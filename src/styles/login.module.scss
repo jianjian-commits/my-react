@@ -1,0 +1,78 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .formContainer {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.form {
+  width: 320px;
+  padding: 10px;
+  border: 1px solid #999;
+  border-radius: 5px;
+}
+.tab {
+  font-weight: 400;
+  font-size: 18px;
+}
+.greeting {
+  font-weight: 500;
+  text-align: center;
+  margin-top: 16px;
+}
+.subGreeting {
+  font-weight: 500;
+  text-align: center;
+  margin-top: 8px;
+}
+.googleButton {
+  margin-top: 32px;
+  box-shadow: #aaa;
+  background-color: white;
+  width: 100%;
+  text-transform: none;
+}
+.googleButtonCreating {
+  margin-top: 0;
+}
+.googleIcon {
+  width: 30px;
+  margin-right: 16px;
+}
+.formButtons {
+  margin-top: 16px;
+  height: 46px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.createAccountButton {
+  height: 46px;
+  text-transform: none;
+}
+.formDividerContainer {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+.formDividerWord {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.formDivider {
+  flex-grow: 1;
+  height: 1;
+  background-color: #ddd;
+}
