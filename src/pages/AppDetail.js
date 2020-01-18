@@ -1,9 +1,10 @@
 import React from "react";
 import { Layout, Button } from "antd";
+import { useParams } from "react-router";
 import CommonHeader from "../components/header/CommonHeader";
+import { ApprovalSection } from "../components/approval";
 import classes from "../styles/apps.module.scss";
 import { history } from "../store";
-import { useParams } from "react-router";
 const { Content, Sider } = Layout;
 
 const navigationList = [
@@ -29,7 +30,9 @@ const AppDetail = () => {
         operations={getOreations(appId)}
       />
       <Layout>
-        <Sider style={{ background: "#fff" }}>1</Sider>
+        <Sider style={{ background: "#fff" }}>
+          <ApprovalSection />
+        </Sider>
         <Content className={classes.container}>
           <div className={classes.header}>
             <div>
