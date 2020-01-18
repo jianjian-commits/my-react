@@ -1,12 +1,11 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
-import { main } from "../routers";
+import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
-import Container from "../pages/Container";
 import Login from "../pages/Login";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
@@ -25,13 +24,25 @@ export const getRoutes = routes =>
     )
   );
 
+const SubApp = () => {
+  const { appId } = useParams();
+  return (
+    <Switch>
+      {appPaths(appId).map(p => (
+        <PrivateRoute exact key={p.key} path={p.path} component={p.component} />
+      ))}
+      <Route render={() => <Redirect to="/app/list" />} />
+    </Switch>
+  );
+};
+
 const App = () => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
-        <PrivateRoute path="/app/:appId" component={Container} />
+        <PrivateRoute path="/app/:appId" component={SubApp} />
         <Route render={() => <Redirect to="/app/list" />} />
       </Switch>
     </ConnectedRouter>

@@ -1,5 +1,9 @@
 import AppList from "../pages/Apps";
+import Backlog from "../pages/Backlog";
+import UserManagement from "../pages/User";
+
 import Placeholder from "../pages/Placeholder";
+import AppDetail from "../pages/AppDetail";
 
 export const main = [
   {
@@ -10,11 +14,18 @@ export const main = [
     component: AppList
   },
   {
+    key: "backlog",
+    label: "待办事项",
+    path: "/backlog",
+    icon: "web",
+    component: Backlog
+  },
+  {
     key: "user",
     label: "用户",
     path: "/user",
     icon: "web",
-    component: Placeholder
+    component: UserManagement
   },
   {
     key: "authority",
@@ -25,25 +36,42 @@ export const main = [
   }
 ];
 
-export const services = appId => [
+export const appPaths = appId => [
+  {
+    key: "setting",
+    label: "应用设置",
+    path: `/app/${appId}/setting`,
+    icon: "file_copy",
+    component: Placeholder
+  },
+  {
+    key: "general",
+    label: "概览",
+    path: `/app/${appId}/detail`,
+    icon: "file_copy",
+    component: AppDetail
+  }
+];
+
+export const appServices = (appId, formId) => [
   {
     key: "form",
-    label: "表单",
-    path: `/app/${appId}/form`,
+    label: "表单编辑",
+    path: `/app/${appId}/setting/form/${formId}/editform`,
     icon: "file_copy",
     component: Placeholder
   },
   {
     key: "process",
     label: "自动化",
-    path: `/app/${appId}/process`,
+    path: `/app/${appId}/setting/form/${formId}/process`,
     icon: "file_copy",
     component: Placeholder
   },
   {
     key: "approval",
     label: "审批流",
-    path: `/app/${appId}/approval`,
+    path: `/app/${appId}/setting/form/${formId}/approval`,
     icon: "file_copy",
     component: Placeholder
   }
