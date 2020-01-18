@@ -1,0 +1,52 @@
+.homeHeader {
+  // position: absolute;
+  // width: 100%;
+  color: #ddd;
+  .wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    .logo {
+      width: 80px;
+      padding: 10px;
+    }
+    .nav {
+      flex: 1;
+    }
+    .operations {
+      flex: 1;
+      text-align: right;
+      padding-right: 30px;
+    }
+    .user {
+      width: 80px;
+    }
+  }
+}
+.breadCrumbs {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  > div {
+    -moz-user-select: none; /*火狐 firefox*/
+    -webkit-user-select: none; /*webkit浏览器*/
+    -ms-user-select: none; /*IE10+*/
+    user-select: none;
+  }
+  :global(.ant-breadcrumb-separator) {
+    color: #ddd;
+  }
+}
+.breadcrumbItem {
+  color: #ddd;
+  &.active {
+    cursor: pointer;
+    &:hover {
+      color: #3786fe;
+    }
+  }
+  &.disabled {
+    color: #aaa;
+  }
+}

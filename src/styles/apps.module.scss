@@ -1,0 +1,26 @@
+.container {
+  height: calc(100vh - 64px);
+  .header {
+    padding: 20px 40px;
+  }
+}
+.appCard {
+  width: 200px;
+  height: 120px;
+  display: inline-block;
+  cursor: pointer;
+
+  &:global(.ant-card) {
+    margin-top: 20px;
+    margin-right: 40px;
+  }
+  .appCardMeta {
+    :global(.ant-card-meta-description) {
+      text-overflow: ellipsis;
+      text-overflow: -o-ellipsis-lastline;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
