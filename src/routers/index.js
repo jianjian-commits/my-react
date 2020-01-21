@@ -4,6 +4,7 @@ import UserManagement from "../pages/User";
 
 import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
+import AppSetting from "../pages/AppSetting";
 
 export const main = [
   {
@@ -36,18 +37,18 @@ export const main = [
   }
 ];
 
-export const appPaths = appId => [
+export const appPaths = [
   {
     key: "setting",
     label: "应用设置",
-    path: `/app/${appId}/setting`,
+    path: `/app/:appId/setting`,
     icon: "file_copy",
-    component: Placeholder
+    component: AppSetting
   },
   {
     key: "general",
     label: "概览",
-    path: `/app/${appId}/detail`,
+    path: `/app/:appId/detail`,
     icon: "file_copy",
     component: AppDetail
   }

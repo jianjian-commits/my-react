@@ -1,9 +1,9 @@
 import React from "react";
 import { List } from "antd";
-import { history } from "../../store";
+import { useHistory } from "react-router-dom";
 import classes from "./approval.module.scss";
 
-const items = [
+const items = history => [
   {
     key: "myPending",
     icon: "setting",
@@ -25,13 +25,14 @@ const items = [
 ];
 
 export const ApprovalSection = () => {
+  const history = useHistory();
   return (
     <div className={classes.sectionWrapper}>
       <div className={classes.sectionContent}>
         <List
           itemLayout="vertical"
           size="small"
-          dataSource={items}
+          dataSource={items(history)}
           renderItem={item => (
             <List.Item
               className={classes.item}
