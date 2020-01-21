@@ -1,25 +1,17 @@
 import React from "react";
-import { Layout, Button, Input } from "antd";
-import { useParams, useHistory } from "react-router-dom";
+import { Layout, Button, Input, Icon } from "antd";
 import CommonHeader from "../components/header/CommonHeader";
-import { ApprovalSection } from "../components/approval";
-import DraggableList from "../components/shared/DraggableList";
+import DraggableList, {
+  DropableWrapper
+} from "../components/shared/DraggableList";
 
 import classes from "../styles/apps.module.scss";
+import { history } from "../store";
 const { Content, Sider } = Layout;
 
-const navigationList = history => [
+const navigationList = [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   { key: 1, label: "13号Devinci应用", disabled: true }
-];
-
-const getOreations = (appId, history) => [
-  {
-    key: "setting",
-    icon: "setting",
-    label: "应用设置",
-    onClick: () => history.push(`/app/${appId}/setting`)
-  }
 ];
 
 const mockForms = {
@@ -57,8 +49,6 @@ const mockForms = {
 };
 
 const AppDetail = () => {
-  const { appId } = useParams();
-  const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
   let { groups, list } = mockForms;
@@ -73,31 +63,42 @@ const AppDetail = () => {
     const { value } = e.target;
     setSearchKey(value);
   };
+  const addFolder = () => alert("没用的");
 
+  const dropHandle = (formId, groupId) => {
+    alert(formId + " 放进 " + groupId);
+  };
   return (
     <Layout>
-      <CommonHeader
-        navigationList={navigationList(history)}
-        operations={getOreations(appId, history)}
-      />
+      <CommonHeader navigationList={navigationList} />
       <Layout>
         <Sider className={classes.appSider} style={{ background: "#fff" }}>
-          <ApprovalSection />
           <div className={classes.searchBox}>
             <Input
+              style={{ width: 150 }}
               placeholder="输入名称来搜索"
               value={searchKey}
               onChange={searchHandle}
+            />
+            <Icon
+              type="folder-add"
+              className={classes.addFolder}
+              onClick={addFolder}
             />
           </div>
           <div className={classes.formArea}>
             <DraggableList
               selected={selectedForm}
-              draggable={false}
+              draggable={!!searchKey}
               onClick={e => setSelectedForm(e.key)}
               groups={groups}
               list={list}
+              onDrop={dropHandle}
             />
+            <DropableWrapper
+              className={classes.empty}
+              onDrop={e => dropHandle(e.dataTransfer.getData("formId"), null)}
+            ></DropableWrapper>
           </div>
         </Sider>
         <Content className={classes.container}>

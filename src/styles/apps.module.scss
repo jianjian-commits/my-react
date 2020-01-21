@@ -24,3 +24,32 @@
     }
   }
 }
+.appSider {
+  background: "#fff";
+  :global(.ant-layout-sider-children) {
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+  }
+}
+.searchBox {
+  padding: 10px;
+  .addFolder {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+  }
+}
+.formArea {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  :global(.ant-menu-inline) {
+    border: none;
+  }
+  .empty {
+    flex: 1;
+  }
+}

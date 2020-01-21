@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, Redirect, useParams } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { main, appPaths } from "../routers";
@@ -25,10 +25,9 @@ export const getRoutes = routes =>
   );
 
 const SubApp = () => {
-  const { appId } = useParams();
   return (
     <Switch>
-      {appPaths(appId).map(p => (
+      {appPaths.map(p => (
         <PrivateRoute exact key={p.key} path={p.path} component={p.component} />
       ))}
       <Route render={() => <Redirect to="/app/list" />} />
