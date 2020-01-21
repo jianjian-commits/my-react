@@ -25,12 +25,15 @@
   }
 }
 .appSider {
-  background: "#fff";
   :global(.ant-layout-sider-children) {
     height: calc(100vh - 64px);
+    padding: 10px 0;
     display: flex;
     flex-direction: column;
   }
+}
+.newForm {
+  padding: 0 10px;
 }
 .searchBox {
   padding: 10px;
@@ -52,4 +55,10 @@
   .empty {
     flex: 1;
   }
+}
+.serviceSider {
+  width: 50px;
+}
+.menuBorderNone {
+  border: none !important;
 }

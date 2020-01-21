@@ -5,6 +5,7 @@ import UserManagement from "../pages/User";
 import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
 import AppSetting from "../pages/AppSetting";
+import AppServices from "../pages/AppServices";
 
 export const main = [
   {
@@ -39,6 +40,13 @@ export const main = [
 
 export const appPaths = [
   {
+    key: "general",
+    label: "概览",
+    path: `/app/:appId/detail`,
+    icon: "file_copy",
+    component: AppDetail
+  },
+  {
     key: "setting",
     label: "应用设置",
     path: `/app/:appId/setting`,
@@ -46,34 +54,10 @@ export const appPaths = [
     component: AppSetting
   },
   {
-    key: "general",
-    label: "概览",
-    path: `/app/:appId/detail`,
-    icon: "file_copy",
-    component: AppDetail
-  }
-];
-
-export const appServices = (appId, formId) => [
-  {
     key: "form",
-    label: "表单编辑",
-    path: `/app/${appId}/setting/form/${formId}/editform`,
+    label: "表单服务",
+    path: `/app/:appId/setting/form/:formId/:serviceId`,
     icon: "file_copy",
-    component: Placeholder
-  },
-  {
-    key: "process",
-    label: "自动化",
-    path: `/app/${appId}/setting/form/${formId}/process`,
-    icon: "file_copy",
-    component: Placeholder
-  },
-  {
-    key: "approval",
-    label: "审批流",
-    path: `/app/${appId}/setting/form/${formId}/approval`,
-    icon: "file_copy",
-    component: Placeholder
+    component: AppServices
   }
 ];

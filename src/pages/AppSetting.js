@@ -1,17 +1,22 @@
 import React from "react";
-import { Layout, Button, Input, Icon } from "antd";
+import { Layout, Input, Button, Icon } from "antd";
+import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
   DropableWrapper
 } from "../components/shared/DraggableList";
 
 import classes from "../styles/apps.module.scss";
-import { history } from "../store";
 const { Content, Sider } = Layout;
 
-const navigationList = [
+const navigationList = (history, appId) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-  { key: 1, label: "13号Devinci应用", disabled: true }
+  {
+    key: 1,
+    label: "13号Devinci应用",
+    onClick: () => history.push(`/app/${appId}/detail`)
+  },
+  { key: 1, label: "应用设置", disabled: true }
 ];
 
 const mockForms = {
@@ -48,8 +53,9 @@ const mockForms = {
   ]
 };
 
-const AppDetail = () => {
-  const [selectedForm, setSelectedForm] = React.useState(null);
+const AppSetting = () => {
+  const { appId } = useParams();
+  const history = useHistory();
   const [searchKey, setSearchKey] = React.useState(null);
   let { groups, list } = mockForms;
 
@@ -68,11 +74,19 @@ const AppDetail = () => {
   const dropHandle = (formId, groupId) => {
     alert(formId + " 放进 " + groupId);
   };
+  const formEnterHandle = e => {
+    history.push(`/app/${appId}/setting/form/${e.key}/edit`);
+  };
   return (
     <Layout>
-      <CommonHeader navigationList={navigationList} />
+      <CommonHeader navigationList={navigationList(history, appId)} />
       <Layout>
-        <Sider className={classes.appSider} style={{ background: "#fff" }}>
+        <Sider className={classes.appSider} theme="light">
+          <div className={classes.newForm}>
+            <Button type="primary" block>
+              新建表单
+            </Button>
+          </div>
           <div className={classes.searchBox}>
             <Input
               style={{ width: 150 }}
@@ -88,9 +102,8 @@ const AppDetail = () => {
           </div>
           <div className={classes.formArea}>
             <DraggableList
-              selected={selectedForm}
-              draggable={!!searchKey}
-              onClick={e => setSelectedForm(e.key)}
+              draggable={!searchKey}
+              onClick={formEnterHandle}
               groups={groups}
               list={list}
               onDrop={dropHandle}
@@ -101,18 +114,9 @@ const AppDetail = () => {
             ></DropableWrapper>
           </div>
         </Sider>
-        <Content className={classes.container}>
-          <div className={classes.header}>
-            <div>
-              <Button type="primary" onClick={null}>
-                提交数据
-              </Button>
-            </div>
-            <div>我是 {selectedForm} -表单数据</div>
-          </div>
-        </Content>
+        <Content className={classes.container}></Content>
       </Layout>
     </Layout>
   );
 };
-export default AppDetail;
+export default AppSetting;
