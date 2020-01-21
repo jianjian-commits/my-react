@@ -24,7 +24,7 @@ export const getRoutes = routes =>
     )
   );
 
-const SubApp = () => {
+const AppInsideRouter = () => {
   return (
     <Switch>
       {appPaths.map(p => (
@@ -41,7 +41,7 @@ const App = () => (
       <Switch>
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
-        <PrivateRoute path="/app/:appId" component={SubApp} />
+        <PrivateRoute path="/app/:appId" component={AppInsideRouter} />
         <Route render={() => <Redirect to="/app/list" />} />
       </Switch>
     </ConnectedRouter>
