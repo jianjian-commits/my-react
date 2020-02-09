@@ -46,8 +46,6 @@ const getOperations = ops => {
 };
 
 const CommonHeader = props => {
-  console.log(props);
-
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>

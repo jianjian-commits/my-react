@@ -5,7 +5,6 @@ import { Spin, Menu, Input, Button } from "antd";
 import { loginUser, resetError } from "../store/loginReducer";
 import classes from "../styles/login.module.scss";
 
-console.log(classes);
 const Login = ({ ...props }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [nameValue, setNameValue] = useState("");
@@ -33,7 +32,6 @@ const Login = ({ ...props }) => {
   const handleLoginButtonClick = () => {
     props.loginUser(loginValue, passwordValue);
   };
-  console.log(activeTab);
   return (
     <div className={classes.container}>
       <div className={classes.formContainer}>
