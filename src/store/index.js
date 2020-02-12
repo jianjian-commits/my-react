@@ -4,7 +4,7 @@ import thunk from "redux-thunk";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 
-import login from "./loginReducer";
+import login from "./_loginReducer";
 
 export const history = createBrowserHistory();
 
