@@ -42,7 +42,7 @@ const App = ({ register_token }) => (
     <ConnectedRouter history={history}>
       <Switch>
         <PublicRoute path="/register" component={Register} />
-        <PublicRoute path="forgetPassword" component={ForgetPassword} />
+        <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
         <PrivateRoute path="/app/:appId" component={AppInsideRouter} />

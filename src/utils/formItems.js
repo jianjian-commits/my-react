@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Input, Button, Icon } from "antd";
-import request from "./request";
+// import request from "./request";
 import itemsStyles from "../styles/login.module.scss";
 
 // 发送验证码
-async function sendVerificationCode() {
-  try {
-    const result = await request("http://www.baidu.com");
-    if (result && result.status) return true;
-  } catch (res) {
-    return false;
-  }
-}
+// async function sendVerificationCode() {
+//   try {
+//     const result = await request("http://www.baidu.com");
+//     if (result && result.status) return true;
+//   } catch (res) {
+//     return false;
+//   }
+// }
 
 //  rules校验规则
 const required = msg => ({ required: true, message: msg });
@@ -58,40 +58,40 @@ const password = item => ({
 });
 
 const phone = item => {
-  const verificationCodeSpanRef = React.createRef();
-  const verificationCodeButtonRef = React.createRef();
-  const buttonConfirm = () => {
-    const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
-      verificationCodeButtonRef.current.buttonNode.disabled = true;
-      verificationCodeSpanRef.current.innerHTML = sended
-        ? `验证码已发送,如未收到请在${initNum}s后重试`
-        : `验证码发送失败,请在${initNum}s后重试`;
-      let num = initNum - 1;
-      const int = setInterval(() => {
-        verificationCodeSpanRef.current.innerHTML = sended
-          ? `验证码已发送,如未收到请在${num}s后重试`
-          : `验证码发送失败,请在${num}s后重试`;
-        num = num - 1;
-      }, timeTerval);
-      setTimeout(() => {
-        window.clearInterval(int);
-        verificationCodeButtonRef.current.buttonNode.disabled = false;
-        verificationCodeSpanRef.current.innerHTML = "";
-        num = initNum - 1;
-      }, timeOut);
-    };
-    sendVerificationCode().then(res => {
-      if (res) {
-        setTime({
-          sended: true,
-          initNum: 60,
-          timeOut: 60000
-        });
-      } else {
-        setTime({ sended: false, initNum: 6, timeOut: 6000 });
-      }
-    });
-  };
+  // const verificationCodeSpanRef = React.createRef();
+  // const verificationCodeButtonRef = React.createRef();
+  // const buttonConfirm = () => {
+  //   const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
+  //     verificationCodeButtonRef.current.buttonNode.disabled = true;
+  //     verificationCodeSpanRef.current.innerHTML = sended
+  //       ? `验证码已发送,如未收到请在${initNum}s后重试`
+  //       : `验证码发送失败,请在${initNum}s后重试`;
+  //     let num = initNum - 1;
+  //     const int = setInterval(() => {
+  //       verificationCodeSpanRef.current.innerHTML = sended
+  //         ? `验证码已发送,如未收到请在${num}s后重试`
+  //         : `验证码发送失败,请在${num}s后重试`;
+  //       num = num - 1;
+  //     }, timeTerval);
+  //     setTimeout(() => {
+  //       window.clearInterval(int);
+  //       verificationCodeButtonRef.current.buttonNode.disabled = false;
+  //       verificationCodeSpanRef.current.innerHTML = "";
+  //       num = initNum - 1;
+  //     }, timeOut);
+  //   };
+  //   sendVerificationCode().then(res => {
+  //     if (res) {
+  //       setTime({
+  //         sended: true,
+  //         initNum: 60,
+  //         timeOut: 60000
+  //       });
+  //     } else {
+  //       setTime({ sended: false, initNum: 6, timeOut: 6000 });
+  //     }
+  //   });
+  // };
   return [
     {
       itemName: "phone",
@@ -110,40 +110,40 @@ const phone = item => {
         />
       ),
       additionComponent: null
-    },
-    {
-      itemName: "verificationCode",
-      options: {
-        rules: [required("请输入验证码")]
-      },
-      component: (
-        <Input
-          prefix={
-            <Icon
-              type="safety-certificate"
-              style={{ color: "rgba(0,0,0,.25)" }}
-            />
-          }
-          placeholder="验证码"
-          addonAfter={
-            <Button
-              ref={verificationCodeButtonRef}
-              disabled={null}
-              onClick={buttonConfirm}
-            >
-              发送验证码
-            </Button>
-          }
-          className={itemsStyles.loginPhoneCard}
-        />
-      ),
-      additionComponent: (
-        <span
-          ref={verificationCodeSpanRef}
-          style={{ position: "absolute", right: 0, top: "18px" }}
-        ></span>
-      )
     }
+    // {
+    //   itemName: "verificationCode",
+    //   options: {
+    //     rules: [required("请输入验证码")]
+    //   },
+    //   component: (
+    //     <Input
+    //       prefix={
+    //         <Icon
+    //           type="safety-certificate"
+    //           style={{ color: "rgba(0,0,0,.25)" }}
+    //         />
+    //       }
+    //       placeholder="验证码"
+    //       addonAfter={
+    //         <Button
+    //           ref={verificationCodeButtonRef}
+    //           disabled={null}
+    //           onClick={buttonConfirm}
+    //         >
+    //           发送验证码
+    //         </Button>
+    //       }
+    //       className={itemsStyles.loginPhoneCard}
+    //     />
+    //   ),
+    //   additionComponent: (
+    //     <span
+    //       ref={verificationCodeSpanRef}
+    //       style={{ position: "absolute", right: 0, top: "18px" }}
+    //     ></span>
+    //   )
+    // }
   ];
 };
 
