@@ -5,6 +5,9 @@ import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 
+import selectCom from "../util/selectCom";
+import appDetailMenu from "../config/appDetailMenu";
+
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
@@ -56,11 +59,14 @@ const mockForms = {
   ]
 };
 
-const AppDetail = () => {
+const AppDetail = props => {
   const { appId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
+  const [ele, setEle] = React.useState(
+    selectCom(props.match.params.menuId, appDetailMenu)
+  );
   let { groups, list } = mockForms;
 
   if (searchKey) {
@@ -74,6 +80,12 @@ const AppDetail = () => {
     setSearchKey(value);
   };
 
+  //根据点击菜单栏加载内容组件
+  const onClickMenu = (key, e) => {
+    setEle(selectCom(key, appDetailMenu));
+  };
+
+  // console.log(ele)
   return (
     <Layout>
       <CommonHeader
@@ -82,7 +94,7 @@ const AppDetail = () => {
       />
       <Layout>
         <Sider className={classes.appSider} style={{ background: "#fff" }}>
-          <ApprovalSection />
+          <ApprovalSection fn={onClickMenu} />
           <div className={classes.searchBox}>
             <Input
               placeholder="输入名称来搜索"
@@ -101,14 +113,20 @@ const AppDetail = () => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          <div className={classes.header}>
+          {ele ? (
+            <ele.ContentEle count={ele.key}></ele.ContentEle>
+          ) : (
+            <div></div>
+          )}
+
+          {/* <div className={classes.header}>
             <div>
               <Button type="primary" onClick={null}>
                 提交数据
               </Button>
             </div>
             <div>我是 {selectedForm} -表单数据</div>
-          </div>
+          </div> */}
         </Content>
       </Layout>
     </Layout>

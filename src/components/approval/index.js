@@ -3,29 +3,46 @@ import { List } from "antd";
 import { useHistory } from "react-router-dom";
 import classes from "./approval.module.scss";
 
-const items = history => [
-  {
-    key: "myPending",
-    icon: "setting",
-    label: "我的待办",
-    onClick: () => history.push("/backlog")
-  },
-  {
-    key: "mySubmitted",
-    icon: "setting",
-    label: "我发起的",
-    onClick: () => history.push("/backlog")
-  },
-  {
-    key: "myHandled",
-    icon: "setting",
-    label: "我处理的",
-    onClick: () => history.push("/backlog")
-  }
-];
-
-export const ApprovalSection = () => {
+const baseUrl = path => {
+  let arr = path.split("/");
+  arr.forEach((item, index, arr) => {
+    if (item === "detail") {
+      arr.length = index + 1;
+    }
+  });
+  return arr.join("/");
+};
+export const ApprovalSection = props => {
   const history = useHistory();
+  const items = history => [
+    {
+      key: "myPending",
+      icon: "setting",
+      label: "我的待办",
+      onClick: () => {
+        history.push(`${baseUrl(history.location.pathname)}/0`);
+        props.fn(0);
+      }
+    },
+    {
+      key: "mySubmitted",
+      icon: "setting",
+      label: "我发起的",
+      onClick: () => {
+        history.push(`${baseUrl(history.location.pathname)}/1`);
+        props.fn(1);
+      }
+    },
+    {
+      key: "myHandled",
+      icon: "setting",
+      label: "我处理的",
+      onClick: () => {
+        history.push(`${baseUrl(history.location.pathname)}/2`);
+        props.fn(2);
+      }
+    }
+  ];
   return (
     <div className={classes.sectionWrapper}>
       <div className={classes.sectionContent}>

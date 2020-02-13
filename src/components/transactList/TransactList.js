@@ -78,8 +78,10 @@ const TransactList = props => {
   const _title = (() => {
     switch (props.count) {
       case 0:
-        return "我发起的";
+        return "我的待办";
       case 1:
+        return "我发起的";
+      case 2:
         return "我处理的";
       default:
         return "我的待办";

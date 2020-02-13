@@ -47,6 +47,13 @@ export const appPaths = [
     component: AppDetail
   },
   {
+    key: "menuContent",
+    label: "菜单内容",
+    path: `/app/:appId/detail/:menuId`,
+    icon: "file_copy",
+    component: AppDetail
+  },
+  {
     key: "setting",
     label: "应用设置",
     path: `/app/:appId/setting`,
