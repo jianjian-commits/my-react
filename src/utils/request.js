@@ -6,7 +6,7 @@ const baseURL = `${serverHost}${port ? ":" + port : ""}`;
 
 async function ajax(url, params) {
   const headers = params.headers || {};
-  headers["content-type"] = "application/json" || params.contentType;
+  headers["Content-Type"] = "application/json" || params.contentType;
   try {
     const res = await axios({
       url: `${baseURL}${url}`,

@@ -95,6 +95,7 @@ class CreateModal extends Component {
           cancelText="取消"
           onOk={this.onOk.bind(this)}
           onCancel={this.onCancel.bind(this)}
+          maskClosable={false}
         >
           <Form>
             <Form.Item label="应用名">

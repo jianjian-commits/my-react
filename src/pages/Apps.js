@@ -20,20 +20,20 @@ const defaultData = [
 ];
 
 // 创建模拟数据
-const createDatas = [
-  {
-    id: 1,
-    appName: "请假申请",
-    appDescription: "用于处理公司的请假申请",
-    icon: "edit"
-  },
-  {
-    id: 2,
-    appName: "车辆管理系统",
-    appDescription: "用于公司的车辆管理",
-    icon: "bar-chart"
-  }
-];
+// const createDatas = [
+//   {
+//     id: 1,
+//     appName: "请假申请",
+//     appDescription: "用于处理公司的请假申请",
+//     icon: "edit"
+//   },
+//   {
+//     id: 2,
+//     appName: "车辆管理系统",
+//     appDescription: "用于公司的车辆管理",
+//     icon: "bar-chart"
+//   }
+// ];
 
 const getApps = list => {
   return list.map(e => {
@@ -68,6 +68,7 @@ class Apps extends React.Component {
   async handleCreate(data) {
     const res = await request("/customApplication/add", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: JSON.stringify(data)
     });
     if (!res) {
@@ -121,7 +122,7 @@ class Apps extends React.Component {
           </header>
           <content>
             {getApps(defaultData)}
-            {getApps(createDatas)}
+            {getApps(this.state.createDatas)}
           </content>
           <CreateFormModal
             title={"创建应用"}
