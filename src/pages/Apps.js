@@ -1,33 +1,54 @@
 import React from "react";
-import { Layout, Button, Card, Avatar } from "antd";
+import { Layout, Button, Card, Icon, message } from "antd";
 import HomeHeader from "../components/header/HomeHeader";
 import commonClasses from "../styles/common.module.scss";
 import classes from "../styles/apps.module.scss";
 import { history } from "../store";
+import { CreateFormModal } from "../components/createModal";
+import request from "../utils/request";
 const { Content } = Layout;
 const { Meta } = Card;
 
-const apps = Array.from(new Array(20)).map((e, i) => ({
-  name: i + ""
-}));
+// 示例数据
+const defaultData = [
+  {
+    id: 0,
+    appName: "用户示例",
+    appDescription: "示例应用各项产品功能",
+    icon: "apartment"
+  }
+];
+
+// 创建模拟数据
+const createDatas = [
+  {
+    id: 1,
+    appName: "请假申请",
+    appDescription: "用于处理公司的请假申请",
+    icon: "edit"
+  },
+  {
+    id: 2,
+    appName: "车辆管理系统",
+    appDescription: "用于公司的车辆管理",
+    icon: "bar-chart"
+  }
+];
 
 const getApps = list => {
   return list.map(e => {
     return (
       <Card
-        key={e.name}
+        key={e.id}
         className={classes.appCard}
-        bodyStyle={{ padding: 15 }}
         loading={false}
-        onClick={() => history.push(`/app/${e.name}/detail`)}
+        onClick={() => history.push(`/app/${e.appName}/detail`)}
       >
         <Meta
           className={classes.appCardMeta}
-          avatar={
-            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-          }
-          title="Devinci"
-          description={`${e.name}, 这么巧，你也叫Devinci`}
+          avatar={<Icon type={e.icon} className={classes.avatarIcon} />}
+          title={e.appName}
+          description={e.appDescription}
         />
       </Card>
     );
@@ -37,8 +58,52 @@ const getApps = list => {
 class Apps extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      createDatas: []
+    };
+    this.handleCancel = this.handleCancel.bind(this);
   }
+
+  // 完成新建
+  async handleCreate(data) {
+    const res = await request("/customApplication/add", {
+      method: "POST",
+      data: JSON.stringify(data)
+    });
+    if (!res) {
+      message.error("创建失败");
+    }
+    this.handleCancel();
+  }
+
+  // 取消新建
+  handleCancel() {
+    this.setState({
+      open: false
+    });
+  }
+
+  // 尝试去获取到所有的应用列表
+  async getList() {
+    const res = await request("/customApplication/list", {
+      method: "POST",
+      data: {
+        page: "1",
+        size: "10"
+      }
+    });
+    if (res && res.data) {
+      return this.setState({
+        createDatas: res.data.datas
+      });
+    }
+    message.error("获取列表失败");
+  }
+
+  componentDidMount() {
+    this.getList();
+  }
+
   render() {
     return (
       <Layout>
@@ -46,11 +111,24 @@ class Apps extends React.Component {
         <Content className={commonClasses.container}>
           <header className={commonClasses.header}>
             <span style={{ fontSize: 20 }}>我的应用</span>
-            <Button type="link" icon="plus">
+            <Button
+              type="link"
+              icon="plus"
+              onClick={() => this.setState({ open: true })}
+            >
               创建应用
             </Button>
           </header>
-          <content>{getApps(apps)}</content>
+          <content>
+            {getApps(defaultData)}
+            {getApps(createDatas)}
+          </content>
+          <CreateFormModal
+            title={"创建应用"}
+            visible={this.state.open}
+            onOk={data => this.handleCreate(data)}
+            onCancel={this.handleCancel}
+          />
         </Content>
       </Layout>
     );

@@ -1,0 +1,64 @@
+.iconStyle i {
+  font-size: 25px;
+  padding: 5px;
+}
+
+.active {
+  background-color: #ddd;
+}
+
+.stretch {
+  resize: none;
+  position: relative;
+}
+
+.text {
+  position: absolute;
+  font-size: 13px;
+  right: 30px;
+  top: 270px;
+}
+
+.num {
+  color: #888;
+}
+
+.star {
+  font-size: 16px;
+  color: red;
+}
+
+.appIcon {
+  color: rgba(0, 0, 0, 0.85);
+  &::before {
+    content: "* ";
+    font-size: 14px;
+    color: #f5222d;
+    font-family: SimSun, sans-serif;
+  }
+}
+
+.errText {
+  color: #f5222d;
+  position: absolute;
+  bottom: 85px;
+  animation: fadeIn 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  left: 24px;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: translateY((-5px));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY((0px));
+  }
+}
