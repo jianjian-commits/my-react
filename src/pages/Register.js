@@ -12,9 +12,9 @@ export default connect()(function Register({ history }) {
   const registerUser = ({ actionType, rest }) => {
     if (actionType === "register" && rest) {
       localStorage.setItem(
-        "register",
+        "userData",
         JSON.stringify([
-          ...(JSON.parse(localStorage.getItem("register")) || []),
+          ...(JSON.parse(localStorage.getItem("userData")) || []),
           rest
         ])
       );

@@ -24,7 +24,7 @@ export default connect(({ login }) => ({ userDatas: login.userDatas }), {
           localStorage.setItem(
             "register",
             JSON.stringify(
-              JSON.parse(localStorage.getItem("register")).map(r => {
+              JSON.parse(localStorage.getItem("userData")).map(r => {
                 return userDatas.username === r.username
                   ? { ...r, [item]: inputRef.current.state.value }
                   : r;

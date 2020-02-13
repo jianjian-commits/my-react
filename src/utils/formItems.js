@@ -16,13 +16,36 @@ import itemsStyles from "../styles/login.module.scss";
 
 //  rules校验规则
 const required = msg => ({ required: true, message: msg });
-// const maxLength = ({ length, msg }) => ({ max: length, message: msg });
+const whitespace = () => ({ whitespace: true, message: "不允许出现空格" });
+const maxLength = ({ length, msg }) => ({ max: length, message: msg });
+const minLength = ({ length, msg }) => ({ min: length, message: msg });
+const number = () => ({ pattern: "^[0-9]*$", message: "只能输入小写数字" });
+// const requireCharAndNum = () => ({
+//   pattern: "^[a-zA-Z0-9]*$",
+//   message: "只允许输入数字和字母"
+// });
+const requireChinese = () => ({
+  pattern: "^[\u4e00-\u9fa5]*$",
+  message: "只允许输入汉字"
+});
+// const email = () => ({pattern: "^[a-zA-Z0-9]"})
+
+// {
+//   pattern: "(?!.*_$)(?!.*__.*)^[a-zA-Z][a-zA-Z0-9_]*$",
+//   message:
+//     "名称必须以字母开首，仅使用字母数字字符和下划线。它不能包括空格，以下划线结尾或有两条连续的下划线。"
+// }
 
 // formItems表单项
 const username = {
   itemName: "username",
   options: {
-    rules: [required("该用户不存在")]
+    rules: [
+      required("用户名不可为空"),
+      whitespace(),
+      maxLength(20, "用户名过长，最多20个字符"),
+      minLength(5, "用户名过短,最少5个字符")
+    ]
   },
   component: (
     <Input
@@ -36,14 +59,18 @@ const username = {
 const password = item => ({
   itemName: "password",
   options: {
-    rules: [required("用户名密码信息不匹配，请重试")]
+    rules: [
+      required("密码不可为空"),
+      whitespace(),
+      maxLength(20, "密码过长，最多20个字符"),
+      minLength(8, "密码过短,最少8个字符")
+    ]
   },
   component: (
     <Input
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       placeholder={item === "login" ? "密码" : "密码至少8位,必须包含数字和字母"}
-      minLength={8}
     />
   ),
   additionComponent: (
@@ -98,6 +125,8 @@ const phone = item => {
       options: {
         rules: [
           required("请输入手机号"),
+          whitespace(),
+          number(),
           { length: 11, message: "请输入正确手机号位数" }
         ]
       },
@@ -106,7 +135,6 @@ const phone = item => {
           prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,.25)" }} />}
           placeholder="手机号"
           addonBefore="+86"
-          maxLength={11}
         />
       ),
       additionComponent: null
@@ -114,7 +142,7 @@ const phone = item => {
     // {
     //   itemName: "verificationCode",
     //   options: {
-    //     rules: [required("请输入验证码")]
+    //     rules: [required("请输入验证码"), whitespace(),requireCharAndNum()]
     //   },
     //   component: (
     //     <Input
@@ -150,13 +178,17 @@ const phone = item => {
 const company = {
   itemName: "company",
   options: {
-    rules: [required("请输入公司名")]
+    rules: [
+      required("请输入公司名称"),
+      whitespace(),
+      requireChinese(),
+      maxLength(30, "z公司名称过长，最多30个字符")
+    ]
   },
   component: (
     <Input
       prefix={<Icon type="company" style={{ color: "rgba(0,0,0,.25)" }} />}
       placeholder="公司名"
-      maxLength={20}
     />
   ),
   additionComponent: null
@@ -165,7 +197,7 @@ const company = {
 const email = {
   itemName: "email",
   options: {
-    rules: [required("请输入电子邮箱")]
+    rules: [required("请输入电子邮箱"), whitespace()]
   },
   component: (
     <Input

@@ -4,7 +4,7 @@ export const initialState = {
   isLoading: false,
   register_token: "null",
   isAuthenticated: !!localStorage.getItem("id_token"),
-  userDatas: (JSON.parse(localStorage.getItem("register")) || []).filter(
+  userDatas: (JSON.parse(localStorage.getItem("userData")) || []).filter(
     l => localStorage.getItem("id_token") === l.username
   )[0],
   error: null
@@ -35,7 +35,7 @@ export const resetError = () => ({
 });
 
 export const fetchDatas = () => dispatch => {
-  const res = (JSON.parse(localStorage.getItem("register")) || []).filter(
+  const res = (JSON.parse(localStorage.getItem("userData")) || []).filter(
     l => localStorage.getItem("id_token") === l.username
   )[0];
   dispatch(loginSuccess(res));
@@ -43,11 +43,10 @@ export const fetchDatas = () => dispatch => {
 
 export const loginUser = ({ actionType, rest }) => dispatch => {
   dispatch(startLogin());
-  const users = JSON.parse(localStorage.getItem("register")) || [];
+  const users = JSON.parse(localStorage.getItem("userData")) || [];
   const user = users.filter(
     u => rest.username === u.username || rest.phone === u.phone
   )[0];
-
   if (
     actionType === "login" &&
     user &&
