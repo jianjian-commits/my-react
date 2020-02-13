@@ -1,20 +1,13 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Input, Button, Result, Modal } from "antd";
+import { Button, Result } from "antd";
 import registerStyles from "../styles/login.module.scss";
 import PublicForm from "../utils/publicForm";
 import { registerFormItems } from "../utils/formItems";
-//***********************************
-import copy from "copy-to-clipboard";
-import { message } from "antd";
-//***********************************
 
-export default connect(({ login }) => ({
-  register_token: login.register_token
-}))(function Register({ history, register_token }) {
+export default connect()(function Register({ history }) {
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
-  const [modal, setModal] = useState(false);
   // const _register_token = history.location.pathname.split("/")[2];
   const registerUser = ({ actionType, rest }) => {
     if (actionType === "register" && rest) {
@@ -35,9 +28,6 @@ export default connect(({ login }) => ({
     if (!status) return setVisible(true);
     history.push("/login");
   };
-  //**************************************************************************
-  const registerUrl = `${window.location.origin}/register/${register_token}`;
-  //*************************************************************************
   return (
     <>
       {visible ? (
@@ -60,36 +50,6 @@ export default connect(({ login }) => ({
           ]}
         />
       )}
-      <button
-        onClick={() => {
-          setModal(true);
-        }}
-      >
-        邀请同事
-      </button>
-      {/****************************************************************/}
-      <Modal
-        title="邀请同事"
-        visible={modal}
-        footer={null}
-        width="419px"
-        onCancel={() => setModal(false)}
-      >
-        <p> 将链接发给同事，即可通过注册的方式加入企业。</p>
-        <div style={{ display: "flex" }}>
-          <Input value={registerUrl} />
-          <Button
-            onClick={() => {
-              copy(registerUrl);
-              message.success("复制成功!");
-            }}
-          >
-            复制链接
-          </Button>
-        </div>
-        <p> 链接14天有效</p>
-      </Modal>
-      {/****************************************************************/}
     </>
   );
 });
