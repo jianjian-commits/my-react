@@ -16,10 +16,16 @@ export default connect(({ login }) => ({
   const [visible, setVisible] = useState(true);
   const [modal, setModal] = useState(false);
   const _register_token = history.location.pathname.split("/")[2];
-  const registerUser = payload => {
-    if (!!payload) {
-      setStatus(false);
-      console.log(_register_token);
+  const registerUser = ({ actionType, rest }) => {
+    if (actionType === "register" && rest) {
+      localStorage.setItem(
+        "register",
+        JSON.stringify([
+          ...(JSON.parse(localStorage.getItem("register")) || []),
+          rest
+        ])
+      );
+      setStatus(true);
     } else {
       setStatus(false);
     }
@@ -54,7 +60,13 @@ export default connect(({ login }) => ({
           ]}
         />
       )}
-      <button onClick={() => setModal(true)}>邀请同事</button>
+      <button
+        onClick={() => {
+          setModal(true);
+        }}
+      >
+        邀请同事
+      </button>
       {/****************************************************************/}
       <Modal
         title="邀请同事"

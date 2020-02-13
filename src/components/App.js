@@ -8,6 +8,7 @@ import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
 import Login from "../pages/_Login";
 import Register from "../pages/Register";
+import ForgetPassword from "../pages/forgetPassword";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
@@ -41,6 +42,7 @@ const App = ({ register_token }) => (
     <ConnectedRouter history={history}>
       <Switch>
         <PublicRoute path={`/register`} component={Register} />
+        <PublicRoute path={`/forgetPassword`} component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
         <PrivateRoute path="/app/:appId" component={AppInsideRouter} />

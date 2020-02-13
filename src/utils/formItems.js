@@ -43,20 +43,21 @@ const password = item => ({
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       placeholder={item === "login" ? "密码" : "密码至少8位,必须包含数字和字母"}
+      minLength={8}
     />
   ),
   additionComponent: (
     <>
       {item === "login" ? (
         <div style={{ position: "absolute", right: 0, top: "16px" }}>
-          <Link to="/">忘记密码?</Link>
+          <Link to="/forgetPassword">忘记密码?</Link>
         </div>
       ) : null}
     </>
   )
 });
 
-const phone = () => {
+const phone = item => {
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
   const buttonConfirm = () => {
@@ -179,22 +180,31 @@ const email = {
 const submit = item => ({
   itemName: "actionType",
   options: {
-    initialValue: item
+    initialValue: item,
+    rules: [required("")]
   },
   component: (
     <Button type="primary" htmlType="submit" className={itemsStyles.button}>
-      {item === "login" ? "登录" : "注册"}
+      {item === "login" && "登录"}
+      {item === "register" && "注册"}
+      {item === "resetPassword" && "重置密码"}
     </Button>
   ),
   additionComponent: (
     <>
-      {item === "login" ? (
+      {item === "login" && (
         <div style={{ textAlign: "center" }}>
-          没有账号?<a href="/register">注册一个</a>
+          没有账号?<Link to="/register">注册一个</Link>
         </div>
-      ) : (
+      )}
+      {item === "register" && (
         <div style={{ textAlign: "center" }}>
-          已有账号?直接<a href="/login">登录</a>
+          已有账号?直接<Link to="/login">登录</Link>
+        </div>
+      )}
+      {item === "resetPassword" && (
+        <div style={{ textAlign: "center" }}>
+          返回<Link to="/login">登录</Link>
         </div>
       )}
     </>
@@ -206,10 +216,15 @@ export const loginPasswordFormItems = [
   password("login"),
   submit("login")
 ];
-export const loginPhoneFormItems = [...phone(), submit("login")];
+export const loginPhoneFormItems = [...phone("login"), submit("login")];
+export const loginForgetPassword = [
+  ...phone(),
+  password(),
+  submit("resetPassword")
+];
 export const registerFormItems = [
   username,
-  ...phone(),
+  ...phone("register"),
   password("register"),
   company,
   email,

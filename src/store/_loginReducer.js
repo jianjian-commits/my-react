@@ -1,3 +1,5 @@
+import { message } from "antd";
+
 export const initialState = {
   isLoading: false,
   register_token: "null",
@@ -16,8 +18,9 @@ export const startLogin = () => ({
   type: START_LOGIN
 });
 
-export const loginSuccess = () => ({
-  type: LOGIN_SUCCESS
+export const loginSuccess = payload => ({
+  type: LOGIN_SUCCESS,
+  payload
 });
 
 export const loginFailure = () => ({
@@ -28,14 +31,24 @@ export const resetError = () => ({
   type: RESET_ERROR
 });
 
-export const loginUser = payload => dispatch => {
-  console.log(payload);
+export const loginUser = ({ actionType, rest }) => dispatch => {
   dispatch(startLogin());
+  const users = JSON.parse(localStorage.getItem("register")) || [];
+  const user = users.filter(
+    u => rest.username === u.username || rest.phone === u.phone
+  )[0];
 
-  if (payload.username === "123@123.com" && payload.password === "123") {
+  if (
+    actionType === "login" &&
+    user &&
+    (rest.username
+      ? rest.password === user.password
+      : rest.verificationCode === user.verificationCode)
+  ) {
     setTimeout(() => {
+      message.success("登陆成功");
       localStorage.setItem("id_token", "1");
-      dispatch(loginSuccess());
+      dispatch(loginSuccess(user));
     }, 2000);
   } else {
     dispatch(loginFailure());
@@ -63,7 +76,8 @@ export default function loginReducer(state = initialState, { type, payload }) {
         ...state,
         isLoading: false,
         isAuthenticated: true,
-        error: null
+        error: null,
+        ...payload
       };
     case LOGIN_FAILURE:
       return {
