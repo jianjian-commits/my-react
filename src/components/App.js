@@ -41,8 +41,8 @@ const App = ({ register_token }) => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
-        <PublicRoute path={`/register`} component={Register} />
-        <PublicRoute path={`/forgetPassword`} component={ForgetPassword} />
+        <PublicRoute path="/register" component={Register} />
+        <PublicRoute path="forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
         <PrivateRoute path="/app/:appId" component={AppInsideRouter} />

@@ -4,6 +4,9 @@ export const initialState = {
   isLoading: false,
   register_token: "null",
   isAuthenticated: !!localStorage.getItem("id_token"),
+  userDatas: (JSON.parse(localStorage.getItem("register")) || []).filter(
+    l => localStorage.getItem("id_token") === l.username
+  )[0],
   error: null
 };
 
@@ -31,6 +34,13 @@ export const resetError = () => ({
   type: RESET_ERROR
 });
 
+export const fetchDatas = () => dispatch => {
+  const res = (JSON.parse(localStorage.getItem("register")) || []).filter(
+    l => localStorage.getItem("id_token") === l.username
+  )[0];
+  dispatch(loginSuccess(res));
+};
+
 export const loginUser = ({ actionType, rest }) => dispatch => {
   dispatch(startLogin());
   const users = JSON.parse(localStorage.getItem("register")) || [];
@@ -47,7 +57,7 @@ export const loginUser = ({ actionType, rest }) => dispatch => {
   ) {
     setTimeout(() => {
       message.success("登陆成功");
-      localStorage.setItem("id_token", "1");
+      localStorage.setItem("id_token", user.username);
       dispatch(loginSuccess(user));
     }, 2000);
   } else {
@@ -77,7 +87,7 @@ export default function loginReducer(state = initialState, { type, payload }) {
         isLoading: false,
         isAuthenticated: true,
         error: null,
-        ...payload
+        userDatas: payload
       };
     case LOGIN_FAILURE:
       return {
