@@ -15,7 +15,7 @@ export default connect(({ login }) => ({
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
   const [modal, setModal] = useState(false);
-  const _register_token = history.location.pathname.split("/")[2];
+  // const _register_token = history.location.pathname.split("/")[2];
   const registerUser = ({ actionType, rest }) => {
     if (actionType === "register" && rest) {
       localStorage.setItem(

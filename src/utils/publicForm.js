@@ -6,7 +6,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
   formItems,
   func
 }) {
-  const { getFieldDecorator, validateFields, getFieldValue } = form;
+  const { getFieldDecorator, validateFields } = form;
   const handleSubmit = e => {
     e.preventDefault();
     validateFields((err, { actionType, ...rest }) => {
@@ -23,7 +23,6 @@ export default Form.create({ name: "login-form" })(function PublicForm({
       f.itemName === "phone"
   );
   const searchPhone = props => {
-    const phone = getFieldValue("phone");
     const user = (JSON.parse(localStorage.getItem("register")) || []).filter(
       u => u.phone === props.phone
     )[0];
