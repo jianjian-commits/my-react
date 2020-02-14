@@ -17,18 +17,21 @@ import itemsStyles from "../styles/login.module.scss";
 //  rules校验规则
 const required = msg => ({ required: true, message: msg });
 const whitespace = () => ({ whitespace: true, message: "不允许出现空格" });
-const maxLength = ({ length, msg }) => ({ max: length, message: msg });
-const minLength = ({ length, msg }) => ({ min: length, message: msg });
+const maxLength = (length, msg) => ({ max: length, message: msg });
+const minLength = (length, msg) => ({ min: length, message: msg });
 const number = () => ({ pattern: "^[0-9]*$", message: "只能输入小写数字" });
-// const requireCharAndNum = () => ({
-//   pattern: "^[a-zA-Z0-9]*$",
-//   message: "只允许输入数字和字母"
-// });
+const requireCharAndNum = () => ({
+  pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$",
+  message: "密码为数字和字母组合,且为8-20位字符"
+});
 const requireChinese = () => ({
   pattern: "^[\u4e00-\u9fa5]*$",
   message: "只允许输入汉字"
 });
-// const email = () => ({pattern: "^[a-zA-Z0-9]"})
+const Email = () => ({
+  pattern: "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$",
+  message: "请输入正确邮箱格式"
+});
 
 // {
 //   pattern: "(?!.*_$)(?!.*__.*)^[a-zA-Z][a-zA-Z0-9_]*$",
@@ -37,7 +40,7 @@ const requireChinese = () => ({
 // }
 
 // formItems表单项
-const username = {
+export const username = {
   itemName: "username",
   options: {
     rules: [
@@ -49,28 +52,43 @@ const username = {
   },
   component: (
     <Input
-      prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+      prefix={<Icon type="solution" style={{ color: "rgba(0,0,0,.25)" }} />}
       placeholder="用户名"
     />
   ),
   additionComponent: null
 };
 
-const password = item => ({
-  itemName: "password",
+export const nickname = {
+  itemName: "nickname",
   options: {
     rules: [
-      required("密码不可为空"),
+      required("姓名不可为空"),
       whitespace(),
-      maxLength(20, "密码过长，最多20个字符"),
-      minLength(8, "密码过短,最少8个字符")
+      maxLength(20, "姓名过长，最多20个字符")
     ]
+  },
+  component: (
+    <Input
+      prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+      placeholder="姓名"
+    />
+  ),
+  additionComponent: null
+};
+
+export const password = item => ({
+  itemName: "password",
+  options: {
+    rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
   },
   component: (
     <Input
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
-      placeholder={item === "login" ? "密码" : "密码至少8位,必须包含数字和字母"}
+      placeholder={
+        item === "login" ? "密码" : "密码为数字和字母组合,且为8-20位字符"
+      }
     />
   ),
   additionComponent: (
@@ -84,7 +102,7 @@ const password = item => ({
   )
 });
 
-const phone = item => {
+export const phone = {
   // const verificationCodeSpanRef = React.createRef();
   // const verificationCodeButtonRef = React.createRef();
   // const buttonConfirm = () => {
@@ -119,63 +137,61 @@ const phone = item => {
   //     }
   //   });
   // };
-  return [
-    {
-      itemName: "phone",
-      options: {
-        rules: [
-          required("请输入手机号"),
-          whitespace(),
-          number(),
-          { length: 11, message: "请输入正确手机号位数" }
-        ]
-      },
-      component: (
-        <Input
-          prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,.25)" }} />}
-          placeholder="手机号"
-          addonBefore="+86"
-        />
-      ),
-      additionComponent: null
-    }
-    // {
-    //   itemName: "verificationCode",
-    //   options: {
-    //     rules: [required("请输入验证码"), whitespace(),requireCharAndNum()]
-    //   },
-    //   component: (
-    //     <Input
-    //       prefix={
-    //         <Icon
-    //           type="safety-certificate"
-    //           style={{ color: "rgba(0,0,0,.25)" }}
-    //         />
-    //       }
-    //       placeholder="验证码"
-    //       addonAfter={
-    //         <Button
-    //           ref={verificationCodeButtonRef}
-    //           disabled={null}
-    //           onClick={buttonConfirm}
-    //         >
-    //           发送验证码
-    //         </Button>
-    //       }
-    //       className={itemsStyles.loginPhoneCard}
-    //     />
-    //   ),
-    //   additionComponent: (
-    //     <span
-    //       ref={verificationCodeSpanRef}
-    //       style={{ position: "absolute", right: 0, top: "18px" }}
-    //     ></span>
-    //   )
-    // }
-  ];
+
+  itemName: "phone",
+  options: {
+    rules: [
+      required("请输入手机号"),
+      whitespace(),
+      number(),
+      { len: 11, message: "请输入正确手机号" }
+    ]
+  },
+  component: (
+    <Input
+      prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,.25)" }} />}
+      placeholder="手机号"
+      addonBefore="+86"
+    />
+  ),
+  additionComponent: null
+
+  // {
+  //   itemName: "verificationCode",
+  //   options: {
+  //     rules: [required("请输入验证码"), whitespace(),requireCharAndNum()]
+  //   },
+  //   component: (
+  //     <Input
+  //       prefix={
+  //         <Icon
+  //           type="safety-certificate"
+  //           style={{ color: "rgba(0,0,0,.25)" }}
+  //         />
+  //       }
+  //       placeholder="验证码"
+  //       addonAfter={
+  //         <Button
+  //           ref={verificationCodeButtonRef}
+  //           disabled={null}
+  //           onClick={buttonConfirm}
+  //         >
+  //           发送验证码
+  //         </Button>
+  //       }
+  //       className={itemsStyles.loginPhoneCard}
+  //     />
+  //   ),
+  //   additionComponent: (
+  //     <span
+  //       ref={verificationCodeSpanRef}
+  //       style={{ position: "absolute", right: 0, top: "18px" }}
+  //     ></span>
+  //   )
+  // }
 };
 
-const company = {
+export const company = {
   itemName: "company",
   options: {
     rules: [
@@ -187,23 +203,22 @@ const company = {
   },
   component: (
     <Input
-      prefix={<Icon type="company" style={{ color: "rgba(0,0,0,.25)" }} />}
+      prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
       placeholder="公司名"
     />
   ),
   additionComponent: null
 };
 
-const email = {
+export const email = {
   itemName: "email",
   options: {
-    rules: [required("请输入电子邮箱"), whitespace()]
+    rules: [required("请输入电子邮箱"), whitespace(), Email()]
   },
   component: (
     <Input
-      prefix={<Icon type="email" style={{ color: "rgba(0,0,0,.25)" }} />}
-      placeholder="email"
-      type="email"
+      prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
+      placeholder="电子邮箱"
     />
   ),
   additionComponent: null
@@ -248,15 +263,12 @@ export const loginPasswordFormItems = [
   password("login"),
   submit("login")
 ];
-export const loginPhoneFormItems = [...phone("login"), submit("login")];
-export const loginForgetPassword = [
-  ...phone(),
-  password(),
-  submit("resetPassword")
-];
+export const loginPhoneFormItems = [phone, submit("login")];
+export const loginForgetPassword = [phone, password(), submit("resetPassword")];
 export const registerFormItems = [
   username,
-  ...phone("register"),
+  nickname,
+  phone,
   password("register"),
   company,
   email,

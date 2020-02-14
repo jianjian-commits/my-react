@@ -42,13 +42,13 @@ const MenuItems = signOut => (
 );
 
 const User = ({ signOut, userDatas = {} }) => {
-  const { username } = userDatas;
+  console.log(userDatas);
+  const { nickname } = userDatas;
   return (
     <Dropdown overlay={MenuItems(signOut)}>
       <Link className="ant-dropdown-link" to="#">
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {username} <Icon type="down" style={{ margin: "0 0 0 5px" }} />
-        </div>
+        {nickname}
+        <Icon type="down" style={{ margin: "0 0 0 5px" }} />
       </Link>
     </Dropdown>
   );
