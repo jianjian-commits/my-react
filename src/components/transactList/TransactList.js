@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Table } from "antd";
 import classes from "./transactList.module.scss";
 
@@ -36,11 +37,14 @@ const columns = [
   {
     title: "操作",
     key: "action",
-    render: (text, record) => (
-      <span>
-        <a>查看</a>
-      </span>
-    )
+    render: (text, record) => {
+      // console.log(props)
+      return (
+        <span>
+          <Link to="/app/1/1">查看</Link>
+        </span>
+      );
+    }
   }
 ];
 

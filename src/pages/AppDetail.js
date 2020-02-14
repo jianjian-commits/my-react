@@ -59,14 +59,12 @@ const mockForms = {
   ]
 };
 
-const AppDetail = props => {
-  const { appId } = useParams();
+const AppDetail = () => {
+  const { appId, menuId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
-  const [ele, setEle] = React.useState(
-    selectCom(props.match.params.menuId, appDetailMenu)
-  );
+  const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
   let { groups, list } = mockForms;
 
   if (searchKey) {

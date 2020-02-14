@@ -6,6 +6,7 @@ import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
+import Dispose from "../pages/Dispose";
 
 export const main = [
   {
@@ -66,5 +67,12 @@ export const appPaths = [
     path: `/app/:appId/setting/form/:formId/:serviceId`,
     icon: "file_copy",
     component: AppServices
+  },
+  {
+    key: "Dispose",
+    label: "审批详情",
+    path: `/app/:appId/:disposeId`,
+    icon: "file_copy",
+    component: Dispose
   }
 ];
