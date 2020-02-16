@@ -4,6 +4,7 @@ import classnames from "classnames";
 import classes from "./index.module.scss";
 const { TextArea } = Input;
 
+// 图标数据
 let iconData = [
   { icon: "edit" },
   { icon: "snippets" },
@@ -18,17 +19,8 @@ class CreateModal extends Component {
     super(props);
     this.state = { icon: "", num: 0, errText: "" };
   }
-  // 赋值state
-  handleChange(key, value) {
-    this.setState({
-      [key]: value
-    });
-  }
-  // 获取textarea已输入字数
-  getAppDescriptNum(e) {
-    this.handleChange("num", e.target.value.length);
-  }
-  // 渲染Icon图标
+
+  // 渲染图标
   renderIcons() {
     return (
       <div className={classes.iconStyle}>
@@ -37,7 +29,7 @@ class CreateModal extends Component {
             key={i.icon}
             type={i.icon}
             onClick={() => {
-              this.selectIcon(i);
+              this.setState({ errText: "", icon: i.icon });
             }}
             className={classnames({
               [classes.active]: this.state.icon === i.icon
@@ -48,27 +40,15 @@ class CreateModal extends Component {
     );
   }
 
-  selectIcon(i) {
-    this.handleChange("errText", "");
-    this.handleChange("icon", i.icon);
-  }
-
-  // 清空数据
-  clearData() {
-    this.props.form.resetFields();
-    this.handleChange("icon", "");
-    this.handleChange("num", 0);
-    this.handleChange("errText", "");
-  }
-
   // 完成新建
   onOk() {
     this.props.form.validateFields((err, values) => {
-      if (!this.state.icon) {
-        return this.handleChange("errText", "应用图标不能为空");
+      let icon = this.state.icon;
+      if (!icon) {
+        return this.setState({ errText: "应用图标不能为空" });
       }
       if (err) return;
-      let data = { ...values, icon: this.state.icon };
+      let data = { ...values, code: icon };
       // 调用父组件给的onOk方法并传入Form的参数
       this.props.onOk(data);
       this.clearData();
@@ -81,8 +61,19 @@ class CreateModal extends Component {
     this.clearData();
   }
 
+  // 清空数据
+  clearData() {
+    this.props.form.resetFields();
+    this.setState({
+      icon: "",
+      num: 0,
+      errText: ""
+    });
+  }
+
   render() {
     const { visible, title, form } = this.props;
+    const { num, errText } = this.state;
     const { getFieldDecorator } = form;
 
     return (
@@ -113,21 +104,19 @@ class CreateModal extends Component {
                   maxLength={30}
                   className={classes.stretch}
                   onChange={e => {
-                    this.getAppDescriptNum(e);
+                    this.setState({ num: e.target.value.length });
                   }}
                 ></TextArea>
               )}
             </Form.Item>
             <span className={classes.text}>
-              <span className={classes.num}>{this.state.num}</span> / 30
+              <span>{num}</span> / 30
             </span>
             <Form.Item>
               <span className={classes.appIcon}>选择应用图标:</span>
               {this.renderIcons()}
             </Form.Item>
-            {this.state.errText && (
-              <span className={classes.errText}>{this.state.errText}</span>
-            )}
+            {errText && <span className={classes.errText}>{errText}</span>}
           </Form>
         </Modal>
       </div>

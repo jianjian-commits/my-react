@@ -9,7 +9,7 @@ import request from "../utils/request";
 const { Content } = Layout;
 const { Meta } = Card;
 
-// 示例数据
+// 示例（默认）数据
 const defaultData = [
   {
     id: 0,
@@ -66,25 +66,25 @@ class Apps extends React.Component {
 
   // 完成新建
   async handleCreate(data) {
-    const res = await request("/customApplication/add", {
+    const res = await request("/customApplication", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       data: JSON.stringify(data)
     });
     if (!res) {
-      message.error("创建失败");
+      message.error("创建应用失败");
     }
     this.handleCancel();
   }
 
-  // 取消新建
+  // 取消新建/关闭模态窗
   handleCancel() {
     this.setState({
       open: false
     });
   }
 
-  // 尝试去获取到所有的应用列表
+  // 获取到所有的应用列表
   async getList() {
     const res = await request("/customApplication/list", {
       method: "POST",
@@ -98,7 +98,7 @@ class Apps extends React.Component {
         createDatas: res.data.datas
       });
     }
-    message.error("获取列表失败");
+    message.error("获取应用列表失败");
   }
 
   componentDidMount() {
