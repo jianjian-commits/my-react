@@ -5,7 +5,7 @@ import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 
-import selectCom from "../util/selectCom";
+import selectCom from "../utils/selectCom";
 import appDetailMenu from "../config/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
