@@ -161,8 +161,7 @@ export const textCheckType = [
         type: "SPLIT",
         describe: "SPLIT(text,text_chars) 将文本按照指定分隔符分割为几个部分",
         checkFunc: (text, text_chars) => {
-
-            target = getValidValue(target, "string");
+            text = getValidValue(text, "string");
             text_chars = getValidValue(text_chars, "string");
 
             return text.split(text_chars);

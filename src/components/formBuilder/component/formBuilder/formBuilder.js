@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { DndProvider } from "react-dnd";
-import {Spin} from 'antd';
+import { Spin } from 'antd';
 import { setActiveIndex, setActiveInnerIndex } from "./redux/utils/operateFormComponent";
 import {
   saveForm,
@@ -13,9 +13,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import Preview from "./preview/preview";
 import Toolbar from "./toolbar/toolbar";
 import Inspector from "./inspector/inspector";
-import config from "../../config/config";
 import locationUtils from "../../utils/locationUtils";
-import { initToken } from "../../utils/tokenUtils";
 import FormBuilderHeader from "./formBuilderHeader/formBuilderHeader";
 
 class ReactFormBuilder extends React.Component {
@@ -35,11 +33,9 @@ class ReactFormBuilder extends React.Component {
   componentDidMount() {
     const { formId } = this.state;
     const { initForm } = this.props;
-    // initToken().then(() => {
-      if (formId) {
-        initForm(formId);
-      }
-    // });
+    if (formId) {
+      initForm(formId);
+    }
     this.props.getAllForms();
   }
   //增加一个形参判断是否点击的是子组件里面的元素
@@ -92,34 +88,34 @@ class ReactFormBuilder extends React.Component {
     return (
       <>
         <Spin spinning={this.props.isInitForming}>
-        <FormBuilderHeader editForm={this.props.localForm} />
-        <DndProvider backend={HTML5Backend}>
-          <div>
-            <div className="react-form-builder clearfix">
-              <Toolbar {...toolbarProps} />
+          <FormBuilderHeader editForm={this.props.localForm} />
+          <DndProvider backend={HTML5Backend}>
+            <div>
+              <div className="react-form-builder clearfix">
+                <Toolbar {...toolbarProps} />
 
-              <Preview
-                manualEditModeOff={this.manualEditModeOff.bind(this)}
-                showCorrectColumn={this.props.showCorrectColumn}
-                parent={this}
-                editModeOn={this.editModeOn}
-                setActiveInnerIndex={this.props.setActiveInnerIndex}
-                isEditMode={this.state.isEditMode}
-                editElement={this.state.editElement}
-                defaultForm={this.props.localForm ? this.props.localForm : null}
-              />
+                <Preview
+                  manualEditModeOff={this.manualEditModeOff.bind(this)}
+                  showCorrectColumn={this.props.showCorrectColumn}
+                  parent={this}
+                  editModeOn={this.editModeOn}
+                  setActiveInnerIndex={this.props.setActiveInnerIndex}
+                  isEditMode={this.state.isEditMode}
+                  editElement={this.state.editElement}
+                  defaultForm={this.props.localForm ? this.props.localForm : null}
+                />
 
-              <Inspector
-                key="formBuilder-inspector"
-                editModeOn={this.editModeOn}
-                isEditMode={this.state.isEditMode}
-                editElement={this.state.editElement}
-                editElementParent={this.state.editElementParent}
-                defaultForm={this.props.localForm ? this.props.localForm : null}
-              />
+                <Inspector
+                  key="formBuilder-inspector"
+                  editModeOn={this.editModeOn}
+                  isEditMode={this.state.isEditMode}
+                  editElement={this.state.editElement}
+                  editElementParent={this.state.editElementParent}
+                  defaultForm={this.props.localForm ? this.props.localForm : null}
+                />
+              </div>
             </div>
-          </div>
-        </DndProvider>
+          </DndProvider>
         </Spin>
       </>
     );

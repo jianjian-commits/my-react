@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteForm, getForms } from "./redux/utils/operateFormUtils";
 import HeaderBar from "../base/NavBar";
-import config from "../../config/config";
 
 // 加载数据时重写表格为空状态
 const noRenderEmpty = () => (

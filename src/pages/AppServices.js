@@ -3,12 +3,14 @@ import { Layout, Menu, Icon } from "antd";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import PlaceHolder from "./Placeholder";
+import CreateForm from "../components/formBuilder/component/formBuilder/formBuilder";
 import classes from "../styles/apps.module.scss";
 
 const { Content, Sider } = Layout;
 
 const services = [
-  { key: "edit", name: "表单编辑", icon: "table", component: PlaceHolder },
+  { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
+  { key: "create", name: "创建表单", icon: "table", component: PlaceHolder },
   {
     key: "process",
     name: "自动化",
@@ -35,12 +37,12 @@ const navigationList = (history, appId) => [
 const AppServices = () => {
   const history = useHistory();
   const { appId, formId, serviceId } = useParams();
-  const Service = services.find(s => s.key === serviceId);
+  const service = services.find(s => s.key === serviceId);
   const clickHandle = e => {
     history.push(`/app/${appId}/setting/form/${formId}/${e.key}`);
   };
 
-  if (!Service) {
+  if (!service) {
     return <Route render={() => <Redirect to={`/app/${appId}/setting`} />} />;
   }
   return (
@@ -57,7 +59,7 @@ const AppServices = () => {
           </Menu>
         </Sider>
         <Content>
-          <Service.component />
+          <service.component />
         </Content>
       </Layout>
     </Layout>
