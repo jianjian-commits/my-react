@@ -48,7 +48,7 @@ class CreateModal extends Component {
         return this.setState({ errText: "应用图标不能为空" });
       }
       if (err) return;
-      let data = { ...values, code: icon };
+      let data = { ...values, icon };
       // 调用父组件给的onOk方法并传入Form的参数
       this.props.onOk(data);
       this.clearData();
@@ -124,4 +124,5 @@ class CreateModal extends Component {
   }
 }
 
-export const CreateFormModal = Form.create()(CreateModal);
+const CreateFormModal = Form.create()(CreateModal);
+export default CreateFormModal;

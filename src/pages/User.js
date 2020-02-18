@@ -5,7 +5,9 @@ import CommonHeader from "../components/header/CommonHeader";
 import UserManagement from "../components/userManagement";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
+import GroupDetail from "../components/profileManagement/GroupDetail";
 
+import { Route } from "react-router-dom";
 const { Sider, Content } = Layout;
 
 const navigationList = [
@@ -15,39 +17,51 @@ const navigationList = [
 
 const webs = [
   {
+    path: "/user/users",
     key: "user",
     label: "用户",
     icon: "user",
     component: UserManagement
   },
   {
+    path: "/user/profile",
     key: "profile",
     label: "分组",
     icon: "team",
+    exact: true,
     component: ProfileManagement
   }
 ];
 
+const otherRoutes = [
+  {
+    path: "/user/profile/view/:id",
+    key: "viewGroupDetail",
+    component: GroupDetail
+  }
+];
 class UserPage extends React.Component {
   constructor(props) {
     super(props);
+    const matches = /^\/user\/(\w+)\/?/.exec(history.location.pathname);
     this.state = {
-      selectedKey: "user"
+      selectedKey: (matches && matches[1]) || "user"
     };
   }
-  setSelectedKey(key) {
+  setSelectedKey(key, path) {
     this.setState({ selectedKey: key });
+    history.push(path);
   }
   getMenu = webs =>
     webs.map(w => (
-      <Menu.Item key={w.key} onClick={() => this.setSelectedKey(w.key)}>
+      <Menu.Item key={w.key} onClick={() => this.setSelectedKey(w.key, w.path)}>
         <Icon type={w.icon} />
         <span>{w.label}</span>
       </Menu.Item>
     ));
+
   render() {
     const { selectedKey } = this.state;
-    const CurrentWeb = webs.find(w => w.key === selectedKey);
     return (
       <Layout>
         <CommonHeader navigationList={navigationList} />
@@ -56,7 +70,12 @@ class UserPage extends React.Component {
             <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
           </Sider>
           <Content className={commonClasses.container}>
-            <CurrentWeb.component />
+            {webs.map(route => (
+              <Route {...route} />
+            ))}
+            {otherRoutes.map(route => (
+              <Route {...route} />
+            ))}
           </Content>
         </Layout>
       </Layout>

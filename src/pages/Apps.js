@@ -4,33 +4,23 @@ import HomeHeader from "../components/header/HomeHeader";
 import commonClasses from "../styles/common.module.scss";
 import classes from "../styles/apps.module.scss";
 import { history } from "../store";
-import { CreateFormModal } from "../components/createModal";
+import CreateFormModal from "../components/createApp";
 import request from "../utils/request";
 const { Content } = Layout;
 const { Meta } = Card;
-
-// 示例（默认）数据
-const defaultData = [
-  {
-    id: 0,
-    appName: "用户示例",
-    appDescription: "示例应用各项产品功能",
-    icon: "apartment"
-  }
-];
 
 // 创建模拟数据
 // const createDatas = [
 //   {
 //     id: 1,
-//     appName: "请假申请",
-//     appDescription: "用于处理公司的请假申请",
+//     name: "请假申请",
+//     description: "用于处理公司的请假申请",
 //     icon: "edit"
 //   },
 //   {
 //     id: 2,
-//     appName: "车辆管理系统",
-//     appDescription: "用于公司的车辆管理",
+//     name: "车辆管理系统",
+//     description: "用于公司的车辆管理",
 //     icon: "bar-chart"
 //   }
 // ];
@@ -42,13 +32,13 @@ const getApps = list => {
         key={e.id}
         className={classes.appCard}
         loading={false}
-        onClick={() => history.push(`/app/${e.appName}/detail`)}
+        onClick={() => history.push(`/app/${e.name}/detail`)}
       >
         <Meta
           className={classes.appCardMeta}
           avatar={<Icon type={e.icon} className={classes.avatarIcon} />}
-          title={e.appName}
-          description={e.appDescription}
+          title={e.name}
+          description={e.description}
         />
       </Card>
     );
@@ -68,10 +58,12 @@ class Apps extends React.Component {
   async handleCreate(data) {
     const res = await request("/customApplication", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       data: JSON.stringify(data)
     });
-    if (!res) {
+    if (res && res.status === "SUCCESS") {
+      message.success("创建应用成功");
+      this.getList();
+    } else {
       message.error("创建应用失败");
     }
     this.handleCancel();
@@ -93,7 +85,7 @@ class Apps extends React.Component {
         size: "10"
       }
     });
-    if (res && res.data) {
+    if (res && res.status === "SUCCESS") {
       return this.setState({
         createDatas: res.data.datas
       });
@@ -120,10 +112,8 @@ class Apps extends React.Component {
               创建应用
             </Button>
           </header>
-          <content>
-            {getApps(defaultData)}
-            {getApps(this.state.createDatas)}
-          </content>
+          {/* <content>{getApps(createDatas)}</content> */}
+          <content>{getApps(this.state.createDatas)}</content>
           <CreateFormModal
             title={"创建应用"}
             visible={this.state.open}
