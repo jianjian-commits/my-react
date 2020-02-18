@@ -6,6 +6,7 @@ import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
+import Dispose from "../pages/Dispose";
 import UserDetail from "../pages/userDetail";
 
 export const main = [
@@ -55,6 +56,13 @@ export const appPaths = [
     component: AppDetail
   },
   {
+    key: "menuContent",
+    label: "菜单内容",
+    path: `/app/:appId/detail/:menuId`,
+    icon: "file_copy",
+    component: AppDetail
+  },
+  {
     key: "setting",
     label: "应用设置",
     path: `/app/:appId/setting`,
@@ -67,5 +75,12 @@ export const appPaths = [
     path: `/app/:appId/setting/form/:formId/:serviceId`,
     icon: "file_copy",
     component: AppServices
+  },
+  {
+    key: "Dispose",
+    label: "审批详情",
+    path: `/app/:appId/:disposeId`,
+    icon: "file_copy",
+    component: Dispose
   }
 ];
