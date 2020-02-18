@@ -17,13 +17,13 @@ export const getRoutes = routes =>
     route.content ? (
       getRoutes(route.content)
     ) : (
-      <PrivateRoute
-        path={route.path}
-        component={route.component}
-        key={route.key}
-        options={route.options}
-      />
-    )
+        <PrivateRoute
+          path={route.path}
+          component={route.component}
+          key={route.key}
+          options={route.options}
+        />
+      )
   );
 
 const AppInsideRouter = () => {
