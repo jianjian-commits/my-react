@@ -1,0 +1,376 @@
+.form-submit-data-table {
+  box-sizing: border-box;
+  width: 86.041%;
+  margin: 0 auto;
+  padding: 176px 0 56px 0;
+  overflow: hidden;
+  .filter-container {
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    padding: 22px;
+    .filter-item-container {
+      max-height: 130px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      .filter-item {
+        margin-bottom: 10px;
+      }
+    }
+    .option-style {
+      background-color: yellowgreen;
+    }
+
+    .filter-action {
+      display: flex;
+      .anticon {
+        svg {
+          color: #3384fe;
+          font-size: 20px;
+          line-height: 32px;
+          height: 32px;
+        }
+      }
+    }
+    .filter-condition {
+      .ant-select-selection-selected-value {
+        font-size: 14px;
+        color: #565c6e;
+        font-weight: 500;
+      }
+      .ant-select-selection__placeholder {
+        font-size: 14px;
+        color: #565c6e;
+        font-weight: 500;
+      }
+      display: flex;
+      p {
+        margin-right: 29px;
+        line-height: 32px;
+        font-weight: 500;
+        font-size: 16px;
+      }
+    }
+    .filter-submit-container {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .limit-data-number-container {
+    display: flex;
+    justify-content: flex-start;
+    background-color: #fff;
+    padding: 13px 0 13px 36px;
+    .ant-input-number {
+      height: 28px;
+      width: 60px;
+      margin-left: 5px;
+    }
+    .ant-btn {
+      margin-left: 10px;
+      font-size: 13px;
+    }
+  }
+  .ant-table-body {
+    overflow-x: auto !important;
+    &::-webkit-scrollbar {
+      height: 10px;
+    }
+  }
+
+  .ant-table-wrapper {
+    background: #fff;
+    table {
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+  }
+  .ant-table-thead {
+    font-size: 14px;
+    tr {
+      th {
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 21px;
+        background: rgba(255, 255, 255, 1);
+        color: #a4adc8;
+        border: 0.3px solid #f3f4f5;
+        border-color: #f3f4f5 !important;
+        .ant-table-column-sorter-inner-full {
+          display: block;
+          margin-left: 2px;
+        }
+        &.ant-table-column-sort {
+          color: #2978ff;
+          font-size: 14px;
+          font-weight: 500;
+        }
+        &.ant-table-row-cell-break-word,
+        &.ant-table-column-has-actions {
+          border-left: none;
+          border-right: none;
+        }
+        &:last-child {
+          // border-left: 1px solid;
+        }
+      }
+    }
+  }
+  .ant-table-tbody {
+    font-size: 14px;
+    .ant-table-row {
+      height: 56px;
+      td {
+        padding: 0 10px;
+        text-align: center;
+        line-height: 56px;
+        height: 56px;
+        color: #565c6e;
+        font-size: 14px;
+        font-weight: 400;
+        border-color: #f3f4f5 !important;
+        &:last-child {
+          border-left: 1px solid;
+        }
+        .formChildDiv {
+          height: 56px;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          margin: 0 -10px;
+          border: 1px solid #f3f4f5;
+          border-top: none;
+          .formChild-item {
+            flex: 0 1 auto;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 5px;
+            &.image {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+        }
+        .formChildLook {
+          height: 56px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0 -10px;
+          border: 1px solid #f3f4f5;
+          border-top: none;
+          border-bottom: none;
+        }
+        p {
+          margin-bottom: 0px;
+          padding: 0px;
+        }
+      }
+    }
+  }
+
+  .ant-btn.ant-btn-link {
+    color: #5a8ced;
+    height: 24px;
+    padding: 0 10px;
+  }
+
+  // // 表格详情
+  .ant-table-pagination.ant-pagination {
+    float: none;
+    text-align: center;
+    margin: 20px;
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      .ant-pagination-item-link {
+        line-height: 28px;
+        padding: 9px;
+        vertical-align: middle;
+        display: table-cell;
+      }
+    }
+    .ant-pagination-item-active {
+      background: $btnBgBlue;
+      border-color: $btnBgBlue;
+      a {
+        color: $white;
+      }
+    }
+  }
+  .ant-pagination-options-quick-jumper {
+    input {
+      border-color: $inputBorderColor !important;
+    }
+  }
+}
+
+.ant-modal-content {
+  width: auto;
+  height: auto;
+  .ant-modal-body {
+    .showDataDetail {
+      width: 520px;
+      height: 600px;
+      padding: 19px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+      .dataDteailText {
+        min-height: 60px;
+        margin-top: 10px;
+        font-size: 14px;
+        font-family: "PingFangSC-Regular", "PingFang SC";
+        border-bottom: 1px solid rgba(237, 239, 243, 1);
+        p {
+          margin-bottom: 7px;
+          word-break: break-all;
+        }
+        .dataTitle {
+          font-weight: 500;
+          color: rgba(170, 178, 203, 1);
+          line-height: 20px;
+        }
+        .dataContent {
+          font-weight: 400;
+          color: rgba(86, 92, 110, 1);
+          line-height: 20px;
+        }
+      }
+      .dataDteailFile {
+        font-size: 14px;
+        min-height: 60px;
+        font-family: "PingFangSC-Regular", "PingFang SC";
+        border-bottom: 1px solid rgba(237, 239, 243, 1);
+        margin-top: 10px;
+        p {
+          margin-bottom: 7px;
+          word-break: break-all;
+        }
+        .dataTitle {
+          font-weight: 500;
+          color: rgba(170, 178, 203, 1);
+          line-height: 20px;
+        }
+        .imageList {
+          width: 100%;
+          height: auto;
+          display: flex;
+          flex-wrap: wrap;
+          margin-bottom: 10px;
+          .imageContainer {
+            width: 100px;
+            height: 100px;
+            margin-top: 5px;
+            margin-right: 8px;
+            position: relative;
+            img {
+              z-index: 1;
+              width: 100%;
+              height: 100%;
+            }
+            .imageHover {
+              z-index: 111;
+              display: none;
+              position: absolute;
+              background: rgba(51, 51, 51, 1);
+              opacity: 0.6;
+              width: 100%;
+              height: 100%;
+              top: 0px;
+              left: 0px;
+              p {
+                &:nth-child(1) {
+                  margin-top: 5px;
+                }
+                margin-bottom: 0px;
+                margin-left: 10px;
+                font-size: 12px;
+                line-height: 17px;
+                font-family: "PingFangSC-Medium", "PingFang SC";
+                font-weight: 500;
+                color: rgba(255, 255, 255, 1);
+              }
+            }
+          }
+        }
+        .fileList {
+          margin-bottom: 10px;
+          .fileContainer {
+            line-height: 20px;
+          }
+        }
+      }
+      .dataDteailFormChild {
+        font-size: 14px;
+        font-family: "PingFangSC-Regular", "PingFang SC";
+        border-bottom: 1px solid rgba(237, 239, 243, 1);
+        margin-top: 10px;
+        max-height: 177px;
+        p {
+          margin-bottom: 7px;
+          word-break: break-all;
+        }
+        .dataTitle {
+          font-weight: 500;
+          color: rgba(170, 178, 203, 1);
+          line-height: 20px;
+        }
+        .formChildTable {
+          .ant-table-body {
+            overflow-x: auto !important;
+            &::-webkit-scrollbar {
+              height: 10px;
+            }
+            td {
+              padding: 6px 8px;
+            }
+          }
+          .ant-table-thead {
+            span {
+              color: rgba(170, 178, 203, 1);
+            }
+            th {
+              padding: 6px 8px;
+            }
+          }
+          table {
+            font-size: 14px;
+          }
+          .ant-table-wrapper {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+          }
+          .formChildData {
+            min-height: 25px;
+            color: rgba(86, 92, 110, 1);
+            width: auto;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            img {
+              width: 45px;
+              height: 25px;
+              margin-right: 3px;
+              margin-top: 3px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.ant-select-dropdown-menu-item-selected {
+  font-weight: 400;
+}
+.ant-select-dropdown-menu-item {
+  font-size: 12px;
+}

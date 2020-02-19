@@ -1,0 +1,26 @@
+.icon-wrap {
+  position: relative;
+  height: 34px;
+  & i:nth-child(2) {
+    opacity: 0;
+  }
+  .form-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: inline-block;
+    width: 23px;
+    height: 34px;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+  &:hover {
+    & i:nth-child(2) {
+      opacity: 1;
+    }
+  }
+}
