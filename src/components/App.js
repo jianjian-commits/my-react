@@ -10,6 +10,8 @@ import Login from "../pages/_Login";
 import Register from "../pages/Register";
 import ForgetPassword from "../pages/forgetPassword";
 
+import PermissionSetting from "./userManagement/applyPermissionSettings";
+
 import ErrorBoundary from "./shared/ErrorBoundary";
 
 export const getRoutes = routes =>
@@ -42,6 +44,7 @@ const App = () => (
     <ConnectedRouter history={history}>
       <Switch>
         <PublicRoute path="/register" component={Register} />
+        <PublicRoute path="/setting" component={PermissionSetting} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}

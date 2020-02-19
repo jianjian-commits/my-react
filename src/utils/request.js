@@ -1,23 +1,22 @@
-// 封装一个axios的实例
-import Axios from "axios";
+import axios from "axios";
 import { serverHost, port } from "./config";
 
-// Axios.defaults.headers.post["content-type"] = "application/json";
-// 创建一个新的实例
-export let r = Axios.create({
-  baseURL: `http://${serverHost}${port ? ":" + port : ""}`
-});
-r.interceptors.response.use(
-  response => response.data,
-  error => Promise.reject(error)
-);
+const baseURL = `http://${serverHost}${port ? ":" + port : ""}`;
 
-let request = function(url = "", options = {}) {
-  return r({
-    url,
-    method: "get", // method先给一个get请求
-    ...options // options中有method就会覆盖,
+async function request(url, params = {}) {
+  const headers = params.headers || {};
+  headers["Content-Type"] = "application/json" || params.contentType;
+  const res = await axios({
+    url: `${baseURL}${url}`,
+    // timeout: params.timeout || 4000,
+    headers,
+    data: params.data || {},
+    params: params.params || {},
+    method: params.method || "GET"
   });
-};
+  console.log("fetch options", params);
+  console.log("fetch res", res);
+  return res.data;
+}
 
 export default request;
