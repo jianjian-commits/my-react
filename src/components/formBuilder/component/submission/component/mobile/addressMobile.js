@@ -38,7 +38,7 @@ export default class address extends Component {
       // 搜索所有省/直辖市信息
       districtSearch.search("中国", function(status, result) {
         // 查询成功时，result即为对应的行政区信息
-        if (result.info == "OK") {
+        if (result.info === "OK") {
           that.setState({
             CityData: that.filterCityData(result.districtList[0].districtList)
           });
@@ -65,7 +65,7 @@ export default class address extends Component {
 
     const { data } = item;
     // 是否为数据联动
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId, //联动条件 id(当前表单)
         linkComponentId, //联动条件 id(联动表单)
@@ -166,8 +166,8 @@ export default class address extends Component {
     const { province, city, county, detail } = newAddress;
     if (item.validate.required) {
       if(province && city && county) {
-        if(item.addressType == "hasDetail") {
-          detail == "" ? newAddress.hasErr = true : newAddress.hasErr = false;
+        if(item.addressType === "hasDetail") {
+          detail === "" ? newAddress.hasErr = true : newAddress.hasErr = false;
         } else {
           newAddress.hasErr = false;
         }
@@ -218,7 +218,7 @@ export default class address extends Component {
               ></List.Item>
             </Picker>
           </div>
-          {this.props.item.addressType == "noDetail" ? (
+          {this.props.item.addressType === "noDetail" ? (
             <></>
           ) : (
             <div className="row mobile detail">

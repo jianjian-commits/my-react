@@ -23,7 +23,7 @@ export default class MultiDropDown extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     let { values, type } = data;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,
@@ -84,7 +84,7 @@ export default class MultiDropDown extends React.Component {
           this.handleChange(undefined);
         });
       });
-    } else if (type == "otherFormData") {
+    } else if (type === "otherFormData") {
       getSelection(values.formId, values.optionId).then(res => {
         this.setState({
           selections: res
@@ -101,7 +101,7 @@ export default class MultiDropDown extends React.Component {
     const { item } = this.props;
     const { maxOptionNumber, minOptionNumber } = item.validate;
     let defaultErrMsg = "";
-    if (maxOptionNumber != Number.MAX_SAFE_INTEGER && minOptionNumber != 0) {
+    if (maxOptionNumber !== Number.MAX_SAFE_INTEGER && minOptionNumber !== 0) {
       defaultErrMsg = `请选择${minOptionNumber} ~ ${maxOptionNumber}项`;
     } else if (maxOptionNumber !== Number.MAX_SAFE_INTEGER) {
       defaultErrMsg = `最多选择${maxOptionNumber}项`;

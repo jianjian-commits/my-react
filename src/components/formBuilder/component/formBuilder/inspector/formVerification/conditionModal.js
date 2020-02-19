@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Input, Tabs, Collapse, AutoComplete } from "antd";
+import { Modal, Input, Tabs, Collapse } from "antd";
 import {
   addVerification,
   editVerification
@@ -30,7 +30,7 @@ class ConditionModal extends React.Component {
     let resultArray = [];
 
     this.props.data.forEach(item => {
-      if (item.type == "FormChildTest") {
+      if (item.type === "FormChildTest") {
         item.values.forEach(childItem => {
           resultArray.push({
             label: item.label + "." + childItem.label,
@@ -82,7 +82,7 @@ class ConditionModal extends React.Component {
     this.setState(
       state => {
         let result = "";
-        if (cursorIndex == 0) {
+        if (cursorIndex === 0) {
           result = value + state.verificationStr;
         } else {
           let start = state.verificationStr.substr(0, cursorIndex);
@@ -114,7 +114,7 @@ class ConditionModal extends React.Component {
       var selectRange = document.selection.createRange();
       selectRange.moveStart("character", -textDom.value.length);
       cursorPos = selectRange.text.length;
-    } else if (textDom.selectionStart || textDom.selectionStart == "0") {
+    } else if (textDom.selectionStart || textDom.selectionStart === "0") {
       // Firefox support
       cursorPos = textDom.selectionStart;
     }
@@ -134,7 +134,7 @@ class ConditionModal extends React.Component {
     this.setState(
       state => {
         let result = "";
-        if (cursorIndex == 0) {
+        if (cursorIndex === 0) {
           result = value + state.verificationStr;
         } else {
           let start = state.verificationStr.substr(0, cursorIndex);
@@ -227,7 +227,7 @@ class ConditionModal extends React.Component {
         onOk={() => {
           this.props.handleOk();
           if (this.state.verificationStr) {
-            this.props.index == -1
+            this.props.index === -1
               ? this.props.addVerification(this.state.verificationStr)
               : this.props.editVerification(
                 this.state.verificationStr,
@@ -346,7 +346,7 @@ class ConditionModal extends React.Component {
                   </div>
                   <div className="formulaDiscribe">
                     <div className="formulaDiscribeContent">
-                      {this.state.showFormualContent == "" ? (
+                      {this.state.showFormualContent === "" ? (
                         <></>
                       ) : (
                           <div>

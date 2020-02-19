@@ -55,10 +55,10 @@ class FormVerification extends React.Component {
     // let customValue = this.state.customValue;
 
     let customValue = this.props.data.filter(item => {
-      return item.type == "CustomValue";
+      return item.type === "CustomValue";
     })[0];
 
-    if (customValue != void 0) {
+    if (customValue  != void 0) {
       this.props.setVerification(customValue.validate)
       this.props.setVerificationMsg(customValue.errMessage, 'init');
     }

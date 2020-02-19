@@ -38,10 +38,6 @@ export default class FormIcon extends PureComponent {
                 name = "./image/icons/email";
                 break;
             }
-            case 'edit': {
-                name = "./image/icons/edit";
-                break;
-            }
             case 'file': {
                 name = "./image/icons/file";
                 break;

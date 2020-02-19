@@ -129,7 +129,7 @@ class FilterItem extends Component {
   renderInputByFiledType = (filed) => {
     switch (filed.type) {
       case "DateInput":
-        if (this.state.operator == "IN" || this.state.operator == "NOT_IN") {
+        if (this.state.operator === "IN" || this.state.operator === "NOT_IN") {
           return (<Input placeholder="请输入值"
             key={`${filed.key}${this.state.operator}`}
             style={{ width: "100%" }}
@@ -281,10 +281,10 @@ class FilterItem extends Component {
 
   onSelectField = (value) => {
     const filed = this.props.fileds.filter(filter => {
-      return filter.key == value
+      return filter.key === value
     })[0];
 
-    if (filed.type == "GetLocalPosition") {
+    if (filed.type === "GetLocalPosition") {
       value = `${value}.address`
     }
     const logicalOperators = this.getOperatorArrayByFiledType(filed.type);
@@ -300,13 +300,13 @@ class FilterItem extends Component {
 
   onSelectOperator = (value) => {
     const operator = this.state.logicalOperators.filter(operator => {
-      return operator.label == value
+      return operator.label === value
     })[0];
     this.props.setFilterAttr("selectedLogicalOperator", operator.operator, this.props.index);
     this.props.setFilterAttr("costomValue", "", this.props.index);
     this.props.setFilterAttr("filterType", operator.type, this.props.index);
     this.setState({
-      disabledCostomValue: (operator.type == "EXISTS") || (operator.type == "NOT_EXISTS") ? true : false,
+      disabledCostomValue: (operator.type === "EXISTS") || (operator.type === "NOT_EXISTS") ? true : false,
       operator: operator.type
     },()=>{
       this._setCostomValue("");
@@ -314,7 +314,7 @@ class FilterItem extends Component {
   }
 
   _setCostomValue = (value) =>{
-    if(this.state.operator == "EXISTS" || this.state.operator == "NOT_EXISTS") {
+    if(this.state.operator === "EXISTS" || this.state.operator === "NOT_EXISTS") {
       this.props.setFilterAttr("costomValue", "emptyValue", this.props.index);
     } else {
       this.props.setFilterAttr("costomValue", value, this.props.index);
@@ -439,7 +439,7 @@ export default class FilterComponent extends Component {
   }
 
   isAllFilled = (filter, index) => {
-    if(filter.costomValue.constructor == Array && filter.costomValue.length == 0 ){
+    if(filter.costomValue.constructor === Array && filter.costomValue.length === 0 ){
       return false;
     }
     if(filter.filterType=="EXISTS"){
@@ -455,7 +455,7 @@ export default class FilterComponent extends Component {
       this.setState({
         filterArray: newFilterArray
       })
-    }else if(newFilterArray.length == 1){
+    }else if(newFilterArray.length === 1){
       this.props.setFilterMode(null,null,false);
       this.setState({
         filterArray: [{
@@ -472,7 +472,7 @@ export default class FilterComponent extends Component {
 
   changeFilterValue = (attr, value, indexInArray) => {
     const newFilterArray = this.state.filterArray.map((filter, index) => {
-      if (indexInArray == index) {
+      if (indexInArray === index) {
         filter[attr] = value
       }
       return filter
@@ -530,7 +530,7 @@ export default class FilterComponent extends Component {
   render() {
     // const fileds = this.props.fileds.filter(fileds => {
     //   // return !this.state.filterArray.some(filter => {
-    //     return filter.selectedFiledKey == fileds.key
+    //     return filter.selectedFiledKey === fileds.key
     //   // })
     // })
     const fileds = this.props.fileds;

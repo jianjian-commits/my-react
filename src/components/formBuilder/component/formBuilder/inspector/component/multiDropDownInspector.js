@@ -15,7 +15,6 @@ import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import OtherDataModal from "../dataLinkageModal/otherDataModal";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
-const { Option } = Select;
 import { connect } from "react-redux";
 import {
   setItemAttr,
@@ -24,6 +23,7 @@ import {
   setFormChildItemValues
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild"
+const { Option } = Select;
 
 class MultiDropDownInspector extends React.Component {
   constructor(props) {
@@ -78,14 +78,14 @@ class MultiDropDownInspector extends React.Component {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value != undefined ? value : checked,
+        value !== undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value != undefined ? value : checked
+        value !== undefined ? value : checked
       );
     }
   }
@@ -109,9 +109,9 @@ class MultiDropDownInspector extends React.Component {
   deleteChooseItem(item, index) {
     // let newValuesList = [...this.props.element.data.values];
     // newValuesList.pop(item);
-    if(this.props.element.data.values.length == 1) return null;
+    if(this.props.element.data.values.length === 1) return null;
     let newValuesList = this.props.element.data.values.filter(
-      (item, i) => i != index
+      (item, i) => i !== index
     );
     if (this.props.elementParent) {
       this.props.setFormChildItemValues(
@@ -150,7 +150,7 @@ class MultiDropDownInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      minOptionNumber: value == void 0 ? 0 : value
+      minOptionNumber: value === void 0 ? 0 : value
     };
 
     if (this.props.elementParent) {
@@ -169,7 +169,7 @@ class MultiDropDownInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxOptionNumber: value == void 0 ? Number.MAX_SAFE_INTEGER : value
+      maxOptionNumber: value === void 0 ? Number.MAX_SAFE_INTEGER : value
     };
 
     if (this.props.elementParent) {
@@ -295,7 +295,7 @@ class MultiDropDownInspector extends React.Component {
                 this.handleSetOtherDataModal(true);
               }}
             >
-              {element.data.type == "otherFormData"
+              {element.data.type === "otherFormData"
                 ? "已设置表单数据关联"
                 : "关联表单数据设置"}
             </Button>
@@ -322,7 +322,7 @@ class MultiDropDownInspector extends React.Component {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type == "DataLinkage"
+              {element.data.type === "DataLinkage"
                 ? "已设置数据联动"
                 : "数据联动设置"}
             </Button>

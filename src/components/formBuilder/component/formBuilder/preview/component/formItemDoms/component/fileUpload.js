@@ -1,7 +1,7 @@
 import React from "react";
 import ComponentBox from "../componentBox";
 import { ComponentHeader } from "../utils/commonDom";
-import { Upload, Button, Icon } from "antd";
+import { Button } from "antd";
 
 export default class FileUpload extends React.Component {
   constructor(props) {
@@ -42,8 +42,8 @@ export default class FileUpload extends React.Component {
             <div className="form-group">
               <div className="localposition-container">
                 <Button type="dashed">
-                  <img src="/image/icons/file2.png" />
-                 上传附件
+                  <img src="/image/icons/file2.png" alt="" />
+                  上传附件
                 </Button>
               </div>
             </div>

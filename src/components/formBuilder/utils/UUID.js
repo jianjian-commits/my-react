@@ -22,7 +22,7 @@ ID.uuid = function (len, radix) {
     for (i = 1; i < 26; i++) {
       if (!uuid[i]) {
         r = 0 | Math.random()*16;
-        uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+        uuid[i] = chars[(i === 19) ? (r & 0x3) | 0x8 : r];
       }
     }
   }
@@ -43,7 +43,7 @@ ID.uuidFast = function() {
       if (rnd <= 0x02) rnd = 0x2000000 + (Math.random()*0x1000000)|0;
       r = rnd & 0xf;
       rnd = rnd >> 4;
-      uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+      uuid[i] = chars[(i === 19) ? (r & 0x3) | 0x8 : r];
     }
   }
   return uuid.join('');
@@ -52,7 +52,7 @@ ID.uuidFast = function() {
 // A more compact, but less performant, RFC4122v4 solution:
 ID.uuidCompact = function() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
     return v.toString(16);
   });
 };

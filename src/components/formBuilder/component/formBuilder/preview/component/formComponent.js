@@ -3,19 +3,20 @@ import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
 import { DragSource, DropTarget } from "react-dnd";
 import ItemTypes from "../../../../utils/ItemTypes";
+import { logDOM, logRoles } from "@testing-library/react";
 
 const _hideAllComponent = (componentArray, isNotHideParentTop) => {
   for (let i = 0, len = componentArray.length; i < len; i++) {
     document.getElementById(`dragItem${i}Top`).style.display = "none";
     document.getElementById(`dragItem${i}Bottom`).style.display = "none";
   }
-  if (isNotHideParentTop != false) {
-    if (document.getElementById("dragParentTop") != void 0) {
+  if (isNotHideParentTop !== false) {
+    if (document.getElementById("dragParentTop")  != void 0) {
       document.getElementById("dragParentTop").style.display = "none";
     }
   }
 
-  if (document.getElementById("formChildTest") != void 0) {
+  if (document.getElementById("formChildTest")  != void 0) {
     document.getElementById("formChildTest").setAttribute("class", "")
   }
 }
@@ -31,7 +32,7 @@ let domHeight = 0;
 let dragType = null;
 
 let _isFormChildIgnoreComponent = (type) => {
-  return type != "FormChildTest" && type != "GetLocalPosition" && type != "HandWrittenSignature" && type != "ComponentTemplate" && type !="Button"
+  return type !== "FormChildTest" && type !== "GetLocalPosition" && type !== "HandWrittenSignature" && type !== "ComponentTemplate" && type !== "Button"
 
 }
 
@@ -41,7 +42,7 @@ let _hoverIntoComponent = (component, props, monitor, targetComponentId, targetT
   let draggedType = monItem.data.type;
 
   props.componentArray.forEach((item, i) => {
-    if (item.id == targetComponentId) {
+    if (item.id === targetComponentId) {
       index = i
     }
   });
@@ -54,12 +55,12 @@ let _hoverIntoComponent = (component, props, monitor, targetComponentId, targetT
 
   _hideAllComponent(props.componentArray);
 
-  if (targetType == "FormChildTest" && _isFormChildIgnoreComponent(draggedType)) {
+  if (targetType === "FormChildTest" && _isFormChildIgnoreComponent(draggedType)) {
     const hoverSize = 27;
     let formChildArray = component.props.data.values;
     _hideAllFormChild(targetComponentId, formChildArray);
 
-    if (dragType != targetType) {
+    if (dragType !== targetType) {
       domHeight = hoverBoundingRect.height;
       dragType = targetType;
     }
@@ -115,7 +116,7 @@ const setHoverClass = (props, component, monitor) => {
   let targetComponentId = component.props.data.id;
   let targetType = component.props.data.type;
 
-  if (targetComponentId == "dragParent") {
+  if (targetComponentId === "dragParent") {
     _hideAllComponent(props.componentArray, false);
 
     document.getElementById("dragParentShadow").style.display = "block";
@@ -137,22 +138,21 @@ const cardSource = {
     };
   },
   endDrag(props, monitor, component) {
-    if (props.componentArray != void 0) {
+    if (props.componentArray  != void 0) {
       _hideAllComponent(props.componentArray)
     }
   }
 };
 
 const _isDragIntoEmptyDom = (hoverIndex) => {
-  return hoverIndex == -2
+  return hoverIndex === -2
 }
 const _isDragIntoParent = (hoverIndex) => {
-  return hoverIndex == -1
+  return hoverIndex === -1
 }
 
 const cardTarget = {
   drop(props, monitor, component) {
-    dragType = null;
     let monItem = monitor.getItem();
     let dragIndex = monItem.index;
     let dragType = monItem.data.type;
@@ -161,13 +161,14 @@ const cardTarget = {
     let targetType = component.props.data.type;
 
 
-    if (document.getElementById("formPlaceHolder") != void 0) {
+    if (document.getElementById("formPlaceHolder")  != void 0) {
       document.getElementById("formPlaceHolder").style.display = "block";
     }
-    if (document.getElementById("dragParentShadow") != void 0) {
+    console.log(document.getElementById("dragParentShadow"));
+    if (document.getElementById("dragParentShadow")  != void 0) {
       document.getElementById("dragParentShadow").style.display = "none";
     }
-    if (document.getElementById("dragParentTop") != void 0) {
+    if (document.getElementById("dragParentTop")  != void 0) {
       document.getElementById("dragParentTop").style.display = "none";
     }
 
@@ -175,7 +176,7 @@ const cardTarget = {
       props.insertCard(monItem.onCreate(monItem.data), 0);
 
     } else {
-      if (props.componentArray != void 0) {
+      if (props.componentArray  != void 0) {
         let componentLen = props.componentArray.length;
 
         _hideAllComponent(props.componentArray)
@@ -199,7 +200,7 @@ const cardTarget = {
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       if (_isDragIntoParent(dragIndex)) {
-        if (targetType == "FormChildTest" && _isFormChildIgnoreComponent(dragType)) {
+        if (targetType === "FormChildTest" && _isFormChildIgnoreComponent(dragType)) {
           let hoverSize = 27;
           let formChildArray = component.props.data.values;
 
@@ -253,7 +254,7 @@ const cardTarget = {
             let editInnerComponent = null;
             let editComponentIndex = -1;
             let resultArr = props.componentArray.map((item) => {
-              if (item.id == component.props.data.id) {
+              if (item.id === component.props.data.id) {
                 let newArr = [...item.values];
                 const newInnerItem = monItem.onCreate(monItem.data);
                 newArr.splice(targetIndex, 0, newInnerItem);
@@ -269,7 +270,7 @@ const cardTarget = {
               };
               return item;
             });
-            if (props.customValue != void 0) {
+            if (props.customValue  != void 0) {
               resultArr.push(props.customValue)
             }
 
@@ -290,7 +291,7 @@ const cardTarget = {
           props.insertCard(monItem.onCreate(monItem.data), hoverIndex);
         }
       } else {
-        if (dragIndex == (hoverIndex - 1) && hoverClientY < hoverMiddleY) {
+        if (dragIndex === (hoverIndex - 1) && hoverClientY < hoverMiddleY) {
           return;
         } else {
           if (hoverClientY > hoverMiddleY) {
@@ -304,9 +305,9 @@ const cardTarget = {
     }
   },
   hover(props, monitor, component) {
-    if (props.componentArray != void 0) {
+    if (props.componentArray  != void 0) {
       setHoverClass(props, component, monitor);
-    } else if (props.data.id == "EmptyFormComponent") {
+    } else if (props.data.id === "EmptyFormComponent") {
       document.getElementById("formPlaceHolder").setAttribute("class", "hover-emptyDom")
     }
   }
@@ -338,7 +339,7 @@ export default function (ComposedComponent) {
       if (_isDragIntoEmptyDom(i)) {
         return connectDropTarget(
           <div id={String(this.props.id)} onDragLeave={(e) => {
-            if (document.getElementById("formPlaceHolder") != void 0) {
+            if (document.getElementById("formPlaceHolder")  != void 0) {
               document.getElementById("formPlaceHolder").setAttribute("class", "")
             }
           }}>
@@ -349,7 +350,7 @@ export default function (ComposedComponent) {
       } else if (_isDragIntoParent(i)) {
         return connectDropTarget(
           <div id={String(this.props.id)} onDragLeave={(e) => {
-            if (document.getElementById("dragParentTop") != void 0) {
+            if (document.getElementById("dragParentTop")  != void 0) {
               document.getElementById("dragParentTop").style.display = "none";
             }
             // document.getElementById("dragParentShadow").style.display = "none";

@@ -21,7 +21,7 @@ export default class ImageUpload extends React.Component {
   }
   validFunction = (rule, value, callback) => {
     const { required, customMessage } = this.props.item.validate;
-    if (value.length == 0 && required) {
+    if (value.length === 0 && required) {
       callback(customMessage);
     }
     callback();

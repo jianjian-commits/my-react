@@ -31,7 +31,7 @@ export default class address extends Component {
       // 搜索所有省/直辖市信息
       districtSearch.search("中国", function(status, result) {
         // 查询成功时，result即为对应的行政区信息
-        if (result.info == "OK") {
+        if (result.info === "OK") {
           that.setState({
             CityData: result.districtList[0]
           });
@@ -101,8 +101,8 @@ export default class address extends Component {
     };
     if (item.validate.required) {
       if(province && city && county) {
-        if(item.addressType == "hasDetail") {
-          detail == "" ? newAddress.hasErr = true : newAddress.hasErr = false;
+        if(item.addressType === "hasDetail") {
+          detail === "" ? newAddress.hasErr = true : newAddress.hasErr = false;
         } else {
           newAddress.hasErr = false;
         }

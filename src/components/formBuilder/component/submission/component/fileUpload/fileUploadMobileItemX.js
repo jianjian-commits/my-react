@@ -114,7 +114,7 @@ class FileUploadMobileItem extends React.Component {
   _deleteExsitFile = index => {
     const { fileCount } = this.props.item;
     const { onChange } = this.props;
-    const newImgList = this.state.uploadFileList.filter((item, i) => i != index);
+    const newImgList = this.state.uploadFileList.filter((item, i) => i !== index);
     this.setState(
       {
         uploadFileList: newImgList,

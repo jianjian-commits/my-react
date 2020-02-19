@@ -17,35 +17,35 @@ class ComponentItem extends React.Component {
   handleDeleteComponent() {
     const { values, element } = this.props;
     const newValues = values.filter(
-      (item, index) => index != this.props.itemIndex
+      (item, index) => index !== this.props.itemIndex
     );
     this.props.setItemAttr(element, "values", newValues);
   }
   handleCopyComponent() {
     const { values, element } = this.props;
     const beCopiedValue = values.filter(
-      (item, index) => index == this.props.itemIndex
+      (item, index) => index === this.props.itemIndex
     )[0];
-    let newData = JSON.parse(JSON.stringify(beCopiedValue)); 
+    let newData = JSON.parse(JSON.stringify(beCopiedValue));
     let key = ID.uuid();
     newData.id = key;
     newData.key = key;
     newData.layout.i = key;
     newData.layout.y = 0;
-    this.props.setItemAttr(element, "values", [...values,newData]);
+    this.props.setItemAttr(element, "values", [...values, newData]);
   }
   render() {
     return (
       <div className="ComponentItem">
         <Input value={this.props.item.label} disabled />
         <Tooltip title="复制">
-          <img src="/image/icons/复制@2x.png" 
+          <img src="/image/icons/复制@2x.png" alt=""
             onClick={this.handleCopyComponent}
           />
         </Tooltip>
         <Tooltip title="删除">
           <img
-            src="/image/icons/delete.png"
+            src="/image/icons/delete.png" alt=""
             onClick={this.handleDeleteComponent}
           />
         </Tooltip>
@@ -65,7 +65,7 @@ class FormChildTestInspector extends React.Component {
   }
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
-    let { validate, unique } = this.props.element;
+    let { validate } = this.props.element;
     validate = { ...validate };
     switch (name) {
       case "customMessage": {
@@ -83,17 +83,18 @@ class FormChildTestInspector extends React.Component {
         value = validate;
         break;
       }
+      default: break;
     }
     this.props.setItemAttr(
       this.props.element,
       name,
-      value != undefined ? value : checked
+      value !== undefined ? value : checked
     );
   };
 
   _getComponentItem = value => {
     const componentItem = advancedComponentArray.concat(basicComponentsArray).filter(item => {
-      return item.label == value;
+      return item.label === value;
     });
     return componentItem[0];
   };
@@ -132,7 +133,7 @@ class FormChildTestInspector extends React.Component {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type == "DataLinkage"
+              {element.data.type === "DataLinkage"
                 ? "已设置数据联动"
                 : "数据联动设置"}
             </Button>
@@ -246,10 +247,10 @@ class FormChildTestInspector extends React.Component {
               }}
             >
               {[...basicComponentsArray, ...advancedComponentArray]
-                .filter(item => item.type != 'FormChildTest'
-                  && item.type != "GetLocalPosition"
-                  && item.type != "HandWrittenSignature"
-                  && item.type != "ComponentTemplate")
+                .filter(item => item.type !== 'FormChildTest'
+                  && item.type !== "GetLocalPosition"
+                  && item.type !== "HandWrittenSignature"
+                  && item.type !== "ComponentTemplate")
                 .map((item, i) => (
                   <Select.Option key={`${item.type}${i}`} value={item.label}>
                     {item.label}
@@ -272,15 +273,15 @@ class FormChildTestInspector extends React.Component {
           <Divider />
           <div className="costom-info-card">
             <p htmlFor="email-tip">校验</p>
-              <div className="checkbox-wrapper">
-                <Checkbox
-                  name="required"
-                  checked={validate.required}
-                  onChange={this.handleChangeAttr}
-                >
-                  必填
+            <div className="checkbox-wrapper">
+              <Checkbox
+                name="required"
+                checked={validate.required}
+                onChange={this.handleChangeAttr}
+              >
+                必填
                 </Checkbox>
-              </div>
+            </div>
           </div>
         </div>
       </div>

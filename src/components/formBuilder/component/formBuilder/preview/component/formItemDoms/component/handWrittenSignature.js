@@ -1,7 +1,7 @@
 import React from "react";
 import ComponentBox from "../componentBox";
 import { ComponentHeader } from "../utils/commonDom";
-import { Upload, Button, Icon } from "antd";
+import { Button } from "antd";
 
 export default class HandWrittenSignature extends React.Component {
   constructor(props) {
@@ -43,7 +43,7 @@ export default class HandWrittenSignature extends React.Component {
               <div className="localposition-container">
                 <span className="loaction-tip">请在移动端打开表单添加签名</span>
                 <Button type="dashed">
-                  <img src="/image/icons/writtensign2.png" />
+                  <img src="/image/icons/writtensign2.png" alt=""/>
                   添加签名
                 </Button>
               </div>

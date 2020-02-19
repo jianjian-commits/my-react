@@ -1,6 +1,6 @@
 let _flattenArray = (array) => {
     return array.reduce((result, item) => {
-        if ({}.toString.call(item) == "[object Array]") {
+        if ({}.toString.call(item) === "[object Array]") {
             result = result.concat(_flattenArray(item))
         } else {
             result.push(item);
@@ -13,16 +13,16 @@ let _flattenArray = (array) => {
 let getValidValue = (value, type) => {
     let newValue = null;
 
-    if ({}.toString.call(value) == "[object Array]") {
+    if ({}.toString.call(value) === "[object Array]") {
         let array = _flattenArray(value);
-        array.length == 0 ?
-            type == "string" ?
+        array.length === 0 ?
+            type === "string" ?
                 newValue = "" : newValue = 0
             :
-            type == "string" ?
+            type === "string" ?
                 newValue = String(array[0]) : newValue = Number(array[0])
     } else {
-        type == "string" ?
+        type === "string" ?
             newValue = String(value) : newValue = Number(value)
     }
 
@@ -36,7 +36,7 @@ export const textCheckType = [
             target = getValidValue(target, "string");
             resource = getValidValue(resource, "string");
 
-            return target == resource;
+            return target === resource;
         }
     },
     {
@@ -127,8 +127,8 @@ export const textCheckType = [
             target = getValidValue(target, "string");
 
             for (var i = 0; i < target.length; i++) {
-                if (target[i] == ' ') {
-                    if (target[i + 1] == ' ') {
+                if (target[i] === ' ') {
+                    if (target[i + 1] === ' ') {
                         var buffer1 = target.substring(0, i);
                         var buffer2 = target.substring(i + 1, target.length);
                         target = buffer1 + buffer2;
@@ -333,7 +333,6 @@ export const numberCheckType = [
         type: "SUMPRODUCT",
         describe: "SUMPRODUCT(array1,array2,...)   加权求和",
         checkFunc: (arr1, arr2) => {
-            dataArray = _flattenArray(dataArray);
 
             return arr1.map(item => Number(item)).reduce((sum, item, index) => sum + (item * Number(arr2[index])), 0)
         }
@@ -383,7 +382,7 @@ export const specificCheckType = [
             left = String(left);
             right = String(right);
 
-            return left == right
+            return left === right
         }
     },
 ];
@@ -395,7 +394,7 @@ export const logicCheckType = [
         checkFunc: (...dataArray) => {
             console.log(dataArray)
             return dataArray.reduce((result, item) => {
-                return result == false ? result : item
+                return result === false ? result : item
             }, true)
         }
     },
@@ -405,7 +404,7 @@ export const logicCheckType = [
         checkFunc: (...dataArray) => {
 
             return dataArray.reduce((result, item) => {
-                return result == true ? result : item
+                return result === true ? result : item
             }, false)
         }
     },

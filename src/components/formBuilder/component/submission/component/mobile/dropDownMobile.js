@@ -29,7 +29,7 @@ export default class DropDown extends React.Component {
     // 数据联动请看单行文本组件
     if (data && data.values) {
       let { values, type } = data;
-      if (data && data.type == "DataLinkage") {
+      if (data && data.type === "DataLinkage") {
         const {
           conditionId,
           linkComponentId,
@@ -93,7 +93,7 @@ export default class DropDown extends React.Component {
             }
           });
         });
-      } else if (type == "otherFormData") {
+      } else if (type === "otherFormData") {
         // 关联其他数据
         // 通过表单id和字段id过滤对应的提交数据
         // 将过滤的数据作为该表单的选项
@@ -119,7 +119,7 @@ export default class DropDown extends React.Component {
     } else if (this.props.isChild) {
       let dropDownOptions = [];
       let values = item.values;
-      if (values.type == "otherFormData") {
+      if (values.type === "otherFormData") {
         getSelection(values.formId, values.optionId).then(res => {
           this.setState({
             selections: this.filterUniqueSelections(res),
@@ -181,7 +181,7 @@ export default class DropDown extends React.Component {
     //   });
     // } else if (
     //   nextProps.item.data &&
-    //   nextProps.item.data != "" &&
+    //   nextProps.item.data !== "" &&
     //   nextProps.isChild
     // ) {
     //   this.setState({

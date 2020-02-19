@@ -100,12 +100,12 @@ export default class FileUpload extends React.Component {
     const { fileCount } = this.props.item;
     const { onChange } = this.props;
     const newFileList = this.state.uploadFileList.filter(
-      (item, i) => i != index
+      (item, i) => i !== index
     );
     this.setState(
       {
         loadStatusMsg:
-          this.state.uploadFileList.length - 1 != 0 ? (
+          this.state.uploadFileList.length - 1 !== 0 ? (
             <div className="fileUploadStatus">
               <Icon type="plus" />
               <span>
@@ -217,7 +217,7 @@ export default class FileUpload extends React.Component {
             disabled={!this.state.canUpload}
           />
           <Button>
-            {this.state.uploadFileList.length == 0 ? (
+            {this.state.uploadFileList.length === 0 ? (
               <div className="fileUploadStatus">
                 <img src="/image/icons/file2.png" />
                 <span>文件上传</span>

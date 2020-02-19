@@ -7,10 +7,10 @@ import {
   setFormChildItemAttr,
   setFormChildItemValues
 } from "../../redux/utils/operateFormComponent";
-const { Option } = Select;
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import locationUtils from "../../../../utils/locationUtils";
+const { Option } = Select;
 
 class AddressInspector extends React.PureComponent {
   constructor(props) {
@@ -54,19 +54,20 @@ class AddressInspector extends React.PureComponent {
         checked = checked ? "true" : "";
         break;
       }
+      default: break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value != undefined ? value : checked,
+        value !== undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value != undefined ? value : checked
+        value !== undefined ? value : checked
       );
     }
   };
@@ -87,7 +88,7 @@ class AddressInspector extends React.PureComponent {
               }}
               className="data-link-set"
             >
-              {element.data.type == "DataLinkage"
+              {element.data.type === "DataLinkage"
                 ? "已设置数据联动"
                 : "数据联动设置"}
             </Button>

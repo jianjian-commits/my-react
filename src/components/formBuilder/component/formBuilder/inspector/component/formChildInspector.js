@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Input, Checkbox, Tooltip, Icon, InputNumber, Divider } from "antd";
+import { Input, Checkbox, Divider } from "antd";
 import { setItemAttr, } from "../../redux/utils/operateFormComponent";
 import { Select } from 'antd';
 
@@ -23,7 +23,7 @@ class FormChildInspector extends React.Component {
     this.props.setItemAttr(
       this.props.element,
       name,
-      value != undefined ? value : checked
+      value !== undefined ? value : checked
     );
   };
 

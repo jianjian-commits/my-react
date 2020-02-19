@@ -1,10 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import update from "immutability-helper";
 import FormComponentContainer from "./component/formComponentContainer";
-import PreviewHeader from "./component/previewHeader";
-import { load, deletek, } from "../redux/utils/preOperation";
-import { updateOrder, setDragState, setSubmitBtn } from "../redux/utils/operateFormComponent";
+// import PreviewHeader from "./component/previewHeader";
+import { updateOrder, setDragState } from "../redux/utils/operateFormComponent";
 import { setFormName, } from "../redux/utils/operateForm";
 
 
@@ -80,9 +78,9 @@ class Preview extends React.Component {
 
   _calcLayoutY(dataArray, index, removeCard) {
     dataArray.forEach((item, i) => {
-      if (item.type == "CustomValue") return;
+      if (item.type === "CustomValue") return;
       if (i > index) {
-        if (removeCard.layout.y != item.layout.y) {
+        if (removeCard.layout.y !== item.layout.y) {
           item.layout.y -= 3;
         }
       }
@@ -97,10 +95,10 @@ class Preview extends React.Component {
     let hasSameLevelItem =
       newDataArray
         .filter(item => {
-          return item.id != removeCard.id && item.type != "CustomValue";
+          return item.id !== removeCard.id && item.type !== "CustomValue";
         })
         .filter(item => {
-          return item.layout.y == removeCard.layout.y;
+          return item.layout.y === removeCard.layout.y;
         }).length >= 1;
 
     if (!hasSameLevelItem) {
@@ -109,7 +107,6 @@ class Preview extends React.Component {
 
     newDataArray.splice(index, 1);
 
-    this.props.deletek(newDataArray);
   }
 
   insertCard(item, hoverIndex) {
@@ -134,7 +131,7 @@ class Preview extends React.Component {
     };
 
     newData.forEach((item, index) => {
-      if (item.type == "CustomValue") {
+      if (item.type === "CustomValue") {
         customValue = item;
         newData.splice(index, 1);
       }
@@ -143,7 +140,7 @@ class Preview extends React.Component {
     newData.splice(dragIndex, 1);
     newData.splice(hoverIndex, 0, dragCard);
 
-    if (customValue != void 0) {
+    if (customValue  != void 0) {
       newData.push(customValue);
     }
 
@@ -179,7 +176,7 @@ class Preview extends React.Component {
     const FormComponent = FormComponentContainer[item.element];
     let active = index === activeIndex ? true : false;
 
-    if (this.formChildScrollObj[item.key] == void 0) {
+    if (this.formChildScrollObj[item.key] === void 0) {
       this.formChildScrollObj[item.key] = 0;
     }
 
@@ -218,7 +215,7 @@ class Preview extends React.Component {
   buildDragParent(data, activeIndex) {
     const FormComponent = FormComponentContainer["DragParent"];
     let item = { id: "dragParent", key: "dragParent" }
-    let active = activeIndex == -2 ? true : false;
+    let active = activeIndex === -2 ? true : false;
 
     return (
       <FormComponent
@@ -276,9 +273,9 @@ class Preview extends React.Component {
     }
     let data = [];
 
-    if (this.props.data != void 0) {
+    if (this.props.data  != void 0) {
       data = this.props.data.filter(x => {
-        if (x.type == "CustomValue") {
+        if (x.type === "CustomValue") {
           this.customValue = x
         }
 
@@ -321,9 +318,7 @@ export default connect(
     activeIndex: store.formBuilder.activeIndex,
   }),
   {
-    load,
     updateOrder,
-    deletek,
     setFormName,
     setDragState,
   }

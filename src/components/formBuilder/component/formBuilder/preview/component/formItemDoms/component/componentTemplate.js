@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Modal, Button, Select, Divider, Checkbox, Icon, Input } from "antd";
+import { Modal, Select, Checkbox, Icon } from "antd";
 import locationUtils from "../../../../../../utils/locationUtils";
 import ID from "../../../../../../utils/UUID";
 
@@ -28,7 +28,7 @@ class ComponentTemplate extends Component {
   componentDidMount() {
     const formId = locationUtils.getUrlParamObj().id;
     // 过滤自身表单
-    const forms = this.props.forms.filter(form => form.id != formId).reverse();
+    const forms = this.props.forms.filter(form => form.id !== formId).reverse();
     this.setState({
       forms
     });
@@ -44,7 +44,7 @@ class ComponentTemplate extends Component {
     this.setState({
       modalVisible: false
     });
-    this.state.selectedComponents.map((component, index) => {
+    this.state.selectedComponents.forEach((component, index) => {
       this.insertTmpComponentToForm(component, index, e);
     });
     this.handleDestoryComponent(e);
@@ -56,7 +56,7 @@ class ComponentTemplate extends Component {
   };
 
   insertTmpComponentToForm = (component, indexInArray, e) => {
-    const { editModeOn, parent, insertCard, index } = this.props;
+    const { editModeOn, insertCard, index } = this.props;
     let newData = JSON.parse(JSON.stringify(component));
     let key = ID.uuid();
     newData.id = key;
@@ -95,7 +95,7 @@ class ComponentTemplate extends Component {
 
     this.setState({
       isSelectAllTmpComponents:
-        data.length == this.state.tmpComponents.length ? true : false,
+        data.length === this.state.tmpComponents.length ? true : false,
       selectedComponents: data
     });
   };

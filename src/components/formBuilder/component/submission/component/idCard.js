@@ -13,7 +13,7 @@ export default class IdCard extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,
@@ -68,7 +68,7 @@ export default class IdCard extends React.Component {
   };
 
   isValueEqualEmptyAndUndefined = value => {
-    if (value == "" || value == void 0) {
+    if (value === "" || value === void 0) {
       return true;
     } else {
       return false;
@@ -85,13 +85,13 @@ export default class IdCard extends React.Component {
     let addressNoArray = ["11", "12", "13", "14", "15", "21", "22", "23", "31", "32", "33", "34", "35", "36", "37", "41", "42", "43", "44", "45", "46", "50", "51", "52", "53", "54", "61", "62", "63", "64", "65", "71", "81", "82", "91"];
     let idCardNo = "";
 
-    if (idStr.length != 15 && idStr.length != 18) {
+    if (idStr.length !== 15 && idStr.length !== 18) {
       return false;
     }
 
-    if (idStr.length == 18) {
+    if (idStr.length === 18) {
       idCardNo = idStr.substring(0, 17);
-    } else if (idStr.length == 15) {
+    } else if (idStr.length === 15) {
       idCardNo = idStr.substring(0, 6) + "19" + idStr.substring(6, 15);
     }
 
@@ -105,7 +105,7 @@ export default class IdCard extends React.Component {
     let strDay = idCardNo.substring(12, 14);// 月份
     let date = new Date(strYear + "/" + strMonth + "/" + strDay);
 
-    if (date == "Invalid Date") {
+    if (date === "Invalid Date") {
       console.error("身份证时间错误")
       return false
     } else if (Date.now() - date < 0) {
@@ -113,7 +113,7 @@ export default class IdCard extends React.Component {
       return false
     }
 
-    if (addressNoArray.includes(idCardNo.substring(0, 2)) == false) {
+    if (addressNoArray.includes(idCardNo.substring(0, 2)) === false) {
       console.error("身份证地址错误")
       return false
     }
@@ -125,11 +125,11 @@ export default class IdCard extends React.Component {
     let modValue = lastOne % 11;
     idCardNo = idCardNo + wf[modValue];
 
-    return idCardNo == idStr.toLowerCase()
+    return idCardNo === idStr.toLowerCase()
   };
 
   checkValueAndThrowMessage = (value, callback) => {
-    if (this._checkIdcardValid(value) == false) {
+    if (this._checkIdcardValid(value) === false) {
       let errMsg = this.props.item.validate.customMessage;
       isStringValid(errMsg)
         ? callback(errMsg)

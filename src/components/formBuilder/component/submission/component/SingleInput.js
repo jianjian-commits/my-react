@@ -11,7 +11,7 @@ export default class SingleInput extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,

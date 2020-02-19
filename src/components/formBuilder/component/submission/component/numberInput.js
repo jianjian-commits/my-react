@@ -15,7 +15,7 @@ export default class NumberInput extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,
@@ -101,7 +101,7 @@ export default class NumberInput extends React.Component {
       }
     }
 
-    if (value == "") {
+    if (value === "") {
       callback();
     } else if (this.props.item.validate.isLimitLength && (validateMax !== null && validateMax < Number(value)) || (validateMin !== null && validateMin > Number(value))) {
       let errMsg = this.props.item.validate.customMessage;

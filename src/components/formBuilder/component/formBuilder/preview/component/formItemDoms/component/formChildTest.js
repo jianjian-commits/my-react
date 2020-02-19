@@ -1,7 +1,6 @@
 import React from "react";
 import ComponentBox from "../componentBox";
-import { ComponentHeader, ComponentLabel } from "../utils/commonDom";
-import { Input, Select, Checkbox, Icon, Radio } from "antd";
+import { ComponentHeader } from "../utils/commonDom";
 import {
   setActiveInnerIndex,
   setItemAttr
@@ -36,7 +35,7 @@ class FormChildTest extends React.Component {
         <div style={style} id={`${parentId}${i}Top`}></div>
         <div
           className={classNames("child-item-content", {
-            'activeContent': this.props.activeInnerIndex == item.id
+            'activeContent': this.props.activeInnerIndex === item.id
           })}
         >
           <div className={item.validate.required ? "item-title-required" : "item-title"}>{item.label}</div>
@@ -48,13 +47,13 @@ class FormChildTest extends React.Component {
             </div>
             <div
               className={classNames("deleteBtn", {
-                activeItem: this.props.activeInnerIndex != item.id
+                activeItem: this.props.activeInnerIndex !== item.id
               })}
               onClick={(e) => {
                 e.stopPropagation()
                 const { values } = this.props.data;
                 const newValues = values.filter(
-                  (innerItem, index) => innerItem.id != item.id
+                  (innerItem, index) => innerItem.id !== item.id
                 );
                 this.props.setItemAttr(
                   this.props.data,
@@ -110,7 +109,7 @@ class FormChildTest extends React.Component {
           //     <div style={style} id={`${parentId}${i}Top`}></div>
           //     <div
           //       className={classNames("child-item-content", {
-          //         'activeContent': this.props.activeInnerIndex == item.id
+          //         'activeContent': this.props.activeInnerIndex === item.id
           //       })}
           //     >
           //       <div className={item.validate.required ? "item-title-required" : "item-title"}>{item.label}</div>
@@ -120,13 +119,13 @@ class FormChildTest extends React.Component {
           //         </div>
           //         <div
           //           className={classNames("deleteBtn", {
-          //             activeItem: this.props.activeInnerIndex != item.id
+          //             activeItem: this.props.activeInnerIndex !== item.id
           //           })}
           //           onClick={(e) => {
           //             e.stopPropagation()
           //             const { values } = this.props.data;
           //             const newValues = values.filter(
-          //               (innerItem, index) => innerItem.id != item.id
+          //               (innerItem, index) => innerItem.id !== item.id
           //             );
           //             this.props.setItemAttr(
           //               this.props.data,
@@ -161,7 +160,7 @@ class FormChildTest extends React.Component {
           //     <div style={style} id={`${parentId}${i}Top`}></div>
           //     <div
           //       className={classNames("child-item-content", {
-          //         'activeContent': this.props.activeInnerIndex == item.id
+          //         'activeContent': this.props.activeInnerIndex === item.id
           //       })}
           //     >
           //       <div className={item.validate.required ? "item-title-required" : "item-title"}>{item.label}</div>
@@ -169,13 +168,13 @@ class FormChildTest extends React.Component {
           //         <Select />
           //         <div
           //           className={classNames("deleteBtn", {
-          //             activeItem: this.props.activeInnerIndex != item.id
+          //             activeItem: this.props.activeInnerIndex !== item.id
           //           })}
           //           onClick={(e) => {
           //             e.stopPropagation()
           //             const { values } = this.props.data;
           //             const newValues = values.filter(
-          //               (innerItem, index) => innerItem.id != item.id
+          //               (innerItem, index) => innerItem.id !== item.id
           //             );
           //             this.props.setItemAttr(
           //               this.props.data,
@@ -218,7 +217,7 @@ class FormChildTest extends React.Component {
           //     <div style={style} id={`${parentId}${i}Top`}></div>
           //     <div
           //       className={classNames("child-item-content", {
-          //         'activeContent': this.props.activeInnerIndex == item.id
+          //         'activeContent': this.props.activeInnerIndex === item.id
           //       })}
           //     >
           //       <div className={item.validate.required ? "item-title-required" : "item-title"}>{item.label}</div>
@@ -226,13 +225,13 @@ class FormChildTest extends React.Component {
           //         <Input />
           //         <div
           //           className={classNames("deleteBtn", {
-          //             activeItem: this.props.activeInnerIndex != item.id
+          //             activeItem: this.props.activeInnerIndex !== item.id
           //           })}
           //           onClick={(e) => {
           //             e.stopPropagation()
           //             const { values } = this.props.data;
           //             const newValues = values.filter(
-          //               (innerItem, index) => innerItem.id != item.id
+          //               (innerItem, index) => innerItem.id !== item.id
           //             );
           //             this.props.setItemAttr(
           //               this.props.data,

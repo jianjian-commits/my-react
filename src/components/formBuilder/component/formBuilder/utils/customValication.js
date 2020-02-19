@@ -2,15 +2,15 @@ import { textCheckType, numberCheckType, specificCheckType, logicCheckType } fro
 
 var _checkValueIsFunc = (value) => {
     let textResult = textCheckType.filter((item) => {
-        return item.type == value;
+        return item.type === value;
     });
 
     let numberResult = numberCheckType.filter((item) => {
-        return item.type == value;
+        return item.type === value;
     });
 
     let logicResult = logicCheckType.filter((item) => {
-        return item.type == value;
+        return item.type === value;
     });
 
     if (textResult.length > 0) {
@@ -37,10 +37,10 @@ var _checkValueIsFunc = (value) => {
 
 var _checkValueIsData = (data, value) => {
     let result = data.filter((item) => {
-        return item.type == value
+        return item.type === value
     });
 
-    if (result.length == 0) {
+    if (result.length === 0) {
         return {
             type: "none"
         }
@@ -85,14 +85,14 @@ var getFuncTree = (str) => {
                 let value = matchArray[1];
                 let operate = matchArray[2];
 
-                if (value != void 0) {
+                if (value  != void 0) {
                     for (let j = 0, length = leftArray.length; j < length; j++) {
                         value = [value];
                     };
 
                     resultArray.push(value)
                 }
-                if (operate != void 0) {
+                if (operate  != void 0) {
                     for (let j = 0, length = leftArray.length; j < length; j++) {
                         operate = [operate];
                     };
@@ -102,7 +102,7 @@ var getFuncTree = (str) => {
                 }
             }
         } else if ((/\,/).test(item)) {
-            if (result != "") {
+            if (result !== "") {
                 for (let j = 0, length = leftArray.length; j < length; j++) {
                     result = [result];
                 };
@@ -115,7 +115,7 @@ var getFuncTree = (str) => {
         }
     }
 
-    if (result != "") {
+    if (result !== "") {
         resultArray.push(result)
     }
 
@@ -123,7 +123,7 @@ var getFuncTree = (str) => {
 };
 
 var isArray = (value) => {
-    return {}.toString.call(value) == "[object Array]"
+    return {}.toString.call(value) === "[object Array]"
 }
 
 var getArrayLevel = (array) => {
@@ -154,7 +154,7 @@ let insertParentChildren = (resultArray, currentLevel, childLevel, childItem) =>
     let target = resultArray[length - 1]
     currentLevel += 1;
 
-    if (currentLevel == childLevel) {
+    if (currentLevel === childLevel) {
         target.children.push(childItem);
         return 0;
     } else {
@@ -173,9 +173,9 @@ var buildFuncTreeArray = (data, treeArray) => {
         let dataResult = _checkValueIsData(data, item.value);
         let valueObj = null;
 
-        if (funcResult.type == "func") {
+        if (funcResult.type === "func") {
             valueObj = funcResult.item
-        } else if (dataResult.type == "data") {
+        } else if (dataResult.type === "data") {
             valueObj = {
                 value: dataResult.item.value
             }
@@ -185,7 +185,7 @@ var buildFuncTreeArray = (data, treeArray) => {
             }
         }
 
-        if (currentLevel == 0) {
+        if (currentLevel === 0) {
             resultArray.push({
                 ...valueObj,
                 children: []
@@ -205,7 +205,7 @@ var buildFuncTreeArray = (data, treeArray) => {
 var _executeFuncTree = (funcTreeArray) => {
     return funcTreeArray.reduce((childrenArray, item) => {
         console.log("type :", item)
-        if (item.type != void 0) {
+        if (item.type  != void 0) {
             let funcArgArray = _executeFuncTree(item.children);
 
             console.log("arugmengts", funcArgArray)
@@ -220,10 +220,10 @@ var _executeFuncTree = (funcTreeArray) => {
                     let rightValue = funcArgArray[i + 1]
 
                     let specificSymbol = specificCheckType.filter((item) => {
-                        return item.type == symbol
+                        return item.type === symbol
                     })[0];
 
-                    if (specificSymbol == void 0) {
+                    if (specificSymbol === void 0) {
                         console.error("this symbol not find")
                     } else {
                         let res = specificSymbol.checkFunc.call(this, leftValue, rightValue)
@@ -258,7 +258,7 @@ export const checkCustomValidate = (data, str) => {
     console.log(str)
 
     let resultArray = getFuncTree(str).filter((item) => {
-        return item != "" && item != " "
+        return item !== "" && item !== " "
     }).map((item) => {
         return getArrayLevel(item);
     });
@@ -282,10 +282,10 @@ export const checkCustomValidate = (data, str) => {
             let rightValue = a[i + 1]
 
             let specificSymbol = specificCheckType.filter((item) => {
-                return item.type == symbol
+                return item.type === symbol
             })[0];
 
-            if (specificSymbol == void 0) {
+            if (specificSymbol === void 0) {
                 console.error("this symbol not find")
             } else {
                 let res = specificSymbol.checkFunc.call(this, leftValue, rightValue)

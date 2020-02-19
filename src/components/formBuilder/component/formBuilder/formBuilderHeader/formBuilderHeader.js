@@ -1,12 +1,11 @@
 import React from "react";
-import { Button, Icon, Modal, Tooltip, message ,Spin} from "antd";
+import { Button, Icon, Modal, Tooltip, message, Spin } from "antd";
 import {
   setFormName,
   saveForm,
   updateForm
 } from "../redux/utils/operateForm";
 import { connect } from "react-redux";
-import locationUtils from "../../../utils/locationUtils";
 import config from "../../../config/config";
 class ForBuilderHeader extends React.Component {
   constructor(props) {
@@ -15,7 +14,7 @@ class ForBuilderHeader extends React.Component {
       visible: false,
       isTitleCanEdit: true,
       formTitleClass: "showFormTitle",
-      btnCanClick:true,
+      btnCanClick: true,
     };
     this.handleTitleEdit = this.handleTitleEdit.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
@@ -30,7 +29,9 @@ class ForBuilderHeader extends React.Component {
       formTitleClass:
         this.state.isTitleCanEdit === true ? "editFormTitle" : "showFormTitle"
     }));
-    this.props.name.trim() == "" ? this.props.setFormName("表单名字") : "";
+    if (this.props.name.trim() === "") {
+      this.props.setFormName("表单名字")
+    }
   }
   handleChangeName = ev => {
     let { value } = ev.target;
@@ -38,7 +39,7 @@ class ForBuilderHeader extends React.Component {
   };
   showModal = () => {
     if (!this.props.isFormChanged) {
-      location.href = config.hostUrl;
+      window.location.href = config.hostUrl;
     } else {
       this.setState(state => ({
         ...state,
@@ -81,7 +82,7 @@ class ForBuilderHeader extends React.Component {
       ...state,
       visible: false
     }));
-    location.href = config.hostUrl;
+    window.location.href = config.hostUrl;
   };
 
   /*
@@ -92,21 +93,21 @@ class ForBuilderHeader extends React.Component {
     const { formData } = this.props;
     let linkIdArray = [];
     let allComponentsId = formData.map(item => {
-      if (item.data && item.data.type == "DataLinkage") {
+      if (item.data && item.data.type === "DataLinkage") {
         linkIdArray.push(item.data.values.conditionId);
       }
       return item.id;
     });
     let isMeetingConditions = true;
     linkIdArray.forEach(item => {
-      if (allComponentsId.includes(item) == false) {
+      if (allComponentsId.includes(item) === false) {
         isMeetingConditions = false;
       }
     });
     return isMeetingConditions;
   };
   _truncateValue(value) {
-    if (value == void 0) {
+    if (value === void 0) {
       return ""
     }
 
@@ -186,46 +187,46 @@ class ForBuilderHeader extends React.Component {
         <div className="CreateFormStep" />
         <div className="CreateFormOperations">
           <Button
-          disabled={!this.state.btnCanClick}
+            disabled={!this.state.btnCanClick}
             onClick={e => {
-              this.setState({btnCanClick:false},()=>{
-                editForm || this.props.localForm != null
-                ? (() => {
-                  if (this.handleIsRightConditions()) {
-                    this.props.updateForm(
-                      this.props.formData,
-                      this.props.submissionAccess,
-                      this.props.name,
-                      this.props.verificationList,
-                      this.props.localForm,
-                      this.props.errMessage,
-                      "save",
-                      ()=>{this.setState({btnCanClick:true});}
-                    );
-                  } else {
-                    message.error("联动条件失效，请重新设置！", 2);
-                  }
-                })()
-                : (() => {
-                  if (this.handleIsRightConditions()) {
-                    this.props.saveForm(
-                      this.props.formData,
-                      this.props.submissionAccess,
-                      this.props.name,
-                      this.props.verificationList,
-                      this.props.errMessage,
-                      "save",
-                      ()=>{this.setState({btnCanClick:true});}
-                    );
-                  } else {
-                    message.error("联动条件失效，请重新设置！", 2);
-                  }
-                })();
+              this.setState({ btnCanClick: false }, () => {
+                editForm || this.props.localForm !== null
+                  ? (() => {
+                    if (this.handleIsRightConditions()) {
+                      this.props.updateForm(
+                        this.props.formData,
+                        this.props.submissionAccess,
+                        this.props.name,
+                        this.props.verificationList,
+                        this.props.localForm,
+                        this.props.errMessage,
+                        "save",
+                        () => { this.setState({ btnCanClick: true }); }
+                      );
+                    } else {
+                      message.error("联动条件失效，请重新设置！", 2);
+                    }
+                  })()
+                  : (() => {
+                    if (this.handleIsRightConditions()) {
+                      this.props.saveForm(
+                        this.props.formData,
+                        this.props.submissionAccess,
+                        this.props.name,
+                        this.props.verificationList,
+                        this.props.errMessage,
+                        "save",
+                        () => { this.setState({ btnCanClick: true }); }
+                      );
+                    } else {
+                      message.error("联动条件失效，请重新设置！", 2);
+                    }
+                  })();
               });
             }}
             type="primary"
           >
-          {this.state.btnCanClick==false?<Spin/>:""}保存
+            {this.state.btnCanClick === false ? <Spin /> : ""}保存
           </Button>
         </div>
       </div>
@@ -241,7 +242,7 @@ export default connect(
     formArray: store.forms.formArray,
     errMessage: store.formBuilder.errMessage,
     isFormChanged: store.formBuilder.isFormChanged,
-    localForm:store.formBuilder.localForm
+    localForm: store.formBuilder.localForm
   }),
   {
     setFormName,

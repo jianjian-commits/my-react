@@ -11,7 +11,7 @@ export default class DropDownTestItem extends React.Component {
   }
 
   componentWillReceiveProps(newProps){
-    if(newProps.selections.length == 0){
+    if(newProps.selections.length === 0){
       this.setState({selectIndex:-1})
     }
   }
@@ -43,7 +43,7 @@ export default class DropDownTestItem extends React.Component {
             <span className="dropDownBtnSpan" style={selectIndex==-1?{color:'rgba(170,170,170,1)'}:{}}>
                 {selectIndex==-1?'请选择':selections[selectIndex].value}
             </span>
-            {isPopoverVisible == false?<Icon type="down" />:<Icon type="up"/>}
+            {isPopoverVisible === false?<Icon type="down" />:<Icon type="up"/>}
           </div>
           {isPopoverVisible==true?
           <div className="dropDownItemContainer" id={'dropDown'+item.id}>
@@ -51,7 +51,7 @@ export default class DropDownTestItem extends React.Component {
                 <div className={classNames("dropDownItem",{ selectOption: selectIndex==index})}
                 onClick={()=>{
                     const { callEventArr } = this.props.item;
-                    if(selectIndex == index){
+                    if(selectIndex === index){
                         this.setState({selectIndex:-1,isPopoverVisible:false});
                         onChange("");
                         if (callEventArr) {

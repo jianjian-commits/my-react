@@ -66,7 +66,7 @@ class FormDataDetail extends PureComponent {
     let dataSource = data.map( (record,index) =>{
 
        let oneRecord =  components.map( component =>{
-          if(component.key != undefined && record[component.key] != undefined ){
+          if(component.key !== undefined && record[component.key] !== undefined ){
             let  data ={};
             data.key = Math.random();
             data[component.key] =  this._renderFormChildDataByType(component,record[component.key].data);
@@ -90,7 +90,7 @@ class FormDataDetail extends PureComponent {
     )
   }
   _truncateValue(value) {
-    if (value == void 0) {
+    if (value === void 0) {
       return "";
     } else if (value.length >= 11) {
       return value.substr(0, 11) + "...";

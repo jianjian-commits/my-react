@@ -1,7 +1,6 @@
 import config from "../../../../config/config";
 import { instanceAxios } from "../../../../utils/tokenUtils";
 import Axios from "axios";
-import ID from "../../../../utils/UUID";
 import { message } from "antd";
 import {
   SAVE_FORM_CHANGE,
@@ -54,18 +53,18 @@ var _calcFormComponentLayout = formDataArray => {
   let y = 0;
 
   formDataArray.forEach(item => {
-    if (item.element == "CustomValue") {
+    if (item.element === "CustomValue") {
       return;
     }
 
     let domElement = document.getElementById(item.key);
     let newHeight = null;
 
-    if (item.type == "FormChildTest") {
+    if (item.type === "FormChildTest") {
       newHeight = 240 / 30;
       item.layout.x = 0;
       item.layout.w = item.layout.minW = item.layout.maxW = 12;
-    } else if (item.type == "FileUpload") {
+    } else if (item.type === "FileUpload") {
       newHeight = 180 / 30;
     } else {
       newHeight = domElement.offsetHeight / 30;
@@ -80,7 +79,7 @@ var _calcFormComponentLayout = formDataArray => {
   });
 
   formDataArray.forEach(item => {
-    if (item.element == "Button" || item.type == "FormChildTest") {
+    if (item.element === "Button" || item.type === "FormChildTest") {
       return;
     }
 
@@ -91,7 +90,7 @@ var _calcFormComponentLayout = formDataArray => {
     item.layout.minW = minWidth > 10 ? 10 : minWidth
 
 
-    if (item.type == "CheckboxInput") {
+    if (item.type === "CheckboxInput") {
       let dom = document.querySelector(`#${item.key}`);
       let checkboxItemArray = dom.querySelectorAll(`.ant-checkbox-wrapper`)
       let currentMaxWidth = minWidth;
@@ -103,7 +102,7 @@ var _calcFormComponentLayout = formDataArray => {
       })
 
       item.layout.minW = currentMaxWidth > 10 ? 10 : currentMaxWidth
-    } else if (item.type == "RadioButtons") {
+    } else if (item.type === "RadioButtons") {
       let dom = document.querySelector(`#${item.key}`);
       let redioItemArray = dom.querySelectorAll(`.ant-radio-wrapper`);
       let currentMaxWidth = minWidth;
@@ -146,7 +145,7 @@ var _calcFormComponentLayout = formDataArray => {
 function updateCustomValue(components, verificationList = [], errMessage = "") {
   let index = -1;
   let verificationEle = components.filter((item, i) => {
-    if (item.element == "CustomValue") {
+    if (item.element === "CustomValue") {
       index = i;
       return true;
     } else {
@@ -196,7 +195,7 @@ export const saveForm = (
     });
   });
 
-  const path =  new String((Math.random() * 1000000000) | 0);
+  const path = new String((Math.random() * 1000000000) | 0);
   // const id = new String((Math.random() * 1000000000) | 0);
   const time = new Date();
   let formData = {
@@ -210,14 +209,14 @@ export const saveForm = (
     path,
     name: name,
     // id,
-    createdTime:time,
-    updateTime:time,
-    formValidation:{
-      errMessage:errMessage,
-      validate:verificationList
+    createdTime: time,
+    updateTime: time,
+    formValidation: {
+      errMessage: errMessage,
+      validate: verificationList
     },
-    layoutArray:[defaultLayout],
-    currentLayoutId:"defaultLayout"
+    layoutArray: [defaultLayout],
+    currentLayoutId: "defaultLayout"
   };
 
   instanceAxios({
@@ -228,7 +227,7 @@ export const saveForm = (
       "Content-Type": "application/json"
     }
   }).then(response => {
-    console.log("res",response);
+    console.log("res", response);
     if (type === "back") {
       // console.log("response",response);
       message.success("保存成功", 1, () => {
@@ -237,7 +236,7 @@ export const saveForm = (
           localForm: response.data,
           data: response.data.components
         });
-        // location.href = config.hostUrl;
+        window.location.href = config.hostUrl;
       });
     } else {
       message.success("保存成功", 1);
@@ -250,11 +249,11 @@ export const saveForm = (
     }
   })
     .catch(err => {
-      // if (err.response.data == "Token Expired") {
+      // if (err.response.data === "Token Expired") {
       //   console.log("token 已过期，正在请求新的token");
       //   // mockLoginAndSetData(false, true );
       // } else {
-        console.info(err);
+      console.info(err);
       // }
     });
 };
@@ -287,15 +286,15 @@ export const updateForm = (
   });
 
 
-  if(localForm.layoutArray != void 0){
+  if (localForm.layoutArray  != void 0) {
     localForm.layoutArray.shift();
     localForm.layoutArray.unshift(defaultLayout);
   } else {
-    localForm.layoutArray = [defaultLayout],
+    localForm.layoutArray = defaultLayout.copyWithin();
     localForm.currentLayoutId = "defaultLayout"
   }
 
-  let {path, id, createdTime, currentLayoutId, layoutArray} = localForm;
+  let { path, id, createdTime, currentLayoutId, layoutArray } = localForm;
   let formData = {
     display: "form",
     components: _checkMinAndMax(formDataArray),
@@ -308,9 +307,9 @@ export const updateForm = (
     id,
     updateTime: new Date(),
     createdTime,
-    formValidation:{
-      errMessage:errMessage,
-      validate:verificationList
+    formValidation: {
+      errMessage: errMessage,
+      validate: verificationList
     },
     currentLayoutId, //默认布局ID
     layoutArray, //布局
@@ -334,7 +333,7 @@ export const updateForm = (
             localForm: response.data,
             data: response.data.components
           });
-          location.href = config.hostUrl;
+          window.location.href = config.hostUrl;
         });
       } else {
         message.success("保存成功", 1);
@@ -347,11 +346,11 @@ export const updateForm = (
       }
     })
     .catch(err => {
-      // if (err.response.data == "Token Expired") {
+      // if (err.response.data === "Token Expired") {
       //   console.log("token 已过期，正在请求新的token");
       //   // mockLoginAndSetData(false, true);
       // } else {
-        console.info(err);
+      console.info(err);
       // }
     });
 
@@ -373,7 +372,7 @@ export const initForm = id => dispatch => {
   instanceAxios
     .get(config.apiUrl + "/form/" + id)
     .then(res => {
-      let {components, name , formValidation} = res.data;
+      let { components, name, formValidation } = res.data;
       let localForm = res.data
       dispatch({
         type: INIT_FORM_DOM,

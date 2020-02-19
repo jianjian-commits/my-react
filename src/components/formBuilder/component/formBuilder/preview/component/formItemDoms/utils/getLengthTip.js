@@ -6,7 +6,7 @@ const checkMaxAndMin = (min, max) =>{
   }
 }
 export const lengthTip = (data) =>{
-  if(data.type == "SingleText" || data.type == "TextArea"){
+  if(data.type === "SingleText" || data.type === "TextArea"){
     if(data.validate.isLimitLength){
       const {maxLength,minLength} = data.validate;
       if (maxLength !== Number.MAX_SAFE_INTEGER && minLength !== 0) {
@@ -22,7 +22,7 @@ export const lengthTip = (data) =>{
       return "(字数不限)";
     }
   } 
-  if(data.type == "NumberInput") {
+  if(data.type === "NumberInput") {
     if(data.validate.isLimitLength) {
       const {max,min} = data.validate;
       if (max !== Number.MAX_VALUE && min !== -Number.MAX_VALUE) {
@@ -39,7 +39,7 @@ export const lengthTip = (data) =>{
     } 
   }
 
-  if(data.type == "MultiDropDown" ||data.type == "CheckboxInput") {
+  if(data.type === "MultiDropDown" ||data.type === "CheckboxInput") {
     if(data.validate.isLimitLength){
       const {maxOptionNumber,minOptionNumber} = data.validate;
       if (maxOptionNumber !== Number.MAX_SAFE_INTEGER && minOptionNumber !== 0) {
@@ -55,7 +55,7 @@ export const lengthTip = (data) =>{
       return  "(选择个数不限)"
     }
   }
-  if(data.type == "FileUpload"||data.type == "ImageUpload"){
+  if(data.type === "FileUpload"||data.type === "ImageUpload"){
     const {fileSize,fileUnit} = data.validate;
     return `(请上传${fileSize+""+fileUnit}以下的文件)`;
   }
@@ -71,7 +71,7 @@ export const checkComponentMaxAndMin = (components) =>{
     if (component.type === "NumberInput") {
       checkMaxAndMin(component.validate.min , component.validate.max);
     }
-    if (component.type == "MultiDropDown") {
+    if (component.type === "MultiDropDown") {
       checkMaxAndMin(component.validate.minOptionNumber , component.validate.maxOptionNumber);
     }
     return component;

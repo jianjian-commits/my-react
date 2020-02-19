@@ -219,7 +219,7 @@ export default class HandWrittenSignatureMobile extends React.Component {
             <Button type="primary" onClick={this.SaveToImage}>保存</Button>
           </div>
         </div>
-        {this.state.imgStr == void 0 ? <></> :
+        {this.state.imgStr === void 0 ? <></> :
           <div className="canvas-result-content" >
             <img className="canvas-result" src={this.state.imgStr} alt="图片" />
           </div>

@@ -36,7 +36,7 @@ export default class RadioTest extends React.Component {
   }
   handleSelect(index) {
     const { onChange } = this.props;
-    if (this.state.selectValue == index) {
+    if (this.state.selectValue === index) {
       this.setState(
         state => ({
           ...state,
@@ -74,7 +74,7 @@ export default class RadioTest extends React.Component {
         {values.map((item, index) => (
           <RadioOption
             option={item}
-            isSelect={this.state.selectValue == index}
+            isSelect={this.state.selectValue === index}
             key={index}
             index={index}
             inline={inline}

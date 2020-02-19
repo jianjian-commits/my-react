@@ -55,19 +55,20 @@ class PhoneInputInspector extends React.PureComponent {
         checked = checked ? "true" : "";
         break;
       }
+      default: break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value != undefined ? value : checked,
+        value !== undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value != undefined ? value : checked
+        value !== undefined ? value : checked
       );
     }
   };
@@ -76,7 +77,6 @@ class PhoneInputInspector extends React.PureComponent {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
-    const { defaultValue } = element;
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -102,7 +102,7 @@ class PhoneInputInspector extends React.PureComponent {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type == "DataLinkage"
+              {element.data.type === "DataLinkage"
                 ? "已设置数据联动"
                 : "数据联动设置"}
             </Button>

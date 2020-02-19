@@ -42,7 +42,7 @@ export default class GetLocalPositon extends React.Component {
                             <div className="localposition-container">
                                 <span className="loaction-tip">请在移动端打开表单获取位置信息</span>
                                 <Button type="dashed">
-                                    <img src="/image/icons/location2.png" />
+                                    <img src="/image/icons/location2.png" alt="" />
                                     获取当前位置
                                 </Button>
                             </div>

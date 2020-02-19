@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Input, Checkbox } from 'antd';
+import { Input } from 'antd';
 import { setFormName } from '../../redux/utils/operateForm';
 
 class FormName extends React.PureComponent {

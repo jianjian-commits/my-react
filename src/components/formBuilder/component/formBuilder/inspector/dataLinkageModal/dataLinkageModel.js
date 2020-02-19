@@ -128,7 +128,7 @@ class DataLinkageModal extends React.Component {
         conditionId &&
         linkDataId &&
         linkComponentType &&
-        element.type == "FormChildTest" &&
+        element.type === "FormChildTest" &&
         formChildData.length > 0) ||
       (linkFormId &&
         linkComponentId &&
@@ -182,13 +182,13 @@ class DataLinkageModal extends React.Component {
     console.log("handleMarkingError", data);
     data.forEach(item => {
       allComponentsId.push(item.id);
-      if (item.type == "FormChildTest" && Array.isArray(item.values)) {
+      if (item.type === "FormChildTest" && Array.isArray(item.values)) {
         item.values.forEach(child => {
           allComponentsId.push(child.id);
         });
       }
     });
-    if (this.state.conditionId == undefined) {
+    if (this.state.conditionId === undefined) {
       return true;
     }
     if (allComponentsId.includes(this.state.conditionId)) {

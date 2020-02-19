@@ -104,10 +104,10 @@ class FormSubmitData extends PureComponent {
   }
 
   // 将地址对象转化为字符串
-  AddressObjToString=(address) => {
-    if(address) {
-      let {province, county, city, detail} = address;
-      return [province, city, county, detail].filter(item=>item).join("");
+  AddressObjToString = (address) => {
+    if (address) {
+      let { province, county, city, detail } = address;
+      return [province, city, county, detail].filter(item => item).join("");
     } else {
       return "";
     }
@@ -123,7 +123,7 @@ class FormSubmitData extends PureComponent {
 
   _truncateValue(value) {
     Array.isArray(value) && (value = value.toString());
-    if (value == void 0) {
+    if (value === void 0) {
       return "";
     } else if (value.length >= 11) {
       return value.substr(0, 10) + "...";
@@ -182,7 +182,7 @@ class FormSubmitData extends PureComponent {
   };
 
   _renderFormChildComponentByType(component, submitData) {
-    if (submitData == void 0) {
+    if (submitData === void 0) {
       return <div className="formChild-item"></div>
     }
     switch (component.type) {
@@ -221,8 +221,8 @@ class FormSubmitData extends PureComponent {
         });
 
         resultArray.forEach((item) => {
-          if (item.data != void 0) {
-            if (resultDataArray == void 0) {
+          if (item.data  != void 0) {
+            if (resultDataArray === void 0) {
               resultDataArray = item.data;
             }
           }
@@ -230,18 +230,18 @@ class FormSubmitData extends PureComponent {
 
         if (
           openDataIdList.filter(
-            item => item.id == submission.id && item.key == component.key
-          ).length != 1
+            item => item.id === submission.id && item.key === component.key
+          ).length !== 1
         ) {
           return <div key={component.key}>
             <div
               key={component.key + "fist"}
               className="formChildDiv"
-              style={resultDataArray && resultDataArray.length == 1 ? { borderBottom: "none" } : null}
+              style={resultDataArray && resultDataArray.length === 1 ? { borderBottom: "none" } : null}
             >
               {
                 resultArray.map((item) => {
-                  if (item.data == void 0) {
+                  if (item.data === void 0) {
                     return <div className="formChild-item"></div>
                   } else {
                     return this._renderFormChildComponentByType(item, item.data[0])
@@ -250,7 +250,7 @@ class FormSubmitData extends PureComponent {
               }
             </div>
             {
-              (resultDataArray == void 0 || resultDataArray.length === 1) ? <></> :
+              (resultDataArray === void 0 || resultDataArray.length === 1) ? <></> :
                 (
                   <div
                     key={component.key + "look"}
@@ -288,7 +288,7 @@ class FormSubmitData extends PureComponent {
                   >
                     {
                       resultArray.map((item) => {
-                        if (item.data == void 0) {
+                        if (item.data === void 0) {
                           return <div className="formChild-item"></div>
                         } else {
                           return this._renderFormChildComponentByType(item, item.data[index])
@@ -308,7 +308,7 @@ class FormSubmitData extends PureComponent {
                       openDataIdList: this.state.openDataIdList.filter(
                         item =>
                           !(
-                            item.id == submission.id && item.key == component.key
+                            item.id === submission.id && item.key === component.key
                           )
                       )
                     });
@@ -321,28 +321,28 @@ class FormSubmitData extends PureComponent {
           );
         }
       case "GetLocalPosition":
-        if (submitData == void 0) {
+        if (submitData === void 0) {
           return <></>;
         }
         return <div key={component.key}>{this._renderAddress(submitData)}</div>;
       case "FileUpload":
-        if (submitData == void 0) {
+        if (submitData === void 0) {
           return <></>;
         }
         return this._renderFileData(submitData);
       case "ImageUpload":
-        if (submitData == void 0) {
+        if (submitData === void 0) {
           return <></>;
         }
         return this._renderImageData(submitData);
       case "HandWrittenSignature":
-        if (submitData == void 0) {
+        if (submitData === void 0) {
           return <></>;
         }
         return this._renderSignatureData(submitData);
       case "created":
       case "modified":
-        if (submitData == void 0) {
+        if (submitData === void 0) {
           return <></>;
         }
         return coverTimeUtils.localTime(submitData);
@@ -350,9 +350,9 @@ class FormSubmitData extends PureComponent {
       case "CheckboxInput":
         return <div key={component.key} className="formChild-item">{submitData ? this._truncateValue(submitData.join(",")) : ""}</div>;
       case "DateInput":
-        return <div key={component.key}>{submitData != void 0 ? coverTimeUtils.localTime(submitData) : ""}</div>;
+        return <div key={component.key}>{submitData  != void 0 ? coverTimeUtils.localTime(submitData) : ""}</div>;
       default:
-        if (submitData == void 0) {
+        if (submitData === void 0) {
           return <></>;
         }
         return <div key={component.key}>{this._truncateValue(submitData)}</div>;
@@ -378,7 +378,7 @@ class FormSubmitData extends PureComponent {
 
   onChangeIsShowTotalData = (value) => {
     this.setState({
-      isShowTotalData: value == "all" ? true : false
+      isShowTotalData: value === "all" ? true : false
     })
   }
 
@@ -444,10 +444,10 @@ class FormSubmitData extends PureComponent {
 
   // 过滤显示数据，争对不同字段进行渲染(将object转为String) 
   filterSubmitDataToString = (value) => {
-    if(value instanceof Object) {
-      if(value.province != undefined) {
+    if (value instanceof Object) {
+      if (value.province !== undefined) {
         return this.AddressObjToString(value)
-      } else if(value.time) {
+      } else if (value.time) {
         // value.time = (new Date(value.time)).toLocaleDateString();
         return value;
       }
@@ -455,28 +455,28 @@ class FormSubmitData extends PureComponent {
     return value;
   }
 
-  handleDeleteSubmisson = (submissionId) =>{
+  handleDeleteSubmisson = (submissionId) => {
     this.props.deleteFormData(this.state.formId, submissionId)
-    .then(response => {
-      if(response.data === "ok"){
-        if(this.props.formData.length == 1 && this.state.currentPage > 1){
-          this.setState({
-            currentPage: this.state.currentPage -1
-          },()=>{
+      .then(response => {
+        if (response.data === "ok") {
+          if (this.props.formData.length === 1 && this.state.currentPage > 1) {
+            this.setState({
+              currentPage: this.state.currentPage - 1
+            }, () => {
+              this.onChangePages(this.state.currentPage, this.state.pageSize)
+            })
+          } else {
             this.onChangePages(this.state.currentPage, this.state.pageSize)
-          })
-        } else {
-          this.onChangePages(this.state.currentPage, this.state.pageSize)
+          }
         }
-      }
-    })
-    .catch(err => {
-      message.error("删除失败！", 2);
-      console.log(err);
-    });
-    
+      })
+      .catch(err => {
+        message.error("删除失败！", 2);
+        console.log(err);
+      });
+
   }
-  
+
   render() {
     const { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
     const controlCol = [
@@ -506,11 +506,11 @@ class FormSubmitData extends PureComponent {
     sortedInfo = sortedInfo || {};
     let columns = this.props.forms.components
       .filter(item => {
-        return item.type != "Button";
+        return item.type !== "Button";
       })
       .filter((item) => {
-        if (item.type == "FormChildTest") {
-          return item.values.length != 0
+        if (item.type === "FormChildTest") {
+          return item.values.length !== 0
         } else {
           return true;
         }
@@ -519,12 +519,12 @@ class FormSubmitData extends PureComponent {
         let resultObj = null;
         let sorter = {};
 
-        if (item.type == "FormChildTest") {
+        if (item.type === "FormChildTest") {
           // 子表单的排序还没有做。。。。
           resultObj = {
             title: item.label,
-            key: item.length == 0 ? item.key : null,
-            children: item.length != 0 ? item.values.map((formChild, i) => {
+            key: item.length === 0 ? item.key : null,
+            children: item.length !== 0 ? item.values.map((formChild, i) => {
               return {
                 title: formChild.label,
                 dataIndex: formChild.key,
@@ -552,7 +552,7 @@ class FormSubmitData extends PureComponent {
             }) : null,
           };
           formChildIdArray.push(item.key);
-        } else if (item.type == "NumberInput") {
+        } else if (item.type === "NumberInput") {
           resultObj = {
             title: item.label,
             dataIndex: item.key,
@@ -564,7 +564,7 @@ class FormSubmitData extends PureComponent {
               return this._renderComponentDataByType(item, record);
             }
           };
-        } else if (item.type == "DateInput") {
+        } else if (item.type === "DateInput") {
           resultObj = {
             title: item.label,
             dataIndex: item.key,
@@ -628,7 +628,7 @@ class FormSubmitData extends PureComponent {
         if (formChildIdArray.includes(n)) {
           dataItem[n].forEach(submitDataObj => {
             for (let m in submitDataObj) {
-              if (obj[m] == void 0) {
+              if (obj[m] === void 0) {
                 obj[m] = [];
               }
               // 此处因该加判断formType的类型，如果为Adrress 才去转换
@@ -656,12 +656,12 @@ class FormSubmitData extends PureComponent {
       loading: this.props.loading,
       current: this.state.currentPage,
       onChange: (current, pageSize) => {
-        if (pageSize != void 0 && current != void 0) {
+        if (pageSize  != void 0 && current  != void 0) {
           this.onChangePages(current, pageSize);
         }
       },
       onShowSizeChange: (current, pageSize) => {
-        if (pageSize != void 0 && current != void 0) {
+        if (pageSize  != void 0 && current  != void 0) {
           this.onChangePages(current, pageSize);
         }
       }
@@ -678,7 +678,7 @@ class FormSubmitData extends PureComponent {
 
     const fileds = this.props.forms.components
       .filter(item => {
-        return item.type != "Button" && item.type !== "FormChildTest";
+        return item.type !== "Button" && item.type !== "FormChildTest";
       })
     const menu = (
       <Menu style={{ padding: 0, fontSize: 13 }}>
@@ -701,7 +701,7 @@ class FormSubmitData extends PureComponent {
         {mobile.is ? null : (
           <HeaderBar
             backCallback={() => {
-              location.href = config.hostUrl;
+              window.location.href = config.hostUrl;
             }}
             name={this.props.forms.name}
             isShowBtn={false}

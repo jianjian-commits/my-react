@@ -37,7 +37,7 @@ export default class address extends Component {
       // 搜索所有省/直辖市信息
       districtSearch.search("中国", function(status, result) {
         // 查询成功时，result即为对应的行政区信息
-        if (result.info == "OK") {
+        if (result.info === "OK") {
           that.setState({
             CityData: result.districtList[0]
           });
@@ -62,7 +62,7 @@ export default class address extends Component {
 
     const { data } = item;
     // 是否为数据联动
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId, //联动条件 id(当前表单)
         linkComponentId, //联动条件 id(联动表单)
@@ -120,10 +120,10 @@ export default class address extends Component {
     const { CityData } = this.state;
     let currentProvinceIndex = -1, currentCityIndex = -1;
     if(province && CityData && CityData.districtList) {
-      currentProvinceIndex = CityData.districtList.findIndex(item => item.name == province);
+      currentProvinceIndex = CityData.districtList.findIndex(item => item.name === province);
     }
     if(currentProvinceIndex > -1 && CityData && CityData.districtList[currentProvinceIndex].districtList) {
-      currentCityIndex = CityData.districtList[currentProvinceIndex].districtList.findIndex(item => item.name == city);
+      currentCityIndex = CityData.districtList[currentProvinceIndex].districtList.findIndex(item => item.name === city);
     }
     this.setState({
       currentProvinceIndex,
@@ -185,8 +185,8 @@ export default class address extends Component {
     newAddress[type] = value;
     const { province, city, county, detail } = newAddress;
     // if (province && city && county) {
-    //   if (item.addressType == "hasDetail") {
-    //     detail == ""
+    //   if (item.addressType === "hasDetail") {
+    //     detail === ""
     //       ? (newAddress.hasErr = true)
     //       : (newAddress.hasErr = false);
     //   } else {
@@ -197,8 +197,8 @@ export default class address extends Component {
     // }
     if (item.validate.required) {
       if(province && city && county) {
-        if(item.addressType == "hasDetail") {
-          detail == "" ? newAddress.hasErr = true : newAddress.hasErr = false;
+        if(item.addressType === "hasDetail") {
+          detail === "" ? newAddress.hasErr = true : newAddress.hasErr = false;
         } else {
           newAddress.hasErr = false;
         }
@@ -335,7 +335,7 @@ export default class address extends Component {
                 : null}
             </Select>
           </div>
-          {this.props.item.addressType == "noDetail" ? (
+          {this.props.item.addressType === "noDetail" ? (
             <></>
           ) : (
             <div className="row">

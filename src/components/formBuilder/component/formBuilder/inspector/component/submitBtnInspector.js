@@ -1,10 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Input, Select, message } from "antd";
-import { setSubmitBtn } from "../../redux/utils/operateFormComponent";
 import {
     setItemAttr
-  } from "../../redux/utils/operateFormComponent";
+} from "../../redux/utils/operateFormComponent";
 const { Option } = Select;
 
 class SubmitBtnInspector extends React.Component {
@@ -23,24 +22,24 @@ class SubmitBtnInspector extends React.Component {
     }
 
     handleChangeAttr = value => {
-          this.props.setItemAttr(
+        this.props.setItemAttr(
             this.props.element,
             "label",
             value
-          );
-      };
+        );
+    };
 
-      handleChangeStyle = (value) =>{
+    handleChangeStyle = (value) => {
         this.props.setItemAttr(
             this.props.element,
             "buttonStyle",
             value
-          );
-      }
+        );
+    }
 
     render() {
-        let { buttonStyle, buttonSize,label} = this.props.element;
-        let { btnName, hasError } = this.state;
+        let { buttonStyle, label } = this.props.element;
+        let { hasError } = this.state;
 
 
         let className = hasError ? "submit-btn-input submit-input-error" : "submit-btn-input";
@@ -62,7 +61,7 @@ class SubmitBtnInspector extends React.Component {
                             onBlur={(e) => {
                                 const value = e.target.value;
 
-                                if (value == "") {
+                                if (value === "") {
                                     this.handleChangeAttr("提交")
                                 } else {
                                     if (value.length > 6) {

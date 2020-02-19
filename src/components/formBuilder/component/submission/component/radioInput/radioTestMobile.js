@@ -20,7 +20,7 @@ export default class RadioInput extends React.Component {
   componentDidMount() {
     const { forms, item, handleSetComponentEvent } = this.props;
     const { data } = item;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,

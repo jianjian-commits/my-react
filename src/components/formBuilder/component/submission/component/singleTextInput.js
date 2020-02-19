@@ -22,7 +22,7 @@ export default class SingleTextInput extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     // 是否为数据联动
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId, //联动条件 id(当前表单)
         linkComponentId, //联动条件 id(联动表单)

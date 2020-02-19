@@ -11,7 +11,7 @@ export default class MultiDropDownItem extends React.Component {
   }
 
   componentWillReceiveProps(newProps){
-    if(newProps.selections.length == 0){
+    if(newProps.selections.length === 0){
       this.setState({selectIndex:[]})
     }
   }
@@ -50,13 +50,13 @@ export default class MultiDropDownItem extends React.Component {
           }}>
             <span
               className="dropDownBtnSpan"
-              style={selectIndexArr.length == 0? { color: "rgba(170,170,170,1)" }: {}}
+              style={selectIndexArr.length === 0? { color: "rgba(170,170,170,1)" }: {}}
             >
-              {selectIndexArr.length == 0
+              {selectIndexArr.length === 0
                 ? "请选择"
                 : selections.filter((item,i) => selectIndexArr.includes(i)).map(item => item.value).join(",")}
             </span>
-            {isPopoverVisible == false ?<Icon type="down" />:<Icon type="up" />}
+            {isPopoverVisible === false ?<Icon type="down" />:<Icon type="up" />}
           </div>
           {isPopoverVisible==true?
           <div className="dropDownItemContainer" id={'dropDown'+item.id}>
@@ -114,7 +114,7 @@ export default class MultiDropDownItem extends React.Component {
           overlayClassName="multiDropDownProver"
           onVisibleChange={visible => {
             this.setState({ isPopoverVisible: visible });
-            if(visible == false){
+            if(visible === false){
                 const { callEventArr } = this.props.item;
                 const dataArr = selections.filter((item,i) => selectIndexArr.includes(i))
                 if (callEventArr) {

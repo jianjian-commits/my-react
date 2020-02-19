@@ -15,7 +15,7 @@ var getSubmissionDataTotal = resp => {
 
 
 const filterData = (formPath, filterStr, pageSize, currentPage) => {
-  let queryData = pageSize == -1 ?
+  let queryData = pageSize === -1 ?
    `/${formPath}/submission?${filterStr}` 
    :`/${formPath}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
   return instanceAxios
@@ -33,7 +33,7 @@ const filterData = (formPath, filterStr, pageSize, currentPage) => {
 
 export const getFilterSubmissionData = (formPath, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber= -1) => dispatch => {
   let filterStr = "";
-  if (connectCondition == "&") {
+  if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
     filterData(formPath, filterStr, pageSize, currentPage).then(res => {
       dispatch({
@@ -49,7 +49,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         })
       });
     }).catch((error)=> {
-      if (error.response && error.response.data.code == 9999 ) {
+      if (error.response && error.response.data.code === 9999 ) {
            message.error("查询条件矛盾，请检查");
          }
     });
@@ -64,7 +64,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
       });
       const filterSubmisstion = [...new Set(submissionKeys)].map(key => {
         return allSubmission.filter(item => {
-          return item.id == key
+          return item.id === key
         })[0]
       })
       dispatch({
@@ -80,7 +80,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         })
       });
     })).catch((error)=> {
-      if (error.response && error.response.data.code == 9999 ) {
+      if (error.response && error.response.data.code === 9999 ) {
            message.error("查询条件矛盾，请检查");
          }
     });
@@ -110,7 +110,7 @@ export const getSubmissionData = (
         dispatch({
           type: RECEIVED_FORM_DATA,
           forms,
-          submissionDataTotal: total == -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
+          submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
             return {
               data: item.data,

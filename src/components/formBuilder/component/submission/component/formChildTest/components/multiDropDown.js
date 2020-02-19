@@ -48,7 +48,7 @@ export default class MultiDropDownItem extends React.Component {
                 this.setState(
                   {
                     selectIndexArr: selectIndexArr.filter(
-                      element => element != index
+                      element => element !== index
                     )
                   },
                   () => {

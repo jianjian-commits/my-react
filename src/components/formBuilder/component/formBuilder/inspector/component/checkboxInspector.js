@@ -43,14 +43,14 @@ class CheckboxInspector extends React.Component {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value != undefined ? value : checked,
+        value !== undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value != undefined ? value : checked
+        value !== undefined ? value : checked
       );
     }
   }
@@ -73,8 +73,8 @@ class CheckboxInspector extends React.Component {
     }
   }
   deleteChooseItem(item,index) {
-    if(this.props.element.values.length == 1) return null;
-    let newValuesList = this.props.element.values.filter((item,i) => i != index)
+    if(this.props.element.values.length === 1) return null;
+    let newValuesList = this.props.element.values.filter((item,i) => i !== index)
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
@@ -112,7 +112,7 @@ class CheckboxInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      minOptionNumber: value == void 0 ? 0 : value
+      minOptionNumber: value === void 0 ? 0 : value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -130,7 +130,7 @@ class CheckboxInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxOptionNumber: value == void 0 ? Number.MAX_SAFE_INTEGER : value
+      maxOptionNumber: value === void 0 ? Number.MAX_SAFE_INTEGER : value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(

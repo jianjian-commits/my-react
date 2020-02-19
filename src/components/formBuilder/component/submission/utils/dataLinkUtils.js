@@ -56,7 +56,7 @@ export const compareEqualArray = (originArr, arr) => {
   arr.sort();
   originArr.forEach((oArr, i) => {
     oArr.sort();
-    if (oArr.toString() == arr.toString()) {
+    if (oArr.toString() === arr.toString()) {
       index = i;
     }
   });
@@ -70,14 +70,14 @@ export const getResIndexArray = (value, originArr) => {
     value.sort();
     originArr.forEach((oArr, i) => {
       oArr.sort();
-      if (oArr.toString() == value.toString()) {
+      if (oArr.toString() === value.toString()) {
         indexs.push(i);
       }
     });
     return indexs;
   } else {
     originArr.forEach((item, index) => {
-      if(item == value) {
+      if(item === value) {
         indexs.push(index);
       }
     })

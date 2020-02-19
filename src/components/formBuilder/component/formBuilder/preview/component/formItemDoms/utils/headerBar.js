@@ -11,7 +11,7 @@ export default class HeaderBar extends React.Component {
 
   handleCopyComponent = e => {
     const { data, editModeOn, parent, insertCard, index } = this.props;
-    if ((data.type == "FormChildTest")) {
+    if ((data.type === "FormChildTest")) {
       let newData = JSON.parse(JSON.stringify(data)); // 深度克隆()
       let key = ID.uuid();
       newData.id = key;

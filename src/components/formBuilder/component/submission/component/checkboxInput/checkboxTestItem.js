@@ -40,7 +40,7 @@ export default class CheckboxInput extends React.Component {
       this.setState(
         state => ({
           ...state,
-          selectValues: this.state.selectValues.filter(i => i != index)
+          selectValues: this.state.selectValues.filter(i => i !== index)
         }),
         () => {
           if (onChange) {

@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from "react";
-import { Table, Popconfirm, Row, Col, ConfigProvider, Icon } from "antd";
+import { Table, Popconfirm, Row, Col, ConfigProvider } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteForm, getForms } from "./redux/utils/operateFormUtils";
 import HeaderBar from "../base/NavBar";
+import config from "../../config/config";
 
 // 加载数据时重写表格为空状态
 const noRenderEmpty = () => (
@@ -120,8 +121,7 @@ class Home extends Component {
           btnValue="创建表单"
           isShowBackBtn={false}
           clickCallback={() => {
-            // location.href = config.hostUrl + "/formbuild";
-            console.log("1")
+            window.location.href = config.hostUrl + "/formbuild";
           }}
         />
         <Fragment>

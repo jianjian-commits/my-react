@@ -1,8 +1,8 @@
 import React from "react";
-import { Checkbox, Input, Select,Divider  } from "antd";
+import { Checkbox, Input, Select, Divider } from "antd";
 import { connect } from "react-redux";
 import { setItemAttr, setItemValues } from "../../../redux/utils/operateFormComponent";
-import  PositionCenterList  from "./component/positionCenterList";
+import PositionCenterList from "./component/positionCenterList";
 import isInFormChild from "../../utils/isInFormChild"
 class GetLocalPositionInspector extends React.Component {
   constructor(props) {
@@ -10,10 +10,10 @@ class GetLocalPositionInspector extends React.Component {
     this.state = {};
   }
 
-  deleteCenterPosition= (index)=> {
+  deleteCenterPosition = (index) => {
     const { validate } = this.props.element;
     let newValuesList = [...this.props.element.validate.centerList];
-    newValuesList.splice(index,1);
+    newValuesList.splice(index, 1);
     var newValidate = {
       ...validate,
       centerList: newValuesList
@@ -25,7 +25,7 @@ class GetLocalPositionInspector extends React.Component {
     );
   }
 
-  addCenterPosition=(centerPosition)=> {
+  addCenterPosition = (centerPosition) => {
     const { validate } = this.props.element;
     const newValuesList = [...this.props.element.validate.centerList, centerPosition];
     var newValidate = {
@@ -39,13 +39,13 @@ class GetLocalPositionInspector extends React.Component {
     );
   }
 
-  changeCenterPosition = (item,index)=> {
+  changeCenterPosition = (item, index) => {
     const { validate } = this.props.element;
     const newItem = {
       center: item.center,
       latitude: item.latitude,
       longitude: item.longitude,
-      orientationRange:item.orientationRange
+      orientationRange: item.orientationRange
     };
     let newValuesList = [...this.props.element.validate.centerList];
     newValuesList[index] = newItem;
@@ -63,7 +63,7 @@ class GetLocalPositionInspector extends React.Component {
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
     let { validate } = this.props.element;
-    validate = {...validate};
+    validate = { ...validate };
     switch (name) {
       case "customMessage": {
         validate.customMessage = value;
@@ -84,15 +84,16 @@ class GetLocalPositionInspector extends React.Component {
         value = validate;
         break;
       }
+      default: break;
     }
     this.props.setItemAttr(
       this.props.element,
       name,
-      value != undefined ? value : checked
+      value !== undefined ? value : checked
     );
   };
 
-  handleChangeSelect = value =>{
+  handleChangeSelect = value => {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
@@ -105,7 +106,7 @@ class GetLocalPositionInspector extends React.Component {
     );
   }
 
-  handleChangeIsAdjustmentRange = event =>{
+  handleChangeIsAdjustmentRange = event => {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
@@ -127,7 +128,7 @@ class GetLocalPositionInspector extends React.Component {
       validate,
       data
     } = this.props.element;
-    const { adjustmentRange,isAdjustmentRange} = validate;
+    const { adjustmentRange, isAdjustmentRange } = validate;
     // const formatChecks = inputMask ? true : false;
     return (
       <div className="position-inspector">
@@ -141,21 +142,21 @@ class GetLocalPositionInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-            {
-              isInFormChild(this.props.elementParent)
-               ? null 
-               :<>
-                   <p htmlFor="email-tip">提示信息</p>
-                    <Input
-                      id="email-tip"
-                      name="tooltip"
-                      placeholder="请输入提示信息"
-                      value={tooltip}
-                      onChange={this.handleChangeAttr}
-                      autoComplete="off"
-                    />
-               </>
-            }
+          {
+            isInFormChild(this.props.elementParent)
+              ? null
+              : <>
+                <p htmlFor="email-tip">提示信息</p>
+                <Input
+                  id="email-tip"
+                  name="tooltip"
+                  placeholder="请输入提示信息"
+                  value={tooltip}
+                  onChange={this.handleChangeAttr}
+                  autoComplete="off"
+                />
+              </>
+          }
         </div>
         <Divider />
         <div className="costom-info-card">
@@ -175,29 +176,29 @@ class GetLocalPositionInspector extends React.Component {
             >
               设定定位范围
             </Checkbox>
-            <PositionCenterList 
-              className = "position-center-list"
-              isActive = {validate.isLimitOrientationRange}
-              centerList = {validate.centerList}
-              addCenterPosition = {this.addCenterPosition}
-              changeCenterPosition = {this.changeCenterPosition}
-              deleteCenterPosition = {this.deleteCenterPosition}/>
+            <PositionCenterList
+              className="position-center-list"
+              isActive={validate.isLimitOrientationRange}
+              centerList={validate.centerList}
+              addCenterPosition={this.addCenterPosition}
+              changeCenterPosition={this.changeCenterPosition}
+              deleteCenterPosition={this.deleteCenterPosition} />
           </div>
           <p htmlFor="email-tip">定位设置</p>
           <div className="checkbox-wrapper">
             <Checkbox
-                name="isAdjustmentRange"
-                checked={isAdjustmentRange}
-                onChange={this.handleChangeIsAdjustmentRange}
-              >
-                允许微调
+              name="isAdjustmentRange"
+              checked={isAdjustmentRange}
+              onChange={this.handleChangeIsAdjustmentRange}
+            >
+              允许微调
             </Checkbox>
             <Select value={`${adjustmentRange}米`} onChange={this.handleChangeSelect} disabled={!isAdjustmentRange}>
               <Select.Option value="100">100米</Select.Option>
               <Select.Option value="200">200米</Select.Option>
               <Select.Option value="5000">5000米</Select.Option>
-          </Select>
-        </div>
+            </Select>
+          </div>
         </div>
       </div>
     );

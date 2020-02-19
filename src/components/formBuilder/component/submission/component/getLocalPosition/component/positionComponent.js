@@ -114,7 +114,7 @@ export default class PositionComponent extends Component {
     });
     this.props.onChange({ address: "", latitude: 39, longitude: 106 });
     this.geolocation.getCurrentPosition((status, result) => {
-      if (status == 'complete') {
+      if (status === 'complete') {
         this.onComplete(result)
       } else {
         this.onError(result)
@@ -234,7 +234,7 @@ export default class PositionComponent extends Component {
     return (<div className="localposition-container">
       <div className="ajustment-position-warpper" style={{ display: this.state.isShowAddressWrapper ? "flex" : "none" }}>
         <div className="address-wrapper">
-          <div className="address">{address == "" && this.state.errorMsg ==""? "正在定位..." : address}</div>
+          <div className="address">{address === "" && this.state.errorMsg ==""? "正在定位..." : address}</div>
           <div className="err-msg">{this.state.errorMsg}</div>
           <span className="clear-btn" onClick={this.toggleAddressWrapper}>清空地址</span>
         </div>
@@ -260,7 +260,7 @@ export default class PositionComponent extends Component {
       <div className="localposition-container">
         <div className="disable-ajustmentrange-position-container">
           <div className="address-wrapper" style={{ display: this.state.isShowAddressWrapper ? "block" : "none" }}>
-            <div className="address">{this.state.address == "" && this.state.errorMsg =="" ? "正在定位..." : this.state.address}</div>
+            <div className="address">{this.state.address === "" && this.state.errorMsg =="" ? "正在定位..." : this.state.address}</div>
             <div className="err-msg">{this.state.errorMsg}</div>
             <span className="clear-btn" onClick={this.toggleAddressWrapper}>清空地址</span>
           </div>

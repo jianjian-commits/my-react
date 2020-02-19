@@ -73,7 +73,7 @@ class Submission extends Component {
       showAddressErr: false,
       showFormChildErr: false,
       isSubmitted: false,
-      errorResponseMsg:{}
+      errorResponseMsg: {}
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -87,7 +87,7 @@ class Submission extends Component {
     mobile.is && mountClassNameOnRoot(mobile.className);
 
     // initToken().then(res => {
-      getFormComponent(this.state.formId);
+    getFormComponent(this.state.formId);
     // });
   }
 
@@ -96,7 +96,7 @@ class Submission extends Component {
     this.setState({ customValicate: this.props.validation });
     if (formComponent.components) {
       const pureFormComponents = formComponent.components.filter(item => {
-        return item.type != "Button";
+        return item.type !== "Button";
       });
       this.setState({
         pureFormComponents
@@ -114,7 +114,7 @@ class Submission extends Component {
     }));
   }
 
-  _checkoutFormChildData() {}
+  _checkoutFormChildData() { }
 
   // 设置地址(解决只能获取单个数据)
   handleSetAddress = address => {
@@ -152,10 +152,10 @@ class Submission extends Component {
   }
   _setNumberValue(values) {
     this.props.formComponent.components.map(component => {
-      if (values[component.id] == "") {
+      if (values[component.id] === "") {
         delete values[component.id];
       }
-      if (component.type == "NumberInput" && values.hasOwnProperty(component.id)) {
+      if (component.type === "NumberInput" && values.hasOwnProperty(component.id)) {
         values[component.id] = Number(values[component.id])
       }
     });
@@ -165,12 +165,12 @@ class Submission extends Component {
   _setDateTimeVaule(values) {
     this.props.formComponent.components.map(component => {
       if (
-        component.type == "DateInput" &&
+        component.type === "DateInput" &&
         values.hasOwnProperty(component.id) &&
-        values[component.id] !== void 0
+        values[component.id]  != void 0
       ) {
         // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
-        if (values[component.id].constructor == Date) {
+        if (values[component.id].constructor === Date) {
           values[component.id].setUTCMilliseconds(0);
         } else {
           values[component.id]._d.setUTCMilliseconds(0);
@@ -183,18 +183,18 @@ class Submission extends Component {
   _setAddressValue(values) {
     this.props.formComponent.components.map(component => {
       if (
-        component.type == "Address" &&
+        component.type === "Address" &&
         values.hasOwnProperty(component.id) &&
-        values[component.id] !== void 0
+        values[component.id]  != void 0
       ) {
         // 如果地址字段为空 就不提交地址字段
         let { province, county, city, detail } = values[component.id];
         let address = [province, city, county, detail]
           .filter(item => item)
           .join("");
-        if (address.trim() == "") {
+        if (address.trim() === "") {
           delete values[component.id];
-        }else{
+        } else {
           values[component.id].xx = address;
         }
       }
@@ -225,7 +225,7 @@ class Submission extends Component {
     for (let i = 0; i < length; i++) {
       let component = components[i];
       if (
-        component.type != "CustomValue" &&
+        component.type !== "CustomValue" &&
         component.validate &&
         component.validate.required &&
         !values[component.id]
@@ -239,24 +239,24 @@ class Submission extends Component {
   _iterateAllComponentToSetData(formComponentArray, customDataArray, values) {
     for (let i in values) {
       let currentComponent = formComponentArray.filter(item => {
-        return item.id == i;
+        return item.id === i;
       })[0];
       currentComponent || (currentComponent = {});
 
-      if (currentComponent.type == "FormChildTest") {
+      if (currentComponent.type === "FormChildTest") {
         let formChildDataArray = this.state.formChildDataObj[i];
         let resObj = {};
 
         values[i] = formChildDataArray;
         formChildDataArray.map(item => {
           for (let m in item) {
-            if (resObj[m] == void 0) {
+            if (resObj[m] === void 0) {
               resObj[m] = {
                 type: currentComponent.label + "." + item[m].type,
                 value: []
               };
             }
-            if (item[m].data != void 0) {
+            if (item[m].data  != void 0) {
               resObj[m].value.push(item[m].data);
             }
           }
@@ -306,7 +306,7 @@ class Submission extends Component {
     let isFormChildErr = false;
     for (let key in formChildDataObj) {
       let currentComponent = formComponentArray.filter(item => {
-        return item.id == key;
+        return item.id === key;
       })[0];
       let required =
         currentComponent.validate && currentComponent.validate.required;
@@ -330,14 +330,14 @@ class Submission extends Component {
                 break;
             }
 
-            if (checkData == void 0 || checkData == "") {
+            if (checkData === void 0 || checkData === "") {
               isFormChildErr = true;
               item[m].hasErr = true;
             }
           }
 
           if (!isFormChildErr) {
-            if (checkValueValidByType(item[m], item[m].data) == false) {
+            if (checkValueValidByType(item[m], item[m].data) === false) {
               isFormChildErr = true;
               item[m].hasErr = true;
             }
@@ -357,21 +357,21 @@ class Submission extends Component {
     }
   }
 
-  _changeErrorResponseData = (componentId) =>{
-    let errorResponseMsg = {...this.state.errorResponseMsg}
+  _changeErrorResponseData = (componentId) => {
+    let errorResponseMsg = { ...this.state.errorResponseMsg }
     delete errorResponseMsg[componentId];
     this.setState({
       errorResponseMsg
-    },()=>{
-      console.log("this.state.errorResponseMsg",this.state.errorResponseMsg)
+    }, () => {
+      console.log("this.state.errorResponseMsg", this.state.errorResponseMsg)
     })
   }
-  _setErrorResponseData = (errorResponseData) =>{
+  _setErrorResponseData = (errorResponseData) => {
     let errorResponseMsg = {};
-    errorResponseData.infos.map(info =>{
-      if(errorResponseMsg[info.fieldName] !== void 0){
+    errorResponseData.infos.map(info => {
+      if (errorResponseMsg[info.fieldName]  != void 0) {
         errorResponseMsg[info.fieldName].push(info.msg)
-      }else{
+      } else {
         errorResponseMsg[info.fieldName] = [info.msg]
       }
     })
@@ -382,8 +382,8 @@ class Submission extends Component {
 
   }
 
-  _getComponentLabelByID = (componentId) =>{
-    return this.state.pureFormComponents.filter( component => component.id=== componentId)[0].label
+  _getComponentLabelByID = (componentId) => {
+    return this.state.pureFormComponents.filter(component => component.id === componentId)[0].label
   }
 
   handleSubmit = e => {
@@ -395,7 +395,7 @@ class Submission extends Component {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
 
-        if (this._checkComponentValid(err, formComponentArray) == false) {
+        if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
         }
 
@@ -418,7 +418,7 @@ class Submission extends Component {
         let customCheckResult = customValicate.validate.reduce(
           (result, validateStr) => {
             let res = checkCustomValidate(customDataArray, validateStr);
-            return result == false ? false : res;
+            return result === false ? false : res;
           },
           true
         );
@@ -440,45 +440,46 @@ class Submission extends Component {
         //     return false;
         // }
 
-        if (customCheckResult != void 0) {
-          if (customCheckResult == true) {
-            this.setState({ isSubmitted: true,errorResponseMsg:{} });
+        if (customCheckResult  != void 0) {
+          if (customCheckResult === true) {
+            this.setState({ isSubmitted: true, errorResponseMsg: {} });
             this.props
               .submitSubmission(this.state.formId, values)
               .then(response => {
-                if(response.data.id !== void 0){
+                if (response.data.id  != void 0) {
                   isMobile
-                  ? Toast.success("提交成功!")
-                  : message.success("提交成功!");
-                setTimeout(() => {
-                  location.href = config.hostUrl;
-                }, 1000);
-              }}).catch((error) => {
-                if (error.response && error.response.data.code == 9998 ) {
+                    ? Toast.success("提交成功!")
+                    : message.success("提交成功!");
+                  setTimeout(() => {
+                    window.location.href = config.hostUrl;
+                  }, 1000);
+                }
+              }).catch((error) => {
+                if (error.response && error.response.data.code === 9998) {
                   this._setErrorResponseData(error.response.data)
-                      isMobile
-                      ? Toast.fail("提交失败")
-                      : message.error("提交失败");
-              }
+                  isMobile
+                    ? Toast.fail("提交失败")
+                    : message.error("提交失败");
+                }
               });
           } else {
-            customValicate.errMessage == void 0 ||
-            customValicate.errMessage == ""
+            customValicate.errMessage === void 0 ||
+              customValicate.errMessage === ""
               ? isMobile
                 ? Toast.fail("校验不通过，请检查输入!")
                 : message.error("校验不通过，请检查输入!")
               : isMobile
-              ? Toast.fail(customValicate.errMessage)
-              : message.error(customValicate.errMessage);
+                ? Toast.fail(customValicate.errMessage)
+                : message.error(customValicate.errMessage);
           }
         } else {
-          customValicate.errMessage == void 0 || customValicate.errMessage == ""
+          customValicate.errMessage === void 0 || customValicate.errMessage === ""
             ? isMobile
               ? Toast.fail("校验不通过，请检查输入!")
               : message.error("校验不通过，请检查输入!")
             : isMobile
-            ? Toast.fail(customValicate.errMessage)
-            : message.error(customValicate.errMessage);
+              ? Toast.fail(customValicate.errMessage)
+              : message.error(customValicate.errMessage);
         }
       });
     }
@@ -509,7 +510,7 @@ class Submission extends Component {
                   form={this.props.form}
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
-                  resetErrorMsg = {this._changeErrorResponseData}
+                  resetErrorMsg={this._changeErrorResponseData}
                 />
               </div>
             );
@@ -528,7 +529,7 @@ class Submission extends Component {
                   form={this.props.form}
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
-                  resetErrorMsg = {this._changeErrorResponseData}
+                  resetErrorMsg={this._changeErrorResponseData}
                 />
               </div>
             );
@@ -547,7 +548,7 @@ class Submission extends Component {
                   form={this.props.form}
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
-                  resetErrorMsg = {this._changeErrorResponseData}
+                  resetErrorMsg={this._changeErrorResponseData}
                 />
               </div>
             );
@@ -566,7 +567,7 @@ class Submission extends Component {
                   getFieldDecorator={getFieldDecorator}
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
-                  resetErrorMsg = {this._changeErrorResponseData}
+                  resetErrorMsg={this._changeErrorResponseData}
                 />
               </div>
             );
@@ -585,7 +586,7 @@ class Submission extends Component {
                   form={this.props.form}
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
-                  resetErrorMsg = {this._changeErrorResponseData}
+                  resetErrorMsg={this._changeErrorResponseData}
                 />
               </div>
             );
@@ -606,15 +607,15 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <RadioButtons
-                    forms={forms}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    key={item.key}
-                    getFieldDecorator={getFieldDecorator}
-                    form={this.props.form}
-                    item={item}
-                  />
-                )}
+                    <RadioButtons
+                      forms={forms}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      key={item.key}
+                      getFieldDecorator={getFieldDecorator}
+                      form={this.props.form}
+                      item={item}
+                    />
+                  )}
               </div>
             );
             break;
@@ -654,15 +655,15 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <DropDown
-                    forms={forms}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    key={item.key}
-                    getFieldDecorator={getFieldDecorator}
-                    form={this.props.form}
-                    item={item}
-                  />
-                )}
+                    <DropDown
+                      forms={forms}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      key={item.key}
+                      getFieldDecorator={getFieldDecorator}
+                      form={this.props.form}
+                      item={item}
+                    />
+                  )}
               </div>
             );
           case "DateInput":
@@ -681,14 +682,14 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <DateInput
-                    forms={forms}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    getFieldDecorator={getFieldDecorator}
-                    form={this.props.form}
-                    item={item}
-                  />
-                )}
+                    <DateInput
+                      forms={forms}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      getFieldDecorator={getFieldDecorator}
+                      form={this.props.form}
+                      item={item}
+                    />
+                  )}
               </div>
             );
           case "HandWrittenSignature":
@@ -707,13 +708,13 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <HandWrittenSignaturePc
-                    getFileUrl={this.getFileUrl}
-                    key={item.key}
-                    getFieldDecorator={getFieldDecorator}
-                    item={item}
-                  />
-                )}
+                    <HandWrittenSignaturePc
+                      getFileUrl={this.getFileUrl}
+                      key={item.key}
+                      getFieldDecorator={getFieldDecorator}
+                      item={item}
+                    />
+                  )}
               </div>
             );
           case "FileUpload":
@@ -735,16 +736,16 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <FileUpload
-                    forms={forms}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    getFileUrl={this.getFileUrl}
-                    key={item.key}
-                    getFieldDecorator={getFieldDecorator}
-                    form={this.props.form}
-                    item={item}
-                  />
-                )}
+                    <FileUpload
+                      forms={forms}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      getFileUrl={this.getFileUrl}
+                      key={item.key}
+                      getFieldDecorator={getFieldDecorator}
+                      form={this.props.form}
+                      item={item}
+                    />
+                  )}
               </div>
             );
           case "FormChild":
@@ -796,15 +797,15 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <MultiDropDown
-                    forms={forms}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    key={item.key}
-                    getFieldDecorator={getFieldDecorator}
-                    form={this.props.form}
-                    item={item}
-                  />
-                )}
+                    <MultiDropDown
+                      forms={forms}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      key={item.key}
+                      getFieldDecorator={getFieldDecorator}
+                      form={this.props.form}
+                      item={item}
+                    />
+                  )}
               </div>
             );
           case "ImageUpload":
@@ -825,16 +826,16 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <ImageUpload
-                    forms={forms}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    getFileUrl={this.getFileUrl}
-                    key={item.key}
-                    getFieldDecorator={getFieldDecorator}
-                    form={this.props.form}
-                    item={item}
-                  />
-                )}
+                    <ImageUpload
+                      forms={forms}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      getFileUrl={this.getFileUrl}
+                      key={item.key}
+                      getFieldDecorator={getFieldDecorator}
+                      form={this.props.form}
+                      item={item}
+                    />
+                  )}
               </div>
             );
           case "GetLocalPosition":
@@ -852,15 +853,15 @@ class Submission extends Component {
                     mobile={this.props.mobile}
                   />
                 ) : (
-                  <PositionComponentPC
-                    item={item}
-                    getFieldDecorator={getFieldDecorator}
-                  />
-                )}
+                    <PositionComponentPC
+                      item={item}
+                      getFieldDecorator={getFieldDecorator}
+                    />
+                  )}
               </div>
             );
           case "FormChildTest":
-            if (this.state.formChildDataObj[item.key] == void 0) {
+            if (this.state.formChildDataObj[item.key] === void 0) {
               this.state.formChildDataObj[item.key] = [];
             }
 
@@ -891,30 +892,30 @@ class Submission extends Component {
                     }}
                   />
                 ) : (
-                  <FormChildTest
-                    key={`${item.key}${i}`}
-                    getFieldDecorator={getFieldDecorator}
-                    item={item}
-                    showFormChildErr={this.state.showFormChildErr}
-                    forms={forms}
-                    form={this.props.form}
-                    closeFormChildErr={() => {
-                      this.setState({
-                        showFormChildErr: false
-                      });
-                    }}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    submitDataArray={this.state.formChildDataObj[item.key]}
-                    handleSetFormChildData={this.handleSetFormChildData}
-                    saveSubmitData={newArray => {
-                      this.state.formChildDataObj[item.key] = newArray;
-                      this.setState(state => ({
-                        ...state,
-                        formChildDataObj: this.state.formChildDataObj
-                      }));
-                    }}
-                  />
-                )}
+                    <FormChildTest
+                      key={`${item.key}${i}`}
+                      getFieldDecorator={getFieldDecorator}
+                      item={item}
+                      showFormChildErr={this.state.showFormChildErr}
+                      forms={forms}
+                      form={this.props.form}
+                      closeFormChildErr={() => {
+                        this.setState({
+                          showFormChildErr: false
+                        });
+                      }}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      submitDataArray={this.state.formChildDataObj[item.key]}
+                      handleSetFormChildData={this.handleSetFormChildData}
+                      saveSubmitData={newArray => {
+                        this.state.formChildDataObj[item.key] = newArray;
+                        this.setState(state => ({
+                          ...state,
+                          formChildDataObj: this.state.formChildDataObj
+                        }));
+                      }}
+                    />
+                  )}
               </div>
             );
           case "Address": {
@@ -937,18 +938,18 @@ class Submission extends Component {
                     item={item}
                   />
                 ) : (
-                  <Address
-                    forms={forms}
-                    handleSetAddress={this.handleSetAddress}
-                    handleSetComponentEvent={this.handleSetComponentEvent}
-                    key={item.key}
-                    getFieldDecorator={getFieldDecorator}
-                    form={this.props.form}
-                    showAddressErr={this.state.showAddressErr}
-                    address={this.state.addressesObj[item.id]}
-                    item={item}
-                  />
-                )}
+                    <Address
+                      forms={forms}
+                      handleSetAddress={this.handleSetAddress}
+                      handleSetComponentEvent={this.handleSetComponentEvent}
+                      key={item.key}
+                      getFieldDecorator={getFieldDecorator}
+                      form={this.props.form}
+                      showAddressErr={this.state.showAddressErr}
+                      address={this.state.addressesObj[item.id]}
+                      item={item}
+                    />
+                  )}
               </div>
             );
           }
@@ -966,13 +967,13 @@ class Submission extends Component {
     currrentKey
   ) => {
     const pureFormComponents = this.state.pureFormComponents.map(component => {
-      if (component.id == componentId) {
+      if (component.id === componentId) {
         if (component.callEventArr) {
           component.callEventArr.push(callback);
         } else {
           component.callEventArr = [callback];
         }
-      } else if (component.element == "FormChildTest" && currrentKey) {
+      } else if (component.element === "FormChildTest" && currrentKey) {
         // 如果关联的是子组件则为子组件注册事件
         let temp = this.state.formChildDataObj[currrentKey][currentIndex];
         if (temp[componentId].callEventArr) {
@@ -1024,7 +1025,7 @@ class Submission extends Component {
       // }
     });
     // 如果没找到对应数据 则返回默认值
-    if (formchildData == null) {
+    if (formchildData === null) {
       formChildDataObj[id] = [rowTemplate]; //清空对应id子表单的数据
       this.setState({
         formChildDataObj
@@ -1067,13 +1068,13 @@ class Submission extends Component {
   render() {
     const { formComponent, form, mobile = {} } = this.props;
     const { getFieldDecorator } = form;
-    let { pureFormComponents, currentLayout,errorResponseMsg } = this.state;
+    let { pureFormComponents, currentLayout, errorResponseMsg } = this.state;
     let layout = null;
 
-    if (currentLayout == void 0) {
+    if (currentLayout === void 0) {
       layout = pureFormComponents
         .filter(item => {
-          return item.isShow != false;
+          return item.isShow !== false;
         })
         .map(item => {
           return {
@@ -1096,9 +1097,9 @@ class Submission extends Component {
     //   const { currentLayoutId, layoutList } = this.state.customValicate;
     //   // console.log(this.state.customValicate)
     //   // console.log(layoutList)
-    //   if (layoutList.length != 0) {
+    //   if (layoutList.length !== 0) {
     //     layout = layoutList
-    //       .filter(item => item.id == currentLayoutId)[0]
+    //       .filter(item => item.id === currentLayoutId)[0]
     //       .layout.map(item => {
     //         return {
     //           ...item,
@@ -1117,72 +1118,53 @@ class Submission extends Component {
       return component;
     });
 
-    let submitBtnObj = this.props.formComponent.components.filter( component => component.type == "Button")[0];
+    let submitBtnObj = this.props.formComponent.components.filter(component => component.type === "Button")[0];
 
     return (
       <>
         <Spin
           spinning={this.state.isSubmitted}
         >
-        {mobile.is ? null : (
-          <HeaderBar
-            backCallback={() => {
-              location.href = config.hostUrl;
-            }}
-            isShowBtn={false}
-          />
-        )}
-        <div className={"formBuilder-Submission"}>
-          <div className="Content">
-            <div className="submission-title">{formComponent.name}</div>
-            <div className="form-layout">
-              <Form onSubmit={this.handleSubmit}>
-                {mobile.is ? (
-                  <>
-                    {this.renderFormComponent(
-                      getFieldDecorator,
-                      pureFormComponents,
-                      errorResponseMsg
-                    )}
-                  </>
-                ) : (
-                    <GridLayout
-                      className="layout"
-                      layout={layout}
-                      cols={12}
-                      rowHeight={22}
-                      width={870}
-                      onLayoutChange={layout => {
-                        this.setState({ currentLayout: layout });
-                      }}
-                    >
+          {mobile.is ? null : (
+            <HeaderBar
+              backCallback={() => {
+                window.location.href = config.hostUrl;
+              }}
+              isShowBtn={false}
+            />
+          )}
+          <div className={"formBuilder-Submission"}>
+            <div className="Content">
+              <div className="submission-title">{formComponent.name}</div>
+              <div className="form-layout">
+                <Form onSubmit={this.handleSubmit}>
+                  {mobile.is ? (
+                    <>
                       {this.renderFormComponent(
                         getFieldDecorator,
                         pureFormComponents,
                         errorResponseMsg
                       )}
-                    </GridLayout>
-                  )}
-                {submitBtnObj == void 0 ? (
-                    <Form.Item
-                      style={{
-                      width: "100%",
-                      textAlign: "center",
-                      marginTop: 80
-                      }}
-                    >
-                     <div className="SubmitBtn">
-                        <Button
-                          block={!!mobile.is}
-                          htmlType="submit"
-                          type="primary"
-                          // size={submitBtnObj.buttonSize}
-                          >
-                            提交
-                        </Button>
-                    </div>
-                    </Form.Item>
-                ) : (
+                    </>
+                  ) : (
+                      <GridLayout
+                        className="layout"
+                        layout={layout}
+                        cols={12}
+                        rowHeight={22}
+                        width={870}
+                        onLayoutChange={layout => {
+                          this.setState({ currentLayout: layout });
+                        }}
+                      >
+                        {this.renderFormComponent(
+                          getFieldDecorator,
+                          pureFormComponents,
+                          errorResponseMsg
+                        )}
+                      </GridLayout>
+                    )}
+                  {submitBtnObj === void 0 ? (
                     <Form.Item
                       style={{
                         width: "100%",
@@ -1194,18 +1176,37 @@ class Submission extends Component {
                         <Button
                           block={!!mobile.is}
                           htmlType="submit"
-                          type={submitBtnObj.buttonStyle}
-                          size={submitBtnObj.buttonSize}
+                          type="primary"
+                        // size={submitBtnObj.buttonSize}
                         >
-                          {submitBtnObj.label}
+                          提交
                         </Button>
                       </div>
                     </Form.Item>
-                  )}
-              </Form>
+                  ) : (
+                      <Form.Item
+                        style={{
+                          width: "100%",
+                          textAlign: "center",
+                          marginTop: 80
+                        }}
+                      >
+                        <div className="SubmitBtn">
+                          <Button
+                            block={!!mobile.is}
+                            htmlType="submit"
+                            type={submitBtnObj.buttonStyle}
+                            size={submitBtnObj.buttonSize}
+                          >
+                            {submitBtnObj.label}
+                          </Button>
+                        </div>
+                      </Form.Item>
+                    )}
+                </Form>
+              </div>
             </div>
           </div>
-        </div>
         </Spin>
       </>
     );

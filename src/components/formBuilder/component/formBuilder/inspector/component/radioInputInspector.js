@@ -35,14 +35,14 @@ class RadioInputInspector extends React.Component {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value != undefined ? value : checked,
+        value !== undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value != undefined ? value : checked
+        value !== undefined ? value : checked
       );
     }
   }
@@ -67,8 +67,8 @@ class RadioInputInspector extends React.Component {
   }
 
   deleteChooseItem(item, index) {
-    if(this.props.element.values.length == 1) return null;
-    let newValuesList = this.props.element.values.filter((item, i) => i != index)
+    if(this.props.element.values.length === 1) return null;
+    let newValuesList = this.props.element.values.filter((item, i) => i !== index)
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,

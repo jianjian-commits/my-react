@@ -2,7 +2,6 @@ import React from "react";
 import ToolbarItem from "./component/tollbarItem";
 import ID from "../../../utils/UUID";
 // import store from '../../../stores/store';
-import { create } from "../redux/utils/preOperation";
 import { connect } from "react-redux";
 import ToolHeader from "./component/toolbarHeader";
 
@@ -388,6 +387,5 @@ export default connect(
     data: store.formBuilder
   }),
   {
-    create
   }
 )(Toolbar);

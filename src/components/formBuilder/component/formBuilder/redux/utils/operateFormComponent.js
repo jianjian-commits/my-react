@@ -92,14 +92,6 @@ export const setActiveIndex = index => {
   };
 };
 
-// 设置数据联动
-export const setDataLinkage = value => {
-  return {
-    type: SET_DATA_LINKAGE,
-    data: value
-  };
-};
-
 export const setActiveInnerIndex = index => {
   return {
     type: SET_ACTIVEINNERINDEX,

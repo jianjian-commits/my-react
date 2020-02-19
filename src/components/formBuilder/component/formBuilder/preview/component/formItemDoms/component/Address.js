@@ -51,7 +51,7 @@ export default class Address extends Component {
                 </Select>
               </div>
               {
-                this.props.data.addressType == "noDetail" ?
+                this.props.data.addressType === "noDetail" ?
                   <></> :
                   <div className="row">
                     <TextArea style={{resize: "none"}} rows={2} />

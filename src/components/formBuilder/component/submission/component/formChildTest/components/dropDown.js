@@ -25,7 +25,7 @@ export default class DropDownTestItem extends React.Component {
               {dropDownOptions.map((item, index) => (
                 <div className={classNames("dropDownItem",{ selectOption: selectIndex==index})}
                 onClick={()=>{
-                    if(selectIndex == index){
+                    if(selectIndex === index){
                         this.setState({selectIndex:-1,isPopoverVisible:false},()=>{
                             onChange("");
                         })

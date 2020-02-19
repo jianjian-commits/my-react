@@ -10,7 +10,7 @@ import {
 
 export default class Email extends React.Component {
   checkUnique = (rule, value, callback) => {
-    if (value == "") {
+    if (value === "") {
       callback();
     }else {
       callback();
@@ -20,7 +20,7 @@ export default class Email extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,

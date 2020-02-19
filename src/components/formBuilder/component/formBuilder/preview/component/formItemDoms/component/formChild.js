@@ -1,6 +1,6 @@
 import React from 'react';
 import ComponentBox from '../componentBox';
-import { ComponentHeader, ComponentLabel } from '../utils/commonDom';
+import { ComponentHeader } from '../utils/commonDom';
 
 
 export default class FormChild extends React.Component {

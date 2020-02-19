@@ -22,7 +22,7 @@ export default class OtherDataModal extends Component {
     const { formId, optionId, optionLabel } = this.props.data;
     // 过滤自身表单
     const forms = this.props.forms.filter(
-      form => form.id != this.props.formId
+      form => form.id !== this.props.formId
     );
     forms.reverse();
     let formIndex = 0;
@@ -52,7 +52,7 @@ export default class OtherDataModal extends Component {
   };
 
   handleOptionSelected = ev => {
-    if (ev.target.tagName == "LI") {
+    if (ev.target.tagName === "LI") {
       let value = ev.target.getAttribute("data-value");
       let label = ev.target.innerText;
       this.setState({
@@ -175,7 +175,7 @@ export default class OtherDataModal extends Component {
                     className="select-option-item"
                   >
                     {component.label}
-                    {selectedOptionId == component.id ? (
+                    {selectedOptionId === component.id ? (
                       <Icon
                         style={{ color: "#09BB07" }}
                         className="dropDown-check-icon"

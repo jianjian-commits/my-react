@@ -36,7 +36,7 @@ class SingleTextInspector extends React.Component {
 
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
-    let { validate, unique } = this.props.element;
+    let { validate } = this.props.element;
     validate = { ...validate };
     switch (name) {
       case "customMessage": {
@@ -54,19 +54,20 @@ class SingleTextInspector extends React.Component {
         value = validate;
         break;
       }
+      default: break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value != undefined ? value : checked,
+        value !== undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value != undefined ? value : checked
+        value !== undefined ? value : checked
       );
     }
   };
@@ -75,7 +76,7 @@ class SingleTextInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      minLength: value ==void 0? 0 : value
+      minLength: value === void 0 ? 0 : value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -96,7 +97,7 @@ class SingleTextInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxLength: value ==void 0 ?Number.MAX_SAFE_INTEGER : value
+      maxLength: value === void 0 ? Number.MAX_SAFE_INTEGER : value
     };
 
     if (this.props.elementParent) {
@@ -145,7 +146,7 @@ class SingleTextInspector extends React.Component {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type == "DataLinkage"
+              {element.data.type === "DataLinkage"
                 ? "已设置数据联动"
                 : "数据联动设置"}
             </Button>
@@ -176,7 +177,7 @@ class SingleTextInspector extends React.Component {
       case "custom": {
         const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
         if (elementParent) {
-          setFormChildItemValues(elementParent, "data", {type: "custom"}, element);
+          setFormChildItemValues(elementParent, "data", { type: "custom" }, element);
         } else {
           setItemValues(this.props.element, "data", {});
         }
@@ -198,7 +199,7 @@ class SingleTextInspector extends React.Component {
   };
 
   render() {
-    const { id, label, tooltip, validate, unique = false } = this.props.element;
+    const { label, tooltip, validate, unique = false } = this.props.element;
     const { optionType, isLinked } = this.state;
 
     return (
@@ -216,8 +217,8 @@ class SingleTextInspector extends React.Component {
             />
             {
               isInFormChild(this.props.elementParent)
-               ? null 
-               :<>
+                ? null
+                : <>
                   <p htmlFor="single-text-tip">提示信息</p>
                   <Input
                     id="single-text-tip"
@@ -227,7 +228,7 @@ class SingleTextInspector extends React.Component {
                     onChange={this.handleChangeAttr}
                     autoComplete="off"
                   />
-                   <p htmlFor="single-text-err-tip">错误提示</p>
+                  <p htmlFor="single-text-err-tip">错误提示</p>
                   <Input
                     id="single-text-err-tip"
                     name="customMessage"
@@ -236,7 +237,7 @@ class SingleTextInspector extends React.Component {
                     onChange={this.handleChangeAttr}
                     autoComplete="off"
                   />
-               </>
+                </>
             }
 
 
@@ -284,7 +285,7 @@ class SingleTextInspector extends React.Component {
                 min={1}
                 precision={0}
                 onChange={this.handleChangeAttrMinLength}
-                value={validate.minLength==0 ? "" : validate.minLength}
+                value={validate.minLength === 0 ? "" : validate.minLength}
                 autoComplete="off"
               />
               ~
@@ -294,14 +295,14 @@ class SingleTextInspector extends React.Component {
                 min={1}
                 precision={0}
                 onChange={this.handleChangeAttrMaxLength}
-                value={validate.maxLength==Number.MAX_SAFE_INTEGER ? "" : validate.maxLength}
+                value={validate.maxLength === Number.MAX_SAFE_INTEGER ? "" : validate.maxLength}
                 autoComplete="off"
               />
             </div>
             {
               isInFormChild(this.props.elementParent)
-              ? null
-              : <div className="checkbox-wrapper">
+                ? null
+                : <div className="checkbox-wrapper">
                   <Checkbox
                     name="unique"
                     checked={unique}

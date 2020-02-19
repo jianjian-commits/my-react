@@ -47,7 +47,7 @@ export const submitLayout = (components, formComponent, layoutArray, currentLayo
     .then(response => {
       message.success("设置成功!");
       setTimeout(() => {
-        location.href = config.hostUrl;
+        window.location.href = config.hostUrl;
       }, 1000);
     })
     .catch(err => {

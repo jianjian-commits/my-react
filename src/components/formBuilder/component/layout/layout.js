@@ -356,7 +356,7 @@ class Layout extends PureComponent {
             </div>
           );
         case "FormChildTest":
-          if (this.state.formChildDataObj[item.key] == void 0) {
+          if (this.state.formChildDataObj[item.key] === void 0) {
             this.state.formChildDataObj[item.key] = [];
           }
           return (
@@ -379,7 +379,7 @@ class Layout extends PureComponent {
                 submitDataArray={this.state.formChildDataObj[item.key]}
                 removeSubmitData={newArray => { }}
                 saveSubmitData={newArray => {
-                  if (newArray.length == 1) {
+                  if (newArray.length === 1) {
                     this.state.formChildDataObj[item.key] = newArray
                   }
                 }}
@@ -480,11 +480,11 @@ class Layout extends PureComponent {
   _handleFilterDate = form => {
     const { components, currentLayoutId, layoutArray} = form;
     let PureComponent = components.filter(item => {
-      return item.element != "Button";
+      return item.element !== "Button";
     });
     //拿取默认布局,默认所有组件显示
     let layout = PureComponent
-      .filter((item) => { return item.isShow != false })
+      .filter((item) => { return item.isShow !== false })
       .map(item => {
         return {
           ...item.layout,
@@ -521,10 +521,10 @@ class Layout extends PureComponent {
 
       let resultDataArray = PureComponent.map((item) => {
         let layout = defaultLayout.filter((layoutItem) => {
-          return layoutItem.i == item.key
+          return layoutItem.i === item.key
         })[0];
 
-        if (layout != void 0) {
+        if (layout  != void 0) {
           item.layout = layout;
         }
 
@@ -542,9 +542,9 @@ class Layout extends PureComponent {
       );
 
 
-      // if (this.state.operationType == "edit") {
+      // if (this.state.operationType === "edit") {
       //   this.state.formLayoutList.map(item => {
-      //     if (item.id == this.state.currentLayoutId) {
+      //     if (item.id === this.state.currentLayoutId) {
       //       item.layout = newLayout;
       //       item.name = this.state.currentLayoutName;
       //       return item;
@@ -583,7 +583,7 @@ class Layout extends PureComponent {
   handleAddItem = (id) => {
     let { PureComponent } = this.state;
     const newPureComponent = PureComponent.map(item => {
-      if (item.id == id) {
+      if (item.id === id) {
         return {
           ...item,
           isShow: !item.isShow
@@ -594,7 +594,7 @@ class Layout extends PureComponent {
     });
 
     let defaultLayout = newPureComponent
-      .filter((item) => { return item.isShow != false })
+      .filter((item) => { return item.isShow !== false })
       .map((item) => {
         return {
           ...item.layout,
@@ -610,7 +610,7 @@ class Layout extends PureComponent {
       // formComponent: {
       //   ...formComponent,
       //   components: formComponent.components.map(item => {
-      //     if (item.id == id) {
+      //     if (item.id === id) {
       //       item.isShow = !item.isShow;
       //     }
       //     return item;
@@ -632,16 +632,16 @@ class Layout extends PureComponent {
     } = this.state;
     // 还原隐藏元素后还原其选择的布局
     // let newLayout;
-    // if (formLayoutList.map(item => item.id).indexOf(id) != -1) {
+    // if (formLayoutList.map(item => item.id).indexOf(id) !== -1) {
     //   newLayout = [
-    //     ...formLayoutList.filter(item => item.id == currentLayoutId)[0].layout
+    //     ...formLayoutList.filter(item => item.id === currentLayoutId)[0].layout
     //   ];
     // } else {
     //   newLayout = currentLayout;
     //   console.log("newLayout", newLayout);
     // }
     // let newLayout = currentLayout.map(item => {
-    //   if(item.i == id){
+    //   if(item.i === id){
     //     item.isShow = !item.isShow;
     //   }
     //   return item;
@@ -650,15 +650,15 @@ class Layout extends PureComponent {
     let removeLayout = null;
 
     defaultLayout = defaultLayout.filter((item) => {
-      if (item.i == id) {
+      if (item.i === id) {
         removeLayout = item
       };
 
-      return item.i != id
+      return item.i !== id
     });
 
     const newPureComponent = PureComponent.map(item => {
-      if (item.id == id) {
+      if (item.id === id) {
         return {
           ...item,
           isShow: !item.isShow,
@@ -676,7 +676,7 @@ class Layout extends PureComponent {
       // formComponent: {
       //   ...formComponent,
       //   components: formComponent.components.map(item => {
-      //     if (item.id == id) {
+      //     if (item.id === id) {
       //       item.isShow = !item.isShow;
       //     }
       //     return item;
@@ -713,8 +713,8 @@ class Layout extends PureComponent {
   //   const currentLayoutIdList = currentLayout.map(item => item.i);
   //   const defaultLayoutIdList = defaultLayout.map(item => item.i);
   //   defaultLayoutIdList.map(id => {
-  //     if (currentLayoutIdList.indexOf(id) == -1) {
-  //       currentLayout.push(defaultLayout.filter(item => item.i == id)[0]);
+  //     if (currentLayoutIdList.indexOf(id) === -1) {
+  //       currentLayout.push(defaultLayout.filter(item => item.i === id)[0]);
   //     }
   //     return id;
   //   });
@@ -758,7 +758,7 @@ class Layout extends PureComponent {
 
         <HeaderBar
           backCallback={() => {
-            location.href = config.hostUrl;
+            window.location.href = config.hostUrl;
           }}
           title={formComponent.name}
           isShowBtn={true}
@@ -790,8 +790,8 @@ class Layout extends PureComponent {
                     // const layoutIdList = layout.map(item => item.i);
                     // const newCurrentLayout = currentLayout.map(item => {
                     //   const index = layoutIdList.indexOf(item.i);
-                    //   if (index != -1) {
-                    //     if (layout[index].w != 1) {
+                    //   if (index !== -1) {
+                    //     if (layout[index].w !== 1) {
                     //       return {
                     //         ...layout[index],
                     //         isShow: true
@@ -822,12 +822,12 @@ class Layout extends PureComponent {
               <div className="tool-header">
                 可选字段
                 {/* |
-                {this.state.operationType == "edit" ? (
+                {this.state.operationType === "edit" ? (
                   <Select
                     defaultValue={this.state.currentLayoutName}
                     onChange={value => {
                       const currentLayoutObj = this.state.formLayoutList.filter(
-                        item => item.id == value
+                        item => item.id === value
                       )[0];
                       this.setCurrentLayout(
                         this._handlNewComponentLayout(currentLayoutObj.layout,this.state.defaultLayout),

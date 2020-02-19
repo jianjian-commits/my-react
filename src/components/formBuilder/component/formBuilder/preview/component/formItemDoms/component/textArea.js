@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from 'antd';
 import ComponentBox from '../componentBox';
-import { ComponentHeader, ComponentLabel } from '../utils/commonDom';
+import { ComponentHeader } from '../utils/commonDom';
 
 
 export default class TextArea extends React.Component {

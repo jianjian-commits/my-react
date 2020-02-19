@@ -138,7 +138,7 @@ export default class FormChildTest extends React.Component {
           getFormAllSubmission(linkFormId).then(submissions => {
             // 根据联动表单的组件id 得到对应所有数据
             let dataArr = filterSubmissionData(submissions, linkComponentId);
-            if (item.type == "DropDown" || item.type == "MultiDropDown") {
+            if (item.type === "DropDown" || item.type === "MultiDropDown") {
               handleSetComponentEvent(
                 conditionId,
                 value =>
@@ -196,7 +196,7 @@ export default class FormChildTest extends React.Component {
   _buildSubmitResultSetState = (isDidMountAddRow) => {
     let newArray = [...this.props.submitDataArray];
 
-    if (newArray.length != 0 && isDidMountAddRow) {
+    if (newArray.length !== 0 && isDidMountAddRow) {
       return;
     }
 
@@ -250,7 +250,7 @@ export default class FormChildTest extends React.Component {
           {
             let dropDownOptions = [];
             let values = item.data.values;
-            if (values.type == "otherFormData") {
+            if (values.type === "otherFormData") {
               // 子表单关联其他数据
               getSelection(values.formId, values.optionId).then(res => {
                 result[item.key].dropDownOptions = res.map(data => data.value);
@@ -301,7 +301,7 @@ export default class FormChildTest extends React.Component {
         getFormAllSubmission(linkFormId).then(submissions => {
           // 根据联动表单的组件id 得到对应所有数据
           let dataArr = filterSubmissionData(submissions, linkComponentId);
-          if (item.type == "DropDown" || item.type == "MultiDropDown") {
+          if (item.type === "DropDown" || item.type === "MultiDropDown") {
             handleSetComponentEvent(
               conditionId,
               value =>
@@ -368,7 +368,7 @@ export default class FormChildTest extends React.Component {
     } = this.props;
     const { data } = item;
     // 是否为数据联动
-    if (data && data.type == "DataLinkage" && data.values.linkFormId) {
+    if (data && data.type === "DataLinkage" && data.values.linkFormId) {
       const {
         conditionId, //联动条件 id(当前表单)
         linkComponentId, //联动条件 id(联动表单)
@@ -449,7 +449,7 @@ export default class FormChildTest extends React.Component {
   };
 
   _truncateValue(value) {
-    if (value == void 0) {
+    if (value === void 0) {
       return "";
     } else if (value.length >= 6) {
       return value.substr(0, 6) + "...";
@@ -599,9 +599,9 @@ export default class FormChildTest extends React.Component {
                       {item.values.map((item, index) => (
                         <Checkbox
                           key={index}
-                          value={typeof item == "object" ? item.value : item}
+                          value={typeof item === "object" ? item.value : item}
                         >
-                          {typeof item == "object" ? item.value : item}
+                          {typeof item === "object" ? item.value : item}
                         </Checkbox>
                       ))}
                     </Checkbox.Group> */}
@@ -657,9 +657,9 @@ export default class FormChildTest extends React.Component {
                       {dropDownOptions.map((item, index) => (
                         <Checkbox
                           key={index}
-                          value={typeof item == "object" ? item.value : item}
+                          value={typeof item === "object" ? item.value : item}
                         >
-                          {typeof item == "object" ? item.value : item}
+                          {typeof item === "object" ? item.value : item}
                         </Checkbox>
                       ))}
                     </Checkbox.Group> */}
@@ -791,7 +791,7 @@ export default class FormChildTest extends React.Component {
                 trigger="click"
               >
                 <div className="checkboxComponent">
-                  {item.data.length != 0
+                  {item.data.length !== 0
                     // ? this._truncateValue(item.data[0].name)
                     ? <span className="dataSpan">{item.data[0].name}</span>
                     : ""}
@@ -828,7 +828,7 @@ export default class FormChildTest extends React.Component {
                 trigger="click"
               >
                 <div className="checkboxComponent">
-                  {item.data.length != 0
+                  {item.data.length !== 0
                     // ? this._truncateValue(item.data[0].name)
                     ? <span className="dataSpan">{item.data[0].name}</span>
                     : ""}
@@ -955,7 +955,7 @@ export default class FormChildTest extends React.Component {
 
   componentDidUpdate() {
     const { showFormChildErr, submitDataArray, closeFormChildErr } = this.props;
-    if (showFormChildErr == true) {
+    if (showFormChildErr === true) {
       this._checkFormChildHasError(submitDataArray);
       closeFormChildErr()
     }
@@ -965,7 +965,7 @@ export default class FormChildTest extends React.Component {
     let isFormChildErr = false;
     submitDataArray.forEach(item => {
       for (let m in item) {
-        if (item[m].hasErr == true) {
+        if (item[m].hasErr === true) {
           isFormChildErr = true
         }
       }
@@ -990,7 +990,7 @@ export default class FormChildTest extends React.Component {
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {
-          item.values.length == 0 ?
+          item.values.length === 0 ?
             <div>
               <div className="app-formChild">
                 <div className="formChildContainer">
@@ -1014,7 +1014,7 @@ export default class FormChildTest extends React.Component {
                       <div
                         key={index}
                         style={
-                          item.label == "时间/日期"
+                          item.label === "时间/日期"
                             ? { width: 200, flex: "0 0 200px" }
                             : { width: 140 }
                         }
@@ -1039,18 +1039,18 @@ export default class FormChildTest extends React.Component {
                           }}
                           onMouseEnter={() => {
                             submitDataArray.forEach((item, i) => {
-                              if (document.getElementById(formChildKey + "Number" + i) != void 0) {
+                              if (document.getElementById(formChildKey + "Number" + i)  != void 0) {
                                 document.getElementById(formChildKey + "Number" + i).style.display = "inline-block";
                               }
-                              if (document.getElementById(formChildKey + "Btn" + i) != void 0) {
+                              if (document.getElementById(formChildKey + "Btn" + i)  != void 0) {
                                 document.getElementById(formChildKey + "Btn" + i).style.display = "none";
                               }
                             })
 
-                            if (document.getElementById(formChildKey + "Number" + index) != void 0) {
+                            if (document.getElementById(formChildKey + "Number" + index)  != void 0) {
                               document.getElementById(formChildKey + "Number" + index).style.display = "none";
                             }
-                            if (document.getElementById(formChildKey + "Btn" + index) != void 0) {
+                            if (document.getElementById(formChildKey + "Btn" + index)  != void 0) {
                               document.getElementById(formChildKey + "Btn" + index).style.display = "inline-block";
                             }
                           }}
@@ -1068,15 +1068,15 @@ export default class FormChildTest extends React.Component {
                             id={formChildKey + "Btn" + index}
                             onMouseOut={() => {
                               submitDataArray.forEach((item, i) => {
-                                if (document.getElementById(formChildKey + "Number" + i) != void 0) {
+                                if (document.getElementById(formChildKey + "Number" + i)  != void 0) {
                                   document.getElementById(formChildKey + "Number" + i).style.display = "inline-block";
                                 }
-                                if (document.getElementById(formChildKey + "Btn" + i) != void 0) {
+                                if (document.getElementById(formChildKey + "Btn" + i)  != void 0) {
                                   document.getElementById(formChildKey + "Btn" + i).style.display = "none";
                                 }
                               });
 
-                              if (document.getElementById(formChildKey + "Number" + index) != void 0) {
+                              if (document.getElementById(formChildKey + "Number" + index)  != void 0) {
                                 document.getElementById(formChildKey + "Number" + index).style.display = "inline-block";
                               }
                             }}

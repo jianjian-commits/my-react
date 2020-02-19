@@ -68,7 +68,7 @@ const ChildItemTemplate = props => {
           break;
         }
       }
-      // if(formItem[item].data && typeof formItem[item].data == "object") {
+      // if(formItem[item].data && typeof formItem[item].data === "object") {
       //     formItem[item].data.time && res.push(formItem[item].data.time)
       // } else {
       //     formItem[item].data && res.push(formItem[item].data);

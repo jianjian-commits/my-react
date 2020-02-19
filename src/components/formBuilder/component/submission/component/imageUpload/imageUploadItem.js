@@ -107,7 +107,7 @@ export default class ImageUpload extends React.Component {
     const { fileCount } = this.props.item.validate;
     const { onChange } = this.props;
     const newFileList = this.state.uploadFileList.filter(
-      (item, i) => i != index
+      (item, i) => i !== index
     );
     this.setState(
       {

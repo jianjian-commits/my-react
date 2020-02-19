@@ -2,7 +2,7 @@
 import React from 'react';
 import { Radio } from 'antd';
 import ComponentBox from '../componentBox';
-import { ComponentHeader, ComponentLabel } from '../utils/commonDom';
+import { ComponentHeader } from '../utils/commonDom';
 
 
 export default class RadioButtons extends React.Component {

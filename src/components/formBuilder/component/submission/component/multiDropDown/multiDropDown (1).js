@@ -24,7 +24,7 @@ export default class MultiDropDown extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     let { values, type } = data;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,
@@ -85,7 +85,7 @@ export default class MultiDropDown extends React.Component {
           this.handleChange(undefined);
         });
       });
-    } else if (type == "otherFormData") {
+    } else if (type === "otherFormData") {
       getSelection(values.formId, values.optionId).then(res => {
         this.setState({
           selections: res

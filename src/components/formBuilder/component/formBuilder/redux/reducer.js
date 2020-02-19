@@ -219,7 +219,7 @@ export default function formBuilderReducer(state = initState, action) {
       return {
         ...state,
         errMessage: action.errMessage,
-        isFormChanged: action.doType == 'init' ? false : true
+        isFormChanged: action.doType === 'init' ? false : true
       }
     }
     case SAVE_FORM_CHANGE: {

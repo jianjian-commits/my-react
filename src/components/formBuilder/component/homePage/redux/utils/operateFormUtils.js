@@ -11,9 +11,9 @@ export const deleteForm = formId => dispatch => {
     method: "DELETE",
   })
     .then(response => {
-      // response.data === "ok"
-      //   ? (location.href = config.hostUrl)
-      //   : message.error("删除失败！", 2);
+      response.data === "ok"
+        ? (window.location.href = config.hostUrl)
+        : message.error("删除失败！", 2);
     })
     .catch(err => {
       console.log(err);

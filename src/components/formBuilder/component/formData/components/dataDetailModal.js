@@ -86,10 +86,10 @@ class DataDetailModal extends React.Component {
       };
     });
     // 一条数据里有 components 里所有组件的一个记录
-    data.length == 0?data=[""]:"";
+    data.length === 0?data=[""]:"";
     let dataSource = data.map((record, index) => {
       let oneRecord = components.map(component => {
-        if (component.key != undefined && record[component.key] != undefined) {
+        if (component.key !== undefined && record[component.key] !== undefined) {
           let data = {};
           data.key = Math.random();
           data[component.key] = this._renderFormChildDataByType(
@@ -124,7 +124,7 @@ class DataDetailModal extends React.Component {
     return length;
   }
   _truncateValue(value) {
-    if (value == void 0) {
+    if (value === void 0) {
       return "";
     } else if (value.length > 8) {
       return value.substr(0, 8) + "...";
@@ -134,7 +134,7 @@ class DataDetailModal extends React.Component {
   }
   _renderDataByType(formDetail, components) {
     return components
-      .filter(item => item.type != "Button")
+      .filter(item => item.type !== "Button")
       .map(item => {
         switch (item.type) {
           case "SingleText":
@@ -155,7 +155,7 @@ class DataDetailModal extends React.Component {
             return (
               <div key={item.key} className="dataDteailText">
                 <p className="dataTitle">{item.label}</p>
-                <p className="dataContent">{formDetail[item.key] != void 0 ? coverTimeUtils.localTime(formDetail[item.key]):""}</p>
+                <p className="dataContent">{formDetail[item.key]  != void 0 ? coverTimeUtils.localTime(formDetail[item.key]):""}</p>
               </div>
             );
           case "MultiDropDown":
@@ -169,7 +169,7 @@ class DataDetailModal extends React.Component {
               </div>
             );
           case "Address": {
-            if(formDetail[item.key] != void 0){
+            if(formDetail[item.key]  != void 0){
               let {province, county, city, detail} = formDetail[item.key];
               let address =  [province, city, county, detail].filter(item=>item).join("");
               return (

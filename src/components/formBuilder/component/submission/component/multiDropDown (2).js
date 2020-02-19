@@ -13,7 +13,7 @@ export default class PhoneNumber extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
-    if (data && data.type == "DataLinkage") {
+    if (data && data.type === "DataLinkage") {
       const {
         conditionId,
         linkComponentId,
@@ -82,7 +82,7 @@ export default class PhoneNumber extends React.Component {
   };
 
   isValueEqualEmptyAndUndefined = value => {
-    if (value == "" || value == void 0) {
+    if (value === "" || value === void 0) {
       return true;
     } else {
       return false;

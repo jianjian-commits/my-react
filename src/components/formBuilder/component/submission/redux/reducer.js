@@ -1,8 +1,6 @@
 import {
   GET_FORM_COMPONENT, GET_CHILD_FORM_COMPONENT, GET_ALL_FORMS
 } from './action';
-import ActionButton from 'antd/lib/modal/ActionButton';
-
 
 export const initialState = {
   formComponent: {

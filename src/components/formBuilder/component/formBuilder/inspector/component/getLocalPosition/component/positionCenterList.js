@@ -2,6 +2,8 @@ import React from "react";
 import { Icon, Button, Modal, InputNumber, Form, Input, message } from "antd";
 import PositionCenterItem from "./positionCenterItem"
 
+var AMap;
+
 export default class PositionCenterList extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +20,7 @@ export default class PositionCenterList extends React.Component {
     this.positionInput = React.createRef();
     this.rangeNumber = React.createRef();
   }
-
+  
 
   componentDidMount() {  //组件加载后初始化地图
     this.map = new AMap.Map("container", {

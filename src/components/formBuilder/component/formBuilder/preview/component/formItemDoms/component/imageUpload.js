@@ -1,7 +1,7 @@
 import React from "react";
 import ComponentBox from "../componentBox";
 import { ComponentHeader } from "../utils/commonDom";
-import { Upload, Button, Icon } from "antd";
+import {  Icon } from "antd";
 
 export default class ImageUpload extends React.Component {
   constructor(props) {

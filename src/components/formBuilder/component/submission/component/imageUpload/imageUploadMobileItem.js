@@ -130,7 +130,7 @@ class ImageUploadTestItem extends React.Component {
   _deleteExsitFile = index => {
     const { fileCount } = this.props.item.validate;
     const { onChange } = this.props;
-    const newImgList = this.state.uploadImgList.filter((item, i) => i != index);
+    const newImgList = this.state.uploadImgList.filter((item, i) => i !== index);
     this.setState(
       {
         uploadImgList: newImgList,

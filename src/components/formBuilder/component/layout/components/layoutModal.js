@@ -37,10 +37,10 @@ class LayoutModal extends React.Component {
             type="primary"
             onClick={() => {
               const currentLayoutObj =
-                this.props.currentLayoutId == ""
+                this.props.currentLayoutId === ""
                   ? this.props.formLayoutList[0]
                   : this.props.formLayoutList.filter(
-                      item => item.id == this.props.currentLayoutId
+                      item => item.id === this.props.currentLayoutId
                     )[0];
               this.props.setCurrentLayout(
                 this.props._handlNewComponentLayout(
@@ -53,7 +53,7 @@ class LayoutModal extends React.Component {
               );
               this.props.handleOk();
             }}
-            disabled={this.props.formLayoutList.length == 0}
+            disabled={this.props.formLayoutList.length === 0}
           >
             更改已存在的布局
           </Button>

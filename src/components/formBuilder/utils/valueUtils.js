@@ -1,7 +1,7 @@
 export const isValueValid = (value) => (
-    value != undefined && value != null
+    value !== undefined && value !== null
 )
 
 export const isStringValid = (value) => (
-    value != undefined && value != null && value != ""
+    value !== undefined && value !== null && value !== ""
 )

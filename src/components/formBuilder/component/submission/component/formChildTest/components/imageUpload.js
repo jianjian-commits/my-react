@@ -95,7 +95,7 @@ export default class FileUpload extends React.Component {
   _deleteExsitFile(index) {
     const { fileCount } = this.props.item.validate;
     const { onChange } = this.props;
-    const newFileList = this.state.uploadFileList.filter((item, i) => i != index);
+    const newFileList = this.state.uploadFileList.filter((item, i) => i !== index);
     this.setState(
       {
         loadStatusMsg: (
@@ -132,7 +132,7 @@ export default class FileUpload extends React.Component {
         </Upload>
         <div className="showFileList">
           {
-            this.state.uploadFileList.length == 0 ?
+            this.state.uploadFileList.length === 0 ?
               <div style={{ textAlign: 'center' }}><p>未选择任何图片</p></div> :
               this.state.uploadFileList.map((item, index) =>
                 <div className="fileItem" key={index}>
