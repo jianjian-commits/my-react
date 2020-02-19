@@ -83,7 +83,10 @@ const AppSetting = () => {
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
-            <Button type="primary" block>
+            <Button type="primary" block onClick={e => {
+              // history.push(`/app/${appId}/setting/form/${e.key}/create`)
+            }
+            }>
               新建表单
             </Button>
           </div>
@@ -116,7 +119,7 @@ const AppSetting = () => {
         </Sider>
         <Content className={classes.container}></Content>
       </Layout>
-    </Layout>
+    </Layout >
   );
 };
 export default AppSetting;

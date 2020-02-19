@@ -4,6 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
+import FormBuilderList from "../components/formBuilder/component/homePage";
 
 import selectCom from "../utils/selectCom";
 import appDetailMenu from "../config/appDetailMenu";
@@ -123,6 +124,7 @@ const AppDetail = () => {
                 提交数据
               </Button>
             </div>
+            <FormBuilderList></FormBuilderList>
             <div>我是 {selectedForm} -表单数据</div>
           </div> */}
         </Content>
