@@ -10,6 +10,19 @@ const basicInfo = [
   { title: "最后修改人", value: "Helen" },
   { title: "最后修改时间", value: "2020/1/22 18:20" }
 ];
+const teamInfo = [
+  { title: "团队信息管理", options: ["领队信息修改"], defaultValue: [] },
+  {
+    title: "团队成员管理",
+    options: ["查看列表", "邀请用户", "更改分组", "踢人"],
+    defaultValue: ["查看列表"]
+  },
+  {
+    title: "分组管理",
+    options: ["查看列表", "增加", "编辑", "删除"],
+    defaultValue: ["查看列表"]
+  }
+];
 
 class GroupDetail extends Component {
   constructor(props) {
@@ -31,20 +44,18 @@ class GroupDetail extends Component {
           <Button type="primary">保存</Button>
           <Button>取消</Button>
         </div>
-        <BasicInfo action={action} />
-        <AppManage action={action} />
-        <OtherManage action={action} />
-        <Setting />
+        {getBasicInfo(action)}
+        {getAppManage(action)}
+        {getOtherManage(action)}
+        {getSetting()}
       </div>
     );
   }
 }
-
 export default GroupDetail;
 
 // 基础信息
-function BasicInfo(props) {
-  const action = props.action;
+const getBasicInfo = action => {
   return (
     <div className={classes.groupBasic}>
       <span>基础信息</span>
@@ -68,11 +79,10 @@ function BasicInfo(props) {
       </table>
     </div>
   );
-}
+};
 
 // 应用管理（动态）
-function AppManage(props) {
-  const action = props.action;
+const getAppManage = action => {
   // 表格数据
   const dataSource = [
     { key: "leave", name: "请假申请", isChecked: false },
@@ -104,7 +114,6 @@ function AppManage(props) {
       }
     }
   ];
-
   return (
     <div className={classes.groupApp}>
       <span>应用管理</span>
@@ -113,24 +122,10 @@ function AppManage(props) {
       </div>
     </div>
   );
-}
+};
 
 // 其他管理
-function OtherManage(props) {
-  const action = props.action;
-  const teamInfo = [
-    { title: "团队信息管理", options: ["领队信息修改"], defaultValue: [] },
-    {
-      title: "团队成员管理",
-      options: ["查看列表", "邀请用户", "更改分组", "踢人"],
-      defaultValue: ["查看列表"]
-    },
-    {
-      title: "分组管理",
-      options: ["查看列表", "增加", "编辑", "删除"],
-      defaultValue: ["查看列表"]
-    }
-  ];
+const getOtherManage = action => {
   return (
     <>
       {teamInfo.map(i => {
@@ -147,10 +142,10 @@ function OtherManage(props) {
       })}
     </>
   );
-}
+};
 
 // 设置
-function Setting() {
+const getSetting = () => {
   return (
     <div className={classes.groupSetting}>
       <span>Session设置</span>
@@ -165,4 +160,4 @@ function Setting() {
       <input defaultValue={"数字和字母组合"} readOnly />
     </div>
   );
-}
+};
