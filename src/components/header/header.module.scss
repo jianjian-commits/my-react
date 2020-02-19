@@ -18,9 +18,9 @@
       text-align: right;
       padding-right: 30px;
     }
-    .user {
-      width: 80px;
-    }
+    // .user {
+    //   width: 80px;
+    // }
   }
 }
 .breadCrumbs {
@@ -48,5 +48,21 @@
   }
   &.disabled {
     color: #aaa;
+  }
+}
+
+.table {
+  tr {
+    height: 60px;
+  }
+  th {
+    font-weight: unset;
+    border-bottom: 1px solid rgb(154, 154, 154);
+    width: 200px;
+  }
+  td {
+    width: 200px;
+    font-weight: unset;
+    border-bottom: 1px solid rgb(154, 154, 154);
   }
 }

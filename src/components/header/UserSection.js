@@ -1,8 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Dropdown, Icon, Popconfirm, Menu } from "antd";
 import { Link } from "react-router-dom";
-import { signOut } from "../../store/_loginReducer";
 // const { Meta } = Card;
 // const UserDetail = (
 //   <Card style={{ width: 200, marginTop: 8, padding: 10 }} loading={false}>
@@ -41,18 +39,14 @@ const MenuItems = signOut => (
   </Menu>
 );
 
-const User = ({ signOut, userDatas = {} }) => {
-  const { username } = userDatas;
+const User = ({ signOut, userData = {} }) => {
   return (
     <Dropdown overlay={MenuItems(signOut)}>
       <Link className="ant-dropdown-link" to="#">
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {username} <Icon type="down" style={{ margin: "0 0 0 5px" }} />
-        </div>
+        {userData.name}
+        <Icon type="down" style={{ margin: "0 0 0 5px" }} />
       </Link>
     </Dropdown>
   );
 };
-export default connect(({ login }) => ({ userDatas: login.userDatas }), {
-  signOut
-})(User);
+export default User;
