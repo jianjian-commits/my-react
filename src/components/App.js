@@ -37,7 +37,7 @@ const AppInsideRouter = () => {
   );
 };
 
-const App = ({ register_token }) => (
+const App = () => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
@@ -52,7 +52,7 @@ const App = ({ register_token }) => (
   </ErrorBoundary>
 );
 
-export default connect(({ login }) => ({
+export default connect(({ login, user }) => ({
   isAuthenticated: login.isAuthenticated,
-  register_token: login.register_token
+  data: user.data
 }))(App);

@@ -5,7 +5,7 @@ import { serverHost, port } from "./config";
 // Axios.defaults.headers.post["content-type"] = "application/json";
 // 创建一个新的实例
 export let r = Axios.create({
-  baseURL: `${serverHost}${port ? ":" + port : ""}`
+  baseURL: `http://${serverHost}${port ? ":" + port : ""}`
 });
 r.interceptors.response.use(
   response => response.data,

@@ -6,7 +6,7 @@ import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
-import UserDetail from "../pages/userDetail";
+import UserDetail from "../components/header/userDetail";
 
 export const main = [
   {
