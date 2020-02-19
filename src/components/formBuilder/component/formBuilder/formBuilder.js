@@ -1,8 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { DndProvider } from "react-dnd";
-import { Spin } from 'antd';
-import { setActiveIndex, setActiveInnerIndex } from "./redux/utils/operateFormComponent";
+import { Spin } from "antd";
+import {
+  setActiveIndex,
+  setActiveInnerIndex
+} from "./redux/utils/operateFormComponent";
 import {
   saveForm,
   updateForm,
@@ -15,6 +18,7 @@ import Toolbar from "./toolbar/toolbar";
 import Inspector from "./inspector/inspector";
 import locationUtils from "../../utils/locationUtils";
 import FormBuilderHeader from "./formBuilderHeader/formBuilderHeader";
+import "../../scss/index.scss";
 
 class ReactFormBuilder extends React.Component {
   constructor(props) {
@@ -50,7 +54,7 @@ class ReactFormBuilder extends React.Component {
         ...state,
         isEditMode: !this.state.isEditMode,
         editElement: formChildInnerElement,
-        editElementParent: editElement,
+        editElementParent: editElement
       }));
     } else {
       this.setState(state => ({
@@ -67,7 +71,6 @@ class ReactFormBuilder extends React.Component {
     } else {
       setActiveIndex(formData.indexOf(editElement));
     }
-
   }
 
   manualEditModeOff() {
@@ -102,7 +105,9 @@ class ReactFormBuilder extends React.Component {
                   setActiveInnerIndex={this.props.setActiveInnerIndex}
                   isEditMode={this.state.isEditMode}
                   editElement={this.state.editElement}
-                  defaultForm={this.props.localForm ? this.props.localForm : null}
+                  defaultForm={
+                    this.props.localForm ? this.props.localForm : null
+                  }
                 />
 
                 <Inspector
@@ -111,7 +116,9 @@ class ReactFormBuilder extends React.Component {
                   isEditMode={this.state.isEditMode}
                   editElement={this.state.editElement}
                   editElementParent={this.state.editElementParent}
-                  defaultForm={this.props.localForm ? this.props.localForm : null}
+                  defaultForm={
+                    this.props.localForm ? this.props.localForm : null
+                  }
                 />
               </div>
             </div>

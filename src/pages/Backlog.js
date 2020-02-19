@@ -1,6 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
 import HomeHeader from "../components/header/HomeHeader";
+import TransactList from "../components/transactList/TransactList";
 
 const { Content } = Layout;
 class Backlog extends React.Component {
@@ -12,7 +13,9 @@ class Backlog extends React.Component {
     return (
       <Layout>
         <HomeHeader />
-        <Content>没有代办，别点了</Content>
+        <Content>
+          <TransactList></TransactList>
+        </Content>
       </Layout>
     );
   }

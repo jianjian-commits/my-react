@@ -1,0 +1,92 @@
+$btnBgBlue: #007aff;
+$inputBorderColor: #5a8ced;
+$tableHeaderFontColor: #a4adc8;
+$tableBodyFontColor: #565c6e;
+$borderBottomColor: #e8e8e8;
+$tableRowHoverBg: #d4e5fd;
+$white: #fff;
+
+.home-wrapper {
+  padding-top: 120px;
+  box-sizing: border-box;
+  height: 100vh;
+  .home-table-wrapper {
+    width: 86%;
+    margin: 60px auto 0;
+    .ant-table-wrapper {
+      background-color: $white;
+      .ant-table {
+        text-align: left;
+        line-height: 20px;
+        table {
+          .ant-table-thead > tr > th {
+            padding: 18px 60px;
+            font-size: 14px;
+            color: $tableHeaderFontColor;
+            background: $white;
+            border-bottom: none;
+          }
+          .ant-table-tbody > tr > td {
+            font-size: 14px;
+            padding: 18px 60px;
+            color: $tableBodyFontColor;
+            border-bottom: none;
+            div {
+              a {
+                display: inline-block;
+                width: 34px;
+                height: 20px;
+                margin-right: 19px;
+              }
+            }
+          }
+          .ant-table-tbody > tr:last-child > td {
+            border-bottom: 1px solid $borderBottomColor;
+          }
+          .ant-table-tbody > tr:hover td {
+            background: $tableRowHoverBg;
+          }
+        }
+      }
+      .ant-table-pagination.ant-pagination {
+        float: none;
+        text-align: center;
+        margin: 20px;
+        .ant-pagination-prev,
+        .ant-pagination-next {
+          .ant-pagination-item-link {
+            line-height: 28px;
+            padding: 9px;
+            vertical-align: middle;
+            display: table-cell;
+          }
+        }
+        .ant-pagination-item-active {
+          background: $btnBgBlue;
+          border-color: $btnBgBlue;
+          a {
+            color: $white;
+          }
+        }
+      }
+      .ant-pagination-options-quick-jumper {
+        input {
+          border-color: $inputBorderColor !important;
+        }
+      }
+    }
+    .light-row {
+      background-color: #ffffff;
+    }
+    .dark-row {
+      background-color: #f9fafb;
+    }
+  }
+}
+
+.light-row {
+  background-color: #ffffff;
+}
+.dark-row {
+  background-color: #f9fafb;
+}
