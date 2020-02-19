@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Button, Input } from "antd";
+import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
