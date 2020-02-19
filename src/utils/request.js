@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serverHost, port } from "./config";
 
-const baseURL = `http://${serverHost}${port ? ":" + port : ""}`;
+const baseURL = `${serverHost}${port ? ":" + port : ""}`;
 
 async function request(url, params = {}) {
   const headers = params.headers || {};

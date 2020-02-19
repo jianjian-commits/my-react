@@ -3,9 +3,9 @@ import { Layout, Menu, Badge, Button } from "antd";
 import { useHistory } from "react-router-dom";
 import { signOut } from "../../store/loginReducer";
 import User from "./UserSection";
+import { getUserDetail } from "../../store/userDetailReducer";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
-import { getUserDetail } from "../../store/userDetailReducer";
 
 const { Header } = Layout;
 const logoStyle = {
@@ -29,7 +29,7 @@ const HomeHeader = props => {
   const selectHandle = e => {
     history.push(e.key);
   };
-  const toUserMangement = () => history.push("/user/management");
+  const toUserMangement = () => history.push("/user/users");
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>
