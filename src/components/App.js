@@ -6,7 +6,9 @@ import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
-import Login from "../pages/Login";
+import Login from "../pages/_Login";
+import Register from "../pages/Register";
+import ForgetPassword from "../pages/forgetPassword";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
@@ -35,10 +37,12 @@ const AppInsideRouter = () => {
   );
 };
 
-const App = () => (
+const App = ({ register_token }) => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
+        <PublicRoute path="/register" component={Register} />
+        <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
         <PrivateRoute path="/app/:appId" component={AppInsideRouter} />
@@ -49,5 +53,6 @@ const App = () => (
 );
 
 export default connect(({ login }) => ({
-  isAuthenticated: login.isAuthenticated
+  isAuthenticated: login.isAuthenticated,
+  register_token: login.register_token
 }))(App);

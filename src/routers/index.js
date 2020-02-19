@@ -6,6 +6,8 @@ import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
+import Dispose from "../pages/Dispose";
+import UserDetail from "../pages/userDetail";
 
 export const main = [
   {
@@ -35,6 +37,13 @@ export const main = [
     path: "/authority",
     icon: "web",
     component: Placeholder
+  },
+  {
+    key: "userDetail",
+    label: "个人信息",
+    path: "/userDetail",
+    icon: "web",
+    component: UserDetail
   }
 ];
 
@@ -43,6 +52,13 @@ export const appPaths = [
     key: "general",
     label: "概览",
     path: `/app/:appId/detail`,
+    icon: "file_copy",
+    component: AppDetail
+  },
+  {
+    key: "menuContent",
+    label: "菜单内容",
+    path: `/app/:appId/detail/:menuId`,
     icon: "file_copy",
     component: AppDetail
   },
@@ -59,5 +75,12 @@ export const appPaths = [
     path: `/app/:appId/setting/form/:formId/:serviceId`,
     icon: "file_copy",
     component: AppServices
+  },
+  {
+    key: "Dispose",
+    label: "审批详情",
+    path: `/app/:appId/:disposeId`,
+    icon: "file_copy",
+    component: Dispose
   }
 ];
