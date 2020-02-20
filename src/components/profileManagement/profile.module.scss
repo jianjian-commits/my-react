@@ -1,3 +1,133 @@
 .wrapper {
   padding: 10px;
+  .tableStyles {
+    padding-top: 20px;
+    :global(.ant-table-thead > tr > th:first-child) {
+      width: 250px;
+    }
+    :global(.ant-table-thead > tr > th) {
+      background-color: #c0c0c0;
+    }
+    :global(.ant-table-middle
+        > .ant-table-content
+        > .ant-table-body
+        > table
+        > .ant-table-tbody
+        > tr
+        > td) {
+      padding: 7px 8px;
+      border-bottom: 1px solid #979797;
+    }
+    :global(.ant-spin-container) {
+      border-radius: 5px;
+    }
+  }
+}
+
+.actionStyle {
+  a {
+    margin: 0 30px 0 0;
+  }
+  :global(.ant-btn) {
+    padding: 0 30px 0 0;
+    color: #1890ff;
+  }
+}
+
+// 分组详情
+.groupContainer {
+  padding: 20px;
+}
+
+.groupHeader {
+  i {
+    font-size: 20px;
+  }
+  > span {
+    margin-left: 20px;
+    font-size: 17px;
+  }
+  button {
+    float: right;
+    margin-right: 15px;
+  }
+}
+
+// 基础信息
+.groupBasic {
+  tbody {
+    display: inline-table;
+    width: calc(100vw - 270px);
+    tr {
+      border-bottom: 1px solid #979797;
+      td:first-child {
+        width: 150px;
+        padding: 7px;
+      }
+    }
+  }
+  .inputStyle {
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+}
+
+// 应用管理
+.groupApp {
+  :global(.ant-table-middle
+      > .ant-table-content
+      > .ant-table-body
+      > table
+      > .ant-table-thead
+      > tr
+      > th) {
+    padding: 7px 8px;
+    background: #c0c0c0;
+  }
+  :global(.ant-table-middle
+      > .ant-table-content
+      > .ant-table-body
+      > table
+      > .ant-table-tbody
+      > tr
+      > td) {
+    padding: 8px 8px;
+    border-bottom: 1px solid #979797;
+  }
+  // 将默认的分页隐藏
+  ul {
+    display: none;
+  }
+  :global(td:nth-child(2)) {
+    text-indent: 10px;
+  }
+}
+
+.groupBasic,
+.groupApp,
+.groupManage,
+.groupSetting {
+  > span {
+    margin-top: 25px;
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+}
+
+// 设置
+.groupSetting {
+  input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #979797;
+    outline: none;
+    text-align: center;
+  }
+}
+
+// 只读输入框
+input:read-only {
+  color: #979797;
 }
