@@ -10,6 +10,8 @@ import Login from "../pages/_Login";
 import Register from "../pages/Register";
 import ForgetPassword from "../pages/forgetPassword";
 
+import PermissionSetting from "./userManagement/applyPermissionSettings";
+
 import ErrorBoundary from "./shared/ErrorBoundary";
 
 export const getRoutes = routes =>
@@ -17,13 +19,13 @@ export const getRoutes = routes =>
     route.content ? (
       getRoutes(route.content)
     ) : (
-        <PrivateRoute
-          path={route.path}
-          component={route.component}
-          key={route.key}
-          options={route.options}
-        />
-      )
+      <PrivateRoute
+        path={route.path}
+        component={route.component}
+        key={route.key}
+        options={route.options}
+      />
+    )
   );
 
 const AppInsideRouter = () => {
@@ -37,11 +39,12 @@ const AppInsideRouter = () => {
   );
 };
 
-const App = ({ register_token }) => (
+const App = () => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
         <PublicRoute path="/register" component={Register} />
+        <PublicRoute path="/setting" component={PermissionSetting} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
@@ -52,7 +55,7 @@ const App = ({ register_token }) => (
   </ErrorBoundary>
 );
 
-export default connect(({ login }) => ({
+export default connect(({ login, user }) => ({
   isAuthenticated: login.isAuthenticated,
-  register_token: login.register_token
+  data: user.data
 }))(App);
