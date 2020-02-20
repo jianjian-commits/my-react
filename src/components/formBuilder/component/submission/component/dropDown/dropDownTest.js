@@ -2,7 +2,7 @@ import React from "react";
 import { isValueValid } from "../../../../utils/valueUtils";
 import { Form, Select, Tooltip, Icon } from "antd";
 import { getSelection } from "../../utils/filterData";
-import DropDownTestItem from './dropDownTestItem';
+import DropDownTestItem from "./dropDownTestItem";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import {
   getFormAllSubmission,
@@ -41,7 +41,9 @@ export default class DropDown extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = [];
             indexArr.forEach(i => {
-              data[i] ? res.push(data[i]) : null; //解决 空选项问题
+              if (data[i]) {
+                res.push(data[i]);
+              }
             });
 
             selections = [];
@@ -134,22 +136,22 @@ export default class DropDown extends React.Component {
               message: "此字段为必填"
             }
           ],
-          initialValue:""
+          initialValue: ""
         })(
-            <DropDownTestItem selections={selections} item={item}/>
-        //   <Select
-        //     disabled={disabled}
-        //     placeholder="请选择"
-        //     style={{ width: "100%" }}
-        //     onChange={this.handleChange}
-        //     getPopupContainer = {triggerNode => triggerNode.parentNode}
-        //   >
-        //     {selections.map((item, index) => (
-        //       <Select.Option key={index} value={item.value}>
-        //         {item.label}
-        //       </Select.Option>
-        //     ))}
-        //   </Select>
+          <DropDownTestItem selections={selections} item={item} />
+          //   <Select
+          //     disabled={disabled}
+          //     placeholder="请选择"
+          //     style={{ width: "100%" }}
+          //     onChange={this.handleChange}
+          //     getPopupContainer = {triggerNode => triggerNode.parentNode}
+          //   >
+          //     {selections.map((item, index) => (
+          //       <Select.Option key={index} value={item.value}>
+          //         {item.label}
+          //       </Select.Option>
+          //     ))}
+          //   </Select>
         )}
       </Form.Item>
     );

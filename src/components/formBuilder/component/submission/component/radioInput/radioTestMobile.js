@@ -51,19 +51,11 @@ export default class RadioInput extends React.Component {
 
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
-
     const { callEventArr } = this.props.item;
     if (callEventArr) {
       callEventArr.forEach(fnc => {
         fnc(value, this);
       });
-    }
-  };
-  checkIsSelect = (rule, value, callback) => {
-    if(isValueValid(item.validate.required)&&value==""){
-      callback('此选项为必填');
-    }else {
-      callback();
     }
   };
   render() {
@@ -87,11 +79,9 @@ export default class RadioInput extends React.Component {
               validator: this.checkSelecNumber
             }
           ],
-          initialValue:""
+          initialValue: ""
           // validateTrigger: 'onSubmit',
-        })(
-          <RadioTestItem handleChange={this.handleChange} item={item} />
-        )}
+        })(<RadioTestItem handleChange={this.handleChange} item={item} />)}
       </Form.Item>
     );
   }

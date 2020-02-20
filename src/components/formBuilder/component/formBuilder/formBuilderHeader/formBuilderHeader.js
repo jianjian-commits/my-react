@@ -1,10 +1,6 @@
 import React from "react";
 import { Button, Icon, Modal, Tooltip, message, Spin } from "antd";
-import {
-  setFormName,
-  saveForm,
-  updateForm
-} from "../redux/utils/operateForm";
+import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
 import { connect } from "react-redux";
 import config from "../../../config/config";
 class ForBuilderHeader extends React.Component {
@@ -14,7 +10,7 @@ class ForBuilderHeader extends React.Component {
       visible: false,
       isTitleCanEdit: true,
       formTitleClass: "showFormTitle",
-      btnCanClick: true,
+      btnCanClick: true
     };
     this.handleTitleEdit = this.handleTitleEdit.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
@@ -30,7 +26,7 @@ class ForBuilderHeader extends React.Component {
         this.state.isTitleCanEdit === true ? "editFormTitle" : "showFormTitle"
     }));
     if (this.props.name.trim() === "") {
-      this.props.setFormName("表单名字")
+      this.props.setFormName("表单名字");
     }
   }
   handleChangeName = ev => {
@@ -53,26 +49,25 @@ class ForBuilderHeader extends React.Component {
       visible: false
     }));
 
-
     if (this.handleIsRightConditions()) {
       editForm || this.props.localForm !== null
         ? this.props.updateForm(
-          this.props.formData,
-          this.props.submissionAccess,
-          this.props.name,
-          this.props.verificationList,
-          this.props.localForm,
-          this.props.errMessage,
-          "back",
-        )
+            this.props.formData,
+            this.props.submissionAccess,
+            this.props.name,
+            this.props.verificationList,
+            this.props.localForm,
+            this.props.errMessage,
+            "back"
+          )
         : this.props.saveForm(
-          this.props.formData,
-          this.props.submissionAccess,
-          this.props.name,
-          this.props.verificationList,
-          this.props.errMessage,
-          "back"
-        );
+            this.props.formData,
+            this.props.submissionAccess,
+            this.props.name,
+            this.props.verificationList,
+            this.props.errMessage,
+            "back"
+          );
     } else {
       message.error("联动条件失效，请重新设置！", 2);
     }
@@ -107,8 +102,8 @@ class ForBuilderHeader extends React.Component {
     return isMeetingConditions;
   };
   _truncateValue(value) {
-    if (value === void 0) {
-      return ""
+    if (value == void 0) {
+      return "";
     }
 
     if (value) {
@@ -164,15 +159,15 @@ class ForBuilderHeader extends React.Component {
           {this.state.isTitleCanEdit === true ? (
             <span>{this._truncateValue(this.props.name)}</span>
           ) : (
-              <input
-                disabled={this.state.isTitleCanEdit}
-                maxLength="20"
-                className={this.state.formTitleClass}
-                onBlur={this.handleTitleEdit}
-                onChange={this.handleChangeName}
-                value={this.props.name}
-              />
-            )}
+            <input
+              disabled={this.state.isTitleCanEdit}
+              maxLength="20"
+              className={this.state.formTitleClass}
+              onBlur={this.handleTitleEdit}
+              onChange={this.handleChangeName}
+              value={this.props.name}
+            />
+          )}
           {this.state.isTitleCanEdit === true ? (
             <Tooltip title="编辑">
               <img
@@ -181,8 +176,8 @@ class ForBuilderHeader extends React.Component {
               />
             </Tooltip>
           ) : (
-              <></>
-            )}
+            <></>
+          )}
         </div>
         <div className="CreateFormStep" />
         <div className="CreateFormOperations">
@@ -192,36 +187,40 @@ class ForBuilderHeader extends React.Component {
               this.setState({ btnCanClick: false }, () => {
                 editForm || this.props.localForm !== null
                   ? (() => {
-                    if (this.handleIsRightConditions()) {
-                      this.props.updateForm(
-                        this.props.formData,
-                        this.props.submissionAccess,
-                        this.props.name,
-                        this.props.verificationList,
-                        this.props.localForm,
-                        this.props.errMessage,
-                        "save",
-                        () => { this.setState({ btnCanClick: true }); }
-                      );
-                    } else {
-                      message.error("联动条件失效，请重新设置！", 2);
-                    }
-                  })()
+                      if (this.handleIsRightConditions()) {
+                        this.props.updateForm(
+                          this.props.formData,
+                          this.props.submissionAccess,
+                          this.props.name,
+                          this.props.verificationList,
+                          this.props.localForm,
+                          this.props.errMessage,
+                          "save",
+                          () => {
+                            this.setState({ btnCanClick: true });
+                          }
+                        );
+                      } else {
+                        message.error("联动条件失效，请重新设置！", 2);
+                      }
+                    })()
                   : (() => {
-                    if (this.handleIsRightConditions()) {
-                      this.props.saveForm(
-                        this.props.formData,
-                        this.props.submissionAccess,
-                        this.props.name,
-                        this.props.verificationList,
-                        this.props.errMessage,
-                        "save",
-                        () => { this.setState({ btnCanClick: true }); }
-                      );
-                    } else {
-                      message.error("联动条件失效，请重新设置！", 2);
-                    }
-                  })();
+                      if (this.handleIsRightConditions()) {
+                        this.props.saveForm(
+                          this.props.formData,
+                          this.props.submissionAccess,
+                          this.props.name,
+                          this.props.verificationList,
+                          this.props.errMessage,
+                          "save",
+                          () => {
+                            this.setState({ btnCanClick: true });
+                          }
+                        );
+                      } else {
+                        message.error("联动条件失效，请重新设置！", 2);
+                      }
+                    })();
               });
             }}
             type="primary"

@@ -9,7 +9,7 @@ import {
   Checkbox,
   Popover,
   Button,
-  DatePicker,
+  DatePicker
 } from "antd";
 import {
   getFormAllSubmission,
@@ -22,14 +22,13 @@ import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/util
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import { checkValueValidByType } from "../../../formBuilder/utils/checkComponentDataValidUtils";
 
-
 import Address from "./components/address";
 import FileUpload from "./components/fileUpload";
 import ImageUpload from "./components/imageUpload";
-import CheckboxInput from '../checkboxInput/checkboxTestItem';
-import RadioButtons from '../radioInput/radioTestItem';
-import DropDown from './components/dropDown';
-import MultiDropDown from './components/multiDropDown';
+import CheckboxInput from "../checkboxInput/checkboxTestItem";
+import RadioButtons from "../radioInput/radioTestItem";
+import DropDown from "./components/dropDown";
+import MultiDropDown from "./components/multiDropDown";
 export default class FormChildTest extends React.Component {
   constructor(props) {
     super(props);
@@ -40,7 +39,7 @@ export default class FormChildTest extends React.Component {
         url: ""
       },
       refesh: true,
-      hasFormChildError: false,
+      hasFormChildError: false
     };
     this.handleAddRow = this.handleAddRow.bind(this);
     this.renderFormChild = this.renderFormChild.bind(this);
@@ -193,7 +192,7 @@ export default class FormChildTest extends React.Component {
     this.props.saveSubmitData(newArray);
   };
 
-  _buildSubmitResultSetState = (isDidMountAddRow) => {
+  _buildSubmitResultSetState = isDidMountAddRow => {
     let newArray = [...this.props.submitDataArray];
 
     if (newArray.length !== 0 && isDidMountAddRow) {
@@ -203,7 +202,6 @@ export default class FormChildTest extends React.Component {
     let { item, handleSetComponentEvent } = this.props;
     let values = item.values;
     let result = {};
-
 
     values.forEach(item => {
       switch (item.type) {
@@ -217,9 +215,9 @@ export default class FormChildTest extends React.Component {
           result[item.key] = {
             type: item.label,
             formType: item.type,
-            data:item.defaultValue||"",
+            data: item.defaultValue || "",
             validate: item.validate,
-            hasErr: false,
+            hasErr: false
           };
           break;
         case "DateInput":
@@ -246,32 +244,31 @@ export default class FormChildTest extends React.Component {
           };
           break;
         case "MultiDropDown":
-        case "DropDown":
-          {
-            let dropDownOptions = [];
-            let values = item.data.values;
-            if (values.type === "otherFormData") {
-              // 子表单关联其他数据
-              getSelection(values.formId, values.optionId).then(res => {
-                result[item.key].dropDownOptions = res.map(data => data.value);
-                this.setState({
-                  refesh: !this.state.refesh
-                })
+        case "DropDown": {
+          let dropDownOptions = [];
+          let values = item.data.values;
+          if (values.type === "otherFormData") {
+            // 子表单关联其他数据
+            getSelection(values.formId, values.optionId).then(res => {
+              result[item.key].dropDownOptions = res.map(data => data.value);
+              this.setState({
+                refesh: !this.state.refesh
               });
-            } else {
-              dropDownOptions = Array.isArray(values) ? values : [];
-            }
-            result[item.key] = {
-              type: item.label,
-              formType: item.type,
-              data: null,
-              hasErr: false,
-              validate: item.validate,
-              values,
-              dropDownOptions,
-            };
-            break;
+            });
+          } else {
+            dropDownOptions = Array.isArray(values) ? values : [];
           }
+          result[item.key] = {
+            type: item.label,
+            formType: item.type,
+            data: null,
+            hasErr: false,
+            validate: item.validate,
+            values,
+            dropDownOptions
+          };
+          break;
+        }
         case "HandWrittenSignature":
         case "FileUpload":
         case "ImageUpload":
@@ -414,7 +411,6 @@ export default class FormChildTest extends React.Component {
         });
       });
     }
-
   }
 
   // 如果存在回调数组，则遍历里面的函数执行
@@ -433,10 +429,20 @@ export default class FormChildTest extends React.Component {
     setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if (!Object.is(document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain"), null)) {
-        document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain").setAttribute('title', customMessage)
+      if (
+        !Object.is(
+          document
+            .querySelector(`#${key}Dom`)
+            .querySelector(".ant-form-explain"),
+          null
+        )
+      ) {
+        document
+          .querySelector(`#${key}Dom`)
+          .querySelector(".ant-form-explain")
+          .setAttribute("title", customMessage);
       }
-    }, 300)
+    }, 300);
   };
 
   handleItemChange = (value, formChildObj) => {
@@ -449,7 +455,7 @@ export default class FormChildTest extends React.Component {
   };
 
   _truncateValue(value) {
-    if (value === void 0) {
+    if (value == void 0) {
       return "";
     } else if (value.length >= 6) {
       return value.substr(0, 6) + "...";
@@ -459,14 +465,14 @@ export default class FormChildTest extends React.Component {
   }
 
   // 将地址对象转化为字符串
-  AddressObjToString = (address) => {
+  AddressObjToString = address => {
     if (address) {
       let { province, county, city, detail } = address;
       return [province, city, county, detail].filter(item => item).join("");
     } else {
       return "";
     }
-  }
+  };
 
   renderFormChild(formChildObj, rowIndex, submitDataArray) {
     let resultArray = [];
@@ -479,19 +485,20 @@ export default class FormChildTest extends React.Component {
         case "NumberInput":
           resultArray.push(
             <div key={key} className={className}>
-              <div className="inputContainer"
-                onClick={
-                  (e) => {
-                    document.getElementById(key + rowIndex).focus();
-                    document.querySelectorAll('.componentContent').forEach((el) => { el.classList.remove('activecontent') })
-                    e.target.parentNode.parentNode.classList.add('activecontent');
-                  }
-                }
-                onBlur={
-                  (e) => {
-                    document.querySelectorAll('.componentContent').forEach((el) => { el.classList.remove('activecontent') })
-                  }
-                }
+              <div
+                className="inputContainer"
+                onClick={e => {
+                  document.getElementById(key + rowIndex).focus();
+                  document.querySelectorAll(".componentContent").forEach(el => {
+                    el.classList.remove("activecontent");
+                  });
+                  e.target.parentNode.parentNode.classList.add("activecontent");
+                }}
+                onBlur={e => {
+                  document.querySelectorAll(".componentContent").forEach(el => {
+                    el.classList.remove("activecontent");
+                  });
+                }}
               >
                 <Input
                   id={key + rowIndex}
@@ -515,7 +522,6 @@ export default class FormChildTest extends React.Component {
                 />
                 <img src="/image/icons/edit.png" alt="图片加载出错" />
               </div>
-
             </div>
           );
           break;
@@ -526,19 +532,20 @@ export default class FormChildTest extends React.Component {
         case "PhoneInput":
           resultArray.push(
             <div key={key} className={className}>
-              <div className="inputContainer"
-                onClick={
-                  (e) => {
-                    document.getElementById(key + rowIndex).focus();
-                    document.querySelectorAll('.componentContent').forEach((el) => { el.classList.remove('activecontent') })
-                    e.target.parentNode.parentNode.classList.add('activecontent');
-                  }
-                }
-                onBlur={
-                  (e) => {
-                    document.querySelectorAll('.componentContent').forEach((el) => { el.classList.remove('activecontent') })
-                  }
-                }
+              <div
+                className="inputContainer"
+                onClick={e => {
+                  document.getElementById(key + rowIndex).focus();
+                  document.querySelectorAll(".componentContent").forEach(el => {
+                    el.classList.remove("activecontent");
+                  });
+                  e.target.parentNode.parentNode.classList.add("activecontent");
+                }}
+                onBlur={e => {
+                  document.querySelectorAll(".componentContent").forEach(el => {
+                    el.classList.remove("activecontent");
+                  });
+                }}
               >
                 <Input
                   id={key + rowIndex}
@@ -571,17 +578,20 @@ export default class FormChildTest extends React.Component {
                 overlayClassName="checkboxProver"
                 content={
                   <>
-                    <CheckboxInput item={item} onChange={(value) => {
-                      item.data = value;
-                      checkValueValidByType(item, value)
-                        ? (item.hasErr = false)
-                        : (item.hasErr = true);
-                      this.setState(state => ({
-                        ...state,
-                        refesh: !this.state.refesh
-                      }));
-                      this._checkFormChildHasError(submitDataArray);
-                    }} />
+                    <CheckboxInput
+                      item={item}
+                      onChange={value => {
+                        item.data = value;
+                        checkValueValidByType(item, value)
+                          ? (item.hasErr = false)
+                          : (item.hasErr = true);
+                        this.setState(state => ({
+                          ...state,
+                          refesh: !this.state.refesh
+                        }));
+                        this._checkFormChildHasError(submitDataArray);
+                      }}
+                    />
                     {/* <Checkbox.Group
                       onChange={value => {
                         item.data = value;
@@ -613,7 +623,9 @@ export default class FormChildTest extends React.Component {
               >
                 <div className="checkboxComponent">
                   {/* {this._truncateValue(item.data)} */}
-                  <span className="dataSpan">{item.data ? item.data.join(",") : ""}</span>
+                  <span className="dataSpan">
+                    {item.data ? item.data.join(",") : ""}
+                  </span>
                   <img src="/image/icons/edit.png" alt="图片加载出错" />
                 </div>
               </Popover>
@@ -622,24 +634,29 @@ export default class FormChildTest extends React.Component {
           break;
         }
         case "MultiDropDown": {
-          const dropDownOptions = Array.isArray(item.values) ? item.values : item.dropDownOptions
+          const dropDownOptions = Array.isArray(item.values)
+            ? item.values
+            : item.dropDownOptions;
           resultArray.push(
             <div key={key} className={className}>
               <Popover
                 overlayClassName="formChild-multiDropDownProver"
                 content={
                   <>
-                    <MultiDropDown item={item} onChange={(value) => {
-                      item.data = value;
-                      checkValueValidByType(item, value)
-                        ? (item.hasErr = false)
-                        : (item.hasErr = true);
-                      this.setState(state => ({
-                        ...state,
-                        refesh: !this.state.refesh
-                      }));
-                      this._checkFormChildHasError(submitDataArray);
-                    }} />
+                    <MultiDropDown
+                      item={item}
+                      onChange={value => {
+                        item.data = value;
+                        checkValueValidByType(item, value)
+                          ? (item.hasErr = false)
+                          : (item.hasErr = true);
+                        this.setState(state => ({
+                          ...state,
+                          refesh: !this.state.refesh
+                        }));
+                        this._checkFormChildHasError(submitDataArray);
+                      }}
+                    />
                     {/* <Checkbox.Group
                       onChange={value => {
                         item.data = value;
@@ -671,7 +688,9 @@ export default class FormChildTest extends React.Component {
               >
                 <div className="checkboxComponent">
                   {/* {this._truncateValue(item.data)} */}
-                  <span className="dataSpan">{item.data ? item.data.join(",") : ""}</span>
+                  <span className="dataSpan">
+                    {item.data ? item.data.join(",") : ""}
+                  </span>
                   <img src="/image/icons/edit.png" alt="图片加载出错" />
                 </div>
               </Popover>
@@ -685,17 +704,20 @@ export default class FormChildTest extends React.Component {
               <Popover
                 overlayClassName="radioButtonsProver"
                 content={
-                  <RadioButtons item={item} onChange={(value) => {
-                    item.data = value;
-                    checkValueValidByType(item, value)
-                      ? (item.hasErr = false)
-                      : (item.hasErr = true);
-                    this.setState(state => ({
-                      ...state,
-                      refesh: !this.state.refesh
-                    }));
-                    this._checkFormChildHasError(submitDataArray);
-                  }} />
+                  <RadioButtons
+                    item={item}
+                    onChange={value => {
+                      item.data = value;
+                      checkValueValidByType(item, value)
+                        ? (item.hasErr = false)
+                        : (item.hasErr = true);
+                      this.setState(state => ({
+                        ...state,
+                        refesh: !this.state.refesh
+                      }));
+                      this._checkFormChildHasError(submitDataArray);
+                    }}
+                  />
                   // <Radio.Group
                   //   onChange={e => {
                   //     let { value } = e.target;
@@ -738,17 +760,20 @@ export default class FormChildTest extends React.Component {
               <Popover
                 overlayClassName="formChild-DropDownProver"
                 content={
-                  <DropDown item={item} onChange={(value) => {
-                    item.data = value;
-                    checkValueValidByType(item, value)
-                      ? (item.hasErr = false)
-                      : (item.hasErr = true);
-                    this.setState(state => ({
-                      ...state,
-                      refesh: !this.state.refesh
-                    }));
-                    this._checkFormChildHasError(submitDataArray);
-                  }} />
+                  <DropDown
+                    item={item}
+                    onChange={value => {
+                      item.data = value;
+                      checkValueValidByType(item, value)
+                        ? (item.hasErr = false)
+                        : (item.hasErr = true);
+                      this.setState(state => ({
+                        ...state,
+                        refesh: !this.state.refesh
+                      }));
+                      this._checkFormChildHasError(submitDataArray);
+                    }}
+                  />
                 }
                 title=""
                 placement="bottom"
@@ -791,10 +816,12 @@ export default class FormChildTest extends React.Component {
                 trigger="click"
               >
                 <div className="checkboxComponent">
-                  {item.data.length !== 0
+                  {item.data.length !== 0 ? (
                     // ? this._truncateValue(item.data[0].name)
-                    ? <span className="dataSpan">{item.data[0].name}</span>
-                    : ""}
+                    <span className="dataSpan">{item.data[0].name}</span>
+                  ) : (
+                    ""
+                  )}
                   <img src="/image/icons/edit.png" alt="图片加载出错" />
                 </div>
               </Popover>
@@ -828,10 +855,12 @@ export default class FormChildTest extends React.Component {
                 trigger="click"
               >
                 <div className="checkboxComponent">
-                  {item.data.length !== 0
+                  {item.data.length !== 0 ? (
                     // ? this._truncateValue(item.data[0].name)
-                    ? <span className="dataSpan">{item.data[0].name}</span>
-                    : ""}
+                    <span className="dataSpan">{item.data[0].name}</span>
+                  ) : (
+                    ""
+                  )}
                   <img src="/image/icons/edit.png" alt="图片加载出错" />
                 </div>
               </Popover>
@@ -890,7 +919,9 @@ export default class FormChildTest extends React.Component {
               >
                 <div className="checkboxComponent">
                   {/* {this._truncateValue(item.data)} */}
-                  <span className="dataSpan">{this.AddressObjToString(item.data)}</span>
+                  <span className="dataSpan">
+                    {this.AddressObjToString(item.data)}
+                  </span>
                   <img src="/image/icons/edit.png" alt="图片加载出错" />
                 </div>
               </Popover>
@@ -928,17 +959,31 @@ export default class FormChildTest extends React.Component {
       let data = filterSubmissionData(submissions, linkDataId);
       let res = [];
       indexArr.forEach(i => {
-        data[i] ? res.push(data[i]) : null; //解决 空选项问题
+        if (data[i]) {
+          res.push(data[i]);
+        }
       });
       // 去重
       const selections = [];
       res.forEach(item => {
         if (Array.isArray(item)) {
           item.forEach(data => {
-            data && (selections.includes(data) ? null : selections.push(data));
+            if (data) {
+              if (selections.includes(data)) {
+                return null;
+              } else {
+                selections.push(data);
+              }
+            }
           });
         } else {
-          item && (selections.includes(item) ? null : selections.push(item));
+          if (item) {
+            if (selections.includes(item)) {
+              return null;
+            } else {
+              selections.push(item);
+            }
+          }
         }
       });
       // 赋值
@@ -952,12 +997,11 @@ export default class FormChildTest extends React.Component {
     }
   }
 
-
   componentDidUpdate() {
     const { showFormChildErr, submitDataArray, closeFormChildErr } = this.props;
     if (showFormChildErr === true) {
       this._checkFormChildHasError(submitDataArray);
-      closeFormChildErr()
+      closeFormChildErr();
     }
   }
 
@@ -966,22 +1010,18 @@ export default class FormChildTest extends React.Component {
     submitDataArray.forEach(item => {
       for (let m in item) {
         if (item[m].hasErr === true) {
-          isFormChildErr = true
+          isFormChildErr = true;
         }
       }
     });
 
-    console.log(isFormChildErr)
+    console.log(isFormChildErr);
 
-    this.setState({ hasFormChildError: isFormChildErr })
-  };
+    this.setState({ hasFormChildError: isFormChildErr });
+  }
 
   render() {
-    const {
-      getFieldDecorator,
-      item,
-      submitDataArray
-    } = this.props;
+    const { getFieldDecorator, item, submitDataArray } = this.props;
     let { values } = item;
     let { hasFormChildError } = this.state;
 
@@ -989,130 +1029,176 @@ export default class FormChildTest extends React.Component {
 
     return (
       <Form.Item label={<LabelUtils data={item} />}>
-        {
-          item.values.length === 0 ?
-            <div>
-              <div className="app-formChild">
-                <div className="formChildContainer">
-                  <div className="TitleContainer">
-                    <div className="componentTitle" />
-                  </div>
-                </div>
-                <div className="formChildAddBtn">
-                  <Button type="link" onClick={this.handleAddRow}>
-                    <Icon type="plus" /> 添加
-                  </Button>
+        {item.values.length === 0 ? (
+          <div>
+            <div className="app-formChild">
+              <div className="formChildContainer">
+                <div className="TitleContainer">
+                  <div className="componentTitle" />
                 </div>
               </div>
-            </div> :
-            getFieldDecorator(item.key)(
-              <div className="app-formChild">
-                <div className="formChildContainer">
-                  <div className="TitleContainer">
-                    <div className="componentTitle" />
-                    {values.map((item, index) => (
-                      <div
-                        key={index}
-                        style={
-                          item.label === "时间/日期"
-                            ? { width: 200, flex: "0 0 200px" }
-                            : { width: 140 }
-                        }
-                        className={item.validate.required ? "componentTitle-required" : "componentTitle"}
-                        title={item.label}
-                      >
-                        {item.label}
-                      </div>
-                    ))}
-                  </div>
-                  {submitDataArray.map((item, index) => (
-                    <div className="contentContainer" key={"formChild" + index}>
-                      <div className="componentContent">
-                        <span
-                          key={Math.random()}
-                          id={formChildKey + "Number" + index}
-                          style={{
-                            display: "inline-block",
-                            width: "25px",
-                            height: "25px",
-                            lineHeight: "25px"
-                          }}
-                          onMouseEnter={() => {
-                            submitDataArray.forEach((item, i) => {
-                              if (document.getElementById(formChildKey + "Number" + i)  != void 0) {
-                                document.getElementById(formChildKey + "Number" + i).style.display = "inline-block";
-                              }
-                              if (document.getElementById(formChildKey + "Btn" + i)  != void 0) {
-                                document.getElementById(formChildKey + "Btn" + i).style.display = "none";
-                              }
-                            })
-
-                            if (document.getElementById(formChildKey + "Number" + index)  != void 0) {
-                              document.getElementById(formChildKey + "Number" + index).style.display = "none";
-                            }
-                            if (document.getElementById(formChildKey + "Btn" + index)  != void 0) {
-                              document.getElementById(formChildKey + "Btn" + index).style.display = "inline-block";
-                            }
-                          }}
-                        >
-                          {index + 1}
-                        </span>
-                        {submitDataArray.length > 0 ? (
-                          <img
-                            key={Math.random()}
-                            src="/image/icons/delete.png"
-                            style={{
-                              width: "25px",
-                              height: "25px"
-                            }}
-                            id={formChildKey + "Btn" + index}
-                            onMouseOut={() => {
-                              submitDataArray.forEach((item, i) => {
-                                if (document.getElementById(formChildKey + "Number" + i)  != void 0) {
-                                  document.getElementById(formChildKey + "Number" + i).style.display = "inline-block";
-                                }
-                                if (document.getElementById(formChildKey + "Btn" + i)  != void 0) {
-                                  document.getElementById(formChildKey + "Btn" + i).style.display = "none";
-                                }
-                              });
-
-                              if (document.getElementById(formChildKey + "Number" + index)  != void 0) {
-                                document.getElementById(formChildKey + "Number" + index).style.display = "inline-block";
-                              }
-                            }}
-                            onClick={(_e) => {
-                              let newArray = this.props.submitDataArray;
-                              newArray.splice(index, 1);
-                              this.props.saveSubmitData(newArray);
-
-                              this.setState(state => ({
-                                ...state,
-                                refesh: !this.state.refesh
-                              }));
-                            }}
-                          />
-                        ) : null}
-                      </div>
-                      {this.renderFormChild(item, index, submitDataArray)}
+              <div className="formChildAddBtn">
+                <Button type="link" onClick={this.handleAddRow}>
+                  <Icon type="plus" /> 添加
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          getFieldDecorator(item.key)(
+            <div className="app-formChild">
+              <div className="formChildContainer">
+                <div className="TitleContainer">
+                  <div className="componentTitle" />
+                  {values.map((item, index) => (
+                    <div
+                      key={index}
+                      style={
+                        item.label === "时间/日期"
+                          ? { width: 200, flex: "0 0 200px" }
+                          : { width: 140 }
+                      }
+                      className={
+                        item.validate.required
+                          ? "componentTitle-required"
+                          : "componentTitle"
+                      }
+                      title={item.label}
+                    >
+                      {item.label}
                     </div>
                   ))}
                 </div>
-                {
-                  hasFormChildError ?
-                    <div className="ant-form-explain" style={{ color: "red" }}>
-                      <p>存在不符合规范的值</p>
-                    </div> : <></>
-                }
-                <div className="formChildAddBtn">
-                  <Button type="link" onClick={this.handleAddRow}>
-                    <Icon type="plus" />
-                    添加
-              </Button>
-                </div>
+                {submitDataArray.map((item, index) => (
+                  <div className="contentContainer" key={"formChild" + index}>
+                    <div className="componentContent">
+                      <span
+                        key={Math.random()}
+                        id={formChildKey + "Number" + index}
+                        style={{
+                          display: "inline-block",
+                          width: "25px",
+                          height: "25px",
+                          lineHeight: "25px"
+                        }}
+                        onMouseEnter={() => {
+                          submitDataArray.forEach((item, i) => {
+                            if (
+                              document.getElementById(
+                                formChildKey + "Number" + i
+                              ) != void 0
+                            ) {
+                              document.getElementById(
+                                formChildKey + "Number" + i
+                              ).style.display = "inline-block";
+                            }
+                            if (
+                              document.getElementById(
+                                formChildKey + "Btn" + i
+                              ) != void 0
+                            ) {
+                              document.getElementById(
+                                formChildKey + "Btn" + i
+                              ).style.display = "none";
+                            }
+                          });
 
+                          if (
+                            document.getElementById(
+                              formChildKey + "Number" + index
+                            ) != void 0
+                          ) {
+                            document.getElementById(
+                              formChildKey + "Number" + index
+                            ).style.display = "none";
+                          }
+                          if (
+                            document.getElementById(
+                              formChildKey + "Btn" + index
+                            ) != void 0
+                          ) {
+                            document.getElementById(
+                              formChildKey + "Btn" + index
+                            ).style.display = "inline-block";
+                          }
+                        }}
+                      >
+                        {index + 1}
+                      </span>
+                      {submitDataArray.length > 0 ? (
+                        <img
+                          key={Math.random()}
+                          src="/image/icons/delete.png"
+                          style={{
+                            width: "25px",
+                            height: "25px"
+                          }}
+                          id={formChildKey + "Btn" + index}
+                          onMouseOut={() => {
+                            submitDataArray.forEach((item, i) => {
+                              if (
+                                document.getElementById(
+                                  formChildKey + "Number" + i
+                                ) != void 0
+                              ) {
+                                document.getElementById(
+                                  formChildKey + "Number" + i
+                                ).style.display = "inline-block";
+                              }
+                              if (
+                                document.getElementById(
+                                  formChildKey + "Btn" + i
+                                ) != void 0
+                              ) {
+                                document.getElementById(
+                                  formChildKey + "Btn" + i
+                                ).style.display = "none";
+                              }
+                            });
+
+                            if (
+                              document.getElementById(
+                                formChildKey + "Number" + index
+                              ) != void 0
+                            ) {
+                              document.getElementById(
+                                formChildKey + "Number" + index
+                              ).style.display = "inline-block";
+                            }
+                          }}
+                          onClick={_e => {
+                            let newArray = this.props.submitDataArray;
+                            newArray.splice(index, 1);
+                            this.props.saveSubmitData(newArray);
+
+                            this.setState(state => ({
+                              ...state,
+                              refesh: !this.state.refesh
+                            }));
+                          }}
+                        />
+                      ) : null}
+                    </div>
+                    {this.renderFormChild(item, index, submitDataArray)}
+                  </div>
+                ))}
               </div>
-            )
-        }
+              {hasFormChildError ? (
+                <div className="ant-form-explain" style={{ color: "red" }}>
+                  <p>存在不符合规范的值</p>
+                </div>
+              ) : (
+                <></>
+              )}
+              <div className="formChildAddBtn">
+                <Button type="link" onClick={this.handleAddRow}>
+                  <Icon type="plus" />
+                  添加
+                </Button>
+              </div>
+            </div>
+          )
+        )}
       </Form.Item>
     );
   }

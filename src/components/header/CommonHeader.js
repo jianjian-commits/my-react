@@ -51,7 +51,7 @@ const CommonHeader = props => {
   const { signOut, getUserDetail, loginData, userData } = props;
   const [init, setInit] = useState(false);
   useEffect(() => {
-    if (!init) getUserDetail(loginData.ownerId);
+    // if (!init) getUserDetail(loginData.ownerId);
     return () => setInit(true);
   });
   return (

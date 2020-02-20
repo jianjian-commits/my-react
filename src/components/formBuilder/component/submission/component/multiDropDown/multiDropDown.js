@@ -2,7 +2,7 @@ import React from "react";
 import { isValueValid } from "../../../../utils/valueUtils";
 import { Form, Select, Tooltip, Icon } from "antd";
 import { getSelection } from "../../utils/filterData";
-import MultiDropDownItem from './multiDropDownItem';
+import MultiDropDownItem from "./multiDropDownItem";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import {
   getFormAllSubmission,
@@ -40,15 +40,19 @@ export default class MultiDropDown extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = [];
             indexArr.forEach(i => {
-              data[i] ? res.push(data[i]) : null;
+              if (data[i]) {
+                res.push(data[i]);
+              }
             });
             selections = [];
             res.forEach(item => {
               if (item instanceof Array) {
                 item.forEach(select => {
-                  select && selections.includes(select)
-                    ? null
-                    : selections.push({ label: select, value: select });
+                  if (select && selections.includes(select)) {
+                    return null;
+                  } else {
+                    selections.push({ label: select, value: select });
+                  }
                 });
               } else {
                 selections.push({ label: item, value: item });
@@ -72,7 +76,7 @@ export default class MultiDropDown extends React.Component {
               [item.key]: undefined
             });
             // 触发多级联动
-          this.handleChange(value);
+            this.handleChange(value);
           } else {
             this.setState({
               selections: []
@@ -102,8 +106,11 @@ export default class MultiDropDown extends React.Component {
     const { item } = this.props;
     const { maxOptionNumber, minOptionNumber } = item.validate;
     let defaultErrMsg = "";
-    if(value.length!=0){
-      if (maxOptionNumber !== Number.MAX_SAFE_INTEGER && minOptionNumber !== 0) {
+    if (value.length != 0) {
+      if (
+        maxOptionNumber !== Number.MAX_SAFE_INTEGER &&
+        minOptionNumber !== 0
+      ) {
         defaultErrMsg = `请选择${minOptionNumber} ~ ${maxOptionNumber}项`;
       } else if (maxOptionNumber !== Number.MAX_SAFE_INTEGER) {
         defaultErrMsg = `最多选择${maxOptionNumber}项`;
@@ -121,7 +128,7 @@ export default class MultiDropDown extends React.Component {
       } else {
         callback();
       }
-    }else{
+    } else {
       callback();
     }
   };
@@ -157,24 +164,24 @@ export default class MultiDropDown extends React.Component {
             }
           ],
           // validateTrigger: 'onSubmit',
-          initialValue:[]
+          initialValue: []
         })(
-        //   <Select
-        //     disabled={disabled}
-        //     mode="multiple"
-        //     placeholder="请选择"
-        //     style={{ width: "100%" }}
-        //     showArrow={true}
-        //     onChange={this.handleChange}
-        //     getPopupContainer = {triggerNode => triggerNode.parentNode}
-        //   >
-        //     {selections.map((item, index) => (
-        //       <Select.Option key={index} value={item.value}>
-        //         {item.label}
-        //       </Select.Option>
-        //     ))}
-        //   </Select>
-          <MultiDropDownItem selections={this.state.selections} item={item}/>
+          //   <Select
+          //     disabled={disabled}
+          //     mode="multiple"
+          //     placeholder="请选择"
+          //     style={{ width: "100%" }}
+          //     showArrow={true}
+          //     onChange={this.handleChange}
+          //     getPopupContainer = {triggerNode => triggerNode.parentNode}
+          //   >
+          //     {selections.map((item, index) => (
+          //       <Select.Option key={index} value={item.value}>
+          //         {item.label}
+          //       </Select.Option>
+          //     ))}
+          //   </Select>
+          <MultiDropDownItem selections={this.state.selections} item={item} />
         )}
       </Form.Item>
     );

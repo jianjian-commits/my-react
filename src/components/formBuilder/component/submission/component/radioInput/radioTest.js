@@ -58,13 +58,6 @@ export default class RadioInput extends React.Component {
       });
     }
   };
-  checkIsSelect = (rule, value, callback) => {
-    if(isValueValid(item.validate.required)&&value==""){
-      callback('此选项为必填');
-    }else {
-      callback();
-    }
-  };
   render() {
     // const { inputValue } = this.state;
     const { getFieldDecorator, item } = this.props;
@@ -86,11 +79,9 @@ export default class RadioInput extends React.Component {
               validator: this.checkSelecNumber
             }
           ],
-          initialValue:""
+          initialValue: ""
           // validateTrigger: 'onSubmit',
-        })(
-          <RadioTestItem handleChange={this.handleChange} item={item} />
-        )}
+        })(<RadioTestItem handleChange={this.handleChange} item={item} />)}
       </Form.Item>
     );
   }

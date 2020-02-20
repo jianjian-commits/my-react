@@ -1,7 +1,15 @@
 import React from "react";
-import { Input, Radio, Checkbox, Button, Tooltip, InputNumber ,Divider} from "antd";
+import {
+  Input,
+  Radio,
+  Checkbox,
+  Button,
+  Tooltip,
+  InputNumber,
+  Divider
+} from "antd";
 import { connect } from "react-redux";
-import isInFormChild from "../utils/isInFormChild"
+import isInFormChild from "../utils/isInFormChild";
 import {
   setItemAttr,
   setFormChildItemAttr,
@@ -72,9 +80,11 @@ class CheckboxInspector extends React.Component {
       this.props.setItemAttr(this.props.element, "values", newValuesList);
     }
   }
-  deleteChooseItem(item,index) {
-    if(this.props.element.values.length === 1) return null;
-    let newValuesList = this.props.element.values.filter((item,i) => i !== index)
+  deleteChooseItem(item, index) {
+    if (this.props.element.values.length === 1) return null;
+    let newValuesList = this.props.element.values.filter(
+      (item, i) => i !== index
+    );
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
@@ -112,7 +122,7 @@ class CheckboxInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      minOptionNumber: value === void 0 ? 0 : value
+      minOptionNumber: value == void 0 ? 0 : value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -130,7 +140,7 @@ class CheckboxInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxOptionNumber: value === void 0 ? Number.MAX_SAFE_INTEGER : value
+      maxOptionNumber: value == void 0 ? Number.MAX_SAFE_INTEGER : value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -158,21 +168,19 @@ class CheckboxInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-          {
-              isInFormChild(this.props.elementParent)
-               ? null 
-               :<>
-                  <p htmlFor="radio-text-tip">提示信息</p>
-                  <Input
-                    id="radio-text-tip"
-                    name="tooltip"
-                    placeholder="请输入提示信息"
-                    defaultValue={tooltip}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-               </>
-            }
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p htmlFor="radio-text-tip">提示信息</p>
+              <Input
+                id="radio-text-tip"
+                name="tooltip"
+                placeholder="请输入提示信息"
+                defaultValue={tooltip}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+            </>
+          )}
           <p>选项</p>
           <div className="chooseitems">
             {values.map((item, index) => (
@@ -191,7 +199,7 @@ class CheckboxInspector extends React.Component {
                   <img
                     src="/image/deleteIcon.png"
                     onClick={() => {
-                      this.deleteChooseItem(item,index);
+                      this.deleteChooseItem(item, index);
                     }}
                   />
                 </Tooltip>
@@ -221,28 +229,34 @@ class CheckboxInspector extends React.Component {
               限定可选个数
             </Checkbox>
           </div>
-          <div className='number-check-warper'>
-              <InputNumber
-                name='minOptionNumber'
-                placeholder="不限"
-                min={1}
-                max = {values.length}
-                precision={0}
-                onChange={this.handleChangeAttrMinLength}
-                value={validate.minOptionNumber==0 ? "" : validate.minOptionNumber}
-                autoComplete="off"
-              />
-              ~
-              <InputNumber
-                name='maxOptionNumber'
-                placeholder="不限"
-                min={1}
-                max = {values.length}
-                precision={0}
-                onChange={this.handleChangeAttrMaxLength}
-                value={validate.maxOptionNumber==Number.MAX_SAFE_INTEGER ? "" : validate.maxOptionNumber}
-                autoComplete="off"
-              />
+          <div className="number-check-warper">
+            <InputNumber
+              name="minOptionNumber"
+              placeholder="不限"
+              min={1}
+              max={values.length}
+              precision={0}
+              onChange={this.handleChangeAttrMinLength}
+              value={
+                validate.minOptionNumber == 0 ? "" : validate.minOptionNumber
+              }
+              autoComplete="off"
+            />
+            ~
+            <InputNumber
+              name="maxOptionNumber"
+              placeholder="不限"
+              min={1}
+              max={values.length}
+              precision={0}
+              onChange={this.handleChangeAttrMaxLength}
+              value={
+                validate.maxOptionNumber == Number.MAX_SAFE_INTEGER
+                  ? ""
+                  : validate.maxOptionNumber
+              }
+              autoComplete="off"
+            />
           </div>
         </div>
       </div>

@@ -45,16 +45,19 @@ export default class multiDropDown extends React.Component {
               let data = filterSubmissionData(submissions, linkDataId);
               let res = [];
               indexArr.forEach(i => {
-                data[i] ? res.push(data[i]) : null; //解决 空选项问题
+                if (data[i]) {
+                  res.push(data[i]);
+                }
               });
 
               selections = [];
               res.forEach(item => {
                 if (item instanceof Array) {
                   item.forEach(select => {
-                    select && selections.includes(select)
-                      ? null
-                      : selections.push({ label: select, value: select });
+                    if (select && selections.includes(select)) {
+                    } else {
+                      selections.push({ label: select, value: select });
+                    }
                   });
                 } else {
                   selections.push({ label: item, value: item });
@@ -86,7 +89,7 @@ export default class multiDropDown extends React.Component {
                 selections: [],
                 setValue: [],
                 setValueTemp: [],
-                setValueTempIndex: [],
+                setValueTempIndex: []
               });
               this.handleChange(undefined);
             }
@@ -101,7 +104,7 @@ export default class multiDropDown extends React.Component {
             selections: this.filterUniqueSelections(res),
             setValue: [],
             setValueTemp: [],
-            setValueTempIndex: [],
+            setValueTempIndex: []
           });
         });
       } else {
@@ -124,7 +127,7 @@ export default class multiDropDown extends React.Component {
             selections: this.filterUniqueSelections(res),
             setValue: [],
             setValueTemp: [],
-            setValueTempIndex: [],
+            setValueTempIndex: []
           });
         });
       } else {
@@ -134,7 +137,7 @@ export default class multiDropDown extends React.Component {
         selections: this.filterUniqueSelections(dropDownOptions),
         setValue: [],
         setValueTemp: [],
-        setValueTempIndex: [],
+        setValueTempIndex: []
       });
     }
   }
@@ -158,7 +161,7 @@ export default class multiDropDown extends React.Component {
         }
       }
     });
-    // 
+    //
     return newSelections;
   };
 
@@ -174,7 +177,7 @@ export default class multiDropDown extends React.Component {
     //     selections: this.filterUniqueSelections(nextProps.value)
     //   });
     // } else if(nextProps.item.data && nextProps.item.data !== "" && nextProps.isChild) {
-    //   
+    //
     //   this.setState({
     //     selections: [nextProps.item.data],
     //     setValue: [nextProps.item.data],
@@ -184,12 +187,11 @@ export default class multiDropDown extends React.Component {
     if (nextProps.isChild) {
       this.setState({
         selections: nextProps.item.dropDownOptions || [],
-        setValue: nextProps.item.data,
+        setValue: nextProps.item.data
       });
     }
   }
 
-  
   checkSelectNumber = (rule, value, callback) => {
     const { item } = this.props;
     const { maxOptionNumber, minOptionNumber } = item.validate;
@@ -209,7 +211,10 @@ export default class multiDropDown extends React.Component {
         (item.validate.minOptionNumber &&
           value.length < item.validate.minOptionNumber))
     ) {
-      !this.props.isChild ?document.querySelector(`#${this.props.item.id} .errorMsg`).innerText = '':null;
+      if (!this.props.isChild) {
+        document.querySelector(`#${this.props.item.id} .errorMsg`).innerText =
+          "";
+      }
       callback(`${this.props.item.label}${defaultErrMsg}`);
     } else {
       callback();
@@ -227,7 +232,7 @@ export default class multiDropDown extends React.Component {
   };
 
   // 校验选中的个数
-  checkNumber (value){
+  checkNumber(value) {
     const { item } = this.props;
     const { maxOptionNumber, minOptionNumber } = item.validate;
     let defaultErrMsg = "";
@@ -246,9 +251,11 @@ export default class multiDropDown extends React.Component {
         (item.validate.minOptionNumber &&
           value.length < item.validate.minOptionNumber))
     ) {
-      document.querySelector(`#${this.props.item.id} .errorMsg`).innerText = `${this.props.item.label}${defaultErrMsg}`
+      document.querySelector(
+        `#${this.props.item.id} .errorMsg`
+      ).innerText = `${this.props.item.label}${defaultErrMsg}`;
     } else {
-      document.querySelector(`#${this.props.item.id} .errorMsg`).innerText = ``
+      document.querySelector(`#${this.props.item.id} .errorMsg`).innerText = ``;
     }
   }
   // 展示下拉列表
@@ -283,22 +290,29 @@ export default class multiDropDown extends React.Component {
   };
 
   // 改变提交的初始值initalValue
-  setSubmissionValue = ( params )=>{
-    let { setFieldsValue } = this.props.form
-    let key = this.props.item.key
-    setFieldsValue({[key]:params})
-  }
+  setSubmissionValue = params => {
+    let { setFieldsValue } = this.props.form;
+    let key = this.props.item.key;
+    setFieldsValue({ [key]: params });
+  };
 
   onClickOk = () => {
-    let setValue = [...this.state.setValueTemp]
-    !this.props.isChild ? this.setSubmissionValue( setValue ):null
-    this.props.onChange && this.props.onChange(setValue)
-    this.setState({
-      setValue: setValue,
-      visible: false
-    },()=>{
-      !this.props.isChild ?this.checkNumber(setValue):null
-    });
+    let setValue = [...this.state.setValueTemp];
+    if (!this.props.isChild) {
+      this.setSubmissionValue(setValue);
+    }
+    this.props.onChange && this.props.onChange(setValue);
+    this.setState(
+      {
+        setValue: setValue,
+        visible: false
+      },
+      () => {
+        if (!this.props.isChild) {
+          this.checkNumber(setValue);
+        }
+      }
+    );
     this.handleChange(setValue);
   };
   onClickCancle = () => {
@@ -312,13 +326,17 @@ export default class multiDropDown extends React.Component {
     const { getFieldDecorator, item, isShowTitle } = this.props;
     const { selections } = this.state;
     let errMsg = this.props.item.validate.customMessage;
-    let id = item.id,errorMsgDom = null;
-    if(document.querySelector(`#${id}`) !== null){
-      errorMsgDom = document.querySelector(`#${id}`).parentNode.parentNode.querySelector('.ant-form-explain')
+    let id = item.id,
+      errorMsgDom = null;
+    if (document.querySelector(`#${id}`) !== null) {
+      errorMsgDom = document
+        .querySelector(`#${id}`)
+        .parentNode.parentNode.querySelector(".ant-form-explain");
     }
     return (
-      <Form.Item label={isShowTitle === false ? null : <LabelUtils data={item} />}>
-
+      <Form.Item
+        label={isShowTitle === false ? null : <LabelUtils data={item} />}
+      >
         {!this.props.isChild ? (
           getFieldDecorator(item.key, {
             initialValue: this.state.setValue,
@@ -345,66 +363,11 @@ export default class multiDropDown extends React.Component {
                   onChange={this.handleChange}
                   readOnly
                 />
-                {errorMsgDom === null ? <div className = "errorMsg" ></div>:<div style={{display:"none"}} className = "errorMsg" ></div>}
-            </div>
-              <Drawer
-                placement={"bottom"}
-                closable={false}
-                onClose={() => this.setState({ visible: true })}
-                visible={this.state.visible}
-                title={
-                  <div className="multiDropDown-header">
-                    <span
-                      className="multiDropDown-header-cancle"
-                      onClick={this.onClickCancle}
-                    >
-                      取消
-                    </span>
-                    <span
-                      className="multiDropDown-header-confirm"
-                      onClick={this.onClickOk}
-                    >
-                      确定
-                    </span>
-                  </div>
-                }
-              >
-                <ul
-                  className="multiDropDown-list"
-                  style={{ listStyle: "none" }}
-                  onClick={e => this.setValue(e)}
-                >
-                  {Array.isArray(selections)
-                    ? selections.map((item, index) => (
-                      <li key={index} value={item.value} index={index}>
-                        {item.label}{" "}
-                        {this.state.setValueTempIndex.indexOf(index) !==
-                          -1 ? (
-                            <Icon
-                              style={{ color: "#09BB07" }}
-                              className="multiDropDown-check-icon"
-                              type="check"
-                            />
-                          ) : null}
-                      </li>
-                    ))
-                    : null}
-                </ul>
-              </Drawer>
-            </div>
-          )
-        ) : (
-            <div className="multiDropDown-Content">
-              <div className="Input-content">
-                <Input
-                  type="text"
-                  placeholder="请选择"
-                  style={{ width: "100%" }}
-                  value={this.state.setValue}
-                  onClick={this.showMultiDropDownMobileList}
-                  onChange={this.handleChange}
-                  readOnly
-                />
+                {errorMsgDom === null ? (
+                  <div className="errorMsg"></div>
+                ) : (
+                  <div style={{ display: "none" }} className="errorMsg"></div>
+                )}
               </div>
               <Drawer
                 placement={"bottom"}
@@ -418,13 +381,13 @@ export default class multiDropDown extends React.Component {
                       onClick={this.onClickCancle}
                     >
                       取消
-                  </span>
+                    </span>
                     <span
                       className="multiDropDown-header-confirm"
                       onClick={this.onClickOk}
                     >
                       确定
-                  </span>
+                    </span>
                   </div>
                 }
               >
@@ -435,6 +398,65 @@ export default class multiDropDown extends React.Component {
                 >
                   {Array.isArray(selections)
                     ? selections.map((item, index) => (
+                        <li key={index} value={item.value} index={index}>
+                          {item.label}{" "}
+                          {this.state.setValueTempIndex.indexOf(index) !==
+                          -1 ? (
+                            <Icon
+                              style={{ color: "#09BB07" }}
+                              className="multiDropDown-check-icon"
+                              type="check"
+                            />
+                          ) : null}
+                        </li>
+                      ))
+                    : null}
+                </ul>
+              </Drawer>
+            </div>
+          )
+        ) : (
+          <div className="multiDropDown-Content">
+            <div className="Input-content">
+              <Input
+                type="text"
+                placeholder="请选择"
+                style={{ width: "100%" }}
+                value={this.state.setValue}
+                onClick={this.showMultiDropDownMobileList}
+                onChange={this.handleChange}
+                readOnly
+              />
+            </div>
+            <Drawer
+              placement={"bottom"}
+              closable={false}
+              onClose={() => this.setState({ visible: true })}
+              visible={this.state.visible}
+              title={
+                <div className="multiDropDown-header">
+                  <span
+                    className="multiDropDown-header-cancle"
+                    onClick={this.onClickCancle}
+                  >
+                    取消
+                  </span>
+                  <span
+                    className="multiDropDown-header-confirm"
+                    onClick={this.onClickOk}
+                  >
+                    确定
+                  </span>
+                </div>
+              }
+            >
+              <ul
+                className="multiDropDown-list"
+                style={{ listStyle: "none" }}
+                onClick={e => this.setValue(e)}
+              >
+                {Array.isArray(selections)
+                  ? selections.map((item, index) => (
                       <li
                         key={index}
                         value={item.value ? item.value : item}
@@ -450,11 +472,11 @@ export default class multiDropDown extends React.Component {
                         ) : null}
                       </li>
                     ))
-                    : null}
-                </ul>
-              </Drawer>
-            </div>
-          )}
+                  : null}
+              </ul>
+            </Drawer>
+          </div>
+        )}
       </Form.Item>
     );
   }

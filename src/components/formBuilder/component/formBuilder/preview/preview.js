@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import FormComponentContainer from "./component/formComponentContainer";
 // import PreviewHeader from "./component/previewHeader";
 import { updateOrder, setDragState } from "../redux/utils/operateFormComponent";
-import { setFormName, } from "../redux/utils/operateForm";
-
+import { setFormName } from "../redux/utils/operateForm";
 
 class Preview extends React.Component {
   constructor(props) {
@@ -27,7 +26,7 @@ class Preview extends React.Component {
         if (component.type !== "CustomValue") {
           this.insertCard(component, index);
         } else {
-          this.setState({ customValue: component })
+          this.setState({ customValue: component });
         }
       });
 
@@ -106,7 +105,6 @@ class Preview extends React.Component {
     }
 
     newDataArray.splice(index, 1);
-
   }
 
   insertCard(item, hoverIndex) {
@@ -117,7 +115,7 @@ class Preview extends React.Component {
     // this.saveData(item, hoverIndex, hoverIndex);
     this.props.updateOrder(data);
 
-    this.props.editModeOn(item, null)
+    this.props.editModeOn(item, null);
   }
 
   saveData(dragCard, dragIndex, hoverIndex) {
@@ -128,7 +126,7 @@ class Preview extends React.Component {
 
     if (dragIndex < hoverIndex) {
       hoverIndex -= 1;
-    };
+    }
 
     newData.forEach((item, index) => {
       if (item.type === "CustomValue") {
@@ -140,10 +138,9 @@ class Preview extends React.Component {
     newData.splice(dragIndex, 1);
     newData.splice(hoverIndex, 0, dragCard);
 
-    if (customValue  != void 0) {
+    if (customValue != void 0) {
       newData.push(customValue);
     }
-
 
     this.props.updateOrder(newData);
     this.props.editModeOn(this.props.data[hoverIndex], null);
@@ -168,15 +165,15 @@ class Preview extends React.Component {
     // this.props.editModeOn(this.props.data[hoverIndex], null);
   }
 
-  handleSetDragState = (state) => {
-    this.props.setDragState(state)
-  }
+  handleSetDragState = state => {
+    this.props.setDragState(state);
+  };
 
   getElement(data, item, index, activeIndex, customValue) {
     const FormComponent = FormComponentContainer[item.element];
     let active = index === activeIndex ? true : false;
 
-    if (this.formChildScrollObj[item.key] === void 0) {
+    if (this.formChildScrollObj[item.key] == void 0) {
       this.formChildScrollObj[item.key] = 0;
     }
 
@@ -201,7 +198,7 @@ class Preview extends React.Component {
         _onDestroy={this.deleteFormComponent}
         active={active}
         scrollLeft={this.formChildScrollObj[item.key]}
-        saveScrollLeft={(value) => {
+        saveScrollLeft={value => {
           this.formChildScrollObj[item.key] = value;
         }}
       />
@@ -214,7 +211,7 @@ class Preview extends React.Component {
 
   buildDragParent(data, activeIndex) {
     const FormComponent = FormComponentContainer["DragParent"];
-    let item = { id: "dragParent", key: "dragParent" }
+    let item = { id: "dragParent", key: "dragParent" };
     let active = activeIndex === -2 ? true : false;
 
     return (
@@ -233,15 +230,15 @@ class Preview extends React.Component {
         data={item}
         active={active}
         editModeOn={this.props.editModeOn}
-        setDragState={() => { }}
-        _onDestroy={() => { }}
+        setDragState={() => {}}
+        _onDestroy={() => {}}
       />
     );
   }
 
   buildEmptyComponent() {
     const FormComponent = FormComponentContainer["EmptyFormComponent"];
-    let item = { id: "EmptyFormComponent", key: "EmptyFormComponent" }
+    let item = { id: "EmptyFormComponent", key: "EmptyFormComponent" };
 
     return (
       <FormComponent
@@ -262,7 +259,6 @@ class Preview extends React.Component {
   }
 
   render() {
-
     let { isEditMode, isDragging, activeIndex } = this.props;
     let classes = this.props.className;
     if (isEditMode) {
@@ -273,31 +269,30 @@ class Preview extends React.Component {
     }
     let data = [];
 
-    if (this.props.data  != void 0) {
+    if (this.props.data != void 0) {
       data = this.props.data.filter(x => {
         if (x.type === "CustomValue") {
-          this.customValue = x
+          this.customValue = x;
         }
 
         return x.type !== "CustomValue";
       });
-
     }
-    const items = data.map((item, index) => this.getElement(data, item, index, activeIndex, this.customValue));
-
+    const items = data.map((item, index) =>
+      this.getElement(data, item, index, activeIndex, this.customValue)
+    );
 
     return (
       <div className="preview-container">
-        <div
-          className={classes}
-          id="dragWrapper"
-        >
-          {items.length > 0 ? (<div className="Sortable">
-            {items}
-            {this.buildDragParent(data, activeIndex)}
-          </div>) : (
-              this.buildEmptyComponent()
-            )}
+        <div className={classes} id="dragWrapper">
+          {items.length > 0 ? (
+            <div className="Sortable">
+              {items}
+              {this.buildDragParent(data, activeIndex)}
+            </div>
+          ) : (
+            this.buildEmptyComponent()
+          )}
         </div>
       </div>
     );
@@ -315,11 +310,11 @@ export default connect(
   store => ({
     data: store.formBuilder.data,
     isDragging: store.formBuilder.isDragging,
-    activeIndex: store.formBuilder.activeIndex,
+    activeIndex: store.formBuilder.activeIndex
   }),
   {
     updateOrder,
     setFormName,
-    setDragState,
+    setDragState
   }
 )(Preview);

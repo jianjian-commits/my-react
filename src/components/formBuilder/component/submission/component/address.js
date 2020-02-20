@@ -10,6 +10,7 @@ import {
 
 const { Option } = Select;
 const { TextArea } = Input;
+let AMap;
 
 export default class address extends Component {
   constructor(props) {
@@ -56,9 +57,9 @@ export default class address extends Component {
       detail: "",
       hasErr: item.validate.required
     });
-    handleSetErrState
-      ? handleSetErrState(item.id, item.validate.required)
-      : null;
+    if (handleSetErrState) {
+      handleSetErrState(item.id, item.validate.required);
+    }
 
     const { data } = item;
     // 是否为数据联动
@@ -104,7 +105,7 @@ export default class address extends Component {
   // 数据联动 设置数据
   handleSetDataLinkData = value => {
     const { handleSetAddress } = this.props;
-    let {county, city, province, detail} = value ? value : {};
+    let { county, city, province, detail } = value ? value : {};
     const newAddress = { ...this.props.address };
     newAddress.province = province;
     newAddress.city = city;
@@ -116,20 +117,29 @@ export default class address extends Component {
 
   // 根据地址数据改变选中的索引
   handleGetRightSelectedIndex = address => {
-    let {city, province} = address;
+    let { city, province } = address;
     const { CityData } = this.state;
-    let currentProvinceIndex = -1, currentCityIndex = -1;
-    if(province && CityData && CityData.districtList) {
-      currentProvinceIndex = CityData.districtList.findIndex(item => item.name === province);
+    let currentProvinceIndex = -1,
+      currentCityIndex = -1;
+    if (province && CityData && CityData.districtList) {
+      currentProvinceIndex = CityData.districtList.findIndex(
+        item => item.name === province
+      );
     }
-    if(currentProvinceIndex > -1 && CityData && CityData.districtList[currentProvinceIndex].districtList) {
-      currentCityIndex = CityData.districtList[currentProvinceIndex].districtList.findIndex(item => item.name === city);
+    if (
+      currentProvinceIndex > -1 &&
+      CityData &&
+      CityData.districtList[currentProvinceIndex].districtList
+    ) {
+      currentCityIndex = CityData.districtList[
+        currentProvinceIndex
+      ].districtList.findIndex(item => item.name === city);
     }
     this.setState({
       currentProvinceIndex,
       currentCityIndex
-    })
-  }
+    });
+  };
 
   handleSelectedProvince = (value, ev) => {
     const index = ev.props.index;
@@ -196,9 +206,11 @@ export default class address extends Component {
     //   newAddress.hasErr = item.validate.required ? true : false;
     // }
     if (item.validate.required) {
-      if(province && city && county) {
-        if(item.addressType === "hasDetail") {
-          detail === "" ? newAddress.hasErr = true : newAddress.hasErr = false;
+      if (province && city && county) {
+        if (item.addressType === "hasDetail") {
+          detail === ""
+            ? (newAddress.hasErr = true)
+            : (newAddress.hasErr = false);
         } else {
           newAddress.hasErr = false;
         }
@@ -246,7 +258,13 @@ export default class address extends Component {
 
   render() {
     const { item, showAddressErr, address, disabled } = this.props;
-    const { hasErr, city = "", county = "", province = "", detail = "" } = address || {
+    const {
+      hasErr,
+      city = "",
+      county = "",
+      province = "",
+      detail = ""
+    } = address || {
       city: "",
       county: "",
       province: ""

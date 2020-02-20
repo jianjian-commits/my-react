@@ -45,16 +45,20 @@ export default class DropDown extends React.Component {
               let data = filterSubmissionData(submissions, linkDataId);
               let res = [];
               indexArr.forEach(i => {
-                data[i] ? res.push(data[i]) : null; //解决 空选项问题
+                if (data[i]) {
+                  res.push(data[i]);
+                }
               });
 
               selections = [];
               res.forEach(item => {
                 if (item instanceof Array) {
                   item.forEach(select => {
-                    select && selections.includes(select)
-                      ? null
-                      : selections.push({ label: select, value: select });
+                    if (select && selections.includes(select)) {
+                      return null;
+                    } else {
+                      selections.push({ label: select, value: select });
+                    }
                   });
                 } else {
                   selections.push({ label: item, value: item });
@@ -131,14 +135,17 @@ export default class DropDown extends React.Component {
       } else {
         dropDownOptions = Array.isArray(values) ? values : [];
       }
-      this.setState({
-        selections: this.filterUniqueSelections(dropDownOptions),
-        setValue: "",
-        setValueTemp: "",
-        setValueTempIndex: -1
-      }, ()=>{
-        // console.log("---", this.state, this.props.item)
-      });
+      this.setState(
+        {
+          selections: this.filterUniqueSelections(dropDownOptions),
+          setValue: "",
+          setValueTemp: "",
+          setValueTempIndex: -1
+        },
+        () => {
+          // console.log("---", this.state, this.props.item)
+        }
+      );
     }
   }
 
@@ -194,7 +201,7 @@ export default class DropDown extends React.Component {
       this.setState({
         selections: nextProps.item.dropDownOptions || [],
         setValue: nextProps.item.data
-      })
+      });
     }
   }
 
@@ -224,7 +231,7 @@ export default class DropDown extends React.Component {
   // 暂存选中的值
   setValue = e => {
     let index = parseInt(e.target.getAttribute("index"));
-    let data = e.target.getAttribute("value")
+    let data = e.target.getAttribute("value");
     this.setState({
       setValueTemp: data,
       setValueTempIndex: index
@@ -232,21 +239,23 @@ export default class DropDown extends React.Component {
   };
 
   // 改变提交的初始值initalValue
-  setSubmissionValue = ( params )=>{
-    let { setFieldsValue } = this.props.form
-    let key = this.props.item.key
-    setFieldsValue({[key]:params})
-  }
+  setSubmissionValue = params => {
+    let { setFieldsValue } = this.props.form;
+    let key = this.props.item.key;
+    setFieldsValue({ [key]: params });
+  };
 
   onClickOk = () => {
     let setValue = this.state.setValueTemp;
-    this.props.isChild ? null:this.setSubmissionValue(setValue);
+    if (!this.props.isChild) {
+      this.setSubmissionValue(setValue);
+    }
     this.props.onChange && this.props.onChange(setValue);
     this.setState({
       setValue: setValue,
-      visible: false,
+      visible: false
     });
-    this.handleChange(setValue)
+    this.handleChange(setValue);
   };
   onClickCancle = () => {
     this.setState({
@@ -260,7 +269,9 @@ export default class DropDown extends React.Component {
     const { selections } = this.state;
     let errMsg = this.props.item.validate.customMessage;
     return (
-      <Form.Item label={isShowTitle === false ? null : <LabelUtils data={item} />}>
+      <Form.Item
+        label={isShowTitle === false ? null : <LabelUtils data={item} />}
+      >
         {this.props.isChild ? (
           <div className="dropDown-Content">
             <div className="Input-content">
@@ -301,78 +312,14 @@ export default class DropDown extends React.Component {
                 style={{ listStyle: "none" }}
                 onClick={e => this.setValue(e)}
               >
-                {Array.isArray(selections) ? selections.map((item, index) => (
-                  <li key={index} value={item.value ? item.value : item} index={index}>
-                    {item.label ? item.label : item}{" "}
-                    {this.state.setValueTempIndex === (index) ? (
-                      <Icon
-                        style={{ color: "#09BB07" }}
-                        className="dropDown-check-icon"
-                        type="check"
-                      />
-                    ) : null}
-                  </li>
-                )) : null}
-              </ul>
-            </Drawer>
-          </div>
-        ) : (
-            getFieldDecorator(item.key, {
-              initialValue: this.state.setValue,
-              rules: [
-                {
-                  required: isValueValid(item.validate.required)
-                    ? item.validate.required
-                    : false,
-                  message: "此字段为必填"
-                },
-                {
-                  validator: this.checkSelecNumber
-                }
-              ]
-            })(
-              <div className="dropDown-Content">
-                <div className="Input-content">
-                  <Input
-                    type="text"
-                    placeholder="请选择"
-                    style={{ width: "100%" }}
-                    value={this.state.setValue}
-                    onClick={this.showDropDownMobileList}
-                    onChange={this.handleChange}
-                    readOnly
-                  />
-                </div>
-                <Drawer
-                  placement={"bottom"}
-                  closable={false}
-                  onClose={() => this.setState({ visible: true })}
-                  visible={this.state.visible}
-                  title={
-                    <div className="dropDown-header">
-                      <span
-                        className="dropDown-header-cancle"
-                        onClick={this.onClickCancle}
+                {Array.isArray(selections)
+                  ? selections.map((item, index) => (
+                      <li
+                        key={index}
+                        value={item.value ? item.value : item}
+                        index={index}
                       >
-                        取消
-                    </span>
-                      <span
-                        className="dropDown-header-confirm"
-                        onClick={this.onClickOk}
-                      >
-                        确定
-                    </span>
-                    </div>
-                  }
-                >
-                  <ul
-                    className="dropDown-list"
-                    style={{ listStyle: "none" }}
-                    onClick={e => this.setValue(e)}
-                  >
-                    {selections.map((item, index) => (
-                      <li key={index} value={item.value} index={index}>
-                        {item.label}{" "}
+                        {item.label ? item.label : item}{" "}
                         {this.state.setValueTempIndex === index ? (
                           <Icon
                             style={{ color: "#09BB07" }}
@@ -381,12 +328,82 @@ export default class DropDown extends React.Component {
                           />
                         ) : null}
                       </li>
-                    ))}
-                  </ul>
-                </Drawer>
+                    ))
+                  : null}
+              </ul>
+            </Drawer>
+          </div>
+        ) : (
+          getFieldDecorator(item.key, {
+            initialValue: this.state.setValue,
+            rules: [
+              {
+                required: isValueValid(item.validate.required)
+                  ? item.validate.required
+                  : false,
+                message: "此字段为必填"
+              },
+              {
+                validator: this.checkSelecNumber
+              }
+            ]
+          })(
+            <div className="dropDown-Content">
+              <div className="Input-content">
+                <Input
+                  type="text"
+                  placeholder="请选择"
+                  style={{ width: "100%" }}
+                  value={this.state.setValue}
+                  onClick={this.showDropDownMobileList}
+                  onChange={this.handleChange}
+                  readOnly
+                />
               </div>
-            )
-          )}
+              <Drawer
+                placement={"bottom"}
+                closable={false}
+                onClose={() => this.setState({ visible: true })}
+                visible={this.state.visible}
+                title={
+                  <div className="dropDown-header">
+                    <span
+                      className="dropDown-header-cancle"
+                      onClick={this.onClickCancle}
+                    >
+                      取消
+                    </span>
+                    <span
+                      className="dropDown-header-confirm"
+                      onClick={this.onClickOk}
+                    >
+                      确定
+                    </span>
+                  </div>
+                }
+              >
+                <ul
+                  className="dropDown-list"
+                  style={{ listStyle: "none" }}
+                  onClick={e => this.setValue(e)}
+                >
+                  {selections.map((item, index) => (
+                    <li key={index} value={item.value} index={index}>
+                      {item.label}{" "}
+                      {this.state.setValueTempIndex === index ? (
+                        <Icon
+                          style={{ color: "#09BB07" }}
+                          className="dropDown-check-icon"
+                          type="check"
+                        />
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </Drawer>
+            </div>
+          )
+        )}
       </Form.Item>
     );
   }

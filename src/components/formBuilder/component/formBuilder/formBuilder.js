@@ -44,7 +44,7 @@ class ReactFormBuilder extends React.Component {
   }
   //增加一个形参判断是否点击的是子组件里面的元素
   editModeOn(editElement, e, formChildInnerElement) {
-    if (editElement === void 0) return;
+    if (editElement == void 0) return;
     if (e) {
       e.preventDefault();
       e.stopPropagation();

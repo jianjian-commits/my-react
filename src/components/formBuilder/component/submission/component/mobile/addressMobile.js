@@ -11,6 +11,7 @@ import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/util
 
 const { Option } = Select;
 const { TextArea } = Input;
+let AMap;
 
 export default class address extends Component {
   constructor(props) {
@@ -59,9 +60,9 @@ export default class address extends Component {
         hasErr: item.validate.required
       });
     }
-    handleSetErrState
-      ? handleSetErrState(item.id, item.validate.required)
-      : null;
+    if (handleSetErrState) {
+      handleSetErrState(item.id, item.validate.required);
+    }
 
     const { data } = item;
     // 是否为数据联动
@@ -165,9 +166,11 @@ export default class address extends Component {
     }
     const { province, city, county, detail } = newAddress;
     if (item.validate.required) {
-      if(province && city && county) {
-        if(item.addressType === "hasDetail") {
-          detail === "" ? newAddress.hasErr = true : newAddress.hasErr = false;
+      if (province && city && county) {
+        if (item.addressType === "hasDetail") {
+          detail === ""
+            ? (newAddress.hasErr = true)
+            : (newAddress.hasErr = false);
         } else {
           newAddress.hasErr = false;
         }
@@ -203,7 +206,9 @@ export default class address extends Component {
         ? "form-address has-error"
         : "form-address";
     return (
-      <Form.Item label={isShowTitle === false ? null : <LabelUtils data={item} />}>
+      <Form.Item
+        label={isShowTitle === false ? null : <LabelUtils data={item} />}
+      >
         <div className={classess}>
           <div className="row mobile">
             <Picker
