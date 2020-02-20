@@ -154,6 +154,10 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       margin: 0 auto;
       border: 1px solid #ddd;
       background: #fff;
+      height: 100%;
+      #emptyFormComponent {
+        height: 96%;
+      }
       &.isdragging {
         .Sortable,
         .place-text {
