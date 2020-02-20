@@ -8,6 +8,7 @@ import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
 import Dispose from "../pages/Dispose";
 import UserDetail from "../pages/userDetail";
+import Team from "../pages/Team";
 
 export const main = [
   {
@@ -44,6 +45,20 @@ export const main = [
     path: "/userDetail",
     icon: "web",
     component: UserDetail
+  },
+  {
+    key: "team",
+    label: "团队",
+    path: "/team",
+    icon: "web",
+    component: Team
+  },
+  {
+    key: "team",
+    label: "团队",
+    path: "/team/:menuId",
+    icon: "web",
+    component: Team
   }
 ];
 
