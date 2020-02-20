@@ -4,7 +4,7 @@ import { serverHost, port } from "../config";
 
 const baseURL = `${serverHost}${port ? ":" + port : ""}`;
 
-async function ajax(url, params = {}) {
+async function request(url, params = {}) {
   const headers = params.headers || {};
   headers["Content-Type"] = "application/json" || params.contentType;
   try {
@@ -23,7 +23,7 @@ async function ajax(url, params = {}) {
   }
 }
 
-export default ajax;
+export default request;
 
 // import Axios from "axios";
 // import { serverHost, port } from "./config";

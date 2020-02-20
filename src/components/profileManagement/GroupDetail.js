@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Icon, Button, Table, Checkbox } from "antd";
 import classes from "./profile.module.scss";
 import { history } from "../../store";
+import clx from "classnames";
 
 const basicInfo = [
   { title: "分组名", value: "HR" },
@@ -110,7 +111,16 @@ const getAppManage = action => {
       key: "action",
       dataIndex: "action",
       render: (text, record) => {
-        return <a href="/">{record.action}</a>;
+        return (
+          <a
+            href="/"
+            className={clx({
+              [classes["readOnlyColor"]]: action === "view"
+            })}
+          >
+            {record.action}
+          </a>
+        );
       }
     }
   ];

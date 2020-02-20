@@ -128,6 +128,7 @@
 }
 
 // 只读输入框
-input:read-only {
+input:read-only,
+.readOnlyColor {
   color: #979797;
 }
