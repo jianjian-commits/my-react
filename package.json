@@ -10,6 +10,7 @@
     "antd": "^3.26.7",
     "antd-mobile": "^2.3.1",
     "axios": "^0.19.1",
+    "bootstrap-slider": "^10.6.2",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.6.1",
     "copy-to-clipboard": "^3.2.1",
