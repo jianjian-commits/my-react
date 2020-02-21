@@ -4,7 +4,8 @@ import { Input, Button, Modal, message } from "antd";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 
-export default connect()(function InviteUser({ loginData }) {
+export default connect()(function InviteUser(props) {
+  const { userId, currentTeam } = props;
   const [visible, setVisible] = useState(false);
   const [token, setToken] = useState(null);
   async function handleInviteUserBtn(teamId) {
@@ -20,10 +21,13 @@ export default connect()(function InviteUser({ loginData }) {
       message.error("token获取失败");
     }
   }
-  const registerUrl = `${window.location.origin}/register/${loginData.ownerId}/${token}`;
+  const registerUrl = `${window.location.origin}/register/${userId}/${token}`;
   return (
     <>
-      <Button type="primary" onClick={() => handleInviteUserBtn(loginData.id)}>
+      <Button
+        type="primary"
+        onClick={() => handleInviteUserBtn(currentTeam.id)}
+      >
         邀请用户
       </Button>
       <Modal

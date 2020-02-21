@@ -1,5 +1,5 @@
 import axios from "axios";
-import { serverHost, port } from "./config";
+import { serverHost, port } from "../config";
 
 const baseURL = `${serverHost}${port ? ":" + port : ""}`;
 

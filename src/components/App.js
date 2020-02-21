@@ -6,7 +6,7 @@ import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
-import Login from "../pages/_Login";
+import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ForgetPassword from "../pages/forgetPassword";
 
@@ -55,7 +55,6 @@ const App = () => (
   </ErrorBoundary>
 );
 
-export default connect(({ login, user }) => ({
-  isAuthenticated: login.isAuthenticated,
-  data: user.data
+export default connect(({ login }) => ({
+  isAuthenticated: login.isAuthenticated
 }))(App);

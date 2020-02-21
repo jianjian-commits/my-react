@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Layout, Menu, Badge, Button } from "antd";
 import { useHistory } from "react-router-dom";
-import { signOut } from "../../store/loginReducer";
+import { signOut, getCurrentTeam } from "../../store/loginReducer";
 import User from "./UserSection";
-import { getUserDetail } from "../../store/userDetailReducer";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
 
@@ -18,13 +17,17 @@ const menuStyle = {
   lineHeight: "64px"
 };
 
-const HomeHeader = props => {
-  const { signOut, getUserDetail, loginData, userData } = props;
-  const [init, setInit] = useState(false);
-  useEffect(() => {
-    if (!init) getUserDetail(loginData.ownerId);
-    return () => setInit(true);
-  });
+export default connect(
+  ({ router, login }) => ({
+    router,
+    loginData: login
+  }),
+  {
+    signOut,
+    getCurrentTeam
+  }
+)(function HomeHeader(props) {
+  const { signOut, loginData, getCurrentTeam } = props;
   const history = useHistory();
   const selectHandle = e => {
     history.push(e.key);
@@ -56,20 +59,13 @@ const HomeHeader = props => {
           </Button>
         </div>
         <div className={classes.user}>
-          {userData && <User signOut={signOut} userData={userData} />}
+          <User
+            signOut={signOut}
+            {...loginData}
+            getCurrentTeam={getCurrentTeam}
+          />
         </div>
       </div>
     </Header>
   );
-};
-export default connect(
-  ({ router, login, user }) => ({
-    router,
-    loginData: login.loginData,
-    userData: user.userData
-  }),
-  {
-    signOut,
-    getUserDetail
-  }
-)(HomeHeader);
+});

@@ -40,7 +40,7 @@ export default connect(({ login }) => ({
     try {
       const res = await request(
         userId ? `/reg/token/${invited_token}` : "/reg",
-        { method: "post", data: { ...rest } }
+        { method: "post", data: rest }
       );
       if (res && res.status === "SUCCESS") {
         setStatus(true);
