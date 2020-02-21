@@ -1,18 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Input, Checkbox, InputNumber, Select, Button, Divider } from "antd";
 import {
-  Input,
-  Checkbox,
-  InputNumber,
-  Select,
-  Button,
-  Divider
-} from "antd";
-import { setItemAttr, setItemValues, setFormChildItemAttr, setFormChildItemValues } from "../../redux/utils/operateFormComponent";
+  setItemAttr,
+  setItemValues,
+  setFormChildItemAttr,
+  setFormChildItemValues
+} from "../../redux/utils/operateFormComponent";
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
-import isInFormChild from "../utils/isInFormChild"
+import isInFormChild from "../utils/isInFormChild";
 const { Option } = Select;
 
 class TextAreaInspector extends React.Component {
@@ -56,7 +54,8 @@ class TextAreaInspector extends React.Component {
         value = validate;
         break;
       }
-      default: break;
+      default:
+        break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -78,23 +77,19 @@ class TextAreaInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      minLength: value === void 0 ? 0 : value
-    }
+      minLength: value == void 0 ? 0 : value
+    };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
-        'validate',
+        "validate",
         newValidate,
         this.props.element
       );
     } else {
-      this.props.setItemAttr(
-        this.props.element,
-        'validate',
-        newValidate,
-      );
+      this.props.setItemAttr(this.props.element, "validate", newValidate);
     }
-  }
+  };
 
   handleChangeAttrMaxLength = value => {
     const { validate } = this.props.element;
@@ -106,18 +101,13 @@ class TextAreaInspector extends React.Component {
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
-        'validate',
+        "validate",
         newValidate,
         this.props.element
       );
     } else {
-      this.props.setItemAttr(
-        this.props.element,
-        'validate',
-        newValidate,
-      );
+      this.props.setItemAttr(this.props.element, "validate", newValidate);
     }
-
   };
 
   handleChangeAttrRows = value => {
@@ -196,7 +186,12 @@ class TextAreaInspector extends React.Component {
   handleSelectChange = value => {
     switch (value) {
       case "custom": {
-        const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
+        const {
+          elementParent,
+          element,
+          setItemValues,
+          setFormChildItemValues
+        } = this.props;
         if (elementParent) {
           setFormChildItemValues(elementParent, "data", {}, element);
         } else {
@@ -244,47 +239,48 @@ class TextAreaInspector extends React.Component {
               onChange={this.handleChangeAttr}
               autoComplete="off"
             />
-            {
-              isInFormChild(this.props.elementParent)
-                ? null
-                : <>
-                  <p htmlFor="single-text-tip">提示信息</p>
-                  <Input
-                    id="single-text-tip"
-                    name="tooltip"
-                    placeholder="请输入提示信息"
-                    value={tooltip}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-                  <p htmlFor="single-text-err-tip">错误提示</p>
-                  <Input
-                    id="single-text-err-tip"
-                    name="customMessage"
-                    placeholder="请输入错误提示"
-                    value={validate.customMessage}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-                </>
-            }
+            {isInFormChild(this.props.elementParent) ? null : (
+              <>
+                <p htmlFor="single-text-tip">提示信息</p>
+                <Input
+                  id="single-text-tip"
+                  name="tooltip"
+                  placeholder="请输入提示信息"
+                  value={tooltip}
+                  onChange={this.handleChangeAttr}
+                  autoComplete="off"
+                />
+                <p htmlFor="single-text-err-tip">错误提示</p>
+                <Input
+                  id="single-text-err-tip"
+                  name="customMessage"
+                  placeholder="请输入错误提示"
+                  value={validate.customMessage}
+                  onChange={this.handleChangeAttr}
+                  autoComplete="off"
+                />
+              </>
+            )}
             <p htmlFor="email-title">默认值</p>
             {isLinked ? (
-              <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
+              <Input
+                defaultValue="以子表单联动为准，不支持设置默认值"
+                disabled
+              />
             ) : (
-                <>
-                  <Select
-                    value={optionType}
-                    style={{ width: "100%" }}
-                    onChange={this.handleSelectChange}
-                    className="data-source-select"
-                  >
-                    <Option value="custom">自定义</Option>
-                    <Option value="DataLinkage">数据联动</Option>
-                  </Select>
-                  {this.renderOptionDataFrom(optionType)}
-                </>
-              )}
+              <>
+                <Select
+                  value={optionType}
+                  style={{ width: "100%" }}
+                  onChange={this.handleSelectChange}
+                  className="data-source-select"
+                >
+                  <Option value="custom">自定义</Option>
+                  <Option value="DataLinkage">数据联动</Option>
+                </Select>
+                {this.renderOptionDataFrom(optionType)}
+              </>
+            )}
 
             <p htmlFor="single-text-default-value">预览行数</p>
             <InputNumber
@@ -332,7 +328,11 @@ class TextAreaInspector extends React.Component {
                 min={1}
                 precision={0}
                 onChange={this.handleChangeAttrMaxLength}
-                value={validate.maxLength == Number.MAX_SAFE_INTEGER ? "" : validate.maxLength}
+                value={
+                  validate.maxLength == Number.MAX_SAFE_INTEGER
+                    ? ""
+                    : validate.maxLength
+                }
                 autoComplete="off"
               />
             </div>
@@ -352,6 +352,6 @@ export default connect(
     setItemAttr,
     setItemValues,
     setFormChildItemAttr,
-    setFormChildItemValues,
+    setFormChildItemValues
   }
 )(TextAreaInspector);

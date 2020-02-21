@@ -4,7 +4,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import { Select, Form, Popconfirm, Input } from "antd";
 import FormLayout from "./components/formLayout";
 import LayoutTool from "./components/layoutTool";
-import { submitLayout} from "../submission/redux/utils/operateSubmissionUtils";
+import { submitLayout } from "../submission/redux/utils/operateSubmissionUtils";
 import { connect } from "react-redux";
 import HeaderBar from "../base/NavBar";
 import locationUtils from "../../utils/locationUtils";
@@ -78,24 +78,23 @@ class Layout extends PureComponent {
   componentDidMount() {
     // initToken()
     //   .then(() => {
-        // this.props.getForms(6, this.state.currentPage).then(forms => {
-        //   // 获得表单数据，避免render重复处理
-        //   this._handleFilterDate(forms);
-        // });
-         instanceAxios
-          .get(config.apiUrl + "/form/" + this.state.formId)
-          .then( res =>{
-            this._handleFilterDate(res.data);
-          })
-          .catch(err =>{
-            console.error(err);
-          })
-      // })
-      // .catch(err => {
-      //   console.error(err);
-      // });
+    // this.props.getForms(6, this.state.currentPage).then(forms => {
+    //   // 获得表单数据，避免render重复处理
+    //   this._handleFilterDate(forms);
+    // });
+    instanceAxios
+      .get(config.apiUrl + "/form/" + this.state.formId)
+      .then(res => {
+        this._handleFilterDate(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    // })
+    // .catch(err => {
+    //   console.error(err);
+    // });
   }
-
 
   renderFormComponent = (getFieldDecorator, components) => {
     return components.map((item, i) => {
@@ -356,7 +355,7 @@ class Layout extends PureComponent {
             </div>
           );
         case "FormChildTest":
-          if (this.state.formChildDataObj[item.key] === void 0) {
+          if (this.state.formChildDataObj[item.key] == void 0) {
             this.state.formChildDataObj[item.key] = [];
           }
           return (
@@ -377,10 +376,10 @@ class Layout extends PureComponent {
                 getFieldDecorator={getFieldDecorator}
                 item={item}
                 submitDataArray={this.state.formChildDataObj[item.key]}
-                removeSubmitData={newArray => { }}
+                removeSubmitData={newArray => {}}
                 saveSubmitData={newArray => {
                   if (newArray.length === 1) {
-                    this.state.formChildDataObj[item.key] = newArray
+                    this.state.formChildDataObj[item.key] = newArray;
                   }
                 }}
               />
@@ -403,7 +402,7 @@ class Layout extends PureComponent {
               <Address
                 key={item.key}
                 getFieldDecorator={getFieldDecorator}
-                handleSetAddress={() => { }}
+                handleSetAddress={() => {}}
                 item={item}
               />
               <div className="layout-shadow"></div>
@@ -470,7 +469,7 @@ class Layout extends PureComponent {
               />
               <div className="layout-shadow"></div>
             </div>
-          )
+          );
         default:
           return <div key={item.key}>{`${item.type} not defind`}</div>;
       }
@@ -478,18 +477,18 @@ class Layout extends PureComponent {
   };
 
   _handleFilterDate = form => {
-    const { components, currentLayoutId, layoutArray} = form;
+    const { components, currentLayoutId, layoutArray } = form;
     let PureComponent = components.filter(item => {
       return item.element !== "Button";
     });
     //拿取默认布局,默认所有组件显示
-    let layout = PureComponent
-      .filter((item) => { return item.isShow !== false })
-      .map(item => {
-        return {
-          ...item.layout,
-        };
-      });
+    let layout = PureComponent.filter(item => {
+      return item.isShow !== false;
+    }).map(item => {
+      return {
+        ...item.layout
+      };
+    });
     this.setState(state => ({
       ...state,
       toolComponent: [...PureComponent],
@@ -498,14 +497,21 @@ class Layout extends PureComponent {
       currentLayout: layout,
       defaultLayout: layout,
       formLayoutList: form.layoutArray,
-      currentLayoutId: form.currentLayoutId,
+      currentLayoutId: form.currentLayoutId
       // customValue: customComponent
     }));
   };
 
   handleSaveLayout = () => {
     initToken().then(() => {
-      const { currentLayout, PureComponent, formComponent, defaultLayout, formLayoutList, currentLayoutId } = this.state;
+      const {
+        currentLayout,
+        PureComponent,
+        formComponent,
+        defaultLayout,
+        formLayoutList,
+        currentLayoutId
+      } = this.state;
       const layoutIdArr = currentLayout.map(item => item.i);
       const newLayout = PureComponent.map(item => {
         let index = layoutIdArr.indexOf(item.id);
@@ -519,20 +525,20 @@ class Layout extends PureComponent {
         }
       });
 
-      let resultDataArray = PureComponent.map((item) => {
-        let layout = defaultLayout.filter((layoutItem) => {
-          return layoutItem.i === item.key
+      let resultDataArray = PureComponent.map(item => {
+        let layout = defaultLayout.filter(layoutItem => {
+          return layoutItem.i === item.key;
         })[0];
 
-        if (layout  != void 0) {
+        if (layout != void 0) {
           item.layout = layout;
         }
 
-        return item
+        return item;
       });
       // resultDataArray.push(customValue)
 
-      console.log(resultDataArray)
+      console.log(resultDataArray);
 
       this.props.submitLayout(
         resultDataArray,
@@ -540,7 +546,6 @@ class Layout extends PureComponent {
         formLayoutList,
         currentLayoutId
       );
-
 
       // if (this.state.operationType === "edit") {
       //   this.state.formLayoutList.map(item => {
@@ -580,7 +585,7 @@ class Layout extends PureComponent {
     });
   };
 
-  handleAddItem = (id) => {
+  handleAddItem = id => {
     let { PureComponent } = this.state;
     const newPureComponent = PureComponent.map(item => {
       if (item.id === id) {
@@ -594,13 +599,14 @@ class Layout extends PureComponent {
     });
 
     let defaultLayout = newPureComponent
-      .filter((item) => { return item.isShow !== false })
-      .map((item) => {
+      .filter(item => {
+        return item.isShow !== false;
+      })
+      .map(item => {
         return {
-          ...item.layout,
-        }
+          ...item.layout
+        };
       });
-
 
     this.setState({
       // currentLayout: newLayout,
@@ -617,7 +623,6 @@ class Layout extends PureComponent {
       //   })
       // }
     });
-
   };
 
   handleToolItemClick = id => {
@@ -649,12 +654,12 @@ class Layout extends PureComponent {
 
     let removeLayout = null;
 
-    defaultLayout = defaultLayout.filter((item) => {
+    defaultLayout = defaultLayout.filter(item => {
       if (item.i === id) {
-        removeLayout = item
-      };
+        removeLayout = item;
+      }
 
-      return item.i !== id
+      return item.i !== id;
     });
 
     const newPureComponent = PureComponent.map(item => {
@@ -778,11 +783,11 @@ class Layout extends PureComponent {
                   rowHeight={22}
                   width={870}
                   onLayoutChange={layout => {
-                    layout = layout.map((item) => {
+                    layout = layout.map(item => {
                       if (item.y < 0) {
                         item.y = 0;
                       }
-                      return item
+                      return item;
                     });
 
                     this.setState({ defaultLayout: layout });

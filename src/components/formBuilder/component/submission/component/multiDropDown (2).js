@@ -9,7 +9,6 @@ import {
 } from "../utils/dataLinkUtils";
 
 export default class PhoneNumber extends React.Component {
-  
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
@@ -25,14 +24,14 @@ export default class PhoneNumber extends React.Component {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let index = -1;
-          if(value instanceof Array) {
+          if (value instanceof Array) {
             index = compareEqualArray(dataArr, value);
-          } else if(value instanceof Object) {
+          } else if (value instanceof Object) {
             // 争对地址的比较
-            let {county, city, province, detail} = value;
-            if(dataArr[0] && dataArr[0] instanceof Object) {
+            let { county, city, province, detail } = value;
+            if (dataArr[0] && dataArr[0] instanceof Object) {
               dataArr = dataArr.map(item => {
-                let {county, city, province, detail} = item;
+                let { county, city, province, detail } = item;
                 return [province, city, county, detail].join("");
               });
             }
@@ -59,30 +58,40 @@ export default class PhoneNumber extends React.Component {
     }
   }
 
-  handleEmitChange = (value) => {
+  handleEmitChange = value => {
     const { callEventArr } = this.props.item;
     if (callEventArr) {
       callEventArr.forEach(fnc => {
         fnc && fnc(value, this);
       });
     }
-  }
+  };
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = ev => {
     const value = ev.target.value;
     this.handleEmitChange(value);
     this.props.resetErrorMsg(this.props.item.id);
-    setTimeout(()=>{
+    setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if (
+        !Object.is(
+          document
+            .querySelector(`#${key}Dom`)
+            .querySelector(".ant-form-explain"),
+          null
+        )
+      ) {
+        document
+          .querySelector(`#${key}Dom`)
+          .querySelector(".ant-form-explain")
+          .setAttribute("title", customMessage);
       }
-    },300)
+    }, 300);
   };
 
   isValueEqualEmptyAndUndefined = value => {
-    if (value === "" || value === void 0) {
+    if (value === "" || value == void 0) {
       return true;
     } else {
       return false;
@@ -113,15 +122,13 @@ export default class PhoneNumber extends React.Component {
 
   render() {
     const { getFieldDecorator, item, disabled } = this.props;
-    let itemOption = {}
-    if(this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0){
+    let itemOption = {};
+    if (this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0) {
       itemOption.validateStatus = "error";
-      itemOption.help = this.props.errorResponseMsg.join("")
+      itemOption.help = this.props.errorResponseMsg.join("");
     }
     return (
-      <Form.Item label={<LabelUtils data={item} />} 
-        {...itemOption}>
-
+      <Form.Item label={<LabelUtils data={item} />} {...itemOption}>
         {getFieldDecorator(item.key, {
           initialValue: item.defaultValue,
           rules: [
@@ -135,13 +142,12 @@ export default class PhoneNumber extends React.Component {
               message: "手机号不能为空!"
             }
           ],
-          validateTrigger:"onBlur"
+          validateTrigger: "onBlur"
         })(
           <Input
             disabled={disabled}
             autoComplete="off"
             onChange={this.handleChange}
-         
           />
         )}
       </Form.Item>

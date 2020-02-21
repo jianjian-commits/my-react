@@ -2,8 +2,8 @@ import React from "react";
 import { Modal, Table } from "antd";
 import { connect } from "react-redux";
 import { getSubmissionDetail } from "../redux/utils/getDataUtils";
-import config from '../../../config/config';
-import coverTimeUtils from '../../../utils/coverTimeUtils'
+import config from "../../../config/config";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
 class DataDetailModal extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ class DataDetailModal extends React.Component {
           &nbsp; &nbsp;
           <a
             // href={item["url"]}
-            href={config.apiUrl+'/file/identification/'+item["url"]}
+            href={config.apiUrl + "/file/identification/" + item["url"]}
             download={item["name"]}
             style={{ textDecoration: "none" }}
           >
@@ -53,27 +53,57 @@ class DataDetailModal extends React.Component {
   _renderFormChildDataByType(component, submitData) {
     switch (component.type) {
       case "GetLocalPosition":
-      return <div className="formChildData">{submitData.address ? submitData.address : ""}</div>
+        return (
+          <div className="formChildData">
+            {submitData.address ? submitData.address : ""}
+          </div>
+        );
       case "DateInput":
-      return <div className="formChildData">{submitData.time ? submitData.time : ""}</div>
+        return (
+          <div className="formChildData">
+            {submitData.time ? submitData.time : ""}
+          </div>
+        );
       case "FileUpload":
-        return <div className="formChildData">{this._renderFileData(submitData)}</div>;
+        return (
+          <div className="formChildData">
+            {this._renderFileData(submitData)}
+          </div>
+        );
       case "HandWrittenSignature":
-        return <div className="formChildData">{this._renderSignatureData(submitData)}</div>;
-      case "ImageUpload":  
-        return <div className="formChildData">
+        return (
+          <div className="formChildData">
+            {this._renderSignatureData(submitData)}
+          </div>
+        );
+      case "ImageUpload":
+        return (
+          <div className="formChildData">
             {/* {submitData.length>0?<img src={submitData[0].url}/>:""} */}
-            {submitData.length>0?submitData.map((item,index) =><a href={item.url}><img src={item.url} key={index}/></a> ):""}
-        </div>;
+            {submitData.length > 0
+              ? submitData.map((item, index) => (
+                  <a href={item.url}>
+                    <img src={item.url} key={index} />
+                  </a>
+                ))
+              : ""}
+          </div>
+        );
       case "Address":
-            let {province, county, city, detail} = submitData;
-            let address =  [province, city, county, detail].filter(item=>item).join("");
-          return <div className="formChildData">{address}</div>;
+        let { province, county, city, detail } = submitData;
+        let address = [province, city, county, detail]
+          .filter(item => item)
+          .join("");
+        return <div className="formChildData">{address}</div>;
       case "CheckboxInput":
       case "MultiDropDown":
-       return <div className="formChildData">{submitData?submitData.join(","):""}</div>;
+        return (
+          <div className="formChildData">
+            {submitData ? submitData.join(",") : ""}
+          </div>
+        );
       default:
-    return <div className="formChildData">{submitData}</div>;
+        return <div className="formChildData">{submitData}</div>;
     }
   }
   renderChildFormTest = (data = [], components = []) => {
@@ -82,14 +112,19 @@ class DataDetailModal extends React.Component {
         title: component.label,
         dataIndex: component.key,
         key: component.key,
-        width:100
+        width: 100
       };
     });
     // 一条数据里有 components 里所有组件的一个记录
-    data.length === 0?data=[""]:"";
+    if (data.length === 0) {
+      data = [""];
+    }
     let dataSource = data.map((record, index) => {
       let oneRecord = components.map(component => {
-        if (component.key !== undefined && record[component.key] !== undefined) {
+        if (
+          component.key !== undefined &&
+          record[component.key] !== undefined
+        ) {
           let data = {};
           data.key = Math.random();
           data[component.key] = this._renderFormChildDataByType(
@@ -103,12 +138,12 @@ class DataDetailModal extends React.Component {
         return Object.assign(result, current);
       }, {});
     });
-    
+
     return (
       <div className="formChildTable">
         <Table
           columns={columns}
-          scroll={{ x: 482 ,y:130}}
+          scroll={{ x: 482, y: 130 }}
           dataSource={dataSource}
           pagination={false}
           size="small"
@@ -117,14 +152,14 @@ class DataDetailModal extends React.Component {
     );
   };
   _GetTextLength = value => {
-    let reg = new RegExp("[\\u4E00-\\u9FFF]","g");
+    let reg = new RegExp("[\\u4E00-\\u9FFF]", "g");
     let res = value.match(reg);
     let length = value.length;
     length += res ? res.length : 0;
     return length;
-  }
+  };
   _truncateValue(value) {
-    if (value === void 0) {
+    if (value == void 0) {
       return "";
     } else if (value.length > 8) {
       return value.substr(0, 8) + "...";
@@ -155,7 +190,11 @@ class DataDetailModal extends React.Component {
             return (
               <div key={item.key} className="dataDteailText">
                 <p className="dataTitle">{item.label}</p>
-                <p className="dataContent">{formDetail[item.key]  != void 0 ? coverTimeUtils.localTime(formDetail[item.key]):""}</p>
+                <p className="dataContent">
+                  {formDetail[item.key] != void 0
+                    ? coverTimeUtils.localTime(formDetail[item.key])
+                    : ""}
+                </p>
               </div>
             );
           case "MultiDropDown":
@@ -169,24 +208,26 @@ class DataDetailModal extends React.Component {
               </div>
             );
           case "Address": {
-            if(formDetail[item.key]  != void 0){
-              let {province, county, city, detail} = formDetail[item.key];
-              let address =  [province, city, county, detail].filter(item=>item).join("");
+            if (formDetail[item.key] != void 0) {
+              let { province, county, city, detail } = formDetail[item.key];
+              let address = [province, city, county, detail]
+                .filter(item => item)
+                .join("");
               return (
                 <div key={item.key} className="dataDteailText">
                   <p className="dataTitle">{item.label}</p>
                   <p className="dataContent">{address}</p>
                 </div>
               );
-            }else {
+            } else {
               return (
                 <div key={item.key} className="dataDteailText">
                   <p className="dataTitle">{item.label}</p>
                   <p className="dataContent"></p>
                 </div>
-              )
+              );
             }
-            };
+          }
           case "ImageUpload":
             return (
               <div key={item.key} className="dataDteailFile">
@@ -233,7 +274,14 @@ class DataDetailModal extends React.Component {
                     ? formDetail[item.key].map((item, index) => (
                         <div key={index} className="fileContainer">
                           <span>{item.name}</span>,
-                          <a href={config.apiUrl+'/file/identification/'+item["url"]} download={item.name}>
+                          <a
+                            href={
+                              config.apiUrl +
+                              "/file/identification/" +
+                              item["url"]
+                            }
+                            download={item.name}
+                          >
                             点击下载
                           </a>
                         </div>

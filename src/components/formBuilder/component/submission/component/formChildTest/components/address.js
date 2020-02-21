@@ -4,6 +4,7 @@ import { Form } from "antd";
 
 const { Option } = Select;
 const { TextArea } = Input;
+let AMap;
 
 export default class address extends Component {
   constructor(props) {
@@ -64,7 +65,7 @@ export default class address extends Component {
         {
           currentCityIndex: index,
           city: value,
-          county: "",
+          county: ""
         },
         this.handleUpdateData
       );
@@ -100,9 +101,11 @@ export default class address extends Component {
       detail
     };
     if (item.validate.required) {
-      if(province && city && county) {
-        if(item.addressType === "hasDetail") {
-          detail === "" ? newAddress.hasErr = true : newAddress.hasErr = false;
+      if (province && city && county) {
+        if (item.addressType === "hasDetail") {
+          detail === ""
+            ? (newAddress.hasErr = true)
+            : (newAddress.hasErr = false);
         } else {
           newAddress.hasErr = false;
         }

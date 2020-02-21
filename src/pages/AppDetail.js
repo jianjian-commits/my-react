@@ -4,7 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
-import FormBuilderList from "../components/formBuilder/component/homePage";
+import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 
 import selectCom from "../utils/selectCom";
 import appDetailMenu from "../config/appDetailMenu";
@@ -32,9 +32,9 @@ const mockForms = {
       name: "基础设置",
       key: "base",
       list: [
-        { key: "group", name: "车队信息" },
-        { key: "card", name: "油卡信息" },
-        { key: "carr", name: "车辆信息" }
+        { key: "sWw", name: "车队信息" },
+        { key: "clr", name: "油卡信息" },
+        { key: "CrE", name: "车辆信息" }
       ]
     },
     {
@@ -84,7 +84,7 @@ const AppDetail = () => {
     setEle(selectCom(key, appDetailMenu));
   };
 
-  // console.log(ele)
+  console.log(selectedForm);
   return (
     <Layout>
       <CommonHeader
@@ -105,28 +105,40 @@ const AppDetail = () => {
             <DraggableList
               selected={selectedForm}
               draggable={false}
-              onClick={e => setSelectedForm(e.key)}
+              onClick={e => {
+                setSelectedForm(e.key);
+              }}
               groups={groups}
               list={list}
             />
           </div>
         </Sider>
         <Content className={classes.container}>
-          {ele ? (
+          {/* {ele ? (
             <ele.ContentEle count={ele.key}></ele.ContentEle>
           ) : (
-            <div></div>
-          )}
+              <div></div>
+            )} */}
 
-          {/* <div className={classes.header}>
-            <div>
-              <Button type="primary" onClick={null}>
+          {selectedForm != void 0 ? (
+            <>
+              <button
+                onClick={_e => {
+                  history.push(
+                    `/app/${appId}/detail/submission/${selectedForm}`
+                  );
+                }}
+              >
                 提交数据
-              </Button>
-            </div>
-            <FormBuilderList></FormBuilderList>
-            <div>我是 {selectedForm} -表单数据</div>
-          </div> */}
+              </button>
+              <FormBuilderSubmitData
+                key={Math.random()}
+                formId={selectedForm}
+              ></FormBuilderSubmitData>
+            </>
+          ) : (
+            <></>
+          )}
         </Content>
       </Layout>
     </Layout>

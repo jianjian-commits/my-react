@@ -1,7 +1,19 @@
 import React, { PureComponent } from "react";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
-import { ConfigProvider, Table, Divider, Select, Input, Button, InputNumber, Menu, Dropdown, Icon, message } from "antd";
+import {
+  ConfigProvider,
+  Table,
+  Divider,
+  Select,
+  Input,
+  Button,
+  InputNumber,
+  Menu,
+  Dropdown,
+  Icon,
+  message
+} from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import { initToken } from "../../utils/tokenUtils";
 import ControlBtn from "./components/controlBtn";
@@ -16,16 +28,12 @@ import {
 } from "./redux/utils/getDataUtils";
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
-import FilterComponent from './components/filterComponent/filterComponent'
-import { es } from "date-fns/esm/locale";
-import coverTimeUtils from '../../utils/coverTimeUtils'
+import FilterComponent from "./components/filterComponent/filterComponent";
+import coverTimeUtils from "../../utils/coverTimeUtils";
 const { Option } = Select;
 
 // 加载数据时重写表格为空状态
-const noRenderEmpty = () => (
-  <div style={{ height: "20vh" }}></div>
-);
-
+const noRenderEmpty = () => <div style={{ height: "20vh" }}></div>;
 
 class FormSubmitData extends PureComponent {
   constructor(props) {
@@ -34,7 +42,7 @@ class FormSubmitData extends PureComponent {
       openDataIdList: [],
       submissionArray: [],
       sortedInfo: null,
-      formId: locationUtils.getUrlParamObj().id,
+      formId: "sWw",
       submissionId: null,
       currentPage: 1,
       pageSize: 10,
@@ -45,7 +53,7 @@ class FormSubmitData extends PureComponent {
       limitDataNumber: false,
       isFilterMode: false,
       filterArray: [],
-      connectCondition: "&",
+      connectCondition: "&"
     };
   }
   showModal = submissionId => {
@@ -70,27 +78,54 @@ class FormSubmitData extends PureComponent {
     }));
   };
   onChangePages = (currentPage, pageSize) => {
-    this.setState({
-      currentPage,
-      pageSize
-    }, () => {
-      if (this.state.isFilterMode && !this.state.isShowTotalData) {
-        this.props.getFilterSubmissionData(this.props.forms.path, this.state.filterArray, this.state.connectCondition, this.state.showNumber, 1, this.state.showNumber);
-      } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
-        this.props.getSubmissionData(this.state.formId, this.state.showNumber, 1, this.state.showNumber);
-      } else if (this.state.isFilterMode && this.state.isShowTotalData) {
-        this.props.getFilterSubmissionData(this.props.forms.path, this.state.filterArray, this.state.connectCondition, this.state.pageSize, this.state.currentPage);
-      } else {
-        this.props.getSubmissionData(this.state.formId, this.state.pageSize, this.state.currentPage);
+    this.setState(
+      {
+        currentPage,
+        pageSize
+      },
+      () => {
+        if (this.state.isFilterMode && !this.state.isShowTotalData) {
+          this.props.getFilterSubmissionData(
+            this.props.forms.path,
+            this.state.filterArray,
+            this.state.connectCondition,
+            this.state.showNumber,
+            1,
+            this.state.showNumber
+          );
+        } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
+          this.props.getSubmissionData(
+            this.state.formId,
+            this.state.showNumber,
+            1,
+            this.state.showNumber
+          );
+        } else if (this.state.isFilterMode && this.state.isShowTotalData) {
+          this.props.getFilterSubmissionData(
+            this.props.forms.path,
+            this.state.filterArray,
+            this.state.connectCondition,
+            this.state.pageSize,
+            this.state.currentPage
+          );
+        } else {
+          this.props.getSubmissionData(
+            this.state.formId,
+            this.state.pageSize,
+            this.state.currentPage
+          );
+        }
       }
-    });
+    );
   };
 
   componentDidMount() {
+    let { formId } = this.props;
+
     initToken()
       .then(() => {
         this.props.getSubmissionData(
-          this.state.formId,
+          formId,
           this.state.pageSize,
           this.state.currentPage
         );
@@ -98,20 +133,22 @@ class FormSubmitData extends PureComponent {
       .catch(err => {
         console.error(err);
       });
+
+    this.setState({ formId: this.props.formId });
   }
   componentWillUnmount() {
     this.props.clearFormData();
   }
 
   // 将地址对象转化为字符串
-  AddressObjToString = (address) => {
+  AddressObjToString = address => {
     if (address) {
       let { province, county, city, detail } = address;
       return [province, city, county, detail].filter(item => item).join("");
     } else {
       return "";
     }
-  }
+  };
 
   _GetTextLength = value => {
     let reg = new RegExp("[\\u4E00-\\u9FFF]", "g");
@@ -119,11 +156,11 @@ class FormSubmitData extends PureComponent {
     let length = value.length;
     length += res ? res.length : 0;
     return length;
-  }
+  };
 
   _truncateValue(value) {
     Array.isArray(value) && (value = value.toString());
-    if (value === void 0) {
+    if (value == void 0) {
       return "";
     } else if (value.length >= 11) {
       return value.substr(0, 10) + "...";
@@ -134,27 +171,33 @@ class FormSubmitData extends PureComponent {
 
   _renderFileData = fileData => {
     if (fileData.length > 0) {
-      return <span className="formChild-item">
-        {this._truncateValue(fileData[0]["name"])}
-        &nbsp; &nbsp;
+      return (
+        <span className="formChild-item">
+          {this._truncateValue(fileData[0]["name"])}
+          &nbsp; &nbsp;
           <a
-          href={fileData[0]["url"]}
-          download={fileData[0]["name"]}
-          style={{ textDecoration: "none" }}
-        >
-          点击下载
+            href={fileData[0]["url"]}
+            download={fileData[0]["name"]}
+            style={{ textDecoration: "none" }}
+          >
+            点击下载
           </a>
-      </span>
+        </span>
+      );
     } else {
-      return <div className="formChild-item"></div>
+      return <div className="formChild-item"></div>;
     }
   };
 
   _renderImageData = fileData => {
     if (fileData.length > 0) {
-      return <div className="formChild-Item image"><img src={fileData[0].url} style={{ width: 56, height: 36 }} /></div>;
+      return (
+        <div className="formChild-Item image">
+          <img src={fileData[0].url} style={{ width: 56, height: 36 }} />
+        </div>
+      );
     } else {
-      return <div className="formChild-item"></div>
+      return <div className="formChild-item"></div>;
     }
   };
 
@@ -182,8 +225,8 @@ class FormSubmitData extends PureComponent {
   };
 
   _renderFormChildComponentByType(component, submitData) {
-    if (submitData === void 0) {
-      return <div className="formChild-item"></div>
+    if (submitData == void 0) {
+      return <div className="formChild-item"></div>;
     }
     switch (component.type) {
       case "DateInput":
@@ -197,13 +240,25 @@ class FormSubmitData extends PureComponent {
       // return <div key={component.key} className="formChild-item">{submitData}</div>
       case "FileUpload":
         // return this._renderFileData(submitData);
-        return <div key={component.key} className="formChild-item">{submitData.length > 0 ? submitData[0].name : ""}</div>
+        return (
+          <div key={component.key} className="formChild-item">
+            {submitData.length > 0 ? submitData[0].name : ""}
+          </div>
+        );
       case "MultiDropDown":
       case "CheckboxInput":
-        return <div key={component.key} className="formChild-item">{submitData.length > 0 ? submitData.join(",") : ""}</div>;
+        return (
+          <div key={component.key} className="formChild-item">
+            {submitData.length > 0 ? submitData.join(",") : ""}
+          </div>
+        );
       default:
         // return <div key={component.key} className="formChild-item">{this._truncateValue(submitData)}</div>;
-        return <div key={component.key} className="formChild-item">{submitData}</div>;
+        return (
+          <div key={component.key} className="formChild-item">
+            {submitData}
+          </div>
+        );
     }
   }
 
@@ -212,17 +267,17 @@ class FormSubmitData extends PureComponent {
     switch (component.type) {
       case "FormChildTest":
         let resultDataArray = null;
-        let resultArray = component.values.map((item) => {
+        let resultArray = component.values.map(item => {
           return {
             key: item.key,
             type: item.type,
             data: submission[item.key]
-          }
+          };
         });
 
-        resultArray.forEach((item) => {
-          if (item.data  != void 0) {
-            if (resultDataArray === void 0) {
+        resultArray.forEach(item => {
+          if (item.data != void 0) {
+            if (resultDataArray == void 0) {
               resultDataArray = item.data;
             }
           }
@@ -233,71 +288,76 @@ class FormSubmitData extends PureComponent {
             item => item.id === submission.id && item.key === component.key
           ).length !== 1
         ) {
-          return <div key={component.key}>
-            <div
-              key={component.key + "fist"}
-              className="formChildDiv"
-              style={resultDataArray && resultDataArray.length === 1 ? { borderBottom: "none" } : null}
-            >
-              {
-                resultArray.map((item) => {
-                  if (item.data === void 0) {
-                    return <div className="formChild-item"></div>
+          return (
+            <div key={component.key}>
+              <div
+                key={component.key + "fist"}
+                className="formChildDiv"
+                style={
+                  resultDataArray && resultDataArray.length === 1
+                    ? { borderBottom: "none" }
+                    : null
+                }
+              >
+                {resultArray.map(item => {
+                  if (item.data == void 0) {
+                    return <div className="formChild-item"></div>;
                   } else {
-                    return this._renderFormChildComponentByType(item, item.data[0])
+                    return this._renderFormChildComponentByType(
+                      item,
+                      item.data[0]
+                    );
                   }
-                })
-              }
-            </div>
-            {
-              (resultDataArray === void 0 || resultDataArray.length === 1) ? <></> :
-                (
-                  <div
-                    key={component.key + "look"}
-                    className="formChildLook"
+                })}
+              </div>
+              {resultDataArray == void 0 || resultDataArray.length === 1 ? (
+                <></>
+              ) : (
+                <div key={component.key + "look"} className="formChildLook">
+                  <Button
+                    style={{ width: 120 }}
+                    type="link"
+                    onClick={() => {
+                      this.setState({
+                        openDataIdList: [
+                          ...this.state.openDataIdList,
+                          {
+                            id: submission.id,
+                            key: component.key
+                          }
+                        ]
+                      });
+                    }}
                   >
-                    <Button
-                      style={{ width: 120 }}
-                      type="link"
-                      onClick={() => {
-                        this.setState({
-                          openDataIdList: [
-                            ...this.state.openDataIdList,
-                            {
-                              id: submission.id,
-                              key: component.key
-                            }
-                          ]
-                        });
-                      }}
-                    >
-                      展开剩余{resultDataArray.length - 1}条数据 <Icon type="caret-down" />
-                    </Button>
-                  </div>
-                )}
-          </div>
-
+                    展开剩余{resultDataArray.length - 1}条数据{" "}
+                    <Icon type="caret-down" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          );
         } else {
           return (
             <div>
-              {
-                resultDataArray.map((item, index) => {
-                  return <div
+              {resultDataArray.map((item, index) => {
+                return (
+                  <div
                     key={component.key + "close" + index}
                     className="formChildDiv"
                   >
-                    {
-                      resultArray.map((item) => {
-                        if (item.data === void 0) {
-                          return <div className="formChild-item"></div>
-                        } else {
-                          return this._renderFormChildComponentByType(item, item.data[index])
-                        }
-                      })
-                    }
+                    {resultArray.map(item => {
+                      if (item.data == void 0) {
+                        return <div className="formChild-item"></div>;
+                      } else {
+                        return this._renderFormChildComponentByType(
+                          item,
+                          item.data[index]
+                        );
+                      }
+                    })}
                   </div>
-                })
-              }
+                );
+              })}
 
               <div className="formChildLook">
                 <Button
@@ -308,7 +368,8 @@ class FormSubmitData extends PureComponent {
                       openDataIdList: this.state.openDataIdList.filter(
                         item =>
                           !(
-                            item.id === submission.id && item.key === component.key
+                            item.id === submission.id &&
+                            item.key === component.key
                           )
                       )
                     });
@@ -321,38 +382,46 @@ class FormSubmitData extends PureComponent {
           );
         }
       case "GetLocalPosition":
-        if (submitData === void 0) {
+        if (submitData == void 0) {
           return <></>;
         }
         return <div key={component.key}>{this._renderAddress(submitData)}</div>;
       case "FileUpload":
-        if (submitData === void 0) {
+        if (submitData == void 0) {
           return <></>;
         }
         return this._renderFileData(submitData);
       case "ImageUpload":
-        if (submitData === void 0) {
+        if (submitData == void 0) {
           return <></>;
         }
         return this._renderImageData(submitData);
       case "HandWrittenSignature":
-        if (submitData === void 0) {
+        if (submitData == void 0) {
           return <></>;
         }
         return this._renderSignatureData(submitData);
       case "created":
       case "modified":
-        if (submitData === void 0) {
+        if (submitData == void 0) {
           return <></>;
         }
         return coverTimeUtils.localTime(submitData);
       case "MultiDropDown":
       case "CheckboxInput":
-        return <div key={component.key} className="formChild-item">{submitData ? this._truncateValue(submitData.join(",")) : ""}</div>;
+        return (
+          <div key={component.key} className="formChild-item">
+            {submitData ? this._truncateValue(submitData.join(",")) : ""}
+          </div>
+        );
       case "DateInput":
-        return <div key={component.key}>{submitData  != void 0 ? coverTimeUtils.localTime(submitData) : ""}</div>;
+        return (
+          <div key={component.key}>
+            {submitData != void 0 ? coverTimeUtils.localTime(submitData) : ""}
+          </div>
+        );
       default:
-        if (submitData === void 0) {
+        if (submitData == void 0) {
           return <></>;
         }
         return <div key={component.key}>{this._truncateValue(submitData)}</div>;
@@ -367,106 +436,142 @@ class FormSubmitData extends PureComponent {
   _filterSorter = (type, key) => {
     // 还需要过滤创建时间和修改时间
     switch (type) {
-      case "NumberInput": return ({
-        sorter: (a, b) => {
-          return a[key] - b[key]
-        }, sortDirections: ['descend', 'ascend']
-      });
-      default: return {};
+      case "NumberInput":
+        return {
+          sorter: (a, b) => {
+            return a[key] - b[key];
+          },
+          sortDirections: ["descend", "ascend"]
+        };
+      default:
+        return {};
     }
-  }
+  };
 
-  onChangeIsShowTotalData = (value) => {
+  onChangeIsShowTotalData = value => {
     this.setState({
       isShowTotalData: value === "all" ? true : false
-    })
-  }
+    });
+  };
 
-  onChangeNumer = (event) => {
+  onChangeNumer = event => {
     event.stopPropagation();
     if (!Number.isNaN(Math.round(event.target.value))) {
       this.setState({
         showNumber: Math.round(event.target.value),
         limitDataNumber: false
-      })
+      });
     }
-  }
+  };
 
   changeTotalNumber = () => {
     // 这里存在问题////
     //  这里再找产品讨论一下。。。
-    this.setState({
-      currentPage: 1
-    }, () => {
-      this.onChangePages(this.state.currentPage, this.state.pageSize);
-      if (this.state.isFilterMode && !this.state.isShowTotalData) {
-        this.props.getFilterSubmissionData(this.props.forms.path, this.state.filterArray, this.state.connectCondition, this.state.showNumber, 1, this.state.showNumber);
-      } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
-        this.props.getSubmissionData(this.state.formId, this.state.showNumber, 1, this.state.showNumber);
-      } else if (this.state.isFilterMode && this.state.isShowTotalData) {
-        this.props.getFilterSubmissionData(this.props.forms.path, this.state.filterArray, this.state.connectCondition, this.state.pageSize, this.state.currentPage);
-      } else {
-        this.props.getSubmissionData(this.state.formId, this.state.pageSize, this.state.currentPage);
+    this.setState(
+      {
+        currentPage: 1
+      },
+      () => {
+        this.onChangePages(this.state.currentPage, this.state.pageSize);
+        if (this.state.isFilterMode && !this.state.isShowTotalData) {
+          this.props.getFilterSubmissionData(
+            this.props.forms.path,
+            this.state.filterArray,
+            this.state.connectCondition,
+            this.state.showNumber,
+            1,
+            this.state.showNumber
+          );
+        } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
+          this.props.getSubmissionData(
+            this.state.formId,
+            this.state.showNumber,
+            1,
+            this.state.showNumber
+          );
+        } else if (this.state.isFilterMode && this.state.isShowTotalData) {
+          this.props.getFilterSubmissionData(
+            this.props.forms.path,
+            this.state.filterArray,
+            this.state.connectCondition,
+            this.state.pageSize,
+            this.state.currentPage
+          );
+        } else {
+          this.props.getSubmissionData(
+            this.state.formId,
+            this.state.pageSize,
+            this.state.currentPage
+          );
+        }
       }
-    })
-  }
+    );
+  };
 
-  handleClickNumber = (event) => {
+  handleClickNumber = event => {
     event.stopPropagation();
-  }
-
+  };
 
   setFilterMode = (filterArray, connectCondition, isFilterMode) => {
     // 如果筛选条件为有效的，则筛选；如果筛选条件只有一个，且为空的，则不筛选
     if (isFilterMode) {
-      this.setState({
-        isFilterMode,
-        filterArray,
-        connectCondition,
-        currentPage: 1,
-        isFilterMode: true
-      }, () => {
-        this.onChangePages(this.state.currentPage, this.state.pageSize);
-      })
+      this.setState(
+        {
+          isFilterMode,
+          filterArray,
+          connectCondition,
+          currentPage: 1,
+          isFilterMode: true
+        },
+        () => {
+          this.onChangePages(this.state.currentPage, this.state.pageSize);
+        }
+      );
     } else {
-      this.setState({
-        isFilterMode: false,
-        filterArray: [],
-        connectCondition: '&',
-        isFilterMode: false,
-        currentPage: 1
-      }, () => {
-        this.onChangePages(this.state.currentPage, this.state.pageSize);
-      })
+      this.setState(
+        {
+          isFilterMode: false,
+          filterArray: [],
+          connectCondition: "&",
+          isFilterMode: false,
+          currentPage: 1
+        },
+        () => {
+          this.onChangePages(this.state.currentPage, this.state.pageSize);
+        }
+      );
     }
+  };
 
-  }
-
-  // 过滤显示数据，争对不同字段进行渲染(将object转为String) 
-  filterSubmitDataToString = (value) => {
+  // 过滤显示数据，争对不同字段进行渲染(将object转为String)
+  filterSubmitDataToString = value => {
     if (value instanceof Object) {
       if (value.province !== undefined) {
-        return this.AddressObjToString(value)
+        return this.AddressObjToString(value);
       } else if (value.time) {
         // value.time = (new Date(value.time)).toLocaleDateString();
         return value;
       }
     }
     return value;
-  }
+  };
 
-  handleDeleteSubmisson = (submissionId) => {
-    this.props.deleteFormData(this.state.formId, submissionId)
+  handleDeleteSubmisson = submissionId => {
+    this.props
+      .deleteFormData(this.state.formId, submissionId)
       .then(response => {
         if (response.data === "ok") {
           if (this.props.formData.length === 1 && this.state.currentPage > 1) {
-            this.setState({
-              currentPage: this.state.currentPage - 1
-            }, () => {
-              this.onChangePages(this.state.currentPage, this.state.pageSize)
-            })
+            this.setState(
+              {
+                currentPage: this.state.currentPage - 1
+              },
+              () => {
+                this.onChangePages(this.state.currentPage, this.state.pageSize);
+              }
+            );
           } else {
-            this.onChangePages(this.state.currentPage, this.state.pageSize)
+            this.onChangePages(this.state.currentPage, this.state.pageSize);
           }
         }
       })
@@ -474,11 +579,11 @@ class FormSubmitData extends PureComponent {
         message.error("删除失败！", 2);
         console.log(err);
       });
-
-  }
+  };
 
   render() {
     const { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
+
     const controlCol = [
       {
         title: "操作",
@@ -508,9 +613,9 @@ class FormSubmitData extends PureComponent {
       .filter(item => {
         return item.type !== "Button";
       })
-      .filter((item) => {
+      .filter(item => {
         if (item.type === "FormChildTest") {
-          return item.values.length !== 0
+          return item.values.length !== 0;
         } else {
           return true;
         }
@@ -524,32 +629,35 @@ class FormSubmitData extends PureComponent {
           resultObj = {
             title: item.label,
             key: item.length === 0 ? item.key : null,
-            children: item.length !== 0 ? item.values.map((formChild, i) => {
-              return {
-                title: formChild.label,
-                dataIndex: formChild.key,
-                key: formChild.key,
-                width: 110,
-                render: (record, submission) => {
-                  let obj = {
-                    children: this._renderComponentDataByType(
-                      item,
-                      record,
-                      formChild,
-                      submission,
-                    ),
-                    props: {
-                      colSpan: item.values.length
-                    }
-                  };
-                  if (i >= 1) {
-                    obj.props.colSpan = 0;
-                  }
+            children:
+              item.length !== 0
+                ? item.values.map((formChild, i) => {
+                    return {
+                      title: formChild.label,
+                      dataIndex: formChild.key,
+                      key: formChild.key,
+                      width: 110,
+                      render: (record, submission) => {
+                        let obj = {
+                          children: this._renderComponentDataByType(
+                            item,
+                            record,
+                            formChild,
+                            submission
+                          ),
+                          props: {
+                            colSpan: item.values.length
+                          }
+                        };
+                        if (i >= 1) {
+                          obj.props.colSpan = 0;
+                        }
 
-                  return obj;
-                }
-              };
-            }) : null,
+                        return obj;
+                      }
+                    };
+                  })
+                : null
           };
           formChildIdArray.push(item.key);
         } else if (item.type === "NumberInput") {
@@ -585,7 +693,7 @@ class FormSubmitData extends PureComponent {
             width: 210,
             render: record => {
               return this._renderComponentDataByType(item, record);
-            },
+            }
           };
         }
         return resultObj;
@@ -613,7 +721,6 @@ class FormSubmitData extends PureComponent {
 
     columns = columns.concat(controlCol);
 
-
     let formDataShowArray = [];
 
     formData.forEach((dataObj, i) => {
@@ -628,7 +735,7 @@ class FormSubmitData extends PureComponent {
         if (formChildIdArray.includes(n)) {
           dataItem[n].forEach(submitDataObj => {
             for (let m in submitDataObj) {
-              if (obj[m] === void 0) {
+              if (obj[m] == void 0) {
                 obj[m] = [];
               }
               // 此处因该加判断formType的类型，如果为Adrress 才去转换
@@ -646,7 +753,6 @@ class FormSubmitData extends PureComponent {
       formDataShowArray.push(obj);
     });
 
-
     const paginationProps = {
       defaultCurrent: 1,
       position: "bottom",
@@ -656,12 +762,12 @@ class FormSubmitData extends PureComponent {
       loading: this.props.loading,
       current: this.state.currentPage,
       onChange: (current, pageSize) => {
-        if (pageSize  != void 0 && current  != void 0) {
+        if (pageSize != void 0 && current != void 0) {
           this.onChangePages(current, pageSize);
         }
       },
       onShowSizeChange: (current, pageSize) => {
-        if (pageSize  != void 0 && current  != void 0) {
+        if (pageSize != void 0 && current != void 0) {
           this.onChangePages(current, pageSize);
         }
       }
@@ -676,29 +782,43 @@ class FormSubmitData extends PureComponent {
       };
     }
 
-    const fileds = this.props.forms.components
-      .filter(item => {
-        return item.type !== "Button" && item.type !== "FormChildTest";
-      })
+    const fileds = this.props.forms.components.filter(item => {
+      return item.type !== "Button" && item.type !== "FormChildTest";
+    });
     const menu = (
       <Menu style={{ padding: 0, fontSize: 13 }}>
         <Menu.Item style={{ borderBottom: "1px solid #D6D8DE" }}>
-          <div style={{ width: 126 }} onClick={() => { this.onChangeIsShowTotalData("all") }}>全部</div>
+          <div
+            style={{ width: 126 }}
+            onClick={() => {
+              this.onChangeIsShowTotalData("all");
+            }}
+          >
+            全部
+          </div>
         </Menu.Item>
         <Menu.Item>
-          <div style={{ width: 126, height: 22 }} onClick={() => { this.onChangeIsShowTotalData("recent") }}>
-            显示<Input
+          <div
+            style={{ width: 126, height: 22 }}
+            onClick={() => {
+              this.onChangeIsShowTotalData("recent");
+            }}
+          >
+            显示
+            <Input
               min={0}
               style={{ width: 50, height: 22, marginLeft: 3, marginRight: 3 }}
               value={this.state.showNumber}
-              onChange={this.onChangeNumer} />
-            条</div>
+              onChange={this.onChangeNumer}
+            />
+            条
+          </div>
         </Menu.Item>
       </Menu>
     );
     return (
       <>
-        {mobile.is ? null : (
+        {/* {mobile.is ? null : (
           <HeaderBar
             backCallback={() => {
               window.location.href = config.hostUrl;
@@ -706,16 +826,11 @@ class FormSubmitData extends PureComponent {
             name={this.props.forms.name}
             isShowBtn={false}
           />
-        )}
+        )} */}
         <div
           className="form-submit-data-table"
           style={mobile.is ? mobile.style.table : null}
-        // key={Math.random()}
         >
-          {/* <Route
-            path="/submitdata/detail/"
-            render={() => <FormDataDetail {...mobileProps} />}
-          /> */}
           <DataDetailModal
             modalVisible={this.state.modalVisible}
             handleCancel={this.handleCancel}
@@ -725,8 +840,7 @@ class FormSubmitData extends PureComponent {
             components={this.props.forms.components}
           />
           <Route
-            exact
-            path="/submitdata/"
+            path="/"
             render={() => (
               <>
                 <FilterComponent
@@ -735,29 +849,57 @@ class FormSubmitData extends PureComponent {
                   setFilterMode={this.setFilterMode}
                   formId={this.state.formId}
                   currentPage={this.state.currentPage}
-                  pageSize={this.state.pageSize} />
+                  pageSize={this.state.pageSize}
+                />
 
                 <div className="limit-data-number-container">
-                  <Dropdown overlay={menu} placement="bottomCenter" trigger={['click']}>
-                    {
-                      this.state.isShowTotalData ?
-                        <Button style={{ width: 150 }}><span style={{ display: "inline-block", width: 98, textAlign: "left" }}>全部</span><Icon type="caret-down" style={{ color: "#777F97" }} /></Button>
-                        :
-                        <Button style={{ width: 150 }}>
-                          显示<Input
-                            min={0}
-                            style={{ width: 50, height: 22, marginLeft: 3, marginRight: 3 }}
-                            value={this.state.showNumber}
-                            onChange={this.onChangeNumer}
-                            onClick={this.handleClickNumber} />条
-                            <Icon type="caret-down" style={{ color: "#777F97" }} />
-                        </Button>
-                    }
+                  <Dropdown
+                    overlay={menu}
+                    placement="bottomCenter"
+                    trigger={["click"]}
+                  >
+                    {this.state.isShowTotalData ? (
+                      <Button style={{ width: 150 }}>
+                        <span
+                          style={{
+                            display: "inline-block",
+                            width: 98,
+                            textAlign: "left"
+                          }}
+                        >
+                          全部
+                        </span>
+                        <Icon type="caret-down" style={{ color: "#777F97" }} />
+                      </Button>
+                    ) : (
+                      <Button style={{ width: 150 }}>
+                        显示
+                        <Input
+                          min={0}
+                          style={{
+                            width: 50,
+                            height: 22,
+                            marginLeft: 3,
+                            marginRight: 3
+                          }}
+                          value={this.state.showNumber}
+                          onChange={this.onChangeNumer}
+                          onClick={this.handleClickNumber}
+                        />
+                        条
+                        <Icon type="caret-down" style={{ color: "#777F97" }} />
+                      </Button>
+                    )}
                   </Dropdown>
                   <Button onClick={this.changeTotalNumber}>查询</Button>
                 </div>
 
-                <ConfigProvider locale={zhCN} renderEmpty={this.props.submissionDataTotal > -1 ? null : noRenderEmpty}>
+                <ConfigProvider
+                  locale={zhCN}
+                  renderEmpty={
+                    this.props.submissionDataTotal > -1 ? null : noRenderEmpty
+                  }
+                >
                   <Table
                     key={Math.random()}
                     loading={this.props.submissionDataTotal <= -1}

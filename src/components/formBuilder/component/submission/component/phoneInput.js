@@ -8,14 +8,15 @@ import {
   compareEqualArray
 } from "../utils/dataLinkUtils";
 
-export default class IdCard extends React.Component {
+export default class PhoneNumber extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
-    if (data && data.type === "DataLinkage") {
+    if (data && data.type == "DataLinkage") {
       const {
         conditionId,
         linkComponentId,
+        linkComponentType,
         linkDataId,
         linkFormId
       } = data.values;
@@ -25,6 +26,16 @@ export default class IdCard extends React.Component {
           let index = -1;
           if (value instanceof Array) {
             index = compareEqualArray(dataArr, value);
+          } else if (value instanceof Object) {
+            // 争对地址的比较
+            let { county, city, province, detail } = value;
+            if (dataArr[0] && dataArr[0] instanceof Object) {
+              dataArr = dataArr.map(item => {
+                let { county, city, province, detail } = item;
+                return [province, city, county, detail].join("");
+              });
+            }
+            index = dataArr.indexOf([province, city, county, detail].join(""));
           } else {
             index = dataArr.indexOf(value);
           }
@@ -37,6 +48,9 @@ export default class IdCard extends React.Component {
             // 多级联动
             this.handleEmitChange(res);
           } else {
+            form.setFieldsValue({
+              [item.key]: undefined
+            });
             this.handleEmitChange(undefined);
           }
         });
@@ -77,7 +91,7 @@ export default class IdCard extends React.Component {
   };
 
   isValueEqualEmptyAndUndefined = value => {
-    if (value === "" || value == void 0) {
+    if (value == "" || value == void 0) {
       return true;
     } else {
       return false;
@@ -88,122 +102,19 @@ export default class IdCard extends React.Component {
     callback();
   };
 
-  _checkIdcardValid(idStr) {
-    let wf = ["1", "0", "x", "9", "8", "7", "6", "5", "4", "3", "2"];
-    let checkCode = [
-      "7",
-      "9",
-      "10",
-      "5",
-      "8",
-      "4",
-      "2",
-      "1",
-      "6",
-      "3",
-      "7",
-      "9",
-      "10",
-      "5",
-      "8",
-      "4",
-      "2"
-    ];
-    let addressNoArray = [
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "21",
-      "22",
-      "23",
-      "31",
-      "32",
-      "33",
-      "34",
-      "35",
-      "36",
-      "37",
-      "41",
-      "42",
-      "43",
-      "44",
-      "45",
-      "46",
-      "50",
-      "51",
-      "52",
-      "53",
-      "54",
-      "61",
-      "62",
-      "63",
-      "64",
-      "65",
-      "71",
-      "81",
-      "82",
-      "91"
-    ];
-    let idCardNo = "";
-
-    if (idStr.length !== 15 && idStr.length !== 18) {
-      return false;
-    }
-
-    if (idStr.length === 18) {
-      idCardNo = idStr.substring(0, 17);
-    } else if (idStr.length === 15) {
-      idCardNo = idStr.substring(0, 6) + "19" + idStr.substring(6, 15);
-    }
-
-    if (Number.isNaN(Number(idCardNo))) {
-      console.error("身份证必须前17位必须为number");
-      return false;
-    }
-
-    let strYear = idCardNo.substring(6, 10); // 年份
-    let strMonth = idCardNo.substring(10, 12); // 月份
-    let strDay = idCardNo.substring(12, 14); // 月份
-    let date = new Date(strYear + "/" + strMonth + "/" + strDay);
-
-    if (date === "Invalid Date") {
-      console.error("身份证时间错误");
-      return false;
-    } else if (Date.now() - date < 0) {
-      console.error("身份证时间错误");
-      return false;
-    }
-
-    if (addressNoArray.includes(idCardNo.substring(0, 2)) === false) {
-      console.error("身份证地址错误");
-      return false;
-    }
-
-    let lastOne = 0;
-    for (let i = 0; i < 17; i++) {
-      lastOne =
-        lastOne + Number.parseInt(idCardNo[i]) * Number.parseInt(checkCode[i]);
-    }
-    let modValue = lastOne % 11;
-    idCardNo = idCardNo + wf[modValue];
-
-    return idCardNo === idStr.toLowerCase();
-  }
-
   checkValueAndThrowMessage = (value, callback) => {
-    if (this._checkIdcardValid(value) === false) {
+    let reg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+    if (!reg.test(value)) {
       let errMsg = this.props.item.validate.customMessage;
       isStringValid(errMsg)
         ? callback(errMsg)
-        : callback("请输入正确的身份证号码！");
+        : callback("请输入正确的手机号！");
     } else {
       callback();
     }
   };
 
-  checkIdCardNumber = (rule, value, callback) => {
+  checkPhoneNumber = (rule, value, callback) => {
     this.isValueEqualEmptyAndUndefined(value)
       ? this.emptyValueNotShowMessage(callback)
       : this.checkValueAndThrowMessage(value, callback);
@@ -222,13 +133,13 @@ export default class IdCard extends React.Component {
           initialValue: item.defaultValue,
           rules: [
             {
-              validator: this.checkIdCardNumber
+              validator: this.checkPhoneNumber
             },
             {
               required: isValueValid(item.validate.required)
                 ? item.validate.required
                 : false,
-              message: "身份证号不能为空!"
+              message: "手机号不能为空!"
             }
           ],
           validateTrigger: "onBlur"

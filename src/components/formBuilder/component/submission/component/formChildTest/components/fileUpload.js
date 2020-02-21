@@ -1,23 +1,19 @@
 import React from "react";
 import { Form, Icon, Tooltip, Spin, Upload, Button, message } from "antd";
-import ID from '../../../../../utils/UUID';
+import ID from "../../../../../utils/UUID";
 import { postFile } from "../../../utils/filePostUtils";
 export default class FileUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadStatusMsg: (
-        <div>
-          添加文件
-        </div>
-      ),
+      loadStatusMsg: <div>添加文件</div>,
       uploadFileList: [],
       canUpload: true //能否上传的一个标志位
     };
     this.handleBeforeUpload = this.handleBeforeUpload.bind(this);
   }
   handleBeforeUpload(file) {
-    const { fileUnit, fileSize,fileCount } = this.props.item.validate;
+    const { fileUnit, fileSize, fileCount } = this.props.item.validate;
     let checkNumber = 0;
     switch (fileUnit) {
       case "KB":
@@ -80,28 +76,29 @@ export default class FileUpload extends React.Component {
       } else {
         uploadFileSize = null;
       }
-      const {fileCount} = this.props.item.validate;
-      const { onChange} = this.props;
+      const { fileCount } = this.props.item.validate;
+      const { onChange } = this.props;
       let identification = ID.uuid();
-      postFile(fileObj,identification);
       let newImgList = [...this.state.uploadFileList];
+
+      postFile(fileObj, identification);
+
       newImgList.push({
         name: fileObj.name,
-        url:identification,
+        url: identification,
         size: uploadFileSize
-      });this.setState(
-          {
-            loadStatusMsg: (
-              <div>添加文件</div>
-            ),
-            uploadFileList: newImgList,
-            canUpload:fileCount>newImgList.length
-          },
-          () => {
-            onChange && onChange(this.state.uploadFileList);
-          }
-        );
-      resolve(file);
+      });
+      this.setState(
+        {
+          loadStatusMsg: <div>添加文件</div>,
+          uploadFileList: newImgList,
+          canUpload: fileCount > newImgList.length
+        },
+        () => {
+          onChange && onChange(this.state.uploadFileList);
+        }
+      );
+      resolve(fileObj);
     });
   }
   _cutName(name) {
@@ -111,26 +108,28 @@ export default class FileUpload extends React.Component {
       return name;
     }
   }
-  _deleteExsitFile(index){
-    const {fileCount} = this.props.item.validate;
-    const { onChange} = this.props;
-     const newFileList = this.state.uploadFileList.filter((item,i) => i!=index);
-     this.setState(
-        {
-          loadStatusMsg: (
-            <div>
-              添加文件
-              {/* <Icon type="upload" /> */}
-              {/* 剩余可上传数量{fileCount-newFileList.length} */}
-            </div>
-          ),
-          uploadFileList: newFileList,
-          canUpload:fileCount>newFileList.length
-        },
-        () => {
-          onChange(this.state.uploadFileList);
-        }
-      );
+  _deleteExsitFile(index) {
+    const { fileCount } = this.props.item.validate;
+    const { onChange } = this.props;
+    const newFileList = this.state.uploadFileList.filter(
+      (item, i) => i != index
+    );
+    this.setState(
+      {
+        loadStatusMsg: (
+          <div>
+            添加文件
+            {/* <Icon type="upload" /> */}
+            {/* 剩余可上传数量{fileCount-newFileList.length} */}
+          </div>
+        ),
+        uploadFileList: newFileList,
+        canUpload: fileCount > newFileList.length
+      },
+      () => {
+        onChange(this.state.uploadFileList);
+      }
+    );
   }
   render() {
     const { item } = this.props;
@@ -149,16 +148,25 @@ export default class FileUpload extends React.Component {
           <Button>{this.state.loadStatusMsg}</Button>
         </Upload>
         <div className="showFileList">
-          {
-            this.state.uploadFileList.length==0?
-            <div style={{textAlign:'center'}}><p>未选择任何文件</p></div>:
-            this.state.uploadFileList.map((item, index) => 
-            <div className="fileItem" key={index}>
-              {/* <span>{this._cutName(item.name)}</span> */}
-              <span className="fileItemSpan">{item.name}</span>
-              <Icon type="minus-circle" theme="filled" onClick={()=>{this._deleteExsitFile(index)}}/>
-            </div>)
-          }
+          {this.state.uploadFileList.length == 0 ? (
+            <div style={{ textAlign: "center" }}>
+              <p>未选择任何文件</p>
+            </div>
+          ) : (
+            this.state.uploadFileList.map((item, index) => (
+              <div className="fileItem" key={index}>
+                {/* <span>{this._cutName(item.name)}</span> */}
+                <span className="fileItemSpan">{item.name}</span>
+                <Icon
+                  type="minus-circle"
+                  theme="filled"
+                  onClick={() => {
+                    this._deleteExsitFile(index);
+                  }}
+                />
+              </div>
+            ))
+          )}
         </div>
       </div>
     );

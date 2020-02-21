@@ -23,7 +23,7 @@ export default class DropDown extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     let { values, type } = data;
-    console.log("values",values)
+    console.log("values", values);
     // 数据联动请看单行文本组件
     if (data && data.type === "DataLinkage") {
       const {
@@ -41,7 +41,9 @@ export default class DropDown extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = [];
             indexArr.forEach(i => {
-              data[i] ? res.push(data[i]) : null; //解决 空选项问题
+              if (data[i]) {
+                res.push(data[i]);
+              }
             });
 
             selections = [];
@@ -95,7 +97,7 @@ export default class DropDown extends React.Component {
       // 关联其他数据
       // 通过表单id和字段id过滤对应的提交数据
       // 将过滤的数据作为该表单的选项
-      console.log("values",values);
+      console.log("values", values);
       getSelection(values.formId, values.optionId).then(res => {
         this.setState({
           selections: res
@@ -116,13 +118,23 @@ export default class DropDown extends React.Component {
         fnc && fnc(value, this);
       });
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if (
+        !Object.is(
+          document
+            .querySelector(`#${key}Dom`)
+            .querySelector(".ant-form-explain"),
+          null
+        )
+      ) {
+        document
+          .querySelector(`#${key}Dom`)
+          .querySelector(".ant-form-explain")
+          .setAttribute("title", customMessage);
       }
-    },300)
+    }, 300);
   };
 
   render() {
@@ -148,7 +160,7 @@ export default class DropDown extends React.Component {
             placeholder="请选择"
             style={{ width: "100%" }}
             onChange={this.handleChange}
-            getPopupContainer = {triggerNode => triggerNode.parentNode}
+            getPopupContainer={triggerNode => triggerNode.parentNode}
           >
             {selections.map((item, index) => (
               <Select.Option key={index} value={item.value}>

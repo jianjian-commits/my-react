@@ -10,7 +10,7 @@ import {
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
-import isInFormChild from "../utils/isInFormChild"
+import isInFormChild from "../utils/isInFormChild";
 const { Option } = Select;
 
 class SingleTextInspector extends React.Component {
@@ -20,7 +20,7 @@ class SingleTextInspector extends React.Component {
       optionType: this.props.element.data.type || "custom",
       formId: locationUtils.getUrlParamObj().id,
       isShowDataLinkageModal: false,
-      isLinked: false,
+      isLinked: false
     };
   }
 
@@ -54,7 +54,8 @@ class SingleTextInspector extends React.Component {
         value = validate;
         break;
       }
-      default: break;
+      default:
+        break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -76,43 +77,35 @@ class SingleTextInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      minLength: value === void 0 ? 0 : value
+      minLength: value == void 0 ? 0 : value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
-        'validate',
+        "validate",
         newValidate,
-        this.props.element,
-      )
-    } else {
-      this.props.setItemAttr(
-        this.props.element,
-        'validate',
-        newValidate,
+        this.props.element
       );
+    } else {
+      this.props.setItemAttr(this.props.element, "validate", newValidate);
     }
   };
   handleChangeAttrMaxLength = value => {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxLength: value === void 0 ? Number.MAX_SAFE_INTEGER : value
+      maxLength: value == void 0 ? Number.MAX_SAFE_INTEGER : value
     };
 
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
-        'validate',
+        "validate",
         newValidate,
-        this.props.element,
-      )
-    } else {
-      this.props.setItemAttr(
-        this.props.element,
-        'validate',
-        newValidate,
+        this.props.element
       );
+    } else {
+      this.props.setItemAttr(this.props.element, "validate", newValidate);
     }
   };
 
@@ -175,9 +168,19 @@ class SingleTextInspector extends React.Component {
   handleSelectChange = value => {
     switch (value) {
       case "custom": {
-        const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
+        const {
+          elementParent,
+          element,
+          setItemValues,
+          setFormChildItemValues
+        } = this.props;
         if (elementParent) {
-          setFormChildItemValues(elementParent, "data", { type: "custom" }, element);
+          setFormChildItemValues(
+            elementParent,
+            "data",
+            { type: "custom" },
+            element
+          );
         } else {
           setItemValues(this.props.element, "data", {});
         }
@@ -215,49 +218,49 @@ class SingleTextInspector extends React.Component {
               onChange={this.handleChangeAttr}
               autoComplete="off"
             />
-            {
-              isInFormChild(this.props.elementParent)
-                ? null
-                : <>
-                  <p htmlFor="single-text-tip">提示信息</p>
-                  <Input
-                    id="single-text-tip"
-                    name="tooltip"
-                    placeholder="请输入提示信息"
-                    value={tooltip}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-                  <p htmlFor="single-text-err-tip">错误提示</p>
-                  <Input
-                    id="single-text-err-tip"
-                    name="customMessage"
-                    placeholder="请输入错误提示"
-                    value={validate.customMessage}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-                </>
-            }
-
+            {isInFormChild(this.props.elementParent) ? null : (
+              <>
+                <p htmlFor="single-text-tip">提示信息</p>
+                <Input
+                  id="single-text-tip"
+                  name="tooltip"
+                  placeholder="请输入提示信息"
+                  value={tooltip}
+                  onChange={this.handleChangeAttr}
+                  autoComplete="off"
+                />
+                <p htmlFor="single-text-err-tip">错误提示</p>
+                <Input
+                  id="single-text-err-tip"
+                  name="customMessage"
+                  placeholder="请输入错误提示"
+                  value={validate.customMessage}
+                  onChange={this.handleChangeAttr}
+                  autoComplete="off"
+                />
+              </>
+            )}
 
             <p htmlFor="email-title">默认值</p>
             {isLinked ? (
-              <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
+              <Input
+                defaultValue="以子表单联动为准，不支持设置默认值"
+                disabled
+              />
             ) : (
-                <>
-                  <Select
-                    value={optionType}
-                    style={{ width: "100%" }}
-                    onChange={this.handleSelectChange}
-                    className="data-source-select"
-                  >
-                    <Option value="custom">自定义</Option>
-                    <Option value="DataLinkage">数据联动</Option>
-                  </Select>
-                  {this.renderOptionDataFrom(optionType)}
-                </>
-              )}
+              <>
+                <Select
+                  value={optionType}
+                  style={{ width: "100%" }}
+                  onChange={this.handleSelectChange}
+                  className="data-source-select"
+                >
+                  <Option value="custom">自定义</Option>
+                  <Option value="DataLinkage">数据联动</Option>
+                </Select>
+                {this.renderOptionDataFrom(optionType)}
+              </>
+            )}
           </div>
           <Divider />
           <div className="costom-info-card">
@@ -269,14 +272,14 @@ class SingleTextInspector extends React.Component {
                 onChange={this.handleChangeAttr}
               >
                 必填
-            </Checkbox>
+              </Checkbox>
               <Checkbox
                 name="isLimitLength"
                 checked={validate.isLimitLength}
                 onChange={this.handleChangeAttr}
               >
                 限定文本长度范围
-            </Checkbox>
+              </Checkbox>
             </div>
             <div className="number-check-warper">
               <InputNumber
@@ -289,29 +292,31 @@ class SingleTextInspector extends React.Component {
                 autoComplete="off"
               />
               ~
-            <InputNumber
+              <InputNumber
                 name="maxLength"
                 placeholder="不限"
                 min={1}
                 precision={0}
                 onChange={this.handleChangeAttrMaxLength}
-                value={validate.maxLength === Number.MAX_SAFE_INTEGER ? "" : validate.maxLength}
+                value={
+                  validate.maxLength === Number.MAX_SAFE_INTEGER
+                    ? ""
+                    : validate.maxLength
+                }
                 autoComplete="off"
               />
             </div>
-            {
-              isInFormChild(this.props.elementParent)
-                ? null
-                : <div className="checkbox-wrapper">
-                  <Checkbox
-                    name="unique"
-                    checked={unique}
-                    onChange={this.handleChangeAttr}
-                  >
-                    不允许重复
+            {isInFormChild(this.props.elementParent) ? null : (
+              <div className="checkbox-wrapper">
+                <Checkbox
+                  name="unique"
+                  checked={unique}
+                  onChange={this.handleChangeAttr}
+                >
+                  不允许重复
                 </Checkbox>
-                </div>
-            }
+              </div>
+            )}
           </div>
         </div>
       </div>

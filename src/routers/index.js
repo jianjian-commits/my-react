@@ -4,10 +4,11 @@ import UserManagement from "../pages/User";
 
 import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
+import Submission from "../components/formBuilder/component/submission/submission";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
+import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
-import UserDetail from "../pages/userDetail";
 
 export const main = [
   {
@@ -54,6 +55,13 @@ export const appPaths = [
     path: `/app/:appId/detail`,
     icon: "file_copy",
     component: AppDetail
+  },
+  {
+    key: "submission",
+    label: "提交数据",
+    path: `/app/:appId/detail/submission/:formId`,
+    icon: "file_copy",
+    component: Submission
   },
   {
     key: "menuContent",

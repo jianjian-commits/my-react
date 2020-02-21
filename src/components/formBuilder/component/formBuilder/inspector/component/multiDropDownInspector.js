@@ -8,9 +8,7 @@ import {
   Select,
   Divider
 } from "antd";
-import {
-  filterFormsForRelation
-} from "../utils/filterData";
+import { filterFormsForRelation } from "../utils/filterData";
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import OtherDataModal from "../dataLinkageModal/otherDataModal";
 import locationUtils from "../../../../utils/locationUtils";
@@ -22,7 +20,7 @@ import {
   setFormChildItemAttr,
   setFormChildItemValues
 } from "../../redux/utils/operateFormComponent";
-import isInFormChild from "../utils/isInFormChild"
+import isInFormChild from "../utils/isInFormChild";
 const { Option } = Select;
 
 class MultiDropDownInspector extends React.Component {
@@ -109,7 +107,7 @@ class MultiDropDownInspector extends React.Component {
   deleteChooseItem(item, index) {
     // let newValuesList = [...this.props.element.data.values];
     // newValuesList.pop(item);
-    if(this.props.element.data.values.length === 1) return null;
+    if (this.props.element.data.values.length === 1) return null;
     let newValuesList = this.props.element.data.values.filter(
       (item, i) => i !== index
     );
@@ -150,7 +148,7 @@ class MultiDropDownInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      minOptionNumber: value === void 0 ? 0 : value
+      minOptionNumber: value == void 0 ? 0 : value
     };
 
     if (this.props.elementParent) {
@@ -169,7 +167,7 @@ class MultiDropDownInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxOptionNumber: value === void 0 ? Number.MAX_SAFE_INTEGER : value
+      maxOptionNumber: value == void 0 ? Number.MAX_SAFE_INTEGER : value
     };
 
     if (this.props.elementParent) {
@@ -289,7 +287,7 @@ class MultiDropDownInspector extends React.Component {
       case "otherFormData": {
         return (
           <>
-           <Button
+            <Button
               className="data-link-set"
               onClick={() => {
                 this.handleSetOtherDataModal(true);
@@ -389,43 +387,41 @@ class MultiDropDownInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-          {
-              isInFormChild(this.props.elementParent)
-               ? null 
-               :<>
-                  <p htmlFor="email-tip">提示信息</p>
-                  <Input
-                    id="email-tip"
-                    name="tooltip"
-                    placeholder="请输入提示信息"
-                    value={tooltip}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-               </>
-            }
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p htmlFor="email-tip">提示信息</p>
+              <Input
+                id="email-tip"
+                name="tooltip"
+                placeholder="请输入提示信息"
+                value={tooltip}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+            </>
+          )}
           <p>选项</p>
           {isLinked ? (
             <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
           ) : (
-              <>
-                <Select
-                  value={optionType}
-                  style={{ width: "100%" }}
-                  onChange={this.handleSelectChange}
-                  className="data-source-select"
-                >
-                  <Option value="custom">自定义</Option>
-                  <Option value="otherFormData">关联其他表单数据</Option>
-                  <Option value="DataLinkage">数据联动</Option>
-                </Select>
-                {this.renderOptionDataFrom(optionType)}
-              </>
-            )}
+            <>
+              <Select
+                value={optionType}
+                style={{ width: "100%" }}
+                onChange={this.handleSelectChange}
+                className="data-source-select"
+              >
+                <Option value="custom">自定义</Option>
+                <Option value="otherFormData">关联其他表单数据</Option>
+                <Option value="DataLinkage">数据联动</Option>
+              </Select>
+              {this.renderOptionDataFrom(optionType)}
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
-        <p htmlFor="email-tip">校验</p>
+          <p htmlFor="email-tip">校验</p>
           <div className="checkbox-wrapper">
             <Checkbox
               name="required"
@@ -450,7 +446,9 @@ class MultiDropDownInspector extends React.Component {
               max={values.length}
               precision={0}
               onChange={this.handleChangeAttrMinLength}
-              value={validate.minOptionNumber==0 ? "" : validate.minOptionNumber}
+              value={
+                validate.minOptionNumber == 0 ? "" : validate.minOptionNumber
+              }
               autoComplete="off"
             />
             ~
@@ -461,13 +459,16 @@ class MultiDropDownInspector extends React.Component {
               max={values.length}
               precision={0}
               onChange={this.handleChangeAttrMaxLength}
-              value={validate.maxOptionNumber==Number.MAX_SAFE_INTEGER ? "" : validate.maxOptionNumber}
+              value={
+                validate.maxOptionNumber == Number.MAX_SAFE_INTEGER
+                  ? ""
+                  : validate.maxOptionNumber
+              }
               autoComplete="off"
             />
           </div>
-          </div>
-         
         </div>
+      </div>
     );
   }
 }
