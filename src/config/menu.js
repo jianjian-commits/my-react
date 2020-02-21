@@ -1,5 +1,5 @@
 import TransactList from "../components/transactList/TransactList";
-import TeamDetail from "../components/team/TeamDetail";
+import TeamDetail from "../components/team/TeamInfo";
 import TeamMember from "../components/team/TeamMember";
 
 export const appDetailMenu = [

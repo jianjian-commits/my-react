@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import HomeHeader from "../components/header/HomeHeader";
 import TeameMenu from "../components/team/TeamMenu";
 import selectCom from "../utils/selectCom";
-import { teamMenu } from "../routers/menu";
+import { teamMenu } from "../config/menu";
 import classes from "../styles/team.module.scss";
 
 const { Content, Sider } = Layout;

@@ -21,7 +21,7 @@ const HomeHeader = props => {
   const selectHandle = e => {
     history.push(e.key);
   };
-  const toUserMangement = () => history.push("/user/users");
+  const toUserMangement = () => history.push("/user/info");
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>

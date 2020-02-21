@@ -74,7 +74,7 @@ const EditInput = props => {
   );
 };
 
-const TeamDetail = () => {
+const TeamInfo = () => {
   return (
     <div>
       <Title level={3}>团队信息</Title>
@@ -99,4 +99,4 @@ const TeamDetail = () => {
   );
 };
 
-export default TeamDetail;
+export default TeamInfo;

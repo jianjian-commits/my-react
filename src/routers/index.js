@@ -8,7 +8,7 @@ import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
 import Dispose from "../pages/Dispose";
 import UserDetail from "../pages/userDetail";
-import Team from "../pages/Team";
+import Team from "../pages/Teamdemo";
 
 export const main = [
   {
@@ -27,7 +27,7 @@ export const main = [
   },
   {
     key: "user",
-    label: "用户",
+    label: "团队管理",
     path: "/user",
     icon: "web",
     component: UserManagement
@@ -45,20 +45,6 @@ export const main = [
     path: "/userDetail",
     icon: "web",
     component: UserDetail
-  },
-  {
-    key: "team",
-    label: "团队",
-    path: "/team",
-    icon: "web",
-    component: Team
-  },
-  {
-    key: "team",
-    label: "团队",
-    path: "/team/:menuId",
-    icon: "web",
-    component: Team
   }
 ];
 
