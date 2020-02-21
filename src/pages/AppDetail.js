@@ -125,7 +125,7 @@ const AppDetail = () => {
               <button
                 onClick={_e => {
                   history.push(
-                    `/app/${appId}/detail/submission/${selectedForm}`
+                    `/app/${appId}/detail/submission?formId=${selectedForm}`
                   );
                 }}
               >

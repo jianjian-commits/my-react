@@ -9,6 +9,7 @@ import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
 import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
+import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 
 export const main = [
   {
@@ -59,9 +60,9 @@ export const appPaths = [
   {
     key: "submission",
     label: "提交数据",
-    path: `/app/:appId/detail/submission/:formId`,
+    path: `/app/:appId/detail/submission`,
     icon: "file_copy",
-    component: Submission
+    component: mobileAdoptor.data(Submission)
   },
   {
     key: "menuContent",

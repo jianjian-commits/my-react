@@ -50,16 +50,12 @@ import RadioButtonsMobile from "./component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 
-function hasErrors(fieldsError) {
-  return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
-
 class Submission extends Component {
   constructor(props) {
     super(props);
     this.state = {
       tipVisibility: false,
-      formId: locationUtils.getUrlParamObj().id,
+      formId: locationUtils.getUrlParamObj().formId,
       formChildDataObj: {},
       currentLayout: null,
       customValicate: {
@@ -1077,30 +1073,6 @@ class Submission extends Component {
         };
       });
     }
-
-    // 这里判断是否设置过布局
-    // if (this.state.customValicate) {
-    //   const { currentLayoutId, layoutList } = this.state.customValicate;
-    //   // console.log(this.state.customValicate)
-    //   // console.log(layoutList)
-    //   if (layoutList.length !== 0) {
-    //     layout = layoutList
-    //       .filter(item => item.id === currentLayoutId)[0]
-    //       .layout.map(item => {
-    //         return {
-    //           ...item,
-    //           static: true
-    //         };
-    //       });
-    //   }
-    // }
-
-    // 将存储在layout中的isShow信息置入component
-    // const layoutIdList = layout.map(item => item.i);
-    pureFormComponents = pureFormComponents.map(component => {
-      // component.isShow = layout[layoutIdList.indexOf(component.id)].isShow;
-      return component;
-    });
 
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
