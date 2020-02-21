@@ -2,7 +2,7 @@
   box-sizing: border-box;
   width: 86.041%;
   margin: 0 auto;
-  padding: 176px 0 56px 0;
+  padding-bottom: 56px;
   overflow: hidden;
   .filter-container {
     background-color: #ffffff;
@@ -188,7 +188,7 @@
     .ant-pagination-prev,
     .ant-pagination-next {
       .ant-pagination-item-link {
-        line-height: 28px;
+        line-height: 10px;
         padding: 9px;
         vertical-align: middle;
         display: table-cell;
