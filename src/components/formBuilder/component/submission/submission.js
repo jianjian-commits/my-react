@@ -1,4 +1,5 @@
 import React, { PureComponent, Component } from "react";
+import { withRouter } from "react-router-dom";
 import GridLayout from "react-grid-layout";
 import { Button, Form, message, Layout, Spin } from "antd";
 import {
@@ -446,7 +447,8 @@ class Submission extends Component {
                     ? Toast.success("提交成功!")
                     : message.success("提交成功!");
                   setTimeout(() => {
-                    window.location.href = config.hostUrl;
+                    let appId = this.props.match.params.appId;
+                    this.props.history.push(`/app/${appId}/detail`);
                   }, 1000);
                 }
               })
@@ -1064,7 +1066,7 @@ class Submission extends Component {
           };
         });
     } else {
-      console.log(currentLayout);
+      // console.log(currentLayout);
       layout = currentLayout.map(item => {
         return {
           ...item,
@@ -1084,7 +1086,8 @@ class Submission extends Component {
           {mobile.is ? null : (
             <HeaderBar
               backCallback={() => {
-                window.location.href = config.hostUrl;
+                let appId = this.props.match.params.appId;
+                this.props.history.push(`/app/${appId}/detail`);
               }}
               isShowBtn={false}
             />
@@ -1183,4 +1186,4 @@ export default connect(
     submitSubmission,
     getFormComponent
   }
-)(SubmissionForm);
+)(withRouter(SubmissionForm));
