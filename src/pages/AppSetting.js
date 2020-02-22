@@ -25,9 +25,9 @@ const mockForms = {
       name: "基础设置",
       key: "base",
       list: [
-        { key: "group", name: "车队信息" },
-        { key: "card", name: "油卡信息" },
-        { key: "carr", name: "车辆信息" }
+        { key: "sWw", name: "车队信息" },
+        { key: "clr", name: "油卡信息" },
+        { key: "CrE", name: "车辆信息" }
       ]
     },
     {
@@ -70,12 +70,11 @@ const AppSetting = () => {
     setSearchKey(value);
   };
   const addFolder = () => alert("没用的");
-
   const dropHandle = (formId, groupId) => {
     alert(formId + " 放进 " + groupId);
   };
   const formEnterHandle = e => {
-    history.push(`/app/${appId}/setting/form/${e.key}/edit`);
+    history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
   };
   return (
     <Layout>
@@ -83,10 +82,15 @@ const AppSetting = () => {
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
-            <Button type="primary" block onClick={e => {
-              // history.push(`/app/${appId}/setting/form/${e.key}/create`)
-            }
-            }>
+            <Button
+              type="primary"
+              block
+              onClick={e => {
+                // history.push(`/app/${appId}/setting/form/create`)
+
+                history.push(`/app/${appId}/setting/form/sWw/edit`);
+              }}
+            >
               新建表单
             </Button>
           </div>
@@ -119,7 +123,7 @@ const AppSetting = () => {
         </Sider>
         <Content className={classes.container}></Content>
       </Layout>
-    </Layout >
+    </Layout>
   );
 };
 export default AppSetting;

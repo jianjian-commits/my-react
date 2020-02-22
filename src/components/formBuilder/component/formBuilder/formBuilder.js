@@ -28,7 +28,7 @@ class ReactFormBuilder extends React.Component {
       isEditMode: false,
       editElement: null,
       editElementParent: null,
-      formId: locationUtils.getUrlParamObj().id
+      formId: locationUtils.getUrlParamObj().formId
     };
 
     this.editModeOn = this.editModeOn.bind(this);
@@ -37,6 +37,7 @@ class ReactFormBuilder extends React.Component {
   componentDidMount() {
     const { formId } = this.state;
     const { initForm } = this.props;
+    console.log(formId);
     if (formId) {
       initForm(formId);
     }
@@ -85,6 +86,7 @@ class ReactFormBuilder extends React.Component {
 
   render() {
     const toolbarProps = {};
+
     if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
     }

@@ -8,7 +8,6 @@ import {
   INIT_FORM_DOM,
   GET_ALL_FORMS,
   INIT_FORM_BEFORE
-
 } from "../action";
 
 var _checkMinAndMax = components => {
@@ -87,41 +86,39 @@ var _calcFormComponentLayout = formDataArray => {
 
     let minWidth = Math.ceil((domElement.offsetWidth + 15) / 65);
 
-    item.layout.minW = minWidth > 10 ? 10 : minWidth
-
+    item.layout.minW = minWidth > 10 ? 10 : minWidth;
 
     if (item.type === "CheckboxInput") {
       let dom = document.querySelector(`#${item.key}`);
-      let checkboxItemArray = dom.querySelectorAll(`.ant-checkbox-wrapper`)
+      let checkboxItemArray = dom.querySelectorAll(`.ant-checkbox-wrapper`);
       let currentMaxWidth = minWidth;
 
-      checkboxItemArray.forEach((item) => {
+      checkboxItemArray.forEach(item => {
         let itemWidth = Math.ceil((item.offsetWidth + 15) / 65);
 
         currentMaxWidth = Math.max(currentMaxWidth, itemWidth);
-      })
+      });
 
-      item.layout.minW = currentMaxWidth > 10 ? 10 : currentMaxWidth
+      item.layout.minW = currentMaxWidth > 10 ? 10 : currentMaxWidth;
     } else if (item.type === "RadioButtons") {
       let dom = document.querySelector(`#${item.key}`);
       let redioItemArray = dom.querySelectorAll(`.ant-radio-wrapper`);
       let currentMaxWidth = minWidth;
 
-      redioItemArray.forEach((item) => {
+      redioItemArray.forEach(item => {
         let width = 0;
 
-        item.querySelectorAll(`span`).forEach((span) => {
-          width += span.offsetWidth
+        item.querySelectorAll(`span`).forEach(span => {
+          width += span.offsetWidth;
         });
 
         let itemWidth = Math.ceil((width + 15) / 65);
 
         currentMaxWidth = Math.max(currentMaxWidth, itemWidth);
-      })
+      });
 
-      item.layout.minW = currentMaxWidth > 10 ? 10 : currentMaxWidth
+      item.layout.minW = currentMaxWidth > 10 ? 10 : currentMaxWidth;
     }
-
   });
 };
 
@@ -176,7 +173,7 @@ export const saveForm = (
   verificationList,
   errMessage,
   type,
-  callback        //将保存按钮设为可点击
+  callback //将保存按钮设为可点击
 ) => dispatch => {
   _calcFormComponentLayout(formDataArray);
 
@@ -185,10 +182,10 @@ export const saveForm = (
     name: "默认布局",
     layout: [],
     createDate: Date.now(),
-    modified: Date.now(),
+    modified: Date.now()
   };
 
-  formDataArray.forEach((item) => {
+  formDataArray.forEach(item => {
     defaultLayout.layout.push({
       ...item.layout,
       isShow: true
@@ -226,28 +223,29 @@ export const saveForm = (
     headers: {
       "Content-Type": "application/json"
     }
-  }).then(response => {
-    console.log("res", response);
-    if (type === "back") {
-      // console.log("response",response);
-      message.success("保存成功", 1, () => {
+  })
+    .then(response => {
+      console.log("res", response);
+      if (type === "back") {
+        // console.log("response",response);
+        message.success("保存成功", 1, () => {
+          dispatch({
+            type: SAVE_FORM_CHANGE,
+            localForm: response.data,
+            data: response.data.components
+          });
+          window.location.href = config.hostUrl;
+        });
+      } else {
+        message.success("保存成功", 1);
         dispatch({
           type: SAVE_FORM_CHANGE,
           localForm: response.data,
           data: response.data.components
         });
-        window.location.href = config.hostUrl;
-      });
-    } else {
-      message.success("保存成功", 1);
-      dispatch({
-        type: SAVE_FORM_CHANGE,
-        localForm: response.data,
-        data: response.data.components
-      });
-      callback();
-    }
-  })
+        callback();
+      }
+    })
     .catch(err => {
       // if (err.response.data === "Token Expired") {
       //   console.log("token 已过期，正在请求新的token");
@@ -275,23 +273,22 @@ export const updateForm = (
     name: "默认布局",
     layout: [],
     createDate: Date.now(),
-    modified: Date.now(),
+    modified: Date.now()
   };
 
-  formDataArray.forEach((item) => {
+  formDataArray.forEach(item => {
     defaultLayout.layout.push({
       ...item.layout,
       isShow: true
     });
   });
 
-
-  if (localForm.layoutArray  != void 0) {
+  if (localForm.layoutArray != void 0) {
     localForm.layoutArray.shift();
     localForm.layoutArray.unshift(defaultLayout);
   } else {
-    localForm.layoutArray = defaultLayout.copyWithin();
-    localForm.currentLayoutId = "defaultLayout"
+    localForm.layoutArray = defaultLayout.layout;
+    localForm.currentLayoutId = "defaultLayout";
   }
 
   let { path, id, createdTime, currentLayoutId, layoutArray } = localForm;
@@ -312,10 +309,8 @@ export const updateForm = (
       validate: verificationList
     },
     currentLayoutId, //默认布局ID
-    layoutArray, //布局
+    layoutArray //布局
   };
-
-
 
   instanceAxios({
     url: config.apiUrl + `/form/${formData.id}`,
@@ -353,7 +348,6 @@ export const updateForm = (
       console.info(err);
       // }
     });
-
 };
 
 export const setFormName = name => {
@@ -373,7 +367,7 @@ export const initForm = id => dispatch => {
     .get(config.apiUrl + "/form/" + id)
     .then(res => {
       let { components, name, formValidation } = res.data;
-      let localForm = res.data
+      let localForm = res.data;
       dispatch({
         type: INIT_FORM_DOM,
         data: components,
@@ -382,7 +376,7 @@ export const initForm = id => dispatch => {
         verificationList: formValidation.validate,
         localForm,
         isInitForming: false
-      })
+      });
     })
     .catch(err => {
       dispatch({
@@ -406,4 +400,3 @@ export const getAllForms = () => dispatch => {
       console.log(err);
     });
 };
-
