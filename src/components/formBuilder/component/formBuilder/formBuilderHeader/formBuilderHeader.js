@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Icon, Modal, Tooltip, message, Spin } from "antd";
 import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import config from "../../../config/config";
 class ForBuilderHeader extends React.Component {
   constructor(props) {
@@ -35,7 +36,9 @@ class ForBuilderHeader extends React.Component {
   };
   showModal = () => {
     if (!this.props.isFormChanged) {
-      window.location.href = config.hostUrl;
+      let appId = this.props.match.params.appId;
+      this.props.history.push(`/app/${appId}/setting`);
+      // console.log(this.props);
     } else {
       this.setState(state => ({
         ...state,
@@ -248,4 +251,4 @@ export default connect(
     saveForm,
     updateForm
   }
-)(ForBuilderHeader);
+)(withRouter(ForBuilderHeader));
