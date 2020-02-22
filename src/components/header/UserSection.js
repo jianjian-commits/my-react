@@ -8,6 +8,7 @@ const MenuItems = (allTeam, setVisible, currentTeam, getCurrentTeam) => (
       <Menu.Item>
         <span>我的团队</span>
       </Menu.Item>
+
       {allTeam.map(team => {
         const check = team.id === currentTeam.id;
         return (
@@ -41,6 +42,7 @@ const MenuItems = (allTeam, setVisible, currentTeam, getCurrentTeam) => (
 
 const User = props => {
   const { signOut, userDetail, allTeam, currentTeam, getCurrentTeam } = props;
+  // debugger;
   const [visible, setVisible] = useState(false);
   return (
     <>

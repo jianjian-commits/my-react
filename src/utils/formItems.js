@@ -358,7 +358,7 @@ const userEmail = ({ form, payload }) => {
   };
 };
 
-const submit = ({ form, payload }) => ({
+const submit = ({ form, payload, userId, invited_token }) => ({
   itemName: "actionType",
   options: {
     initialValue: payload
@@ -369,6 +369,7 @@ const submit = ({ form, payload }) => ({
       {payload === "register" && "注册"}
       {payload === "resetPassword" && "重置密码"}
       {payload === "submit" && "提交"}
+      {payload === "addTeam" && "加入团队"}
     </Button>
   ),
   additionComponent: (
@@ -386,6 +387,11 @@ const submit = ({ form, payload }) => ({
       {payload === "resetPassword" && (
         <div style={{ textAlign: "center" }}>
           返回<Link to="/login">登录</Link>
+        </div>
+      )}
+      {payload === "addTeam" && (
+        <div style={{ textAlign: "center" }}>
+          返回<Link to={`/login/${userId}/${invited_token}`}>登录</Link>
         </div>
       )}
     </>

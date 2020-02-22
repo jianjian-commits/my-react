@@ -4,8 +4,9 @@ import request from "../utils/request";
 export const initialState = {
   isLoading: false,
   loginData: null,
-  isAuthenticated: !!localStorage.getItem("id_token"),
+  isAuthenticated: localStorage.getItem("id_token"),
   userId: localStorage.getItem("id_token"),
+  currentTeam: JSON.parse(localStorage.getItem("currentTeam")) || {},
   userDetail: JSON.parse(localStorage.getItem("userDetail")) || {},
   allTeam: JSON.parse(localStorage.getItem("allTeam")) || [],
   error: null
@@ -83,7 +84,7 @@ export const getCurrentTeam = teamId => async dispatch => {
   try {
     const res = await request(`/team/${teamId}`);
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("cyrrentTeam", JSON.stringify(res.data));
+      localStorage.setItem("currentTeam", JSON.stringify(res.data));
       dispatch(fetchCurrentTeam(res.data));
     }
   } catch (err) {
@@ -122,7 +123,7 @@ export const loginUser = ({ rest }) => async dispatch => {
     }
   } catch (err) {
     dispatch(loginFailure());
-    message.error("登陆失败,请重试");
+    message.error("账号密码信息不匹配,请重试");
   }
 };
 

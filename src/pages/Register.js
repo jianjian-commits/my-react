@@ -5,38 +5,64 @@ import request from "../utils/request";
 import registerStyles from "../styles/login.module.scss";
 import PublicForm from "../utils/publicForm";
 import { registerParameter } from "../utils/formItems";
+import Loading from "./loading";
 
 export default connect(({ login }) => ({
   isAuthenticated: login.isAuthenticated
 }))(function Register({ history, isAuthenticated }) {
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
-  const [name, setName] = useState(null);
-  const [teamName, setTeamName] = useState(null);
+  const [data, setData] = useState({ spinning: false });
+  const [isAuthenticateded, setIsAuthenticateded] = useState(isAuthenticated);
+  //
+  const [alreadyAddTeam, setAlreadyAddTeam] = useState(true);
   const pathname = history.location.pathname.split("/");
   const userId = pathname[2];
   const invited_token = pathname[3];
-  if (userId) {
+  if (!userId && isAuthenticated) history.push("/app");
+  if (userId && !data.team && !data.inviteUserDetail) {
+    // setData({ ...data, spinning: true });
     try {
       request(`/sysUser/${userId}`).then(res => {
-        if (res && res.status === "SUCCESS") {
-          setName(res.data.name);
+        if (res && res.status === "SUCCESS" && !data.userDetail) {
           request(`/team/sysUser/${userId}`).then(resu => {
-            if (resu && resu.status === "SUCCESS") {
-              setTeamName(resu.data.name);
+            if (
+              resu &&
+              resu.status === "SUCCESS" &&
+              !data.team &&
+              !!isAuthenticated
+            ) {
+              request(`/sysUser/${isAuthenticated}`).then(result => {
+                if (result && result.status === "SUCCESS")
+                  setData({
+                    ...data,
+                    inviteUserDetail: res.data,
+                    team: resu.data,
+                    currentUserDetail: result.data,
+                    spinning: false
+                  });
+              });
             } else {
-              message.error("获取团队id失败");
+              setData({
+                ...data,
+                inviteUserDetail: res.data,
+                team: resu.data,
+                spinning: false
+              });
             }
           });
         } else {
-          message.error("获取邀请人信息失败");
+          setData({ ...data, inviteUserDetail: res.data, spinning: false });
         }
       });
     } catch (error) {
       message.error("获取信息失败");
     }
+    // setData({ ...data, spinning: false });
   }
+  if (userId && !data.team && !data.inviteUserDetail) return null;
   const registerUser = async ({ actionType, rest }) => {
+    setData({ ...data, spinning: true });
     try {
       const res = await request(
         userId ? `/reg/token/${invited_token}` : "/reg",
@@ -52,28 +78,75 @@ export default connect(({ login }) => ({
       setStatus(false);
       setVisible(false);
     }
+    setData({ ...data, spinning: false });
   };
   const confirm = () => {
     if (!status) return setVisible(true);
     history.push("/login");
   };
 
+  const currentUserAddTeam = () => {
+    try {
+      request(`/team/${data.team.id}`, {
+        method: "post",
+        data: isAuthenticated
+      }).then(res => {
+        if (res && res.status === "SUCCESS") {
+          history.push("/app");
+        } else {
+          setAlreadyAddTeam(true);
+        }
+      });
+    } catch (error) {
+      message.error("加入团队失败");
+    }
+  };
+
+  const anotherUserAddTeam = () => {
+    history.push(`/login/${userId}/${invited_token}`);
+  };
+
+  const BlueFont = props => {
+    return <span style={{ color: "#1890ff" }}>{props.children}</span>;
+  };
   const authenticatedRegister = (
     <div className={registerStyles.authenticatedDiv}>
-      {!isAuthenticated && (
+      {alreadyAddTeam ? (
+        <>
+          {isAuthenticated && (
+            <>
+              <div>
+                <Button onClick={currentUserAddTeam}>
+                  当前帐号
+                  {data.currentUserDetail && (
+                    <BlueFont>{data.currentUserDetail.name}</BlueFont>
+                  )}
+                  加入
+                </Button>
+              </div>
+              <hr />
+            </>
+          )}
+          <div>
+            <Button onClick={() => setIsAuthenticateded(false)}>
+              注册账号加入
+            </Button>
+          </div>
+          <div>
+            <Button onClick={anotherUserAddTeam}>其他账号加入</Button>
+          </div>
+        </>
+      ) : (
         <>
           <div>
-            <Button>当前帐号XXX加入</Button>
+            <span>您的账号</span>
           </div>
-          <hr />
+          <div style={{ textAlign: "center" }}>
+            {data.currentUserDetail.name}
+          </div>
+          <div>已经加入团队{data.team.name}</div>
         </>
       )}
-      <div>
-        <Button href="/register">注册账号加入</Button>
-      </div>
-      <div>
-        <Button href="/login">其他账号加入加入</Button>
-      </div>
     </div>
   );
   const component = (
@@ -82,20 +155,32 @@ export default connect(({ login }) => ({
         <div className={registerStyles.title}>
           <div>
             <h2>
-              {userId ? `${name}邀请您加入团队${teamName}` : "感谢您的选择,"}
+              {userId && data.inviteUserDetail && data.team ? (
+                <>
+                  <BlueFont>{data.inviteUserDetail.name}</BlueFont>
+                  邀请您加入团队<BlueFont>{data.team.name}</BlueFont>
+                </>
+              ) : (
+                "感谢您的选择,"
+              )}
             </h2>
           </div>
-          {!isAuthenticated && (
+          {!isAuthenticateded && (
             <div>
               <h2>完善个人信息立即开始试用吧!</h2>
             </div>
           )}
         </div>
         <div>
-          {isAuthenticated ? (
+          {isAuthenticateded ? (
             authenticatedRegister
           ) : (
-            <PublicForm parameter={registerParameter} func={registerUser} />
+            <PublicForm
+              parameter={registerParameter}
+              func={registerUser}
+              userId={userId}
+              invited_token={invited_token}
+            />
           )}
         </div>
       </div>
@@ -112,5 +197,11 @@ export default connect(({ login }) => ({
       ]}
     />
   );
-  return <>{visible ? component : registerResult}</>;
+  return (
+    <>
+      <Loading spinning={data.spinning}>
+        {visible ? component : registerResult}
+      </Loading>
+    </>
+  );
 });

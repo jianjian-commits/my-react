@@ -18,19 +18,27 @@ export const PrivateRoute = ({ component, options, ...rest }) => (
   />
 );
 
-export const PublicRoute = ({ component, props, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      localStorage.getItem("id_token") ? (
-        <Redirect
-          to={{
-            pathname: "/"
-          }}
-        />
-      ) : (
-        React.createElement(component, props)
-      )
-    }
-  />
-);
+export const PublicRoute = ({ component, props, ...rest }) => {
+  if (
+    rest.location.pathname !== "/login" &&
+    rest.location.pathname !== "/register"
+  )
+    return (
+      <Route
+        {...rest}
+        render={props => React.createElement(component, props)}
+      />
+    );
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        localStorage.getItem("id_token") ? (
+          <Redirect to={{ pathname: "/" }} />
+        ) : (
+          React.createElement(component, props)
+        )
+      }
+    />
+  );
+};
