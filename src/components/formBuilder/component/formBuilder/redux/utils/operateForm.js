@@ -234,7 +234,11 @@ export const saveForm = (
             localForm: response.data,
             data: response.data.components
           });
-          window.location.href = config.hostUrl;
+          let newPath = window.location.pathname
+            .split("/")
+            .splice(0, window.location.pathname.split("/").length - 3)
+            .join("/");
+          window.location.href = `${window.location.origin}${newPath}`;
         });
       } else {
         message.success("保存成功", 1);
@@ -328,7 +332,11 @@ export const updateForm = (
             localForm: response.data,
             data: response.data.components
           });
-          window.location.href = config.hostUrl;
+          let newPath = window.location.pathname
+            .split("/")
+            .splice(0, window.location.pathname.split("/").length - 3)
+            .join("/");
+          window.location.href = `${window.location.origin}${newPath}`;
         });
       } else {
         message.success("保存成功", 1);
