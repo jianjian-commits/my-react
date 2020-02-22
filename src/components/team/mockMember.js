@@ -8,14 +8,6 @@ const data = [
     group: "管理员"
   },
   {
-    key: 0,
-    name: "Kevin",
-    nickname: "Kevin01",
-    mail: "Kevin@wctsoft.com",
-    lastLogin: new Date().toLocaleString("chinese", { hour12: false }),
-    group: "管理员"
-  },
-  {
     key: 1,
     name: "Halen",
     nickname: "Halen01",

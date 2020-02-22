@@ -8,7 +8,6 @@ import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
 import Dispose from "../pages/Dispose";
 import UserDetail from "../pages/userDetail";
-import Team from "../pages/Teamdemo";
 
 export const main = [
   {

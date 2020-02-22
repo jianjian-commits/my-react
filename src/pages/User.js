@@ -76,7 +76,7 @@ class UserPage extends React.Component {
         <CommonHeader navigationList={navigationList} />
         <Layout>
           <Sider style={{ background: "#fff" }}>
-            <div>团队管理</div>
+            <div className={commonClasses.title}>团队管理</div>
             <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
           </Sider>
           <Content className={commonClasses.container}>

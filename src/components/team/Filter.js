@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col, Input, Select, Button } from "antd";
 import data from "./mockMember";
+import classes from "./team.module.scss";
 
 const { Option } = Select;
 const Filter = props => {
@@ -25,26 +26,22 @@ const Filter = props => {
   const onClickFilter = () => {
     const newData = groupKey
       ? data.filter(item => {
-          if (item.group === groupKey) {
-            return item;
-          }
+          return item.group === groupKey;
         })
       : data;
     const resultData = inputStr
       ? newData.filter(item => {
-          if (
+          return (
             item.name.includes(inputStr) ||
             item.mail.includes(inputStr) ||
             item.nickname.includes(inputStr)
-          ) {
-            return item;
-          }
+          );
         })
       : newData;
     props.fn(resultData);
   };
   return (
-    <div>
+    <div className={classes.fliter}>
       <Row>
         <Col span={5}>用户信息</Col>
         <Col span={5}>分组</Col>

@@ -11,28 +11,22 @@ import {
 } from "antd";
 import initData from "./mockMember";
 import Filter from "./Filter";
+import ChangeGroup from "./ChangeGroup";
+import classes from "./team.module.scss";
 
 const TeamMember = () => {
   const [isShow, setIsShow] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
+  const [changeGroup, setChangeGroup] = React.useState(false);
   const [data, setData] = React.useState(initData);
+  const [userKey, setUserKey] = React.useState(null);
   //判断管理员的个数及是否有操作按钮
   const onSwitch =
     initData.filter(item => {
-      if (item.group === "管理员") {
-        return item;
-      }
+      return item.group === "管理员";
     }).length === 1
       ? true
       : false;
-  const confirm = e => {
-    message.success("成功");
-  };
-
-  const cancel = e => {
-    message.error("失败");
-  };
-
   const columns = [
     {
       title: "姓名",
@@ -55,12 +49,18 @@ const TeamMember = () => {
       dataIndex: "group"
     },
     {
-      title: "Action",
+      title: "操作",
       key: "action",
       render: (text, record) => {
         return text.group === "管理员" && onSwitch ? null : (
           <span>
-            <Button type="link">变更分组</Button>
+            <Button
+              type="link"
+              onClick={handleChange.bind(this, text.name)}
+              style={{ paddingLeft: "0" }}
+            >
+              变更分组
+            </Button>
             <Popconfirm
               title="把改成员从团队中踢出?"
               onConfirm={confirm}
@@ -76,33 +76,58 @@ const TeamMember = () => {
       }
     }
   ];
+  const confirm = e => {
+    message.success("成功");
+  };
 
+  const cancel = e => {
+    message.error("失败");
+  };
+
+  // 过滤
   const onClickFilter = () => {
     setIsShow(!isShow);
   };
   const filterData = value => {
     setData(value);
   };
+  // 邀请模态框
   const showModalInvite = () => {
     setVisible(true);
   };
   const handleCancel = () => {
     setVisible(false);
   };
+
+  const handleChange = (value, e) => {
+    // console.log(e)
+    // console.log(value)
+    setUserKey(value);
+    setChangeGroup(!changeGroup);
+  };
+
   return (
-    <div>
-      <Row type="flex" justify="space-between">
+    <div className={classes.container}>
+      <Row type="flex" justify="space-between" className={classes.box}>
         <Col>
-          <Button onClick={showModalInvite}>邀请</Button>
+          <Button size="large" onClick={showModalInvite}>
+            邀请
+          </Button>
         </Col>
         <Col>
-          <Button type="link" icon="filter" onClick={onClickFilter}>
+          <Button
+            size="large"
+            type="link"
+            icon="filter"
+            onClick={onClickFilter}
+          >
             筛选
           </Button>
         </Col>
       </Row>
       {isShow ? <Filter fn={filterData} /> : null}
       <Table pagination={false} columns={columns} dataSource={data} />
+      {/* //邀请模态框 */}
       <Modal
         title="邀请新成员加入"
         visible={visible}
@@ -120,6 +145,13 @@ const TeamMember = () => {
         </Row>
         <p>邀请链接14天有效</p>
       </Modal>
+      {changeGroup ? (
+        <ChangeGroup
+          userKey={userKey}
+          visible={changeGroup}
+          fn={handleChange}
+        />
+      ) : null}
     </div>
   );
 };

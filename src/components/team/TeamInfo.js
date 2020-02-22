@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Input, Row, Col, List, Typography, Button } from "antd";
+import classes from "./team.module.scss";
 
 const { Title } = Typography;
 const infoData = [
@@ -47,20 +48,30 @@ const EditInput = props => {
   return (
     <div>
       {redact ? (
-        <Row>
+        <Row type="flex" gutter={5} align="middle">
           <Col>{obj.lable}:</Col>
           <Col>
-            <Input defaultValue={obj.value} onChange={changeValue} />
-            <Button type="link" onClick={submitAmend.bind(this, obj.key)}>
-              确认
-            </Button>
-            <Button type="link" onClick={onClickAmend}>
-              取消
-            </Button>
+            <Row type="flex" gutter={5} align="middle">
+              <Col>
+                <Input defaultValue={obj.value} onChange={changeValue} />
+              </Col>
+              <Col>
+                {" "}
+                <Button type="link" onClick={submitAmend.bind(this, obj.key)}>
+                  {" "}
+                  确认{" "}
+                </Button>
+              </Col>
+              <Col>
+                <Button type="link" onClick={onClickAmend}>
+                  取消
+                </Button>
+              </Col>
+            </Row>
           </Col>
         </Row>
       ) : (
-        <Row type="flex" gutter={16}>
+        <Row type="flex" gutter={16} align="middle">
           <Col>{obj.lable}:</Col>
           <Col>{obj.value}</Col>
           <Col>
@@ -76,10 +87,9 @@ const EditInput = props => {
 
 const TeamInfo = () => {
   return (
-    <div>
+    <div className={classes.container}>
       <Title level={3}>团队信息</Title>
       <List
-        bordered={true}
         itemLayout="horizontal"
         dataSource={infoData}
         renderItem={item => (
