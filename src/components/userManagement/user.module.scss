@@ -1,3 +1,29 @@
 .wrapper {
   padding: 10px;
 }
+
+.setting {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+.panel {
+  width: 85%;
+  display: inherit;
+  justify-content: space-between;
+  & > div:nth-of-type(1) {
+    display: inherit;
+    align-items: center;
+    & > span {
+      margin: 0 10px 0 0;
+      font-size: 17px;
+      font-weight: 500;
+      color: rgba(72, 72, 72, 1);
+    }
+  }
+  & > div:nth-of-type(2) {
+    & > span {
+      margin: 0 0 0 10px;
+    }
+  }
+}

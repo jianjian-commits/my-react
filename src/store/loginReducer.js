@@ -1,6 +1,13 @@
+import { message } from "antd";
+import request from "../utils/request";
+
 export const initialState = {
   isLoading: false,
+  loginData: null,
   isAuthenticated: !!localStorage.getItem("id_token"),
+  userDatas: (JSON.parse(localStorage.getItem("userData")) || []).filter(
+    l => localStorage.getItem("id_token") === l.username
+  )[0],
   error: null
 };
 
@@ -15,8 +22,9 @@ export const startLogin = () => ({
   type: START_LOGIN
 });
 
-export const loginSuccess = () => ({
-  type: LOGIN_SUCCESS
+export const loginSuccess = payload => ({
+  type: LOGIN_SUCCESS,
+  payload
 });
 
 export const loginFailure = () => ({
@@ -27,16 +35,39 @@ export const resetError = () => ({
   type: RESET_ERROR
 });
 
-export const loginUser = (login, password) => dispatch => {
-  dispatch(startLogin());
+export const fetchDatas = () => dispatch => {
+  const res = (JSON.parse(localStorage.getItem("userData")) || []).filter(
+    l => localStorage.getItem("id_token") === l.username
+  )[0];
+  dispatch(loginSuccess(res));
+};
 
-  if (!!login && !!password) {
-    setTimeout(() => {
-      localStorage.setItem("id_token", "1");
-      dispatch(loginSuccess());
-    }, 2000);
-  } else {
+export const loginUser = ({ actionType, rest }) => async dispatch => {
+  dispatch(startLogin());
+  try {
+    const res = await request("/login", {
+      method: "post",
+      data: { loginType: "PASSWORD", ...rest }
+    });
+    if (res && res.status === "SUCCESS") {
+      request(`/team/sysUser/${res.data}`).then(result => {
+        if (result && result.status === "SUCCESS") {
+          setTimeout(() => {
+            localStorage.setItem("id_token", 1);
+            message.success("登陆成功");
+            dispatch(loginSuccess(result.data));
+          }, 100);
+        } else {
+          message.error("获取数据失败");
+        }
+      });
+    } else {
+      dispatch(loginFailure());
+      message.error("账号密码信息不匹配,请重试");
+    }
+  } catch (err) {
     dispatch(loginFailure());
+    message.error("登陆失败,请重试");
   }
 };
 
@@ -61,7 +92,8 @@ export default function loginReducer(state = initialState, { type, payload }) {
         ...state,
         isLoading: false,
         isAuthenticated: true,
-        error: null
+        error: null,
+        loginData: payload
       };
     case LOGIN_FAILURE:
       return {
