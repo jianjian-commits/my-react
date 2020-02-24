@@ -84,10 +84,6 @@ const AppDetail = () => {
     setEle(selectCom(key, appDetailMenu));
   };
 
-<<<<<<< HEAD
-=======
-  console.log(selectedForm);
->>>>>>> master
   return (
     <Layout>
       <CommonHeader
