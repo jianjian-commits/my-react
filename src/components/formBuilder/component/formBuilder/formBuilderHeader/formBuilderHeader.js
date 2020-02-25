@@ -38,7 +38,6 @@ class ForBuilderHeader extends React.Component {
     if (!this.props.isFormChanged) {
       let appId = this.props.match.params.appId;
       this.props.history.push(`/app/${appId}/setting`);
-      // console.log(this.props);
     } else {
       this.setState(state => ({
         ...state,
@@ -80,7 +79,8 @@ class ForBuilderHeader extends React.Component {
       ...state,
       visible: false
     }));
-    window.location.href = config.hostUrl;
+    let appId = this.props.match.params.appId;
+    this.props.history.push(`/app/${appId}/setting`);
   };
 
   /*
