@@ -5,23 +5,22 @@ import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 
 export default connect()(function InviteUser(props) {
-  const { userId, currentTeam } = props;
+  const { userDetail, currentTeam } = props;
+  const { id, teamId } = userDetail;
   const [visible, setVisible] = useState(false);
   const [token, setToken] = useState(null);
-  async function handleInviteUserBtn(teamId) {
+  async function handleInviteUserBtn() {
     try {
-      const res = await request(`/${teamId}/token`);
+      const res = await request(`/team/${teamId}/invitedToken`);
       if (res && res.status === "SUCCESS") {
         setToken(res.data);
         setVisible(true);
-      } else {
-        message.error("token获取失败");
       }
     } catch (err) {
       message.error("token获取失败");
     }
   }
-  const registerUrl = `${window.location.origin}/register/${userId}/${token}`;
+  const inviteUrl = `${window.location.origin}/invite/${id}/${teamId}/${token}`;
   return (
     <>
       <Button
@@ -39,10 +38,10 @@ export default connect()(function InviteUser(props) {
       >
         <p> 将链接发给同事，即可通过注册的方式加入企业。</p>
         <div style={{ display: "flex" }}>
-          <Input value={registerUrl} />
+          <Input value={inviteUrl} />
           <Button
             onClick={() => {
-              copy(registerUrl);
+              copy(inviteUrl);
               message.success("复制成功!");
             }}
           >

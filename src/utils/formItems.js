@@ -358,7 +358,7 @@ const userEmail = ({ form, payload }) => {
   };
 };
 
-const submit = ({ form, payload, userId, invited_token }) => ({
+const submit = ({ form, payload, userId, teamId, token }) => ({
   itemName: "actionType",
   options: {
     initialValue: payload
@@ -391,9 +391,14 @@ const submit = ({ form, payload, userId, invited_token }) => ({
       )}
       {payload === "addTeam" && (
         <div style={{ textAlign: "center" }}>
-          返回<Link to={`/login/${userId}/${invited_token}`}>登录</Link>
+          <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
         </div>
       )}
+      {/* {payload === "addTeam" && (
+        <div style={{ textAlign: "center" }}>
+          返回<Link to={`/login/${userId}/${invited_token}`}>登录</Link>
+        </div>
+      )} */}
     </>
   )
 });

@@ -4,14 +4,15 @@ import request from "../utils/request";
 export const initialState = {
   isLoading: false,
   loginData: null,
-  isAuthenticated: localStorage.getItem("id_token"),
-  userId: localStorage.getItem("id_token"),
+  isAuthenticated: !!localStorage.getItem("id_token"),
   currentTeam: JSON.parse(localStorage.getItem("currentTeam")) || {},
   userDetail: JSON.parse(localStorage.getItem("userDetail")) || {},
   allTeam: JSON.parse(localStorage.getItem("allTeam")) || [],
-  error: null
+  error: null,
+  isSpinning: false
 };
 
+export const START_SPINNING = "Login/START_SPINNING";
 export const START_LOGIN = "Login/START_LOGIN";
 export const LOGIN_SUCCESS = "Login/LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "Login/LOGIN_FAILURE";
@@ -22,13 +23,16 @@ export const FETCH_ALL_TEAM = "Login/FETCH_ALL_TEAM";
 export const FETCH_CURRENT_TEAM = "Login/FETCH_TEAM";
 export const FETCH_USER_DETAIL = "Login/FETCH_USER_DETAIL";
 
+export const startSpinning = () => ({
+  type: START_SPINNING
+});
+
 export const startLogin = () => ({
   type: START_LOGIN
 });
 
-export const loginSuccess = payload => ({
-  type: LOGIN_SUCCESS,
-  payload
+export const loginSuccess = () => ({
+  type: LOGIN_SUCCESS
 });
 
 export const loginFailure = () => ({
@@ -54,6 +58,7 @@ export const fetchUserDetail = payload => ({
   payload
 });
 
+//更新个人信息
 export const updateUserDetail = (userId, payload) => async dispatch => {
   try {
     const res = await request(`/sysUser/${userId}`, {
@@ -68,6 +73,8 @@ export const updateUserDetail = (userId, payload) => async dispatch => {
     message.error("个人信息修改失败");
   }
 };
+
+//获取个人信息
 export const getUserDetail = userId => async dispatch => {
   try {
     const res = await request(`/sysUser/${userId}`);
@@ -80,6 +87,7 @@ export const getUserDetail = userId => async dispatch => {
   }
 };
 
+//获取当前团队信息
 export const getCurrentTeam = teamId => async dispatch => {
   try {
     const res = await request(`/team/${teamId}`);
@@ -92,9 +100,10 @@ export const getCurrentTeam = teamId => async dispatch => {
   }
 };
 
-export const getAllTeam = userId => async dispatch => {
+//获取所有团队信息
+export const getAllTeam = () => async dispatch => {
   try {
-    const res = await request(`/team/all/sysUser/${userId}`);
+    const res = await request(`/team/currentUser/all`);
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("allTeam", JSON.stringify(res.data));
       dispatch(fetchAllTeam(res.data));
@@ -104,22 +113,33 @@ export const getAllTeam = userId => async dispatch => {
   }
 };
 
-export const loginUser = ({ rest }) => async dispatch => {
+//初始化所有信息
+export const initAllDetail = () => async dispatch => {
+  try {
+    const res = await request("/currentUser");
+    if (res && res.status === "SUCCESS") {
+      localStorage.setItem("userDetail", JSON.stringify(res.data));
+      dispatch(fetchUserDetail(res.data));
+      await getCurrentTeam(res.data.teamId)(dispatch);
+      await getAllTeam(res.data.id)(dispatch);
+    }
+  } catch (error) {
+    message.error("获取当前用户信息失败");
+  }
+};
+
+//登录用户
+export const loginUser = ({ token, rest }) => async dispatch => {
   await dispatch(startLogin());
   try {
-    const res = await request("/login", {
+    const res = await request(token ? `/login?token=${token}` : "/login", {
       method: "post",
       data: { loginType: "PASSWORD", ...rest }
     });
     if (res && res.status === "SUCCESS") {
-      await getAllTeam(res.data.id)(dispatch);
-      await getCurrentTeam(res.data.teamId)(dispatch);
-      await getUserDetail(res.data.id)(dispatch);
-      localStorage.setItem("id_token", res.data.id);
-      dispatch(loginSuccess(res.data.id));
-    } else {
-      dispatch(loginFailure());
-      message.error("账号密码信息不匹配,请重试");
+      await initAllDetail()(dispatch);
+      localStorage.setItem("id_token", 1);
+      dispatch(loginSuccess());
     }
   } catch (err) {
     dispatch(loginFailure());
@@ -145,10 +165,15 @@ export const signOut = () => async dispatch => {
 
 export default function loginReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case START_SPINNING:
+      return {
+        ...state,
+        isSpinning: true,
+      };
     case START_LOGIN:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
       };
     case LOGIN_SUCCESS:
       return {
@@ -171,7 +196,7 @@ export default function loginReducer(state = initialState, { type, payload }) {
     case SIGN_OUT_SUCCESS:
       return {
         ...state,
-        isAuthenticated: false
+        isAuthenticated: false,
       };
     case FETCH_USER_DETAIL:
       return {

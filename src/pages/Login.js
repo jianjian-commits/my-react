@@ -10,12 +10,18 @@ import {
   loginPhoneParameter
 } from "../utils/formItems";
 
-export default connect(({ login }) => ({ isLoading: login.isLoading }), {
-  loginUser
-})(function Login({ loginUser, isLoading, history }) {
-  const pathname = history.location.pathname.split("/");
-  const userId = pathname[2];
-  const invited_token = pathname[3];
+export default connect(
+  ({ login }) => ({
+    isLoading: login.isLoading,
+    isAuthenticated: login.isAuthenticated
+  }),
+  {
+    loginUser
+  }
+)(function Login({ loginUser, isLoading, match, history, isAuthenticated }) {
+  if (!history.location.query && history.location.pathname !== "/login")
+    history.push("/login");
+
   return (
     <Loading spinning={isLoading}>
       <div className={signinStyles.signin}>
@@ -25,20 +31,14 @@ export default connect(({ login }) => ({ isLoading: login.isLoading }), {
               <PublicForm
                 parameter={loginPasswordParameter}
                 func={loginUser}
-                userId={userId}
-                invited_token={invited_token}
-                history={history}
-                id_token={loginUser.userId}
+                params={match.params}
               />
             </Tabs.TabPane>
             <Tabs.TabPane tab="手机验证码登录" key="2">
               <PublicForm
                 parameter={loginPhoneParameter}
                 func={loginUser}
-                userId={userId}
-                invited_token={invited_token}
-                history={history}
-                id_token={loginUser.userId}
+                params={match.params}
               />
             </Tabs.TabPane>
           </Tabs>

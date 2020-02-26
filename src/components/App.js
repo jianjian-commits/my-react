@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { main, appPaths } from "../routers";
 import { history } from "../store";
-import { PrivateRoute, PublicRoute } from "./shared";
+import { PrivateRoute, PublicRoute, SpecialRoute } from "./shared";
 import ErrorPage from "../pages/Error";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ForgetPassword from "../pages/forgetPassword";
-
+import InviteUser from "../pages/inviteUser";
 import PermissionSetting from "./userManagement/applyPermissionSettings";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
@@ -43,6 +43,21 @@ const App = () => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
+        <SpecialRoute
+          exact
+          path="/invite/:userId/:teamId/:token"
+          component={InviteUser}
+        />
+        <SpecialRoute
+          exact
+          path="/register/:userId/:teamId/:token"
+          component={Register}
+        />
+        <SpecialRoute
+          exact
+          path="/login/:userId/:teamId/:token"
+          component={Login}
+        />
         <PublicRoute path="/register" component={Register} />
         <PublicRoute path="/setting" component={PermissionSetting} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />

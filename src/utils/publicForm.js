@@ -7,9 +7,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
   parameter,
   func,
   userId,
-  invited_token,
-  history,
-  id_token
+  params
 }) {
   const { getFieldDecorator, validateFields } = form;
   const handleSubmit = e => {
@@ -17,9 +15,10 @@ export default Form.create({ name: "login-form" })(function PublicForm({
     validateFields((err, { actionType, verificationCode, ...rest }) => {
       if (!err) {
         console.log("Received values of form: ", actionType, rest);
-        func({ actionType, rest });
-        if (actionType === "addTeam" && id_token)
-          setTimeout(() => history.push("/"), 2000);
+        func({
+          token: params.token ? params.token : null ,
+          rest
+        });
       }
     });
   };
@@ -27,12 +26,11 @@ export default Form.create({ name: "login-form" })(function PublicForm({
     <Form onSubmit={e => handleSubmit(e)}>
       {parameter.map(p => {
         const formItem =
-          p.key === "submit" && userId && invited_token
+          p.key === "submit" && params.userId
             ? formItems[p.key]({
                 form,
                 payload: "addTeam",
-                userId,
-                invited_token
+                ...params
               })
             : formItems[p.key]({ form, payload: p.value });
         return (
