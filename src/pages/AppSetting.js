@@ -63,7 +63,6 @@ const AppSetting = () => {
 
   let { groups, list } = mockForms;
   useEffect(() => {
-    console.log(mockForms);
     let newList = [];
     request("/form?desc=createdTime", {
       methods: "get"
