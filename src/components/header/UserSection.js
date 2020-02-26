@@ -1,6 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown, Icon, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  signOut,
+  getCurrentTeam,
+  initAllDetail
+} from "../../store/loginReducer";
 
 const MenuItems = (allTeam, setVisible, currentTeam, getCurrentTeam) => (
   <>
@@ -41,9 +47,14 @@ const MenuItems = (allTeam, setVisible, currentTeam, getCurrentTeam) => (
 );
 
 const User = props => {
-  const { signOut, userDetail, allTeam, currentTeam, getCurrentTeam } = props;
-  // debugger;
+  const { signOut, login, getCurrentTeam, initAllDetail } = props;
+  const { userDetail, allTeam, currentTeam } = login;
+  const [init, setInit] = useState(false);
   const [visible, setVisible] = useState(false);
+  if (!init) {
+    initAllDetail();
+    setInit(true);
+  }
   return (
     <>
       <Dropdown
@@ -68,4 +79,13 @@ const User = props => {
     </>
   );
 };
-export default User;
+export default connect(
+  ({ login }) => ({
+    login
+  }),
+  {
+    signOut,
+    getCurrentTeam,
+    initAllDetail
+  }
+)(User);

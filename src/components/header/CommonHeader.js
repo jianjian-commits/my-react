@@ -3,7 +3,6 @@ import clx from "classnames";
 import { Layout, Breadcrumb, Button } from "antd";
 import User from "./UserSection";
 import classes from "./header.module.scss";
-import { signOut, getCurrentTeam } from "../../store/loginReducer";
 import { connect } from "react-redux";
 
 const { Header } = Layout;
@@ -46,17 +45,9 @@ const getOperations = ops => {
   ));
 };
 
-export default connect(
-  ({ router, login }) => ({
-    router,
-    loginData: login
-  }),
-  {
-    signOut,
-    getCurrentTeam
-  }
-)(function CommonHeader(props) {
-  const { signOut, loginData, getCurrentTeam } = props;
+export default connect(({ router }) => ({
+  router
+}))(function CommonHeader(props) {
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>
@@ -70,11 +61,7 @@ export default connect(
           {getOperations(props.operations)}
         </div>
         <div className={classes.user}>
-          <User
-            signOut={signOut}
-            {...loginData}
-            getCurrentTeam={getCurrentTeam}
-          />
+          <User />
         </div>
       </div>
     </Header>

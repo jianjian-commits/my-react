@@ -4,13 +4,8 @@ import { message, Button } from "antd";
 import request from "../utils/request";
 import Loading from "./loading";
 import registerStyles from "../styles/login.module.scss";
-import { initAllDetail } from "../store/loginReducer";
 
-export default connect(() => ({}), { initAllDetail })(function InviteUser({
-  match,
-  history,
-  initAllDetail
-}) {
+export default connect()(function InviteUser({ match, history }) {
   const { userId, teamId, token } = match.params;
   const initialState = {
     //邀请人信息
@@ -105,7 +100,6 @@ export default connect(() => ({}), { initAllDetail })(function InviteUser({
       }).then(async res => {
         if (res && res.status === "SUCCESS") {
           message.success(`团队加入成功`);
-          // await initAllDetail();
           setTimeout(() => history.push("/"), 2000);
         } else {
           setState({ ...state, alreadyAddTeam: true });
