@@ -1,47 +1,26 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, Result, message } from "antd";
+import { Button, Result } from "antd";
 import request from "../utils/request";
 import registerStyles from "../styles/login.module.scss";
 import PublicForm from "../utils/publicForm";
 import { registerParameter } from "../utils/formItems";
+import Loading from "./loading";
 
-export default connect(({ login }) => ({
-  isAuthenticated: login.isAuthenticated
-}))(function Register({ history, isAuthenticated }) {
+export default connect()(function Register({ history, match }) {
+  const { userId, token } = match.params;
+  if (!history.location.query && history.location.pathname !== "/register") history.push("/register");
+  const { inviter, invitedTeam } = history.location.query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
-  const [name, setName] = useState(null);
-  const [teamName, setTeamName] = useState(null);
-  const pathname = history.location.pathname.split("/");
-  const userId = pathname[2];
-  const invited_token = pathname[3];
-  if (userId) {
-    try {
-      request(`/sysUser/${userId}`).then(res => {
-        if (res && res.status === "SUCCESS") {
-          setName(res.data.name);
-          request(`/team/sysUser/${userId}`).then(resu => {
-            if (resu && resu.status === "SUCCESS") {
-              setTeamName(resu.data.name);
-            } else {
-              message.error("获取团队id失败");
-            }
-          });
-        } else {
-          message.error("获取邀请人信息失败");
-        }
-      });
-    } catch (error) {
-      message.error("获取信息失败");
-    }
-  }
+  const [spinning, setSpinning] = useState(false);
   const registerUser = async ({ actionType, rest }) => {
+    setSpinning(true);
     try {
-      const res = await request(
-        userId ? `/reg/token/${invited_token}` : "/reg",
-        { method: "post", data: { ...rest } }
-      );
+      const res = await request(userId ? `/reg?token=${token}` : "/reg", {
+        method: "post",
+        data: rest
+      });
       if (res && res.status === "SUCCESS") {
         setStatus(true);
         setVisible(false);
@@ -52,51 +31,43 @@ export default connect(({ login }) => ({
       setStatus(false);
       setVisible(false);
     }
+    setSpinning(false);
   };
   const confirm = () => {
     if (!status) return setVisible(true);
-    history.push("/login");
+    history.push("/")
   };
 
-  const authenticatedRegister = (
-    <div className={registerStyles.authenticatedDiv}>
-      {!isAuthenticated && (
-        <>
-          <div>
-            <Button>当前帐号XXX加入</Button>
-          </div>
-          <hr />
-        </>
-      )}
-      <div>
-        <Button href="/register">注册账号加入</Button>
-      </div>
-      <div>
-        <Button href="/login">其他账号加入加入</Button>
-      </div>
-    </div>
-  );
+  const BlueFont = props => {
+    return <span style={{ color: "#1890ff" }}>{props.children}</span>;
+  };
+
   const component = (
     <div className={registerStyles.signin}>
       <div className={registerStyles.form}>
         <div className={registerStyles.title}>
           <div>
             <h2>
-              {userId ? `${name}邀请您加入团队${teamName}` : "感谢您的选择,"}
+              {userId ? (
+                <>
+                  <BlueFont>{inviter.name}</BlueFont>
+                  邀请您加入团队<BlueFont>{invitedTeam.name}</BlueFont>
+                </>
+              ) : (
+                "感谢您的选择,"
+              )}
             </h2>
           </div>
-          {!isAuthenticated && (
-            <div>
-              <h2>完善个人信息立即开始试用吧!</h2>
-            </div>
-          )}
+          <div>
+            <h2>完善个人信息立即开始试用吧!</h2>
+          </div>
         </div>
         <div>
-          {isAuthenticated ? (
-            authenticatedRegister
-          ) : (
-            <PublicForm parameter={registerParameter} func={registerUser} />
-          )}
+          <PublicForm
+            parameter={registerParameter}
+            func={registerUser}
+            params={match.params}
+          />
         </div>
       </div>
     </div>
@@ -112,5 +83,11 @@ export default connect(({ login }) => ({
       ]}
     />
   );
-  return <>{visible ? component : registerResult}</>;
+  return (
+    <>
+      <Loading spinning={spinning}>
+        {visible ? component : registerResult}
+      </Loading>
+    </>
+  );
 });

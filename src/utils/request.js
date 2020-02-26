@@ -1,7 +1,9 @@
 import axios from "axios";
-import { serverHost, port } from "./config";
+import { serverHost, port } from "../config";
 
 const baseURL = `${serverHost}${port ? ":" + port : ""}`;
+
+axios.defaults.withCredentials = true;
 
 async function request(url, params = {}) {
   const headers = params.headers || {};
