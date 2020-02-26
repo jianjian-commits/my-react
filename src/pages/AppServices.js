@@ -10,7 +10,6 @@ const { Content, Sider } = Layout;
 
 const services = [
   { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
-  { key: "create", name: "创建表单", icon: "table", component: PlaceHolder },
   {
     key: "process",
     name: "自动化",

@@ -78,6 +78,13 @@ export const appPaths = [
     icon: "file_copy",
     component: AppSetting
   },
+  // {
+  //   key: "createForm",
+  //   label: "表单服务",
+  //   path: `/app/:appId/setting/form/create`,
+  //   icon: "file_copy",
+  //   component: CreateForm
+  // },
   {
     key: "form",
     label: "表单服务",
