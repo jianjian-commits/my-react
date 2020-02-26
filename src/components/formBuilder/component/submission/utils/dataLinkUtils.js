@@ -38,11 +38,11 @@ export const getFormAllSubmission = formId => {
 // 从所有数据中过滤出对应字段的数据
 export const filterSubmissionData = (submissions, componentId) => {
   return submissions.map(item => {
-    if(item.data && item.data[componentId]) {
+    if (item.data && item.data[componentId]) {
       return item.data[componentId];
     } else {
-      for(let key in item.data) {
-        if(item.data[key] instanceof Array) {
+      for (let key in item.data) {
+        if (item.data[key] instanceof Array) {
           return filterSubmissionData(item.data[key], componentId);
         }
       }
@@ -65,11 +65,13 @@ export const compareEqualArray = (originArr, arr) => {
 
 // 获取对应字段，同一字段对应不同值，显示所有值内容，争对-下拉框-
 export const getResIndexArray = (value, originArr) => {
-  let indexs=[];
+  let indexs = [];
   if (value instanceof Array) {
     value.sort();
     originArr.forEach((oArr, i) => {
-      oArr.sort();
+      if (Array.isArray(oArr)) {
+        oArr.sort();
+      }
       if (oArr.toString() === value.toString()) {
         indexs.push(i);
       }
@@ -77,7 +79,10 @@ export const getResIndexArray = (value, originArr) => {
     return indexs;
   } else {
     originArr.forEach((item, index) => {
-      if(item === value) {
+      if (Array.isArray(item)) {
+        item.sort();
+      }
+      if (item.toString() === value.toString()) {
         indexs.push(index);
       }
     })

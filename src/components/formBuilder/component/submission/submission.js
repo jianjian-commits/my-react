@@ -51,6 +51,10 @@ import RadioButtonsMobile from "./component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 
+function hasErrors(fieldsError) {
+  return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
+
 class Submission extends Component {
   constructor(props) {
     super(props);
@@ -105,7 +109,6 @@ class Submission extends Component {
     }));
   }
 
-  _checkoutFormChildData() {}
 
   // 设置地址(解决只能获取单个数据)
   handleSetAddress = address => {
@@ -146,11 +149,8 @@ class Submission extends Component {
       if (values[component.id] === "") {
         delete values[component.id];
       }
-      if (
-        component.type === "NumberInput" &&
-        values.hasOwnProperty(component.id)
-      ) {
-        values[component.id] = Number(values[component.id]);
+      if (component.type === "NumberInput" && values.hasOwnProperty(component.id)) {
+        values[component.id] = Number(values[component.id])
       }
     });
     return values;
@@ -315,7 +315,8 @@ class Submission extends Component {
               case "FileUpload":
               case "ImageUpload":
               case "GetLocalPosition":
-                checkData = item[m].data.url;
+                let dataArr = item[m].data;
+                checkData = dataArr.length === 0 ? null : "hasData";
                 break;
               default:
                 checkData = item[m].data;
@@ -357,7 +358,7 @@ class Submission extends Component {
         errorResponseMsg
       },
       () => {
-        console.log("this.state.errorResponseMsg", this.state.errorResponseMsg);
+        // console.log("this.state.errorResponseMsg", this.state.errorResponseMsg);
       }
     );
   };
@@ -411,13 +412,13 @@ class Submission extends Component {
         // console.log("custom data", customDataArray);
         // console.log("custom valicate", customValicate.validate);
 
-        let customCheckResult = customValicate.validate.reduce(
-          (result, validateStr) => {
-            let res = checkCustomValidate(customDataArray, validateStr);
-            return result === false ? false : res;
-          },
-          true
-        );
+        // let customCheckResult = customValicate.validate.reduce(
+        //   (result, validateStr) => {
+        //     let res = checkCustomValidate(customDataArray, validateStr.name);
+        //     return result === false ? false : res;
+        //   },
+        //   true
+        // );
 
         //如果含有移动端组件且为必填，则阻止提交并警告
         if (
@@ -436,27 +437,34 @@ class Submission extends Component {
         //     return false;
         // }
 
-        if (customCheckResult != void 0) {
-          if (customCheckResult === true) {
-            this.setState({ isSubmitted: true, errorResponseMsg: {} });
+        if (true) {
+          if (true) {
+            this.setState({ isSubmitted: true,errorResponseMsg:{} });
             this.props
               .submitSubmission(this.state.formId, values)
               .then(response => {
-                if (response.data.id != void 0) {
+                if(response.data.id != void 0){
                   isMobile
-                    ? Toast.success("提交成功!")
-                    : message.success("提交成功!");
-                  setTimeout(() => {
-                    let appId = this.props.match.params.appId;
-                    this.props.history.push(`/app/${appId}/detail`);
-                  }, 1000);
-                }
-              })
-              .catch(error => {
-                if (error.response && error.response.data.code === 9998) {
-                  this._setErrorResponseData(error.response.data);
-                  isMobile ? Toast.fail("提交失败") : message.error("提交失败");
-                }
+                  ? Toast.success("提交成功!")
+                  : message.success("提交成功!");
+                setTimeout(() => {
+                  let appId = this.props.match.params.appId;
+                  this.props.history.push(`/app/${appId}/detail`);
+                }, 1000);
+              }}).catch((error) => {
+                if (error.response && error.response.data.code === 9998 ) {
+                  this._setErrorResponseData(error.response.data)
+                      isMobile
+                      ? Toast.fail("提交失败")
+                      : message.error("提交失败");
+              }else if(error.response && error.response.data.code === 2003){
+                this.setState({
+                  isSubmitted: false
+                })
+                isMobile
+                ? Toast.fail(error.response.data.msg)
+                : message.error(error.response.data.msg);
+              }
               });
           } else {
             customValicate.errMessage == void 0 ||
@@ -1066,7 +1074,6 @@ class Submission extends Component {
           };
         });
     } else {
-      // console.log(currentLayout);
       layout = currentLayout.map(item => {
         return {
           ...item,
@@ -1076,9 +1083,11 @@ class Submission extends Component {
       });
     }
 
-    let submitBtnObj = this.props.formComponent.components.filter(
-      component => component.type === "Button"
-    )[0];
+   pureFormComponents = pureFormComponents.map(component => {
+      return component;
+    });
+
+  let submitBtnObj = this.props.formComponent.components.filter( component => component.type === "Button")[0];
 
     return (
       <>

@@ -7,7 +7,6 @@ import {
   getResIndexArray
 } from "../../utils/dataLinkUtils";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
-import locale from "antd/lib/date-picker/locale/zh_CN";
 import Address from "./formChildComponents";
 import { checkValueValidByType } from "../../../formBuilder/utils/checkComponentDataValidUtils";
 import FileUpload from "./formChildComponents";
@@ -91,7 +90,7 @@ export default class FormChildTest extends React.Component {
           case "DropDown": {
             let dropDownOptions = [];
             let values = item.data.values;
-            if (values.type == "otherFormData") {
+            if (values.type === "otherFormData") {
               // 子表单关联其他数据
               getSelection(values.formId, values.optionId).then(res => {
                 result[item.key].dropDownOptions = res.map(data => data.value);
@@ -148,7 +147,7 @@ export default class FormChildTest extends React.Component {
           getFormAllSubmission(linkFormId).then(submissions => {
             // 根据联动表单的组件id 得到对应所有数据
             let dataArr = filterSubmissionData(submissions, linkComponentId);
-            if (item.type == "DropDown" || item.type == "MultiDropDown") {
+            if (item.type === "DropDown" || item.type === "MultiDropDown") {
               handleSetComponentEvent(
                 conditionId,
                 value =>
@@ -251,7 +250,7 @@ export default class FormChildTest extends React.Component {
         case "DropDown": {
           let dropDownOptions = [];
           let values = item.data.values;
-          if (values.type == "otherFormData") {
+          if (values.type === "otherFormData") {
             // 子表单关联其他数据
             getSelection(values.formId, values.optionId).then(res => {
               result[item.key].dropDownOptions = res.map(data => data.value);
@@ -305,7 +304,7 @@ export default class FormChildTest extends React.Component {
         getFormAllSubmission(linkFormId).then(submissions => {
           // 根据联动表单的组件id 得到对应所有数据
           let dataArr = filterSubmissionData(submissions, linkComponentId);
-          if (item.type == "DropDown" || item.type == "MultiDropDown") {
+          if (item.type === "DropDown" || item.type === "MultiDropDown") {
             handleSetComponentEvent(
               conditionId,
               value =>
@@ -408,7 +407,7 @@ export default class FormChildTest extends React.Component {
     } = this.props;
     const { data } = item;
     // 是否为数据联动
-    if (data && data.type == "DataLinkage" && data.values.linkFormId) {
+    if (data && data.type === "DataLinkage" && data.values.linkFormId) {
       const {
         conditionId, //联动条件 id(当前表单)
         linkComponentId, //联动条件 id(联动表单)
@@ -512,7 +511,7 @@ export default class FormChildTest extends React.Component {
                 value={item.data}
               />
               {item.hasErr ? (
-                item.data == "" || item.data == void 0 ? (
+                item.data === "" || item.data == void 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -557,7 +556,7 @@ export default class FormChildTest extends React.Component {
                 value={item.data}
               />
               {item.hasErr ? (
-                item.data == "" || item.data == void 0 ? (
+                item.data === "" || item.data == void 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -600,7 +599,7 @@ export default class FormChildTest extends React.Component {
                 item={item}
               ></MultiDropDownMobile>
               {item.hasErr ? (
-                item.data == void 0 || item.data.length == 0 ? (
+                item.data == void 0 || item.data.length === 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -615,7 +614,7 @@ export default class FormChildTest extends React.Component {
         case "CheckboxInput": {
           let dropDownOptions = [];
           let values = item.values;
-          if (values.type == "otherFormData") {
+          if (values.type === "otherFormData") {
             console.warn("暂不支持子表单关联其他数据");
           } else {
             dropDownOptions = Array.isArray(values) ? values : [];
@@ -647,7 +646,7 @@ export default class FormChildTest extends React.Component {
                 }}
               />
               {item.hasErr ? (
-                item.data.length == 0 || item.data == void 0 ? (
+                item.data.length === 0 || item.data == void 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -673,9 +672,9 @@ export default class FormChildTest extends React.Component {
                   <Checkbox
                     key={index}
                     className="formchild-checkbox"
-                    value={typeof item == "object" ? item.value : item}
+                    value={typeof item === "object" ? item.value : item}
                   >
-                    {typeof item == "object" ? item.value : item}
+                    {typeof item === "object" ? item.value : item}
                   </Checkbox>
                 ))}
               </Checkbox.Group> */}
@@ -849,7 +848,7 @@ export default class FormChildTest extends React.Component {
           break;
         case "DateInput":
           let currentDate = "";
-          if (typeof item.data == "string") {
+          if (typeof item.data === "string") {
             currentDate = item.data;
           } else if (item.data) {
             currentDate = item.data.time;
@@ -1024,8 +1023,8 @@ export default class FormChildTest extends React.Component {
               for (let m in formItem) {
                 let item = formItem[m];
 
-                if (typeof item == "object") {
-                  if (item.hasErr == true) {
+                if (typeof item === "object") {
+                  if (item.hasErr === true) {
                     hasItemErr = true;
                   }
                 }

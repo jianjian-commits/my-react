@@ -1,6 +1,7 @@
 import config from "../../../../config/config";
 import { instanceAxios } from "../../../../utils/tokenUtils";
 import Axios from "axios";
+import ID from "../../../../utils/UUID";
 import { message } from "antd";
 import {
   SAVE_FORM_CHANGE,
@@ -193,7 +194,6 @@ export const saveForm = (
   });
 
   const path = new String((Math.random() * 1000000000) | 0);
-  // const id = new String((Math.random() * 1000000000) | 0);
   const time = new Date();
   let formData = {
     display: "form",
@@ -205,7 +205,6 @@ export const saveForm = (
     title: name,
     path,
     name: name,
-    // id,
     createdTime: time,
     updateTime: time,
     formValidation: {
@@ -315,6 +314,8 @@ export const updateForm = (
     currentLayoutId, //默认布局ID
     layoutArray //布局
   };
+
+
 
   instanceAxios({
     url: config.apiUrl + `/form/${formData.id}`,

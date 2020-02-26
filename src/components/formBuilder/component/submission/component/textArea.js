@@ -1,7 +1,7 @@
 import React from "react";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import { isValueValid } from "../../../utils/valueUtils";
-import { Input, Form, Tooltip, Icon } from "antd";
+import { Input, Form } from "antd";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -83,7 +83,7 @@ export default class TextArea extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, submittedData, disabled } = this.props;
+    const { getFieldDecorator, item, disabled } = this.props;
 
     let errMsg = this.props.item.validate.customMessage;
     let tip = "";

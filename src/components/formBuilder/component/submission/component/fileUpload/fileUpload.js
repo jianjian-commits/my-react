@@ -1,7 +1,7 @@
 import React from "react";
 import { Form } from "antd";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
-import { isValueValid, isStringValid } from "../../../../utils/valueUtils";
+import { isValueValid } from "../../../../utils/valueUtils";
 import FileUploadItem from './fileUploadItem';
 export default class FileUpload extends React.Component {
   constructor(props) {

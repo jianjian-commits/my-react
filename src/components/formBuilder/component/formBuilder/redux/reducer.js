@@ -19,8 +19,8 @@ import {
   SAVE_FORM_CHANGE,
   SET_FORMCHILDITEM_VALUES,
   SET_ACTIVEINNERINDEX,
-  INIT_ACTIVEINNERINDEX,
-  INIT_FORM_BEFORE
+  INIT_FORM_BEFORE,
+  SET_ERROR_COMPONENT_INDEX
 
 } from "./action";
 const initState = {
@@ -36,7 +36,9 @@ const initState = {
   errMessage: "",           //不满足校验提示文字
   isFormChanged: false,     //表单是否被修改过
   localForm: null,            //当前正在编辑的表单
-  isInitForming: false
+  isInitForming: false,
+  localFormPath: null,        //点击保存后，新表单的path
+  errorComponentIndex: -1, //当前错误组件索引
 };
 
 export default function formBuilderReducer(state = initState, action) {
@@ -185,9 +187,10 @@ export default function formBuilderReducer(state = initState, action) {
       };
     }
     case ADD_VERIFICATION: {
+      const {name, value} = action;
       return {
         ...state,
-        verificationList: [...state.verificationList, action.value],
+        verificationList: [...state.verificationList, { name, value }],
         isFormChanged: true,
       }
     }
@@ -201,8 +204,9 @@ export default function formBuilderReducer(state = initState, action) {
       }
     }
     case EDIT_VERIFICATION: {
+      const {name, value} = action;
       let newArray = state.verificationList;
-      newArray[action.index] = action.value
+      newArray[action.index] = {name, value}
       return {
         ...state,
         verificationList: [...newArray],
@@ -235,6 +239,12 @@ export default function formBuilderReducer(state = initState, action) {
         ...state,
         activeInnerIndex: action.index,
         activeIndex: -1
+      }
+    }
+    case SET_ERROR_COMPONENT_INDEX: {
+      return {
+        ...state,
+        errorComponentIndex: action.index
       }
     }
     default:

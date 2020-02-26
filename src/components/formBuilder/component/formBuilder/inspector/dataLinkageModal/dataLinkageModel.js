@@ -13,6 +13,7 @@ import {
   filterFormChildAllComponent,
   filterLinkedFormChildItem
 } from "../utils/filterData";
+import { setErrorComponentIndex } from "../../redux/utils/operateFormComponent";
 const { Option } = Select;
 
 const defaultStyle = {
@@ -36,6 +37,8 @@ class DataLinkageModal extends React.Component {
       linkComponentType: "other",
       classess: "input-item",
       isError: false,
+      linkFormClass: "data-link-form", //关联表单的class
+      isLinkFormError: false, //关联表单的状态
       formChildData: [] // 子表单关联对象
     };
   }
@@ -70,9 +73,20 @@ class DataLinkageModal extends React.Component {
               classess = "input-item has-error";
               isError = true;
             }
+            let linkFormClass, isLinkFormError;
+            if (this.handleCheckingHasForm()) {
+              linkFormClass = "data-link-form";
+              isLinkFormError = false;
+            } else {
+              linkFormClass = "data-link-form has-error";
+              isLinkFormError = true;
+              this.handleSelectLinkForm(undefined);
+            }
             this.setState({
               classess,
-              isError
+              isError,
+              linkFormClass,
+              isLinkFormError
             });
           }
         );
@@ -81,6 +95,12 @@ class DataLinkageModal extends React.Component {
   }
 
   handleSelectLinkForm = value => {
+    if (value) {
+      this.setState({
+        linkFormClass: "data-link-form",
+        isLinkFormError: false
+      });
+    }
     this.setState({
       linkFormId: value,
       linkComponentId: undefined,
@@ -145,6 +165,8 @@ class DataLinkageModal extends React.Component {
 
   // 确定的回调
   handleOk = () => {
+    this.handleCheckingHasForm();
+
     if (this.handleIsRightConditions()) {
       let values = {
         ...this.state
@@ -167,6 +189,7 @@ class DataLinkageModal extends React.Component {
         setItemValues(this.props.element, "data", values, "DataLinkage");
       }
       showOrHideModal(false);
+      this.props.setErrorComponentIndex(-1);
     } else {
       message.warn("请设置完整的数据联动条件", 2);
     }
@@ -179,7 +202,6 @@ class DataLinkageModal extends React.Component {
   handleMarkingError = () => {
     const { data } = this.props;
     let allComponentsId = [];
-    console.log("handleMarkingError", data);
     data.forEach(item => {
       allComponentsId.push(item.id);
       if (item.type === "FormChildTest" && Array.isArray(item.values)) {
@@ -196,6 +218,17 @@ class DataLinkageModal extends React.Component {
     } else {
       return false;
     }
+  };
+
+  /*
+   * 检查关联表单是否存在
+   */
+  handleCheckingHasForm = () => {
+    const { forms = [] } = this.props;
+    const { linkFormId } = this.state;
+    const formsIds = forms.map(form => form.id);
+    const hasLinkedFormId = formsIds.includes(linkFormId);
+    return hasLinkedFormId;
   };
 
   // 子表单数据联动逻辑
@@ -254,7 +287,9 @@ class DataLinkageModal extends React.Component {
       conditionId,
       classess,
       formChildData,
-      isError
+      isError,
+      linkFormClass,
+      isLinkFormError
     } = this.state;
 
     // 确定模态框的高度
@@ -284,9 +319,9 @@ class DataLinkageModal extends React.Component {
         <div className="data-linkage-wrap">
           <p className="sencond-title">联动表单</p>
           <Select
-            className="data-link-form"
+            className={linkFormClass}
             onChange={this.handleSelectLinkForm}
-            defaultValue={linkFormId}
+            defaultValue={isLinkFormError ? "字段失效，请重新选择" : linkFormId}
           >
             {filterFormExceptSelf(forms, formId).reverse().map(form => (
               <Option value={form.id} key={form.id}>
@@ -451,6 +486,7 @@ export default connect(
   }),
   {
     setItemValues,
-    setFormChildItemAttr
+    setFormChildItemAttr,
+    setErrorComponentIndex
   }
 )(DataLinkageModal);
