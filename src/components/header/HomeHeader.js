@@ -1,7 +1,6 @@
 import React from "react";
 import { Layout, Menu, Badge, Button } from "antd";
 import { useHistory } from "react-router-dom";
-import { signOut, getCurrentTeam } from "../../store/loginReducer";
 import User from "./UserSection";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
@@ -17,17 +16,9 @@ const menuStyle = {
   lineHeight: "64px"
 };
 
-export default connect(
-  ({ router, login }) => ({
-    router,
-    loginData: login
-  }),
-  {
-    signOut,
-    getCurrentTeam
-  }
-)(function HomeHeader(props) {
-  const { signOut, loginData, getCurrentTeam } = props;
+export default connect(({ router }) => ({
+  router
+}))(function HomeHeader(props) {
   const history = useHistory();
   const selectHandle = e => {
     history.push(e.key);
@@ -59,11 +50,7 @@ export default connect(
           </Button>
         </div>
         <div className={classes.user}>
-          <User
-            signOut={signOut}
-            {...loginData}
-            getCurrentTeam={getCurrentTeam}
-          />
+          <User/>
         </div>
       </div>
     </Header>

@@ -137,7 +137,6 @@ export const loginUser = ({ token, rest }) => async dispatch => {
       data: { loginType: "PASSWORD", ...rest }
     });
     if (res && res.status === "SUCCESS") {
-      await initAllDetail()(dispatch);
       localStorage.setItem("id_token", 1);
       dispatch(loginSuccess());
     }
