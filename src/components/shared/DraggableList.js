@@ -69,7 +69,7 @@ const DraggableList = ({
               formId={l.key}
               onDrop={e => onDrop(e.dataTransfer.getData("formId"), null)}
             >
-              <Icon type={l.icon || "table"} />
+              {l.key !== "" ? <Icon type={l.icon || "table"} /> : ""}
               <span>{l.name}</span>
             </DraggableWrapper>
           </Menu.Item>

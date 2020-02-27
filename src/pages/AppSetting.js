@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout, Input, Button, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
-import { useEffect } from "react";
 import request from "../utils/request";
 import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
@@ -71,7 +70,20 @@ const AppSetting = () => {
         key: item.id,
         name: item.name
       }));
-      setMockForms({ groups: [], list: newList });
+      setMockForms({
+        groups: [
+          {
+            name: "基础设置",
+            key: "base",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
+        list: newList
+      });
     });
   }, []);
 
@@ -79,6 +91,9 @@ const AppSetting = () => {
     const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
     groups = null;
     list = all.filter(i => i.name.indexOf(searchKey) !== -1);
+    if (list.length === 0) {
+      list = [{ key: "", name: "暂无匹配项" }];
+    }
   }
 
   const searchHandle = e => {
@@ -92,7 +107,9 @@ const AppSetting = () => {
   };
 
   const formEnterHandle = e => {
-    history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
+    if (list[0].key !== "") {
+      history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
+    }
   };
 
   return (
@@ -107,7 +124,9 @@ const AppSetting = () => {
               onClick={e => {
                 // history.push(`/app/${appId}/setting/form/create`)
 
-                history.push(`/app/${appId}/setting/form/sWw/edit`);
+                if (list[0].key !== "") {
+                  history.push(`/app/${appId}/setting/form/sWw/edit`);
+                }
               }}
             >
               新建表单

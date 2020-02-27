@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Route } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   ConfigProvider,
@@ -120,12 +120,12 @@ class FormSubmitData extends PureComponent {
   };
 
   componentDidMount() {
-    let { formId } = this.props;
+    let { formId } = locationUtils.getUrlParamObj().formId;
 
     initToken()
       .then(() => {
         this.props.getSubmissionData(
-          formId,
+          locationUtils.getUrlParamObj().formId,
           this.state.pageSize,
           this.state.currentPage
         );
@@ -133,8 +133,8 @@ class FormSubmitData extends PureComponent {
       .catch(err => {
         console.error(err);
       });
-
-    this.setState({ formId: this.props.formId });
+    console.log(locationUtils.getUrlParamObj().formId);
+    this.setState({ formId: locationUtils.getUrlParamObj().formId });
   }
   componentWillUnmount() {
     this.props.clearFormData();
@@ -818,15 +818,16 @@ class FormSubmitData extends PureComponent {
     );
     return (
       <>
-        {/* {mobile.is ? null : (
+        {mobile.is ? null : (
           <HeaderBar
             backCallback={() => {
-              window.location.href = config.hostUrl;
+              let appId = this.props.match.params.appId;
+              this.props.history.push(`/app/${appId}/detail`);
             }}
             name={this.props.forms.name}
             isShowBtn={false}
           />
-        )} */}
+        )}
         <div
           className="form-submit-data-table"
           style={mobile.is ? mobile.style.table : null}
@@ -936,4 +937,4 @@ export default connect(
     clearFormData,
     getSubmissionDetail
   }
-)(FormSubmitData);
+)(withRouter(FormSubmitData));

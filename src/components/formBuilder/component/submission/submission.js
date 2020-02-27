@@ -50,13 +50,15 @@ import CheckboxInput from "./component/checkboxInput";
 import RadioButtonsMobile from "./component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
+import mobileAdoptor from "../../utils/mobileAdoptor";
 
 class Submission extends Component {
   constructor(props) {
     super(props);
     this.state = {
       tipVisibility: false,
-      formId: locationUtils.getUrlParamObj().formId,
+      //
+      formId: this.props.formId,
       formChildDataObj: {},
       currentLayout: null,
       customValicate: {
@@ -1083,7 +1085,7 @@ class Submission extends Component {
     return (
       <>
         <Spin spinning={this.state.isSubmitted}>
-          {mobile.is ? null : (
+          {/* {mobile.is ? null : (
             <HeaderBar
               backCallback={() => {
                 let appId = this.props.match.params.appId;
@@ -1091,7 +1093,7 @@ class Submission extends Component {
               }}
               isShowBtn={false}
             />
-          )}
+          )} */}
           <div className={"formBuilder-Submission"}>
             <div className="Content">
               <div className="submission-title">{formComponent.name}</div>
@@ -1186,4 +1188,4 @@ export default connect(
     submitSubmission,
     getFormComponent
   }
-)(withRouter(SubmissionForm));
+)(withRouter(mobileAdoptor.data(SubmissionForm)));
