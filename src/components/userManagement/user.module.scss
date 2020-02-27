@@ -77,3 +77,39 @@
     }
   }
 }
+
+// 应用权限设置
+.apsLayout{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.aps{
+  width: 90%;
+  margin-top: 20px;
+}
+//** top
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back {
+  display: flex;
+  & > span {
+    display: inherit;
+    align-items: center;
+  }
+}
+
+.btn {
+  & > button {
+    margin-left: 10px;
+  }
+}
+
+//** meteData
+.meteData{
+  margin-top: 40px;
+}

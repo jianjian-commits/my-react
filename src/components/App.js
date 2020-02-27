@@ -11,6 +11,7 @@ import Register from "../pages/Register";
 import ForgetPassword from "../pages/forgetPassword";
 import InviteUser from "../pages/inviteUser";
 import PermissionSetting from "./userManagement/applyPermissionSettings";
+import PermissionSetting_ from "./userManagement/_applyPermissionSettings";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
@@ -60,6 +61,7 @@ const App = () => (
         />
         <PublicRoute path="/register" component={Register} />
         <PublicRoute path="/setting" component={PermissionSetting} />
+        <PublicRoute path="/settings" component={PermissionSetting_} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
