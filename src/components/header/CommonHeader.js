@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import clx from "classnames";
 import { Layout, Breadcrumb, Button } from "antd";
 import User from "./UserSection";
 import classes from "./header.module.scss";
-import { signOut } from "../../store/loginReducer";
 import { connect } from "react-redux";
-import { getUserDetail } from "../../store/userDetailReducer";
 
 const { Header } = Layout;
 const logoStyle = {
@@ -47,13 +45,9 @@ const getOperations = ops => {
   ));
 };
 
-const CommonHeader = props => {
-  const { signOut, getUserDetail, loginData, userData } = props;
-  const [init, setInit] = useState(false);
-  useEffect(() => {
-    // if (!init) getUserDetail(loginData.ownerId);
-    return () => setInit(true);
-  });
+export default connect(({ router }) => ({
+  router
+}))(function CommonHeader(props) {
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>
@@ -67,20 +61,9 @@ const CommonHeader = props => {
           {getOperations(props.operations)}
         </div>
         <div className={classes.user}>
-          {userData && <User signOut={signOut} userData={userData} />}
+          <User />
         </div>
       </div>
     </Header>
   );
-};
-export default connect(
-  ({ router, login, user }) => ({
-    router,
-    loginData: login.loginData,
-    userData: user.userData
-  }),
-  {
-    signOut,
-    getUserDetail
-  }
-)(CommonHeader);
+});
