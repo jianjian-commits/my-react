@@ -45,7 +45,9 @@ const getOperations = ops => {
   ));
 };
 
-const CommonHeader = props => {
+export default connect(({ router }) => ({
+  router
+}))(function CommonHeader(props) {
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>
@@ -64,5 +66,4 @@ const CommonHeader = props => {
       </div>
     </Header>
   );
-};
-export default connect(({ router }) => ({ router }))(CommonHeader);
+});

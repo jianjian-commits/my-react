@@ -1,0 +1,63 @@
+$font-Family: "PingFangSC-Regular", "PingFang SC";
+
+* {
+  padding: 0px;
+  margin: 0px;
+}
+.formBuilder-NavBar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  z-index: 1000;
+  height: 60px;
+  width: 100%;
+  background: rgba(255, 255, 255, 1);
+  min-width: 1000px;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid rgba(238, 238, 238, 1);
+  box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
+  .headerBarTitle {
+    text-align: center;
+    height: 60px;
+    width: 84%;
+    line-height: 60px;
+    font-size: 14px;
+    font-family: $font-Family;
+    font-weight: 400;
+    color: rgba(86, 92, 110, 1);
+  }
+  .headerBarBack {
+    line-height: 60px;
+    height: 60px;
+    width: 8%;
+    display: flex;
+    align-items: center;
+    .ant-btn-link {
+      margin-left: 10px;
+      font-size: 14px;
+      font-family: $font-Family;
+      font-weight: 500;
+      color: rgba(86, 92, 110, 1);
+      span {
+        margin-left: 1px;
+      }
+    }
+  }
+  .headerBarButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    width: 8%;
+    .ant-btn {
+      border-radius: 4px;
+      background: rgba(0, 122, 255, 1);
+      font-size: 14px;
+      font-family: $font-Family;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      height: 36px;
+    }
+  }
+}

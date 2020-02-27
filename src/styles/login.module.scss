@@ -103,3 +103,26 @@
   padding: 0 0 0 11px;
   background-color: inherit;
 }
+
+.authenticatedDiv {
+  & > div {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    & > button {
+      width: 300px;
+    }
+    & > a {
+      width: 300px;
+    }
+  }
+  & > hr {
+    width: 340px;
+    margin: 0 auto;
+  }
+}
+
+.title {
+  display: block;
+  text-align: center;
+}

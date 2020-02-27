@@ -16,7 +16,9 @@ const menuStyle = {
   lineHeight: "64px"
 };
 
-const HomeHeader = props => {
+export default connect(({ router }) => ({
+  router
+}))(function HomeHeader(props) {
   const history = useHistory();
   const selectHandle = e => {
     history.push(e.key);
@@ -48,10 +50,9 @@ const HomeHeader = props => {
           </Button>
         </div>
         <div className={classes.user}>
-          <User />
+          <User/>
         </div>
       </div>
     </Header>
   );
-};
-export default connect(({ router }) => ({ router }))(HomeHeader);
+});
