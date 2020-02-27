@@ -4,12 +4,12 @@ import UserManagement from "../pages/User";
 
 import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
-import Submission from "../components/formBuilder/component/submission/submission";
+// import Submission from "../components/formBuilder/component/submission/submission";
+import SubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
 import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
-import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 
 export const main = [
   {
@@ -57,12 +57,19 @@ export const appPaths = [
     icon: "file_copy",
     component: AppDetail
   },
+  // {
+  //   key: "submission",
+  //   label: "提交数据",
+  //   path: `/app/:appId/detail/submission`,
+  //   icon: "file_copy",
+  //   component: Submission
+  // },
   {
-    key: "submission",
-    label: "提交数据",
+    key: "submissionData",
+    label: "查看数据",
     path: `/app/:appId/detail/submission`,
     icon: "file_copy",
-    component: mobileAdoptor.data(Submission)
+    component: SubmitData
   },
   {
     key: "menuContent",
