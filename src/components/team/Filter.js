@@ -49,7 +49,7 @@ const Filter = props => {
       <Row>
         <Col span={5} style={{ padding: "10px 10px 5px 0" }}>
           <Input
-            placeholder="姓名，用户名或邮箱"
+            placeholder="姓名字或邮箱"
             value={inputStr}
             onChange={onChangeInput}
           />

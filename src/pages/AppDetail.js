@@ -113,11 +113,6 @@ const AppDetail = () => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {/* {ele ? (
-            <ele.ContentEle count={ele.key}></ele.ContentEle>
-          ) : (
-              <div></div>
-            )} */}
 
           {selectedForm != void 0 ? (
             <>

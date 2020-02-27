@@ -1,36 +1,38 @@
-import React from "react";
-
-import { Input, Row, Col, List, Typography, Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { Input, Row, Col, List, Typography, Button,Spin } from "antd";
+import request from '../../utils/request'
 import classes from "./team.module.scss";
 
 const { Title } = Typography;
+const teamId = '5e578830149d3d1d6cb681b6'
 const infoData = [
   {
-    key: "teamName",
+    key: "name",
     lable: "团队名称",
-    value: "测试团队"
+    value: ""
   },
   {
-    key: "introduce",
+    key: "description",
     lable: "团队介绍",
-    value: "供测试团队使用"
+    value: ""
   },
   {
     key: "creator",
     lable: "创建人",
-    value: "Kevin"
+    value: ""
   },
   {
-    key: "creatTime",
+    key: "createDate",
     lable: "创建时间",
-    value: new Date().toLocaleString("chinese", { hour12: false })
+    value: ""
   }
 ];
 
 const EditInput = props => {
   const { obj } = props;
-  const [redact, setRedact] = React.useState(false);
-  const [dataStr, setDataStr] = React.useState(obj.value);
+  const [dataStr, setDataStr] = useState(obj.value);
+  const [redact, setRedact] = useState(false);
+  const [changeStr, setChangeStr] = useState(obj.value)
   const onClickAmend = e => {
     setRedact(!redact);
   };
@@ -40,11 +42,23 @@ const EditInput = props => {
         item.value = dataStr;
       }
     });
+    setChangeStr(dataStr)
     onClickAmend();
   };
   const changeValue = e => {
     setDataStr(e.target.value);
   };
+  useEffect(() => {
+    const upData = async () => {
+      const params = {
+        method: 'PUT',
+        data:{}
+      }
+      params.data[obj.key] = changeStr
+      const result = await request(`/team/5e578830149d3d1d6cb681b6`, params)
+    }
+    upData()
+  }, [changeStr])
   return (
     <div>
       {redact ? (
@@ -56,10 +70,8 @@ const EditInput = props => {
                 <Input defaultValue={obj.value} onChange={changeValue} />
               </Col>
               <Col>
-                {" "}
                 <Button type="link" onClick={submitAmend.bind(this, obj.key)}>
-                  {" "}
-                  确认{" "}
+                  确认
                 </Button>
               </Col>
               <Col>
@@ -71,41 +83,61 @@ const EditInput = props => {
           </Col>
         </Row>
       ) : (
-        <Row type="flex" gutter={16} align="middle">
-          <Col>{obj.lable}:</Col>
-          <Col>{obj.value}</Col>
-          <Col>
-            <Button type="link" onClick={onClickAmend}>
-              修改
+          <Row type="flex" gutter={16} align="middle">
+            <Col>{obj.lable}:</Col>
+            <Col>{obj.value}</Col>
+            <Col>
+              <Button type="link" onClick={onClickAmend}>
+                修改
             </Button>
-          </Col>
-        </Row>
-      )}
+            </Col>
+          </Row>
+        )}
     </div>
   );
 };
 
 const TeamInfo = () => {
+  const [data, setData] = useState(null)
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await request(`/team/5e578830149d3d1d6cb681b6`)
+      const creator = await request(`/sysUser/${res.data.ownerId}`)
+      const newData = infoData.map(item => {
+        Object.keys(res.data).forEach(i => {
+          if (item.key === i) {
+            item.value = res.data[i]
+          } else if (item.key === 'creator') {
+            item.value = creator.data.name
+          }
+        })
+        return item
+      })
+      setData(newData)
+    }
+    fetchData()
+  }, [])
   return (
-    <div className={classes.container}>
-      <Title level={3}>团队信息</Title>
-      <List
-        itemLayout="horizontal"
-        dataSource={infoData}
-        renderItem={item => (
-          <List.Item>
-            {item.key === "teamName" || item.key === "introduce" ? (
-              <EditInput obj={item} />
-            ) : (
-              <Row type="flex" gutter={16}>
-                <Col>{item.lable}:</Col>
-                <Col>{item.value}</Col>
-              </Row>
-            )}
-          </List.Item>
-        )}
-      />
-    </div>
+    data ?
+      <div className={classes.container}>
+        <Title level={3}>团队信息</Title>
+        <List
+          itemLayout="horizontal"
+          dataSource={data}
+          renderItem={item => (
+            <List.Item>
+              {item.key === "name" || item.key === "description" ? (
+                <EditInput obj={item} />
+              ) : (
+                  <Row type="flex" gutter={16}>
+                    <Col>{item.lable}:</Col>
+                    <Col>{item.value}</Col>
+                  </Row>
+                )}
+            </List.Item>
+          )}
+        />
+      </div> : <Spin size="large" />
   );
 };
 
