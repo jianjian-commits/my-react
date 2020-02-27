@@ -9,7 +9,8 @@ import Loading from "./loading";
 
 export default connect()(function Register({ history, match }) {
   const { userId, token } = match.params;
-  if (!history.location.query && history.location.pathname !== "/register") history.push("/register");
+  if (!history.location.query && history.location.pathname !== "/register")
+    history.push("/register");
   const { inviter, invitedTeam } = history.location.query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
@@ -35,7 +36,7 @@ export default connect()(function Register({ history, match }) {
   };
   const confirm = () => {
     if (!status) return setVisible(true);
-    history.push("/")
+    history.push("/");
   };
 
   const BlueFont = props => {
@@ -50,8 +51,8 @@ export default connect()(function Register({ history, match }) {
             <h2>
               {userId ? (
                 <>
-                  <BlueFont>{inviter.name}</BlueFont>
-                  邀请您加入团队<BlueFont>{invitedTeam.name}</BlueFont>
+                  <BlueFont>{inviter}</BlueFont>
+                  邀请您加入团队<BlueFont>{invitedTeam}</BlueFont>
                 </>
               ) : (
                 "感谢您的选择,"

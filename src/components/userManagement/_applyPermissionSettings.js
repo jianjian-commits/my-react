@@ -294,6 +294,30 @@ const MeteDataPermission = ({ appSetting, createForm, formPermissions }) => {
     const As = data.filter(d => d.value.split(`${formId}:F`)[1]);
     const A = As.filter(d => !d.value.split(`${formId}:AT`)[1]);
     const AT = As.filter(d => d.value.split(`${formId}:AT`)[1]);
+    const Tr = (formId, label) => {
+      return (
+        <tr>
+          {formMeteDataThead.map(f => {
+            const td = data.filter(
+              d => d.value.split(`${formId}${f.key}`).length > 1
+            )[0];
+            return (
+              <td key={f.key}>
+                {td ? (
+                  <Checkbox
+                    defaultChecked={td.checked}
+                    checked={td.checked}
+                    onChange={() => console.log(td.value, td.checked)}
+                  />
+                ) : f.key === "T" ? (
+                  label
+                ) : null}
+              </td>
+            );
+          })}
+        </tr>
+      );
+    };
     return (
       <table>
         <thead>
@@ -304,30 +328,9 @@ const MeteDataPermission = ({ appSetting, createForm, formPermissions }) => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            {formMeteDataThead.map(f => {
-              const td = data.filter(d =>
-                console.log(
-                  d.value,
-                  `${formId}:F${f.key}`,
-                  d.value.split(`${formId}:F${f.key}`)
-                )
-              );
-              if (f.key === "T") return <td>表单</td>;
-              console.log(td);
-              return (
-                <td key={f.key}>
-                  {/* {td ? (
-                    <Checkbox
-                      defaultChecked={td[0].checked}
-                      checked={td[0].checked}
-                      onChange={() => console.log(td[0].value, td[0].checked)}
-                    />
-                  ) : null} */}
-                </td>
-              );
-            })}
-          </tr>
+          {Tr(`${formId}:F`, "表单")}
+          {Tr(`${formId}:A`, "ap")}
+          {Tr(`${formId}:AT`, "pb")}
         </tbody>
       </table>
     );
