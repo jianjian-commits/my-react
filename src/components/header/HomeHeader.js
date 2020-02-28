@@ -23,7 +23,7 @@ export default connect(({ router }) => ({
   const selectHandle = e => {
     history.push(e.key);
   };
-  const toUserMangement = () => history.push("/user/users");
+  const toUserMangement = () => history.push("/user/info");
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>
@@ -50,7 +50,7 @@ export default connect(({ router }) => ({
           </Button>
         </div>
         <div className={classes.user}>
-          <User/>
+          <User />
         </div>
       </div>
     </Header>
