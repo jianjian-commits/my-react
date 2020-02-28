@@ -1,15 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import {
-  Button,
-  Row,
-  Col,
-  Table,
-  Popconfirm,
-  message,
-  Modal,
-  Spin
-} from "antd";
+import { Button, Row, Col, Table, Popconfirm, message, Spin } from "antd";
 import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
@@ -80,12 +71,17 @@ export default connect(({ login }) => ({
       .catch(err => {
         message.success("失败");
       })
-      .then(res => {
+      .then(async res => {
         console.log(data);
-        const newData = data.filter(item => {
-          return item.key != sysUserId;
+        const newData = await request(`/sysUser/team/${teamId}`, {
+          method: "POST",
+          data: { page: page, size: 2 }
         });
-        setData(newData);
+        if (Math.ceil(newData.data.total / 2) < page) {
+          setPage(Math.ceil(newData.data.total / 2));
+        }
+        setData(newData.data.datas);
+        setTotal(newData.data.total);
         message.success("成功");
       });
   };
@@ -125,7 +121,6 @@ export default connect(({ login }) => ({
         method: "POST",
         data: { page: page, size }
       });
-      console.log(res);
       res.data.datas.forEach(item => {
         item.key = item.id;
         item.lastModifiedDate = new Date().toLocaleString(
@@ -134,7 +129,7 @@ export default connect(({ login }) => ({
       });
       setOnSwitch(
         res.data.datas.filter(item => {
-          return item.group === "超级管理员";
+          return item.groupName === "超级管理员";
         }).length === 1
           ? true
           : false
