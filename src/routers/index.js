@@ -64,13 +64,13 @@ export const appPaths = [
   //   icon: "file_copy",
   //   component: Submission
   // },
-  {
-    key: "submissionData",
-    label: "查看数据",
-    path: `/app/:appId/detail/submission`,
-    icon: "file_copy",
-    component: SubmitData
-  },
+  // {
+  //   key: "submissionData",
+  //   label: "查看数据",
+  //   path: `/app/:appId/detail/submission`,
+  //   icon: "file_copy",
+  //   component: SubmitData
+  // },
   {
     key: "menuContent",
     label: "菜单内容",

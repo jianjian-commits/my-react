@@ -120,12 +120,12 @@ class FormSubmitData extends PureComponent {
   };
 
   componentDidMount() {
-    let { formId } = locationUtils.getUrlParamObj().formId;
+    let { formId } = this.props;
 
     initToken()
       .then(() => {
         this.props.getSubmissionData(
-          locationUtils.getUrlParamObj().formId,
+          this.props.formId,
           this.state.pageSize,
           this.state.currentPage
         );
@@ -133,8 +133,7 @@ class FormSubmitData extends PureComponent {
       .catch(err => {
         console.error(err);
       });
-    console.log(locationUtils.getUrlParamObj().formId);
-    this.setState({ formId: locationUtils.getUrlParamObj().formId });
+    this.setState({ formId: this.props.id });
   }
   componentWillUnmount() {
     this.props.clearFormData();
@@ -818,7 +817,7 @@ class FormSubmitData extends PureComponent {
     );
     return (
       <>
-        {mobile.is ? null : (
+        {/* {mobile.is ? null : (
           <HeaderBar
             backCallback={() => {
               let appId = this.props.match.params.appId;
@@ -827,7 +826,7 @@ class FormSubmitData extends PureComponent {
             name={this.props.forms.name}
             isShowBtn={false}
           />
-        )}
+        )} */}
         <div
           className="form-submit-data-table"
           style={mobile.is ? mobile.style.table : null}
