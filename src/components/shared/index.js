@@ -1,10 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 export const SpecialRoute = ({ component, props, ...rest }) => (
-  <Route
-    {...rest}
-    render={props => React.createElement(component, props)}
-  />
+  <Route {...rest} render={props => React.createElement(component, props)} />
 );
 
 export const PrivateRoute = ({ component, options, ...rest }) => (

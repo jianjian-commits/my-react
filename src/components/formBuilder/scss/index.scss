@@ -1,5 +1,5 @@
 @import "./components/errorPage.scss";
-@import "~antd/dist/antd.css";
+// @import "~antd/dist/antd.css";
 @import "~antd-mobile/dist/antd-mobile.css";
 @import "./base/base.scss";
 @import "./base/isMobile.scss";
@@ -80,11 +80,6 @@ $dark: $gray-800;
 }
 body {
   background: #f3f4f5;
-}
-.ant-input {
-  color: #565c6e;
-  border-radius: 0;
-  font-weight: 400;
 }
 
 /*滚动条样式*/

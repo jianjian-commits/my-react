@@ -2,7 +2,9 @@ import React from "react";
 import { Layout, Menu, Icon } from "antd";
 import { history } from "../store";
 import CommonHeader from "../components/header/CommonHeader";
-import UserManagement from "../components/userManagement";
+// import UserManagement from "../components/userManagement";
+import TeamInfo from "../components/team/TeamInfo";
+import TeamMember from "../components/team/TeamMember";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
 import GroupDetail from "../components/profileManagement/GroupDetail";
@@ -17,11 +19,18 @@ const navigationList = [
 
 const webs = [
   {
-    path: "/user/users",
-    key: "user",
-    label: "用户",
+    path: "/user/info",
+    key: "info",
+    label: "团队信息",
+    icon: "exclamation-circle",
+    component: TeamInfo
+  },
+  {
+    path: "/user/member",
+    key: "member",
+    label: "团队成员",
     icon: "user",
-    component: UserManagement
+    component: TeamMember
   },
   {
     path: "/user/profile",
@@ -67,6 +76,7 @@ class UserPage extends React.Component {
         <CommonHeader navigationList={navigationList} />
         <Layout>
           <Sider style={{ background: "#fff" }}>
+            <div className={commonClasses.title}>团队管理</div>
             <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
           </Sider>
           <Content className={commonClasses.container}>

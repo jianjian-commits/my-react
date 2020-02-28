@@ -167,12 +167,12 @@ export default function loginReducer(state = initialState, { type, payload }) {
     case START_SPINNING:
       return {
         ...state,
-        isSpinning: true,
+        isSpinning: true
       };
     case START_LOGIN:
       return {
         ...state,
-        isLoading: true,
+        isLoading: true
       };
     case LOGIN_SUCCESS:
       return {
@@ -195,7 +195,7 @@ export default function loginReducer(state = initialState, { type, payload }) {
     case SIGN_OUT_SUCCESS:
       return {
         ...state,
-        isAuthenticated: false,
+        isAuthenticated: false
       };
     case FETCH_USER_DETAIL:
       return {

@@ -16,8 +16,8 @@ async function request(url, params = {}) {
     params: params.params || {},
     method: params.method || "GET"
   });
-  console.log("fetch options", params);
-  console.log("fetch res", res);
+  // console.log("fetch options", params);
+  // console.log("fetch res", res);
   return res.data;
 }
 
