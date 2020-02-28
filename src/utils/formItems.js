@@ -5,8 +5,8 @@ import request from "./request";
 import itemsStyles from "../styles/login.module.scss";
 
 // 发送验证码
-async function sendVerificationCode(userMobilePhone) {
-  if (!userMobilePhone) return false;
+async function sendVerificationCode(mobilePhone) {
+  if (!mobilePhone) return false;
   try {
     const result = await request("http://www.baidu.com");
     if (result && result.status) return true;
@@ -19,7 +19,7 @@ async function sendVerificationCode(userMobilePhone) {
 const required = msg => ({ required: true, message: msg });
 const whitespace = () => ({ whitespace: true, message: "不允许出现空格" });
 const maxLength = (length, msg) => ({ max: length, message: msg });
-const minLength = (length, msg) => ({ min: length, message: msg });
+// const minLength = (length, msg) => ({ min: length, message: msg });
 const number = () => ({ pattern: "^[0-9]*$", message: "只能输入小写数字" });
 const requireCharAndNum = () => ({
   pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$",
@@ -59,6 +59,16 @@ const checkEmail = async (rule, value, callback) => {
   }
   callback();
 };
+const checkCompanyNamePresence = async (rule, value, callback) => {
+  if (!value) return callback();
+  try {
+    const result = await request(`/company/name/${value}/check`);
+    if (result && result.data === true) return callback("该公司未被创建");
+  } catch (err) {
+    message.error("校验失败");
+  }
+  callback();
+};
 
 // {
 //   pattern: "(?!.*_$)(?!.*__.*)^[a-zA-Z][a-zA-Z0-9_]*$",
@@ -67,10 +77,11 @@ const checkEmail = async (rule, value, callback) => {
 // }
 
 // formItems表单项
-export const username = ({ form, payload }) => {
+const username = ({ form, payload }) => {
   return {
     itemName: "username",
     options: {
+      validateTrigger: "onBlur",
       rules: [
         required("用户名不可为空"),
         whitespace(),
@@ -81,16 +92,18 @@ export const username = ({ form, payload }) => {
       <Input
         prefix={<Icon type="solution" style={{ color: "rgba(0,0,0,.25)" }} />}
         placeholder="请输入注册时绑定的邮箱/手机号"
+        onChange={() => form.setFields({ username: { errors: null } })}
       />
     ),
     additionComponent: null
   };
 };
 
-export const name = ({ form, payload }) => {
+const name = ({ form, payload }) => {
   return {
     itemName: "name",
     options: {
+      validateTrigger: "onBlur",
       rules: [
         required("姓名不可为空"),
         whitespace(),
@@ -101,21 +114,24 @@ export const name = ({ form, payload }) => {
       <Input
         prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
         placeholder="用户昵称"
+        onChange={() => form.setFields({ name: { errors: null } })}
       />
     ),
     additionComponent: null
   };
 };
 
-export const password = ({ form, payload }) => ({
+const password = ({ form, payload }) => ({
   itemName: "password",
   options: {
+    validateTrigger: "onBlur",
     rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
   },
   component: (
     <Input
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
+      onChange={() => form.setFields({ password: { errors: null } })}
       placeholder={
         payload === "reconfirm"
           ? ""
@@ -135,15 +151,78 @@ export const password = ({ form, payload }) => ({
     </>
   )
 });
+const oldPassWord = ({ form, payload }) => ({
+  itemName: "oldPassWord",
+  options: {
+    validateTrigger: "onBlur",
+    rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
+  },
+  component: (
+    <Input
+      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+      type="password"
+      onChange={() => form.setFields({ oldPassWord: { errors: null } })}
+      placeholder={"当前密码"}
+    />
+  ),
+  additionComponent: null
+});
+const newPassWord = ({ form, payload }) => ({
+  itemName: "newPassWord",
+  options: {
+    validateTrigger: "onBlur",
+    rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
+  },
+  component: (
+    <Input
+      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+      type="password"
+      onChange={() => form.setFields({ newPassWord: { errors: null } })}
+      placeholder={"新密码"}
+    />
+  ),
+  additionComponent: null
+});
+const confirmPassWord = ({ form, payload, newPassWord }) => {
+  return {
+    itemName: "confirmPassWord",
+    options: {
+      validateTrigger: "onBlur",
+      rules: [
+        required("密码不可为空"),
+        whitespace(),
+        requireCharAndNum(),
+        {
+          validator: (rule, value, callback) => {
+            if (!value) return callback();
+            if (value !== newPassWord) return callback("两次密码输入不一致");
+            callback();
+          }
+        }
+      ]
+    },
+    component: (
+      <Input
+        prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+        type="password"
+        onChange={() => form.setFields({ confirmPassWord: { errors: null } })}
+        placeholder={"确认密码"}
+      />
+    ),
+    additionComponent: null
+  };
+};
 
-export const verificationCode = ({ form, payload }) => {
+const verificationCode = ({ form, payload }) => {
   return {
     itemName: "verificationCode",
     options: {
+      validateTrigger: "onBlur",
       rules: [required("请输入验证码"), whitespace()]
     },
     component: (
       <Input
+        onChange={() => form.setFields({ verificationCode: { errors: null } })}
         prefix={
           <Icon
             type="safety-certificate"
@@ -157,7 +236,7 @@ export const verificationCode = ({ form, payload }) => {
   };
 };
 
-export const userMobilePhone = ({ form, payload }) => {
+const mobilePhone = ({ form, payload }) => {
   const { getFieldValue } = form;
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
@@ -181,7 +260,7 @@ export const userMobilePhone = ({ form, payload }) => {
         num = initNum - 1;
       }, timeOut);
     };
-    sendVerificationCode(getFieldValue("userMobilePhone")).then(res => {
+    sendVerificationCode(getFieldValue("mobilePhone")).then(res => {
       if (res) {
         setTime({
           sended: true,
@@ -194,8 +273,9 @@ export const userMobilePhone = ({ form, payload }) => {
     });
   };
   return {
-    itemName: "userMobilePhone",
+    itemName: "mobilePhone",
     options: {
+      validateTrigger: "onBlur",
       rules: [
         required("请输入手机号"),
         whitespace(),
@@ -210,6 +290,7 @@ export const userMobilePhone = ({ form, payload }) => {
         prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,.25)" }} />}
         placeholder="手机号"
         addonBefore="+86"
+        onChange={() => form.setFields({ mobilePhone: { errors: null } })}
         addonAfter={
           <Button
             ref={verificationCodeButtonRef}
@@ -230,20 +311,23 @@ export const userMobilePhone = ({ form, payload }) => {
   };
 };
 
-export const companyName = ({ form, payload }) => {
+const companyName = ({ form, payload }) => {
   return {
     itemName: "companyName",
     options: {
+      validateTrigger: "onBlur",
       rules: [
         required("请输入公司名称"),
         whitespace(),
         requireChinese(),
-        maxLength(30, "z公司名称过长，最多30个字符")
+        maxLength(30, "z公司名称过长，最多30个字符"),
+        payload === "redit" && { validator: checkCompanyNamePresence }
       ]
     },
     component: (
       <Input
         prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
+        onChange={() => form.setFields({ companyName: { errors: null } })}
         placeholder="公司名"
       />
     ),
@@ -251,10 +335,11 @@ export const companyName = ({ form, payload }) => {
   };
 };
 
-export const userEmail = ({ form, payload }) => {
+const userEmail = ({ form, payload }) => {
   return {
     itemName: "userEmail",
     options: {
+      validateTrigger: "onBlur",
       rules: [
         required("请输入电子邮箱"),
         whitespace(),
@@ -266,17 +351,17 @@ export const userEmail = ({ form, payload }) => {
       <Input
         prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
         placeholder="电子邮箱"
+        onChange={() => form.setFields({ userEmail: { errors: null } })}
       />
     ),
     additionComponent: null
   };
 };
 
-const submit = ({ form, payload }) => ({
+const submit = ({ form, payload, userId, teamId, token }) => ({
   itemName: "actionType",
   options: {
-    initialValue: payload,
-    rules: [required("")]
+    initialValue: payload
   },
   component: (
     <Button type="primary" htmlType="submit" className={itemsStyles.button}>
@@ -284,6 +369,7 @@ const submit = ({ form, payload }) => ({
       {payload === "register" && "注册"}
       {payload === "resetPassword" && "重置密码"}
       {payload === "submit" && "提交"}
+      {payload === "addTeam" && "加入团队"}
     </Button>
   ),
   additionComponent: (
@@ -303,30 +389,40 @@ const submit = ({ form, payload }) => ({
           返回<Link to="/login">登录</Link>
         </div>
       )}
+      {payload === "addTeam" && (
+        <div style={{ textAlign: "center" }}>
+          <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
+        </div>
+      )}
+      {/* {payload === "addTeam" && (
+        <div style={{ textAlign: "center" }}>
+          返回<Link to={`/login/${userId}/${invited_token}`}>登录</Link>
+        </div>
+      )} */}
     </>
   )
 });
 
 // 表单组件参数
 export const loginPasswordParameter = [
-  { key: "username", value: null },
-  { key: "password", value: "login" },
-  { key: "submit", value: "login" }
+  { key: "username", value: null, itemName: "username" },
+  { key: "password", value: "login", itemName: "password" },
+  { key: "submit", value: "login", itemName: "submit" }
 ];
 export const loginPhoneParameter = [
-  { key: "userMobilePhone", value: "login" },
+  { key: "mobilePhone", value: "login" },
   { key: "verificationCode", value: null },
   { key: "submit", value: "login" }
 ];
 export const loginForgetPasswordParameter = [
-  { key: "userMobilePhone", value: "forgrtPassword" },
+  { key: "mobilePhone", value: "forgrtPassword" },
   { key: "password", value: null },
   { key: "submit", value: "resetPassword" }
 ];
 export const registerParameter = [
   { key: "name", value: null },
   { key: "userEmail", value: null },
-  { key: "userMobilePhone", value: "register" },
+  { key: "mobilePhone", value: "register" },
   { key: "verificationCode", value: null },
   { key: "password", value: "register" },
   { key: "companyName", value: null },
@@ -334,22 +430,22 @@ export const registerParameter = [
 ];
 export const userDetailParameter = {
   resetCompanyName: [
-    { key: "companyName", value: null },
+    { key: "companyName", value: "redit" },
     { key: "submit", value: "submit" }
   ],
   resetName: [
     { key: "name", value: null },
     { key: "submit", value: "submit" }
   ],
-  resetUserMobilePhone: [
-    { key: "userMobilePhone", value: null },
+  resetMobilePhone: [
+    { key: "mobilePhone", value: null },
     { key: "verificationCode", value: null },
     { key: "submit", value: "submit" }
   ],
   resetPassword: [
-    { key: "password", value: "old" },
-    { key: "password", value: "new" },
-    { key: "password", value: "reconfirm" },
+    { key: "oldPassWord", value: null },
+    { key: "newPassWord", value: null },
+    { key: "confirmPassWord", value: null },
     { key: "submit", value: "submit" }
   ]
 };
@@ -360,8 +456,11 @@ export const formItems = {
   name,
   password,
   verificationCode,
-  userMobilePhone,
+  mobilePhone,
   companyName,
   userEmail,
-  submit
+  submit,
+  oldPassWord,
+  newPassWord,
+  confirmPassWord
 };
