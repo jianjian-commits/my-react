@@ -1,17 +1,11 @@
 import React from "react";
 import { Modal, Select, Row, Col } from "antd";
-import data from "./mockMember";
 
 const { Option } = Select;
-const groups = Array.from(
-  new Set(
-    data.map(item => {
-      return item.group;
-    })
-  )
-);
+const groups = [];
 
 const ChangeGroup = props => {
+  const [data, setData] = React.useState([]);
   const [groupKey, setGroupKey] = React.useState(null); //分组关键字
   const onChange = value => {
     setGroupKey(value);

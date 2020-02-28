@@ -51,8 +51,8 @@ export default connect()(function Register({ history, match }) {
             <h2>
               {userId ? (
                 <>
-                  <BlueFont>{inviter.name}</BlueFont>
-                  邀请您加入团队<BlueFont>{invitedTeam.name}</BlueFont>
+                  <BlueFont>{inviter}</BlueFont>
+                  邀请您加入团队<BlueFont>{invitedTeam}</BlueFont>
                 </>
               ) : (
                 "感谢您的选择,"

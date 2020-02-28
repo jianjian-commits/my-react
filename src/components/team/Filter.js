@@ -1,17 +1,11 @@
 import React from "react";
 import { Row, Col, Input, Select, Button } from "antd";
-import data from "./mockMember";
+
 import classes from "./team.module.scss";
 
 const { Option } = Select;
 const Filter = props => {
-  const groups = Array.from(
-    new Set(
-      data.map(item => {
-        return item.group;
-      })
-    )
-  );
+  const [data, setData] = React.useState([]);
   const [inputStr, setInputStr] = React.useState(null); //输入框关键字
   const [groupKey, setGroupKey] = React.useState(null); //分组关键字
   const onChangeInput = e => {
@@ -21,6 +15,13 @@ const Filter = props => {
   const onChange = value => {
     setGroupKey(value);
   };
+  const groups = Array.from(
+    new Set(
+      data.map(item => {
+        return item.group;
+      })
+    )
+  );
 
   // 过滤
   const onClickFilter = () => {
@@ -76,7 +77,8 @@ const Filter = props => {
               );
             })}
           </Select>
-          ,<Button onClick={onClickFilter}>筛选</Button>
+          {/* <Button onClick={onClickFilter}>筛选</Button> */}
+          <Button>筛选</Button>
         </Col>
       </Row>
     </div>

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import {
   Button,
   Row,
@@ -7,22 +8,26 @@ import {
   Popconfirm,
   message,
   Modal,
-  Input,
   Spin
 } from "antd";
 import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../utils/request";
+import InviteUser from "../userManagement/inviteUser";
 
-const TeamMember = () => {
+export default connect(({ login }) => ({
+  loginData: login
+}))(function TeamMember({ loginData }) {
+  const [teamId, setTeamId] = React.useState(loginData.currentTeam.id);
   const [isShow, setIsShow] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [changeGroup, setChangeGroup] = React.useState(false);
   const [data, setData] = React.useState(null);
   const [userKey, setUserKey] = React.useState(null);
-  const [onSwitch, setOnSwitch] = React.useState(0)
-  const [page, setPage] = React.useState(1)
+  const [onSwitch, setOnSwitch] = React.useState(0);
+  const [page, setPage] = React.useState(1);
+  const [total, setTotal] = React.useState(null);
   //判断管理员的个数及是否有操作按钮
   const columns = [
     {
@@ -39,14 +44,14 @@ const TeamMember = () => {
     },
     {
       title: "分组",
-      dataIndex: "group"
+      dataIndex: "groupName"
     },
     {
       title: "操作",
       key: "action",
       render: (text, record) => {
-        console.log(text)
-        return text.group === "管理员" && onSwitch ? null : (
+        // console.log(text)
+        return text.groupName === "超级管理员" && onSwitch ? null : (
           <span>
             <Button
               type="link"
@@ -71,8 +76,18 @@ const TeamMember = () => {
     }
   ];
   const confirm = sysUserId => {
-    request('/team/5e578830149d3d1d6cb681b6', { method: 'DELETE', data: { sysUserId } })
-      .catch(err => {message.success("失败")}).then(res => {message.success("成功")})
+    request(`/team/${teamId}`, { method: "DELETE", data: { sysUserId } })
+      .catch(err => {
+        message.success("失败");
+      })
+      .then(res => {
+        console.log(data);
+        const newData = data.filter(item => {
+          return item.key != sysUserId;
+        });
+        setData(newData);
+        message.success("成功");
+      });
   };
 
   const cancel = e => {
@@ -99,34 +114,41 @@ const TeamMember = () => {
     setChangeGroup(!changeGroup);
   };
 
-  const onChangePage = page => {
-    setPage(page)
-  }
+  const onChangePage = e => {
+    setPage(e);
+  };
 
   //获取成员
   useEffect(() => {
-    const gainData = async (page, size = 10) => {
-      const res = await request('/sysUser/team/5e578830149d3d1d6cb681b6', { method: 'POST', data: { page, size } })
-      console.log(res)
+    const gainData = async (size = 2) => {
+      const res = await request(`/sysUser/team/${teamId}`, {
+        method: "POST",
+        data: { page: page, size }
+      });
+      console.log(res);
       res.data.datas.forEach(item => {
-        item.key = item.id
-      })
-      setOnSwitch(res.data.datas.filter(item => {
-        return item.group === "管理员";
-      }).length === 1
-        ? true
-        : false)
-      setData(res.data.datas)
-    }
-    gainData()
-  }, [page])
-  return (
-    data ? <div className={classes.container}>
+        item.key = item.id;
+        item.lastModifiedDate = new Date().toLocaleString(
+          item.lastModifiedDate
+        );
+      });
+      setOnSwitch(
+        res.data.datas.filter(item => {
+          return item.group === "超级管理员";
+        }).length === 1
+          ? true
+          : false
+      );
+      setTotal(res.data.total);
+      setData(res.data.datas);
+    };
+    gainData();
+  }, [page]);
+  return data ? (
+    <div className={classes.container}>
       <Row type="flex" justify="space-between" className={classes.box}>
         <Col>
-          <Button size="large" onClick={showModalInvite}>
-            邀请
-          </Button>
+          <InviteUser {...loginData} />
         </Col>
         <Col>
           <Button
@@ -140,25 +162,11 @@ const TeamMember = () => {
         </Col>
       </Row>
       {isShow ? <Filter fn={filterData} /> : null}
-      <Table pagination={{ onChange: onChangePage.bind(this, page) }} columns={columns} dataSource={data} />
-      {/* //邀请模态框 */}
-      <Modal
-        title="邀请新成员加入"
-        visible={visible}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <p>发送以下链接给新成员，点击连接即可加入团队</p>
-        <Row type="flex" gutter={10} style={{ padding: "15px 0" }}>
-          <Col>
-            <Input readOnly value="https://localhost/null" />
-          </Col>
-          <Col>
-            <Button>复制链接</Button>
-          </Col>
-        </Row>
-        <p>邀请链接14天有效</p>
-      </Modal>
+      <Table
+        pagination={{ total: total, pageSize: 2, onChange: onChangePage }}
+        columns={columns}
+        dataSource={data}
+      />
       {changeGroup ? (
         <ChangeGroup
           userKey={userKey}
@@ -166,7 +174,8 @@ const TeamMember = () => {
           fn={handleChange}
         />
       ) : null}
-    </div> : <Spin size="large" />
+    </div>
+  ) : (
+    <Spin size="large" />
   );
-};
-export default TeamMember;
+});
