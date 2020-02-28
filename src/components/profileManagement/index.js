@@ -4,6 +4,7 @@ import classes from "./profile.module.scss";
 import CreateFormModal from "../createGroup";
 import { history } from "../../store";
 import request from "../../utils/request";
+import { connect } from "react-redux";
 class ProfileManagement extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +45,7 @@ class ProfileManagement extends React.Component {
           ? await request("/group/addGroup", {
               method: "POST",
               data: {
-                teamId: "",
+                teamId: this.props.teamId,
                 name: data.groupName
               }
             })
@@ -114,7 +115,7 @@ class ProfileManagement extends React.Component {
             >
               查看
             </Button>
-            {record.groupName !== "管理员" && (
+            {record.key !== "sys" && (
               <Button
                 type="link"
                 onClick={() =>
@@ -138,7 +139,7 @@ class ProfileManagement extends React.Component {
             >
               克隆
             </Button>
-            {record.groupName !== "管理员" && record.groupName !== "普通用户" && (
+            {record.key !== "sys" && record.key !== "normal" && (
               <Popconfirm
                 title="是否删除这个分组？"
                 okText="是"
@@ -179,4 +180,6 @@ class ProfileManagement extends React.Component {
     );
   }
 }
-export default ProfileManagement;
+export default connect(({ login }) => ({
+  teamId: login.currentTeam.id
+}))(ProfileManagement);

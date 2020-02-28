@@ -3,6 +3,7 @@ import { Icon, Button, Table, Checkbox, message } from "antd";
 import classes from "./profile.module.scss";
 import { history } from "../../store";
 import request from "../../utils/request";
+import { connect } from "react-redux";
 
 class GroupDetail extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class GroupDetail extends Component {
   async getDetail() {
     const data = {
       groupId: this.groupId,
-      teamId: ""
+      teamId: this.props.teamId
     };
     try {
       const res = await request("/group/detail", {
@@ -158,7 +159,7 @@ class GroupDetail extends Component {
   render() {
     // 获取是查看还是编辑行为
     const action = this.action;
-    const { baseInfoBo, permissions, appManagerBos, setting } = this.state;
+    const { baseInfoBo, permissions, appManagerBos } = this.state;
     return (
       <div className={classes.groupContainer}>
         <div className={classes.groupHeader}>
@@ -181,12 +182,14 @@ class GroupDetail extends Component {
         {getBasicInfo(action, baseInfoBo, this.onChange)}
         {getAppManage(action, appManagerBos, this.onChange)}
         {getOtherManage(action, permissions, this.onChange)}
-        {getSetting(action, setting)}
+        {/* {getSetting(action, setting)} */}
       </div>
     );
   }
 }
-export default GroupDetail;
+export default connect(({ login }) => ({
+  teamId: login.currentTeam.id
+}))(GroupDetail);
 
 // 基础信息
 const getBasicInfo = (a, baseInfoBo, onChange) => {
@@ -349,19 +352,19 @@ const getOtherManage = (a, permissions, onChange) => {
 };
 
 // 设置
-const getSetting = (a, setting) => {
-  return (
-    <div className={classes.groupSetting}>
-      <span>Session设置</span>
-      * 过期时间
-      <input defaultValue={setting.sessionTime} readOnly />
-      小时（不活跃状态）
-      <span>Password设置</span>
-      * 最小位数
-      <input defaultValue={setting.passwordMinLength} readOnly />
-      <br />
-      * 密码复杂度
-      <input defaultValue={setting.passwordDiffer} readOnly />
-    </div>
-  );
-};
+// const getSetting = (a, setting) => {
+//   return (
+//     <div className={classes.groupSetting}>
+//       <span>Session设置</span>
+//       * 过期时间
+//       <input defaultValue={setting.sessionTime} readOnly />
+//       小时（不活跃状态）
+//       <span>Password设置</span>
+//       * 最小位数
+//       <input defaultValue={setting.passwordMinLength} readOnly />
+//       <br />
+//       * 密码复杂度
+//       <input defaultValue={setting.passwordDiffer} readOnly />
+//     </div>
+//   );
+// };
