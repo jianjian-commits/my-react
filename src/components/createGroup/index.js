@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Form, Input } from "antd";
+import classes from "./index.module.scss";
 
 class CreateGroup extends Component {
   constructor(props) {
@@ -43,6 +44,7 @@ class CreateGroup extends Component {
           onOk={() => this.onOk(title)}
           onCancel={this.onCancel.bind(this)}
           maskClosable={false}
+          className={classes.modalPadding}
         >
           <Form>
             <Form.Item label="分组名称">
