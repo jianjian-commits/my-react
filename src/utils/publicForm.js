@@ -16,7 +16,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
       if (!err) {
         console.log("Received values of form: ", actionType, rest);
         func({
-          token: params.token ? params.token : null ,
+          token: params.token ? params.token : null,
           rest
         });
       }
