@@ -53,7 +53,7 @@ const DraggableList = ({
                       formId={l.key}
                       onDrop={dropHandle}
                     >
-                      <Icon type={l.icon || "table"} />
+                      {l.key !== -1 ? <Icon type={l.icon || "table"} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
                   </Menu.Item>

@@ -9,7 +9,7 @@ import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
 const services = [
-  { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
+  { key: "create", name: "表单创建", icon: "table", component: CreateForm },
   {
     key: "process",
     name: "自动化",
@@ -18,6 +18,7 @@ const services = [
   },
   { key: "approval", name: "审批流", icon: "audit", component: PlaceHolder }
 ];
+
 const navigationList = (history, appId) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
@@ -35,10 +36,12 @@ const navigationList = (history, appId) => [
 
 const AppServices = () => {
   const history = useHistory();
-  const { appId, formId, serviceId } = useParams();
-  const service = services.find(s => s.key === serviceId);
+  const { appId, formId } = useParams();
+  console.log(formId);
+  const service = services.find(s => s.key === formId);
+
   const clickHandle = e => {
-    history.push(`/app/${appId}/setting/form/${formId}/${e.key}`);
+    history.push(`/app/${appId}/setting/form/${e.key}`);
   };
 
   if (!service) {
@@ -49,7 +52,7 @@ const AppServices = () => {
       <CommonHeader navigationList={navigationList(history, appId)} />
       <Layout>
         <Sider className={classes.appSider} theme="light" width={64}>
-          <Menu className={classes.menuBorderNone} selectedKeys={serviceId}>
+          <Menu className={classes.menuBorderNone} selectedKeys={formId}>
             {services.map(s => (
               <Menu.Item key={s.key} onClick={clickHandle}>
                 <Icon type={s.icon} style={{ fontSize: 22 }} />
