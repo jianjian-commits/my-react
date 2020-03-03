@@ -180,7 +180,7 @@ class GroupDetail extends Component {
           )}
         </div>
         {getBasicInfo(action, baseInfoBo, this.onChange)}
-        {getAppManage(action, appManagerBos, this.onChange)}
+        {getAppManage(action, appManagerBos, this.onChange, this.props.teamId)}
         {getOtherManage(action, permissions, this.onChange)}
         {/* {getSetting(action, setting)} */}
       </div>
@@ -242,7 +242,7 @@ const getBasicInfo = (a, baseInfoBo, onChange) => {
 };
 
 // 应用管理（动态）
-const getAppManage = (a, appManagerBos, onChange) => {
+const getAppManage = (a, appManagerBos, onChange, teamId) => {
   // 表格头
   const columns = [
     { title: "应用名", dataIndex: "appName" },
@@ -269,10 +269,20 @@ const getAppManage = (a, appManagerBos, onChange) => {
     },
     {
       title: "操作",
-      key: "action",
       dataIndex: "action",
-      render: (text, record) => {
-        return <a href="/">权限管理</a>;
+      render: () => {
+        return (
+          <Button
+            type="link"
+            onClick={() => {
+              history.push(
+                `/user/profile/permissions/${this.action}/${this.groupId}/${teamId}`
+              );
+            }}
+          >
+            权限管理
+          </Button>
+        );
       }
     }
   ];
