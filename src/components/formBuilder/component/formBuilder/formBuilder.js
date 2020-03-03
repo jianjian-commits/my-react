@@ -35,13 +35,13 @@ class ReactFormBuilder extends React.Component {
   }
 
   componentDidMount() {
-    const { formId } = this.state;
+    let { formId } = this.state;
     const { initForm } = this.props;
-    console.log(formId);
     if (formId) {
       initForm(formId);
     }
     this.props.getAllForms();
+    console.log(this.props);
   }
   //增加一个形参判断是否点击的是子组件里面的元素
   editModeOn(editElement, e, formChildInnerElement) {
@@ -108,7 +108,8 @@ class ReactFormBuilder extends React.Component {
                   isEditMode={this.state.isEditMode}
                   editElement={this.state.editElement}
                   defaultForm={
-                    this.props.localForm ? this.props.localForm : null
+                    //  this.props.localForm? this.props.localForm:null
+                    null
                   }
                 />
 
@@ -119,7 +120,8 @@ class ReactFormBuilder extends React.Component {
                   editElement={this.state.editElement}
                   editElementParent={this.state.editElementParent}
                   defaultForm={
-                    this.props.localForm ? this.props.localForm : null
+                    //  this.props.localForm? this.props.localForm:null
+                    null
                   }
                 />
               </div>
