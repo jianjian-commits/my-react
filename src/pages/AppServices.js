@@ -1,29 +1,101 @@
 import React from "react";
-import { Layout, Menu, Icon } from "antd";
+import { Switch, useRouteMatch } from "react-router-dom";
+import { history } from "../store";
+import { PrivateRoute } from "../components/shared";
+import { Layout, Menu, Icon, Tooltip } from "antd";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
-import PlaceHolder from "./Placeholder";
+// import PlaceHolder from "./Placeholder";
 import CreateForm from "../components/formBuilder/component/formBuilder/formBuilder";
 import classes from "../styles/apps.module.scss";
+import { Process, Approval } from "componentized-process";
+import { processRequst } from "../utils/request";
 
 const { Content, Sider } = Layout;
 
+const defaultConfig = {
+  request: processRequst
+};
+
+const Proc = () => {
+  const { url } = useRouteMatch();
+  const puginConfig = {
+    pathPrefix: `${url}`,
+    history
+  };
+  const composedConfig = Object.assign({}, defaultConfig, puginConfig);
+  return (
+    <Switch>
+      <PrivateRoute
+        path={`${url}/list`}
+        exact
+        component={Process.List}
+        key={"process/list"}
+        options={{ config: composedConfig }}
+      />
+      <PrivateRoute
+        path={`${url}/builder`}
+        component={Process.Builder}
+        key={"process/builder"}
+        options={{ config: composedConfig }}
+      />
+      <PrivateRoute
+        path={`${url}/log`}
+        component={Process.Log}
+        key={"process/log"}
+        options={{ config: composedConfig }}
+      />
+    </Switch>
+  );
+};
+
+const Appr = () => {
+  const { url } = useRouteMatch();
+  const puginConfig = {
+    pathPrefix: `${url}`,
+    history
+  };
+  const composedConfig = Object.assign({}, defaultConfig, puginConfig);
+  return (
+    <Switch>
+      <PrivateRoute
+        path={`${url}/list`}
+        exact
+        component={Approval.List}
+        key={"approval/list"}
+        options={{ config: composedConfig }}
+      />
+      <PrivateRoute
+        path={`${url}/builder`}
+        component={Approval.Builder}
+        key={"approval/builder"}
+        options={{ config: composedConfig }}
+      />
+      <PrivateRoute
+        path={`${url}/log`}
+        component={Approval.Log}
+        key={"approval/log"}
+        options={{ config: composedConfig }}
+      />
+    </Switch>
+  );
+};
+
 const services = [
   { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
-  { key: "create", name: "创建表单", icon: "table", component: PlaceHolder },
   {
-    key: "process",
+    key: "process/list",
     name: "自动化",
     icon: "cloud-sync",
-    component: PlaceHolder
+    component: Proc
   },
-  { key: "approval", name: "审批流", icon: "audit", component: PlaceHolder }
+  { key: "approval/list", name: "审批流", icon: "audit", component: Appr }
 ];
 const navigationList = (history, appId) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
-    label: "13号Devinci应用",
+    label: `${appId}`,
     onClick: () => history.push(`/app/${appId}/detail`)
   },
   {
@@ -37,7 +109,9 @@ const navigationList = (history, appId) => [
 const AppServices = () => {
   const history = useHistory();
   const { appId, formId, serviceId } = useParams();
-  const service = services.find(s => s.key === serviceId);
+  const service = services.find(s => {
+    return s.key.indexOf(serviceId) !== -1;
+  });
   const clickHandle = e => {
     history.push(`/app/${appId}/setting/form/${formId}/${e.key}`);
   };
@@ -53,7 +127,9 @@ const AppServices = () => {
           <Menu className={classes.menuBorderNone} selectedKeys={serviceId}>
             {services.map(s => (
               <Menu.Item key={s.key} onClick={clickHandle}>
-                <Icon type={s.icon} style={{ fontSize: 22 }} />
+                <Tooltip title={s.name}>
+                  <Icon type={s.icon} style={{ fontSize: 22 }} />
+                </Tooltip>
               </Menu.Item>
             ))}
           </Menu>
