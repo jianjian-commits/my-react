@@ -1,11 +1,11 @@
 import React from "react";
-import { Modal, Select, Row, Col } from "antd";
+import { Modal, Select, Row, Col, message } from "antd";
+import request from "../../utils/request";
 
 const { Option } = Select;
-const groups = [];
 
 const ChangeGroup = props => {
-  const [data, setData] = React.useState([]);
+  // console.log(props)
   const [groupKey, setGroupKey] = React.useState(null); //分组关键字
   const onChange = value => {
     setGroupKey(value);
@@ -15,13 +15,20 @@ const ChangeGroup = props => {
   };
   const handleOk = () => {
     if (groupKey) {
-      data.forEach(item => {
-        if (item.name === props.userKey) {
-          item.group = groupKey;
-        }
-      });
+      request(`/sysUser/${props.userKey}`, {
+        method: "PUT",
+        data: { oldGroupId: props.groupKey, newGroupId: groupKey }
+      })
+        .then(res => {
+          message.success("成功");
+          props.fn();
+        })
+        .catch(err => {
+          message.error("变更失败");
+        });
+    } else {
+      props.fn();
     }
-    props.fn();
   };
   return (
     <Modal
@@ -47,10 +54,10 @@ const ChangeGroup = props => {
                 .indexOf(input.toLowerCase()) >= 0
             }
           >
-            {groups.map((item, index) => {
+            {props.groups.map((item, index) => {
               return (
-                <Option key={index} value={item}>
-                  {item}
+                <Option key={index} value={item.id}>
+                  {item.name}
                 </Option>
               );
             })}

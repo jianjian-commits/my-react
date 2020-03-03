@@ -92,6 +92,7 @@ export const getCurrentTeam = teamId => async dispatch => {
   try {
     const res = await request(`/team/${teamId}`);
     if (res && res.status === "SUCCESS") {
+      console.log(res);
       localStorage.setItem("currentTeam", JSON.stringify(res.data));
       dispatch(fetchCurrentTeam(res.data));
     }

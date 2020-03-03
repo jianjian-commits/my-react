@@ -6,20 +6,26 @@ import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../utils/request";
 import InviteUser from "../userManagement/inviteUser";
+import { getCurrentTeam } from "../../store/loginReducer";
 
-export default connect(({ login }) => ({
-  loginData: login
-}))(function TeamMember({ loginData }) {
-  const [teamId, setTeamId] = React.useState(loginData.currentTeam.id);
-  const [isShow, setIsShow] = React.useState(false);
-  const [visible, setVisible] = React.useState(false);
-  const [changeGroup, setChangeGroup] = React.useState(false);
-  const [data, setData] = React.useState(null);
-  const [userKey, setUserKey] = React.useState(null);
-  const [onSwitch, setOnSwitch] = React.useState(0);
-  const [page, setPage] = React.useState(1);
-  const [total, setTotal] = React.useState(null);
-  //判断管理员的个数及是否有操作按钮
+export default connect(
+  ({ login }) => ({
+    loginData: login
+  }),
+  { getCurrentTeam }
+)(function TeamMember({ loginData, getCurrentTeam }) {
+  // console.log(loginData)
+  const [teamId] = React.useState(loginData.currentTeam.id);
+  const [isShow, setIsShow] = React.useState(false); //筛选的显示开关
+  const [changeGroup, setChangeGroup] = React.useState(false); //变更分组模态框显示开关
+  const [data, setData] = React.useState(null); //用户数据
+  const [userKey, setUserKey] = React.useState(null); //变更分组用户的Id
+  const [groupKey, setGroupKey] = React.useState(null); //变更分组用户的当前分组id
+  const [onSwitch, setOnSwitch] = React.useState(false); //管理员操作按钮显示
+  const [page, setPage] = React.useState(1); //页码
+  const [total, setTotal] = React.useState(null); //数据总量
+  const [size] = React.useState(5); //每页显示数量
+
   const columns = [
     {
       title: "姓名",
@@ -41,18 +47,17 @@ export default connect(({ login }) => ({
       title: "操作",
       key: "action",
       render: (text, record) => {
-        // console.log(text)
         return text.groupName === "超级管理员" && onSwitch ? null : (
           <span>
             <Button
               type="link"
-              onClick={handleChange.bind(this, text.name)}
+              onClick={handleChange.bind(this, text)}
               style={{ paddingLeft: "0" }}
             >
               变更分组
             </Button>
             <Popconfirm
-              title="把改成员从团队中踢出?"
+              title="把该成员从团队中踢出?"
               onConfirm={confirm.bind(this, text.id)}
               onCancel={cancel}
               okText="确认"
@@ -67,18 +72,20 @@ export default connect(({ login }) => ({
     }
   ];
   const confirm = sysUserId => {
-    request(`/team/${teamId}`, { method: "DELETE", data: { sysUserId } })
+    request(`/sysUser/${sysUserId}`, {
+      method: "PUT",
+      data: { oldTeamId: teamId }
+    })
       .catch(err => {
         message.success("失败");
       })
       .then(async res => {
-        console.log(data);
         const newData = await request(`/sysUser/team/${teamId}`, {
           method: "POST",
-          data: { page: page, size: 2 }
+          data: { page: page, size: size }
         });
-        if (Math.ceil(newData.data.total / 2) < page) {
-          setPage(Math.ceil(newData.data.total / 2));
+        if (Math.ceil(newData.data.total / size) < page) {
+          setPage(Math.ceil(newData.data.total / size));
         }
         setData(newData.data.datas);
         setTotal(newData.data.total);
@@ -97,16 +104,24 @@ export default connect(({ login }) => ({
   const filterData = value => {
     setData(value);
   };
-  // 邀请模态框
-  const showModalInvite = () => {
-    setVisible(true);
-  };
-  const handleCancel = () => {
-    setVisible(false);
+
+  const handleChange = (obj, e) => {
+    setGroupKey(obj.groupId);
+    setUserKey(obj.id);
+    setChangeGroup(!changeGroup);
   };
 
-  const handleChange = (value, e) => {
-    setUserKey(value);
+  // 变更分组后的回调
+  const changeGroupCal = async () => {
+    await getCurrentTeam(teamId);
+    setOnSwitch(
+      loginData.currentTeam.groups.filter(item => {
+        return item.name === "超级管理员";
+      })[0].peopleNumber === 1
+        ? true
+        : false
+    );
+    await gainData();
     setChangeGroup(!changeGroup);
   };
 
@@ -115,28 +130,26 @@ export default connect(({ login }) => ({
   };
 
   //获取成员
+  const gainData = async () => {
+    const res = await request(`/sysUser/currentTeam/all`, {
+      method: "POST",
+      data: { page: page, size }
+    });
+    res.data.datas.forEach(item => {
+      item.key = item.id;
+      item.lastModifiedDate = new Date().toLocaleString(item.lastModifiedDate);
+    });
+    setOnSwitch(
+      loginData.currentTeam.groups.filter(item => {
+        return item.name === "超级管理员";
+      })[0].peopleNumber === 1
+        ? true
+        : false
+    );
+    setTotal(res.data.total);
+    setData(res.data.datas);
+  };
   useEffect(() => {
-    const gainData = async (size = 2) => {
-      const res = await request(`/sysUser/team/${teamId}`, {
-        method: "POST",
-        data: { page: page, size }
-      });
-      res.data.datas.forEach(item => {
-        item.key = item.id;
-        item.lastModifiedDate = new Date().toLocaleString(
-          item.lastModifiedDate
-        );
-      });
-      setOnSwitch(
-        res.data.datas.filter(item => {
-          return item.groupName === "超级管理员";
-        }).length === 1
-          ? true
-          : false
-      );
-      setTotal(res.data.total);
-      setData(res.data.datas);
-    };
     gainData();
   }, [page]);
   return data ? (
@@ -158,15 +171,17 @@ export default connect(({ login }) => ({
       </Row>
       {isShow ? <Filter fn={filterData} /> : null}
       <Table
-        pagination={{ total: total, pageSize: 2, onChange: onChangePage }}
+        pagination={{ total, pageSize: size, onChange: onChangePage }}
         columns={columns}
         dataSource={data}
       />
       {changeGroup ? (
         <ChangeGroup
+          groups={loginData.currentTeam.groups}
+          groupKey={groupKey}
           userKey={userKey}
           visible={changeGroup}
-          fn={handleChange}
+          fn={changeGroupCal}
         />
       ) : null}
     </div>

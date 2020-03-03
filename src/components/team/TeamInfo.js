@@ -55,7 +55,7 @@ const EditInput = props => {
         data: {}
       };
       params.data[obj.key] = changeStr;
-      const result = await request(`/team/${teamId}`, params);
+      await request(`/team`, params);
     };
     upData();
   }, [changeStr]);
@@ -100,16 +100,21 @@ const EditInput = props => {
 export default connect(({ login }) => ({
   loginData: login
 }))(function TeamInfo({ loginData }) {
-  const [teamId, setTeamId] = React.useState(loginData.currentTeam.id);
+  const [teamId] = React.useState(loginData.currentTeam.id);
   const [data, setData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await request(`/team/${teamId}`);
-      const creator = await request(`/sysUser/${res.data.ownerId}`);
+      const res = loginData.currentTeam;
+      const creator = await request(`/sysUser/${res.ownerId}`);
+      const createDate = new Date(res.createDate).toLocaleString();
       const newData = infoData.map(item => {
-        Object.keys(res.data).forEach(i => {
+        Object.keys(res).forEach(i => {
           if (item.key === i) {
-            item.value = res.data[i];
+            if (i === "createDate") {
+              item.value = createDate;
+            } else {
+              item.value = res[i];
+            }
           } else if (item.key === "creator") {
             item.value = creator.data.name;
           }
