@@ -7,7 +7,7 @@ import DraggableList from "../components/shared/DraggableList";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 
 import selectCom from "../utils/selectCom";
-import appDetailMenu from "../config/appDetailMenu";
+import { appDetailMenu } from "../config/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -85,7 +85,6 @@ const AppDetail = () => {
     setEle(selectCom(key, appDetailMenu));
   };
 
-  console.log(selectedForm);
   return (
     <Layout>
       <CommonHeader
@@ -115,12 +114,6 @@ const AppDetail = () => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {/* {ele ? (
-            <ele.ContentEle count={ele.key}></ele.ContentEle>
-          ) : (
-              <div></div>
-            )} */}
-
           {selectedForm !== void 0 ? (
             <>
               <button
