@@ -8,7 +8,7 @@ import CommonHeader from "../components/header/CommonHeader";
 // import PlaceHolder from "./Placeholder";
 import CreateForm from "../components/formBuilder/component/formBuilder/formBuilder";
 import classes from "../styles/apps.module.scss";
-import { Process, Approval } from "componentized-process/lib/index";
+import { Process, Approval } from "componentized-process";
 import { processRequst } from "../utils/request";
 
 const { Content, Sider } = Layout;
