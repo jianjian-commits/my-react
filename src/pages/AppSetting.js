@@ -13,7 +13,7 @@ const navigationList = (history, appId) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
-    label: "13号Devinci应用",
+    label: `${appId}`,
     onClick: () => history.push(`/app/${appId}/detail`)
   },
   { key: 1, label: "应用设置", disabled: true }

@@ -33,7 +33,12 @@ const AppInsideRouter = () => {
   return (
     <Switch>
       {appPaths.map(p => (
-        <PrivateRoute exact key={p.key} path={p.path} component={p.component} />
+        <PrivateRoute
+          exact={!p.rough}
+          key={p.key}
+          path={p.path}
+          component={p.component}
+        />
       ))}
       <Route render={() => <Redirect to="/app/list" />} />
     </Switch>
