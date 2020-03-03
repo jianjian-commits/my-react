@@ -6,6 +6,7 @@ import UserManagement from "../components/userManagement";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
 import GroupDetail from "../components/profileManagement/GroupDetail";
+import ApplyPermissionSetting from "../components/userManagement/applyPermissionSettings";
 
 import { Route } from "react-router-dom";
 const { Sider, Content } = Layout;
@@ -37,7 +38,14 @@ const otherRoutes = [
   {
     path: "/user/profile/:action/:id",
     key: "viewGroupDetail",
+    exact: true,
     component: GroupDetail
+  },
+  {
+    path: "/user/profile/permissions/:action/:groupId/:teamId",
+    key: "reditApplyPermissions",
+    exact: true,
+    component: ApplyPermissionSetting
   }
 ];
 class UserPage extends React.Component {

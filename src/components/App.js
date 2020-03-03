@@ -10,8 +10,6 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ForgetPassword from "../pages/forgetPassword";
 import InviteUser from "../pages/inviteUser";
-import PermissionSetting from "./userManagement/applyPermissionSettings";
-import PermissionSetting_ from "./userManagement/_applyPermissionSettings";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
@@ -46,22 +44,16 @@ const App = () => (
       <Switch>
         <SpecialRoute
           exact
-          path="/invite/:userId/:teamId/:token"
+          path="/invite/:teamId/:token"
           component={InviteUser}
         />
         <SpecialRoute
           exact
-          path="/register/:userId/:teamId/:token"
+          path="/register/:teamId/:token"
           component={Register}
         />
-        <SpecialRoute
-          exact
-          path="/login/:userId/:teamId/:token"
-          component={Login}
-        />
+        <SpecialRoute exact path="/login/:teamId/:token" component={Login} />
         <PublicRoute path="/register" component={Register} />
-        <PublicRoute path="/setting" component={PermissionSetting} />
-        <PublicRoute path="/settings" component={PermissionSetting_} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}

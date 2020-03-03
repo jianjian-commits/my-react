@@ -8,23 +8,25 @@ import { registerParameter } from "../utils/formItems";
 import Loading from "./loading";
 
 export default connect()(function Register({ history, match }) {
-  const { userId, token } = match.params;
+  const { teamId, token } = match.params;
   if (!history.location.query && history.location.pathname !== "/register")
     history.push("/register");
-  const { inviter, invitedTeam } = history.location.query || {};
+  const { inviter, invitedTeam, switchCurrentTeam } =
+    history.location.query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
   const [spinning, setSpinning] = useState(false);
   const registerUser = async ({ actionType, rest }) => {
     setSpinning(true);
     try {
-      const res = await request(userId ? `/reg?token=${token}` : "/reg", {
+      const res = await request(token ? `/reg?token=${token}` : "/reg", {
         method: "post",
         data: rest
       });
       if (res && res.status === "SUCCESS") {
         setStatus(true);
         setVisible(false);
+        if (teamId) switchCurrentTeam(teamId);
       } else {
         setStatus(false);
       }
@@ -49,7 +51,7 @@ export default connect()(function Register({ history, match }) {
         <div className={registerStyles.title}>
           <div>
             <h2>
-              {userId ? (
+              {token ? (
                 <>
                   <BlueFont>{inviter}</BlueFont>
                   邀请您加入团队<BlueFont>{invitedTeam}</BlueFont>

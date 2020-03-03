@@ -19,10 +19,9 @@ export default connect(
     loginUser
   }
 )(function Login({ loginUser, isLoading, match, history, isAuthenticated }) {
-  if (isAuthenticated) history.push("/")
+  if (isAuthenticated) history.push("/");
   if (!history.location.query && history.location.pathname !== "/login")
     history.push("/login");
-
   return (
     <Loading spinning={isLoading}>
       <div className={signinStyles.signin}>

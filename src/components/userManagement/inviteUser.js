@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import { Input, Button, Modal, message } from "antd";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 
-export default connect()(function InviteUser(props) {
-  const { userDetail, currentTeam } = props;
-  const { id, teamId } = userDetail;
+export default function InviteUser(props) {
+  const { id } = props.currentTeam;
   const [visible, setVisible] = useState(false);
   const [token, setToken] = useState(null);
   async function handleInviteUserBtn() {
     try {
-      const res = await request(`/team/${teamId}/invitedToken`);
+      const res = await request(`/team/invitedToken`);
       if (res && res.status === "SUCCESS") {
         setToken(res.data);
         setVisible(true);
@@ -20,13 +18,10 @@ export default connect()(function InviteUser(props) {
       message.error("token获取失败");
     }
   }
-  const inviteUrl = `${window.location.origin}/invite/${id}/${teamId}/${token}`;
+  const inviteUrl = `${window.location.origin}/invite/${id}/${token}`;
   return (
     <>
-      <Button
-        type="primary"
-        onClick={() => handleInviteUserBtn(currentTeam.id)}
-      >
+      <Button type="primary" onClick={() => handleInviteUserBtn()}>
         邀请用户
       </Button>
       <Modal
@@ -52,4 +47,4 @@ export default connect()(function InviteUser(props) {
       </Modal>
     </>
   );
-});
+}

@@ -75,7 +75,7 @@ export default Form.create({ name: "reset-form" })(
       validateFields((err, { actionType, verificationCode, ...rest }) => {
         if (!err) {
           console.log("Received values of form: ", rest);
-          updateUserDetail(userDetail.id, rest).then(() => {
+          updateUserDetail(rest).then(() => {
             setModalMeter(initModalMeter);
           });
         }

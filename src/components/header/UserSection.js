@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Dropdown, Icon, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   signOut,
-  getCurrentTeam,
+  switchCurrentTeam,
   initAllDetail
 } from "../../store/loginReducer";
 
-const MenuItems = (allTeam, setVisible, currentTeam, getCurrentTeam) => (
+const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
   <>
     <Menu>
       <Menu.Item>
@@ -20,7 +20,7 @@ const MenuItems = (allTeam, setVisible, currentTeam, getCurrentTeam) => (
         return (
           <Menu.Item key={team.id}>
             <Link
-              onClick={check ? () => "" : () => getCurrentTeam(team.id)}
+              onClick={check ? () => "" : () => switchCurrentTeam(team.id)}
               to="#"
             >
               {team.name}
@@ -47,7 +47,7 @@ const MenuItems = (allTeam, setVisible, currentTeam, getCurrentTeam) => (
 );
 
 const User = props => {
-  const { signOut, login, getCurrentTeam, initAllDetail } = props;
+  const { signOut, login, switchCurrentTeam, initAllDetail } = props;
   const { userDetail, allTeam, currentTeam } = login;
   const [init, setInit] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -58,7 +58,7 @@ const User = props => {
   return (
     <>
       <Dropdown
-        overlay={MenuItems(allTeam, setVisible, currentTeam, getCurrentTeam)}
+        overlay={MenuItems(allTeam, setVisible, currentTeam, switchCurrentTeam)}
       >
         <Link className="ant-dropdown-link" to="#">
           {userDetail.name}
@@ -85,7 +85,7 @@ export default connect(
   }),
   {
     signOut,
-    getCurrentTeam,
+    switchCurrentTeam,
     initAllDetail
   }
 )(User);
