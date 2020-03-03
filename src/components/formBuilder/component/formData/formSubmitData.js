@@ -133,7 +133,7 @@ class FormSubmitData extends PureComponent {
       .catch(err => {
         console.error(err);
       });
-    this.setState({ formId: this.props.id });
+    this.setState({ formId: this.props.formId });
   }
   componentWillUnmount() {
     this.props.clearFormData();
@@ -556,6 +556,7 @@ class FormSubmitData extends PureComponent {
   };
 
   handleDeleteSubmisson = submissionId => {
+    console.log(1, this.props);
     this.props
       .deleteFormData(this.state.formId, submissionId)
       .then(response => {
