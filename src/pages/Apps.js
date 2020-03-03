@@ -32,7 +32,7 @@ const getApps = list => {
         key={e.id}
         className={classes.appCard}
         loading={false}
-        onClick={() => history.push(`/app/${e.name}/detail`)}
+        onClick={() => history.push(`/app/${e.id}/detail`)}
       >
         <Meta
           className={classes.appCardMeta}

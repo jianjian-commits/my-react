@@ -8,7 +8,6 @@ axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.interceptors.response.use(
   response => response,
   error => {
-    console.log(error.response);
     if (
       error.response.status === 401 &&
       error.response.data.status === "UNAUTHENTICATED"
@@ -18,6 +17,24 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const processIns = axios.create({
+  baseURL: "http://192.168.3.106:9080"
+});
+
+export const processRequst = async (url, params = {}) => {
+  const headers = params.headers || {};
+  const res = await processIns({
+    url,
+    headers,
+    data: params.data || {},
+    params: params.params || {},
+    method: params.method || "GET"
+  });
+  // console.log("fetch options", params);
+  // console.log("fetch res", res);
+  return res.data;
+};
 
 async function request(url, params = {}) {
   const headers = params.headers || {};
