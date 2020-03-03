@@ -1,4 +1,4 @@
-import TransactList from "../components/transactList/TransactList";
+import TransactList from "./TransactList";
 
 export const appDetailMenu = [
   {

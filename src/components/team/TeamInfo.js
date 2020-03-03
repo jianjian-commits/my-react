@@ -18,7 +18,7 @@ const infoData = [
     value: ""
   },
   {
-    key: "creator",
+    key: "sysUserName",
     lable: "创建人",
     value: ""
   },
@@ -53,11 +53,11 @@ const EditInput = ({ obj, getCurrentTeam }) => {
   };
   useEffect(() => {
     upData().then((res, { key } = obj) => {
-      infoData.forEach(item => {
-        if (key === item.key) {
-          item.value = dataStr;
-        }
-      });
+      // infoData.forEach(item => {
+      //   if (key === item.key) {
+      //     item.value = dataStr;
+      //   }
+      // });
       getCurrentTeam().then(res => {
         onClickAmend();
       });
@@ -107,11 +107,11 @@ export default connect(
   }),
   { getCurrentTeam }
 )(function TeamInfo({ loginData, getCurrentTeam }) {
-  console.log(loginData);
   const [data, setData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       const res = await loginData.currentTeam;
+      console.log(res);
       const createDate = new Date(res.createDate).toLocaleString();
       const newData = infoData.map(item => {
         Object.keys(res).forEach(i => {
@@ -128,7 +128,7 @@ export default connect(
       setData(newData);
     };
     fetchData();
-  }, []);
+  }, [loginData]);
   return data ? (
     <div className={classes.container}>
       <Title level={3}>团队信息</Title>

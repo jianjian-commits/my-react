@@ -14,14 +14,13 @@ export default connect(
   }),
   { getCurrentTeam }
 )(function TeamMember({ loginData, getCurrentTeam }) {
-  // console.log(loginData)
   const [teamId] = React.useState(loginData.currentTeam.id);
   const [isShow, setIsShow] = React.useState(false); //筛选的显示开关
   const [changeGroup, setChangeGroup] = React.useState(false); //变更分组模态框显示开关
   const [data, setData] = React.useState(null); //用户数据
   const [userKey, setUserKey] = React.useState(null); //变更分组用户的Id
   const [groupKey, setGroupKey] = React.useState(null); //变更分组用户的当前分组id
-  const [onSwitch, setOnSwitch] = React.useState(false); //管理员操作按钮显示
+  const [onSwitch, setOnSwitch] = React.useState(null); //管理员操作按钮显示
   const [page, setPage] = React.useState(1); //页码
   const [total, setTotal] = React.useState(null); //数据总量
   const [size] = React.useState(5); //每页显示数量
@@ -106,7 +105,6 @@ export default connect(
   };
 
   const handleChange = (obj, e) => {
-    console.log(obj);
     setGroupKey(obj.group.id);
     setUserKey(obj.id);
     setChangeGroup(!changeGroup);
@@ -114,14 +112,7 @@ export default connect(
 
   // 变更分组后的回调
   const changeGroupCal = async () => {
-    await getCurrentTeam(teamId);
-    setOnSwitch(
-      loginData.currentTeam.groups.filter(item => {
-        return item.name === "超级管理员";
-      })[0].peopleNumber === 1
-        ? true
-        : false
-    );
+    await getCurrentTeam();
     await gainData();
     setChangeGroup(!changeGroup);
   };
@@ -141,6 +132,10 @@ export default connect(
       item.lastModifiedDate = new Date().toLocaleString(item.lastModifiedDate);
       item.groupName = item.group.name;
     });
+    setTotal(res.data.total);
+    setData(res.data.datas);
+  };
+  useEffect(() => {
     setOnSwitch(
       loginData.currentTeam.groups.filter(item => {
         return item.name === "超级管理员";
@@ -148,9 +143,7 @@ export default connect(
         ? true
         : false
     );
-    setTotal(res.data.total);
-    setData(res.data.datas);
-  };
+  }, [loginData]);
   useEffect(() => {
     gainData();
   }, [page]);

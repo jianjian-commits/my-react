@@ -7,7 +7,7 @@ import DraggableList from "../components/shared/DraggableList";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 
 import selectCom from "../utils/selectCom";
-import { appDetailMenu } from "../config/appDetailMenu";
+import { appDetailMenu } from "../components/transactList/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
