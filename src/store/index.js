@@ -10,12 +10,20 @@ import homeReducer from "../components/formBuilder/component/homePage/redux/redu
 import formSubmitDataReducer from "../components/formBuilder/component/formData/redux/reducer";
 import formBuilderReducer from "../components/formBuilder/component/formBuilder/redux/reducer";
 import login from "./loginReducer";
+import { Process, Approval } from "componentized-process";
+
+const { table_process, process, processMiddleware } = Process.redux;
+const { table_approval, approval, approvalMiddleware } = Approval.redux;
 
 export const history = createBrowserHistory();
 
 const reducers = history =>
   combineReducers({
     login,
+    table_process,
+    table_approval,
+    process,
+    approval,
     formSubmitData: formSubmitDataReducer,
     forms: homeReducer,
     survey: surveyReducer,
@@ -25,7 +33,12 @@ const reducers = history =>
   });
 
 const configureStore = preloadedState => {
-  const middlewares = [thunk, routerMiddleware(history)];
+  const middlewares = [
+    thunk,
+    processMiddleware,
+    approvalMiddleware,
+    routerMiddleware(history)
+  ];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 
   const enhancers = [middlewareEnhancer];
