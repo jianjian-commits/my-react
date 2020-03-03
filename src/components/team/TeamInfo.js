@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Input, Row, Col, List, Typography, Button, Spin } from "antd";
 import request from "../../utils/request";
 import classes from "./team.module.scss";
+import { getCurrentTeam } from "../../store/loginReducer";
 
 const { Title } = Typography;
 const infoData = [
@@ -28,36 +29,39 @@ const infoData = [
   }
 ];
 
-const EditInput = props => {
-  const { obj, teamId } = props;
+const EditInput = ({ obj, getCurrentTeam }) => {
   const [dataStr, setDataStr] = useState(obj.value);
   const [redact, setRedact] = useState(false);
   const [changeStr, setChangeStr] = useState(obj.value);
   const onClickAmend = e => {
-    setRedact(!redact);
+    setRedact(false);
   };
-  const submitAmend = (key, e) => {
-    infoData.forEach(item => {
-      if (key === item.key) {
-        item.value = dataStr;
-      }
-    });
+  const submitAmend = () => {
     setChangeStr(dataStr);
-    onClickAmend();
   };
   const changeValue = e => {
     setDataStr(e.target.value);
   };
-  useEffect(() => {
-    const upData = async () => {
-      const params = {
-        method: "PUT",
-        data: {}
-      };
-      params.data[obj.key] = changeStr;
-      await request(`/team`, params);
+
+  const upData = async () => {
+    const params = {
+      method: "PUT",
+      data: {}
     };
-    upData();
+    params.data[obj.key] = changeStr;
+    await request(`/team`, params);
+  };
+  useEffect(() => {
+    upData().then((res, { key } = obj) => {
+      infoData.forEach(item => {
+        if (key === item.key) {
+          item.value = dataStr;
+        }
+      });
+      getCurrentTeam().then(res => {
+        onClickAmend();
+      });
+    });
   }, [changeStr]);
   return (
     <div>
@@ -70,7 +74,7 @@ const EditInput = props => {
                 <Input defaultValue={obj.value} onChange={changeValue} />
               </Col>
               <Col>
-                <Button type="link" onClick={submitAmend.bind(this, obj.key)}>
+                <Button type="link" onClick={submitAmend}>
                   确认
                 </Button>
               </Col>
@@ -87,7 +91,7 @@ const EditInput = props => {
           <Col>{obj.lable}:</Col>
           <Col>{obj.value}</Col>
           <Col>
-            <Button type="link" onClick={onClickAmend}>
+            <Button type="link" onClick={setRedact.bind(true)}>
               修改
             </Button>
           </Col>
@@ -97,15 +101,17 @@ const EditInput = props => {
   );
 };
 
-export default connect(({ login }) => ({
-  loginData: login
-}))(function TeamInfo({ loginData }) {
-  const [teamId] = React.useState(loginData.currentTeam.id);
+export default connect(
+  ({ login }) => ({
+    loginData: login
+  }),
+  { getCurrentTeam }
+)(function TeamInfo({ loginData, getCurrentTeam }) {
+  console.log(loginData);
   const [data, setData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
-      const res = loginData.currentTeam;
-      const creator = await request(`/sysUser/${res.ownerId}`);
+      const res = await loginData.currentTeam;
       const createDate = new Date(res.createDate).toLocaleString();
       const newData = infoData.map(item => {
         Object.keys(res).forEach(i => {
@@ -115,8 +121,6 @@ export default connect(({ login }) => ({
             } else {
               item.value = res[i];
             }
-          } else if (item.key === "creator") {
-            item.value = creator.data.name;
           }
         });
         return item;
@@ -134,7 +138,7 @@ export default connect(({ login }) => ({
         renderItem={item => (
           <List.Item>
             {item.key === "name" || item.key === "description" ? (
-              <EditInput obj={item} teamId={teamId} />
+              <EditInput obj={item} getCurrentTeam={getCurrentTeam} />
             ) : (
               <Row type="flex" gutter={16}>
                 <Col>{item.lable}:</Col>

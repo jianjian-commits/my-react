@@ -47,7 +47,7 @@ export default connect(
       title: "操作",
       key: "action",
       render: (text, record) => {
-        return text.groupName === "超级管理员" && onSwitch ? null : (
+        return text.group.name === "超级管理员" && onSwitch ? null : (
           <span>
             <Button
               type="link"
@@ -72,7 +72,7 @@ export default connect(
     }
   ];
   const confirm = sysUserId => {
-    request(`/sysUser/${sysUserId}`, {
+    request(`/sysUser/${sysUserId}/team`, {
       method: "PUT",
       data: { oldTeamId: teamId }
     })
@@ -80,7 +80,7 @@ export default connect(
         message.success("失败");
       })
       .then(async res => {
-        const newData = await request(`/sysUser/team/${teamId}`, {
+        const newData = await request(`/sysUser/currentTeam/all`, {
           method: "POST",
           data: { page: page, size: size }
         });
@@ -106,7 +106,8 @@ export default connect(
   };
 
   const handleChange = (obj, e) => {
-    setGroupKey(obj.groupId);
+    console.log(obj);
+    setGroupKey(obj.group.id);
     setUserKey(obj.id);
     setChangeGroup(!changeGroup);
   };
@@ -138,6 +139,7 @@ export default connect(
     res.data.datas.forEach(item => {
       item.key = item.id;
       item.lastModifiedDate = new Date().toLocaleString(item.lastModifiedDate);
+      item.groupName = item.group.name;
     });
     setOnSwitch(
       loginData.currentTeam.groups.filter(item => {

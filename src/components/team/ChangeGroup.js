@@ -15,7 +15,7 @@ const ChangeGroup = props => {
   };
   const handleOk = () => {
     if (groupKey) {
-      request(`/sysUser/${props.userKey}`, {
+      request(`/sysUser/${props.userKey}/group`, {
         method: "PUT",
         data: { oldGroupId: props.groupKey, newGroupId: groupKey }
       })

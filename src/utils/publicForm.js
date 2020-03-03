@@ -6,7 +6,6 @@ export default Form.create({ name: "login-form" })(function PublicForm({
   form,
   parameter,
   func,
-  userId,
   params
 }) {
   const { getFieldDecorator, validateFields } = form;
@@ -17,6 +16,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
         console.log("Received values of form: ", actionType, rest);
         func({
           token: params.token ? params.token : null,
+          teamId: params.teamId ? params.teamId : null,
           rest
         });
       }
@@ -26,7 +26,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
     <Form onSubmit={e => handleSubmit(e)}>
       {parameter.map(p => {
         const formItem =
-          p.key === "submit" && params.userId
+          p.key === "submit" && params.token
             ? formItems[p.key]({
                 form,
                 payload: "addTeam",

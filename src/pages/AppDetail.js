@@ -66,6 +66,7 @@ const AppDetail = () => {
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
+  console.log(ele);
   let { groups, list } = mockForms;
 
   if (searchKey) {
@@ -113,8 +114,7 @@ const AppDetail = () => {
           </div>
         </Sider>
         <Content className={classes.container}>
-
-          {selectedForm != void 0 ? (
+          {selectedForm !== void 0 ? (
             <>
               <button
                 onClick={_e => {

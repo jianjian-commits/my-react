@@ -3,10 +3,15 @@ import { connect } from "react-redux";
 import { message, Button } from "antd";
 import request from "../utils/request";
 import Loading from "./loading";
+import { switchCurrentTeam } from "../store/loginReducer";
 import registerStyles from "../styles/login.module.scss";
 
-export default connect()(function InviteUser({ match, history }) {
-  const { userId, teamId, token } = match.params;
+export default connect(() => ({}), { switchCurrentTeam })(function InviteUser({
+  match,
+  history,
+  switchCurrentTeam
+}) {
+  const { teamId, token } = match.params;
   const initialState = {
     //邀请人信息
     inviter: null,
@@ -14,17 +19,18 @@ export default connect()(function InviteUser({ match, history }) {
     currentUserDetail: null,
     spinning: true,
     alreadyAddTeam: false,
-    init: false
+    init: false,
+    switchCurrentTeam: switchCurrentTeam
   };
   const [state, setState] = useState(initialState);
   if (!state.init) {
     request(`/team/invitedToken/${token}`).then(
       r => {
         if (r && r.status === "SUCCESS") {
-          request(`/currentUser`).then(
+          request(`/sysUser/current`).then(
             res => {
               if (res && res.status === "SUCCESS") {
-                request(`/team/currentUser/all`).then(resu => {
+                request(`/team/currentSysUser/all`).then(resu => {
                   if (resu && resu.status === "SUCCESS") {
                     setState({
                       ...state,
@@ -89,31 +95,27 @@ export default connect()(function InviteUser({ match, history }) {
 
   //点击当前按钮加入团队
   const handleCurrentUserAddTeam = () => {
-    try {
-      request(`/team/${teamId}`, {
-        method: "post",
-        data: {
-          description: "string",
-          name: currentUserDetail.name,
-          sysUserId: currentUserDetail.id
-        }
-      }).then(async res => {
+    request(`/sysUser`, {
+      method: "put",
+      data: {
+        newTeamId: teamId
+      }
+    }).then(
+      async res => {
         if (res && res.status === "SUCCESS") {
           message.success(`团队加入成功`);
+          await switchCurrentTeam(teamId);
           setTimeout(() => history.push("/"), 2000);
-        } else {
-          setState({ ...state, alreadyAddTeam: true });
         }
-      });
-    } catch (error) {
-      message.error("加入团队失败");
-    }
+      },
+      err => setState({ ...state, alreadyAddTeam: true })
+    );
   };
 
   //点击注册账号加入
   const handleRegisterAddTeam = () => {
     history.push({
-      pathname: `/register/${userId}/${teamId}/${token}`,
+      pathname: `/register/${teamId}/${token}`,
       query: state
     });
   };
@@ -121,7 +123,7 @@ export default connect()(function InviteUser({ match, history }) {
   //点击其他账号加入
   const handleLoginAddTeam = () => {
     history.push({
-      pathname: `/login/${userId}/${teamId}/${token}`,
+      pathname: `/login/${teamId}/${token}`,
       query: state
     });
   };
@@ -133,45 +135,51 @@ export default connect()(function InviteUser({ match, history }) {
   return (
     <>
       <Loading spinning={spinning}>
-        {!alreadyAddTeam ? (
-          <div className={registerStyles.signin}>
-            <div className={registerStyles.form}>
-              <div className={registerStyles.title}>
-                <span>
-                  <BlueFont>{inviter}</BlueFont>邀请您加入团队
-                  <BlueFont>{invitedTeam}</BlueFont>
-                </span>
-              </div>
-              <div className={registerStyles.authenticatedDiv}>
-                {currentUserDetail && (
-                  <>
-                    <div onClick={handleCurrentUserAddTeam}>
-                      <Button>
-                        当前账号<BlueFont>{currentUserDetail.name}</BlueFont>
-                        加入
-                      </Button>
-                    </div>
-                    <hr />
-                  </>
-                )}
-                <div onClick={handleRegisterAddTeam}>
-                  <Button>注册账号加入</Button>
+        <div className={registerStyles.signin}>
+          <div className={registerStyles.form}>
+            {!alreadyAddTeam ? (
+              <>
+                <div className={registerStyles.title}>
+                  <span>
+                    <BlueFont>{inviter}</BlueFont>邀请您加入团队
+                    <BlueFont>{invitedTeam}</BlueFont>
+                  </span>
                 </div>
-                <div onClick={handleLoginAddTeam}>
-                  <Button>其他账号加入</Button>
+                <div className={registerStyles.authenticatedDiv}>
+                  {currentUserDetail && (
+                    <>
+                      <div onClick={handleCurrentUserAddTeam}>
+                        <Button>
+                          当前账号<BlueFont>{currentUserDetail.name}</BlueFont>
+                          加入
+                        </Button>
+                      </div>
+                      <hr />
+                    </>
+                  )}
+                  <div onClick={handleRegisterAddTeam}>
+                    <Button>注册账号加入</Button>
+                  </div>
+                  <div onClick={handleLoginAddTeam}>
+                    <Button>其他账号加入</Button>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            ) : (
+              <>
+                <div style={{ textAlign: "center" }}>
+                  <span>您的账号</span>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <BlueFont>{currentUserDetail.name}</BlueFont>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  已经加入团队{invitedTeam}
+                </div>
+              </>
+            )}
           </div>
-        ) : (
-          <div>
-            <div>
-              <span>您的账号</span>
-            </div>
-            <div style={{ textAlign: "center" }}>{currentUserDetail.name}</div>
-            <div>已经加入团队{invitedTeam}</div>
-          </div>
-        )}
+        </div>
       </Loading>
     </>
   );

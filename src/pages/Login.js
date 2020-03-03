@@ -22,7 +22,6 @@ export default connect(
   if (isAuthenticated) history.push("/");
   if (!history.location.query && history.location.pathname !== "/login")
     history.push("/login");
-
   return (
     <Loading spinning={isLoading}>
       <div className={signinStyles.signin}>
