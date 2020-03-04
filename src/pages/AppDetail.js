@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Layout, Input } from "antd";
+import { Layout, Input, Button } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
@@ -124,7 +124,6 @@ const AppDetail = () => {
     setSubmit(!val);
   };
 
-  console.log(selectedForm);
   return (
     <Layout>
       <CommonHeader
@@ -163,13 +162,17 @@ const AppDetail = () => {
 
           {selectedForm !== null ? (
             <>
-              <button
-                onClick={_e => {
-                  setSubmit(!submit);
-                }}
-              >
-                {submit ? "查看数据" : "提交数据"}
-              </button>
+              {!submit ? (
+                <Button
+                  type="primary"
+                  className="form-submit-data-button"
+                  onClick={_e => {
+                    setSubmit(!submit);
+                  }}
+                >
+                  提交数据
+                </Button>
+              ) : null}
               {submit ? (
                 <FormBuilderSubmission
                   key={Math.random()}

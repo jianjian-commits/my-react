@@ -1081,22 +1081,21 @@ class Submission extends Component {
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];
-
     return (
       <>
         <Spin spinning={this.state.isSubmitted}>
-          {/* {mobile.is ? null : (
+          {mobile.is ? null : (
             <HeaderBar
               backCallback={() => {
-                let appId = this.props.match.params.appId;
-                this.props.history.push(`/app/${appId}/detail`);
+                let skipToSubmissionDataFlag = true;
+                this.props.actionFun(skipToSubmissionDataFlag);
               }}
+              name={formComponent.name}
               isShowBtn={false}
             />
-          )} */}
+          )}
           <div className={"formBuilder-Submission"}>
             <div className="Content">
-              <div className="submission-title">{formComponent.name}</div>
               <div className="form-layout">
                 <Form onSubmit={this.handleSubmit}>
                   {mobile.is ? (
