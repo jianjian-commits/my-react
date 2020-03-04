@@ -125,7 +125,7 @@ const AppSetting = () => {
                 // history.push(`/app/${appId}/setting/form/create`)
 
                 if (list[0].key !== "") {
-                  history.push(`/app/${appId}/setting/form/sWw/edit`);
+                  history.push(`/app/${appId}/setting/form/create`);
                 }
               }}
             >

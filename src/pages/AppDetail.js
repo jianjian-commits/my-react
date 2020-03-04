@@ -67,6 +67,7 @@ const AppDetail = () => {
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
+  const [submit, setSubmit] = React.useState(false);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({ groups: [], list: [] });
@@ -118,6 +119,11 @@ const AppDetail = () => {
     setEle(selectCom(key, appDetailMenu));
   };
 
+  // 父传子的方法
+  const skipToSubmissionData = val => {
+    setSubmit(!val);
+  };
+
   console.log(selectedForm);
   return (
     <Layout>
@@ -141,6 +147,7 @@ const AppDetail = () => {
               draggable={false}
               onClick={e => {
                 setSelectedForm(e.key);
+                setSubmit(false);
               }}
               groups={groups}
               list={list}
@@ -158,21 +165,23 @@ const AppDetail = () => {
             <>
               <button
                 onClick={_e => {
-                  history.push(
-                    `/app/${appId}/detail/submission?formId=${selectedForm}`
-                  );
+                  setSubmit(!submit);
                 }}
               >
-                查看数据
+                {submit ? "查看数据" : "提交数据"}
               </button>
-              {/* <FormBuilderSubmitData
-                key={Math.random()}
-                formId={selectedForm}>
-              </FormBuilderSubmitData> */}
-              <FormBuilderSubmission
-                key={Math.random()}
-                formId={selectedForm}
-              ></FormBuilderSubmission>
+              {submit ? (
+                <FormBuilderSubmission
+                  key={Math.random()}
+                  formId={selectedForm}
+                  actionFun={skipToSubmissionData}
+                ></FormBuilderSubmission>
+              ) : (
+                <FormBuilderSubmitData
+                  key={Math.random()}
+                  formId={selectedForm}
+                ></FormBuilderSubmitData>
+              )}
             </>
           ) : (
             <></>

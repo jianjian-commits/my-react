@@ -449,8 +449,8 @@ class Submission extends Component {
                     ? Toast.success("提交成功!")
                     : message.success("提交成功!");
                   setTimeout(() => {
-                    let appId = this.props.match.params.appId;
-                    this.props.history.push(`/app/${appId}/detail`);
+                    let skipToSubmissionDataFlag = true;
+                    this.props.actionFun(skipToSubmissionDataFlag);
                   }, 1000);
                 }
               })
