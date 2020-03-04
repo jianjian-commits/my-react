@@ -232,7 +232,7 @@ const states = {
   }
 };
 const Tr = ({
-  data,
+  dat,
   table,
   filters,
   headers,
@@ -255,18 +255,27 @@ const Tr = ({
               <CheckBox
                 defaultChecked={Td[0].checked}
                 checked={Td[0].checked}
-                onChange={() => {
-                  data[index].permissions = filters.map(f => {
+                onChange={e => {
+                  dat[index].permissions = filters.map(f => {
                     if (f.label === Td[0].label)
                       return { ...f, checked: !f.checked };
                     return f;
                   });
                   setState({
                     ...state,
-                    [value]: {
-                      ...state[value],
-                      [permissionsValue]: data
-                    }
+                    state: {
+                      ...state["state"],
+                      [value]: {
+                        ...state["state"][value],
+                        [permissionsValue]: dat
+                      }
+                    },
+                    data: crreteData({
+                      handleChecked: e.target.checked,
+                      defaultChecked: e.target.defaultChecked,
+                      state,
+                      dat: Td[0]
+                    })
                   });
                 }}
               />
@@ -278,7 +287,7 @@ const Tr = ({
   );
 };
 const table = (
-  data,
+  dat,
   filters,
   headers,
   value,
@@ -308,7 +317,7 @@ const table = (
             state={state}
             setState={setState}
             index={index}
-            data={data}
+            dat={dat}
             permissionsValue={permissionsValue}
             CheckBox={CheckBox}
           />
@@ -319,10 +328,10 @@ const table = (
 };
 const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
   const permissionsValue = value + "Permissions";
-  const data = Data[permissionsValue];
+  const dat = Data[permissionsValue];
   return (
     <>
-      {data.map((form, index) => {
+      {dat.map((form, index) => {
         const filters = form.permissions;
         const display = filters.filter(f => f.label === "DISPLAY");
         return (
@@ -337,18 +346,27 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
                 <CheckBox
                   defaultChecked={display[0].checked}
                   checked={display[0].checked}
-                  onChange={() => {
-                    data[index].permissions = filters.map(f => {
+                  onChange={e => {
+                    dat[index].permissions = filters.map(f => {
                       if (f.label === "DISPLAY")
                         return { ...f, checked: !f.checked };
                       return f;
                     });
                     setState({
                       ...state,
-                      [value]: {
-                        ...state[value],
-                        [permissionsValue]: data
-                      }
+                      state: {
+                        ...state["state"],
+                        [value]: {
+                          ...state["state"][value],
+                          [permissionsValue]: dat
+                        }
+                      },
+                      data: crreteData({
+                        handleChecked: e.target.checked,
+                        defaultChecked: e.target.defaultChecked,
+                        state,
+                        dat: display[0]
+                      })
                     });
                   }}
                 />
@@ -356,7 +374,7 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
             </div>
             <div>
               {table(
-                data,
+                dat,
                 filters,
                 headers,
                 value,
@@ -376,17 +394,16 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
 };
 
 const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
-  const data = Data[settingValue];
+  const dat = Data[settingValue];
   return (
     <>
       <div>
         <span>
-          {Mete[data.label]}&nbsp;&nbsp;&nbsp;&nbsp;
+          {Mete[dat.label]}&nbsp;&nbsp;&nbsp;&nbsp;
           <CheckBox
-            defaultChecked={data.checked}
-            checked={data.checked}
-            onChange={e => {
-              console.log(e.target.checked);
+            defaultChecked={dat.checked}
+            checked={dat.checked}
+            onChange={e =>
               setState({
                 ...state,
                 state: {
@@ -394,28 +411,19 @@ const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
                   [value]: {
                     ...state["state"][value],
                     [settingValue]: Object.assign({
-                      ...data,
-                      checked: !data.checked
+                      ...dat,
+                      checked: !dat.checked
                     })
                   }
                 },
-                data: {
-                  ...state.data,
-                  [e.target.checked
-                    ? "permissionAllTrue"
-                    : "permissionTrueToFalse"]: e.target.checked
-                    ? [
-                        ...state.data.permissionAllTrue.filter(
-                          f => f !== data.value
-                        ),
-                        data.value
-                      ]
-                    : state.data.permissionTrueToFalse.filter(
-                        f => f !== data.value
-                      )
-                }
-              });
-            }}
+                data: crreteData({
+                  handleChecked: e.target.checked,
+                  defaultChecked: e.target.defaultChecked,
+                  state,
+                  dat
+                })
+              })
+            }
           />
         </span>
       </div>
@@ -424,9 +432,45 @@ const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
   );
 };
 
+const crreteData = ({ handleChecked, defaultChecked, state, dat }) => {
+  return handleChecked === defaultChecked
+    ? {
+        ...state.data,
+        permissionAllTrue: state.data.permissionAllTrue.filter(
+          f => f !== dat.value
+        ),
+        permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
+          f => f !== dat.value
+        )
+      }
+    : handleChecked
+    ? {
+        ...state.data,
+        permissionAllTrue: [
+          ...state.data.permissionAllTrue.filter(f => f !== dat.value),
+          dat.value
+        ],
+        permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
+          f => f !== dat.value
+        )
+      }
+    : {
+        ...state.data,
+        permissionAllTrue: state.data.permissionAllTrue.filter(
+          f => f !== dat.value
+        ),
+        permissionTrueToFalse: [
+          ...state.data.permissionTrueToFalse.filter(
+            f => f !== dat.value,
+            dat.value
+          )
+        ]
+      };
+};
+
 const Permission = ({ value, headers, setState, state, CheckBox }) => {
   const permissionsValue = value + "Permissions";
-  const Data = state[state][value];
+  const Data = state["state"][value];
   return (
     <div className={Styles.meteData}>
       <div>
@@ -471,7 +515,7 @@ const Top = ({ appId, roleId, teamId, setState, state, action, disabled }) => {
 };
 
 function handleSaveButton({ state }) {
-  request("/group/saveAppPermission", {
+  request(`/sysRole/saveAppPermission`, {
     method: "post",
     data: state.data
   }).then(
@@ -482,20 +526,27 @@ function handleSaveButton({ state }) {
   );
 }
 
-function fetchPermissionsDetail({ roleId, teamId, appId, setState }) {
-  request("/group/appPermission", {
+function fetchPermissionsDetail({
+  roleId,
+  teamId,
+  appId,
+  setState,
+  initialData
+}) {
+  request(`/sysRole/appPermission`, {
     method: "POST",
     data: { roleId, teamId, appId }
   }).then(
     res => {
-      if (res && res.status === "SUCCESS") setState(res.data);
+      if (res && res.status === "SUCCESS")
+        setState(res.data || { state: states, data: initialData });
     },
     () => message.error("获取应用权限失败")
   );
 }
 
-export default function ApplyPermissionSetting({ match }) {
-  const { action, roleId, teamId, appId } = match.params;
+export default function ApplyPermissionSetting(props) {
+  const { action, roleId, teamId, appId } = props;
   const initialData = {
     roleId: roleId,
     permissionAllTrue: [],
@@ -515,14 +566,13 @@ export default function ApplyPermissionSetting({ match }) {
     );
   };
   if (!init) {
-    fetchPermissionsDetail({ roleId, teamId, appId, setState });
+    fetchPermissionsDetail({ roleId, teamId, appId, setState, initialData });
     return setInit(true);
   }
   return (
     <>
       <div className={Styles.apsLayout}>
         <div className={Styles.aps}>
-          <Checkbox defaultChecked={true} />
           <Top
             appId={appId}
             roleId={roleId}
@@ -531,7 +581,6 @@ export default function ApplyPermissionSetting({ match }) {
             action={action}
             setState={setState}
             disabled={disabled}
-            states={states}
           />
           <Permission
             value={"meteData"}
