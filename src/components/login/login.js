@@ -1,14 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Tabs } from "antd";
-import signinStyles from "../styles/login.module.scss";
-import { loginUser } from "../store/loginReducer";
-import PublicForm from "../utils/publicForm";
-import Loading from "./loading";
-import {
-  loginPasswordParameter,
-  loginPhoneParameter
-} from "../utils/formItems";
+import signinStyles from "../../styles/login.module.scss";
+import { loginUser } from "../../store/loginReducer";
+import PublicForm from "./publicForm";
+import Loading from "../../pages/Loading";
+import { loginPasswordParameter, loginPhoneParameter } from "./formItems";
 
 export default connect(
   ({ login }) => ({

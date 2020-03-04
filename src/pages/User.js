@@ -51,7 +51,7 @@ const otherRoutes = [
     component: GroupDetail
   },
   {
-    path: "/user/profile/permissions/:action/:groupId/:teamId",
+    path: "/user/profile/permissions/:action/:appId/:userId/:roleId/",
     key: "reditApplyPermissions",
     exact: true,
     component: ApplyPermissionSetting

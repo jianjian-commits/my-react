@@ -385,18 +385,37 @@ const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
           <CheckBox
             defaultChecked={data.checked}
             checked={data.checked}
-            onChange={() =>
+            onChange={e => {
+              console.log(e.target.checked);
               setState({
                 ...state,
-                [value]: {
-                  ...state[value],
-                  [settingValue]: Object.assign({
-                    ...data,
-                    checked: !data.checked
-                  })
+                state: {
+                  ...state["state"],
+                  [value]: {
+                    ...state["state"][value],
+                    [settingValue]: Object.assign({
+                      ...data,
+                      checked: !data.checked
+                    })
+                  }
+                },
+                data: {
+                  ...state.data,
+                  [e.target.checked
+                    ? "permissionAllTrue"
+                    : "permissionTrueToFalse"]: e.target.checked
+                    ? [
+                        ...state.data.permissionAllTrue.filter(
+                          f => f !== data.value
+                        ),
+                        data.value
+                      ]
+                    : state.data.permissionTrueToFalse.filter(
+                        f => f !== data.value
+                      )
                 }
-              })
-            }
+              });
+            }}
           />
         </span>
       </div>
@@ -407,7 +426,7 @@ const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
 
 const Permission = ({ value, headers, setState, state, CheckBox }) => {
   const permissionsValue = value + "Permissions";
-  const Data = state[value];
+  const Data = state[state][value];
   return (
     <div className={Styles.meteData}>
       <div>
@@ -423,11 +442,11 @@ const Permission = ({ value, headers, setState, state, CheckBox }) => {
   );
 };
 
-const Top = ({ groupId, teamId, setState, state, action, disabled }) => {
+const Top = ({ appId, roleId, teamId, setState, state, action, disabled }) => {
   return (
     <div className={Styles.top}>
       <div className={Styles.back}>
-        <Link to={`/user/profile/${action}/${groupId}`}>
+        <Link to={`/user/profile/${action}/${roleId}`}>
           <span>
             <Icon type="arrow-left" />
           </span>
@@ -436,15 +455,14 @@ const Top = ({ groupId, teamId, setState, state, action, disabled }) => {
       </div>
       <div className={Styles.btn}>
         <Button
-          onClick={() => fetchPermissionsDetail({ groupId, teamId, setState })}
+          onClick={() =>
+            fetchPermissionsDetail({ roleId, teamId, appId, setState })
+          }
           disabled={disabled}
         >
           取消
         </Button>
-        <Button
-          onClick={() => handleSaveButton({ groupId, state })}
-          disabled={disabled}
-        >
+        <Button onClick={() => handleSaveButton({ state })} disabled={disabled}>
           保存
         </Button>
       </div>
@@ -452,13 +470,10 @@ const Top = ({ groupId, teamId, setState, state, action, disabled }) => {
   );
 };
 
-function handleSaveButton({ groupId, state }) {
+function handleSaveButton({ state }) {
   request("/group/saveAppPermission", {
     method: "post",
-    data: {
-      groupId,
-      state
-    }
+    data: state.data
   }).then(
     res => {
       if (res && res.status === "SUCCESS") message.success("保存成功");
@@ -467,10 +482,10 @@ function handleSaveButton({ groupId, state }) {
   );
 }
 
-function fetchPermissionsDetail({ groupId, teamId, setState }) {
+function fetchPermissionsDetail({ roleId, teamId, appId, setState }) {
   request("/group/appPermission", {
     method: "POST",
-    data: { groupId, teamId }
+    data: { roleId, teamId, appId }
   }).then(
     res => {
       if (res && res.status === "SUCCESS") setState(res.data);
@@ -480,9 +495,14 @@ function fetchPermissionsDetail({ groupId, teamId, setState }) {
 }
 
 export default function ApplyPermissionSetting({ match }) {
-  const [state, setState] = useState(states);
+  const { action, roleId, teamId, appId } = match.params;
+  const initialData = {
+    roleId: roleId,
+    permissionAllTrue: [],
+    permissionTrueToFalse: []
+  };
+  const [state, setState] = useState({ state: states, data: initialData });
   const [init, setInit] = useState(false);
-  const { action, groupId, teamId } = match.params;
   const disabled = action === "view" ? true : false;
   const CheckBox = ({ defaultChecked, checked, onChange }) => {
     return (
@@ -495,20 +515,23 @@ export default function ApplyPermissionSetting({ match }) {
     );
   };
   if (!init) {
-    fetchPermissionsDetail({ groupId, teamId, setState });
+    fetchPermissionsDetail({ roleId, teamId, appId, setState });
     return setInit(true);
   }
   return (
     <>
       <div className={Styles.apsLayout}>
         <div className={Styles.aps}>
+          <Checkbox defaultChecked={true} />
           <Top
-            groupId={groupId}
+            appId={appId}
+            roleId={roleId}
             teamId={teamId}
             state={state}
             action={action}
             setState={setState}
             disabled={disabled}
+            states={states}
           />
           <Permission
             value={"meteData"}

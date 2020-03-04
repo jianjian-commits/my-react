@@ -5,15 +5,9 @@ export const initialState = {
   isLoading: false,
   loginData: null,
   isAuthenticated: !!localStorage.getItem("id_token"),
-  currentTeam:
-    // JSON.parse(localStorage.getItem("currentTeam")) ||
-    {},
-  userDetail:
-    // JSON.parse(localStorage.getItem("userDetail")) ||
-    {},
-  allTeam:
-    // JSON.parse(localStorage.getItem("allTeam")) ||
-    [],
+  currentTeam: JSON.parse(localStorage.getItem("currentTeam")) || {},
+  userDetail: JSON.parse(localStorage.getItem("userDetail")) || {},
+  allTeam: JSON.parse(localStorage.getItem("allTeam")) || [],
   error: null,
   isSpinning: false
 };
@@ -147,7 +141,7 @@ export const initAllDetail = () => async dispatch => {
 };
 
 //登录用户
-export const loginUser = ({ token, teamId, rest }) => async dispatch => {
+export const loginUser = ({ token, rest }) => async dispatch => {
   await dispatch(startLogin());
   try {
     const res = await request(token ? `/login?token=${token}` : "/login", {
@@ -155,7 +149,6 @@ export const loginUser = ({ token, teamId, rest }) => async dispatch => {
       data: { loginType: "PASSWORD", ...rest }
     });
     if (res && res.status === "SUCCESS") {
-      if (teamId) await switchCurrentTeam(teamId)(dispatch);
       setTimeout(() => {
         localStorage.setItem("id_token", 1);
         dispatch(loginSuccess());

@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Result } from "antd";
-import request from "../utils/request";
-import registerStyles from "../styles/login.module.scss";
-import PublicForm from "../utils/publicForm";
-import { registerParameter } from "../utils/formItems";
-import Loading from "./loading";
+import request from "../../utils/request";
+import registerStyles from "../../styles/login.module.scss";
+import PublicForm from "./publicForm";
+import { registerParameter } from "./formItems";
+import Loading from "../../pages/Loading";
 
 export default connect()(function Register({ history, match }) {
-  const { teamId, token } = match.params;
+  const { token } = match.params;
   if (!history.location.query && history.location.pathname !== "/register")
     history.push("/register");
-  const { inviter, invitedTeam, switchCurrentTeam } =
-    history.location.query || {};
+  const { inviter, invitedTeam } = history.location.query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
   const [spinning, setSpinning] = useState(false);
@@ -26,7 +25,6 @@ export default connect()(function Register({ history, match }) {
       if (res && res.status === "SUCCESS") {
         setStatus(true);
         setVisible(false);
-        if (teamId) switchCurrentTeam(teamId);
       } else {
         setStatus(false);
       }

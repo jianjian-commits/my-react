@@ -14,7 +14,7 @@ import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../utils/request";
-import InviteUser from "../userManagement/inviteUser";
+import InviteUser from "../userManagement/modalInviteUser";
 
 export default connect(({ login }) => ({
   loginData: login
@@ -144,7 +144,7 @@ export default connect(({ login }) => ({
     };
     gainData();
   }, [page]);
-  return data ? (
+  return true ? (
     <div className={classes.container}>
       <Row type="flex" justify="space-between" className={classes.box}>
         <Col>

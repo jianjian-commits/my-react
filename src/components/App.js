@@ -6,10 +6,10 @@ import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute, SpecialRoute } from "./shared";
 import ErrorPage from "../pages/Error";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import ForgetPassword from "../pages/forgetPassword";
-import InviteUser from "../pages/inviteUser";
+import Login from "./login/login";
+import Register from "./login/register";
+import ForgetPassword from "./login/forgetPassword";
+import InviteUser from "../components/login/inviteUser";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
@@ -49,15 +49,19 @@ const App = () => (
       <Switch>
         <SpecialRoute
           exact
-          path="/invite/:teamId/:token"
+          path="/invite/:userId/:teamId/:token"
           component={InviteUser}
         />
         <SpecialRoute
           exact
-          path="/register/:teamId/:token"
+          path="/register/:userId/:teamId/:token"
           component={Register}
         />
-        <SpecialRoute exact path="/login/:teamId/:token" component={Login} />
+        <SpecialRoute
+          exact
+          path="/login/:userId/:teamId/:token"
+          component={Login}
+        />
         <PublicRoute path="/register" component={Register} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />

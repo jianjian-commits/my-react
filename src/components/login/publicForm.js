@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "antd";
-import { formItems } from "../utils/formItems";
+import { formItems } from "./formItems";
 
 export default Form.create({ name: "login-form" })(function PublicForm({
   form,
@@ -16,7 +16,6 @@ export default Form.create({ name: "login-form" })(function PublicForm({
         console.log("Received values of form: ", actionType, rest);
         func({
           token: params.token ? params.token : null,
-          teamId: params.teamId ? params.teamId : null,
           rest
         });
       }
