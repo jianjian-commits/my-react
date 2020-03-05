@@ -7,6 +7,7 @@ import {
   switchCurrentTeam,
   initAllDetail
 } from "../../store/loginReducer";
+import Styles from "./header.module.scss";
 
 const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
   <>
@@ -58,6 +59,7 @@ const User = props => {
   return (
     <>
       <Dropdown
+        overlayClassName={Styles.overlay}
         overlay={MenuItems(allTeam, setVisible, currentTeam, switchCurrentTeam)}
       >
         <Link className="ant-dropdown-link" to="#">

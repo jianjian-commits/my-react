@@ -5,6 +5,13 @@ WORKDIR /app
 
 COPY package.json .
 
+RUN echo "https://mirrors.aliyun.com/alpine/v3.9/main/" > /etc/apk/repositories && \
+    echo "https://mirrors.aliyun.com/alpine/v3.9/community/" >> /etc/apk/repositories && \
+    apk update && \
+    apk upgrade && \
+    apk add --no-cache bash && \
+    apk add --no-cache git
+
 RUN \
 npm config set sass_binary_site https://npm.taobao.org/mirrors/node-sass/ && \
 npm config set registry https://registry.npm.taobao.org/ && \

@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { message, Button } from "antd";
-import request from "../utils/request";
-import Loading from "./loading";
-import { switchCurrentTeam } from "../store/loginReducer";
-import registerStyles from "../styles/login.module.scss";
+import request from "../../utils/request";
+import Loading from "../../pages/Loading";
+import registerStyles from "../../styles/login.module.scss";
 
-export default connect(() => ({}), { switchCurrentTeam })(function InviteUser({
-  match,
-  history,
-  switchCurrentTeam
-}) {
-  const { teamId, token } = match.params;
+export default connect()(function InviteUser({ match, history }) {
+  const { userId, teamId, token } = match.params;
   const initialState = {
     //邀请人信息
     inviter: null,
@@ -19,8 +14,7 @@ export default connect(() => ({}), { switchCurrentTeam })(function InviteUser({
     currentUserDetail: null,
     spinning: true,
     alreadyAddTeam: false,
-    init: false,
-    switchCurrentTeam: switchCurrentTeam
+    init: false
   };
   const [state, setState] = useState(initialState);
   if (!state.init) {
@@ -95,7 +89,7 @@ export default connect(() => ({}), { switchCurrentTeam })(function InviteUser({
 
   //点击当前按钮加入团队
   const handleCurrentUserAddTeam = () => {
-    request(`/sysUser`, {
+    request(`/sysUser/${currentUserDetail.id}/team`, {
       method: "put",
       data: {
         newTeamId: teamId
@@ -104,18 +98,17 @@ export default connect(() => ({}), { switchCurrentTeam })(function InviteUser({
       async res => {
         if (res && res.status === "SUCCESS") {
           message.success(`团队加入成功`);
-          await switchCurrentTeam(teamId);
           setTimeout(() => history.push("/"), 2000);
         }
       },
-      err => setState({ ...state, alreadyAddTeam: true })
+      () => setState({ ...state, alreadyAddTeam: true })
     );
   };
 
   //点击注册账号加入
   const handleRegisterAddTeam = () => {
     history.push({
-      pathname: `/register/${teamId}/${token}`,
+      pathname: `/register/${userId}/${teamId}/${token}`,
       query: state
     });
   };
@@ -123,7 +116,7 @@ export default connect(() => ({}), { switchCurrentTeam })(function InviteUser({
   //点击其他账号加入
   const handleLoginAddTeam = () => {
     history.push({
-      pathname: `/login/${teamId}/${token}`,
+      pathname: `/login/${userId}/${teamId}/${token}`,
       query: state
     });
   };

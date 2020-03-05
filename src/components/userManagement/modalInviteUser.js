@@ -4,7 +4,7 @@ import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 
 export default function InviteUser(props) {
-  const { id } = props.currentTeam;
+  const { currentTeam, userDetail } = props;
   const [visible, setVisible] = useState(false);
   const [token, setToken] = useState(null);
   async function handleInviteUserBtn() {
@@ -18,7 +18,7 @@ export default function InviteUser(props) {
       message.error("token获取失败");
     }
   }
-  const inviteUrl = `${window.location.origin}/invite/${id}/${token}`;
+  const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;
   return (
     <>
       <Button type="primary" onClick={() => handleInviteUserBtn()}>

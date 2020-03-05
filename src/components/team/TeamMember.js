@@ -5,8 +5,8 @@ import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../utils/request";
-import InviteUser from "../userManagement/inviteUser";
 import { getCurrentTeam } from "../../store/loginReducer";
+import InviteUser from "../userManagement/modalInviteUser";
 
 export default connect(
   ({ login }) => ({
@@ -146,8 +146,8 @@ export default connect(
   }, [loginData]);
   useEffect(() => {
     gainData();
-  }, [page]);
-  return data ? (
+  }, [page, loginData]);
+  return true ? (
     <div className={classes.container}>
       <Row type="flex" justify="space-between" className={classes.box}>
         <Col>

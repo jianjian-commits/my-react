@@ -104,7 +104,6 @@ export const getCurrentTeam = () => async dispatch => {
   try {
     const res = await request(`/team/current`);
     if (res && res.status === "SUCCESS") {
-      console.log(res);
       localStorage.setItem("currentTeam", JSON.stringify(res.data));
       dispatch(fetchCurrentTeam(res.data));
     }
@@ -142,7 +141,7 @@ export const initAllDetail = () => async dispatch => {
 };
 
 //登录用户
-export const loginUser = ({ token, teamId, rest }) => async dispatch => {
+export const loginUser = ({ token, rest }) => async dispatch => {
   await dispatch(startLogin());
   try {
     const res = await request(token ? `/login?token=${token}` : "/login", {
@@ -150,7 +149,6 @@ export const loginUser = ({ token, teamId, rest }) => async dispatch => {
       data: { loginType: "PASSWORD", ...rest }
     });
     if (res && res.status === "SUCCESS") {
-      if (teamId) await switchCurrentTeam(teamId)(dispatch);
       setTimeout(() => {
         localStorage.setItem("id_token", 1);
         dispatch(loginSuccess());

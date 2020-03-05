@@ -83,6 +83,7 @@ export const appPaths = [
     label: "表单服务",
     path: `/app/:appId/setting/form/:formId/:serviceId`,
     icon: "file_copy",
+    rough: true,
     component: AppServices
   },
   {

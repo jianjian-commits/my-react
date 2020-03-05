@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Input, Button, Icon, message } from "antd";
-import request from "./request";
-import itemsStyles from "../styles/login.module.scss";
+import request from "../../utils/request";
+import itemsStyles from "../../styles/login.module.scss";
 
 // 发送验证码
 async function sendVerificationCode(mobilePhone) {
@@ -358,7 +358,7 @@ const userEmail = ({ form, payload }) => {
   };
 };
 
-const submit = ({ form, payload, teamId, token }) => ({
+const submit = ({ form, payload, teamId, userId, token }) => ({
   itemName: "actionType",
   options: {
     initialValue: payload
@@ -391,7 +391,7 @@ const submit = ({ form, payload, teamId, token }) => ({
       )}
       {payload === "addTeam" && (
         <div style={{ textAlign: "center" }}>
-          <Link to={`/invite/${teamId}/${token}`}>返回</Link>
+          <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
         </div>
       )}
     </>

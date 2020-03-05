@@ -1,3 +1,12 @@
+.modalPadding {
+  :global(.ant-modal-body) {
+    padding: 4px 22px !important;
+  }
+  :global(.ant-form-item-required) {
+    margin-bottom: 0px !important;
+  }
+}
+
 .iconStyle {
   i {
     font-size: 25px;
@@ -18,7 +27,7 @@
   position: absolute;
   font-size: 13px;
   right: 30px;
-  top: 270px;
+  top: 254px;
   span {
     color: #888;
   }

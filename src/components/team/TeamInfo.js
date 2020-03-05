@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Input, Row, Col, List, Typography, Button, Spin } from "antd";
 import request from "../../utils/request";
 import classes from "./team.module.scss";
-import { getCurrentTeam } from "../../store/loginReducer";
+import { getCurrentTeam, getAllTeam } from "../../store/loginReducer";
 
 const { Title } = Typography;
 const infoData = [
@@ -29,7 +29,7 @@ const infoData = [
   }
 ];
 
-const EditInput = ({ obj, getCurrentTeam }) => {
+const EditInput = ({ obj, getCurrentTeam, getAllTeam }) => {
   const [dataStr, setDataStr] = useState(obj.value);
   const [redact, setRedact] = useState(false);
   const [changeStr, setChangeStr] = useState(obj.value);
@@ -53,12 +53,10 @@ const EditInput = ({ obj, getCurrentTeam }) => {
   };
   useEffect(() => {
     upData().then((res, { key } = obj) => {
-      // infoData.forEach(item => {
-      //   if (key === item.key) {
-      //     item.value = dataStr;
-      //   }
-      // });
       getCurrentTeam().then(res => {
+        if (key === "name") {
+          getAllTeam();
+        }
         onClickAmend();
       });
     });
@@ -105,13 +103,12 @@ export default connect(
   ({ login }) => ({
     loginData: login
   }),
-  { getCurrentTeam }
-)(function TeamInfo({ loginData, getCurrentTeam }) {
+  { getCurrentTeam, getAllTeam }
+)(function TeamInfo({ loginData, getCurrentTeam, getAllTeam }) {
   const [data, setData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await loginData.currentTeam;
-      console.log(res);
+      const res = loginData.currentTeam;
       const createDate = new Date(res.createDate).toLocaleString();
       const newData = infoData.map(item => {
         Object.keys(res).forEach(i => {
@@ -128,7 +125,7 @@ export default connect(
       setData(newData);
     };
     fetchData();
-  }, [loginData]);
+  }, [loginData.currentTeam]);
   return data ? (
     <div className={classes.container}>
       <Title level={3}>团队信息</Title>
@@ -138,7 +135,11 @@ export default connect(
         renderItem={item => (
           <List.Item>
             {item.key === "name" || item.key === "description" ? (
-              <EditInput obj={item} getCurrentTeam={getCurrentTeam} />
+              <EditInput
+                obj={item}
+                getAllTeam={getAllTeam}
+                getCurrentTeam={getCurrentTeam}
+              />
             ) : (
               <Row type="flex" gutter={16}>
                 <Col>{item.lable}:</Col>

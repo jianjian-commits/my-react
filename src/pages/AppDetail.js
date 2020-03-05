@@ -12,9 +12,9 @@ import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
-const navigationList = history => [
+const navigationList = (appId, history) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-  { key: 1, label: "13号Devinci应用", disabled: true }
+  { key: 1, label: `${appId}`, disabled: true }
 ];
 
 const getOreations = (appId, history) => [
@@ -66,7 +66,6 @@ const AppDetail = () => {
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
-  console.log(ele);
   let { groups, list } = mockForms;
 
   if (searchKey) {
@@ -88,7 +87,7 @@ const AppDetail = () => {
   return (
     <Layout>
       <CommonHeader
-        navigationList={navigationList(history)}
+        navigationList={navigationList(appId, history)}
         operations={getOreations(appId, history)}
       />
       <Layout>
@@ -114,7 +113,7 @@ const AppDetail = () => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {selectedForm !== void 0 ? (
+          {selectedForm != void 0 ? (
             <>
               <button
                 onClick={_e => {
