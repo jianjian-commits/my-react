@@ -16,7 +16,7 @@ class GroupDetail extends Component {
       setting: {}
     };
     this.action = props.action;
-    this.groupId = props.groupId;
+    this.roleId = props.roleId;
     this.oldPermissionAllTrue = [];
     this.oldAppAllTrue = [];
     this.onChange = this.onChange.bind(this);
@@ -31,10 +31,10 @@ class GroupDetail extends Component {
   async getDetail() {
     const data = {
       userId: this.props.userId,
-      roleId: this.groupId
+      roleId: this.roleId
     };
     try {
-      const res = await request("/sysRole/detail", {
+      const res = await request(`/sysRole/detail/${this.roleId}`, {
         method: "POST",
         data
       });
@@ -77,7 +77,7 @@ class GroupDetail extends Component {
       this.setState({
         baseInfoBo: {
           ...this.state.baseInfoBo,
-          groupName: state
+          roleName: state
         }
       });
     }
@@ -154,10 +154,12 @@ class GroupDetail extends Component {
 
     // 传给后台的data数据
     let data = {
-      groupId: this.groupId,
-      groupName: this.state.baseInfoBo.groupName,
-      permissionAllTrue: [...permissionAllTrue, ...appAllTrue],
-      permissionTrueToFalse: [...permissionTrueToFalse, ...appTrueToFalse],
+      roleId: this.roleId,
+      roleName: this.state.baseInfoBo.roleName,
+      appAllTrue,
+      appTrueToFalse,
+      permissionAllTrue,
+      permissionTrueToFalse,
       ...this.state.setting
     };
     try {
@@ -199,7 +201,6 @@ class GroupDetail extends Component {
           action,
           appManagerBos,
           this.onChange,
-          this.props.teamId,
           this.props.enterPermission
         )}
         {getOtherManage(action, permissions, this.onChange)}

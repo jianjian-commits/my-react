@@ -48,7 +48,7 @@ class CreateGroup extends Component {
         >
           <Form>
             <Form.Item label="分组名称">
-              {getFieldDecorator("groupName", {
+              {getFieldDecorator("roleName", {
                 rules: [{ required: true, message: "分组名称不能为空" }]
               })(<Input />)}
             </Form.Item>

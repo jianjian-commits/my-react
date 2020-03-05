@@ -17,11 +17,11 @@ class ProfileManagement extends React.Component {
       enterD: false,
       enterP: false,
       title: "",
-      oldGroupId: "",
-      groupList: []
+      oldRoleId: "",
+      roleList: []
     };
     this.action = "view";
-    this.groupId = "";
+    this.roleId = "";
     this.appId = "";
     this.handleCancel = this.handleCancel.bind(this);
     this.enterDetail = this.enterDetail.bind(this);
@@ -37,9 +37,8 @@ class ProfileManagement extends React.Component {
     try {
       const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
-        if (res.data === "teamId:null") return;
         this.setState({
-          groupList: res.data
+          roleList: res.data
         });
       }
     } catch (err) {
@@ -49,21 +48,18 @@ class ProfileManagement extends React.Component {
 
   // 新建分组
   async handleCreate(data, title) {
+    console.log("data", data);
     try {
       const res =
         title === "添加分组"
-          ? await request("/sysRole", {
-              method: "PUT",
-              data: {
-                name: data.groupName,
-                userId: this.props.userId
-              }
+          ? await request(`/sysRole/role?name=${data.roleName}`, {
+              method: "PUT"
             })
           : await request("/sysRole/clone", {
               method: "PUT",
               data: {
-                oldRoleId: this.state.oldGroupId,
-                newRoleName: data.groupName
+                oldRoleId: this.state.oldRoleId,
+                newRoleName: data.roleName
               }
             });
       if (res && res.status === "SUCCESS") {
@@ -80,7 +76,7 @@ class ProfileManagement extends React.Component {
   // 删除分组
   async removeGroup(record) {
     try {
-      const res = await request(`/sysRole/${record.groupId}`, {
+      const res = await request(`/sysRole/${record.roleId}`, {
         method: "DELETE"
       });
       if (res && res.status === "SUCCESS") {
@@ -105,7 +101,7 @@ class ProfileManagement extends React.Component {
       enterD: boolean
     });
     this.action = type ? type : "view";
-    this.groupId = record ? record.groupId : "";
+    this.roleId = record ? record.roleId : "";
   }
 
   // 进入或退出权限管理
@@ -117,10 +113,10 @@ class ProfileManagement extends React.Component {
   }
 
   render() {
-    const { open, title, groupList } = this.state;
+    const { open, title, roleList } = this.state;
     // 分组列表标题和操作
     const columns = [
-      { title: "组名", dataIndex: "groupName" },
+      { title: "组名", dataIndex: "roleName" },
       {
         title: "操作",
         dataIndex: "action",
@@ -150,7 +146,7 @@ class ProfileManagement extends React.Component {
                 this.setState({
                   open: true,
                   title: "克隆分组",
-                  oldGroupId: record.groupId
+                  oldRoleId: record.roleId
                 })
               }
             >
@@ -176,7 +172,7 @@ class ProfileManagement extends React.Component {
         {this.state.enterP === true ? (
           <PermissionSetting
             action={this.action}
-            groupId={this.groupId}
+            roleId={this.roleId}
             appId={this.appId}
             teamId={this.props.teamId}
           />
@@ -184,7 +180,7 @@ class ProfileManagement extends React.Component {
           <GroupDetail
             action={this.action}
             enterDetail={this.enterDetail}
-            groupId={this.groupId}
+            roleId={this.roleId}
             enterPermission={this.enterPermission}
           />
         ) : (
@@ -205,8 +201,8 @@ class ProfileManagement extends React.Component {
               <Table
                 size="middle"
                 columns={columns}
-                dataSource={groupList}
-                rowKey="groupId"
+                dataSource={roleList}
+                rowKey="roleId"
               ></Table>
             </div>
           </>

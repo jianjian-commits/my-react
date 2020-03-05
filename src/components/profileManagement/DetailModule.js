@@ -5,7 +5,7 @@ import classes from "./profile.module.scss";
 // 基础信息
 export const getBasicInfo = (a, baseInfoBo, onChange) => {
   let {
-    groupName,
+    roleName,
     createName,
     createDate = "",
     lastModifyName,
@@ -13,7 +13,7 @@ export const getBasicInfo = (a, baseInfoBo, onChange) => {
   } = baseInfoBo;
 
   const basicInfo = [
-    { title: "分组名", value: groupName },
+    { title: "分组名", value: roleName },
     { title: "创建人", value: createName },
     {
       title: "创建时间",
@@ -53,13 +53,7 @@ export const getBasicInfo = (a, baseInfoBo, onChange) => {
 };
 
 // 应用管理（动态）
-export const getAppManage = (
-  a,
-  appManagerBos,
-  onChange,
-  teamId,
-  enterPermission
-) => {
+export const getAppManage = (a, appManagerBos, onChange, enterPermission) => {
   // 表格头
   const columns = [
     { title: "应用名", dataIndex: "appName" },
