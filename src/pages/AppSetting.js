@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Layout, Input, Button, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
@@ -9,11 +10,11 @@ import DraggableList, {
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
-const navigationList = (history, appId) => [
+const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
-    label: `${appId}`,
+    label: `${appName}`,
     onClick: () => history.push(`/app/${appId}/detail`)
   },
   { key: 1, label: "应用设置", disabled: true }
@@ -53,11 +54,14 @@ const mockForms = {
   ]
 };
 
-const AppSetting = () => {
+const AppSetting = props => {
   const { appId } = useParams();
   const history = useHistory();
   const [searchKey, setSearchKey] = React.useState(null);
   let { groups, list } = mockForms;
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
 
   if (searchKey) {
     const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
@@ -78,7 +82,7 @@ const AppSetting = () => {
   };
   return (
     <Layout>
-      <CommonHeader navigationList={navigationList(history, appId)} />
+      <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
@@ -126,4 +130,6 @@ const AppSetting = () => {
     </Layout>
   );
 };
-export default AppSetting;
+export default connect(({ app }) => ({
+  appList: app.appList
+}))(AppSetting);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Dropdown, Icon, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";

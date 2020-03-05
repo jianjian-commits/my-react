@@ -7,7 +7,6 @@ import TeamInfo from "../components/team/TeamInfo";
 import TeamMember from "../components/team/TeamMember";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
-import GroupDetail from "../components/profileManagement/GroupDetail";
 
 import { Route } from "react-router-dom";
 const { Sider, Content } = Layout;
@@ -42,13 +41,6 @@ const webs = [
   }
 ];
 
-const otherRoutes = [
-  {
-    path: "/user/profile/:action/:id",
-    key: "viewGroupDetail",
-    component: GroupDetail
-  }
-];
 class UserPage extends React.Component {
   constructor(props) {
     super(props);
@@ -81,9 +73,6 @@ class UserPage extends React.Component {
           </Sider>
           <Content className={commonClasses.container}>
             {webs.map(route => (
-              <Route {...route} />
-            ))}
-            {otherRoutes.map(route => (
               <Route {...route} />
             ))}
           </Content>
