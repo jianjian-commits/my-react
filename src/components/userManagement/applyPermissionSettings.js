@@ -24,8 +24,6 @@ const formDataThead = [
 ];
 
 const Mete = {
-  meteData: "元数据权限",
-  data: "数据权限",
   DISPLAY: "是否可见",
   TABLE: [
     { key: "FORM", value: "表单元数据" },
@@ -37,211 +35,243 @@ const Mete = {
 };
 
 const states = {
-  meteData: {
-    appSetting: {
-      label: "displayApplySettingButton",
-      value: "teamId:appId:RB",
-      checked: false
-    },
-    createForm: {
-      label: "allowCreateNewForm",
-      value: "teamId:appId:CF",
-      checked: false
-    },
-    meteDataPermissions: [
-      {
-        formId: "form01",
-        permissions: [
-          {
-            label: "DISPLAY",
-            value: "teamId:appId:form01:RR",
-            checked: false
-          },
-          {
-            label: "FORM_REDIT",
-            value: "teamId:appId:form01:FU",
-            checked: false
-          },
-          {
-            label: "FORM_DELETE",
-            value: "teamId:appId:form01:FD",
-            checked: false
-          },
-          {
-            label: "AP_ADD",
-            value: "teamId:appId:form01:AC",
-            checked: false
-          },
-          {
-            label: "AP_REDIT",
-            value: "teamId:appId:form01:AU",
-            checked: false
-          },
-          {
-            label: "AP_DELETE",
-            value: "teamId:appId:form01:AD",
-            checked: false
-          },
-          {
-            label: "AP_ENABLE",
-            value: "teamId:appId:form01:AE",
-            checked: false
-          },
-          {
-            label: "PB_ADD",
-            value: "teamId:appId:form01:PC",
-            checked: false
-          },
-          {
-            label: "PB_REDIT",
-            value: "teamId:appId:form01:PU",
-            checked: false
-          },
-          {
-            label: "PB_DELETE",
-            value: "teamId:appId:form01:PD",
-            checked: false
-          },
-          {
-            label: "PB_ENABLE",
-            value: "teamId:appId:form01:PE",
-            checked: false
-          }
-        ]
-      },
-      {
-        formId: "form02",
-        permissions: [
-          {
-            label: "DISPLAY",
-            value: "teamId:appId:form02:RR",
-            checked: false
-          },
-          {
-            label: "FORM_REDIT",
-            value: "teamId:appId:form02:FE",
-            checked: false
-          },
-          {
-            label: "FORM_DELETE",
-            value: "teamId:appId:form02:FD",
-            checked: false
-          },
-          {
-            label: "AP_ADD",
-            value: "teamId:appId:form02:AC",
-            checked: false
-          },
-          {
-            label: "AP_REDIT",
-            value: "teamId:appId:form02:AU",
-            checked: false
-          },
-          {
-            label: "AP_DELETE",
-            value: "teamId:appId:form02:AD",
-            checked: false
-          },
-          {
-            label: "AP_ENABLE",
-            value: "teamId:appId:form02:AE",
-            checked: false
-          },
-          {
-            label: "PB_ADD",
-            value: "teamId:appId:form02:PC",
-            checked: false
-          },
-          {
-            label: "PB_REDIT",
-            value: "teamId:appId:form02:PU",
-            checked: false
-          },
-          {
-            label: "PB_DELETE",
-            value: "teamId:appId:form02:PD",
-            checked: false
-          },
-          {
-            label: "PB_ENABLE",
-            value: "teamId:appId:form02:PE",
-            checked: false
-          }
-        ]
-      }
-    ]
+  appSetting: {
+    label: "displayApplySettingButton",
+    value: "APP_SETTING",
+    checked: false
   },
-  data: {
-    dataPermissions: [
-      {
-        formId: "form01",
-        permissions: [
-          {
-            label: "DISPLAY",
-            value: "teamId:appId::form01:RR",
-            checked: false
-          },
-          {
-            label: "FORM_SEARCHOWNER",
-            value: "teamId:appId::form01:u#owner:R",
-            checked: false
-          },
-          {
-            label: "FORM_ADD",
-            value: "teamId:appId::form01:C",
-            checked: false
-          },
-          {
-            label: "FORM_REDITOWNER",
-            value: "teamId:appId::form01:u#owner:E",
-            checked: false
-          },
-          {
-            label: "FORM_DELETE",
-            value: "teamId:appId::form01:D",
-            checked: false
-          },
-          {
-            label: "FORM_SEARCHALL",
-            value: "teamId:appId::form01:R",
-            checked: false
-          },
-          {
-            label: "FORM_REDITALL",
-            value: "teamId:appId::form01:UA",
-            checked: false
-          },
-          {
-            label: "FORM_DELETEALL",
-            value: "teamId:appId::form01:DA",
-            checked: false
-          },
-          {
-            label: "PB_SEARCHOWNER",
-            value: "teamId:appId::form01:u#owner:R",
-            checked: false
-          },
-          {
-            label: "PB_SEARCHALL",
-            value: "teamId:appId::form01:RA",
-            checked: false
-          }
-        ]
-      }
-    ]
-  }
+  createForm: {
+    label: "allowCreateNewForm",
+    value: "APP_CREATEFORM",
+    checked: false
+  },
+  formPermissions: [
+    {
+      formId: "form01",
+      formDetailPermissions: [
+        {
+          label: "DISPLAY",
+          value: "FORM_VISIBLE",
+          checked: false
+        },
+        {
+          label: "FORM_REDIT",
+          value: "FORM_DATAEDIT",
+          checked: false
+        },
+        {
+          label: "FORM_DELETE",
+          value: "FORM_DATADEL",
+          checked: false
+        },
+        {
+          label: "AP_ADD",
+          value: "FORM_APPROVEADD",
+          checked: false
+        },
+        {
+          label: "AP_DELETE",
+          value: "FORM_APPROVEDEL",
+          checked: false
+        },
+        {
+          label: "AP_REDIT",
+          value: "FORM_APPROVEEDIT",
+          checked: false
+        },
+        {
+          label: "AP_ENABLE",
+          value: "FORM_APPROVEENABLE",
+          checked: false
+        },
+        {
+          label: "PB_ADD",
+          value: "FORM_AUTOADD",
+          checked: false
+        },
+        {
+          label: "PB_DELETE",
+          value: "FORM_AUTODEL",
+          checked: false
+        },
+        {
+          label: "PB_REDIT",
+          value: "FORM_AUTOEDIT",
+          checked: false
+        },
+        {
+          label: "PB_ENABLE",
+          value: "FORM_AUTOENABLE",
+          checked: false
+        }
+      ]
+    },
+    {
+      formId: "form02",
+      formDetailPermissions: [
+        {
+          label: "DISPLAY",
+          value: "FORM_VISIBLE",
+          checked: false
+        },
+        {
+          label: "FORM_REDIT",
+          value: "FORM_DATAEDIT",
+          checked: false
+        },
+        {
+          label: "FORM_DELETE",
+          value: "FORM_DATADEL",
+          checked: false
+        },
+        {
+          label: "AP_ADD",
+          value: "FORM_APPROVEADD",
+          checked: false
+        },
+        {
+          label: "AP_DELETE",
+          value: "FORM_APPROVEDEL",
+          checked: false
+        },
+        {
+          label: "AP_REDIT",
+          value: "FORM_APPROVEEDIT",
+          checked: false
+        },
+        {
+          label: "AP_ENABLE",
+          value: "FORM_APPROVEENABLE",
+          checked: false
+        },
+        {
+          label: "PB_ADD",
+          value: "FORM_AUTOADD",
+          checked: false
+        },
+        {
+          label: "PB_DELETE",
+          value: "FORM_AUTODEL",
+          checked: false
+        },
+        {
+          label: "PB_REDIT",
+          value: "FORM_AUTOEDIT",
+          checked: false
+        },
+        {
+          label: "PB_ENABLE",
+          value: "FORM_AUTOENABLE",
+          checked: false
+        }
+      ]
+    }
+  ],
+  dataPermissions: [
+    {
+      formId: "form01",
+      dataPermissions: [
+        {
+          label: "DISPLAY",
+          value: "FORMDATA_VISIBLE",
+          checked: false
+        },
+        {
+          label: "FORM_ADD",
+          value: "FORMDATA_ADD",
+          checked: false
+        },
+        {
+          label: "FORM_SEARCHOWNER",
+          value: "FORMDATA_CHECK",
+          checked: false
+        },
+        {
+          label: "FORM_DELETE",
+          value: "FORMDATA_DEL",
+          checked: false
+        },
+        {
+          label: "FORM_DELETEALL",
+          value: "FORMDATA_DELALL",
+          checked: false
+        },
+        {
+          label: "FORM_REDITOWNER",
+          value: "FORMDATA_EDIT",
+          checked: false
+        },
+        {
+          label: "FORM_REDITALL",
+          value: "FORMDATA_EDITALL",
+          checked: false
+        },
+        {
+          label: "FORM_SEARCHALL",
+          value: "FORMDATA_LIST",
+          checked: false
+        }
+      ]
+    },
+    {
+      formId: "form02",
+      dataPermissions: [
+        {
+          label: "DISPLAY",
+          value: "FORMDATA_VISIBLE",
+          checked: false
+        },
+        {
+          label: "FORM_ADD",
+          value: "FORMDATA_ADD",
+          checked: false
+        },
+        {
+          label: "FORM_SEARCHOWNER",
+          value: "FORMDATA_CHECK",
+          checked: false
+        },
+        {
+          label: "FORM_DELETE",
+          value: "FORMDATA_DEL",
+          checked: false
+        },
+        {
+          label: "FORM_DELETEALL",
+          value: "FORMDATA_DELALL",
+          checked: false
+        },
+        {
+          label: "FORM_REDITOWNER",
+          value: "FORMDATA_EDIT",
+          checked: false
+        },
+        {
+          label: "FORM_REDITALL",
+          value: "FORMDATA_EDITALL",
+          checked: false
+        },
+        {
+          label: "FORM_SEARCHALL",
+          value: "FORMDATA_LIST",
+          checked: false
+        }
+      ]
+    }
+  ]
 };
 const Tr = ({
   dat,
   table,
   filters,
   headers,
-  value,
   state,
   setState,
   index,
   permissionsValue,
-  CheckBox
+  CheckBox,
+  formId,
+  fp
 }) => {
   const filte = filters.filter(f => f.label.split("_")[0] === table.key);
   return (
@@ -253,28 +283,44 @@ const Tr = ({
             {header.key === "TYPE" && <span>{table.value}</span>}
             {Td[0] && (
               <CheckBox
-                defaultChecked={Td[0].checked}
+                defaultChecked={Td[0].defaultChecked || Td[0].checked}
                 checked={Td[0].checked}
                 onChange={e => {
-                  dat[index].permissions = filters.map(f => {
+                  dat[index][fp] = filters.map(f => {
+                    // const relate = (r, rd) => {
+                    //   if (
+                    //     Td[0].label.split("_")[1] === r &&
+                    //     f.label.split("_")[1] === rd
+                    //   )
+                    //     return {
+                    //       ...f,
+                    //       checked: true,
+                    //       defaultChecked: f.defaultChecked || f.checked
+                    //     };
+                    // };
+                    // relate("DELETEALL", "DELETE");
+                    // relate("REDITALL", "REDITOWNER");
+                    // relate("SEARCHALL", "SEARCHOWNER");
                     if (f.label === Td[0].label)
-                      return { ...f, checked: !f.checked };
+                      return {
+                        ...f,
+                        checked: !f.checked,
+                        defaultChecked: f.defaultChecked || f.checked
+                      };
                     return f;
                   });
                   setState({
                     ...state,
                     state: {
                       ...state["state"],
-                      [value]: {
-                        ...state["state"][value],
-                        [permissionsValue]: dat
-                      }
+                      [permissionsValue]: dat
                     },
                     data: crreteData({
-                      handleChecked: e.target.checked,
                       defaultChecked: e.target.defaultChecked,
+                      checked: e.target.checked,
                       state,
-                      dat: Td[0]
+                      dat: Td[0],
+                      formId
                     })
                   });
                 }}
@@ -286,17 +332,18 @@ const Tr = ({
     </tr>
   );
 };
-const table = (
+const Table = ({
   dat,
   filters,
   headers,
-  value,
+  permissionsValue,
   index,
   state,
   setState,
-  permissionsValue,
-  CheckBox
-) => {
+  CheckBox,
+  formId,
+  fp
+}) => {
   return (
     <table className={Styles.table}>
       <thead>
@@ -308,31 +355,38 @@ const table = (
       </thead>
       <tbody>
         {Mete["TABLE"].map(table => (
-          <Tr
-            key={table.key}
-            table={table}
-            filters={filters}
-            headers={headers}
-            value={value}
-            state={state}
-            setState={setState}
-            index={index}
-            dat={dat}
-            permissionsValue={permissionsValue}
-            CheckBox={CheckBox}
-          />
+          <React.Fragment key={table.key}>
+            {filters.filter(f => f.label.split("_")[0] === table.key)[0] && (
+              <Tr
+                table={table}
+                filters={filters}
+                headers={headers}
+                permissionsValue={permissionsValue}
+                state={state}
+                setState={setState}
+                index={index}
+                dat={dat}
+                CheckBox={CheckBox}
+                formId={formId}
+                fp={fp}
+              />
+            )}
+          </React.Fragment>
         ))}
       </tbody>
     </table>
   );
 };
-const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
-  const permissionsValue = value + "Permissions";
-  const dat = Data[permissionsValue];
+const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
+  const dat = state["state"][permissionsValue];
+  const fp =
+    permissionsValue === "formPermissions"
+      ? "formDetailPermissions"
+      : permissionsValue;
   return (
     <>
       {dat.map((form, index) => {
-        const filters = form.permissions;
+        const filters = form.formDetailPermissions || form.dataPermissions;
         const display = filters.filter(f => f.label === "DISPLAY");
         return (
           <div key={form.formId} className={Styles.form}>
@@ -344,28 +398,32 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
                 {display && display[0] && Mete[display[0].label]}
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <CheckBox
-                  defaultChecked={display[0].checked}
+                  defaultChecked={
+                    display[0].defaultChecked || display[0].checked
+                  }
                   checked={display[0].checked}
                   onChange={e => {
-                    dat[index].permissions = filters.map(f => {
+                    dat[index][fp] = filters.map(f => {
                       if (f.label === "DISPLAY")
-                        return { ...f, checked: !f.checked };
+                        return {
+                          ...f,
+                          checked: !f.checked,
+                          defaultChecked: f.defaultChecked || f.checked
+                        };
                       return f;
                     });
                     setState({
                       ...state,
                       state: {
                         ...state["state"],
-                        [value]: {
-                          ...state["state"][value],
-                          [permissionsValue]: dat
-                        }
+                        [permissionsValue]: dat
                       },
                       data: crreteData({
-                        handleChecked: e.target.checked,
                         defaultChecked: e.target.defaultChecked,
+                        checked: e.target.checked,
                         state,
-                        dat: display[0]
+                        dat: display[0],
+                        formId: form.formId
                       })
                     });
                   }}
@@ -373,16 +431,19 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
               </span>
             </div>
             <div>
-              {table(
-                dat,
-                filters,
-                headers,
-                value,
-                index,
-                state,
-                setState,
-                permissionsValue,
-                CheckBox
+              {display[0].checked && (
+                <Table
+                  dat={dat}
+                  filters={filters}
+                  headers={headers}
+                  permissionsValue={permissionsValue}
+                  index={index}
+                  state={state}
+                  setState={setState}
+                  CheckBox={CheckBox}
+                  formId={form.formId}
+                  fp={fp}
+                />
               )}
             </div>
             <hr />
@@ -393,37 +454,51 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
   );
 };
 
-const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
-  const dat = Data[settingValue];
+const thunkSetting = (state, settingValue, setState, CheckBox) => {
+  const dat = state["state"][settingValue];
   return (
     <>
       <div>
         <span>
           {Mete[dat.label]}&nbsp;&nbsp;&nbsp;&nbsp;
           <CheckBox
-            defaultChecked={dat.checked}
+            defaultChecked={dat.defaultChecked || dat.checked}
             checked={dat.checked}
-            onChange={e =>
+            onChange={e => {
+              const { defaultChecked, checked } = e.target;
+              console.log(state);
               setState({
                 ...state,
                 state: {
                   ...state["state"],
-                  [value]: {
-                    ...state["state"][value],
-                    [settingValue]: Object.assign({
-                      ...dat,
-                      checked: !dat.checked
-                    })
-                  }
+                  [settingValue]: Object.assign({
+                    ...dat,
+                    checked: !dat.checked,
+                    defaultChecked: dat.defaultChecked || dat.checked
+                  })
                 },
-                data: crreteData({
-                  handleChecked: e.target.checked,
-                  defaultChecked: e.target.defaultChecked,
-                  state,
-                  dat
-                })
-              })
-            }
+                permissionAllTrue:
+                  defaultChecked === checked
+                    ? state.permissionAllTrue.filter(f => f !== dat.value)
+                    : checked
+                    ? [
+                        ...state.permissionAllTrue.filter(f => f !== dat.value),
+                        dat.value
+                      ]
+                    : state.permissionAllTrue.filter(f => f !== dat.value),
+                permissionTrueToFalse:
+                  defaultChecked === checked
+                    ? state.permissionTrueToFalse.filter(f => f !== dat.value)
+                    : checked
+                    ? state.permissionTrueToFalse.filter(f => f !== dat.value)
+                    : [
+                        ...state.permissionTrueToFalse.filter(
+                          f => f !== dat.value
+                        ),
+                        dat.value
+                      ]
+              });
+            }}
           />
         </span>
       </div>
@@ -432,81 +507,113 @@ const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
   );
 };
 
-const crreteData = ({ handleChecked, defaultChecked, state, dat }) => {
-  return handleChecked === defaultChecked
-    ? {
-        ...state.data,
-        permissionAllTrue: state.data.permissionAllTrue.filter(
-          f => f !== dat.value
-        ),
-        permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
-          f => f !== dat.value
-        )
+const crreteData = ({ defaultChecked, checked, state, dat, formId }) => {
+  const fi = state.data.filter(f => f.formId === formId);
+  const fil = item => {
+    return item.filter(f => f !== dat.value);
+  };
+  if (!fi[0])
+    state.data = [
+      ...state.data,
+      {
+        formId,
+        permissionAllTrue: [],
+        permissionTrueToFalse: []
       }
-    : handleChecked
-    ? {
-        ...state.data,
-        permissionAllTrue: [
-          ...state.data.permissionAllTrue.filter(f => f !== dat.value),
-          dat.value
-        ],
-        permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
-          f => f !== dat.value
-        )
+    ];
+  return state.data.map(d => {
+    const values = () => {
+      // const profix = dat.value.split("_");
+      // if (profix[1] === "SEARCHALL")
+      //   return [dat.value, profix[0] + "SEARCHOWNER"];
+      // if (profix[1] === "REDITALL") return [dat.value, profix[0] + "REDITOWNER"];
+      // if (profix[1] === "DELETEALL") return [dat.value, profix[0] + "DELETE"];
+      return [dat.value];
+    };
+    if (d.formId === formId) {
+      if (defaultChecked === checked)
+        return {
+          ...d,
+          permissionAllTrue: fil(d.permissionAllTrue),
+          permissionTrueToFalse: fil(d.permissionTrueToFalse)
+        };
+      if (checked) {
+        return {
+          ...d,
+          permissionAllTrue: [...fil(d.permissionAllTrue), ...values()],
+          permissionTrueToFalse: fil(d.permissionTrueToFalse)
+        };
+      } else {
+        return {
+          ...d,
+          permissionAllTrue: fil(d.permissionAllTrue),
+          permissionTrueToFalse: [...fil(d.permissionTrueToFalse), ...values()]
+        };
       }
-    : {
-        ...state.data,
-        permissionAllTrue: state.data.permissionAllTrue.filter(
-          f => f !== dat.value
-        ),
-        permissionTrueToFalse: [
-          ...state.data.permissionTrueToFalse.filter(
-            f => f !== dat.value,
-            dat.value
-          )
-        ]
-      };
+    }
+    return d;
+  });
 };
 
-const Permission = ({ value, headers, setState, state, CheckBox }) => {
+const Permission = ({
+  value,
+  headers,
+  setState,
+  state,
+  CheckBox,
+  settingDisplay,
+  title
+}) => {
   const permissionsValue = value + "Permissions";
-  const Data = state["state"][value];
   return (
     <div className={Styles.meteData}>
       <div>
-        <h5>{Mete[value]}</h5>
+        <h5>{title}</h5>
       </div>
-      {Data.appSetting &&
-        thunkSetting(state, Data, value, "appSetting", setState, CheckBox)}
-      {Data.createForm &&
-        thunkSetting(state, Data, value, "createForm", setState, CheckBox)}
-      {Data[permissionsValue] &&
-        thunkForm(state, value, headers, setState, Data, CheckBox)}
+      {state["state"].appSetting &&
+        settingDisplay &&
+        thunkSetting(state, "appSetting", setState, CheckBox)}
+      {state["state"].createForm &&
+        settingDisplay &&
+        thunkSetting(state, "createForm", setState, CheckBox)}
+      {state["state"][permissionsValue] &&
+        thunkForm(state, permissionsValue, headers, setState, CheckBox)}
     </div>
   );
 };
 
-const Top = ({ appId, roleId, teamId, setState, state, action, disabled }) => {
+const Top = ({
+  appId,
+  roleId,
+  setState,
+  state,
+  action,
+  disabled,
+  initialData,
+  enterPermission
+}) => {
   return (
     <div className={Styles.top}>
-      <div className={Styles.back}>
-        <Link to={`/user/profile/${action}/${roleId}`}>
-          <span>
-            <Icon type="arrow-left" />
-          </span>
-          <span>应用权限设置</span>
-        </Link>
+      <div className={Styles.back} onClick={enterPermission}>
+        <span>
+          <Icon type="arrow-left" />
+        </span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span>应用权限设置</span>
       </div>
       <div className={Styles.btn}>
         <Button
           onClick={() =>
-            fetchPermissionsDetail({ roleId, teamId, appId, setState })
+            fetchPermissionsDetail({ roleId, appId, setState, state })
           }
           disabled={disabled}
         >
           取消
         </Button>
-        <Button onClick={() => handleSaveButton({ state })} disabled={disabled}>
+        <Button
+          onClick={() => handleSaveButton({ state, initialData })}
+          disabled={disabled}
+        >
           保存
         </Button>
       </div>
@@ -514,10 +621,15 @@ const Top = ({ appId, roleId, teamId, setState, state, action, disabled }) => {
   );
 };
 
-function handleSaveButton({ state }) {
+function handleSaveButton({ state, initialData }) {
   request(`/sysRole/saveAppPermission`, {
-    method: "post",
-    data: state.data
+    method: "put",
+    data: {
+      ...initialData,
+      appPermissionUpdateDetailBos: state.data,
+      permissionAllTrue: state.permissionAllTrue,
+      permissionTrueToFalse: state.permissionTrueToFalse
+    }
   }).then(
     res => {
       if (res && res.status === "SUCCESS") message.success("保存成功");
@@ -526,33 +638,39 @@ function handleSaveButton({ state }) {
   );
 }
 
-function fetchPermissionsDetail({
-  roleId,
-  teamId,
-  appId,
-  setState,
-  initialData
-}) {
+function fetchPermissionsDetail({ roleId, appId, setState, state }) {
   request(`/sysRole/appPermission`, {
-    method: "POST",
-    data: { roleId, teamId, appId }
+    method: "post",
+    data: { roleId, appId }
   }).then(
     res => {
       if (res && res.status === "SUCCESS")
-        setState(res.data || { state: states, data: initialData });
+        setState({
+          ...state,
+          state: res.data,
+          data: []
+        });
     },
     () => message.error("获取应用权限失败")
   );
 }
 
 export default function ApplyPermissionSetting(props) {
-  const { action, roleId, teamId, appId } = props;
+  const { action, roleId, appId, enterPermission } = props;
   const initialData = {
     roleId: roleId,
+    appId: appId,
+    permissionAllTrue: [],
+    permissionTrueToFalse: [],
+    appPermissionUpdateDetailBos: []
+  };
+  const [state, setState] = useState({
+    state: states,
+    data: [],
     permissionAllTrue: [],
     permissionTrueToFalse: []
-  };
-  const [state, setState] = useState({ state: states, data: initialData });
+  });
+  console.log(state);
   const [init, setInit] = useState(false);
   const disabled = action === "view" ? true : false;
   const CheckBox = ({ defaultChecked, checked, onChange }) => {
@@ -566,7 +684,12 @@ export default function ApplyPermissionSetting(props) {
     );
   };
   if (!init) {
-    fetchPermissionsDetail({ roleId, teamId, appId, setState, initialData });
+    fetchPermissionsDetail({
+      roleId,
+      appId,
+      setState,
+      state
+    });
     return setInit(true);
   }
   return (
@@ -576,18 +699,21 @@ export default function ApplyPermissionSetting(props) {
           <Top
             appId={appId}
             roleId={roleId}
-            teamId={teamId}
             state={state}
             action={action}
             setState={setState}
             disabled={disabled}
+            initialData={initialData}
+            enterPermission={enterPermission}
           />
           <Permission
-            value={"meteData"}
+            value={"form"}
             headers={formMeteDataThead}
             state={state}
             setState={setState}
             CheckBox={CheckBox}
+            settingDisplay={true}
+            title={"元数据权限"}
           />
           <Permission
             value={"data"}
@@ -595,6 +721,8 @@ export default function ApplyPermissionSetting(props) {
             state={state}
             setState={setState}
             CheckBox={CheckBox}
+            settingDisplay={false}
+            title={"数据权限"}
           />
         </div>
       </div>
