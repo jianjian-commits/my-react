@@ -5,6 +5,7 @@ import { Button, Table, message, Popconfirm } from "antd";
 import CreateFormModal from "../createGroup";
 import GroupDetail from "./GroupDetail";
 import PermissionSetting from "../userManagement/applyPermissionSettings";
+// import Loading from "../../pages/Loading";
 
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
@@ -19,6 +20,7 @@ class ProfileManagement extends React.Component {
       title: "",
       oldRoleId: "",
       roleList: []
+      // spinning: false
     };
     this.action = "view";
     this.roleId = "";
@@ -32,8 +34,15 @@ class ProfileManagement extends React.Component {
     this.getGroupList();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.teamId !== this.props.teamId) {
+      this.getGroupList();
+    }
+  }
+
   // 获取分组总列表
   async getGroupList() {
+    // this.setState({ spinning: true });
     try {
       const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
@@ -44,6 +53,7 @@ class ProfileManagement extends React.Component {
     } catch (err) {
       message.error("获取分组列表失败");
     }
+    // this.setState({ spinning: false });
   }
 
   // 新建分组
@@ -174,7 +184,6 @@ class ProfileManagement extends React.Component {
             action={this.action}
             roleId={this.roleId}
             appId={this.appId}
-            teamId={this.props.teamId}
             enterPermission={this.enterPermission}
           />
         ) : this.state.enterD === true ? (
@@ -186,6 +195,7 @@ class ProfileManagement extends React.Component {
           />
         ) : (
           <>
+            {/* <Loading spinning={this.state.spinning}> */}
             <Button
               type="primary"
               onClick={() => this.setState({ open: true, title: "添加分组" })}
@@ -206,6 +216,7 @@ class ProfileManagement extends React.Component {
                 rowKey="roleId"
               ></Table>
             </div>
+            {/* </Loading> */}
           </>
         )}
       </div>
@@ -213,6 +224,6 @@ class ProfileManagement extends React.Component {
   }
 }
 export default connect(({ login }) => ({
-  teamId: login.currentTeam.id,
-  userId: login.userDetail.id
+  userId: login.userDetail.id,
+  teamId: login.currentTeam.id
 }))(ProfileManagement);
