@@ -118,7 +118,8 @@ const AppDetail = props => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {selectedForm != void 0 ? (
+          {// eslint-disable-next-line
+          selectedForm != void 0 ? (
             <>
               <button
                 onClick={_e => {
