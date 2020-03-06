@@ -41,12 +41,12 @@ const states = {
     appSetting: {
       label: "displayApplySettingButton",
       value: "teamId:appId:RB",
-      checked: false
+      checked: true
     },
     createForm: {
       label: "allowCreateNewForm",
       value: "teamId:appId:CF",
-      checked: false
+      checked: true
     },
     meteDataPermissions: [
       {
@@ -55,12 +55,12 @@ const states = {
           {
             label: "DISPLAY",
             value: "teamId:appId:form01:RR",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_REDIT",
             value: "teamId:appId:form01:FU",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_DELETE",
@@ -90,12 +90,12 @@ const states = {
           {
             label: "PB_ADD",
             value: "teamId:appId:form01:PC",
-            checked: false
+            checked: true
           },
           {
             label: "PB_REDIT",
             value: "teamId:appId:form01:PU",
-            checked: false
+            checked: true
           },
           {
             label: "PB_DELETE",
@@ -179,22 +179,22 @@ const states = {
           {
             label: "DISPLAY",
             value: "teamId:appId::form01:RR",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_SEARCHOWNER",
             value: "teamId:appId::form01:u#owner:R",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_ADD",
             value: "teamId:appId::form01:C",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_REDITOWNER",
             value: "teamId:appId::form01:u#owner:E",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_DELETE",
@@ -204,27 +204,27 @@ const states = {
           {
             label: "FORM_SEARCHALL",
             value: "teamId:appId::form01:R",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_REDITALL",
             value: "teamId:appId::form01:UA",
-            checked: false
+            checked: true
           },
           {
             label: "FORM_DELETEALL",
             value: "teamId:appId::form01:DA",
-            checked: false
+            checked: true
           },
           {
             label: "PB_SEARCHOWNER",
             value: "teamId:appId::form01:u#owner:R",
-            checked: false
+            checked: true
           },
           {
             label: "PB_SEARCHALL",
             value: "teamId:appId::form01:RA",
-            checked: false
+            checked: true
           }
         ]
       }
@@ -241,7 +241,8 @@ const Tr = ({
   setState,
   index,
   permissionsValue,
-  CheckBox
+  CheckBox,
+  formId
 }) => {
   const filte = filters.filter(f => f.label.split("_")[0] === table.key);
   return (
@@ -258,7 +259,10 @@ const Tr = ({
                 onChange={e => {
                   dat[index].permissions = filters.map(f => {
                     if (f.label === Td[0].label)
-                      return { ...f, checked: !f.checked };
+                      return {
+                        ...f,
+                        checked: !f.checked
+                      };
                     return f;
                   });
                   setState({
@@ -271,10 +275,10 @@ const Tr = ({
                       }
                     },
                     data: crreteData({
-                      handleChecked: e.target.checked,
                       defaultChecked: e.target.defaultChecked,
                       state,
-                      dat: Td[0]
+                      dat: Td[0],
+                      formId
                     })
                   });
                 }}
@@ -295,7 +299,8 @@ const table = (
   state,
   setState,
   permissionsValue,
-  CheckBox
+  CheckBox,
+  formId
 ) => {
   return (
     <table className={Styles.table}>
@@ -320,6 +325,7 @@ const table = (
             dat={dat}
             permissionsValue={permissionsValue}
             CheckBox={CheckBox}
+            formId={formId}
           />
         ))}
       </tbody>
@@ -349,7 +355,10 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
                   onChange={e => {
                     dat[index].permissions = filters.map(f => {
                       if (f.label === "DISPLAY")
-                        return { ...f, checked: !f.checked };
+                        return {
+                          ...f,
+                          checked: !f.checked
+                        };
                       return f;
                     });
                     setState({
@@ -362,10 +371,10 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
                         }
                       },
                       data: crreteData({
-                        handleChecked: e.target.checked,
                         defaultChecked: e.target.defaultChecked,
                         state,
-                        dat: display[0]
+                        dat: display[0],
+                        formId: form.formId
                       })
                     });
                   }}
@@ -382,7 +391,8 @@ const thunkForm = (state, value, headers, setState, Data, CheckBox) => {
                 state,
                 setState,
                 permissionsValue,
-                CheckBox
+                CheckBox,
+                form.formId
               )}
             </div>
             <hr />
@@ -417,7 +427,6 @@ const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
                   }
                 },
                 data: crreteData({
-                  handleChecked: e.target.checked,
                   defaultChecked: e.target.defaultChecked,
                   state,
                   dat
@@ -432,40 +441,93 @@ const thunkSetting = (state, Data, value, settingValue, setState, CheckBox) => {
   );
 };
 
-const crreteData = ({ handleChecked, defaultChecked, state, dat }) => {
-  return handleChecked === defaultChecked
-    ? {
-        ...state.data,
-        permissionAllTrue: state.data.permissionAllTrue.filter(
-          f => f !== dat.value
-        ),
-        permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
-          f => f !== dat.value
-        )
+const crreteData = ({ defaultChecked, state, dat, formId }) => {
+  const filte = state.data.filter(f => f.formId === formId)[0];
+  const fil = item => {
+    return item.filter(f => f !== dat.value);
+  };
+  const file = item => {
+    return item.filter(f => f === dat.value);
+  };
+  if (!filte)
+    state.data = [
+      ...state.data,
+      { formId, permissionAllTrue: [], permissionTrueToFalse: [] }
+    ];
+  return state.data.map(d => {
+    if (d.formId === formId) {
+      if (!defaultChecked) {
+        if (file(d.permissionTrueToFalse).length > 0) {
+          return { ...d, permissionTrueToFalse: fil(d.permissionTrueToFalse) };
+        }
+        return {
+          ...d,
+          permissionAllTrue: [...fil(d.permissionAllTrue), dat.value]
+        };
       }
-    : handleChecked
-    ? {
-        ...state.data,
-        permissionAllTrue: [
-          ...state.data.permissionAllTrue.filter(f => f !== dat.value),
-          dat.value
-        ],
-        permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
-          f => f !== dat.value
-        )
+      if (defaultChecked) {
+        if (file(d.permissionAllTrue).length > 0)
+          return { ...d, permissionAllTrue: fil(d.permissionAllTrue) };
+        return {
+          ...d,
+          permissionTrueToFalse: [...fil(d.permissionTrueToFalse), dat.value]
+        };
       }
-    : {
-        ...state.data,
-        permissionAllTrue: state.data.permissionAllTrue.filter(
-          f => f !== dat.value
-        ),
-        permissionTrueToFalse: [
-          ...state.data.permissionTrueToFalse.filter(
-            f => f !== dat.value,
-            dat.value
-          )
-        ]
-      };
+    }
+    return d;
+  });
+  // return filte
+  //   ? [
+  //       ...state.data,
+  //       {
+  //         ...filte,
+  //         permissionAllTrue: [
+  //           ...filte.permissionAllTrue.filter(f => f !== dat.value),
+  //           dat.value
+  //         ],
+  //         permissionTrueToFalse: [
+  //           ...filte.permissionTrueToFalse.filter(f => f !== dat.value),
+  //           dat.value
+  //         ]
+  //       }
+  //     ]
+  //   : {
+  //       form
+  //     };
+
+  // return handleChecked === defaultChecked
+  //   ? {
+  //       ...state.data,
+  //       permissionAllTrue: state.data.permissionAllTrue.filter(
+  //         f => f !== dat.value
+  //       ),
+  //       permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
+  //         f => f !== dat.value
+  //       )
+  //     }
+  //   : handleChecked
+  //   ? {
+  //       ...state.data,
+  //       permissionAllTrue: [
+  //         ...state.data.permissionAllTrue.filter(f => f !== dat.value),
+  //         dat.value
+  //       ],
+  //       permissionTrueToFalse: state.data.permissionTrueToFalse.filter(
+  //         f => f !== dat.value
+  //       )
+  //     }
+  //   : {
+  //       ...state.data,
+  //       permissionAllTrue: state.data.permissionAllTrue.filter(
+  //         f => f !== dat.value
+  //       ),
+  //       permissionTrueToFalse: [
+  //         ...state.data.permissionTrueToFalse.filter(
+  //           f => f !== dat.value,
+  //           dat.value
+  //         )
+  //       ]
+  //     };
 };
 
 const Permission = ({ value, headers, setState, state, CheckBox }) => {
@@ -486,7 +548,15 @@ const Permission = ({ value, headers, setState, state, CheckBox }) => {
   );
 };
 
-const Top = ({ appId, roleId, teamId, setState, state, action, disabled }) => {
+const Top = ({
+  appId,
+  roleId,
+  setState,
+  state,
+  action,
+  disabled,
+  initialData
+}) => {
   return (
     <div className={Styles.top}>
       <div className={Styles.back}>
@@ -499,14 +569,15 @@ const Top = ({ appId, roleId, teamId, setState, state, action, disabled }) => {
       </div>
       <div className={Styles.btn}>
         <Button
-          onClick={() =>
-            fetchPermissionsDetail({ roleId, teamId, appId, setState })
-          }
+          onClick={() => fetchPermissionsDetail({ roleId, appId, setState })}
           disabled={disabled}
         >
           取消
         </Button>
-        <Button onClick={() => handleSaveButton({ state })} disabled={disabled}>
+        <Button
+          onClick={() => handleSaveButton({ state, initialData })}
+          disabled={disabled}
+        >
           保存
         </Button>
       </div>
@@ -514,10 +585,13 @@ const Top = ({ appId, roleId, teamId, setState, state, action, disabled }) => {
   );
 };
 
-function handleSaveButton({ state }) {
+function handleSaveButton({ state, initialData }) {
   request(`/sysRole/saveAppPermission`, {
     method: "post",
-    data: state.data
+    data: {
+      ...initialData,
+      appPermissionUpdateDetailBos: state.data
+    }
   }).then(
     res => {
       if (res && res.status === "SUCCESS") message.success("保存成功");
@@ -526,16 +600,10 @@ function handleSaveButton({ state }) {
   );
 }
 
-function fetchPermissionsDetail({
-  roleId,
-  teamId,
-  appId,
-  setState,
-  initialData
-}) {
+function fetchPermissionsDetail({ roleId, appId, setState, initialData }) {
   request(`/sysRole/appPermission`, {
     method: "POST",
-    data: { roleId, teamId, appId }
+    data: { roleId, appId }
   }).then(
     res => {
       if (res && res.status === "SUCCESS")
@@ -546,13 +614,16 @@ function fetchPermissionsDetail({
 }
 
 export default function ApplyPermissionSetting(props) {
-  const { action, roleId, teamId, appId } = props;
+  const { action, roleId, appId } = props;
   const initialData = {
     roleId: roleId,
-    permissionAllTrue: [],
-    permissionTrueToFalse: []
+    appId: appId,
+    appPermissionUpdateDetailBos: []
   };
-  const [state, setState] = useState({ state: states, data: initialData });
+  const [state, setState] = useState({
+    state: states,
+    data: initialData.appPermissionUpdateDetailBos
+  });
   const [init, setInit] = useState(false);
   const disabled = action === "view" ? true : false;
   const CheckBox = ({ defaultChecked, checked, onChange }) => {
@@ -566,7 +637,7 @@ export default function ApplyPermissionSetting(props) {
     );
   };
   if (!init) {
-    fetchPermissionsDetail({ roleId, teamId, appId, setState, initialData });
+    fetchPermissionsDetail({ roleId, appId, setState, initialData });
     return setInit(true);
   }
   return (
@@ -576,11 +647,11 @@ export default function ApplyPermissionSetting(props) {
           <Top
             appId={appId}
             roleId={roleId}
-            teamId={teamId}
             state={state}
             action={action}
             setState={setState}
             disabled={disabled}
+            initialData={initialData}
           />
           <Permission
             value={"meteData"}

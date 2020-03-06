@@ -95,7 +95,7 @@ export default connect()(function InviteUser({ match, history }) {
         newTeamId: teamId
       }
     }).then(
-      async res => {
+      res => {
         if (res && res.status === "SUCCESS") {
           message.success(`团队加入成功`);
           setTimeout(() => history.push("/"), 2000);

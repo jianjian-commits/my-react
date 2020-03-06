@@ -10,6 +10,7 @@ import Login from "./login/login";
 import Register from "./login/register";
 import ForgetPassword from "./login/forgetPassword";
 import InviteUser from "../components/login/inviteUser";
+import ApplyPermissionSetting from "../components/userManagement/applyPermissionSettings";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
@@ -62,6 +63,7 @@ const App = () => (
           path="/login/:userId/:teamId/:token"
           component={Login}
         />
+        <PublicRoute path="/apply" component={ApplyPermissionSetting} />
         <PublicRoute path="/register" component={Register} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
