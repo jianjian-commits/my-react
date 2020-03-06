@@ -1,12 +1,11 @@
 import React from "react";
 import { Form } from "antd";
-import { formItems } from "../utils/formItems";
+import { formItems } from "./formItems";
 
 export default Form.create({ name: "login-form" })(function PublicForm({
   form,
   parameter,
   func,
-  userId,
   params
 }) {
   const { getFieldDecorator, validateFields } = form;
@@ -26,7 +25,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
     <Form onSubmit={e => handleSubmit(e)}>
       {parameter.map(p => {
         const formItem =
-          p.key === "submit" && params.userId
+          p.key === "submit" && params.token
             ? formItems[p.key]({
                 form,
                 payload: "addTeam",

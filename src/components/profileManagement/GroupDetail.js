@@ -70,7 +70,7 @@ class GroupDetail extends Component {
           this.state.appManagerBos,
           "appManagerBos"
         );
-        // 团队按钮旧数据被选中，如果被选中就返回value，否则为""
+        // 团队按钮旧数据被选中，如果被选中就返回value，否则为[]
         this.state.teamVisible.checked &&
           this.oldTeamVisibleTrue.push(this.state.teamVisible.value);
       }

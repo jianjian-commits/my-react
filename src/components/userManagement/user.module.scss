@@ -44,40 +44,6 @@
   margin: 20px 0 0 0;
 }
 
-.table {
-  width: 100%;
-  margin: 10px 0 20px 0;
-  // table-layout: fixed;
-  & tr {
-    height: 40px;
-    border: 1px solid rgba(151, 151, 151, 1);
-  }
-  & th {
-    text-indent: 40px;
-    text-align: center;
-    &:nth-of-type(1) {
-      text-align: left;
-    }
-  }
-  & td {
-    text-indent: 40px;
-    text-align: center;
-    &:nth-of-type(1) {
-      text-align: left;
-    }
-  }
-  & > thead {
-    & > tr {
-      background: rgba(192, 192, 192, 1);
-    }
-  }
-  & > tbody {
-    & > tr {
-      background: rgba(255, 255, 255, 1);
-    }
-  }
-}
-
 // 应用权限设置
 .apsLayout {
   width: 100%;
@@ -96,10 +62,12 @@
 }
 
 .back {
-  display: flex;
-  & > span {
-    display: inherit;
-    align-items: center;
+  & > a {
+    display: flex;
+    & > span {
+      display: inherit;
+      align-items: center;
+    }
   }
 }
 
@@ -112,4 +80,51 @@
 //** meteData
 .meteData {
   margin-top: 40px;
+  & > div {
+    margin-bottom: 10px;
+  }
+  & > div:nth-child(1) {
+    margin-bottom: 20px;
+  }
+}
+
+.form {
+  & > div {
+    margin-bottom: 10px;
+  }
+}
+
+.table {
+  width: 100%;
+  margin: 10px 0 20px 0;
+  // table-layout: fixed;
+  & tr {
+    height: 40px;
+    border: 1px solid rgba(151, 151, 151, 1);
+  }
+  & th {
+    text-align: center;
+    &:nth-of-type(1) {
+      text-indent: 40px;
+      text-align: left;
+    }
+  }
+  & td {
+    text-align: center;
+    &:nth-of-type(1) {
+      text-indent: 40px;
+      width: 200px;
+      text-align: left;
+    }
+  }
+  & > thead {
+    & > tr {
+      background: rgba(192, 192, 192, 1);
+    }
+  }
+  & > tbody {
+    & > tr {
+      background: rgba(255, 255, 255, 1);
+    }
+  }
 }
