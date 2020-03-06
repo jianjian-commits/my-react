@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
@@ -12,9 +13,9 @@ import { appDetailMenu } from "../config/appDetailMenu";
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
-const navigationList = (appId, history) => [
+const navigationList = (appName, history) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-  { key: 1, label: `${appId}`, disabled: true }
+  { key: 1, label: `${appName}`, disabled: true }
 ];
 
 const getOreations = (appId, history) => [
@@ -60,13 +61,16 @@ const mockForms = {
   ]
 };
 
-const AppDetail = () => {
+const AppDetail = props => {
   const { appId, menuId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
   let { groups, list } = mockForms;
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
 
   if (searchKey) {
     const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
@@ -87,7 +91,7 @@ const AppDetail = () => {
   return (
     <Layout>
       <CommonHeader
-        navigationList={navigationList(appId, history)}
+        navigationList={navigationList(appName, history)}
         operations={getOreations(appId, history)}
       />
       <Layout>
@@ -137,4 +141,6 @@ const AppDetail = () => {
     </Layout>
   );
 };
-export default AppDetail;
+export default connect(({ app }) => ({
+  appList: app.appList
+}))(AppDetail);
