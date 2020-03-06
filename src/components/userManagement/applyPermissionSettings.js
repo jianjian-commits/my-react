@@ -466,6 +466,7 @@ const thunkSetting = (state, settingValue, setState, CheckBox) => {
             checked={dat.checked}
             onChange={e => {
               const { defaultChecked, checked } = e.target;
+              console.log(state);
               setState({
                 ...state,
                 state: {
@@ -602,7 +603,9 @@ const Top = ({
       </div>
       <div className={Styles.btn}>
         <Button
-          onClick={() => fetchPermissionsDetail({ roleId, appId, setState })}
+          onClick={() =>
+            fetchPermissionsDetail({ roleId, appId, setState, state })
+          }
           disabled={disabled}
         >
           取消
@@ -620,7 +623,7 @@ const Top = ({
 
 function handleSaveButton({ state, initialData }) {
   request(`/sysRole/saveAppPermission`, {
-    method: "post",
+    method: "put",
     data: {
       ...initialData,
       appPermissionUpdateDetailBos: state.data,
@@ -635,16 +638,17 @@ function handleSaveButton({ state, initialData }) {
   );
 }
 
-function fetchPermissionsDetail({ roleId, appId, setState, initialData }) {
+function fetchPermissionsDetail({ roleId, appId, setState, state }) {
   request(`/sysRole/appPermission`, {
-    method: "put",
+    method: "post",
     data: { roleId, appId }
   }).then(
     res => {
       if (res && res.status === "SUCCESS")
         setState({
+          ...state,
           state: res.data,
-          data: initialData.appPermissionUpdateDetailBos
+          data: []
         });
     },
     () => message.error("获取应用权限失败")
@@ -662,10 +666,11 @@ export default function ApplyPermissionSetting(props) {
   };
   const [state, setState] = useState({
     state: states,
-    data: initialData.appPermissionUpdateDetailBos,
-    permissionAllTrue: initialData.permissionAllTrue,
-    permissionTrueToFalse: initialData.permissionTrueToFalse
+    data: [],
+    permissionAllTrue: [],
+    permissionTrueToFalse: []
   });
+  console.log(state);
   const [init, setInit] = useState(false);
   const disabled = action === "view" ? true : false;
   const CheckBox = ({ defaultChecked, checked, onChange }) => {
@@ -679,7 +684,12 @@ export default function ApplyPermissionSetting(props) {
     );
   };
   if (!init) {
-    fetchPermissionsDetail({ roleId, appId, setState, initialData });
+    fetchPermissionsDetail({
+      roleId,
+      appId,
+      setState,
+      state
+    });
     return setInit(true);
   }
   return (

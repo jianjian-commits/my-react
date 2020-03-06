@@ -90,7 +90,7 @@ export default connect()(function InviteUser({ match, history }) {
   //点击当前按钮加入团队
   const handleCurrentUserAddTeam = () => {
     request(`/sysUser/${currentUserDetail.id}/team`, {
-      method: "put",
+      method: "post",
       data: {
         newTeamId: teamId
       }
