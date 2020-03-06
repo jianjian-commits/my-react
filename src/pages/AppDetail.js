@@ -81,6 +81,7 @@ const AppDetail = () => {
 
   //根据点击菜单栏加载内容组件
   const onClickMenu = (key, e) => {
+    setSelectedForm(null);
     setEle(selectCom(key, appDetailMenu));
   };
 
