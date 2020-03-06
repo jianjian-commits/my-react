@@ -174,15 +174,17 @@ export const saveForm = (
   errMessage,
   // type,
   path,
-  formInfo,
+  formInfo = "",
   callback,
   url
 ) => dispatch => {
   _calcFormComponentLayout(formDataArray);
-  formInfo = formInfo
-    .replace(/\r\n/g, "<br/>")
-    .replace(/\n/g, "<br/>")
-    .replace(/\s/g, " ");
+  if (formInfo != "") {
+    formInfo = formInfo
+      .replace(/\r\n/g, "<br/>")
+      .replace(/\n/g, "<br/>")
+      .replace(/\s/g, " ");
+  }
 
   let defaultLayout = {
     id: "defaultLayout",
@@ -234,7 +236,7 @@ export const saveForm = (
   })
     .then(response => {
       console.log("res", response);
-      callback(url + "?id=" + response.data.id);
+      callback(url + "?formId=" + response.data.id);
       // if (type === "back") {
       //   // console.log("response",response);
       //   message.success("保存成功", 1, () => {
