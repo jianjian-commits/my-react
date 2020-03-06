@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Icon, Button, message } from "antd";
+import { Icon, Button, message, Checkbox } from "antd";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 import { getBasicInfo, getAppManage, getOtherManage } from "./DetailModule";
@@ -12,6 +12,7 @@ class GroupDetail extends Component {
     this.state = {
       baseInfoBo: {},
       appManagerBos: [],
+      teamVisible: {},
       permissions: {},
       setting: {}
     };
@@ -19,6 +20,7 @@ class GroupDetail extends Component {
     this.roleId = props.roleId;
     this.oldPermissionAllTrue = [];
     this.oldAppAllTrue = [];
+    this.oldTeamVisibleTrue = [];
     this.onChange = this.onChange.bind(this);
   }
 
@@ -42,6 +44,7 @@ class GroupDetail extends Component {
         const {
           baseInfoBo,
           appManagerBos,
+          teamVisible,
           permissions,
           sessionTime,
           passwordMinLength,
@@ -50,6 +53,7 @@ class GroupDetail extends Component {
         this.setState({
           baseInfoBo,
           appManagerBos,
+          teamVisible,
           permissions,
           setting: {
             sessionTime,
@@ -66,6 +70,9 @@ class GroupDetail extends Component {
           this.state.appManagerBos,
           "appManagerBos"
         );
+        // 团队按钮旧数据被选中，如果被选中就返回value，否则为""
+        this.state.teamVisible.checked &&
+          this.oldTeamVisibleTrue.push(this.state.teamVisible.value);
       }
     } catch (err) {
       message.error("获取详情失败");
@@ -140,10 +147,10 @@ class GroupDetail extends Component {
       this.state.permissions,
       "permissions"
     );
-    // 获取选中后被取消
     const permissionTrueToFalse = this.oldPermissionAllTrue.filter(
       item => !permissionAllTrue.includes(item)
     );
+
     const appAllTrue = this.getTrueValue(
       this.state.appManagerBos,
       "appManagerBos"
@@ -152,14 +159,24 @@ class GroupDetail extends Component {
       item => !appAllTrue.includes(item)
     );
 
+    const teamVisibleTrue = [];
+    this.state.teamVisible.checked &&
+      teamVisibleTrue.push(this.state.teamVisible.value);
+    const teamVisibleTrueToFalse = this.oldTeamVisibleTrue.filter(
+      item => !teamVisibleTrue.includes(item)
+    );
+
     // 传给后台的data数据
     let data = {
       roleId: this.roleId,
       roleName: this.state.baseInfoBo.roleName,
       appAllTrue,
       appTrueToFalse,
-      permissionAllTrue,
-      permissionTrueToFalse,
+      permissionAllTrue: [...permissionAllTrue, ...teamVisibleTrue],
+      permissionTrueToFalse: [
+        ...permissionTrueToFalse,
+        ...teamVisibleTrueToFalse
+      ],
       ...this.state.setting
     };
     try {
@@ -182,6 +199,7 @@ class GroupDetail extends Component {
     const action = this.action;
     const { enterDetail } = this.props;
     const { baseInfoBo, permissions, appManagerBos } = this.state;
+
     return (
       <div className={classes.groupContainer}>
         <div className={classes.groupHeader}>
@@ -203,7 +221,23 @@ class GroupDetail extends Component {
           this.onChange,
           this.props.enterPermission
         )}
-        {getOtherManage(action, permissions, this.onChange)}
+        <p>
+          团队管理信息可见
+          <Checkbox
+            disabled={action === "view"}
+            checked={this.state.teamVisible.checked}
+            onChange={e => {
+              this.setState({
+                teamVisible: {
+                  ...this.state.teamVisible,
+                  checked: e.target.checked
+                }
+              });
+            }}
+          ></Checkbox>
+        </p>
+        {this.state.teamVisible.checked &&
+          getOtherManage(action, permissions, this.onChange)}
         {/* {getSetting(action, setting)} */}
       </div>
     );

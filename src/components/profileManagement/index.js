@@ -48,7 +48,6 @@ class ProfileManagement extends React.Component {
 
   // 新建分组
   async handleCreate(data, title) {
-    console.log("data", data);
     try {
       const res =
         title === "添加分组"
@@ -102,6 +101,7 @@ class ProfileManagement extends React.Component {
     });
     this.action = type ? type : "view";
     this.roleId = record ? record.roleId : "";
+    this.getGroupList();
   }
 
   // 进入或退出权限管理
