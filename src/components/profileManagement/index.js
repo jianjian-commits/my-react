@@ -1,20 +1,31 @@
 import React from "react";
-import { Button, Table, message, Popconfirm } from "antd";
-import classes from "./profile.module.scss";
-import CreateFormModal from "../createGroup";
-import { history } from "../../store";
-import request from "../../utils/request";
 import { connect } from "react-redux";
+
+import { Button, Table, message, Popconfirm } from "antd";
+import CreateFormModal from "../createGroup";
+import GroupDetail from "./GroupDetail";
+import PermissionSetting from "../userManagement/applyPermissionSettings";
+
+import classes from "./profile.module.scss";
+import request from "../../utils/request";
+
 class ProfileManagement extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
+      enterD: false,
+      enterP: false,
       title: "",
-      groupList: [],
-      oldGroupId: ""
+      oldRoleId: "",
+      roleList: []
     };
+    this.action = "view";
+    this.roleId = "";
+    this.appId = "";
     this.handleCancel = this.handleCancel.bind(this);
+    this.enterDetail = this.enterDetail.bind(this);
+    this.enterPermission = this.enterPermission.bind(this);
   }
 
   componentDidMount() {
@@ -24,13 +35,11 @@ class ProfileManagement extends React.Component {
   // 获取分组总列表
   async getGroupList() {
     try {
-      const res = await request("/group/list");
+      const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
         this.setState({
-          groupList: res.data
+          roleList: res.data
         });
-      } else {
-        message.error("获取分组列表失败");
       }
     } catch (err) {
       message.error("获取分组列表失败");
@@ -42,27 +51,20 @@ class ProfileManagement extends React.Component {
     try {
       const res =
         title === "添加分组"
-          ? await request("/group/addGroup", {
-              method: "POST",
-              data: {
-                teamId: this.props.teamId,
-                name: data.groupName
-              }
+          ? await request(`/sysRole/role?name=${data.roleName}`, {
+              method: "PUT"
             })
-          : await request("/group/cloneGroup", {
-              method: "POST",
+          : await request("/sysRole/clone", {
+              method: "PUT",
               data: {
-                oldGroupId: this.state.oldGroupId,
-                newGroupName: data.groupName
+                oldRoleId: this.state.oldRoleId,
+                newRoleName: data.roleName
               }
             });
       if (res && res.status === "SUCCESS") {
         message.success(`${title}成功!`);
         this.handleCancel();
         this.getGroupList();
-      } else {
-        message.error(`${title}失败`);
-        this.handleCancel();
       }
     } catch (err) {
       message.error(`${title}失败`);
@@ -73,14 +75,12 @@ class ProfileManagement extends React.Component {
   // 删除分组
   async removeGroup(record) {
     try {
-      const res = await request(`/group/delGroup?id=${record.groupId}`, {
+      const res = await request(`/sysRole/${record.roleId}`, {
         method: "DELETE"
       });
       if (res && res.status === "SUCCESS") {
         message.success("删除成功！");
         this.getGroupList();
-      } else {
-        message.error("删除失败！");
       }
     } catch (err) {
       message.error("删除失败！");
@@ -94,35 +94,48 @@ class ProfileManagement extends React.Component {
     });
   }
 
+  // 进入或退出分组详情
+  enterDetail(boolean, type, record) {
+    this.setState({
+      enterD: boolean
+    });
+    this.action = type ? type : "view";
+    this.roleId = record ? record.roleId : "";
+    this.getGroupList();
+  }
+
+  // 进入或退出权限管理
+  enterPermission(boolean, record) {
+    this.setState({
+      enterP: boolean
+    });
+    this.appId = record ? record.appId : "";
+  }
+
   render() {
-    const { open, title, groupList } = this.state;
+    const { open, title, roleList } = this.state;
     // 分组列表标题和操作
     const columns = [
-      { title: "组名", dataIndex: "groupName" },
+      { title: "组名", dataIndex: "roleName" },
       {
         title: "操作",
-        key: "action",
         dataIndex: "action",
         render: (text, record) => (
           <span className={classes.actionStyle}>
             <Button
               type="link"
-              onClick={() =>
-                history.push({
-                  pathname: `/user/profile/view/${record.groupId}`
-                })
-              }
+              onClick={() => {
+                this.enterDetail(true, "view", record);
+              }}
             >
               查看
             </Button>
-            {record.key !== "sys" && (
+            {record.code !== "SUPER_ADMIN" && (
               <Button
                 type="link"
-                onClick={() =>
-                  history.push({
-                    pathname: `/user/profile/edit/${record.groupId}`
-                  })
-                }
+                onClick={() => {
+                  this.enterDetail(true, "edit", record);
+                }}
               >
                 编辑
               </Button>
@@ -133,13 +146,13 @@ class ProfileManagement extends React.Component {
                 this.setState({
                   open: true,
                   title: "克隆分组",
-                  oldGroupId: record.groupId
+                  oldRoleId: record.roleId
                 })
               }
             >
               克隆
             </Button>
-            {record.key !== "sys" && record.key !== "normal" && (
+            {record.code !== "SUPER_ADMIN" && record.code !== "GENERAL" && (
               <Popconfirm
                 title="是否删除这个分组？"
                 okText="是"
@@ -156,30 +169,50 @@ class ProfileManagement extends React.Component {
 
     return (
       <div className={classes.wrapper}>
-        <Button
-          type="primary"
-          onClick={() => this.setState({ open: true, title: "添加分组" })}
-        >
-          添加分组
-        </Button>
-        <CreateFormModal
-          title={title}
-          visible={open}
-          onOk={(data, title) => this.handleCreate(data, title)}
-          onCancel={this.handleCancel}
-        />
-        <div className={classes.tableStyles}>
-          <Table
-            size="middle"
-            columns={columns}
-            dataSource={groupList}
-            rowKey="groupId"
-          ></Table>
-        </div>
+        {this.state.enterP === true ? (
+          <PermissionSetting
+            action={this.action}
+            roleId={this.roleId}
+            appId={this.appId}
+            teamId={this.props.teamId}
+            enterPermission={this.enterPermission}
+          />
+        ) : this.state.enterD === true ? (
+          <GroupDetail
+            action={this.action}
+            enterDetail={this.enterDetail}
+            roleId={this.roleId}
+            enterPermission={this.enterPermission}
+          />
+        ) : (
+          <>
+            <Button
+              type="primary"
+              onClick={() => this.setState({ open: true, title: "添加分组" })}
+            >
+              添加分组
+            </Button>
+            <CreateFormModal
+              title={title}
+              visible={open}
+              onOk={(data, title) => this.handleCreate(data, title)}
+              onCancel={this.handleCancel}
+            />
+            <div className={classes.tableStyles}>
+              <Table
+                size="middle"
+                columns={columns}
+                dataSource={roleList}
+                rowKey="roleId"
+              ></Table>
+            </div>
+          </>
+        )}
       </div>
     );
   }
 }
 export default connect(({ login }) => ({
-  teamId: login.currentTeam.id
+  teamId: login.currentTeam.id,
+  userId: login.userDetail.id
 }))(ProfileManagement);

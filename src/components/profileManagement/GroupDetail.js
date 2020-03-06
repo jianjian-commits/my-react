@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Icon, Button, Table, Checkbox, message } from "antd";
-import classes from "./profile.module.scss";
-import { history } from "../../store";
-import request from "../../utils/request";
 import { connect } from "react-redux";
+
+import { Icon, Button, message, Checkbox } from "antd";
+import classes from "./profile.module.scss";
+import request from "../../utils/request";
+import { getBasicInfo, getAppManage, getOtherManage } from "./DetailModule";
 
 class GroupDetail extends Component {
   constructor(props) {
@@ -11,14 +12,15 @@ class GroupDetail extends Component {
     this.state = {
       baseInfoBo: {},
       appManagerBos: [],
+      teamVisible: {},
       permissions: {},
       setting: {}
     };
-    const matches =
-      /^\/user\/profile\/(\w+)\/(\w+)/.exec(history.location.pathname) || [];
-    this.action = matches[1] || "view";
-    this.groupId = matches[2] || "";
+    this.action = props.action;
+    this.roleId = props.roleId;
     this.oldPermissionAllTrue = [];
+    this.oldAppAllTrue = [];
+    this.oldTeamVisibleTrue = [];
     this.onChange = this.onChange.bind(this);
   }
 
@@ -30,11 +32,11 @@ class GroupDetail extends Component {
   // 获取查看详情/编辑详情
   async getDetail() {
     const data = {
-      groupId: this.groupId,
-      teamId: this.props.teamId
+      userId: this.props.userId,
+      roleId: this.roleId
     };
     try {
-      const res = await request("/group/detail", {
+      const res = await request(`/sysRole/detail/${this.roleId}`, {
         method: "POST",
         data
       });
@@ -42,6 +44,7 @@ class GroupDetail extends Component {
         const {
           baseInfoBo,
           appManagerBos,
+          teamVisible,
           permissions,
           sessionTime,
           passwordMinLength,
@@ -50,6 +53,7 @@ class GroupDetail extends Component {
         this.setState({
           baseInfoBo,
           appManagerBos,
+          teamVisible,
           permissions,
           setting: {
             sessionTime,
@@ -58,9 +62,17 @@ class GroupDetail extends Component {
           }
         });
         // 获取数据库中（其他管理)被选中的选项值value
-        this.oldPermissionAllTrue = this.getTrueValue(this.state.permissions);
-      } else {
-        message.error("获取详情失败");
+        this.oldPermissionAllTrue = this.getTrueValue(
+          this.state.permissions,
+          "permissions"
+        );
+        this.oldAppAllTrue = this.getTrueValue(
+          this.state.appManagerBos,
+          "appManagerBos"
+        );
+        // 团队按钮旧数据被选中，如果被选中就返回value，否则为[]
+        this.state.teamVisible.checked &&
+          this.oldTeamVisibleTrue.push(this.state.teamVisible.value);
       }
     } catch (err) {
       message.error("获取详情失败");
@@ -72,7 +84,7 @@ class GroupDetail extends Component {
       this.setState({
         baseInfoBo: {
           ...this.state.baseInfoBo,
-          groupName: state
+          roleName: state
         }
       });
     }
@@ -106,44 +118,70 @@ class GroupDetail extends Component {
   }
 
   // 获取（其他管理)被选中的选项值value
-  getTrueValue(state) {
+  getTrueValue(state, type) {
     const result = [];
-    for (let key in state) {
-      state[key].forEach(item => {
+    if (type === "permissions") {
+      for (let key in state) {
+        state[key].forEach(item => {
+          if (item.checked) {
+            result.push(item.value);
+          }
+        });
+      }
+      return result;
+    }
+    if (type === "appManagerBos") {
+      state.forEach(item => {
         if (item.checked) {
           result.push(item.value);
         }
       });
+      return result;
     }
-    return result;
   }
 
   // 保存
   async handleDetail() {
     // 其他管理（此刻所有被选中的选项值)
-    const permissionAllTrue = this.getTrueValue(this.state.permissions);
-    // 获取选中后被取消
+    const permissionAllTrue = this.getTrueValue(
+      this.state.permissions,
+      "permissions"
+    );
     const permissionTrueToFalse = this.oldPermissionAllTrue.filter(
       item => !permissionAllTrue.includes(item)
     );
 
-    // 应用管理被选中的id
-    const appIds = this.state.appManagerBos
-      .filter(item => item.checked)
-      .map(item => item.appId);
+    const appAllTrue = this.getTrueValue(
+      this.state.appManagerBos,
+      "appManagerBos"
+    );
+    const appTrueToFalse = this.oldAppAllTrue.filter(
+      item => !appAllTrue.includes(item)
+    );
+
+    const teamVisibleTrue = [];
+    this.state.teamVisible.checked &&
+      teamVisibleTrue.push(this.state.teamVisible.value);
+    const teamVisibleTrueToFalse = this.oldTeamVisibleTrue.filter(
+      item => !teamVisibleTrue.includes(item)
+    );
 
     // 传给后台的data数据
     let data = {
-      groupId: this.groupId,
-      groupName: this.state.baseInfoBo.groupName,
-      appIds,
-      permissionAllTrue,
-      permissionTrueToFalse,
+      roleId: this.roleId,
+      roleName: this.state.baseInfoBo.roleName,
+      appAllTrue,
+      appTrueToFalse,
+      permissionAllTrue: [...permissionAllTrue, ...teamVisibleTrue],
+      permissionTrueToFalse: [
+        ...permissionTrueToFalse,
+        ...teamVisibleTrueToFalse
+      ],
       ...this.state.setting
     };
     try {
-      const res = await request("/group/updateGroup", {
-        method: "POST",
+      const res = await request("/sysRole/save", {
+        method: "PUT",
         data
       });
       if (res && res.status === "SUCCESS") {
@@ -159,212 +197,53 @@ class GroupDetail extends Component {
   render() {
     // 获取是查看还是编辑行为
     const action = this.action;
+    const { enterDetail } = this.props;
     const { baseInfoBo, permissions, appManagerBos } = this.state;
+
     return (
       <div className={classes.groupContainer}>
         <div className={classes.groupHeader}>
-          <Icon
-            type="arrow-left"
-            onClick={() => history.replace("/user/profile")}
-          />
+          <Icon type="arrow-left" onClick={() => enterDetail(false)} />
           <span>分组</span>
           {action === "edit" && (
             <>
               <Button type="primary" onClick={() => this.handleDetail()}>
                 保存
               </Button>
-              <Button onClick={() => history.replace("/user/profile")}>
-                取消
-              </Button>
+              <Button onClick={() => enterDetail(false)}>取消</Button>
             </>
           )}
         </div>
         {getBasicInfo(action, baseInfoBo, this.onChange)}
-        {getAppManage(action, appManagerBos, this.onChange)}
-        {getOtherManage(action, permissions, this.onChange)}
+        {getAppManage(
+          action,
+          appManagerBos,
+          this.onChange,
+          this.props.enterPermission
+        )}
+        <p>
+          团队管理信息可见
+          <Checkbox
+            disabled={action === "view"}
+            checked={this.state.teamVisible.checked}
+            onChange={e => {
+              this.setState({
+                teamVisible: {
+                  ...this.state.teamVisible,
+                  checked: e.target.checked
+                }
+              });
+            }}
+          ></Checkbox>
+        </p>
+        {this.state.teamVisible.checked &&
+          getOtherManage(action, permissions, this.onChange)}
         {/* {getSetting(action, setting)} */}
       </div>
     );
   }
 }
 export default connect(({ login }) => ({
-  teamId: login.currentTeam.id
+  teamId: login.currentTeam.id,
+  userId: login.userDetail.id
 }))(GroupDetail);
-
-// 基础信息
-const getBasicInfo = (a, baseInfoBo, onChange) => {
-  let {
-    groupName,
-    createName,
-    createDate = "",
-    lastModifyName,
-    lastModifyDate = ""
-  } = baseInfoBo;
-
-  const basicInfo = [
-    { title: "分组名", value: groupName },
-    { title: "创建人", value: createName },
-    {
-      title: "创建时间",
-      value: createDate.split(".")[0].replace("T", " ")
-    },
-    { title: "最后修改人", value: lastModifyName },
-    {
-      title: "最后修改时间",
-      value: lastModifyDate.split(".")[0].replace("T", " ")
-    }
-  ];
-
-  return (
-    <div className={classes.groupBasic}>
-      <span>基础信息</span>
-      <table>
-        <tbody>
-          {basicInfo.map(i => {
-            return (
-              <tr key={i.title}>
-                <td>{i.title}</td>
-                <td>
-                  <input
-                    readOnly={a === "view" || i.title !== "分组名"}
-                    defaultValue={i.value}
-                    className={classes.inputStyle}
-                    onChange={e => onChange(e.target.value, "getBasicInfo")}
-                  ></input>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-// 应用管理（动态）
-const getAppManage = (a, appManagerBos, onChange) => {
-  // 表格头
-  const columns = [
-    { title: "应用名", dataIndex: "appName" },
-    {
-      title: "是否可见",
-      dataIndex: "checked",
-      render: (text, record) => {
-        return (
-          <Checkbox
-            checked={record.checked}
-            disabled={a === "view"}
-            onChange={e =>
-              onChange(
-                {
-                  checkedValue: e.target.checked,
-                  appId: record.appId
-                },
-                "getAppManage"
-              )
-            }
-          />
-        );
-      }
-    },
-    {
-      title: "操作",
-      key: "action",
-      dataIndex: "action",
-      render: (text, record) => {
-        return <a href="/">权限管理</a>;
-      }
-    }
-  ];
-  return (
-    <div className={classes.groupApp}>
-      <span>应用管理</span>
-      <div className={classes.tableStyles}>
-        <Table
-          size="middle"
-          columns={columns}
-          dataSource={appManagerBos}
-          rowKey="appId"
-        ></Table>
-      </div>
-    </div>
-  );
-};
-
-// 其他管理
-const getOtherManage = (a, permissions, onChange) => {
-  const {
-    teamPermissions = [],
-    teamEmployerPermissions = [],
-    groupPermissions = []
-  } = permissions;
-
-  // 获取checked即被选中
-  const getChecked = t => t.filter(i => i.checked).map(i => i.value);
-
-  const teamInfo = [
-    {
-      title: "团队信息管理",
-      options: teamPermissions,
-      value: getChecked(teamPermissions),
-      key: "teamPermissions"
-    },
-    {
-      title: "团队成员管理",
-      options: teamEmployerPermissions,
-      value: getChecked(teamEmployerPermissions),
-      key: "teamEmployerPermissions"
-    },
-    {
-      title: "分组管理",
-      options: groupPermissions,
-      value: getChecked(groupPermissions),
-      key: "groupPermissions"
-    }
-  ];
-
-  return (
-    <>
-      {/* <h3>其他</h3> */}
-      {teamInfo.map(i => {
-        return (
-          <div className={classes.groupManage} key={i.title}>
-            <span>{i.title}</span>
-            <Checkbox.Group
-              options={i.options}
-              value={i.value}
-              disabled={a === "view"}
-              onChange={checkedValue =>
-                onChange(
-                  {
-                    checkedValue,
-                    key: i.key
-                  },
-                  "getOtherManage"
-                )
-              }
-            ></Checkbox.Group>
-          </div>
-        );
-      })}
-    </>
-  );
-};
-
-// 设置
-// const getSetting = (a, setting) => {
-//   return (
-//     <div className={classes.groupSetting}>
-//       <span>Session设置</span>
-//       * 过期时间
-//       <input defaultValue={setting.sessionTime} readOnly />
-//       小时（不活跃状态）
-//       <span>Password设置</span>
-//       * 最小位数
-//       <input defaultValue={setting.passwordMinLength} readOnly />
-//       <br />
-//       * 密码复杂度
-//       <input defaultValue={setting.passwordDiffer} readOnly />
-//     </div>
-//   );
-// };
