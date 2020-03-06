@@ -129,9 +129,9 @@ const AppDetail = () => {
                 formId={selectedForm}
               ></FormBuilderSubmitData>
             </>
-          ) : (
-            <></>
-          )}
+          ) : ele != null ? (
+            <ele.ContentEle count={ele.key} />
+          ) : null}
         </Content>
       </Layout>
     </Layout>
