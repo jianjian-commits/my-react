@@ -7,7 +7,7 @@ import DraggableList from "../components/shared/DraggableList";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 
 import selectCom from "../utils/selectCom";
-import { appDetailMenu } from "../config/appDetailMenu";
+import { appDetailMenu } from "../components/transactList/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -81,6 +81,7 @@ const AppDetail = () => {
 
   //根据点击菜单栏加载内容组件
   const onClickMenu = (key, e) => {
+    setSelectedForm(null);
     setEle(selectCom(key, appDetailMenu));
   };
 
@@ -129,9 +130,9 @@ const AppDetail = () => {
                 formId={selectedForm}
               ></FormBuilderSubmitData>
             </>
-          ) : (
-            <></>
-          )}
+          ) : ele != null ? (
+            <ele.ContentEle count={ele.key} />
+          ) : null}
         </Content>
       </Layout>
     </Layout>
