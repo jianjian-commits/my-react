@@ -175,6 +175,7 @@ class ProfileManagement extends React.Component {
             roleId={this.roleId}
             appId={this.appId}
             teamId={this.props.teamId}
+            enterPermission={this.enterPermission}
           />
         ) : this.state.enterD === true ? (
           <GroupDetail
