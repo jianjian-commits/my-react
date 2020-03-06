@@ -33,6 +33,14 @@ body {
       font-family: $font-Family;
       margin-bottom: 45px;
     }
+    .submission-formInfo {
+      width: 870px;
+      height: auto;
+      border-bottom: 1px solid $border-color;
+      margin-bottom: 10px;
+      font-size: 14px;
+      padding: 0 15px 10px 15px;
+    }
     .form-layout {
       width: 870px;
       .ant-form-item-label {

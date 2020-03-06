@@ -31,6 +31,7 @@ class FormInforModal extends React.Component {
           this.props.errMessage,
           //   this.props.submitBtnObj,
           values.formPath,
+          values.formInfo,
           this.props.push,
           this.props.url
         );
@@ -76,7 +77,7 @@ class FormInforModal extends React.Component {
                 })(<Input placeholder="请输入表单api" />)}
               </Form.Item>
               <Form.Item label={"表单说明"}>
-                {getFieldDecorator("formIntro")(
+                {getFieldDecorator("formInfo")(
                   <TextArea row={5} style={{ height: 110 }} />
                 )}
               </Form.Item>

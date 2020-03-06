@@ -174,10 +174,15 @@ export const saveForm = (
   errMessage,
   // type,
   path,
+  formInfo,
   callback,
   url
 ) => dispatch => {
   _calcFormComponentLayout(formDataArray);
+  formInfo = formInfo
+    .replace(/\r\n/g, "<br/>")
+    .replace(/\n/g, "<br/>")
+    .replace(/\s/g, " ");
 
   let defaultLayout = {
     id: "defaultLayout",
@@ -207,6 +212,7 @@ export const saveForm = (
     title: name,
     path: path,
     name: name,
+    formInfo: formInfo,
     // id,
     createdTime: time,
     updateTime: time,
