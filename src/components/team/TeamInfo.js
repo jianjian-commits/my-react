@@ -55,6 +55,7 @@ const EditInput = ({ obj, getCurrentTeam, getAllTeam }) => {
       };
       upData()
         .then((res, { key } = obj) => {
+          message.success("修改成功");
           getCurrentTeam().then(res => {
             if (key === "name") {
               getAllTeam();
@@ -65,9 +66,6 @@ const EditInput = ({ obj, getCurrentTeam, getAllTeam }) => {
         .catch(err => {
           message.error("修改失败，请确认权限再操作");
           onClickAmend();
-        })
-        .then(res => {
-          message.success("修改成功");
         });
     }
   }, [changeStr, getAllTeam, getCurrentTeam, obj]);

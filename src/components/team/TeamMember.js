@@ -185,7 +185,7 @@ export default connect(
         });
     };
     gainData();
-  }, [page, teamId]);
+  }, [page, teamId, size, getCurrentTeam]);
   return true ? (
     <div className={classes.container}>
       <Row type="flex" justify="space-between" className={classes.box}>
