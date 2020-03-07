@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Input, Row, Col, List, Typography, Button, Spin } from "antd";
+import { Input, Row, Col, List, Typography, Button, Spin, message } from "antd";
 import request from "../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../store/loginReducer";
@@ -43,24 +43,35 @@ const EditInput = ({ obj, getCurrentTeam, getAllTeam }) => {
     setDataStr(e.target.value);
   };
 
-  const upData = async () => {
-    const params = {
-      method: "PUT",
-      data: {}
-    };
-    params.data[obj.key] = changeStr;
-    await request(`/team`, params);
-  };
   useEffect(() => {
-    upData().then((res, { key } = obj) => {
-      getCurrentTeam().then(res => {
-        if (key === "name") {
-          getAllTeam();
-        }
-        onClickAmend();
-      });
-    });
-  }, [changeStr]);
+    if (changeStr !== obj.value) {
+      const upData = async () => {
+        const params = {
+          method: "PUT",
+          data: {}
+        };
+        params.data[obj.key] = changeStr;
+        await request(`/team`, params);
+      };
+      upData()
+        .then((res, { key } = obj) => {
+          getCurrentTeam().then(res => {
+            if (key === "name") {
+              getAllTeam();
+            }
+            onClickAmend();
+          });
+        })
+        .catch(err => {
+          message.error("修改失败，请确认权限再操作");
+          onClickAmend();
+        })
+        .then(res => {
+          message.success("修改成功");
+        });
+    }
+  }, [changeStr, getAllTeam, getCurrentTeam, obj]);
+
   return (
     <div>
       {redact ? (
