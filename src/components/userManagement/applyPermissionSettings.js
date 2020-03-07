@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { Icon, Button, Checkbox, message } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
@@ -466,7 +465,6 @@ const thunkSetting = (state, settingValue, setState, CheckBox) => {
             checked={dat.checked}
             onChange={e => {
               const { defaultChecked, checked } = e.target;
-              console.log(state);
               setState({
                 ...state,
                 state: {
@@ -602,16 +600,13 @@ const Top = ({
         <span>应用权限设置</span>
       </div>
       <div className={Styles.btn}>
-        <Button
-          onClick={() =>
-            fetchPermissionsDetail({ roleId, appId, setState, state })
-          }
-          disabled={disabled}
-        >
+        <Button onClick={enterPermission} disabled={disabled}>
           取消
         </Button>
         <Button
-          onClick={() => handleSaveButton({ state, initialData })}
+          onClick={() =>
+            handleSaveButton({ state, initialData, enterPermission })
+          }
           disabled={disabled}
         >
           保存
@@ -621,7 +616,7 @@ const Top = ({
   );
 };
 
-function handleSaveButton({ state, initialData }) {
+function handleSaveButton({ state, initialData, enterPermission }) {
   request(`/sysRole/saveAppPermission`, {
     method: "put",
     data: {
@@ -633,6 +628,7 @@ function handleSaveButton({ state, initialData }) {
   }).then(
     res => {
       if (res && res.status === "SUCCESS") message.success("保存成功");
+      enterPermission();
     },
     () => message.error("保存应用权限失败")
   );
@@ -670,7 +666,6 @@ export default function ApplyPermissionSetting(props) {
     permissionAllTrue: [],
     permissionTrueToFalse: []
   });
-  console.log(state);
   const [init, setInit] = useState(false);
   const disabled = action === "view" ? true : false;
   const CheckBox = ({ defaultChecked, checked, onChange }) => {
