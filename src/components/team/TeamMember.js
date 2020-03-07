@@ -124,10 +124,9 @@ export default connect(
       method: "POST",
       data: { page: page, size }
     });
-    console.log(res);
     if (res.status === "UNAUTHORIZED") {
       setData(res.data);
-      message.error("未授权，请确认权限再操作");
+      message.error("未授权");
     } else {
       res.data.datas.forEach(item => {
         item.key = item.id;

@@ -64,7 +64,7 @@ const EditInput = ({ obj, getCurrentTeam, getAllTeam }) => {
           });
         })
         .catch(err => {
-          message.error("修改失败，请确认权限再操作");
+          message.error("修改失败");
           onClickAmend();
         });
     }
