@@ -90,12 +90,12 @@ export default connect()(function InviteUser({ match, history }) {
   //点击当前按钮加入团队
   const handleCurrentUserAddTeam = () => {
     request(`/sysUser/${currentUserDetail.id}/team`, {
-      method: "put",
+      method: "post",
       data: {
         newTeamId: teamId
       }
     }).then(
-      async res => {
+      res => {
         if (res && res.status === "SUCCESS") {
           message.success(`团队加入成功`);
           setTimeout(() => history.push("/"), 2000);
