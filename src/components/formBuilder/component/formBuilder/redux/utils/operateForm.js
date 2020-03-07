@@ -172,10 +172,19 @@ export const saveForm = (
   name,
   verificationList,
   errMessage,
-  type,
-  callback //将保存按钮设为可点击
+  // type,
+  path,
+  formInfo = "",
+  callback,
+  url
 ) => dispatch => {
   _calcFormComponentLayout(formDataArray);
+  if (formInfo != "") {
+    formInfo = formInfo
+      .replace(/\r\n/g, "<br/>")
+      .replace(/\n/g, "<br/>")
+      .replace(/\s/g, " ");
+  }
 
   let defaultLayout = {
     id: "defaultLayout",
@@ -192,7 +201,7 @@ export const saveForm = (
     });
   });
 
-  const path = new String((Math.random() * 1000000000) | 0);
+  // const path = new String((Math.random() * 1000000000) | 0);
   // const id = new String((Math.random() * 1000000000) | 0);
   const time = new Date();
   let formData = {
@@ -203,8 +212,9 @@ export const saveForm = (
     page: 0,
     submissionAccess: submissionAccess,
     title: name,
-    path,
+    path: path,
     name: name,
+    formInfo: formInfo,
     // id,
     createdTime: time,
     updateTime: time,
@@ -226,29 +236,30 @@ export const saveForm = (
   })
     .then(response => {
       console.log("res", response);
-      if (type === "back") {
-        // console.log("response",response);
-        message.success("保存成功", 1, () => {
-          dispatch({
-            type: SAVE_FORM_CHANGE,
-            localForm: response.data,
-            data: response.data.components
-          });
-          let newPath = window.location.pathname
-            .split("/")
-            .splice(0, window.location.pathname.split("/").length - 3)
-            .join("/");
-          window.location.href = `${window.location.origin}${newPath}`;
-        });
-      } else {
-        message.success("保存成功", 1);
-        dispatch({
-          type: SAVE_FORM_CHANGE,
-          localForm: response.data,
-          data: response.data.components
-        });
-        callback();
-      }
+      callback(url + "?formId=" + response.data.id);
+      // if (type === "back") {
+      //   // console.log("response",response);
+      //   message.success("保存成功", 1, () => {
+      //     dispatch({
+      //       type: SAVE_FORM_CHANGE,
+      //       localForm: response.data,
+      //       data: response.data.components
+      //     });
+      //     let newPath = window.location.pathname
+      //       .split("/")
+      //       .splice(0, window.location.pathname.split("/").length - 3)
+      //       .join("/");
+      //     window.location.href = `${window.location.origin}${newPath}`;
+      //   });
+      // } else {
+      //   message.success("保存成功", 1);
+      //   dispatch({
+      //     type: SAVE_FORM_CHANGE,
+      //     localForm: response.data,
+      //     data: response.data.components
+      //   });
+      //   callback();
+      // }
     })
     .catch(err => {
       // if (err.response.data === "Token Expired") {
@@ -256,6 +267,10 @@ export const saveForm = (
       //   // mockLoginAndSetData(false, true );
       // } else {
       console.info(err);
+      if ((err.response.data.code = "1002")) {
+        message.error("该api已存在");
+      }
+
       // }
     });
 };

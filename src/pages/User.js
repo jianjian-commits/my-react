@@ -35,7 +35,7 @@ const webs = [
 
 const otherRoutes = [
   {
-    path: "/user/profile/view/:id",
+    path: "/user/profile/:action/:id",
     key: "viewGroupDetail",
     component: GroupDetail
   }

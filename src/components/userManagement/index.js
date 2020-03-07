@@ -4,12 +4,12 @@ import classes from "./user.module.scss";
 import InviteUser from "./inviteUser";
 
 export default connect(({ login }) => ({
-  loginData: login.loginData
+  loginData: login
 }))(function UserManagement({ loginData }) {
   return (
     <div className={classes.wrapper}>
       <div>
-        <InviteUser loginData={loginData} />
+        <InviteUser {...loginData} />
       </div>
       <div>我是用户列表</div>
     </div>

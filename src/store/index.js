@@ -10,7 +10,6 @@ import homeReducer from "../components/formBuilder/component/homePage/redux/redu
 import formSubmitDataReducer from "../components/formBuilder/component/formData/redux/reducer";
 import formBuilderReducer from "../components/formBuilder/component/formBuilder/redux/reducer";
 import login from "./loginReducer";
-import user from "./userDetailReducer";
 
 export const history = createBrowserHistory();
 
@@ -22,7 +21,6 @@ const reducers = history =>
     survey: surveyReducer,
     formBuilder: formBuilderReducer,
     rootData: rootReducer,
-    user,
     router: connectRouter(history)
   });
 

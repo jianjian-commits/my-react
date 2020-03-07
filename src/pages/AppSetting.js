@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Layout, Input, Button, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../utils/request";
@@ -8,6 +8,7 @@ import DraggableList, {
 } from "../components/shared/DraggableList";
 
 import classes from "../styles/apps.module.scss";
+import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId) => [
@@ -112,8 +113,29 @@ const AppSetting = () => {
     }
   };
 
+  const [visible, setVisible] = useState(false);
+  const modalProps = {
+    visible,
+    showModal: () => {
+      setVisible(true);
+    },
+
+    handleCancel: e => {
+      setVisible(false);
+    },
+
+    handleOK: e => {
+      setVisible(false);
+    }
+  };
+
   return (
     <Layout>
+      <ForInfoModal
+        key={Math.random()}
+        {...modalProps}
+        url={"/app/${appId}/setting/form/sWw/edit"}
+      />
       <CommonHeader navigationList={navigationList(history, appId)} />
       <Layout>
         <Sider className={classes.appSider} theme="light">
@@ -127,6 +149,8 @@ const AppSetting = () => {
                 if (list[0].key !== "") {
                   history.push(`/app/${appId}/setting/form/create`);
                 }
+                modalProps.showModal();
+                // history.push(`/app/${appId}/setting/form/sWw/edit`);
               }}
             >
               新建表单

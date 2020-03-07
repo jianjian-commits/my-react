@@ -56,17 +56,21 @@ class Apps extends React.Component {
 
   // 完成新建
   async handleCreate(data) {
-    const res = await request("/customApplication", {
-      method: "POST",
-      data: JSON.stringify(data)
-    });
-    if (res && res.status === "SUCCESS") {
-      message.success("创建应用成功");
-      this.getList();
-    } else {
+    try {
+      const res = await request("/customApplication", {
+        method: "POST",
+        data
+      });
+      if (res && res.status === "SUCCESS") {
+        message.success("创建应用成功");
+        this.getList();
+        this.handleCancel();
+      } else {
+        message.error("创建应用失败");
+      }
+    } catch (err) {
       message.error("创建应用失败");
     }
-    this.handleCancel();
   }
 
   // 取消新建/关闭模态窗
@@ -78,19 +82,24 @@ class Apps extends React.Component {
 
   // 获取到所有的应用列表
   async getList() {
-    const res = await request("/customApplication/list", {
-      method: "POST",
-      data: {
-        page: "1",
-        size: "10"
-      }
-    });
-    if (res && res.status === "SUCCESS") {
-      return this.setState({
-        createDatas: res.data.datas
+    try {
+      const res = await request("/customApplication/list", {
+        method: "POST",
+        data: {
+          page: "1",
+          size: "10"
+        }
       });
+      if (res && res.status === "SUCCESS") {
+        return this.setState({
+          createDatas: res.data.datas
+        });
+      } else {
+        message.error("获取应用列表失败");
+      }
+    } catch (err) {
+      message.error("获取应用列表失败");
     }
-    message.error("获取应用列表失败");
   }
 
   componentDidMount() {
