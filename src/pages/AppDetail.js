@@ -114,7 +114,7 @@ const AppDetail = () => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {selectedForm != void 0 ? (
+          {selectedForm !== void 0 ? (
             <>
               <button
                 onClick={_e => {
