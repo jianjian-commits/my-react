@@ -14,7 +14,7 @@ export default connect(
   }),
   { getCurrentTeam }
 )(function TeamMember({ loginData, getCurrentTeam }) {
-  const [teamId] = React.useState(loginData.currentTeam.id);
+  const [teamId, setTeamId] = React.useState(loginData.currentTeam.id);
   const [isShow, setIsShow] = React.useState(false); //筛选的显示开关
   const [changeGroup, setChangeGroup] = React.useState(false); //变更分组模态框显示开关
   const [data, setData] = React.useState(null); //用户数据
@@ -75,9 +75,6 @@ export default connect(
       method: "PUT",
       data: { oldTeamId: teamId }
     })
-      .catch(err => {
-        message.success("失败");
-      })
       .then(async res => {
         const newData = await request(`/sysUser/currentTeam/all`, {
           method: "POST",
@@ -86,9 +83,19 @@ export default connect(
         if (Math.ceil(newData.data.total / size) < page) {
           setPage(Math.ceil(newData.data.total / size));
         }
+        newData.data.datas.forEach(item => {
+          item.key = item.id;
+          item.lastModifiedDate = new Date().toLocaleString(
+            item.lastModifiedDate
+          );
+          item.groupName = item.group.name;
+        });
         setData(newData.data.datas);
         setTotal(newData.data.total);
         message.success("成功");
+      })
+      .catch(err => {
+        message.error("踢出失败");
       });
   };
 
@@ -113,7 +120,25 @@ export default connect(
   // 变更分组后的回调
   const changeGroupCal = async () => {
     await getCurrentTeam();
-    await gainData();
+    const res = await request(`/sysUser/currentTeam/all`, {
+      method: "POST",
+      data: { page: page, size }
+    });
+    console.log(res);
+    if (res.status === "UNAUTHORIZED") {
+      setData(res.data);
+      message.error("未授权，请确认权限再操作");
+    } else {
+      res.data.datas.forEach(item => {
+        item.key = item.id;
+        item.lastModifiedDate = new Date().toLocaleString(
+          item.lastModifiedDate
+        );
+        item.groupName = item.group.name;
+      });
+      setTotal(res.data.total);
+      setData(res.data.datas);
+    }
     setChangeGroup(!changeGroup);
   };
 
@@ -121,21 +146,9 @@ export default connect(
     setPage(e);
   };
 
-  //获取成员
-  const gainData = async () => {
-    const res = await request(`/sysUser/currentTeam/all`, {
-      method: "POST",
-      data: { page: page, size }
-    });
-    res.data.datas.forEach(item => {
-      item.key = item.id;
-      item.lastModifiedDate = new Date().toLocaleString(item.lastModifiedDate);
-      item.groupName = item.group.name;
-    });
-    setTotal(res.data.total);
-    setData(res.data.datas);
-  };
+  // 管理员操作显示控制
   useEffect(() => {
+    setTeamId(loginData.currentTeam.id);
     setOnSwitch(
       loginData.currentTeam.groups.filter(item => {
         return item.name === "超级管理员";
@@ -144,9 +157,35 @@ export default connect(
         : false
     );
   }, [loginData]);
+
+  //获取成员
   useEffect(() => {
+    const gainData = async () => {
+      await getCurrentTeam();
+      request(`/sysUser/currentTeam/all`, {
+        method: "POST",
+        data: { page: page, size }
+      })
+        .then(res => {
+          res.data.datas.forEach(item => {
+            item.key = item.id;
+            item.lastModifiedDate = new Date().toLocaleString(
+              item.lastModifiedDate
+            );
+            item.groupName = item.group.name;
+          });
+          setData(res.data.datas);
+          setTotal(res.data.total);
+        })
+        .catch(err => {
+          console.log(err.response);
+          message.error(err.response.data.msg);
+          setTotal(0);
+          setData(null);
+        });
+    };
     gainData();
-  }, [page, loginData]);
+  }, [page, teamId]);
   return true ? (
     <div className={classes.container}>
       <Row type="flex" justify="space-between" className={classes.box}>
