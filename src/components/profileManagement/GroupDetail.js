@@ -186,8 +186,7 @@ class GroupDetail extends Component {
       });
       if (res && res.status === "SUCCESS") {
         message.success("保存成功！");
-      } else {
-        message.error("保存失败！");
+        this.props.enterDetail(false);
       }
     } catch (err) {
       message.error("保存失败！");
