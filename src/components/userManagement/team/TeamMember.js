@@ -27,7 +27,7 @@ export default connect(
   });
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
-    pageSize: 1
+    pageSize: 5
   });
   const columns = [
     {

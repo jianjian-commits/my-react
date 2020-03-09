@@ -80,12 +80,12 @@ const data = [
 
 const TransactList = props => {
   const _title = (() => {
-    switch (props.count) {
-      case 0:
+    switch (props.approvalKey) {
+      case "myPending":
         return "我的待办";
-      case 1:
+      case "mySubmitted":
         return "我发起的";
-      case 2:
+      case "myHandled":
         return "我处理的";
       default:
         return "我的待办";

@@ -20,8 +20,8 @@ export const ApprovalSection = props => {
       icon: "setting",
       label: "我的待办",
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/0`);
-        props.fn(0);
+        history.push(`${baseUrl(history.location.pathname)}/myPending`);
+        props.fn("myPending");
       }
     },
     {
@@ -29,8 +29,8 @@ export const ApprovalSection = props => {
       icon: "setting",
       label: "我发起的",
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/1`);
-        props.fn(1);
+        history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
+        props.fn("mySubmitted");
       }
     },
     {
@@ -38,8 +38,8 @@ export const ApprovalSection = props => {
       icon: "setting",
       label: "我处理的",
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/2`);
-        props.fn(2);
+        history.push(`${baseUrl(history.location.pathname)}/myHandled`);
+        props.fn("myHandled");
       }
     }
   ];
