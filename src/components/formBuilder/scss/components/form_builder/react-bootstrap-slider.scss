@@ -2,3 +2,8 @@ $slider-horizontal-width: 100%;
 
 @import "../../../../../../node_modules/bootstrap-slider/src/sass/bootstrap-slider";
 @import "../../../../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+// bootstrap 影响 antd， 样式修正
+svg {
+  vertical-align: baseline;
+}
