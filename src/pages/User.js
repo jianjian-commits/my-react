@@ -3,8 +3,8 @@ import { Layout, Menu, Icon } from "antd";
 import { history } from "../store";
 // import CommonHeader from "../components/header/CommonHeader";
 import HomeHeader from "../components/header/HomeHeader";
-import TeamInfo from "../components/team/TeamInfo";
-import TeamMember from "../components/team/TeamMember";
+import TeamInfo from "../components/userManagement/team/TeamInfo";
+import TeamMember from "../components/userManagement/team/TeamMember";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
 
