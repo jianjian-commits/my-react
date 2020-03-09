@@ -4,17 +4,17 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   padding: 0px;
   margin: 0px;
 }
-body {
-  background-color: rgba(243, 244, 245, 1);
-}
-.ant-tooltip-inner {
-  background-color: red;
-}
-.ant-tooltip-arrow {
-  &::before {
-    background-color: red;
-  }
-}
+// body {
+//   background-color: rgba(243, 244, 245, 1);
+// }
+// .ant-tooltip-inner {
+//   background-color: red;
+// }
+// .ant-tooltip-arrow {
+//   &::before {
+//     background-color: red;
+//   }
+// }
 .formBuilder-SatisfySurvey {
   width: 900px;
   height: 962px;
