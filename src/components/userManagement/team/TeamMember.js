@@ -117,8 +117,9 @@ export default connect(
             ...pageConfig,
             currentPage: pageConfig.currentPage - 1
           });
+        } else {
+          gainData();
         }
-        gainData();
         message.success("成功");
         await getCurrentTeam();
       })
