@@ -1,5 +1,6 @@
 import React from "react";
-import { Icon, Button, Row, Col, List, Table, Typography } from "antd";
+import { Button, Row, Col, List, Table, Typography } from "antd";
+import { useHistory } from "react-router-dom";
 
 import clasess from "./transactionDetail.module.scss";
 
@@ -76,12 +77,17 @@ const data = [
 ];
 
 const TransactionDetail = () => {
+  const history = useHistory();
+  const onClickBack = () => {
+    console.log(history);
+    history.goBack();
+  };
   return (
     <div className={clasess.box}>
-      <Row type="flex" gutter={10} className={clasess.title}>
+      <Row type="flex" align="middle" gutter={10} className={clasess.title}>
         <Col>
           <Title level={3}>
-            <Icon type="arrow-left" />
+            <Button icon="arrow-left" onClick={onClickBack}></Button>
           </Title>
         </Col>
         <Col>
@@ -93,7 +99,9 @@ const TransactionDetail = () => {
           <Title level={4}>记录信息</Title>
         </Col>
         <Col>
-          <Button type="danger">拒绝</Button>
+          <Button type="danger" style={{ marginRight: "20px" }}>
+            拒绝
+          </Button>
           <Button type="primary">通过</Button>
         </Col>
       </Row>

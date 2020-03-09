@@ -11,11 +11,11 @@ import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 const { Content, Sider } = Layout;
 
-const navigationList = (history, appId) => [
+const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
-    label: "13号Devinci应用",
+    label: `${appName}`,
     onClick: () => history.push(`/app/${appId}/detail`)
   },
   { key: 1, label: "应用设置", disabled: true }
@@ -55,7 +55,7 @@ const navigationList = (history, appId) => [
 //   ]
 // };
 
-const AppSetting = () => {
+const AppSetting = props => {
   const { appId } = useParams();
   const history = useHistory();
   const [searchKey, setSearchKey] = React.useState(null);
@@ -188,4 +188,6 @@ const AppSetting = () => {
     </Layout>
   );
 };
-export default AppSetting;
+export default connect(({ app }) => ({
+  appList: app.appList
+}))(AppSetting);

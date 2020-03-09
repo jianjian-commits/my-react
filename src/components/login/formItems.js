@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Input, Button, Icon, message } from "antd";
-import request from "./request";
-import itemsStyles from "../styles/login.module.scss";
+import request from "../../utils/request";
+import itemsStyles from "../../styles/login.module.scss";
 
 // 发送验证码
 async function sendVerificationCode(mobilePhone) {
@@ -59,16 +59,16 @@ const checkEmail = async (rule, value, callback) => {
   }
   callback();
 };
-const checkCompanyNamePresence = async (rule, value, callback) => {
-  if (!value) return callback();
-  try {
-    const result = await request(`/company/name/${value}/check`);
-    if (result && result.data === true) return callback("该公司未被创建");
-  } catch (err) {
-    message.error("校验失败");
-  }
-  callback();
-};
+// const checkCompanyNamePresence = async (rule, value, callback) => {
+//   if (!value) return callback();
+//   try {
+//     const result = await request(`/company/name/${value}/check`);
+//     if (result && result.data === true) return callback("该公司未被创建");
+//   } catch (err) {
+//     message.error("校验失败");
+//   }
+//   callback();
+// };
 
 // {
 //   pattern: "(?!.*_$)(?!.*__.*)^[a-zA-Z][a-zA-Z0-9_]*$",
@@ -84,8 +84,8 @@ const username = ({ form, payload }) => {
       validateTrigger: "onBlur",
       rules: [
         required("用户名不可为空"),
-        whitespace(),
-        maxLength(20, "用户名过长，最多20个字符")
+        whitespace()
+        // maxLength(20, "用户名过长，最多20个字符")
       ]
     },
     component: (
@@ -320,8 +320,8 @@ const companyName = ({ form, payload }) => {
         required("请输入公司名称"),
         whitespace(),
         requireChinese(),
-        maxLength(30, "z公司名称过长，最多30个字符"),
-        payload === "redit" && { validator: checkCompanyNamePresence }
+        maxLength(30, "z公司名称过长，最多30个字符")
+        // payload === "redit" && { validator: checkCompanyNamePresence }
       ]
     },
     component: (
@@ -358,7 +358,7 @@ const userEmail = ({ form, payload }) => {
   };
 };
 
-const submit = ({ form, payload, userId, teamId, token }) => ({
+const submit = ({ form, payload, teamId, userId, token }) => ({
   itemName: "actionType",
   options: {
     initialValue: payload
@@ -394,11 +394,6 @@ const submit = ({ form, payload, userId, teamId, token }) => ({
           <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
         </div>
       )}
-      {/* {payload === "addTeam" && (
-        <div style={{ textAlign: "center" }}>
-          返回<Link to={`/login/${userId}/${invited_token}`}>登录</Link>
-        </div>
-      )} */}
     </>
   )
 });

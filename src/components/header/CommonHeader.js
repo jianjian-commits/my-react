@@ -4,6 +4,7 @@ import { Layout, Breadcrumb, Button } from "antd";
 import User from "./UserSection";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
+import { getAppList } from "../../store/appReducer";
 
 const { Header } = Layout;
 const logoStyle = {
@@ -15,6 +16,7 @@ const logoStyle = {
 
 const getNavigationList = navs => {
   if (!navs || !navs.length) return null;
+  if (navs.filter(v => !v.label).length > 0) return null;
   return (
     <div className={classes.breadCrumbs}>
       <Breadcrumb separator=">">
@@ -45,9 +47,16 @@ const getOperations = ops => {
   ));
 };
 
-export default connect(({ router }) => ({
-  router
-}))(function CommonHeader(props) {
+export default connect(
+  ({ router, app }) => ({
+    router,
+    appList: app.appList
+  }),
+  { getAppList }
+)(function CommonHeader(props) {
+  if (props.appList.length === 0) {
+    props.getAppList();
+  }
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>

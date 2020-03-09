@@ -14,9 +14,9 @@ import request from "../utils/request";
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
-const navigationList = history => [
+const navigationList = (appName, history) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-  { key: 1, label: "13号Devinci应用", disabled: true }
+  { key: 1, label: `${appName}`, disabled: true }
 ];
 
 const getOreations = (appId, history) => [
@@ -62,7 +62,7 @@ const getOreations = (appId, history) => [
 //   ]
 // };
 
-const AppDetail = () => {
+const AppDetail = props => {
   const { appId, menuId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
@@ -116,6 +116,7 @@ const AppDetail = () => {
 
   //根据点击菜单栏加载内容组件
   const onClickMenu = (key, e) => {
+    setSelectedForm(null);
     setEle(selectCom(key, appDetailMenu));
   };
 
@@ -128,7 +129,7 @@ const AppDetail = () => {
   return (
     <Layout>
       <CommonHeader
-        navigationList={navigationList(history)}
+        navigationList={navigationList(appName, history)}
         operations={getOreations(appId, history)}
       />
       <Layout>
@@ -183,12 +184,14 @@ const AppDetail = () => {
                 ></FormBuilderSubmitData>
               )}
             </>
-          ) : (
-            <></>
-          )}
+          ) : ele != null ? (
+            <ele.ContentEle count={ele.key} />
+          ) : null}
         </Content>
       </Layout>
     </Layout>
   );
 };
-export default AppDetail;
+export default connect(({ app }) => ({
+  appList: app.appList
+}))(AppDetail);

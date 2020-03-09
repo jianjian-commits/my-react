@@ -4,3 +4,10 @@
 .title {
   padding: 10px 0;
 }
+.agree {
+  border: none;
+  &:hover {
+    background: #aaa;
+    color: #fff;
+  }
+}

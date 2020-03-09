@@ -1,5 +1,6 @@
 import { message } from "antd";
 import request from "../utils/request";
+import { getAppList } from "./appReducer";
 
 export const initialState = {
   isLoading: false,
@@ -58,16 +59,29 @@ export const fetchUserDetail = payload => ({
   payload
 });
 
-//更新个人信息
-export const updateUserDetail = (userId, payload) => async dispatch => {
+//转换当前团队
+export const switchCurrentTeam = teamId => async dispatch => {
   try {
-    const res = await request(`/sysUser/${userId}`, {
+    const res = await request(`/team/${teamId}/currentTeam`, { method: "put" });
+    if (res && res.status === "SUCCESS") {
+      dispatch(getCurrentTeam());
+      dispatch(getAppList());
+    }
+  } catch (error) {
+    message.error("团队转换失败");
+  }
+};
+
+//更新个人信息
+export const updateUserDetail = payload => async dispatch => {
+  try {
+    const res = await request(`/sysUser`, {
       method: "put",
       data: payload
     });
     if (res && res.status === "SUCCESS") {
       message.success("修改成功");
-      await getUserDetail(userId)(dispatch);
+      await getUserDetail()(dispatch);
     }
   } catch (error) {
     message.error("个人信息修改失败");
@@ -75,9 +89,9 @@ export const updateUserDetail = (userId, payload) => async dispatch => {
 };
 
 //获取个人信息
-export const getUserDetail = userId => async dispatch => {
+export const getUserDetail = () => async dispatch => {
   try {
-    const res = await request(`/sysUser/${userId}`);
+    const res = await request(`/sysUser/current`);
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("userDetail", JSON.stringify(res.data));
       dispatch(fetchUserDetail(res.data));
@@ -88,9 +102,9 @@ export const getUserDetail = userId => async dispatch => {
 };
 
 //获取当前团队信息
-export const getCurrentTeam = teamId => async dispatch => {
+export const getCurrentTeam = () => async dispatch => {
   try {
-    const res = await request(`/team/${teamId}`);
+    const res = await request(`/team/current`);
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("currentTeam", JSON.stringify(res.data));
       dispatch(fetchCurrentTeam(res.data));
@@ -103,7 +117,7 @@ export const getCurrentTeam = teamId => async dispatch => {
 //获取所有团队信息
 export const getAllTeam = () => async dispatch => {
   try {
-    const res = await request(`/team/currentUser/all`);
+    const res = await request(`/team/currentSysUser/all`);
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("allTeam", JSON.stringify(res.data));
       dispatch(fetchAllTeam(res.data));
@@ -116,12 +130,12 @@ export const getAllTeam = () => async dispatch => {
 //初始化所有信息
 export const initAllDetail = () => async dispatch => {
   try {
-    const res = await request("/currentUser");
+    const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("userDetail", JSON.stringify(res.data));
-      dispatch(fetchUserDetail(res.data));
-      await getCurrentTeam(res.data.teamId)(dispatch);
       await getAllTeam(res.data.id)(dispatch);
+      getCurrentTeam()(dispatch);
+      dispatch(fetchUserDetail(res.data));
     }
   } catch (error) {
     message.error("获取当前用户信息失败");
@@ -137,8 +151,10 @@ export const loginUser = ({ token, rest }) => async dispatch => {
       data: { loginType: "PASSWORD", ...rest }
     });
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("id_token", 1);
-      dispatch(loginSuccess());
+      setTimeout(() => {
+        localStorage.setItem("id_token", 1);
+        dispatch(loginSuccess());
+      }, 2000);
     }
   } catch (err) {
     dispatch(loginFailure());

@@ -23,7 +23,7 @@ export default connect(({ router }) => ({
   const selectHandle = e => {
     history.push(e.key);
   };
-  const toUserMangement = () => history.push("/user/users");
+  const toUserMangement = () => history.push("/user/info");
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>
@@ -46,7 +46,7 @@ export default connect(({ router }) => ({
         </div>
         <div className={classes.operations}>
           <Button icon="user" onClick={toUserMangement}>
-            用户管理
+            团队管理
           </Button>
         </div>
         <div className={classes.user}>

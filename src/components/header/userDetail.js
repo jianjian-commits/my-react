@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Modal, Form } from "antd";
 import { updateUserDetail } from "../../store/loginReducer";
 import HomeHeader from "./HomeHeader";
-import { userDetailParameter, formItems } from "../../utils/formItems";
+import { userDetailParameter, formItems } from "../login/formItems";
 import userDetailStyles from "./header.module.scss";
 
 export default Form.create({ name: "reset-form" })(
@@ -75,7 +75,7 @@ export default Form.create({ name: "reset-form" })(
       validateFields((err, { actionType, verificationCode, ...rest }) => {
         if (!err) {
           console.log("Received values of form: ", rest);
-          updateUserDetail(userDetail.id, rest).then(() => {
+          updateUserDetail(rest).then(() => {
             setModalMeter(initModalMeter);
           });
         }
