@@ -5,15 +5,15 @@ import classes from "./team.module.scss";
 
 const { Option } = Select;
 const Filter = props => {
-  const [data, setData] = React.useState([]);
+  const [data] = React.useState([]);
   const [inputStr, setInputStr] = React.useState(null); //输入框关键字
-  const [groupKey, setGroupKey] = React.useState(null); //分组关键字
+  // const [groupKey, setGroupKey] = React.useState(null); //分组关键字
   const onChangeInput = e => {
     const { value } = e.target;
     setInputStr(value);
   };
   const onChange = value => {
-    setGroupKey(value);
+    // setGroupKey(value);
   };
   const groups = Array.from(
     new Set(
@@ -24,23 +24,6 @@ const Filter = props => {
   );
 
   // 过滤
-  const onClickFilter = () => {
-    const newData = groupKey
-      ? data.filter(item => {
-          return item.group === groupKey;
-        })
-      : data;
-    const resultData = inputStr
-      ? newData.filter(item => {
-          return (
-            item.name.includes(inputStr) ||
-            item.mail.includes(inputStr) ||
-            item.nickname.includes(inputStr)
-          );
-        })
-      : newData;
-    props.fn(resultData);
-  };
   return (
     <div className={classes.fliter}>
       <Row>

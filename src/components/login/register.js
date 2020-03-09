@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Result } from "antd";
-import request from "../utils/request";
-import registerStyles from "../styles/login.module.scss";
-import PublicForm from "../utils/publicForm";
-import { registerParameter } from "../utils/formItems";
-import Loading from "./loading";
+import request from "../../utils/request";
+import registerStyles from "../../styles/login.module.scss";
+import PublicForm from "./publicForm";
+import { registerParameter } from "./formItems";
+import Loading from "../../pages/Loading";
 
 export default connect()(function Register({ history, match }) {
-  const { userId, token } = match.params;
+  const { token } = match.params;
   if (!history.location.query && history.location.pathname !== "/register")
     history.push("/register");
   const { inviter, invitedTeam } = history.location.query || {};
@@ -18,7 +18,7 @@ export default connect()(function Register({ history, match }) {
   const registerUser = async ({ actionType, rest }) => {
     setSpinning(true);
     try {
-      const res = await request(userId ? `/reg?token=${token}` : "/reg", {
+      const res = await request(token ? `/reg?token=${token}` : "/reg", {
         method: "post",
         data: rest
       });
@@ -49,7 +49,7 @@ export default connect()(function Register({ history, match }) {
         <div className={registerStyles.title}>
           <div>
             <h2>
-              {userId ? (
+              {token ? (
                 <>
                   <BlueFont>{inviter}</BlueFont>
                   邀请您加入团队<BlueFont>{invitedTeam}</BlueFont>

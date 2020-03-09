@@ -7,7 +7,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "componentized-process": "git+http://192.168.3.101/wct/frontend-componentized-process.git#0d8c77389a814c2e34ef019a3301a29d3ea65edd",
+    "componentized-process": "git+http://192.168.3.101/wct/frontend-componentized-process.git#795102c368ce8be9662d7f3403fa29f22edd4044",
     "antd": "^3.26.7",
     "antd-mobile": "^2.3.1",
     "axios": "^0.19.1",

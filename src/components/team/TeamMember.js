@@ -1,34 +1,30 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import {
-  Button,
-  Row,
-  Col,
-  Table,
-  Popconfirm,
-  message,
-  Modal,
-  Spin
-} from "antd";
+import { Button, Row, Col, Table, Popconfirm, message, Spin } from "antd";
 import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../utils/request";
-import InviteUser from "../userManagement/inviteUser";
+import { getCurrentTeam } from "../../store/loginReducer";
+import InviteUser from "../userManagement/modalInviteUser";
 
-export default connect(({ login }) => ({
-  loginData: login
-}))(function TeamMember({ loginData }) {
+export default connect(
+  ({ login }) => ({
+    loginData: login
+  }),
+  { getCurrentTeam }
+)(function TeamMember({ loginData, getCurrentTeam }) {
   const [teamId, setTeamId] = React.useState(loginData.currentTeam.id);
-  const [isShow, setIsShow] = React.useState(false);
-  const [visible, setVisible] = React.useState(false);
-  const [changeGroup, setChangeGroup] = React.useState(false);
-  const [data, setData] = React.useState(null);
-  const [userKey, setUserKey] = React.useState(null);
-  const [onSwitch, setOnSwitch] = React.useState(0);
-  const [page, setPage] = React.useState(1);
-  const [total, setTotal] = React.useState(null);
-  //判断管理员的个数及是否有操作按钮
+  const [isShow, setIsShow] = React.useState(false); //筛选的显示开关
+  const [changeGroup, setChangeGroup] = React.useState(false); //变更分组模态框显示开关
+  const [data, setData] = React.useState(null); //用户数据
+  const [userKey, setUserKey] = React.useState(null); //变更分组用户的Id
+  const [groupKey, setGroupKey] = React.useState(null); //变更分组用户的当前分组id
+  const [onSwitch, setOnSwitch] = React.useState(null); //管理员操作按钮显示
+  const [page, setPage] = React.useState(1); //页码
+  const [total, setTotal] = React.useState(null); //数据总量
+  const [size] = React.useState(5); //每页显示数量
+
   const columns = [
     {
       title: "姓名",
@@ -50,18 +46,17 @@ export default connect(({ login }) => ({
       title: "操作",
       key: "action",
       render: (text, record) => {
-        // console.log(text)
-        return text.groupName === "超级管理员" && onSwitch ? null : (
+        return text.group.name === "超级管理员" && onSwitch ? null : (
           <span>
             <Button
               type="link"
-              onClick={handleChange.bind(this, text.name)}
+              onClick={handleChange.bind(this, text)}
               style={{ paddingLeft: "0" }}
             >
               变更分组
             </Button>
             <Popconfirm
-              title="把改成员从团队中踢出?"
+              title="把该成员从团队中踢出?"
               onConfirm={confirm.bind(this, text.id)}
               onCancel={cancel}
               okText="确认"
@@ -76,17 +71,31 @@ export default connect(({ login }) => ({
     }
   ];
   const confirm = sysUserId => {
-    request(`/team/${teamId}`, { method: "DELETE", data: { sysUserId } })
-      .catch(err => {
-        message.success("失败");
-      })
-      .then(res => {
-        console.log(data);
-        const newData = data.filter(item => {
-          return item.key != sysUserId;
+    request(`/sysUser/${sysUserId}/team`, {
+      method: "PUT",
+      data: { oldTeamId: teamId }
+    })
+      .then(async res => {
+        const newData = await request(`/sysUser/currentTeam/all`, {
+          method: "POST",
+          data: { page: page, size: size }
         });
-        setData(newData);
+        if (Math.ceil(newData.data.total / size) < page) {
+          setPage(Math.ceil(newData.data.total / size));
+        }
+        newData.data.datas.forEach(item => {
+          item.key = item.id;
+          item.lastModifiedDate = new Date().toLocaleString(
+            item.lastModifiedDate
+          );
+          item.groupName = item.group.name;
+        });
+        setData(newData.data.datas);
+        setTotal(newData.data.total);
         message.success("成功");
+      })
+      .catch(err => {
+        message.error("踢出失败");
       });
   };
 
@@ -101,16 +110,34 @@ export default connect(({ login }) => ({
   const filterData = value => {
     setData(value);
   };
-  // 邀请模态框
-  const showModalInvite = () => {
-    setVisible(true);
-  };
-  const handleCancel = () => {
-    setVisible(false);
+
+  const handleChange = (obj, e) => {
+    setGroupKey(obj.group.id);
+    setUserKey(obj.id);
+    setChangeGroup(!changeGroup);
   };
 
-  const handleChange = (value, e) => {
-    setUserKey(value);
+  // 变更分组后的回调
+  const changeGroupCal = async () => {
+    await getCurrentTeam();
+    const res = await request(`/sysUser/currentTeam/all`, {
+      method: "POST",
+      data: { page: page, size }
+    });
+    if (res.status === "UNAUTHORIZED") {
+      setData(res.data);
+      message.error("未授权");
+    } else {
+      res.data.datas.forEach(item => {
+        item.key = item.id;
+        item.lastModifiedDate = new Date().toLocaleString(
+          item.lastModifiedDate
+        );
+        item.groupName = item.group.name;
+      });
+      setTotal(res.data.total);
+      setData(res.data.datas);
+    }
     setChangeGroup(!changeGroup);
   };
 
@@ -118,33 +145,47 @@ export default connect(({ login }) => ({
     setPage(e);
   };
 
+  // 管理员操作显示控制
+  useEffect(() => {
+    setTeamId(loginData.currentTeam.id);
+    setOnSwitch(
+      loginData.currentTeam.groups.filter(item => {
+        return item.name === "超级管理员";
+      })[0].peopleNumber === 1
+        ? true
+        : false
+    );
+  }, [loginData]);
+
   //获取成员
   useEffect(() => {
-    const gainData = async (size = 2) => {
-      const res = await request(`/sysUser/team/${teamId}`, {
+    const gainData = async () => {
+      await getCurrentTeam();
+      request(`/sysUser/currentTeam/all`, {
         method: "POST",
         data: { page: page, size }
-      });
-      console.log(res);
-      res.data.datas.forEach(item => {
-        item.key = item.id;
-        item.lastModifiedDate = new Date().toLocaleString(
-          item.lastModifiedDate
-        );
-      });
-      setOnSwitch(
-        res.data.datas.filter(item => {
-          return item.group === "超级管理员";
-        }).length === 1
-          ? true
-          : false
-      );
-      setTotal(res.data.total);
-      setData(res.data.datas);
+      })
+        .then(res => {
+          res.data.datas.forEach(item => {
+            item.key = item.id;
+            item.lastModifiedDate = new Date().toLocaleString(
+              item.lastModifiedDate
+            );
+            item.groupName = item.group.name;
+          });
+          setData(res.data.datas);
+          setTotal(res.data.total);
+        })
+        .catch(err => {
+          console.log(err.response);
+          message.error(err.response.data.msg);
+          setTotal(0);
+          setData(null);
+        });
     };
     gainData();
-  }, [page]);
-  return data ? (
+  }, [page, teamId, size, getCurrentTeam]);
+  return true ? (
     <div className={classes.container}>
       <Row type="flex" justify="space-between" className={classes.box}>
         <Col>
@@ -163,15 +204,17 @@ export default connect(({ login }) => ({
       </Row>
       {isShow ? <Filter fn={filterData} /> : null}
       <Table
-        pagination={{ total: total, pageSize: 2, onChange: onChangePage }}
+        pagination={{ total, pageSize: size, onChange: onChangePage }}
         columns={columns}
         dataSource={data}
       />
       {changeGroup ? (
         <ChangeGroup
+          groups={loginData.currentTeam.groups}
+          groupKey={groupKey}
           userKey={userKey}
           visible={changeGroup}
-          fn={handleChange}
+          fn={changeGroupCal}
         />
       ) : null}
     </div>

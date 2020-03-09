@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Switch, useRouteMatch } from "react-router-dom";
 import { history } from "../store";
 import { PrivateRoute } from "../components/shared";
@@ -91,11 +92,11 @@ const services = [
   },
   { key: "approval/list", name: "审批流", icon: "audit", component: Appr }
 ];
-const navigationList = (history, appId) => [
+const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
-    label: `${appId}`,
+    label: `${appName}`,
     onClick: () => history.push(`/app/${appId}/detail`)
   },
   {
@@ -106,9 +107,12 @@ const navigationList = (history, appId) => [
   { key: 1, label: "用车申请", disabled: true }
 ];
 
-const AppServices = () => {
+const AppServices = props => {
   const history = useHistory();
   const { appId, formId, serviceId } = useParams();
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
   const service = services.find(s => {
     return s.key.indexOf(serviceId) !== -1;
   });
@@ -121,7 +125,7 @@ const AppServices = () => {
   }
   return (
     <Layout>
-      <CommonHeader navigationList={navigationList(history, appId)} />
+      <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light" width={64}>
           <Menu className={classes.menuBorderNone} selectedKeys={serviceId}>
@@ -141,4 +145,6 @@ const AppServices = () => {
     </Layout>
   );
 };
-export default AppServices;
+export default connect(({ app }) => ({
+  appList: app.appList
+}))(AppServices);
