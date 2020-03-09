@@ -79,7 +79,7 @@ export default connect(
     }
   ];
   //获取成员
-  const gainData = useCallback(async () => {
+  const gainData = useCallback(() => {
     request(`/sysUser/currentTeam/all`, {
       method: "POST",
       data: { page: pageConfig.currentPage, size: pageConfig.pageSize }
@@ -100,13 +100,13 @@ export default connect(
         return currentTeam.id;
       });
   }, [pageConfig, currentTeam.id]);
-  //提出成员
+  //踢出成员
   const confirm = sysUserId => {
     request(`/sysUser/${sysUserId}/team`, {
       method: "PUT",
       data: { oldTeamId: currentTeam.id }
     })
-      .then(async res => {
+      .then(res => {
         if (
           pageConfig.currentPage >
           Math.ceil(
@@ -121,7 +121,7 @@ export default connect(
           gainData();
         }
         message.success("成功");
-        await getCurrentTeam();
+        getCurrentTeam();
       })
       .catch(err => {
         message.error("踢出失败");
@@ -155,10 +155,10 @@ export default connect(
         method: "PUT",
         data: { oldGroupId: key.groupKey, newGroupId: groupKey }
       })
-        .then(async res => {
+        .then(res => {
           gainData();
           message.success("成功");
-          await getCurrentTeam();
+          getCurrentTeam();
         })
         .catch(err => {
           message.error("变更失败");
