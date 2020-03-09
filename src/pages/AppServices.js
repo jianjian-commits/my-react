@@ -84,6 +84,7 @@ const Appr = () => {
 
 const services = [
   { key: "create", name: "表单创建", icon: "table", component: CreateForm },
+  { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
   {
     key: "process/list",
     name: "自动化",
@@ -92,8 +93,7 @@ const services = [
   },
   { key: "approval/list", name: "审批流", icon: "audit", component: Appr }
 ];
-
-const navigationList = (history, appId) => [
+const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
@@ -110,10 +110,13 @@ const navigationList = (history, appId) => [
 
 const AppServices = props => {
   const history = useHistory();
-  const { appId, formId } = useParams();
-  console.log(formId);
-  const service = services.find(s => s.key === formId);
-
+  const { appId, formId, serviceId } = useParams();
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
+  const service = services.find(s => {
+    return s.key.indexOf(serviceId) !== -1;
+  });
   const clickHandle = e => {
     history.push(`/app/${appId}/setting/form/${e.key}`);
   };

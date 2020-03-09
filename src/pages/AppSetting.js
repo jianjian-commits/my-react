@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { Layout, Input, Button, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../utils/request";
@@ -87,6 +88,9 @@ const AppSetting = props => {
       });
     });
   }, []);
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
 
   if (searchKey) {
     const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
@@ -136,7 +140,7 @@ const AppSetting = props => {
         {...modalProps}
         url={"/app/${appId}/setting/form/sWw/edit"}
       />
-      <CommonHeader navigationList={navigationList(history, appId)} />
+      <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>

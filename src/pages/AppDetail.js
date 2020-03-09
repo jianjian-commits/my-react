@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
@@ -8,8 +9,8 @@ import FormBuilderSubmitData from "../components/formBuilder/component/formData/
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 
 import selectCom from "../utils/selectCom";
-import appDetailMenu from "../config/appDetailMenu";
 import request from "../utils/request";
+import { appDetailMenu } from "../components/transactList/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -99,6 +100,9 @@ const AppDetail = props => {
       });
     });
   }, []);
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
 
   if (searchKey) {
     const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
@@ -156,13 +160,7 @@ const AppDetail = props => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {/* {ele ? (
-            <ele.ContentEle count={ele.key}></ele.ContentEle>
-          ) : (
-              <div></div>
-            )}*/}
-
-          {selectedForm !== null ? (
+          {selectedForm != void 0 ? (
             <>
               <button
                 onClick={_e => {
