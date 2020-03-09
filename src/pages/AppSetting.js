@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Input, Button, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../utils/request";
