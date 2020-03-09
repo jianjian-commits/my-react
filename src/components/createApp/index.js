@@ -87,6 +87,7 @@ class CreateModal extends Component {
           onOk={this.onOk.bind(this)}
           onCancel={this.onCancel.bind(this)}
           maskClosable={false}
+          className={classes.modalPadding}
         >
           <Form>
             <Form.Item label="应用名">

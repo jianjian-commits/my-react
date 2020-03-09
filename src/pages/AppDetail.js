@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
@@ -8,15 +9,15 @@ import FormBuilderSubmitData from "../components/formBuilder/component/formData/
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 
 import selectCom from "../utils/selectCom";
-import appDetailMenu from "../config/appDetailMenu";
 import request from "../utils/request";
+import { appDetailMenu } from "../components/transactList/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
-const navigationList = history => [
+const navigationList = (appName, history) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-  { key: 1, label: "13号Devinci应用", disabled: true }
+  { key: 1, label: `${appName}`, disabled: true }
 ];
 
 const getOreations = (appId, history) => [
@@ -62,7 +63,7 @@ const getOreations = (appId, history) => [
 //   ]
 // };
 
-const AppDetail = () => {
+const AppDetail = props => {
   const { appId, menuId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
@@ -99,6 +100,9 @@ const AppDetail = () => {
       });
     });
   }, []);
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
 
   if (searchKey) {
     const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
@@ -116,6 +120,7 @@ const AppDetail = () => {
 
   //根据点击菜单栏加载内容组件
   const onClickMenu = (key, e) => {
+    setSelectedForm(null);
     setEle(selectCom(key, appDetailMenu));
   };
 
@@ -128,7 +133,7 @@ const AppDetail = () => {
   return (
     <Layout>
       <CommonHeader
-        navigationList={navigationList(history)}
+        navigationList={navigationList(appName, history)}
         operations={getOreations(appId, history)}
       />
       <Layout>
@@ -155,13 +160,7 @@ const AppDetail = () => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {/* {ele ? (
-            <ele.ContentEle count={ele.key}></ele.ContentEle>
-          ) : (
-              <div></div>
-            )}*/}
-
-          {selectedForm !== null ? (
+          {selectedForm != void 0 ? (
             <>
               <button
                 onClick={_e => {
@@ -183,12 +182,14 @@ const AppDetail = () => {
                 ></FormBuilderSubmitData>
               )}
             </>
-          ) : (
-            <></>
-          )}
+          ) : ele != null ? (
+            <ele.ContentEle count={ele.key} />
+          ) : null}
         </Content>
       </Layout>
     </Layout>
   );
 };
-export default AppDetail;
+export default connect(({ app }) => ({
+  appList: app.appList
+}))(AppDetail);

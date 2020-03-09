@@ -1,27 +1,35 @@
 import React from "react";
 import { Layout, Menu, Icon } from "antd";
 import { history } from "../store";
-import CommonHeader from "../components/header/CommonHeader";
-import UserManagement from "../components/userManagement";
+// import CommonHeader from "../components/header/CommonHeader";
+import HomeHeader from "../components/header/HomeHeader";
+import TeamInfo from "../components/team/TeamInfo";
+import TeamMember from "../components/team/TeamMember";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
-import GroupDetail from "../components/profileManagement/GroupDetail";
 
 import { Route } from "react-router-dom";
 const { Sider, Content } = Layout;
 
-const navigationList = [
-  { key: 0, label: "首页", onClick: () => history.push("/app/list") },
-  { key: 1, label: "用户管理", disabled: true }
-];
+// const navigationList = [
+//   { key: 0, label: "首页", onClick: () => history.push("/app/list") },
+//   { key: 1, label: "用户管理", disabled: true }
+// ];
 
 const webs = [
   {
-    path: "/user/users",
-    key: "user",
-    label: "用户",
+    path: "/user/info",
+    key: "info",
+    label: "团队信息",
+    icon: "exclamation-circle",
+    component: TeamInfo
+  },
+  {
+    path: "/user/member",
+    key: "member",
+    label: "团队成员",
     icon: "user",
-    component: UserManagement
+    component: TeamMember
   },
   {
     path: "/user/profile",
@@ -33,13 +41,6 @@ const webs = [
   }
 ];
 
-const otherRoutes = [
-  {
-    path: "/user/profile/:action/:id",
-    key: "viewGroupDetail",
-    component: GroupDetail
-  }
-];
 class UserPage extends React.Component {
   constructor(props) {
     super(props);
@@ -64,16 +65,14 @@ class UserPage extends React.Component {
     const { selectedKey } = this.state;
     return (
       <Layout>
-        <CommonHeader navigationList={navigationList} />
+        <HomeHeader />
         <Layout>
           <Sider style={{ background: "#fff" }}>
+            <div className={commonClasses.title}>团队管理</div>
             <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
           </Sider>
           <Content className={commonClasses.container}>
             {webs.map(route => (
-              <Route {...route} />
-            ))}
-            {otherRoutes.map(route => (
               <Route {...route} />
             ))}
           </Content>
