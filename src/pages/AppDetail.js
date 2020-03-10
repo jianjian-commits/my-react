@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout, Input } from "antd";
+import { Layout, Input, Button } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
@@ -29,41 +29,7 @@ const getOreations = (appId, history) => [
   }
 ];
 
-// const mockForms = {
-//   groups: [
-//     {
-//       name: "基础设置",
-//       key: "base",
-//       list: [
-//         { key: "sWw", name: "车队信息" },
-//         { key: "clr", name: "油卡信息" },
-//         { key: "CrE", name: "车辆信息" }
-//       ]
-//     },
-//     {
-//       name: "用车管理",
-//       key: "use",
-//       list: [
-//         { key: "short", name: "短途申请" },
-//         { key: "long", name: "长途用车申请" }
-//       ]
-//     },
-//     {
-//       name: "违章管理",
-//       key: "ban",
-//       list: [
-//         { key: "aban", name: "违章记录" },
-//         { key: "handle", name: "违章处理记录" }
-//       ]
-//     }
-//   ],
-//   list: [
-//     { key: "genernal", name: "车辆状态一览" },
-//     { key: "check", name: "车辆年检记录" }
-//   ]
-// };
-
-const AppDetail = props => {
+const AppDetail = () => {
   const { appId, menuId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
@@ -105,10 +71,12 @@ const AppDetail = props => {
   const appName = currentApp.name || "";
 
   if (searchKey) {
-    const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
-    groups = null;
+    const all = JSON.parse(JSON.stringify(list));
+    const allGroups = JSON.parse(JSON.stringify(groups));
+    groups =
+      searchKey === "" ? searchList : searchForms(searchKey, [...allGroups]);
     list = all.filter(i => i.name.indexOf(searchKey) !== -1);
-    if (list.length === 0) {
+    if (list.length === 0 && groups === null) {
       list = [{ key: "", name: "暂无匹配项" }];
     }
   }
@@ -129,7 +97,6 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
-  console.log(selectedForm);
   return (
     <Layout>
       <CommonHeader
@@ -162,13 +129,17 @@ const AppDetail = props => {
         <Content className={classes.container}>
           {selectedForm != void 0 ? (
             <>
-              <button
-                onClick={_e => {
-                  setSubmit(!submit);
-                }}
-              >
-                {submit ? "查看数据" : "提交数据"}
-              </button>
+              {!submit ? (
+                <Button
+                  type="primary"
+                  className="form-submit-data-button"
+                  onClick={_e => {
+                    setSubmit(!submit);
+                  }}
+                >
+                  提交数据
+                </Button>
+              ) : null}
               {submit ? (
                 <FormBuilderSubmission
                   key={Math.random()}

@@ -818,16 +818,16 @@ class FormSubmitData extends PureComponent {
     );
     return (
       <>
-        {/* {mobile.is ? null : (
+        {mobile.is ? null : (
           <HeaderBar
             backCallback={() => {
-              let appId = this.props.match.params.appId;
-              this.props.history.push(`/app/${appId}/detail`);
+              this.props.history.go(-1);
             }}
             name={this.props.forms.name}
             isShowBtn={false}
+            isShowBackBtn={false}
           />
-        )} */}
+        )}
         <div
           className="form-submit-data-table"
           style={mobile.is ? mobile.style.table : null}
