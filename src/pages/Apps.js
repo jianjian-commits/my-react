@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import { history } from "../store";
 import { Layout, Button, Card, Icon, message } from "antd";
 import HomeHeader from "../components/header/HomeHeader";
-import commonClasses from "../styles/common.module.scss";
-import classes from "../styles/apps.module.scss";
-import { history } from "../store";
-import CreateFormModal from "../components/createApp";
+import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
+import commonClasses from "../styles/common.module.scss";
+import classes from "../styles/apps.module.scss";
 const { Content } = Layout;
 const { Meta } = Card;
 
@@ -53,6 +53,8 @@ class Apps extends React.Component {
         message.success("创建应用成功");
         this.props.getAppList();
         this.handleCancel();
+      } else {
+        message.error("创建应用失败");
       }
     } catch (err) {
       message.error("创建应用失败");
@@ -82,7 +84,7 @@ class Apps extends React.Component {
             </Button>
           </header>
           <content>{getApps(this.props.appList)}</content>
-          <CreateFormModal
+          <ModalCreation
             title={"创建应用"}
             visible={this.state.open}
             onOk={data => this.handleCreate(data)}

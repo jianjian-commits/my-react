@@ -1,0 +1,19 @@
+.iconStyle {
+  i {
+    font-size: 25px;
+    padding: 5px;
+  }
+  .active {
+    background-color: #ddd;
+  }
+}
+.stretch {
+  resize: none;
+  position: relative;
+}
+.text {
+  position: absolute;
+  font-size: 13px;
+  left: 332px;
+  top: 40px;
+}

@@ -2,10 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { Button, Table, message, Popconfirm } from "antd";
-import CreateFormModal from "../createGroup";
+import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
 import PermissionSetting from "../userManagement/applyPermissionSettings";
-// import Loading from "../../pages/Loading";
 
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
@@ -20,7 +19,6 @@ class ProfileManagement extends React.Component {
       title: "",
       oldRoleId: "",
       roleList: []
-      // spinning: false
     };
     this.action = "view";
     this.roleId = "";
@@ -42,18 +40,18 @@ class ProfileManagement extends React.Component {
 
   // 获取分组总列表
   async getGroupList() {
-    // this.setState({ spinning: true });
     try {
       const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
         this.setState({
           roleList: res.data
         });
+      } else {
+        message.error("获取分组列表失败");
       }
     } catch (err) {
       message.error("获取分组列表失败");
     }
-    // this.setState({ spinning: false });
   }
 
   // 新建分组
@@ -75,6 +73,9 @@ class ProfileManagement extends React.Component {
         message.success(`${title}成功!`);
         this.handleCancel();
         this.getGroupList();
+      } else {
+        message.error(`${title}失败`);
+        this.handleCancel();
       }
     } catch (err) {
       message.error(`${title}失败`);
@@ -91,6 +92,8 @@ class ProfileManagement extends React.Component {
       if (res && res.status === "SUCCESS") {
         message.success("删除成功！");
         this.getGroupList();
+      } else {
+        message.error("删除失败！");
       }
     } catch (err) {
       message.error("删除失败！");
@@ -195,17 +198,16 @@ class ProfileManagement extends React.Component {
           />
         ) : (
           <>
-            {/* <Loading spinning={this.state.spinning}> */}
             <Button
               type="primary"
               onClick={() => this.setState({ open: true, title: "添加分组" })}
             >
               添加分组
             </Button>
-            <CreateFormModal
+            <ModalCreation
               title={title}
               visible={open}
-              onOk={(data, title) => this.handleCreate(data, title)}
+              onOk={data => this.handleCreate(data, title)}
               onCancel={this.handleCancel}
             />
             <div className={classes.tableStyles}>
@@ -216,7 +218,6 @@ class ProfileManagement extends React.Component {
                 rowKey="roleId"
               ></Table>
             </div>
-            {/* </Loading> */}
           </>
         )}
       </div>
