@@ -3,13 +3,30 @@
 }
 
 .setting {
-  display: flex;
+  background: rgba(245, 245, 245, 1);
+  & > div {
+    margin: 30px auto;
+    width: 85%;
+  }
+}
+.title {
   justify-content: center;
-  padding: 20px 0;
+}
+.metedate {
+  & > div:nth-of-type(1) {
+    font-weight: bold;
+    font-size: 15px;
+    color: rgba(72, 72, 72, 1);
+  }
+  & > div:nth-of-type(2) > div {
+    font-size: 15px;
+    margin: 0;
+  }
 }
 .panel {
-  width: 85%;
-  display: inherit;
+  margin: 10px auto;
+  width: 100%;
+  display: flex;
   justify-content: space-between;
   & > div:nth-of-type(1) {
     display: inherit;
@@ -21,9 +38,93 @@
       color: rgba(72, 72, 72, 1);
     }
   }
-  & > div:nth-of-type(2) {
+}
+
+.thunk {
+  margin: 20px 0 0 0;
+}
+
+// 应用权限设置
+.apsLayout {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.aps {
+  width: 90%;
+  margin-top: 20px;
+}
+//** top
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back {
+  & > a {
+    display: flex;
     & > span {
-      margin: 0 0 0 10px;
+      display: inherit;
+      align-items: center;
+    }
+  }
+}
+
+.btn {
+  & > button {
+    margin-left: 10px;
+  }
+}
+
+//** meteData
+.meteData {
+  margin-top: 40px;
+  & > div {
+    margin-bottom: 10px;
+  }
+  & > div:nth-child(1) {
+    margin-bottom: 20px;
+  }
+}
+
+.form {
+  & > div {
+    margin-bottom: 10px;
+  }
+}
+
+.table {
+  width: 100%;
+  margin: 10px 0 20px 0;
+  // table-layout: fixed;
+  & tr {
+    height: 40px;
+    border: 1px solid rgba(151, 151, 151, 1);
+  }
+  & th {
+    text-align: center;
+    &:nth-of-type(1) {
+      text-indent: 40px;
+      text-align: left;
+    }
+  }
+  & td {
+    text-align: center;
+    &:nth-of-type(1) {
+      text-indent: 40px;
+      width: 200px;
+      text-align: left;
+    }
+  }
+  & > thead {
+    & > tr {
+      background: rgba(192, 192, 192, 1);
+    }
+  }
+  & > tbody {
+    & > tr {
+      background: rgba(255, 255, 255, 1);
     }
   }
 }

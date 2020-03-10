@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { Layout, Input, Button, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../utils/request";
@@ -8,61 +9,62 @@ import DraggableList, {
 } from "../components/shared/DraggableList";
 
 import classes from "../styles/apps.module.scss";
+import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 const { Content, Sider } = Layout;
 
-const navigationList = (history, appId) => [
+const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
-    label: "13号Devinci应用",
+    label: `${appName}`,
     onClick: () => history.push(`/app/${appId}/detail`)
   },
   { key: 1, label: "应用设置", disabled: true }
 ];
 
-// const mockForms = {
-//   groups: [
-// {
-//   name: "基础设置",
-//   key: "base",
-//   list: [
-//     { key: "sWw", name: "车队信息" },
-//     { key: "clr", name: "油卡信息" },
-//     { key: "CrE", name: "车辆信息" }
-//   ]
-// },
-// {
-//   name: "用车管理",
-//   key: "use",
-//   list: [
-//     { key: "short", name: "短途申请" },
-//     { key: "long", name: "长途用车申请" }
-//   ]
-// },
-// {
-//   name: "违章管理",
-//   key: "ban",
-//   list: [
-//     { key: "aban", name: "违章记录" },
-//     { key: "handle", name: "违章处理记录" }
-//   ]
-// }
-// ],
-// list: [
-// { key: "short", name: "短途申请" },
-// { key: "long", name: "长途用车申请" }
-//   ]
-// };
+const mockForms = {
+  groups: [
+    {
+      name: "基础设置",
+      key: "base",
+      list: [
+        { key: "sWw", name: "车队信息" },
+        { key: "clr", name: "油卡信息" },
+        { key: "CrE", name: "车辆信息" }
+      ]
+    },
+    {
+      name: "用车管理",
+      key: "use",
+      list: [
+        { key: "short", name: "短途申请" },
+        { key: "long", name: "长途用车申请" }
+      ]
+    },
+    {
+      name: "违章管理",
+      key: "ban",
+      list: [
+        { key: "aban", name: "违章记录" },
+        { key: "handle", name: "违章处理记录" }
+      ]
+    }
+  ],
+  list: [
+    { key: "short", name: "短途申请" },
+    { key: "long", name: "长途用车申请" }
+  ]
+};
 
-const AppSetting = () => {
+const AppSetting = props => {
   const { appId } = useParams();
   const history = useHistory();
   const [searchKey, setSearchKey] = React.useState(null);
-  const [mockForms, setMockForms] = React.useState({
-    groups: [],
-    list: [],
-    searchList: []
-  });
+  // const [mockForms, setMockForms] = React.useState({
+  //   groups: [],
+  //   list: [],
+  //   searchList: []
+  // });
 
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
@@ -74,33 +76,36 @@ const AppSetting = () => {
         key: item.id,
         name: item.name
       }));
-      setMockForms({
-        groups: [
-          {
-            name: "基础设置",
-            key: "ban",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
-        ],
-        searchList: [
-          {
-            name: "基础设置",
-            key: "ban",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
-        ],
-        list: newList
-      });
+      // setMockForms({
+      //   groups: [
+      //     {
+      //       name: "基础设置",
+      //       key: "ban",
+      //       list: [
+      //         { key: "sWw", name: "车队信息" },
+      //         { key: "clr", name: "油卡信息" },
+      //         { key: "CrE", name: "车辆信息" }
+      //       ]
+      //     }
+      //   ],
+      //   searchList: [
+      //     {
+      //       name: "基础设置",
+      //       key: "ban",
+      //       list: [
+      //         { key: "sWw", name: "车队信息" },
+      //         { key: "clr", name: "油卡信息" },
+      //         { key: "CrE", name: "车辆信息" }
+      //       ]
+      //     }
+      //   ],
+      //   list: newList
+      // });
     });
   }, []);
+  const currentApp =
+    Object.assign([], props.appList).find(v => v.id === appId) || {};
+  const appName = currentApp.name || "";
   const searchForms = (keyword, groupsParams) => {
     let _groups = groupsParams;
 
@@ -145,9 +150,30 @@ const AppSetting = () => {
     }
   };
 
+  const [visible, setVisible] = useState(false);
+  const modalProps = {
+    visible,
+    showModal: () => {
+      setVisible(true);
+    },
+
+    handleCancel: e => {
+      setVisible(false);
+    },
+
+    handleOK: e => {
+      setVisible(false);
+    }
+  };
+
   return (
     <Layout>
-      <CommonHeader navigationList={navigationList(history, appId)} />
+      <ForInfoModal
+        key={Math.random()}
+        {...modalProps}
+        url={"/app/${appId}/setting/form/create"}
+      />
+      <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
@@ -157,9 +183,11 @@ const AppSetting = () => {
               onClick={e => {
                 // history.push(`/app/${appId}/setting/form/create`)
 
-                if (list[0].key !== "") {
-                  history.push(`/app/${appId}/setting/form/create`);
-                }
+                // if (list[0].key !== "") {
+                //   history.push(`/app/${appId}/setting/form/create`);
+                // }
+                modalProps.showModal();
+                // history.push(`/app/${appId}/setting/form/sWw/edit`);
               }}
             >
               新建表单
@@ -199,4 +227,6 @@ const AppSetting = () => {
     </Layout>
   );
 };
-export default AppSetting;
+export default connect(({ app }) => ({
+  appList: app.appList
+}))(AppSetting);

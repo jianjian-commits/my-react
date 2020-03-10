@@ -29,7 +29,7 @@ export const main = [
   },
   {
     key: "user",
-    label: "用户",
+    label: "团队管理",
     path: "/user",
     icon: "web",
     component: UserManagement
@@ -98,6 +98,7 @@ export const appPaths = [
     label: "表单服务",
     path: `/app/:appId/setting/form/:formId`,
     icon: "file_copy",
+    rough: true,
     component: AppServices
   },
   {

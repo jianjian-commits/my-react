@@ -90,8 +90,9 @@ class ReactFormBuilder extends React.Component {
     if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
     }
+    debugger;
     return (
-      <>
+      <div className={"formBuilder"}>
         <Spin spinning={this.props.isInitForming}>
           <FormBuilderHeader editForm={this.props.localForm} />
           <DndProvider backend={HTML5Backend}>
@@ -128,7 +129,7 @@ class ReactFormBuilder extends React.Component {
             </div>
           </DndProvider>
         </Spin>
-      </>
+      </div>
     );
   }
 }

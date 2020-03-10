@@ -94,6 +94,9 @@ class Submission extends Component {
       this.setState({
         pureFormComponents
       });
+      //渲染表单说明
+      let formInfo = formComponent.formInfo;
+      document.getElementById("submission-title").innerHTML = formInfo;
     }
   }
 
@@ -1096,6 +1099,15 @@ class Submission extends Component {
           )}
           <div className={"formBuilder-Submission"}>
             <div className="Content">
+              <div className="submission-title">{formComponent.name}</div>
+              {this.props.formComponent.formInfo != "" ? (
+                <div
+                  className="submission-formInfo"
+                  id="submission-title"
+                ></div>
+              ) : (
+                ""
+              )}
               <div className="form-layout">
                 <Form onSubmit={this.handleSubmit}>
                   {mobile.is ? (

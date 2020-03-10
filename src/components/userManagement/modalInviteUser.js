@@ -1,29 +1,27 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import { Input, Button, Modal, message } from "antd";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 
-export default connect()(function InviteUser({ loginData }) {
+export default function InviteUser(props) {
+  const { currentTeam, userDetail } = props;
   const [visible, setVisible] = useState(false);
   const [token, setToken] = useState(null);
-  async function handleInviteUserBtn(teamId) {
+  async function handleInviteUserBtn() {
     try {
-      const res = await request(`/${teamId}/token`);
+      const res = await request(`/team/invitedToken`);
       if (res && res.status === "SUCCESS") {
         setToken(res.data);
         setVisible(true);
-      } else {
-        message.error("token获取失败");
       }
     } catch (err) {
       message.error("token获取失败");
     }
   }
-  const registerUrl = `${window.location.origin}/register/${loginData.ownerId}/${token}`;
+  const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;
   return (
     <>
-      <Button type="primary" onClick={() => handleInviteUserBtn(loginData.id)}>
+      <Button type="primary" onClick={() => handleInviteUserBtn()}>
         邀请用户
       </Button>
       <Modal
@@ -35,10 +33,10 @@ export default connect()(function InviteUser({ loginData }) {
       >
         <p> 将链接发给同事，即可通过注册的方式加入企业。</p>
         <div style={{ display: "flex" }}>
-          <Input value={registerUrl} />
+          <Input value={inviteUrl} />
           <Button
             onClick={() => {
-              copy(registerUrl);
+              copy(inviteUrl);
               message.success("复制成功!");
             }}
           >
@@ -49,4 +47,4 @@ export default connect()(function InviteUser({ loginData }) {
       </Modal>
     </>
   );
-});
+}

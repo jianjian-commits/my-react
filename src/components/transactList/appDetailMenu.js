@@ -1,6 +1,6 @@
-import TransactList from "../components/transactList/TransactList";
+import TransactList from "./TransactList";
 
-const appDetailMenu = [
+export const appDetailMenu = [
   {
     key: 0,
     describe: "我的待办",
@@ -17,4 +17,3 @@ const appDetailMenu = [
     ContentEle: TransactList
   }
 ];
-export default appDetailMenu;
