@@ -21,21 +21,21 @@ const webs = [
     path: "/user/info",
     key: "info",
     label: "团队信息",
-    icon: "exclamation-circle",
+    icon: "file-text",
     component: TeamInfo
   },
   {
     path: "/user/member",
     key: "member",
     label: "团队成员",
-    icon: "user",
+    icon: "team",
     component: TeamMember
   },
   {
     path: "/user/profile",
     key: "profile",
     label: "分组",
-    icon: "team",
+    icon: "switcher",
     exact: true,
     component: ProfileManagement
   }

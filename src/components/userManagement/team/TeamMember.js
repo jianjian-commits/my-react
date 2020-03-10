@@ -27,28 +27,33 @@ export default connect(
   });
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
-    pageSize: 5
+    pageSize: 1
   });
   const columns = [
     {
       title: "姓名",
-      dataIndex: "name"
+      dataIndex: "name",
+      width: 100
     },
     {
       title: "邮箱",
-      dataIndex: "email"
+      dataIndex: "email",
+      width: 200
     },
     {
       title: "最后登录时间",
-      dataIndex: "lastModifiedDate"
+      dataIndex: "lastModifiedDate",
+      width: 200
     },
     {
       title: "分组",
-      dataIndex: "groupName"
+      dataIndex: "groupName",
+      width: 200
     },
     {
       title: "操作",
       key: "action",
+      width: 200,
       render: (text, record) => {
         return text.group.name === "超级管理员" &&
           currentTeam.groups.filter(item => {
@@ -189,11 +194,12 @@ export default connect(
     <div className={classes.container}>
       <Row type="flex" justify="space-between" className={classes.box}>
         <Col>
-          <InviteUser {...loginData} />
+          <div className={classes.title}>团队成员</div>
         </Col>
         <Col>
+          <InviteUser {...loginData} />
           <Button
-            size="large"
+            style={{ backgroundColor: "#ffffff" }}
             type="link"
             icon="filter"
             onClick={onClickFilter}
@@ -203,16 +209,18 @@ export default connect(
         </Col>
       </Row>
       {onOff.filterSwith ? <Filter fn={filterData} /> : null}
-      <Table
-        pagination={{
-          total: total,
-          pageSize: pageConfig.pageSize,
-          onChange: onChangePage
-        }}
-        columns={columns}
-        dataSource={data}
-        rowClassName={classes.rowKey}
-      />
+      <div className={classes.tableBox}>
+        <Table
+          pagination={{
+            total: total,
+            pageSize: pageConfig.pageSize,
+            onChange: onChangePage
+          }}
+          columns={columns}
+          dataSource={data}
+          rowClassName={classes.rowKey}
+        />
+      </div>
       {onOff.changeGroupSwitch ? (
         <ChangeGroup
           groups={currentTeam.groups}

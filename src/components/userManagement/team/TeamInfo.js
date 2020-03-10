@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Input, Row, Col, List, Typography, Button, Spin, message } from "antd";
+import { Input, Row, Col, List, Button, Spin, message } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
-
-const { Title } = Typography;
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   const [isRedact, setIsRedact] = useState(false);
@@ -24,36 +22,30 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   };
 
   return (
-    <div>
+    <div className={classes.rowBox}>
       {isRedact ? (
-        <Row type="flex" gutter={5} align="middle">
-          <Col>{lable}:</Col>
-          <Col>
-            <Row type="flex" gutter={5} align="middle">
-              <Col>
-                <Input defaultValue={defaultValue} onChange={changeValue} />
-              </Col>
-              <Col>
-                <Button type="link" onClick={submitAmend}>
-                  确认
-                </Button>
-              </Col>
-              <Col>
-                <Button type="link" onClick={switchRedact}>
-                  取消
-                </Button>
-              </Col>
-            </Row>
+        <Row type="flex" align="middle">
+          <Col span={10}>{lable}</Col>
+          <Col span={14}>
+            <Input
+              defaultValue={defaultValue}
+              onChange={changeValue}
+              style={{ width: "auto" }}
+            />
+            <Button type="link" onClick={submitAmend}>
+              确认
+            </Button>
+            <Button type="link" onClick={switchRedact}>
+              取消
+            </Button>
           </Col>
         </Row>
       ) : (
-        <Row type="flex" gutter={16} align="middle">
-          <Col>{lable}:</Col>
-          <Col>{defaultValue}</Col>
-          <Col>
-            <Button type="link" onClick={switchRedact}>
-              修改
-            </Button>
+        <Row type="flex" align="middle">
+          <Col span={10}>{lable}</Col>
+          <Col span={14}>
+            {defaultValue}
+            <Button type="link" icon="form" onClick={switchRedact}></Button>
           </Col>
         </Row>
       )}
@@ -90,37 +82,45 @@ export default connect(
 
   return currentTeam ? (
     <div className={classes.container}>
-      <Title level={3}>团队信息</Title>
-      <List itemLayout="horizontal">
-        <List.Item>
-          <EditInput
-            defaultValue={currentTeam.name}
-            onClickSubmit={onClickSubmit}
-            lableKey="name"
-            lable="团队名称"
-          />
-        </List.Item>
-        <List.Item>
-          <EditInput
-            defaultValue={currentTeam.description}
-            onClickSubmit={onClickSubmit}
-            lableKey="description"
-            lable="团队介绍"
-          />
-        </List.Item>
-        <List.Item>
-          <Row type="flex" gutter={16}>
-            <Col>创建人:</Col>
-            <Col>{currentTeam.sysUserName}</Col>
-          </Row>
-        </List.Item>
-        <List.Item>
-          <Row type="flex" gutter={16}>
-            <Col>创建时间:</Col>
-            <Col>{new Date(currentTeam.createDate).toLocaleString()}</Col>
-          </Row>
-        </List.Item>
-      </List>
+      <div className={classes.title}>团队信息</div>
+      <div className={classes.listBox}>
+        <List itemLayout="horizontal" split={false}>
+          <List.Item>
+            <EditInput
+              defaultValue={currentTeam.name}
+              onClickSubmit={onClickSubmit}
+              lableKey="name"
+              lable="团队名称"
+            />
+          </List.Item>
+          <List.Item>
+            <EditInput
+              defaultValue={currentTeam.description}
+              onClickSubmit={onClickSubmit}
+              lableKey="description"
+              lable="团队介绍"
+            />
+          </List.Item>
+          <List.Item>
+            <div className={classes.rowBox}>
+              <Row>
+                <Col span={10}>创建人</Col>
+                <Col span={14}>{currentTeam.sysUserName}</Col>
+              </Row>
+            </div>
+          </List.Item>
+          <List.Item>
+            <div className={classes.rowBox}>
+              <Row>
+                <Col span={10}>创建时间</Col>
+                <Col span={14}>
+                  {new Date(currentTeam.createDate).toLocaleString()}
+                </Col>
+              </Row>
+            </div>
+          </List.Item>
+        </List>
+      </div>
     </div>
   ) : (
     <Spin size="large" />

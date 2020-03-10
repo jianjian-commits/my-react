@@ -1,0 +1,25 @@
+.container {
+  padding: 46px 30px;
+  height: 420px;
+  box-shadow: 0px 4px 26px rgba(46, 106, 162, 0.25);
+  border-radius: 5px;
+}
+
+.title {
+  font-family: Microsoft YaHei;
+  font-size: 20px;
+  line-height: 26px;
+  color: #000;
+}
+
+.text {
+  font-family: Microsoft YaHei;
+  font-size: 14px;
+  margin: 30px 0 18px;
+  color: #333333;
+}
+
+.warn {
+  color: #b6b6ba;
+  margin-top: 10px;
+}
