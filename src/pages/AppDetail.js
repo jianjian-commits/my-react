@@ -5,6 +5,7 @@ import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
+import { APP_SETTING_ABLED } from "../auth";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import TransactList from "../components/transactList/TransactList";
 
@@ -21,6 +22,7 @@ const getOreations = (appId, history) => [
     key: "setting",
     icon: "setting",
     label: "应用设置",
+    auth: APP_SETTING_ABLED(appId),
     onClick: () => history.push(`/app/${appId}/setting`)
   }
 ];
