@@ -178,7 +178,7 @@ export const saveForm = (
   callback,
   url
 ) => dispatch => {
-  _calcFormComponentLayout(formDataArray);
+  // _calcFormComponentLayout(formDataArray);
   if (formInfo != "") {
     formInfo = formInfo
       .replace(/\r\n/g, "<br/>")
@@ -236,7 +236,9 @@ export const saveForm = (
   })
     .then(response => {
       console.log("res", response);
-      callback(url + "?formId=" + response.data.id);
+      let id = response.data.id;
+      console.log(id);
+      callback(`${url}${id}/edit?formId=${id}`);
       // if (type === "back") {
       //   // console.log("response",response);
       //   message.success("保存成功", 1, () => {

@@ -32,6 +32,8 @@ const AppServices = () => {
   let { appId, serviceId } = useParams();
   let service = services.find(s => s.key === serviceId);
 
+  console.log("fck", service);
+
   const clickHandle = e => {
     history.push(`/app/${appId}/setting/form/${e.key}`);
   };
