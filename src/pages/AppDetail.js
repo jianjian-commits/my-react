@@ -5,8 +5,10 @@ import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
+import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
+import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
 
 import selectCom from "../utils/selectCom";
 import request from "../utils/request";
@@ -63,6 +65,7 @@ const getOreations = (appId, history) => [
 //   ]
 // };
 
+const FormBuilderEditFormData = mobileAdoptor.submission(EditFormData);
 const AppDetail = props => {
   const { appId, menuId } = useParams();
   const history = useHistory();
@@ -70,6 +73,7 @@ const AppDetail = props => {
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
+  const [submissionId, setSubmissionId] = React.useState(null);
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({ groups: [], list: [] });
 
@@ -129,6 +133,8 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
+  console.log("submissionId",submissionId);
+  console.log("submit",submit);
   return (
     <Layout>
       <CommonHeader
@@ -172,16 +178,34 @@ const AppDetail = props => {
                   提交数据
                 </Button>
               ) : null}
-              {submit ? (
-                <FormBuilderSubmission
+              {submit  ? (
+                submissionId ? (
+                  <FormBuilderEditFormData
+                    key={Math.random()}
+                    formId={selectedForm}
+                    submissionId = {submissionId}
+                    actionFun={(submission_id, submitFlag = false)=>{
+                      setSubmissionId(submission_id)
+                      setSubmit(submitFlag);
+                    }}
+                  ></FormBuilderEditFormData>
+                )
+                :(
+                  <FormBuilderSubmission
                   key={Math.random()}
                   formId={selectedForm}
                   actionFun={skipToSubmissionData}
                 ></FormBuilderSubmission>
+                )
               ) : (
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
+                  actionFun={(submission_id)=>{
+                    console.log("actionFun",submission_id)
+                    setSubmit(true);
+                    setSubmissionId(submission_id)
+                  }}
                 ></FormBuilderSubmitData>
               )}
             </>
