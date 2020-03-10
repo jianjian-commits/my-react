@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Route } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   ConfigProvider,
@@ -125,7 +125,7 @@ class FormSubmitData extends PureComponent {
     initToken()
       .then(() => {
         this.props.getSubmissionData(
-          formId,
+          this.props.formId,
           this.state.pageSize,
           this.state.currentPage
         );
@@ -133,7 +133,6 @@ class FormSubmitData extends PureComponent {
       .catch(err => {
         console.error(err);
       });
-
     this.setState({ formId: this.props.formId });
   }
   componentWillUnmount() {
@@ -557,6 +556,7 @@ class FormSubmitData extends PureComponent {
   };
 
   handleDeleteSubmisson = submissionId => {
+    console.log(1, this.props);
     this.props
       .deleteFormData(this.state.formId, submissionId)
       .then(response => {
@@ -821,7 +821,8 @@ class FormSubmitData extends PureComponent {
         {/* {mobile.is ? null : (
           <HeaderBar
             backCallback={() => {
-              window.location.href = config.hostUrl;
+              let appId = this.props.match.params.appId;
+              this.props.history.push(`/app/${appId}/detail`);
             }}
             name={this.props.forms.name}
             isShowBtn={false}
@@ -936,4 +937,4 @@ export default connect(
     clearFormData,
     getSubmissionDetail
   }
-)(FormSubmitData);
+)(withRouter(FormSubmitData));

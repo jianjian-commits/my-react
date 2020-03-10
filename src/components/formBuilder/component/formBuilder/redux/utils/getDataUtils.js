@@ -4,17 +4,18 @@ import config from "../../../../config/config";
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => {
-    axios
+  axios
     .get(config.apiUrl + "/form")
     .then(response => {
+      console.log(2);
       dispatch({
         type: GET_ALL_FORMS,
         formArray: response.data.filter(item => {
-            return !ignoreFormIdArray.includes(item.name);
-          })
+          return !ignoreFormIdArray.includes(item.name);
+        })
       });
     })
     .catch(err => {
       console.log(err);
     });
-}
+};

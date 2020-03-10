@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
@@ -6,8 +6,10 @@ import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
+import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 
 import selectCom from "../utils/selectCom";
+import request from "../utils/request";
 import { appDetailMenu } from "../components/transactList/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
@@ -27,47 +29,77 @@ const getOreations = (appId, history) => [
   }
 ];
 
-const mockForms = {
-  groups: [
-    {
-      name: "基础设置",
-      key: "base",
-      list: [
-        { key: "sWw", name: "车队信息" },
-        { key: "clr", name: "油卡信息" },
-        { key: "CrE", name: "车辆信息" }
-      ]
-    },
-    {
-      name: "用车管理",
-      key: "use",
-      list: [
-        { key: "short", name: "短途申请" },
-        { key: "long", name: "长途用车申请" }
-      ]
-    },
-    {
-      name: "违章管理",
-      key: "ban",
-      list: [
-        { key: "aban", name: "违章记录" },
-        { key: "handle", name: "违章处理记录" }
-      ]
-    }
-  ],
-  list: [
-    { key: "genernal", name: "车辆状态一览" },
-    { key: "check", name: "车辆年检记录" }
-  ]
-};
+// const mockForms = {
+//   groups: [
+//     {
+//       name: "基础设置",
+//       key: "base",
+//       list: [
+//         { key: "sWw", name: "车队信息" },
+//         { key: "clr", name: "油卡信息" },
+//         { key: "CrE", name: "车辆信息" }
+//       ]
+//     },
+//     {
+//       name: "用车管理",
+//       key: "use",
+//       list: [
+//         { key: "short", name: "短途申请" },
+//         { key: "long", name: "长途用车申请" }
+//       ]
+//     },
+//     {
+//       name: "违章管理",
+//       key: "ban",
+//       list: [
+//         { key: "aban", name: "违章记录" },
+//         { key: "handle", name: "违章处理记录" }
+//       ]
+//     }
+//   ],
+//   list: [
+//     { key: "genernal", name: "车辆状态一览" },
+//     { key: "check", name: "车辆年检记录" }
+//   ]
+// };
 
 const AppDetail = props => {
   const { appId, menuId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
+  const [submit, setSubmit] = React.useState(false);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
+  // zxx mockForms存储表单列表数据
+  const [mockForms, setMockForms] = React.useState({ groups: [], list: [] });
+
+  //zxx groups目录结构 list无目录结构的表单
   let { groups, list } = mockForms;
+  useEffect(() => {
+    let newList = [];
+    request("/form?desc=createdTime", {
+      methods: "get"
+    }).then(res => {
+      newList = res.map(item => ({
+        key: item.id,
+        name: item.name
+      }));
+      setMockForms({
+        groups: [
+          {
+            name: "基础设置",
+            key: "base",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
+        list: newList
+      });
+    });
+  }, []);
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
@@ -76,8 +108,11 @@ const AppDetail = props => {
     const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
     groups = null;
     list = all.filter(i => i.name.indexOf(searchKey) !== -1);
+    if (list.length === 0) {
+      list = [{ key: "", name: "暂无匹配项" }];
+    }
   }
-
+  //zxx 更改搜索的关键值
   const searchHandle = e => {
     const { value } = e.target;
     setSearchKey(value);
@@ -89,6 +124,12 @@ const AppDetail = props => {
     setEle(selectCom(key, appDetailMenu));
   };
 
+  // 父传子的方法
+  const skipToSubmissionData = val => {
+    setSubmit(!val);
+  };
+
+  console.log(selectedForm);
   return (
     <Layout>
       <CommonHeader
@@ -111,6 +152,7 @@ const AppDetail = props => {
               draggable={false}
               onClick={e => {
                 setSelectedForm(e.key);
+                setSubmit(false);
               }}
               groups={groups}
               list={list}
@@ -118,21 +160,27 @@ const AppDetail = props => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {selectedForm !== void 0 ? (
+          {selectedForm != void 0 ? (
             <>
               <button
                 onClick={_e => {
-                  history.push(
-                    `/app/${appId}/detail/submission?formId=${selectedForm}`
-                  );
+                  setSubmit(!submit);
                 }}
               >
-                提交数据
+                {submit ? "查看数据" : "提交数据"}
               </button>
-              <FormBuilderSubmitData
-                key={Math.random()}
-                formId={selectedForm}
-              ></FormBuilderSubmitData>
+              {submit ? (
+                <FormBuilderSubmission
+                  key={Math.random()}
+                  formId={selectedForm}
+                  actionFun={skipToSubmissionData}
+                ></FormBuilderSubmission>
+              ) : (
+                <FormBuilderSubmitData
+                  key={Math.random()}
+                  formId={selectedForm}
+                ></FormBuilderSubmitData>
+              )}
             </>
           ) : ele != null ? (
             <ele.ContentEle count={ele.key} />

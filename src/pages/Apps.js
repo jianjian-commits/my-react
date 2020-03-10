@@ -69,6 +69,7 @@ class Apps extends React.Component {
   }
 
   render() {
+    console.log(this.props.name);
     return (
       <Layout>
         <HomeHeader />

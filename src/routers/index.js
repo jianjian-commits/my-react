@@ -4,12 +4,13 @@ import UserManagement from "../pages/User";
 
 import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
-import Submission from "../components/formBuilder/component/submission/submission";
+// import Submission from "../components/formBuilder/component/submission/submission";
+// import SubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
+import AppServicesEdit from "../pages/AppServicesEdit";
 import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
-import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 
 export const main = [
   {
@@ -57,13 +58,20 @@ export const appPaths = [
     icon: "file_copy",
     component: AppDetail
   },
-  {
-    key: "submission",
-    label: "提交数据",
-    path: `/app/:appId/detail/submission`,
-    icon: "file_copy",
-    component: mobileAdoptor.data(Submission)
-  },
+  // {
+  //   key: "submission",
+  //   label: "提交数据",
+  //   path: `/app/:appId/detail/submission`,
+  //   icon: "file_copy",
+  //   component: Submission
+  // },
+  // {
+  //   key: "submissionData",
+  //   label: "查看数据",
+  //   path: `/app/:appId/detail/submission`,
+  //   icon: "file_copy",
+  //   component: SubmitData
+  // },
   {
     key: "menuContent",
     label: "菜单内容",
@@ -78,13 +86,27 @@ export const appPaths = [
     icon: "file_copy",
     component: AppSetting
   },
+  // {
+  //   key: "createForm",
+  //   label: "表单服务",
+  //   path: `/app/:appId/setting/form/create`,
+  //   icon: "file_copy",
+  //   component: CreateForm
+  // },
   {
     key: "form",
     label: "表单服务",
-    path: `/app/:appId/setting/form/:formId/:serviceId`,
+    path: `/app/:appId/setting/form/:formId`,
     icon: "file_copy",
     rough: true,
     component: AppServices
+  },
+  {
+    key: "formEdit",
+    label: "表单服务",
+    path: `/app/:appId/setting/form/:formId/:serviceId`,
+    icon: "file_copy",
+    component: AppServicesEdit
   },
   {
     key: "Dispose",
