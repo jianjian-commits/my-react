@@ -14,7 +14,8 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import { filterFormsForRelation } from "../utils/filterData";
 import config from "../../../../config/config";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
-import isInFormChild from "../utils/isInFormChild"
+import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class DropdownInspector extends React.Component {
@@ -41,6 +42,13 @@ class DropdownInspector extends React.Component {
         isLinked: true
       });
     }
+
+    const { apiName } = element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr(ev) {
@@ -96,7 +104,7 @@ class DropdownInspector extends React.Component {
     }
   };
   deleteChooseItem(item, index) {
-    if(this.props.element.data.values.length === 1) return null;
+    if (this.props.element.data.values.length === 1) return null;
     let newValuesList = this.props.element.data.values.filter(
       (item, i) => i !== index
     );
@@ -321,27 +329,57 @@ class DropdownInspector extends React.Component {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { optionType, isLinked } = this.state;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
     const { elementParent } = this.props;
     const { label, validate, tooltip } = this.props.element;
-    
+
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
-        <p htmlFor="checkbox-title">标题</p>
-        <Input
-          id="checkbox-title"
-          name="label"
-          placeholder="多选框"
-          value={label}
-          onChange={this.handleChangeAttr}
-          autoComplete="off"
-        />
-        {
-          isInFormChild(this.props.elementParent)
-            ? null 
-            :<>
+          <p htmlFor="checkbox-title">标题</p>
+          <Input
+            id="checkbox-title"
+            name="label"
+            placeholder="多选框"
+            value={label}
+            onChange={this.handleChangeAttr}
+            autoComplete="off"
+          />
+
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
               <p htmlFor="email-tip">提示信息</p>
               <Input
                 id="email-tip"
@@ -351,39 +389,39 @@ class DropdownInspector extends React.Component {
                 onChange={this.handleChangeAttr}
                 autoComplete="off"
               />
-             </>
-        }
-        <p>选项</p>
-        {isLinked ? (
-          <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
-        ) : (
-          <>
-            <Select
-              value={optionType}
-              style={{ width: "100%" }}
-              onChange={this.handleSelectChange}
-              className="data-source-select"
-            >
-              <Option value="custom">自定义</Option>
-              <Option value="otherFormData">关联其他表单数据</Option>
-              <Option value="DataLinkage">数据联动</Option>
-            </Select>
-            {this.renderOptionDataFrom(optionType)}
-          </>
-        )}
+            </>
+          )}
+          <p>选项</p>
+          {isLinked ? (
+            <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
+          ) : (
+            <>
+              <Select
+                value={optionType}
+                style={{ width: "100%" }}
+                onChange={this.handleSelectChange}
+                className="data-source-select"
+              >
+                <Option value="custom">自定义</Option>
+                <Option value="otherFormData">关联其他表单数据</Option>
+                <Option value="DataLinkage">数据联动</Option>
+              </Select>
+              {this.renderOptionDataFrom(optionType)}
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
-            <p htmlFor="email-tip">校验</p>
-            <div className="checkbox-wrapper">
-              <Checkbox
-                name="required"
-                checked={validate.required}
-                onChange={this.handleChangeAttr}
-              >
-                必选
-              </Checkbox>
-            </div>
+          <p htmlFor="email-tip">校验</p>
+          <div className="checkbox-wrapper">
+            <Checkbox
+              name="required"
+              checked={validate.required}
+              onChange={this.handleChangeAttr}
+            >
+              必选
+            </Checkbox>
+          </div>
         </div>
       </div>
     );

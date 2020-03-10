@@ -10,16 +10,19 @@ import {
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import locationUtils from "../../../../utils/locationUtils";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class AddressInspector extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      optionType: (this.props.element.data && this.props.element.data.type) || "custom",
+      optionType:
+        (this.props.element.data && this.props.element.data.type) || "custom",
       formId: locationUtils.getUrlParamObj().id,
       isShowDataLinkageModal: false,
-      isLinked: false
+      isLinked: false,
+      apiNameTemp: undefined //api name 临时值
     };
   }
 
@@ -31,6 +34,12 @@ class AddressInspector extends React.PureComponent {
         isLinked: true
       });
     }
+    const { apiName } = element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
@@ -54,7 +63,8 @@ class AddressInspector extends React.PureComponent {
         checked = checked ? "true" : "";
         break;
       }
-      default: break;
+      default:
+        break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -159,10 +169,30 @@ class AddressInspector extends React.PureComponent {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const { label, validate, addressType } = this.props.element;
     const elementParent = this.props.elementParent;
-    const { optionType, isLinked } = this.state;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
 
     return (
       <div className="base-form-tool">
@@ -173,6 +203,17 @@ class AddressInspector extends React.PureComponent {
             placeholder="地址"
             value={label}
             onChange={this.handleChangeAttr}
+            autoComplete="off"
+          />
+
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
             autoComplete="off"
           />
 

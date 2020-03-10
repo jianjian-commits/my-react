@@ -1,18 +1,31 @@
 import React from "react";
-import { Input, Checkbox, Divider} from "antd";
+import { Input, Checkbox, Divider } from "antd";
 import { connect } from "react-redux";
-import { setItemAttr, setFormChildItemAttr } from "../../redux/utils/operateFormComponent";
-import isInFormChild from "../utils/isInFormChild"
+import {
+  setItemAttr,
+  setFormChildItemAttr
+} from "../../redux/utils/operateFormComponent";
+import isInFormChild from "../utils/isInFormChild";
 
 class EmailInputInspector extends React.PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
       formId: locationUtils.getUrlParamObj().id,
-      isShowDataLinkageModal: false
+      isShowDataLinkageModal: false,
+      apiNameTemp: undefined //api name 临时值
     };
+  }
+
+  componentDidMount() {
+    const { element } = this.props;
+    const { apiName } = element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr = ev => {
@@ -26,7 +39,7 @@ class EmailInputInspector extends React.PureComponent {
     switch (type) {
       // 自定义组件
       case "custom": {
-        return(
+        return (
           <>
             {/* <Input
               id="email-default-value"
@@ -101,8 +114,23 @@ class EmailInputInspector extends React.PureComponent {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { optionType } = this.state;
+    const { optionType, apiNameTemp, isUniqueApi = true } = this.state;
     return (
       <div className="base-form-tool">
         <div classNam="costom-info-card">
@@ -114,20 +142,22 @@ class EmailInputInspector extends React.PureComponent {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-          {
-            isInFormChild(this.props.elementParent)
-            ? null 
-            :<>
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
               <p htmlFor="email-tip">提示信息</p>
-              <Input id="email-tip" placeholder="请输入提示信息" autoComplete="off" />
+              <Input
+                id="email-tip"
+                placeholder="请输入提示信息"
+                autoComplete="off"
+              />
               <p htmlFor="email-err-tip">错误提示</p>
               <Input
                 id="email-err-tip"
                 placeholder="请输入错误提示"
                 autoComplete="off"
               />
-              </>
-          }
+            </>
+          )}
           <p htmlFor="email-default-value">默认值</p>
           <Select
             value={optionType}
@@ -145,11 +175,9 @@ class EmailInputInspector extends React.PureComponent {
           <p htmlFor="email-tip">校验</p>
           <div className="checkbox-wrapper">
             <Checkbox>必填</Checkbox>
-            {
-              isInFormChild(this.props.elementParent) 
-              ? null
-              : <Checkbox>不允许重复</Checkbox>
-            }
+            {isInFormChild(this.props.elementParent) ? null : (
+              <Checkbox>不允许重复</Checkbox>
+            )}
             <Checkbox>格式校验</Checkbox>
           </div>
         </div>

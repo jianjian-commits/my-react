@@ -10,7 +10,8 @@ import {
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
-import isInFormChild from "../utils/isInFormChild"
+import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class PhoneInputInspector extends React.PureComponent {
@@ -20,7 +21,8 @@ class PhoneInputInspector extends React.PureComponent {
       optionType: this.props.element.data.type || "custom",
       formId: locationUtils.getUrlParamObj().id,
       isLinked: false,
-      isShowDataLinkageModal: false
+      isShowDataLinkageModal: false,
+      apiNameTemp: undefined //api name 临时值
     };
   }
 
@@ -32,6 +34,13 @@ class PhoneInputInspector extends React.PureComponent {
         isLinked: true
       });
     }
+
+    const { apiName } = this.props.element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr = ev => {
@@ -55,7 +64,8 @@ class PhoneInputInspector extends React.PureComponent {
         checked = checked ? "true" : "";
         break;
       }
-      default: break;
+      default:
+        break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -145,11 +155,16 @@ class PhoneInputInspector extends React.PureComponent {
   handleSelectChange = value => {
     switch (value) {
       case "custom": {
-        const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
-        if(elementParent) {
+        const {
+          elementParent,
+          element,
+          setItemValues,
+          setFormChildItemValues
+        } = this.props;
+        if (elementParent) {
           setFormChildItemValues(elementParent, "data", {}, element);
         } else {
-          setItemValues(this.props.element, "data",{});
+          setItemValues(this.props.element, "data", {});
         }
         this.setState({
           optionType: "custom"
@@ -168,6 +183,21 @@ class PhoneInputInspector extends React.PureComponent {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const {
       label,
@@ -177,7 +207,12 @@ class PhoneInputInspector extends React.PureComponent {
       inputMask
     } = this.props.element;
     const formatChecks = inputMask ? true : false;
-    const { optionType, isLinked } = this.state;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
     return (
       <div className="base-form-tool">
         <div className="costom-info-card">
@@ -189,47 +224,56 @@ class PhoneInputInspector extends React.PureComponent {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-          {
-              isInFormChild(this.props.elementParent)
-               ? null 
-               :<>
-                   <p htmlFor="email-tip">提示信息</p>
-                    <Input
-                      name="tooltip"
-                      placeholder="请输入提示信息"
-                      value={tooltip}
-                      onChange={this.handleChangeAttr}
-                      autoComplete="off"
-                    />
-                    <p htmlFor="email-err-tip">错误提示</p>
-                    <Input
-                      name="customMessage"
-                      placeholder="请输入错误提示"
-                      value={validate.customMessage}
-                      onChange={this.handleChangeAttr}
-                      autoComplete="off"
-                    />
-               </>
-          }
 
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p htmlFor="email-tip">提示信息</p>
+              <Input
+                name="tooltip"
+                placeholder="请输入提示信息"
+                value={tooltip}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+              <p htmlFor="email-err-tip">错误提示</p>
+              <Input
+                name="customMessage"
+                placeholder="请输入错误提示"
+                value={validate.customMessage}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+            </>
+          )}
 
           <p htmlFor="email-default-value">默认值</p>
           {isLinked ? (
-              <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
-            ) : (
-              <>
-                <Select
-                  value={optionType}
-                  style={{ width: "100%" }}
-                  onChange={this.handleSelectChange}
-                  className="data-source-select"
-                >
-                  <Option value="custom">自定义</Option>
-                  <Option value="DataLinkage">数据联动</Option>
-                </Select>
-                {this.renderOptionDataFrom(optionType)}
-              </>
-            )}
+            <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
+          ) : (
+            <>
+              <Select
+                value={optionType}
+                style={{ width: "100%" }}
+                onChange={this.handleSelectChange}
+                className="data-source-select"
+              >
+                <Option value="custom">自定义</Option>
+                <Option value="DataLinkage">数据联动</Option>
+              </Select>
+              {this.renderOptionDataFrom(optionType)}
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
@@ -242,17 +286,15 @@ class PhoneInputInspector extends React.PureComponent {
             >
               必填
             </Checkbox>
-            {
-              isInFormChild(this.props.elementParent)
-              ? null
-                : <Checkbox
+            {isInFormChild(this.props.elementParent) ? null : (
+              <Checkbox
                 name="unique"
                 checked={unique}
                 onChange={this.handleChangeAttr}
               >
                 不允许重复
               </Checkbox>
-            }
+            )}
             <Checkbox
               name="inputMask"
               checked={formatChecks}

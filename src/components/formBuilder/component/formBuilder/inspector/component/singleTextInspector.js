@@ -11,6 +11,7 @@ import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class SingleTextInspector extends React.Component {
@@ -20,7 +21,8 @@ class SingleTextInspector extends React.Component {
       optionType: this.props.element.data.type || "custom",
       formId: locationUtils.getUrlParamObj().id,
       isShowDataLinkageModal: false,
-      isLinked: false
+      isLinked: false,
+      apiNameTemp: undefined //api name 临时值
     };
   }
 
@@ -32,6 +34,13 @@ class SingleTextInspector extends React.Component {
         isLinked: true
       });
     }
+
+    const { apiName } = element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr = ev => {
@@ -201,9 +210,29 @@ class SingleTextInspector extends React.Component {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const { label, tooltip, validate, unique = false } = this.props.element;
-    const { optionType, isLinked } = this.state;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
 
     return (
       <div className="textarea-text-input">
@@ -216,6 +245,17 @@ class SingleTextInspector extends React.Component {
               placeholder="单行文本"
               value={label}
               onChange={this.handleChangeAttr}
+              autoComplete="off"
+            />
+
+            <p htmlFor="url-name">API Name</p>
+            <Input
+              id="single-text-title"
+              className={isUniqueApi ? "" : "err-input"}
+              name="key"
+              placeholder="API Name"
+              value={apiNameTemp}
+              onChange={this.handleChangeAPI}
               autoComplete="off"
             />
             {isInFormChild(this.props.elementParent) ? null : (

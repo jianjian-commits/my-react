@@ -56,7 +56,7 @@ var _calcFormComponentLayout = formDataArray => {
       return;
     }
 
-    let domElement = document.getElementById(item.key);
+    let domElement = document.getElementById(item.id);
     let newHeight = null;
 
     if (item.type === "FormChildTest") {

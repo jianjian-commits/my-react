@@ -15,6 +15,7 @@ import {
   setFormChildItemAttr,
   setCalcLayout
 } from "../../redux/utils/operateFormComponent";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class CheckboxInspector extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +23,16 @@ class CheckboxInspector extends React.Component {
     this.addChooseItem = this.addChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
   }
+
+  componentDidMount() {
+    const { apiName } = this.props.element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
+  }
+
   handleChangeAttr(ev) {
     let { name, value, checked } = ev.target;
     let { validate } = this.props.element;
@@ -154,8 +165,24 @@ class CheckboxInspector extends React.Component {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const { label, validate, values, inline, tooltip } = this.props.element;
+    const { apiNameTemp, isUniqueApi = true } = this.state;
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
@@ -168,6 +195,17 @@ class CheckboxInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
           {isInFormChild(this.props.elementParent) ? null : (
             <>
               <p htmlFor="radio-text-tip">提示信息</p>
