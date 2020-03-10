@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import Authenticate from "../shared/Authenticate";
 import { Button, Table, message, Popconfirm } from "antd";
 import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
 import PermissionSetting from "../userManagement/applyPermissionSettings";
-
+import { PROFILE_MANAGEMENT_NEW } from "../../auth";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 
@@ -23,9 +23,11 @@ function GroupList(props) {
     <>
       <span>分组</span>
       <Button icon="filter">筛选</Button>
-      <Button icon="plus" onClick={handleClick}>
-        添加分组
-      </Button>
+      <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
+        <Button icon="plus" onClick={handleClick}>
+          添加分组
+        </Button>
+      </Authenticate>
       <Table
         // size="middle"
         columns={columns}
