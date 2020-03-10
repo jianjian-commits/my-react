@@ -10,6 +10,7 @@ import {
   SET_FORMCHILDITEM_VALUES,
   SET_ACTIVEINNERINDEX,
   INIT_ACTIVEINNERINDEX,
+  SET_ERROR_COMPONENT_INDEX
 } from "../action";
 
 export const setData = (data, saveData) => dispatch => {
@@ -49,7 +50,13 @@ export const setItemAttr = (element, attr, value) => {
     value
   };
 };
-export const setFormChildItemAttr = (element, attr, value, innerElement, dataType) => {
+export const setFormChildItemAttr = (
+  element,
+  attr,
+  value,
+  innerElement,
+  dataType
+) => {
   if (_attrArray.includes(attr)) {
     attr = "validate";
   }
@@ -106,5 +113,13 @@ export const setFormChildItemValues = (element, attr, value, innerElement) => {
     attr,
     value,
     innerElement
+  };
+};
+
+// 设置当前错误组件index
+export const setErrorComponentIndex = index => {
+  return {
+    type: SET_ERROR_COMPONENT_INDEX,
+    index
   };
 };

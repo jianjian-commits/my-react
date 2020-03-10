@@ -19,7 +19,7 @@ class SingleTextInspector extends React.Component {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isLinked: false,
       apiNameTemp: undefined //api name 临时值
@@ -34,18 +34,17 @@ class SingleTextInspector extends React.Component {
         isLinked: true
       });
     }
-
-    const { apiName } = element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
+      apiNameTemp: key,
       isUniqueApi: isUniqueApi
     });
   }
 
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
-    let { validate } = this.props.element;
+    let { validate, unique } = this.props.element;
     validate = { ...validate };
     switch (name) {
       case "customMessage": {
@@ -122,7 +121,12 @@ class SingleTextInspector extends React.Component {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
-
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if (errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -143,13 +147,17 @@ class SingleTextInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -226,7 +234,7 @@ class SingleTextInspector extends React.Component {
   };
 
   render() {
-    const { label, tooltip, validate, unique = false } = this.props.element;
+    const { id, label, tooltip, validate, unique = false } = this.props.element;
     const {
       optionType,
       isLinked,
@@ -252,6 +260,7 @@ class SingleTextInspector extends React.Component {
             <Input
               id="single-text-title"
               className={isUniqueApi ? "" : "err-input"}
+              disabled={this.state.formPath ? true : false}
               name="key"
               placeholder="API Name"
               value={apiNameTemp}
@@ -367,7 +376,8 @@ class SingleTextInspector extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,

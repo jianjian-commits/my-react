@@ -15,20 +15,24 @@ import {
   setFormChildItemAttr,
   setCalcLayout
 } from "../../redux/utils/operateFormComponent";
+
+import locationUtils from "../../../../utils/locationUtils";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class CheckboxInspector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      formPath: locationUtils.getUrlParamObj().path
+    };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
   }
 
   componentDidMount() {
-    const { apiName } = this.props.element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
+      apiNameTemp: key,
       isUniqueApi: isUniqueApi
     });
   }
@@ -62,14 +66,14 @@ class CheckboxInspector extends React.Component {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value !== undefined ? value : checked,
+        value != undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value !== undefined ? value : checked
+        value != undefined ? value : checked
       );
     }
   }
@@ -151,7 +155,7 @@ class CheckboxInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxOptionNumber: value == void 0 ? Number.MAX_SAFE_INTEGER : value
+      maxOptionNumber: value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -195,10 +199,12 @@ class CheckboxInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
+
           <p htmlFor="url-name">API Name</p>
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
+            disabled={this.state.formPath ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

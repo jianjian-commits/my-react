@@ -7,6 +7,7 @@ import {
   setFormChildItemAttr
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
+import locationUtils from "../../../../utils/locationUtils";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class RadioInputInspector extends React.Component {
   constructor(props) {
@@ -17,11 +18,12 @@ class RadioInputInspector extends React.Component {
   }
 
   componentDidMount() {
-    const { apiName } = this.props.element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
-      isUniqueApi: isUniqueApi
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi,
+      formPath: locationUtils.getUrlParamObj().path
     });
   }
 
@@ -169,6 +171,7 @@ class RadioInputInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
+            disabled={this.state.formPath ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

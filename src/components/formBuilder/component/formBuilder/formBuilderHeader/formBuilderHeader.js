@@ -1,8 +1,10 @@
 import React from "react";
 import { Button, Icon, Modal, Tooltip, message, Spin } from "antd";
 import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
+import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import checkAndSaveForm from "../utils/checkSaveFormUtils";
 import config from "../../../config/config";
 class ForBuilderHeader extends React.Component {
   constructor(props) {
@@ -187,6 +189,10 @@ class ForBuilderHeader extends React.Component {
           <Button
             disabled={!this.state.btnCanClick}
             onClick={e => {
+              const checkRes = checkAndSaveForm(this.props);
+              if (!checkRes.res) {
+                return;
+              }
               this.setState({ btnCanClick: false }, () => {
                 editForm || this.props.localForm !== null
                   ? (() => {
@@ -249,6 +255,7 @@ export default connect(
   {
     setFormName,
     saveForm,
-    updateForm
+    updateForm,
+    setErrorComponentIndex
   }
 )(withRouter(ForBuilderHeader));

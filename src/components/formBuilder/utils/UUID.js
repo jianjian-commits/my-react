@@ -4,18 +4,69 @@ var CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".spl
   ""
 );
 var ID = {};
-
 const uuidTypeIndex = {};
-ID.uuid = function(type) {
+
+ID.uuid = function(type, components = []) {
+  const keys = [];
+  components.forEach(component => {
+    if (component.type === "FormChildTest") {
+      keys.push(component.key);
+      component.values.forEach(item => {
+        keys.push(item.key);
+      });
+    } else {
+      keys.push(component.key);
+    }
+  });
+
+  while (
+    keys.includes(type) &&
+    (keys.includes(type + uuidTypeIndex[type]) ||
+      !uuidTypeIndex.hasOwnProperty(type))
+  ) {
+    if (uuidTypeIndex.hasOwnProperty(type)) {
+      uuidTypeIndex[type]++;
+    } else {
+      uuidTypeIndex[type] = 1;
+    }
+  }
+
   if (uuidTypeIndex.hasOwnProperty(type)) {
-    uuidTypeIndex[type]++;
     return type + uuidTypeIndex[type];
   } else {
-    uuidTypeIndex[type] = 0;
     return type;
   }
 };
 
+ID.oldUuid = function(len, radix) {
+  var chars = CHARS,
+    uuid = [],
+    i;
+  radix = radix || chars.length;
+
+  if (len) {
+    // Compact form
+    for (i = 0; i < len; i++) uuid[i] = chars[0 | (Math.random() * radix)];
+  } else {
+    // rfc4122, version 4 form
+    var r;
+
+    // rfc4122 requires these characters
+    uuid[8] = uuid[13] = uuid[18] = "-";
+    uuid[0] = "M";
+
+    // Fill in random data.  At i==19 set the high bits of clock sequence as
+    // per rfc4122, sec. 4.1.5
+    for (i = 1; i < 26; i++) {
+      if (!uuid[i]) {
+        r = 0 | (Math.random() * 16);
+        uuid[i] = chars[i == 19 ? (r & 0x3) | 0x8 : r];
+      }
+    }
+  }
+
+  return uuid.join("");
+};
 // A more performant, but slightly bulkier, RFC4122v4 solution.  We boost performance
 // by minimizing calls to random()
 ID.uuidFast = function() {

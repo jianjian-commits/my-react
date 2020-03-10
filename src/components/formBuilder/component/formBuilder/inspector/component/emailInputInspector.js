@@ -6,13 +6,15 @@ import {
   setFormChildItemAttr
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
+import locationUtils from "../../../../utils/locationUtils";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 
 class EmailInputInspector extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       apiNameTemp: undefined //api name 临时值
     };
@@ -20,10 +22,10 @@ class EmailInputInspector extends React.PureComponent {
 
   componentDidMount() {
     const { element } = this.props;
-    const { apiName } = element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
+      apiNameTemp: key,
       isUniqueApi: isUniqueApi
     });
   }
@@ -36,6 +38,12 @@ class EmailInputInspector extends React.PureComponent {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if (errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -54,13 +62,17 @@ class EmailInputInspector extends React.PureComponent {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -185,6 +197,11 @@ class EmailInputInspector extends React.PureComponent {
     );
   }
 }
-export default connect(store => ({}), {
-  setItemAttr
-})(EmailInputInspector);
+export default connect(
+  store => ({
+    errorComponentIndex: store.formBuilder.errorComponentIndex
+  }),
+  {
+    setItemAttr
+  }
+)(EmailInputInspector);

@@ -6,6 +6,7 @@ import {
   setFormChildItemAttr
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
+import locationUtils from "../../../../utils/locationUtils";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class IdCardInspector extends React.Component {
   constructor(props) {
@@ -14,15 +15,18 @@ class IdCardInspector extends React.Component {
       apiNameTemp: undefined //api name 临时值
     };
   }
+
   componentDidMount() {
     const { element } = this.props;
-    const { apiName } = element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
-      isUniqueApi: isUniqueApi
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi,
+      formPath: locationUtils.getUrlParamObj().path
     });
   }
+
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
     let { validate } = this.props.element;
@@ -102,6 +106,7 @@ class IdCardInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
+            disabled={this.state.formPath ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}
@@ -139,7 +144,7 @@ class IdCardInspector extends React.Component {
             value={defaultValue}
             onChange={this.handleChangeAttr}
             autoComplete="off"
-          /> */}
+          />  */}
         </div>
         <Divider />
         <div className="costom-info-card">

@@ -7,11 +7,15 @@ import {
 } from "../../../redux/utils/operateFormComponent";
 import PositionCenterList from "./component/positionCenterList";
 import isInFormChild from "../../utils/isInFormChild";
+import locationUtils from "../../../../../utils/locationUtils";
 import { checkUniqueApi } from "../../utils/checkUniqueApiName";
 class GetLocalPositionInspector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      apiNameTemp: undefined, //api name 临时值
+      formPath: locationUtils.getUrlParamObj().path
+    };
   }
 
   deleteCenterPosition = index => {
@@ -109,10 +113,10 @@ class GetLocalPositionInspector extends React.Component {
 
   componentDidMount() {
     const { element } = this.props;
-    const { apiName } = element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
+      apiNameTemp: key,
       isUniqueApi: isUniqueApi
     });
   }
@@ -154,6 +158,7 @@ class GetLocalPositionInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
+            disabled={this.state.formPath ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}
@@ -215,8 +220,8 @@ class GetLocalPositionInspector extends React.Component {
               onChange={this.handleChangeSelect}
               disabled={!isAdjustmentRange}
             >
-              <Select.Option value="100">100米</Select.Option>
-              <Select.Option value="200">200米</Select.Option>
+              <Select.Option value="100米">100米</Select.Option>
+              <Select.Option value="200米">200米</Select.Option>
               <Select.Option value="5000">5000米</Select.Option>
             </Select>
           </div>

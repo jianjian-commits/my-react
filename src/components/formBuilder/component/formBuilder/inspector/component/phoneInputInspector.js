@@ -19,7 +19,7 @@ class PhoneInputInspector extends React.PureComponent {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isLinked: false,
       isShowDataLinkageModal: false,
       apiNameTemp: undefined //api name 临时值
@@ -34,11 +34,10 @@ class PhoneInputInspector extends React.PureComponent {
         isLinked: true
       });
     }
-
-    const { apiName } = this.props.element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
+      apiNameTemp: key,
       isUniqueApi: isUniqueApi
     });
   }
@@ -87,6 +86,13 @@ class PhoneInputInspector extends React.PureComponent {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
+    const { defaultValue } = element;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if (errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -107,13 +113,17 @@ class PhoneInputInspector extends React.PureComponent {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -183,6 +193,29 @@ class PhoneInputInspector extends React.PureComponent {
     }
   };
 
+  handleCheckUniqueApi = value => {
+    if (!value) {
+      return true;
+    }
+    const { data, element } = this.props;
+    let apiNames = [];
+    data.forEach(component => {
+      if (component.id !== element.id) {
+        if (component.type === "FormChildTest") {
+          component.values.forEach(item => {
+            if (item.id !== element.id) {
+              item.apiName && apiNames.push(item.apiName);
+            }
+          });
+        } else {
+          component.apiName && apiNames.push(component.apiName);
+        }
+      }
+    });
+    apiNames = apiNames.filter(item => item);
+    return !apiNames.includes(value);
+  };
+
   // API change
   handleChangeAPI = ev => {
     const { value } = ev.target;
@@ -229,6 +262,7 @@ class PhoneInputInspector extends React.PureComponent {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
+            disabled={this.state.formPath ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}
@@ -312,7 +346,8 @@ class PhoneInputInspector extends React.PureComponent {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,

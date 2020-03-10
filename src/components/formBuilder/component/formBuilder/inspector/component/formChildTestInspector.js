@@ -1,11 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Input, Checkbox, Tooltip, Select, Button, Divider } from "antd";
-import { updateOrder, setItemAttr, setFormChildItemAttr, setItemValues } from "../../redux/utils/operateFormComponent";
+import {
+  updateOrder,
+  setItemAttr,
+  setFormChildItemAttr,
+  setItemValues
+} from "../../redux/utils/operateFormComponent";
 import ID from "../../../../utils/UUID";
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
-import { basicComponentsArray, advancedComponentArray } from "../../toolbar/toolbar";
+import {
+  basicComponentsArray,
+  advancedComponentArray
+} from "../../toolbar/toolbar";
 import locationUtils from "../../../../utils/locationUtils";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class ComponentItem extends React.Component {
@@ -27,9 +36,9 @@ class ComponentItem extends React.Component {
       (item, index) => index === this.props.itemIndex
     )[0];
     let newData = JSON.parse(JSON.stringify(beCopiedValue));
-    let key = ID.uuid();
+    let key = ID.oldUuid();
     newData.id = key;
-    newData.key = key;
+    newData.key = ID.uuid(newData.type, this.props.data);
     newData.layout.i = key;
     newData.layout.y = 0;
     this.props.setItemAttr(element, "values", [...values, newData]);
@@ -39,14 +48,17 @@ class ComponentItem extends React.Component {
       <div className="ComponentItem">
         <Input value={this.props.item.label} disabled />
         <Tooltip title="复制">
-          <img src="/image/icons/复制@2x.png" alt=""
+          <img
+            src="/image/icons/复制@2x.png"
             onClick={this.handleCopyComponent}
+            alt=""
           />
         </Tooltip>
         <Tooltip title="删除">
           <img
-            src="/image/icons/delete.png" alt=""
+            src="/image/icons/delete.png"
             onClick={this.handleDeleteComponent}
+            alt=""
           />
         </Tooltip>
       </div>
@@ -59,13 +71,23 @@ class FormChildTestInspector extends React.Component {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false
     };
   }
+  componentDidMount() {
+    const { element } = this.props;
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
+  }
+
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
-    let { validate } = this.props.element;
+    let { validate, unique } = this.props.element;
     validate = { ...validate };
     switch (name) {
       case "customMessage": {
@@ -83,7 +105,8 @@ class FormChildTestInspector extends React.Component {
         value = validate;
         break;
       }
-      default: break;
+      default:
+        break;
     }
     this.props.setItemAttr(
       this.props.element,
@@ -93,20 +116,22 @@ class FormChildTestInspector extends React.Component {
   };
 
   _getComponentItem = value => {
-    const componentItem = advancedComponentArray.concat(basicComponentsArray).filter(item => {
-      return item.label === value;
-    });
+    const componentItem = advancedComponentArray
+      .concat(basicComponentsArray)
+      .filter(item => {
+        return item.label === value;
+      });
     return componentItem[0];
   };
 
   handleSelectItem = value => {
     let { values } = this.props.element;
     let item = this._getComponentItem(value);
-    let key = ID.uuid();
+    let key = ID.uuid(this.props.element.type, this.props.data);
 
     let elementOptions = {
       ...item,
-      id: key,
+      id: ID.oldUuid(),
       key: key,
       isShow: true,
       layout: { i: key, x: 2, y: 0, w: 8, h: 3, minH: 2, minW: 2 },
@@ -121,6 +146,12 @@ class FormChildTestInspector extends React.Component {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if (errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       // 数据联动组件
@@ -128,13 +159,17 @@ class FormChildTestInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -193,6 +228,21 @@ class FormChildTestInspector extends React.Component {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const {
       id,
@@ -204,6 +254,7 @@ class FormChildTestInspector extends React.Component {
       values
     } = this.props.element;
     const { optionType } = this.state;
+    const { apiNameTemp, isUniqueApi = true } = this.state;
 
     return (
       <div className="FormChildTestInspector">
@@ -216,6 +267,18 @@ class FormChildTestInspector extends React.Component {
               placeholder="单行文本"
               value={label}
               onChange={this.handleChangeAttr}
+              autoComplete="off"
+            />
+
+            <p htmlFor="url-name">API Name</p>
+            <Input
+              id="single-text-title"
+              name="key"
+              placeholder="API Name"
+              className={isUniqueApi ? "" : "err-input"}
+              disabled={this.state.formPath ? true : false}
+              value={apiNameTemp}
+              onChange={this.handleChangeAPI}
               autoComplete="off"
             />
 
@@ -247,10 +310,13 @@ class FormChildTestInspector extends React.Component {
               }}
             >
               {[...basicComponentsArray, ...advancedComponentArray]
-                .filter(item => item.type !== 'FormChildTest'
-                  && item.type !== "GetLocalPosition"
-                  && item.type !== "HandWrittenSignature"
-                  && item.type !== "ComponentTemplate")
+                .filter(
+                  item =>
+                    item.type !== "FormChildTest" &&
+                    item.type !== "GetLocalPosition" &&
+                    item.type !== "HandWrittenSignature" &&
+                    item.type !== "ComponentTemplate"
+                )
                 .map((item, i) => (
                   <Select.Option key={`${item.type}${i}`} value={item.label}>
                     {item.label}
@@ -280,7 +346,7 @@ class FormChildTestInspector extends React.Component {
                 onChange={this.handleChangeAttr}
               >
                 必填
-                </Checkbox>
+              </Checkbox>
             </div>
           </div>
         </div>

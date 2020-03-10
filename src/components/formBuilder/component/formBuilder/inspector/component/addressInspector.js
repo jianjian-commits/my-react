@@ -19,7 +19,7 @@ class AddressInspector extends React.PureComponent {
     this.state = {
       optionType:
         (this.props.element.data && this.props.element.data.type) || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isLinked: false,
       apiNameTemp: undefined //api name 临时值
@@ -34,10 +34,10 @@ class AddressInspector extends React.PureComponent {
         isLinked: true
       });
     }
-    const { apiName } = element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
+      apiNameTemp: key,
       isUniqueApi: isUniqueApi
     });
   }
@@ -70,14 +70,14 @@ class AddressInspector extends React.PureComponent {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value !== undefined ? value : checked,
+        value != undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value !== undefined ? value : checked
+        value != undefined ? value : checked
       );
     }
   };
@@ -86,6 +86,12 @@ class AddressInspector extends React.PureComponent {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if (errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       // 数据联动组件
@@ -96,10 +102,14 @@ class AddressInspector extends React.PureComponent {
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
-              className="data-link-set"
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
             >
-              {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -210,6 +220,7 @@ class AddressInspector extends React.PureComponent {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
+            disabled={this.state.formPath ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}
@@ -282,7 +293,8 @@ class AddressInspector extends React.PureComponent {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,

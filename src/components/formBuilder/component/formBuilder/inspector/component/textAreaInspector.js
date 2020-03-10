@@ -1,6 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Input, Checkbox, InputNumber, Select, Button, Divider } from "antd";
+
+import {
+  Input,
+  Checkbox,
+  Tooltip,
+  Icon,
+  InputNumber,
+  Select,
+  Button,
+  Divider
+} from "antd";
 import {
   setItemAttr,
   setItemValues,
@@ -19,7 +29,7 @@ class TextAreaInspector extends React.Component {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isLinked: false,
       apiNameTemp: undefined //api name 临时值
@@ -34,18 +44,19 @@ class TextAreaInspector extends React.Component {
         isLinked: true
       });
     }
-    const { apiName } = this.props.element;
-    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
     this.setState({
-      apiNameTemp: apiName,
+      apiNameTemp: key,
       isUniqueApi: isUniqueApi
     });
   }
 
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
-    let { validate } = this.props.element;
+    let { validate, unique } = this.props.element;
     validate = { ...validate };
+    // console.log(this.props.element, validate)
     switch (name) {
       case "customMessage": {
         validate.customMessage = value;
@@ -126,6 +137,12 @@ class TextAreaInspector extends React.Component {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if (errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -146,13 +163,17 @@ class TextAreaInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -262,7 +283,7 @@ class TextAreaInspector extends React.Component {
             <Input
               id="single-text-title"
               name="label"
-              placeholder="单行文本"
+              placeholder="API Name"
               value={label}
               onChange={this.handleChangeAttr}
               autoComplete="off"
@@ -273,6 +294,7 @@ class TextAreaInspector extends React.Component {
               name="key"
               placeholder="API Name"
               className={isUniqueApi ? "" : "err-input"}
+              disabled={this.state.formPath ? true : false}
               value={apiNameTemp}
               onChange={this.handleChangeAPI}
               autoComplete="off"
@@ -374,6 +396,17 @@ class TextAreaInspector extends React.Component {
                 autoComplete="off"
               />
             </div>
+            {/* {isInFormChild(this.props.elementParent) ? null : (
+              <div className="checkbox-wrapper">
+                <Checkbox
+                  name="unique"
+                  checked={unique}
+                  onChange={this.handleChangeAttr}
+                >
+                  不允许重复
+                </Checkbox>
+              </div>
+            )} */}
           </div>
         </div>
       </div>
@@ -384,7 +417,8 @@ class TextAreaInspector extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,
