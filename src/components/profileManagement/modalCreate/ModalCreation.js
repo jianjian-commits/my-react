@@ -1,17 +1,20 @@
 import React, { Component } from "react";
-import { Modal, Form, Input, Icon } from "antd";
+import { Modal, Form, Input } from "antd";
 import classes from "./create.module.scss";
 import classnames from "classnames";
 import MyTextArea from "./MyTextArea";
 
 // 图标数据
-const iconData = [
-  { icon: "edit" },
-  { icon: "snippets" },
-  { icon: "bar-chart" },
-  { icon: "car" },
-  { icon: "schedule" },
-  { icon: "apartment" }
+const iconDatas = [
+  "icon1",
+  "icon2",
+  "icon3",
+  "icon4",
+  "icon5",
+  "icon6",
+  "icon7",
+  "icon8",
+  "icon9"
 ];
 
 class ModalCreation extends Component {
@@ -33,7 +36,7 @@ class ModalCreation extends Component {
     const { getFieldDecorator, setFields, getFieldValue } = form;
     const appParams = [
       {
-        label: "应用名",
+        label: "应用名称",
         key: "name",
         options: { rules: [{ required: true, message: "应用名不能为空" }] },
         component: <Input />
@@ -45,9 +48,10 @@ class ModalCreation extends Component {
         component: (
           <MyTextArea
             required
-            rows={3}
+            rows={5}
             maxLength={30}
             className={classes.stretch}
+            placeholder="简单描述一下你的应用吧"
           />
         )
       },
@@ -57,17 +61,18 @@ class ModalCreation extends Component {
         options: { rules: [{ required: true, message: "应用图标不能为空" }] },
         component: (
           <div className={classes.iconStyle}>
-            {iconData.map(i => (
-              <Icon
-                key={i.icon}
-                type={i.icon}
+            {iconDatas.map(item => (
+              <img
+                key={item}
+                src={`/image/appCreateIcons/${item}.png`}
+                alt=""
                 onClick={() =>
-                  setFields({ icon: { errors: null, value: i.icon } })
+                  setFields({ icon: { errors: null, value: item } })
                 }
                 className={classnames({
-                  [classes.active]: getFieldValue("icon") === i.icon
+                  [classes.active]: getFieldValue("icon") === item
                 })}
-              ></Icon>
+              />
             ))}
           </div>
         )
@@ -88,11 +93,13 @@ class ModalCreation extends Component {
         visible={visible}
         width="500px"
         title={title}
-        okText="创建"
+        okText="确定"
         cancelText="取消"
         onOk={() => this.onOk(title)}
         onCancel={this.onCancel.bind(this)}
         maskClosable={false}
+        className={classes.appModalStyles}
+        closable={false}
       >
         <Form>
           {params.map(i => (

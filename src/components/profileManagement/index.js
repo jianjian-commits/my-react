@@ -9,6 +9,39 @@ import PermissionSetting from "../userManagement/applyPermissionSettings";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 
+function GroupList(props) {
+  const {
+    handleClick,
+    columns,
+    dataSource,
+    title,
+    visible,
+    onOk,
+    onCancel
+  } = props;
+  return (
+    <>
+      <span>分组</span>
+      <Button icon="filter">筛选</Button>
+      <Button icon="plus" onClick={handleClick}>
+        添加分组
+      </Button>
+      <Table
+        // size="middle"
+        columns={columns}
+        dataSource={dataSource}
+        rowKey="roleId"
+      ></Table>
+      <ModalCreation
+        title={title}
+        visible={visible}
+        onOk={onOk}
+        onCancel={onCancel}
+      />
+    </>
+  );
+}
+
 class ProfileManagement extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +56,6 @@ class ProfileManagement extends React.Component {
     this.action = "view";
     this.roleId = "";
     this.appId = "";
-    this.handleCancel = this.handleCancel.bind(this);
     this.enterDetail = this.enterDetail.bind(this);
     this.enterPermission = this.enterPermission.bind(this);
   }
@@ -71,15 +103,14 @@ class ProfileManagement extends React.Component {
             });
       if (res && res.status === "SUCCESS") {
         message.success(`${title}成功!`);
-        this.handleCancel();
         this.getGroupList();
       } else {
         message.error(`${title}失败`);
-        this.handleCancel();
       }
     } catch (err) {
       message.error(`${title}失败`);
-      this.handleCancel();
+    } finally {
+      this.setState({ open: false });
     }
   }
 
@@ -98,13 +129,6 @@ class ProfileManagement extends React.Component {
     } catch (err) {
       message.error("删除失败！");
     }
-  }
-
-  // 取消新建分组/关闭模态窗
-  handleCancel() {
-    this.setState({
-      open: false
-    });
   }
 
   // 进入或退出分组详情
@@ -127,56 +151,63 @@ class ProfileManagement extends React.Component {
 
   render() {
     const { open, title, roleList } = this.state;
-    // 分组列表标题和操作
     const columns = [
       { title: "组名", dataIndex: "roleName" },
       {
         title: "操作",
         dataIndex: "action",
-        render: (text, record) => (
-          <span className={classes.actionStyle}>
-            <Button
-              type="link"
-              onClick={() => {
-                this.enterDetail(true, "view", record);
-              }}
-            >
-              查看
-            </Button>
-            {record.code !== "SUPER_ADMIN" && (
-              <Button
-                type="link"
-                onClick={() => {
-                  this.enterDetail(true, "edit", record);
-                }}
-              >
-                编辑
-              </Button>
-            )}
-            <Button
-              type="link"
-              onClick={() =>
+        width: 520,
+        render: (text, record) => {
+          const roleList = [
+            {
+              key: "view",
+              text: "查看",
+              options: () => this.enterDetail(true, "view", record)
+            },
+            {
+              key: "edit",
+              text: "编辑",
+              options: () => this.enterDetail(true, "edit", record),
+              hide: record.code === "SUPER_ADMIN"
+            },
+            {
+              key: "clone",
+              text: "克隆",
+              options: () =>
                 this.setState({
                   open: true,
                   title: "克隆分组",
                   oldRoleId: record.roleId
                 })
-              }
-            >
-              克隆
-            </Button>
-            {record.code !== "SUPER_ADMIN" && record.code !== "GENERAL" && (
-              <Popconfirm
-                title="是否删除这个分组？"
-                okText="是"
-                cancelText="否"
-                onConfirm={() => this.removeGroup(record)}
-              >
-                <Button type="link">删除</Button>
-              </Popconfirm>
-            )}
-          </span>
-        )
+            },
+            {
+              key: "delete",
+              text: "删除",
+              hide: record.code === "SUPER_ADMIN" || record.code === "GENERAL"
+            }
+          ];
+          return roleList
+            .filter(v => !v.hide)
+            .map(w => {
+              return w.key === "delete" ? (
+                <Popconfirm
+                  title="是否删除这个分组？"
+                  okText="是"
+                  cancelText="否"
+                  onConfirm={() => this.removeGroup(record)}
+                  key={w.key}
+                >
+                  <Button type="link" key={w.key}>
+                    {w.text}
+                  </Button>
+                </Popconfirm>
+              ) : (
+                <Button type="link" onClick={w.options} key={w.key}>
+                  {w.text}
+                </Button>
+              );
+            });
+        }
       }
     ];
 
@@ -197,28 +228,15 @@ class ProfileManagement extends React.Component {
             enterPermission={this.enterPermission}
           />
         ) : (
-          <>
-            <Button
-              type="primary"
-              onClick={() => this.setState({ open: true, title: "添加分组" })}
-            >
-              添加分组
-            </Button>
-            <ModalCreation
-              title={title}
-              visible={open}
-              onOk={data => this.handleCreate(data, title)}
-              onCancel={this.handleCancel}
-            />
-            <div className={classes.tableStyles}>
-              <Table
-                size="middle"
-                columns={columns}
-                dataSource={roleList}
-                rowKey="roleId"
-              ></Table>
-            </div>
-          </>
+          <GroupList
+            handleClick={() => this.setState({ open: true, title: "添加分组" })}
+            columns={columns}
+            dataSource={roleList}
+            onOk={data => this.handleCreate(data, title)}
+            onCancel={() => this.setState({ open: false })}
+            visible={open}
+            title={title}
+          />
         )}
       </div>
     );

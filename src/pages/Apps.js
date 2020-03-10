@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { history } from "../store";
-import { Layout, Button, Card, Icon, message } from "antd";
+import { Layout, Button, Card, message } from "antd";
 import HomeHeader from "../components/header/HomeHeader";
 import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
@@ -22,7 +22,7 @@ const getApps = list => {
       >
         <Meta
           className={classes.appCardMeta}
-          avatar={<Icon type={e.icon} className={classes.avatarIcon} />}
+          avatar={<img src={`/image/appCreateIcons/${e.icon}.png`} alt="" />}
           title={e.name}
           description={e.description}
         />
