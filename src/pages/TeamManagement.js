@@ -3,8 +3,8 @@ import { Layout, Menu, Icon } from "antd";
 import { history } from "../store";
 // import CommonHeader from "../components/header/CommonHeader";
 import HomeHeader from "../components/header/HomeHeader";
-import TeamInfo from "../components/team/TeamInfo";
-import TeamMember from "../components/team/TeamMember";
+import TeamInfo from "../components/userManagement/team/TeamInfo";
+import TeamMember from "../components/userManagement/team/TeamMember";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
 import { PROFILE_MANAGEMENT_LIST, TEAM_MANAGEMENT_LIST } from "../auth";
@@ -18,23 +18,23 @@ const webs = [
     path: "/user/info",
     key: "info",
     label: "团队信息",
-    icon: "exclamation-circle",
+    icon: "file-text",
     component: TeamInfo
   },
   {
     path: "/user/member",
     key: "member",
     label: "团队成员",
-    icon: "user",
     auth: TEAM_MANAGEMENT_LIST,
+    icon: "team",
     component: TeamMember
   },
   {
     path: "/user/profile",
     key: "profile",
     label: "分组",
-    icon: "team",
     auth: PROFILE_MANAGEMENT_LIST,
+    icon: "switcher",
     exact: true,
     component: ProfileManagement
   }
