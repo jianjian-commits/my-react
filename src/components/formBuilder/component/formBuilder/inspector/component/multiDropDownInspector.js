@@ -21,6 +21,7 @@ import {
   setFormChildItemValues
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class MultiDropDownInspector extends React.Component {
@@ -45,6 +46,13 @@ class MultiDropDownInspector extends React.Component {
         isLinked: true
       });
     }
+
+    const { apiName } = this.props.element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr(ev) {
@@ -370,8 +378,28 @@ class MultiDropDownInspector extends React.Component {
     });
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { optionType, isLinked } = this.state;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
     const { elementParent } = this.props;
     const { label, validate, tooltip } = this.props.element;
     const { values } = this.props.element.data;
@@ -387,6 +415,18 @@ class MultiDropDownInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
+
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
           {isInFormChild(this.props.elementParent) ? null : (
             <>
               <p htmlFor="email-tip">提示信息</p>

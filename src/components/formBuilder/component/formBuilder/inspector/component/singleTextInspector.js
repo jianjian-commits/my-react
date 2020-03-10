@@ -252,7 +252,7 @@ class SingleTextInspector extends React.Component {
             <Input
               id="single-text-title"
               className={isUniqueApi ? "" : "err-input"}
-              name="apiName"
+              name="key"
               placeholder="API Name"
               value={apiNameTemp}
               onChange={this.handleChangeAPI}

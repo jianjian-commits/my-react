@@ -11,6 +11,7 @@ import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class NumberInputInspector extends React.PureComponent {
@@ -20,7 +21,8 @@ class NumberInputInspector extends React.PureComponent {
       optionType: this.props.element.data.type || "custom",
       formId: locationUtils.getUrlParamObj().id,
       isShowDataLinkageModal: false,
-      isLinked: false
+      isLinked: false,
+      apiNameTemp: undefined //api name 临时值
     };
   }
 
@@ -32,6 +34,12 @@ class NumberInputInspector extends React.PureComponent {
         isLinked: true
       });
     }
+    const { apiName } = element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr = ev => {
@@ -210,6 +218,21 @@ class NumberInputInspector extends React.PureComponent {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const {
       id,
@@ -220,7 +243,12 @@ class NumberInputInspector extends React.PureComponent {
       inputMask
     } = this.props.element;
     const formatChecks = inputMask ? true : false;
-    const { optionType, isLinked } = this.state;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
     const minBoundary = -Number.MAX_VALUE === validate.min ? "" : validate.min;
     return (
       <div className="textarea-text-input">
@@ -235,6 +263,18 @@ class NumberInputInspector extends React.PureComponent {
               onChange={this.handleChangeAttr}
               autoComplete="off"
             />
+
+            <p htmlFor="url-name">API Name</p>
+            <Input
+              id="single-text-title"
+              className={isUniqueApi ? "" : "err-input"}
+              name="key"
+              placeholder="API Name"
+              value={apiNameTemp}
+              onChange={this.handleChangeAPI}
+              autoComplete="off"
+            />
+
             {isInFormChild(this.props.elementParent) ? null : (
               <>
                 <p htmlFor="number-input-title-tip">提示信息</p>

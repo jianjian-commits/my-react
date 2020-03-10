@@ -210,7 +210,7 @@ class AddressInspector extends React.PureComponent {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            name="apiName"
+            name="key"
             placeholder="API Name"
             value={apiNameTemp}
             onChange={this.handleChangeAPI}

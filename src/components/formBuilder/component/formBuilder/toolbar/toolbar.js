@@ -339,13 +339,12 @@ class Toolbar extends React.Component {
   }
 
   create(item) {
-    let key = ID.uuid();
+    let key = ID.uuid(item.type);
 
     let elementOptions = {
       ...item,
       id: key,
       key: key,
-      apiName: key,
       isShow: true,
       layout: { i: key, x: 0, y: 0, w: 10, h: 3, minH: 2, minW: 2 },
       element: item.type

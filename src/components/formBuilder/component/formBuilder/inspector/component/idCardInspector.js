@@ -1,17 +1,32 @@
 import React from "react";
 import { Checkbox, Input, Divider } from "antd";
 import { connect } from "react-redux";
-import { setItemAttr, setFormChildItemAttr} from "../../redux/utils/operateFormComponent";
-import isInFormChild from "../utils/isInFormChild"
+import {
+  setItemAttr,
+  setFormChildItemAttr
+} from "../../redux/utils/operateFormComponent";
+import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class IdCardInspector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      apiNameTemp: undefined //api name 临时值
+    };
+  }
+  componentDidMount() {
+    const { element } = this.props;
+    const { apiName } = element;
+    const isUniqueApi = checkUniqueApi(apiName, this.props);
+    this.setState({
+      apiNameTemp: apiName,
+      isUniqueApi: isUniqueApi
+    });
   }
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
     let { validate } = this.props.element;
-    validate = {...validate};
+    validate = { ...validate };
     switch (name) {
       case "customMessage": {
         validate.customMessage = value;
@@ -43,6 +58,22 @@ class IdCardInspector extends React.Component {
       );
     }
   };
+
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const {
       label,
@@ -53,6 +84,7 @@ class IdCardInspector extends React.Component {
       inputMask
     } = this.props.element;
     const formatChecks = inputMask ? true : false;
+    const { apiNameTemp, isUniqueApi = true } = this.state;
     return (
       <div className="IdCardInspector">
         <div className="costom-info-card">
@@ -66,30 +98,39 @@ class IdCardInspector extends React.Component {
             autoComplete="off"
           />
 
-          {
-              isInFormChild(this.props.elementParent)
-               ? null 
-               :<>
-                  <p htmlFor="email-tip">提示信息</p>
-                  <Input
-                    id="email-tip"
-                    name="tooltip"
-                    placeholder="请输入提示信息"
-                    value={tooltip}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-                   <p htmlFor="email-err-tip">错误提示</p>
-                  <Input
-                    id="email-err-tip"
-                    name="customMessage"
-                    placeholder="请输入错误提示"
-                    value={validate.customMessage}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-               </>
-            }
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p htmlFor="email-tip">提示信息</p>
+              <Input
+                id="email-tip"
+                name="tooltip"
+                placeholder="请输入提示信息"
+                value={tooltip}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+              <p htmlFor="email-err-tip">错误提示</p>
+              <Input
+                id="email-err-tip"
+                name="customMessage"
+                placeholder="请输入错误提示"
+                value={validate.customMessage}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+            </>
+          )}
           {/* <p htmlFor="email-default-value">默认值</p>
           <Input
             id="email-default-value"
@@ -111,18 +152,16 @@ class IdCardInspector extends React.Component {
             >
               必填
             </Checkbox>
-            {
-              isInFormChild(this.props.elementParent)
-              ? null
-              :  <Checkbox
-                  name="unique"
-                  checked={unique}
-                  onChange={this.handleChangeAttr}
-                >
-                  不允许重复
-                </Checkbox>
-            }
-           
+            {isInFormChild(this.props.elementParent) ? null : (
+              <Checkbox
+                name="unique"
+                checked={unique}
+                onChange={this.handleChangeAttr}
+              >
+                不允许重复
+              </Checkbox>
+            )}
+
             <Checkbox
               name="inputMask"
               checked={formatChecks}
