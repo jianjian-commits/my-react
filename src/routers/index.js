@@ -96,18 +96,18 @@ export const appPaths = [
   {
     key: "form",
     label: "表单服务",
-    path: `/app/:appId/setting/form/:formId`,
+    path: `/app/:appId/setting/form/:formId/:serviceId`,
     icon: "file_copy",
     rough: true,
     component: AppServices
   },
-  {
-    key: "formEdit",
-    label: "表单服务",
-    path: `/app/:appId/setting/form/:formId/:serviceId`,
-    icon: "file_copy",
-    component: AppServicesEdit
-  },
+  // {
+  //   key: "formEdit",
+  //   label: "表单服务",
+  //   path: `/app/:appId/setting/form/:formId/:serviceId`,
+  //   icon: "file_copy",
+  //   component: AppServicesEdit
+  // },
   {
     key: "Dispose",
     label: "审批详情",

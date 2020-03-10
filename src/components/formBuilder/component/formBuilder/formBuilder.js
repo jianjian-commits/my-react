@@ -90,7 +90,6 @@ class ReactFormBuilder extends React.Component {
     if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
     }
-    debugger;
     return (
       <div className={"formBuilder"}>
         <Spin spinning={this.props.isInitForming}>
