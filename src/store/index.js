@@ -11,6 +11,7 @@ import formSubmitDataReducer from "../components/formBuilder/component/formData/
 import formBuilderReducer from "../components/formBuilder/component/formBuilder/redux/reducer";
 import login from "./loginReducer";
 import app from "./appReducer";
+import debug from "./debugReducer";
 import { Process, Approval } from "componentized-process";
 
 const { table_process, process, processMiddleware } = Process.redux;
@@ -22,6 +23,7 @@ const reducers = history =>
   combineReducers({
     login,
     app,
+    debug,
     table_process,
     table_approval,
     process,

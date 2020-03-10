@@ -7,6 +7,12 @@ import classes from "./team.module.scss";
 import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
 import InviteUser from "../modalInviteUser";
+import Authenticate from "../../shared/Authenticate";
+import {
+  TEAM_MANAGEMENT_INVITE,
+  TEAM_MANAGEMENT_DROP,
+  TEAM_MANAGEMENT_SWITCH
+} from "../../../auth";
 
 export default connect(
   ({ login }) => ({
@@ -62,22 +68,26 @@ export default connect(
           true
         ) : false ? null : (
           <span>
-            <Button
-              type="link"
-              onClick={handleChange.bind(this, text)}
-              style={{ paddingLeft: "0" }}
-            >
-              变更分组
-            </Button>
-            <Popconfirm
-              title="把该成员从团队中踢出?"
-              onConfirm={confirm.bind(this, text.id)}
-              okText="确认"
-              cancelText="取消"
-              placement="bottom"
-            >
-              <Button type="link">踢出</Button>
-            </Popconfirm>
+            <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
+              <Button
+                type="link"
+                onClick={handleChange.bind(this, text)}
+                style={{ paddingLeft: "0" }}
+              >
+                变更分组
+              </Button>
+            </Authenticate>
+            <Authenticate auth={TEAM_MANAGEMENT_DROP}>
+              <Popconfirm
+                title="把该成员从团队中踢出?"
+                onConfirm={confirm.bind(this, text.id)}
+                okText="确认"
+                cancelText="取消"
+                placement="bottom"
+              >
+                <Button type="link">踢出</Button>
+              </Popconfirm>
+            </Authenticate>
           </span>
         );
       }
@@ -197,7 +207,9 @@ export default connect(
           <div className={classes.title}>团队成员</div>
         </Col>
         <Col>
-          <InviteUser {...loginData} />
+          <Authenticate auth={TEAM_MANAGEMENT_INVITE}>
+            <InviteUser {...loginData} />
+          </Authenticate>
           <Button
             style={{ backgroundColor: "#ffffff" }}
             type="link"

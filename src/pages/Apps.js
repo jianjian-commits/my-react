@@ -6,6 +6,8 @@ import HomeHeader from "../components/header/HomeHeader";
 import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
+import Authenticate from "../components/shared/Authenticate";
+import { APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import classes from "../styles/apps.module.scss";
 const { Content } = Layout;
@@ -14,19 +16,20 @@ const { Meta } = Card;
 const getApps = list => {
   return list.map(e => {
     return (
-      <Card
-        key={e.id}
-        className={classes.appCard}
-        loading={false}
-        onClick={() => history.push(`/app/${e.id}/detail`)}
-      >
-        <Meta
-          className={classes.appCardMeta}
-          avatar={<img src={`/image/appCreateIcons/${e.icon}.png`} alt="" />}
-          title={e.name}
-          description={e.description}
-        />
-      </Card>
+      <Authenticate key={e.id} auth={APP_VISIABLED(e.id)}>
+        <Card
+          className={classes.appCard}
+          loading={false}
+          onClick={() => history.push(`/app/${e.id}/detail`)}
+        >
+          <Meta
+            className={classes.appCardMeta}
+            avatar={<img src={`/image/appCreateIcons/${e.icon}.png`} alt="" />}
+            title={e.name}
+            description={e.description}
+          />
+        </Card>
+      </Authenticate>
     );
   });
 };

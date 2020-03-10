@@ -4,6 +4,8 @@ import { Input, Row, Col, List, Button, Spin, message } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
+import Authenticate from "../../shared/Authenticate";
+import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   const [isRedact, setIsRedact] = useState(false);
@@ -45,7 +47,9 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
           <Col span={10}>{lable}</Col>
           <Col span={14}>
             {defaultValue}
-            <Button type="link" icon="form" onClick={switchRedact}></Button>
+            <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
+              <Button type="link" icon="form" onClick={switchRedact}></Button>
+            </Authenticate>
           </Col>
         </Row>
       )}
