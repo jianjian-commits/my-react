@@ -10,7 +10,7 @@ const navigationList = (appId, history) => [
   {
     key: 0,
     label: "理财产品合同审批",
-    onClick: () => history.push(`/app/${appId}/detail`)
+    disabled: true
   }
 ];
 

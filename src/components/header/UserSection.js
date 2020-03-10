@@ -1,52 +1,93 @@
-import React from "react";
-import { Dropdown, Icon, Popconfirm, Menu } from "antd";
+import React, { useState } from "react";
+import { Dropdown, Icon, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
-// const { Meta } = Card;
-// const UserDetail = (
-//   <Card style={{ width: 200, marginTop: 8, padding: 10 }} loading={false}>
-//     <Meta
-//       avatar={
-//         <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-//       }
-//       title="Devinci"
-//       description="这么巧，你也叫Devinci"
-//     />
-//   </Card>
-// );
+import { connect } from "react-redux";
+import {
+  signOut,
+  switchCurrentTeam,
+  initAllDetail
+} from "../../store/loginReducer";
+import Styles from "./header.module.scss";
 
-const MenuItems = signOut => (
-  <Menu>
-    <span>我的团队</span>
-    <Menu.Item>
-      <Link to="/">占位</Link>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item>
-      <Link to="/userDetail">个人信息</Link>
-    </Menu.Item>
-    <Menu.Item>
-      <Popconfirm
-        title="确定退出登录?"
-        onConfirm={signOut}
-        onCancel={() => ""}
-        okText="确定"
-        cancelText="取消"
-        placement="left"
-      >
-        <span>退出登录</span>
-      </Popconfirm>
-    </Menu.Item>
-  </Menu>
+const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
+  <>
+    <Menu>
+      <Menu.Item>
+        <span>我的团队</span>
+      </Menu.Item>
+
+      {allTeam.map(team => {
+        const check = team.id === currentTeam.id;
+        return (
+          <Menu.Item key={team.id}>
+            <Link
+              onClick={check ? () => "" : () => switchCurrentTeam(team.id)}
+              to="#"
+            >
+              {team.name}
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              {check && <Icon type="check" />}
+            </Link>
+          </Menu.Item>
+        );
+      })}
+      <Menu.Divider />
+      <Menu.Item>
+        <Link to="/userDetail">个人信息</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <div
+          style={{ width: "100%", height: "100%" }}
+          onClick={() => setVisible(true)}
+        >
+          退出登录
+        </div>
+      </Menu.Item>
+    </Menu>
+  </>
 );
 
-const User = ({ signOut, userData = {} }) => {
+const User = props => {
+  const { signOut, login, switchCurrentTeam, initAllDetail } = props;
+  const { userDetail, allTeam, currentTeam } = login;
+  const [init, setInit] = useState(false);
+  const [visible, setVisible] = useState(false);
+  if (!init) {
+    initAllDetail();
+    setInit(true);
+  }
   return (
-    <Dropdown overlay={MenuItems(signOut)}>
-      <Link className="ant-dropdown-link" to="#">
-        {userData.name}
-        <Icon type="down" style={{ margin: "0 0 0 5px" }} />
-      </Link>
-    </Dropdown>
+    <>
+      <Dropdown
+        overlayClassName={Styles.overlay}
+        overlay={MenuItems(allTeam, setVisible, currentTeam, switchCurrentTeam)}
+      >
+        <Link className="ant-dropdown-link" to="#">
+          {userDetail.name}
+          <Icon type="down" style={{ margin: "0 0 0 5px" }} />
+          <Modal
+            visible={visible}
+            width="419px"
+            title={"退出登录"}
+            cancelText={"取消"}
+            okText={"确定"}
+            onCancel={() => setVisible(false)}
+            onOk={signOut}
+          >
+            确定退出登录?
+          </Modal>
+        </Link>
+      </Dropdown>
+    </>
   );
 };
-export default User;
+export default connect(
+  ({ login }) => ({
+    login
+  }),
+  {
+    signOut,
+    switchCurrentTeam,
+    initAllDetail
+  }
+)(User);

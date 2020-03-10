@@ -1,7 +1,8 @@
 .wrapper {
   padding: 10px;
   .tableStyles {
-    padding-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 5px;
     :global(.ant-table-thead > tr > th:first-child) {
       width: 250px;
     }
@@ -128,6 +129,7 @@
 }
 
 // 只读输入框
-input:read-only {
+input:read-only,
+.readOnlyColor {
   color: #979797;
 }

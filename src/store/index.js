@@ -10,24 +10,37 @@ import homeReducer from "../components/formBuilder/component/homePage/redux/redu
 import formSubmitDataReducer from "../components/formBuilder/component/formData/redux/reducer";
 import formBuilderReducer from "../components/formBuilder/component/formBuilder/redux/reducer";
 import login from "./loginReducer";
-import user from "./userDetailReducer";
+import app from "./appReducer";
+import { Process, Approval } from "componentized-process";
+
+const { table_process, process, processMiddleware } = Process.redux;
+const { table_approval, approval, approvalMiddleware } = Approval.redux;
 
 export const history = createBrowserHistory();
 
 const reducers = history =>
   combineReducers({
     login,
+    app,
+    table_process,
+    table_approval,
+    process,
+    approval,
     formSubmitData: formSubmitDataReducer,
     forms: homeReducer,
     survey: surveyReducer,
     formBuilder: formBuilderReducer,
     rootData: rootReducer,
-    user,
     router: connectRouter(history)
   });
 
 const configureStore = preloadedState => {
-  const middlewares = [thunk, routerMiddleware(history)];
+  const middlewares = [
+    thunk,
+    processMiddleware,
+    approvalMiddleware,
+    routerMiddleware(history)
+  ];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 
   const enhancers = [middlewareEnhancer];
