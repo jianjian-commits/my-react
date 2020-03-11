@@ -4,6 +4,7 @@ import { Layout, Breadcrumb, Button } from "antd";
 import User from "./UserSection";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
+import Authenticate from "../shared/Authenticate";
 import { getAppList } from "../../store/appReducer";
 
 const { Header } = Layout;
@@ -41,9 +42,11 @@ const getNavigationList = navs => {
 const getOperations = ops => {
   if (!ops || !ops.length) return null;
   return ops.map(o => (
-    <Button key={o.key} icon={o.icon ? o.icon : undefined} onClick={o.onClick}>
-      {o.label}
-    </Button>
+    <Authenticate key={o.key} auth={o.auth}>
+      <Button icon={o.icon ? o.icon : undefined} onClick={o.onClick}>
+        {o.label}
+      </Button>
+    </Authenticate>
   ));
 };
 

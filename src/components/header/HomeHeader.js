@@ -2,6 +2,8 @@ import React from "react";
 import { Layout, Menu, Badge, Button } from "antd";
 import { useHistory } from "react-router-dom";
 import User from "./UserSection";
+import Authenticate from "../shared/Authenticate";
+import { TEAM_MANAGEMENT_ABLE } from "../../auth";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
 
@@ -45,9 +47,11 @@ export default connect(({ router }) => ({
           </Menu>
         </div>
         <div className={classes.operations}>
-          <Button icon="user" onClick={toUserMangement}>
-            团队管理
-          </Button>
+          <Authenticate auth={TEAM_MANAGEMENT_ABLE}>
+            <Button icon="user" onClick={toUserMangement}>
+              团队管理
+            </Button>
+          </Authenticate>
         </div>
         <div className={classes.user}>
           <User />
