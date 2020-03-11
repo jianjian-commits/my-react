@@ -25,7 +25,7 @@ export default connect(({ router }) => ({
   const selectHandle = e => {
     history.push(e.key);
   };
-  const toUserMangement = () => history.push("/user/info");
+  const toTeamMangement = () => history.push("/team/info");
   return (
     <Header className={classes.homeHeader}>
       <div className={classes.wrapper}>
@@ -48,7 +48,7 @@ export default connect(({ router }) => ({
         </div>
         <div className={classes.operations}>
           <Authenticate auth={TEAM_MANAGEMENT_ABLE}>
-            <Button icon="user" onClick={toUserMangement}>
+            <Button icon="user" onClick={toTeamMangement}>
               团队管理
             </Button>
           </Authenticate>

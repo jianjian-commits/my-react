@@ -1,6 +1,7 @@
 import React from "react";
 import { Layout, Menu, Icon } from "antd";
 import { history } from "../store";
+import { connect } from "react-redux";
 // import CommonHeader from "../components/header/CommonHeader";
 import HomeHeader from "../components/header/HomeHeader";
 import TeamInfo from "../components/userManagement/team/TeamInfo";
@@ -8,21 +9,22 @@ import TeamMember from "../components/userManagement/team/TeamMember";
 import ProfileManagement from "../components/profileManagement";
 import commonClasses from "../styles/common.module.scss";
 import { PROFILE_MANAGEMENT_LIST, TEAM_MANAGEMENT_LIST } from "../auth";
+import { authorityIsValid } from "../utils";
+import { Route } from "react-router-dom";
 import Authenticate from "../components/shared/Authenticate";
 
-import { Route } from "react-router-dom";
 const { Sider, Content } = Layout;
 
 const webs = [
   {
-    path: "/user/info",
+    path: "/team/info",
     key: "info",
     label: "团队信息",
     icon: "file-text",
     component: TeamInfo
   },
   {
-    path: "/user/member",
+    path: "/team/member",
     key: "member",
     label: "团队成员",
     auth: TEAM_MANAGEMENT_LIST,
@@ -30,7 +32,7 @@ const webs = [
     component: TeamMember
   },
   {
-    path: "/user/profile",
+    path: "/team/profile",
     key: "profile",
     label: "分组",
     auth: PROFILE_MANAGEMENT_LIST,
@@ -43,7 +45,7 @@ const webs = [
 class TeamManagement extends React.Component {
   constructor(props) {
     super(props);
-    const matches = /^\/user\/(\w+)\/?/.exec(history.location.pathname);
+    const matches = /^\/team\/(\w+)\/?/.exec(history.location.pathname);
     this.state = {
       selectedKey: (matches && matches[1]) || "info"
     };
@@ -53,14 +55,20 @@ class TeamManagement extends React.Component {
     history.push(path);
   }
   getMenu = webs =>
-    webs.map(w => (
-      <Menu.Item key={w.key} onClick={() => this.setSelectedKey(w.key, w.path)}>
-        <Authenticate auth={w.auth}>
+    webs
+      .filter(w => {
+        const { permissions, teamId, debug } = this.props;
+        return authorityIsValid({ permissions, teamId, debug, auth: w.auth });
+      })
+      .map(w => (
+        <Menu.Item
+          key={w.key}
+          onClick={() => this.setSelectedKey(w.key, w.path)}
+        >
           <Icon type={w.icon} />
           <span>{w.label}</span>
-        </Authenticate>
-      </Menu.Item>
-    ));
+        </Menu.Item>
+      ));
 
   render() {
     const { selectedKey } = this.state;
@@ -74,7 +82,9 @@ class TeamManagement extends React.Component {
           </Sider>
           <Content className={commonClasses.container}>
             {webs.map(route => (
-              <Route {...route} />
+              <Authenticate auth={route.auth}>
+                <Route {...route} />
+              </Authenticate>
             ))}
           </Content>
         </Layout>
@@ -83,4 +93,8 @@ class TeamManagement extends React.Component {
   }
 }
 
-export default TeamManagement;
+export default connect(({ login, debug }) => ({
+  permissions: (login.userDetail && login.userDetail.permissions) || [],
+  teamId: login.currentTeam && login.currentTeam.id,
+  debug: debug.isOpen
+}))(TeamManagement);
