@@ -236,8 +236,10 @@ export const saveForm = (
   })
     .then(response => {
       let id = response.data.id;
+      let path = response.data.path;
       console.log(id);
-      callback(`${url}${id}/edit?formId=${id}`);
+      // callback(`${url}${id}/edit?formId=${id}`);
+      callback(`${url}${path}/edit?formPath=${path}`);
       // if (type === "back") {
       //   // console.log("response",response);
       //   message.success("保存成功", 1, () => {
@@ -411,6 +413,37 @@ export const initForm = id => dispatch => {
       // mockLoginAndSetData(false, true);
     });
 };
+
+export const initFormByPath = path => dispatch => {
+  dispatch({
+    type: INIT_FORM_BEFORE,
+    isInitForming: true
+  });
+  instanceAxios
+    .get(config.apiUrl + "/form?path=" + path)
+    .then(res => {
+      console.log(1);
+      let { components, name, formValidation } = res.data[0];
+      let localForm = res.data[0];
+      dispatch({
+        type: INIT_FORM_DOM,
+        data: components,
+        name,
+        errMessage: formValidation.errMessage,
+        verificationList: formValidation.validate,
+        localForm,
+        isInitForming: false
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: INIT_FORM_BEFORE,
+        isInitForming: false
+      });
+      // mockLoginAndSetData(false, true);
+    });
+};
+
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => dispatch => {

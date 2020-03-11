@@ -5,6 +5,7 @@ import { Button, Form, message, Layout, Spin } from "antd";
 import {
   submitSubmission,
   getFormComponent,
+  getFormComponentByPath,
   getAllForms
 } from "./redux/utils/operateSubmissionUtils";
 import { getSubmissionData } from "../formData/redux/utils/getDataUtils";
@@ -60,6 +61,7 @@ class Submission extends Component {
       tipVisibility: false,
       //
       formId: this.props.formId,
+      formPath: this.props.formPath,
       formChildDataObj: {},
       currentLayout: null,
       customValicate: {
@@ -77,11 +79,17 @@ class Submission extends Component {
   }
 
   componentDidMount() {
-    const { getFormComponent, mountClassNameOnRoot, mobile = {} } = this.props;
+    const {
+      getFormComponent,
+      getFormComponentByPath,
+      mountClassNameOnRoot,
+      mobile = {}
+    } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
 
     // initToken().then(res => {
-    getFormComponent(this.state.formId);
+    // getFormComponent(this.state.formId);
+    getFormComponentByPath(this.state.formPath);
     // });
   }
 
@@ -96,8 +104,12 @@ class Submission extends Component {
         pureFormComponents
       });
       //渲染表单说明
-      let formInfo = formComponent.formInfo;
-      document.getElementById("submission-title").innerHTML = formInfo;
+      if (formComponent.formInfo) {
+        document.getElementById("submission-title").innerHTML =
+          formComponent.formInfo;
+      } else {
+        document.getElementById("submission-title").style.display = "none";
+      }
     }
   }
 
@@ -485,7 +497,7 @@ class Submission extends Component {
             // this.setHiddenComponentsValue(formComponentArray, values);
             this.setState({ isSubmitted: true, errorResponseMsg: {} });
             this.props
-              .submitSubmission(this.state.formId, values)
+              .submitSubmission(this.props.formComponent.id, values)
               .then(response => {
                 if (response.data.id != void 0) {
                   isMobile
@@ -1237,6 +1249,7 @@ export default connect(
   {
     getSubmissionData,
     submitSubmission,
-    getFormComponent
+    getFormComponent,
+    getFormComponentByPath
   }
 )(withRouter(mobileAdoptor.data(SubmissionForm)));
