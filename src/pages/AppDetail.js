@@ -94,7 +94,7 @@ const AppDetail = props => {
             name: "基础设置",
             key: "base",
             list: [
-              { key: "sWw", name: "车队信息" },
+              { key: "pTP", name: "测试修改数据" },
               { key: "clr", name: "油卡信息" },
               { key: "CrE", name: "车辆信息" }
             ]

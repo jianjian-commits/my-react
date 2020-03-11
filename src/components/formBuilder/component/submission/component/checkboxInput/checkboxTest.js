@@ -18,7 +18,7 @@ export default class CheckboxInput extends React.Component {
   }
 
   componentDidMount() {
-    const { forms, item, handleSetComponentEvent } = this.props;
+    const { forms, item, handleSetComponentEvent, value } = this.props;
     const { data } = item;
     if (data && data.type === "DataLinkage") {
       const {

@@ -35,6 +35,18 @@ export default class address extends Component {
         if (result.info === "OK") {
           that.setState({
             CityData: result.districtList[0]
+          },()=>{
+            let { item } = that.props;
+            let data = item.data;
+            if(data != void 0){
+              that.setState({
+                county: data.county || "",
+                city: data.city || "",
+                province: data.province || "",
+                detail: data.detail ||""
+              });
+              that.handleGetRightSelectedIndex(data)
+            }
           });
         } else {
           console.error("城市信息获取失败！");

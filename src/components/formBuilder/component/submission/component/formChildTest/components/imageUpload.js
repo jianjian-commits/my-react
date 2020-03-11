@@ -10,7 +10,7 @@ export default class FileUpload extends React.Component {
           添加图片
         </div>
       ),
-      uploadFileList: [],
+      uploadFileList: props.data || [],
       canUpload: true //能否上传的一个标志位
     };
     this.handleBeforeUpload = this.handleBeforeUpload.bind(this);

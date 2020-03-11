@@ -31,10 +31,15 @@ export default class HandWrittenSignature extends React.Component {
 
   render() {
     
-    const { getFieldDecorator, item } = this.props;
+    const { getFieldDecorator, item, initData } = this.props;
+    let initialValue = {};
+    if(initData != void 0){
+      initialValue.initialValue = initData
+    }
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key,{
+          ...initialValue,
           rules:[
             {
               required: isValueValid(item.validate.required)

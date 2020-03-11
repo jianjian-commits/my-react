@@ -26,8 +26,28 @@ class CheckboxOption extends React.Component {
 export default class CheckboxInput extends React.Component {
   constructor(props) {
     super(props);
+    const {item, value } = props;
+    const indexs = item.values.map(item => item.value);
+    let selectValues = [];
+      if (value) {
+          value.forEach(item => {
+          let index = indexs.indexOf(item);
+          if (index > -1) {
+            selectValues.push(index);
+          }
+          });
+      } else if (item.isMobileChild && item.data) {
+        // console.log("item data",item.data);
+        item.data.forEach(item => {
+          let index = indexs.indexOf(item);
+          if (index > -1) {
+            selectValues.push(index);
+          }
+          });
+      }
     this.state = {
-      selectValues: []
+      selectValues: selectValues,
+      hasClicked: false // 判断是否去URL的默认值
     };
     this.handleSelect = this.handleSelect.bind(this);
   }

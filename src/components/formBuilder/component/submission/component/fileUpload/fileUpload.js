@@ -18,7 +18,7 @@ export default class FileUpload extends React.Component {
     callback();
   };
   render() {
-    const { getFieldDecorator, item } = this.props;
+    const { getFieldDecorator, item, initData } = this.props;
     return (
       <Form.Item
         label={
@@ -29,13 +29,9 @@ export default class FileUpload extends React.Component {
           rules: [
             {  required: isValueValid(item.validate.required)
               ? item.validate.required
-              : false, message: item.validate.customMessage||"文件上传不能为空" },
-            // {
-            //   validator: this.validFunction
-            // }
+              : false, message: item.validate.customMessage || "文件上传不能为空" },
           ],
-          // validateTrigger: 'onSubmit',
-          initialValue:[]
+          initialValue: initData || []
         })(
          <FileUploadItem item={item}/>
         )}

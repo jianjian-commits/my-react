@@ -43,6 +43,18 @@ export default class address extends Component {
           that.setState({
             CityData: that.filterCityData(result.districtList[0].districtList)
           });
+          let { initData } = that.props
+            if(initData != void 0){
+              that.props.handleSetAddress({
+                id: item.id,
+                county: initData.county || "",
+                city: initData.city || "",
+                province: initData.province || "",
+                detail: initData.detail ||"",
+                hasErr: item.validate.required
+              });
+              that.handleGetRightSelectedIndex(initData)
+            }
         } else {
           console.error("城市信息获取失败！");
         }

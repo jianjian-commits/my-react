@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import HeaderBar from "../../../base/NavBar";
 import PhoneInput from "../../../submission/component/phoneInput";
 import Email from "../../../submission/component/Email";
+
 import Checkbox from "../../../submission/component/checkboxInput/checkboxTest";
 import DropDown from "../../../submission/component/dropDown/dropDownTest";
 import IdCard from "../../../submission/component/idCard";
@@ -903,23 +904,6 @@ class EditFormData extends Component {
       return component;
     });
 
-    const uniqueColumnData = {};
-    for (let i = 0; i < uniqueComponents.length; i++) {
-      for (let j = 0; j < formData.length; j++) {
-        let submissionData = formData[j].data;
-        for (var key in submissionData) {
-          if (
-            uniqueComponents[i].key === key &&
-            uniqueColumnData[key] === undefined
-          ) {
-            uniqueColumnData[key] = [];
-            uniqueColumnData[key].push(submissionData[key]);
-          } else if (uniqueComponents[i].key === key) {
-            uniqueColumnData[key].push(submissionData[key]);
-          }
-        }
-      }
-    }
 
     let submitBtnObj = this.props.currentForm.components.filter(
       component => component.type === "Button"

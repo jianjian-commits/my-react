@@ -4,16 +4,20 @@ import classNames from "classnames";
 export default class MultiDropDownItem extends React.Component {
   constructor(props) {
     super(props);
+    let { item } = this.props;
+    const indexs = item.dropDownOptions.map(item => item.value);
+    let selectValues = [];
+    item.data.forEach(value => {
+      let index = indexs.indexOf(value);
+      if (index > -1) {
+        selectValues.push(index);
+      }
+    });
     this.state = {
-      selectIndexArr: [],
+      selectIndexArr: selectValues,
       isPopoverVisible: false
     };
   }
-
-  // componentDidMount() {
-  //   const { onChange } = this.props;
-  //   onChange([]);
-  // }
 
   render() {
     const { item, onChange } = this.props;

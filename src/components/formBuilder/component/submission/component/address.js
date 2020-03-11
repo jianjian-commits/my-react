@@ -41,6 +41,19 @@ export default class address extends Component {
         if (result.info === "OK") {
           that.setState({
             CityData: result.districtList[0]
+          },()=>{
+            let { initData } = this.props;
+            if(initData != void 0){
+              that.props.handleSetAddress({
+                id: item.id,
+                county: initData.county || "",
+                city: initData.city || "",
+                province: initData.province || "",
+                detail: initData.detail ||"",
+                hasErr: item.validate.required
+              });
+              that.handleGetRightSelectedIndex(initData)
+            }
           });
         } else {
           console.error("城市信息获取失败！");
@@ -194,17 +207,6 @@ export default class address extends Component {
     const newAddress = { ...address };
     newAddress[type] = value;
     const { province, city, county, detail } = newAddress;
-    // if (province && city && county) {
-    //   if (item.addressType === "hasDetail") {
-    //     detail === ""
-    //       ? (newAddress.hasErr = true)
-    //       : (newAddress.hasErr = false);
-    //   } else {
-    //     newAddress.hasErr = false;
-    //   }
-    // } else {
-    //   newAddress.hasErr = item.validate.required ? true : false;
-    // }
     if (item.validate.required) {
       if (province && city && county) {
         if (item.addressType === "hasDetail") {

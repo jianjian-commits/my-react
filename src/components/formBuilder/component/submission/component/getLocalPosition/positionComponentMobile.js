@@ -42,7 +42,7 @@ export default class PositionComponentMoblie extends React.Component {
     }
   };
   render() {
-    const { getFieldDecorator, item } = this.props;
+    const { getFieldDecorator, item, initData } = this.props;
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
@@ -54,8 +54,8 @@ export default class PositionComponentMoblie extends React.Component {
               required: item.validate.required,
               message: `${item.label}不能为空`
             }
-          ]
-          // initialValue:{address:"",latitude:0,longitude:0},
+          ],
+          initialValue: initData,
         })(<PositionComponent item={item} />)}
       </Form.Item>
     );
