@@ -390,7 +390,7 @@ export const initForm = id => dispatch => {
   instanceAxios
     .get(config.apiUrl + "/form/" + id)
     .then(res => {
-      console.log(1);
+      // console.log(1);
       let { components, name, formValidation } = res.data;
       let localForm = res.data;
       dispatch({
@@ -416,8 +416,8 @@ let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 export const getAllForms = () => dispatch => {
   Axios.get(config.apiUrl + "/form")
     .then(response => {
-      console.log(1);
-      console.log(response);
+      // console.log(1);
+      // console.log(response);
       dispatch({
         type: GET_ALL_FORMS,
         formArray: response.data

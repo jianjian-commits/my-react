@@ -22,86 +22,53 @@ const navigationList = (history, appId, appName) => [
   { key: 1, label: "应用设置", disabled: true }
 ];
 
-// const mockForms = {
-//   groups: [
-//     {
-//       name: "基础设置",
-//       key: "base",
-//       list: [
-//         { key: "sWw", name: "车队信息" },
-//         { key: "clr", name: "油卡信息" },
-//         { key: "CrE", name: "车辆信息" }
-//       ]
-//     },
-//     {
-//       name: "用车管理",
-//       key: "use",
-//       list: [
-//         { key: "short", name: "短途申请" },
-//         { key: "long", name: "长途用车申请" }
-//       ]
-//     },
-//     {
-//       name: "违章管理",
-//       key: "ban",
-//       list: [
-//         { key: "aban", name: "违章记录" },
-//         { key: "handle", name: "违章处理记录" }
-//       ]
-//     }
-//   ],
-//   list: [
-//     { key: "short", name: "短途申请" },
-//     { key: "long", name: "长途用车申请" }
-//   ]
-// };
-
 const AppSetting = props => {
   const { appId } = useParams();
   const history = useHistory();
   const [searchKey, setSearchKey] = React.useState(null);
-  // const [mockForms, setMockForms] = React.useState({
-  //   groups: [],
-  //   list: [],
-  //   searchList: []
-  // });
+  const [mockForms, setMockForms] = React.useState({
+    groups: [],
+    list: [],
+    searchList: []
+  });
 
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
-    console.log(appId);
     getFormsAll().then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name
       }));
-      // setMockForms({
-      //   groups: [
-      //     {
-      //       name: "基础设置",
-      //       key: "ban",
-      //       list: [
-      //         { key: "sWw", name: "车队信息" },
-      //         { key: "clr", name: "油卡信息" },
-      //         { key: "CrE", name: "车辆信息" }
-      //       ]
-      //     }
-      //   ],
-      //   searchList: [
-      //     {
-      //       name: "基础设置",
-      //       key: "ban",
-      //       list: [
-      //         { key: "sWw", name: "车队信息" },
-      //         { key: "clr", name: "油卡信息" },
-      //         { key: "CrE", name: "车辆信息" }
-      //       ]
-      //     }
-      //   ],
-      //   list: newList
-      // });
+
+      setMockForms({
+        groups: [
+          {
+            name: "基础设置",
+            key: "ban",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
+        searchList: [
+          {
+            name: "基础设置",
+            key: "ban",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
+        list: newList
+      });
     });
   }, []);
+
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
@@ -122,6 +89,7 @@ const AppSetting = props => {
   };
 
   if (searchKey) {
+    // 深拷贝数据
     const all = JSON.parse(JSON.stringify(list));
     const allGroups = JSON.parse(JSON.stringify(groups));
     groups =
@@ -133,6 +101,7 @@ const AppSetting = props => {
   }
 
   const searchHandle = e => {
+    console.log(e);
     const { value } = e.target;
     setSearchKey(value);
   };
@@ -142,9 +111,9 @@ const AppSetting = props => {
     alert(formId + " 放进 " + groupId);
   };
 
+  // 处理点击表单名字事件
   const formEnterHandle = e => {
     if (list[0].key !== "") {
-      console.log(e);
       history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
     }
   };

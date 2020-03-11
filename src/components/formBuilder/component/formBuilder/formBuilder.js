@@ -41,7 +41,7 @@ class ReactFormBuilder extends React.Component {
       initForm(formId);
     }
     this.props.getAllForms();
-    console.log(this.props);
+    // console.log(this.props);
   }
   //增加一个形参判断是否点击的是子组件里面的元素
   editModeOn(editElement, e, formChildInnerElement) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Switch, useRouteMatch } from "react-router-dom";
 import { history } from "../store";
@@ -7,6 +7,7 @@ import { Layout, Menu, Icon, Tooltip } from "antd";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 // import PlaceHolder from "./Placeholder";
+import { getFormsByFormId } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CreateForm from "../components/formBuilder/component/formBuilder/formBuilder";
 import classes from "../styles/apps.module.scss";
 import { Process, Approval } from "componentized-process";
@@ -92,7 +93,8 @@ const services = [
   },
   { key: "approval/list", name: "审批流", icon: "audit", component: Appr }
 ];
-const navigationList = (history, appId, appName) => [
+
+const navigationList = (history, appId, appName, formName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
     key: 1,
@@ -104,18 +106,27 @@ const navigationList = (history, appId, appName) => [
     label: "应用设置",
     onClick: () => history.push(`/app/${appId}/setting`)
   },
-  { key: 1, label: "用车申请", disabled: true }
+  { key: 1, label: `${formName}`, disabled: true }
 ];
 
 const AppServices = props => {
   const history = useHistory();
   const { appId, formId, serviceId } = useParams();
+  const [formName, setFormName] = useState("");
+
+  // 通过formId获取表单的信息
+  useEffect(() => {
+    getFormsByFormId(formId).then(res => {
+      setFormName(res.name);
+    });
+  }, []);
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
   const service = services.find(s => {
     return s.key.indexOf(serviceId) !== -1;
   });
+
   const clickHandle = e => {
     history.push(`/app/${appId}/setting/form/${e.key}`);
   };
@@ -123,9 +134,12 @@ const AppServices = props => {
   if (!service) {
     return <Route render={() => <Redirect to={`/app/${appId}/setting`} />} />;
   }
+
   return (
     <Layout>
-      <CommonHeader navigationList={navigationList(history, appId, appName)} />
+      <CommonHeader
+        navigationList={navigationList(history, appId, appName, formName)}
+      />
       <Layout>
         <Sider className={classes.appSider} theme="light" width={64}>
           <Menu className={classes.menuBorderNone} selectedKeys={formId}>

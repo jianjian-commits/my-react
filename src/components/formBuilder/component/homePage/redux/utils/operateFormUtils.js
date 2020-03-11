@@ -109,3 +109,20 @@ export const getFormsAll = () => {
       });
   });
 };
+
+export const getFormsByFormId = formId => {
+  return new Promise((resolve, reject) => {
+    axios({
+      url: config.apiUrl + "/form/" + formId,
+      method: "get"
+    })
+      .then(response => {
+        const forms = response.data;
+        resolve(forms);
+      })
+      .catch(err => {
+        console.log(err);
+        reject(err);
+      });
+  });
+};
