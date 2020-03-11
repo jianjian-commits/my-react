@@ -236,7 +236,6 @@ export const saveForm = (
     }
   })
     .then(response => {
-      console.log("res", response);
       let id = response.data.id;
       console.log(id);
       callback(`${url}${id}/edit?formId=${id}`);
