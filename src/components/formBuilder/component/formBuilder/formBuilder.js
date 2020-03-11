@@ -90,9 +90,8 @@ class ReactFormBuilder extends React.Component {
     if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
     }
-    debugger;
     return (
-      <div className={"formBuilder"}>
+      <div className={"formBuilder"} key={Math.random()}>
         <Spin spinning={this.props.isInitForming}>
           <FormBuilderHeader editForm={this.props.localForm} />
           <DndProvider backend={HTML5Backend}>

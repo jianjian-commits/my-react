@@ -8,7 +8,7 @@ import AppDetail from "../pages/AppDetail";
 // import SubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
-import AppServicesEdit from "../pages/AppServicesEdit";
+// import AppServicesEdit from "../pages/AppServicesEdit";
 import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
 
@@ -58,20 +58,6 @@ export const appPaths = [
     icon: "file_copy",
     component: AppDetail
   },
-  // {
-  //   key: "submission",
-  //   label: "提交数据",
-  //   path: `/app/:appId/detail/submission`,
-  //   icon: "file_copy",
-  //   component: Submission
-  // },
-  // {
-  //   key: "submissionData",
-  //   label: "查看数据",
-  //   path: `/app/:appId/detail/submission`,
-  //   icon: "file_copy",
-  //   component: SubmitData
-  // },
   {
     key: "menuContent",
     label: "菜单内容",
@@ -96,18 +82,18 @@ export const appPaths = [
   {
     key: "form",
     label: "表单服务",
-    path: `/app/:appId/setting/form/:formId`,
+    path: `/app/:appId/setting/form/:formId/:serviceId`,
     icon: "file_copy",
     rough: true,
     component: AppServices
   },
-  {
-    key: "formEdit",
-    label: "表单服务",
-    path: `/app/:appId/setting/form/:formId/:serviceId`,
-    icon: "file_copy",
-    component: AppServicesEdit
-  },
+  // {
+  //   key: "formEdit",
+  //   label: "表单服务",
+  //   path: `/app/:appId/setting/form/:formId/:serviceId`,
+  //   icon: "file_copy",
+  //   component: AppServicesEdit
+  // },
   {
     key: "Dispose",
     label: "审批详情",

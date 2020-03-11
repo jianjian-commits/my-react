@@ -83,7 +83,6 @@ const Appr = () => {
 };
 
 const services = [
-  { key: "create", name: "表单创建", icon: "table", component: CreateForm },
   { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
   {
     key: "process/list",

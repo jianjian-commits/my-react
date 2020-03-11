@@ -9,7 +9,7 @@ import FormBuilderSubmitData from "../components/formBuilder/component/formData/
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 
 import selectCom from "../utils/selectCom";
-import request from "../utils/request";
+import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import { appDetailMenu } from "../components/transactList/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
@@ -29,7 +29,7 @@ const getOreations = (appId, history) => [
   }
 ];
 
-const AppDetail = () => {
+const AppDetail = props => {
   const { appId, menuId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
@@ -37,15 +37,17 @@ const AppDetail = () => {
   const [submit, setSubmit] = React.useState(false);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
   // zxx mockForms存储表单列表数据
-  const [mockForms, setMockForms] = React.useState({ groups: [], list: [] });
+  const [mockForms, setMockForms] = React.useState({
+    groups: [],
+    list: [],
+    searchList: []
+  });
 
   //zxx groups目录结构 list无目录结构的表单
-  let { groups, list } = mockForms;
+  let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
-    request("/form?desc=createdTime", {
-      methods: "get"
-    }).then(res => {
+    getFormsAll().then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name
@@ -62,13 +64,41 @@ const AppDetail = () => {
             ]
           }
         ],
+        searchList: [
+          {
+            name: "基础设置",
+            key: "ban",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
         list: newList
       });
     });
   }, []);
+
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
+
+  const searchForms = (keyword, groupsParams) => {
+    let _groups = groupsParams;
+
+    for (let i = 0, maxLength = _groups.length; i < maxLength; i++) {
+      let arr = _groups[i].list.filter(
+        item => item.name.indexOf(keyword) !== -1
+      );
+      if (arr.length !== 0) {
+        _groups[i].list = arr;
+      } else {
+        _groups = null;
+      }
+    }
+    return _groups;
+  };
 
   if (searchKey) {
     const all = JSON.parse(JSON.stringify(list));

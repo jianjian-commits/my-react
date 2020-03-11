@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Layout, Input, Button, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
-import request from "../utils/request";
+import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
   DropableWrapper
@@ -22,39 +22,39 @@ const navigationList = (history, appId, appName) => [
   { key: 1, label: "应用设置", disabled: true }
 ];
 
-const mockForms = {
-  groups: [
-    {
-      name: "基础设置",
-      key: "base",
-      list: [
-        { key: "sWw", name: "车队信息" },
-        { key: "clr", name: "油卡信息" },
-        { key: "CrE", name: "车辆信息" }
-      ]
-    },
-    {
-      name: "用车管理",
-      key: "use",
-      list: [
-        { key: "short", name: "短途申请" },
-        { key: "long", name: "长途用车申请" }
-      ]
-    },
-    {
-      name: "违章管理",
-      key: "ban",
-      list: [
-        { key: "aban", name: "违章记录" },
-        { key: "handle", name: "违章处理记录" }
-      ]
-    }
-  ],
-  list: [
-    { key: "short", name: "短途申请" },
-    { key: "long", name: "长途用车申请" }
-  ]
-};
+// const mockForms = {
+//   groups: [
+//     {
+//       name: "基础设置",
+//       key: "base",
+//       list: [
+//         { key: "sWw", name: "车队信息" },
+//         { key: "clr", name: "油卡信息" },
+//         { key: "CrE", name: "车辆信息" }
+//       ]
+//     },
+//     {
+//       name: "用车管理",
+//       key: "use",
+//       list: [
+//         { key: "short", name: "短途申请" },
+//         { key: "long", name: "长途用车申请" }
+//       ]
+//     },
+//     {
+//       name: "违章管理",
+//       key: "ban",
+//       list: [
+//         { key: "aban", name: "违章记录" },
+//         { key: "handle", name: "违章处理记录" }
+//       ]
+//     }
+//   ],
+//   list: [
+//     { key: "short", name: "短途申请" },
+//     { key: "long", name: "长途用车申请" }
+//   ]
+// };
 
 const AppSetting = props => {
   const { appId } = useParams();
@@ -69,9 +69,8 @@ const AppSetting = props => {
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
-    request("/form?desc=createdTime", {
-      methods: "get"
-    }).then(res => {
+    console.log(appId);
+    getFormsAll().then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name
@@ -123,7 +122,6 @@ const AppSetting = props => {
   };
 
   if (searchKey) {
-    // const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
     const all = JSON.parse(JSON.stringify(list));
     const allGroups = JSON.parse(JSON.stringify(groups));
     groups =
@@ -146,6 +144,7 @@ const AppSetting = props => {
 
   const formEnterHandle = e => {
     if (list[0].key !== "") {
+      console.log(e);
       history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
     }
   };
@@ -171,7 +170,7 @@ const AppSetting = props => {
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
-        url={"/app/${appId}/setting/form/create"}
+        url={`/app/${appId}/setting/form/`}
       />
       <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
@@ -181,13 +180,7 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                // history.push(`/app/${appId}/setting/form/create`)
-
-                // if (list[0].key !== "") {
-                //   history.push(`/app/${appId}/setting/form/create`);
-                // }
                 modalProps.showModal();
-                // history.push(`/app/${appId}/setting/form/sWw/edit`);
               }}
             >
               新建表单
