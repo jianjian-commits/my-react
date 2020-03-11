@@ -10,6 +10,7 @@ import {
   saveForm,
   updateForm,
   initForm,
+  initFormByPath,
   getAllForms
 } from "./redux/utils/operateForm";
 import HTML5Backend from "react-dnd-html5-backend";
@@ -28,17 +29,18 @@ class ReactFormBuilder extends React.Component {
       isEditMode: false,
       editElement: null,
       editElementParent: null,
-      formId: locationUtils.getUrlParamObj().formId
+      formId: locationUtils.getUrlParamObj().formId,
+      formPath: locationUtils.getUrlParamObj().formPath
     };
 
     this.editModeOn = this.editModeOn.bind(this);
   }
 
   componentDidMount() {
-    let { formId } = this.state;
-    const { initForm } = this.props;
-    if (formId) {
-      initForm(formId);
+    let { formPath } = this.state;
+    const { initFormByPath } = this.props;
+    if (formPath) {
+      initFormByPath(formPath);
     }
     this.props.getAllForms();
     console.log(this.props);
@@ -148,6 +150,7 @@ export default connect(
     saveForm,
     updateForm,
     initForm,
+    initFormByPath,
     getAllForms,
     setActiveIndex,
     setActiveInnerIndex
