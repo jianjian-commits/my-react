@@ -33,7 +33,6 @@ async function request(url, params = {}) {
 export default request;
 
 export const requestWithHeaders = ({ ...headers }) => {
-  debugger;
   const ins = axios.create({
     // baseURL: "http://192.168.3.106:9080",
     headers: {
