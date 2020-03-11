@@ -8,6 +8,10 @@ import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
 import InviteUser from "../modalInviteUser";
 
+const customCss = {
+  filter: { backgroundColor: "#ffffff", marginLeft: "20px" },
+  action: { color: "#333" }
+};
 export default connect(
   ({ login }) => ({
     loginData: login
@@ -27,7 +31,7 @@ export default connect(
   });
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
-    pageSize: 1
+    pageSize: 10
   });
   const columns = [
     {
@@ -66,8 +70,9 @@ export default connect(
               type="link"
               onClick={handleChange.bind(this, text)}
               style={{ paddingLeft: "0" }}
+              icon="swap"
             >
-              变更分组
+              <span style={customCss.action}>变更分组</span>
             </Button>
             <Popconfirm
               title="把该成员从团队中踢出?"
@@ -76,7 +81,9 @@ export default connect(
               cancelText="取消"
               placement="bottom"
             >
-              <Button type="link">踢出</Button>
+              <Button className={classes.btn} icon="minus-circle" type="link">
+                <span style={customCss.action}>踢出</span>
+              </Button>
             </Popconfirm>
           </span>
         );
@@ -199,7 +206,7 @@ export default connect(
         <Col>
           <InviteUser {...loginData} />
           <Button
-            style={{ backgroundColor: "#ffffff" }}
+            style={customCss.filter}
             type="link"
             icon="filter"
             onClick={onClickFilter}

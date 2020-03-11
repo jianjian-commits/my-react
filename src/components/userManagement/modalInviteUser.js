@@ -28,7 +28,11 @@ export default function InviteUser(props) {
   const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;
   return (
     <>
-      <Button icon="plus" type="primary" onClick={() => handleInviteUserBtn()}>
+      <Button
+        icon="plus-circle"
+        type="primary"
+        onClick={() => handleInviteUserBtn()}
+      >
         邀请
       </Button>
       <Modal
@@ -41,7 +45,6 @@ export default function InviteUser(props) {
       >
         <p className={classes.title}>邀请新成员加入</p>
         <p className={classes.text}>
-          {" "}
           发送以下链接给新成员，点击链接即可加入团队
         </p>
         <div style={{ display: "flex" }}>

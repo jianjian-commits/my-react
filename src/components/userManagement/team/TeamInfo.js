@@ -23,9 +23,9 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
 
   return (
     <div className={classes.rowBox}>
-      {isRedact ? (
-        <Row type="flex" align="middle">
-          <Col span={10}>{lable}</Col>
+      <Row type="flex" align="middle">
+        <Col span={10}>{lable}</Col>
+        {isRedact ? (
           <Col span={14}>
             <Input
               defaultValue={defaultValue}
@@ -39,16 +39,13 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
               取消
             </Button>
           </Col>
-        </Row>
-      ) : (
-        <Row type="flex" align="middle">
-          <Col span={10}>{lable}</Col>
+        ) : (
           <Col span={14}>
             {defaultValue}
             <Button type="link" icon="form" onClick={switchRedact}></Button>
           </Col>
-        </Row>
-      )}
+        )}
+      </Row>
     </div>
   );
 };
