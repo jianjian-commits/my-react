@@ -152,7 +152,14 @@ class RadioInputInspector extends React.Component {
   };
 
   render() {
-    const { label, validate, values, inline, tooltip } = this.props.element;
+    const {
+      label,
+      validate,
+      values,
+      inline,
+      tooltip,
+      isSetAPIName
+    } = this.props.element;
     const { apiNameTemp, isUniqueApi = true } = this.state;
     return (
       <div className="radio-input-inspactor">
@@ -171,7 +178,7 @@ class RadioInputInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            disabled={this.state.formPath ? true : false}
+            disabled={isSetAPIName ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

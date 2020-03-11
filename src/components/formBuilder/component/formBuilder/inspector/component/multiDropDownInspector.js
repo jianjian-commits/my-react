@@ -421,7 +421,7 @@ class MultiDropDownInspector extends React.Component {
       isUniqueApi = true
     } = this.state;
     const { elementParent, element, data, errorComponentIndex } = this.props;
-    const { label, validate, tooltip } = this.props.element;
+    const { label, validate, tooltip, isSetAPIName } = this.props.element;
     const { values } = this.props.element.data;
     return (
       <div className="multidropdown-inspector">
@@ -440,7 +440,7 @@ class MultiDropDownInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            disabled={this.state.formPath ? true : false}
+            disabled={isSetAPIName ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

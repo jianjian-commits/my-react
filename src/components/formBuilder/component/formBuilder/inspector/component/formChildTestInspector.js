@@ -251,7 +251,8 @@ class FormChildTestInspector extends React.Component {
       defaultValue,
       validate,
       unique = false,
-      values
+      values,
+      isSetAPIName
     } = this.props.element;
     const { optionType } = this.state;
     const { apiNameTemp, isUniqueApi = true } = this.state;
@@ -276,7 +277,7 @@ class FormChildTestInspector extends React.Component {
               name="key"
               placeholder="API Name"
               className={isUniqueApi ? "" : "err-input"}
-              disabled={this.state.formPath ? true : false}
+              disabled={isSetAPIName ? true : false}
               value={apiNameTemp}
               onChange={this.handleChangeAPI}
               autoComplete="off"

@@ -195,7 +195,7 @@ class AddressInspector extends React.PureComponent {
   };
 
   render() {
-    const { label, validate, addressType } = this.props.element;
+    const { label, validate, addressType, isSetAPIName } = this.props.element;
     const elementParent = this.props.elementParent;
     const {
       optionType,
@@ -220,7 +220,7 @@ class AddressInspector extends React.PureComponent {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            disabled={this.state.formPath ? true : false}
+            disabled={isSetAPIName ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

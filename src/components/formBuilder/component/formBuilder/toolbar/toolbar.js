@@ -158,9 +158,7 @@ export const advancedComponentArray = [
     defaultValue: "",
     validate: {
       required: false,
-      customMessage: "",
-      maxLength: null,
-      minLength: null
+      customMessage: ""
     },
     data: {
       type: "custom"
@@ -357,6 +355,7 @@ class Toolbar extends React.Component {
       ...item,
       id: key,
       key: newKey,
+      isSetAPIName: false, // 判断APiName是否可以编辑
       isShow: true,
       layout: { i: newKey, x: 0, y: 0, w: 10, h: 3, minH: 2, minW: 2 },
       element: item.type

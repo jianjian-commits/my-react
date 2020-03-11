@@ -266,7 +266,8 @@ class TextAreaInspector extends React.Component {
       defaultValue,
       validate,
       rows,
-      unique = false
+      unique = false,
+      isSetAPIName
     } = this.props.element;
     const {
       optionType,
@@ -294,7 +295,7 @@ class TextAreaInspector extends React.Component {
               name="key"
               placeholder="API Name"
               className={isUniqueApi ? "" : "err-input"}
-              disabled={this.state.formPath ? true : false}
+              disabled={isSetAPIName ? true : false}
               value={apiNameTemp}
               onChange={this.handleChangeAPI}
               autoComplete="off"

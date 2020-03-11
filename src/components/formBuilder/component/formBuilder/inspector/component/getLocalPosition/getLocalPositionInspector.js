@@ -138,7 +138,14 @@ class GetLocalPositionInspector extends React.Component {
   };
 
   render() {
-    const { label, tooltip, defaultValue, validate, data } = this.props.element;
+    const {
+      label,
+      tooltip,
+      defaultValue,
+      validate,
+      data,
+      isSetAPIName
+    } = this.props.element;
     const { apiNameTemp, isUniqueApi = true } = this.state;
     const { adjustmentRange, isAdjustmentRange } = validate;
     // const formatChecks = inputMask ? true : false;
@@ -158,7 +165,7 @@ class GetLocalPositionInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            disabled={this.state.formPath ? true : false}
+            disabled={isSetAPIName ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

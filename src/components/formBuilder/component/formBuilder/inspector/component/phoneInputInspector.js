@@ -237,7 +237,8 @@ class PhoneInputInspector extends React.PureComponent {
       tooltip,
       validate,
       unique = false,
-      inputMask
+      inputMask,
+      isSetAPIName
     } = this.props.element;
     const formatChecks = inputMask ? true : false;
     const {
@@ -262,7 +263,7 @@ class PhoneInputInspector extends React.PureComponent {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            disabled={this.state.formPath ? true : false}
+            disabled={isSetAPIName ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

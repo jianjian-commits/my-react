@@ -234,7 +234,14 @@ class SingleTextInspector extends React.Component {
   };
 
   render() {
-    const { id, label, tooltip, validate, unique = false } = this.props.element;
+    const {
+      id,
+      label,
+      tooltip,
+      validate,
+      unique = false,
+      isSetAPIName
+    } = this.props.element;
     const {
       optionType,
       isLinked,
@@ -260,7 +267,7 @@ class SingleTextInspector extends React.Component {
             <Input
               id="single-text-title"
               className={isUniqueApi ? "" : "err-input"}
-              disabled={this.state.formPath ? true : false}
+              disabled={isSetAPIName ? true : false}
               name="key"
               placeholder="API Name"
               value={apiNameTemp}

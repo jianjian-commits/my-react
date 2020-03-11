@@ -1,7 +1,7 @@
 /*
  * @Author: komons
  * @Date: 2020-02-17 10:23:58
- * @LastEditTime: 2020-03-10 16:44:41
+ * @LastEditTime: 2020-03-11 14:32:08
  * @LastEditors: komons
  * @Description: 用于检验编辑的表单是否合理， 如果合理返回true
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formBuilder\utils\checkSaveFormUtils.js
@@ -67,7 +67,7 @@ export function checkHasLinkForm(forms = [], components = []) {
 
 // 检查API Name 是否唯一(API Name 已替换为Key)
 export function checkHasUniqueApiName(components = [], tempAPINameArr = []) {
-  const formAPi = getDataFromUrl("path");
+  const formAPi = getDataFromUrl("formId");
   for (let i = 0; i < components.length; i++) {
     // 争对子表单的校验
     if (components[i].type === "FormChildTest") {
@@ -76,6 +76,7 @@ export function checkHasUniqueApiName(components = [], tempAPINameArr = []) {
         return res;
       }
     }
+    components[i].isSetAPIName = true;
     let key = components[i].key;
     if (key) {
       if (key == formAPi) {

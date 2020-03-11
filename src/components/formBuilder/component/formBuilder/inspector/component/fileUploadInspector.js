@@ -117,7 +117,7 @@ class FileUploadInspector extends React.Component {
       defaultValue,
       validate,
       unique = false,
-
+      isSetAPIName,
       inputMask
     } = this.props.element;
     const { fileSize, fileUnit, fileCount } = validate;
@@ -141,7 +141,7 @@ class FileUploadInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            disabled={this.state.formPath ? true : false}
+            disabled={isSetAPIName ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

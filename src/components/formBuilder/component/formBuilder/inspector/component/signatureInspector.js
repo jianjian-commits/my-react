@@ -84,7 +84,8 @@ class SignatureInspector extends React.Component {
       unique = false,
       fileSize,
       fileUnit,
-      inputMask
+      inputMask,
+      isSetAPIName
     } = this.props.element;
     const { apiNameTemp, isUniqueApi = true } = this.state;
     const formatChecks = inputMask ? true : false;
@@ -106,7 +107,7 @@ class SignatureInspector extends React.Component {
           <Input
             id="single-text-title"
             className={isUniqueApi ? "" : "err-input"}
-            disabled={this.state.formPath ? true : false}
+            disabled={isSetAPIName ? true : false}
             name="key"
             placeholder="API Name"
             value={apiNameTemp}

@@ -399,21 +399,19 @@ class Submission extends Component {
 
   // 设置隐藏组件的默认值(通过组件的API Name)
   setHiddenComponentsValue = (components, values) => {
-    console.log(values);
-    const componentsNeedSplit = ["CheckboxInput", "MultiDropDown"];
-    components.forEach(component => {
-      if (!component.isShow && component.key) {
-        let value = getDataFromUrl(component.key);
-        if (value) {
-          if (componentsNeedSplit.includes(component.type)) {
-            values[component.key] = value.split(",");
-          } else {
-            values[component.key] = value;
-          }
-        }
-      }
-    });
-
+    // const componentsNeedSplit = ["CheckboxInput", "MultiDropDown"];
+    // components.forEach(component => {
+    //   if (!component.isShow && component.key) {
+    //     let value = getDataFromUrl(component.key);
+    //     if (value) {
+    //       if (componentsNeedSplit.includes(component.type)) {
+    //         values[component.key] = value.split(",");
+    //       } else {
+    //         values[component.key] = value;
+    //       }
+    //     }
+    //   }
+    // });
     // 由于更换key引发未知原因， 需要过滤掉空数据
     // for (let key in values) {
     //   if (Array.isArray(values[key])) {
@@ -424,7 +422,6 @@ class Submission extends Component {
     //     delete values[key];
     //   }
     // }
-    console.log(values);
   };
 
   handleSubmit = e => {
@@ -435,6 +432,7 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
+        console.log(values, formComponentArray);
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
