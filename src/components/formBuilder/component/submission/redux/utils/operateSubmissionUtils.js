@@ -79,6 +79,22 @@ export const getFormComponent = id => dispatch => {
     });
 };
 
+export const getFormComponentByPath = path => dispatch => {
+  instanceAxios
+    .get(config.apiUrl + "/form?path=" + path)
+    .then(res => {
+      dispatch({
+        type: GET_FORM_COMPONENT,
+        data: res.data[0],
+        formValidation: res.data[0].formValidation
+      });
+      return res.data[0];
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => dispatch => {

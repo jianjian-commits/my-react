@@ -49,7 +49,7 @@ const AppDetail = props => {
     let newList = [];
     getFormsAll().then(res => {
       newList = res.map(item => ({
-        key: item.id,
+        key: item.path,
         name: item.name
       }));
       setMockForms({
@@ -174,12 +174,14 @@ const AppDetail = props => {
                 <FormBuilderSubmission
                   key={Math.random()}
                   formId={selectedForm}
+                  formPath={selectedForm}
                   actionFun={skipToSubmissionData}
                 ></FormBuilderSubmission>
               ) : (
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
+                  formPath={selectedForm}
                 ></FormBuilderSubmitData>
               )}
             </>
