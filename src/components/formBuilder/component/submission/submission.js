@@ -38,6 +38,7 @@ import HandWrittenSignatureMobile from "./component/handWrittenSignature/handWri
 import { initToken } from "../../utils/tokenUtils";
 import { checkCustomValidate } from "../formBuilder/utils/customValication";
 import { checkValueValidByType } from "../formBuilder/utils/checkComponentDataValidUtils";
+import { getDataFromUrl } from "../../utils/locationUtils";
 import Address from "./component/address";
 /*
  * 手机端组件
@@ -303,7 +304,7 @@ class Submission extends Component {
     let isFormChildErr = false;
     for (let key in formChildDataObj) {
       let currentComponent = formComponentArray.filter(item => {
-        return item.id === key;
+        return item.key === key;
       })[0];
       let required =
         currentComponent.validate && currentComponent.validate.required;
@@ -387,6 +388,45 @@ class Submission extends Component {
     )[0].label;
   };
 
+  // 设置正确的子表单数据
+  setCorrectFormChildData = (values, formChildDataObj) => {
+    for (let key in values) {
+      if (formChildDataObj.hasOwnProperty(key)) {
+        values[key] = formChildDataObj[key];
+      }
+    }
+  };
+
+  // 设置隐藏组件的默认值(通过组件的API Name)
+  setHiddenComponentsValue = (components, values) => {
+    console.log(values);
+    const componentsNeedSplit = ["CheckboxInput", "MultiDropDown"];
+    components.forEach(component => {
+      if (!component.isShow && component.key) {
+        let value = getDataFromUrl(component.key);
+        if (value) {
+          if (componentsNeedSplit.includes(component.type)) {
+            values[component.key] = value.split(",");
+          } else {
+            values[component.key] = value;
+          }
+        }
+      }
+    });
+
+    // 由于更换key引发未知原因， 需要过滤掉空数据
+    // for (let key in values) {
+    //   if (Array.isArray(values[key])) {
+    //     values[key].length > 0 ? null : delete values[key];
+    //   } else if (typeof values[key] === "object") {
+    //     Object.keys(values[key]).length > 0 ? null : delete values[key];
+    //   } else if (!values[key]) {
+    //     delete values[key];
+    //   }
+    // }
+    console.log(values);
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     const isMobile = this.props.mobile.is;
@@ -405,6 +445,7 @@ class Submission extends Component {
         values = this._setNumberValue(values);
         values = this._setDateTimeVaule(values);
         values = this._setAddressValue(values);
+        this.setCorrectFormChildData(values, this.state.formChildDataObj);
         this._iterateAllComponentToSetData(
           formComponentArray,
           customDataArray,
@@ -443,6 +484,7 @@ class Submission extends Component {
 
         if (customCheckResult != void 0) {
           if (customCheckResult === true) {
+            // this.setHiddenComponentsValue(formComponentArray, values);
             this.setState({ isSubmitted: true, errorResponseMsg: {} });
             this.props
               .submitSubmission(this.state.formId, values)
