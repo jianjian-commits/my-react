@@ -1,10 +1,14 @@
 import config from "../../../../config/config";
 import { message } from "antd";
 import { instanceAxios } from "../../../../utils/tokenUtils";
-import { GET_FORM_COMPONENT, GET_CHILD_FORM_COMPONENT, GET_ALL_FORMS } from '../action'
+import {
+  GET_FORM_COMPONENT,
+  GET_CHILD_FORM_COMPONENT,
+  GET_ALL_FORMS
+} from "../action";
 export const submitSubmission = (formId, values) => dispatch => {
   const date = new Date();
-    return   instanceAxios({
+  return instanceAxios({
     url: config.apiUrl + `/submission`,
     method: "POST",
     headers: {
@@ -17,12 +21,16 @@ export const submitSubmission = (formId, values) => dispatch => {
       createdTime: date,
       updateTime: date
     }
-  })
+  });
 };
 
-export const submitLayout = (components, formComponent, layoutArray, currentLayoutId) => dispatch => {
-
-  let {formValidation, createdTime, path, name ,id} = formComponent;
+export const submitLayout = (
+  components,
+  formComponent,
+  layoutArray,
+  currentLayoutId
+) => dispatch => {
+  let { formValidation, createdTime, path, name, id } = formComponent;
 
   let formData = {
     components,
@@ -33,7 +41,7 @@ export const submitLayout = (components, formComponent, layoutArray, currentLayo
     createdTime,
     formValidation,
     currentLayoutId, //默认布局ID
-    layoutArray, //布局
+    layoutArray //布局
   };
 
   instanceAxios({
@@ -64,7 +72,7 @@ export const getFormComponent = id => dispatch => {
         data: res.data,
         formValidation: res.data.formValidation
       });
-      return res.data
+      return res.data;
     })
     .catch(err => {
       console.error(err);
@@ -74,8 +82,9 @@ export const getFormComponent = id => dispatch => {
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => dispatch => {
-  instanceAxios
-    .get(config.apiUrl + "/form")
+  instanceAxios.get(config.apiUrl + "/form");
+  console
+    .log(1)
     .then(response => {
       dispatch({
         type: GET_ALL_FORMS,
@@ -87,4 +96,4 @@ export const getAllForms = () => dispatch => {
     .catch(err => {
       console.log(err);
     });
-}
+};

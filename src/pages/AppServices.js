@@ -119,7 +119,7 @@ const AppServices = props => {
     return s.key.indexOf(serviceId) !== -1;
   });
   const clickHandle = e => {
-    history.push(`/app/${appId}/setting/form/${formId}/${e.key}`);
+    history.push(`/app/${appId}/setting/form/${e.key}`);
   };
 
   if (!service) {
@@ -130,7 +130,7 @@ const AppServices = props => {
       <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light" width={64}>
-          <Menu className={classes.menuBorderNone} selectedKeys={serviceId}>
+          <Menu className={classes.menuBorderNone} selectedKeys={formId}>
             {services.map(s => (
               <Menu.Item key={s.key} onClick={clickHandle}>
                 <Tooltip title={s.name}>
