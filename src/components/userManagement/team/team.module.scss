@@ -1,0 +1,47 @@
+.container {
+  padding: 36px 22px 0px;
+}
+
+.title {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.listBox {
+  padding: 5px 30px;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+.rowBox {
+  width: 100%;
+  height: 32.5px;
+  box-sizing: border-box;
+}
+
+.box {
+  padding: 20px 0;
+}
+
+.fliter {
+  padding: 0 0 10px 0;
+}
+
+.tableBox {
+  .rowKey {
+    height: 50px;
+    box-sizing: border-box;
+    & td {
+      padding: 0 16px;
+    }
+  }
+
+  & .rowKey:nth-of-type(2n) {
+    background-color: #f3f5f9;
+  }
+
+  & .rowKey:nth-of-type(2n + 1) {
+    background-color: #fff;
+  }
+}

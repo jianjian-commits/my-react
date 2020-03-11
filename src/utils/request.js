@@ -19,24 +19,6 @@ axios.interceptors.response.use(
   }
 );
 
-export const processIns = axios.create({
-  baseURL: "http://192.168.3.106:9080"
-});
-
-export const processRequst = async (url, params = {}) => {
-  const headers = params.headers || {};
-  const res = await processIns({
-    url,
-    headers,
-    data: params.data || {},
-    params: params.params || {},
-    method: params.method || "GET"
-  });
-  // console.log("fetch options", params);
-  // console.log("fetch res", res);
-  return res.data;
-};
-
 async function request(url, params = {}) {
   const headers = params.headers || {};
   const res = await axios({
@@ -46,8 +28,26 @@ async function request(url, params = {}) {
     params: params.params || {},
     method: params.method || "GET"
   });
-  // console.log("fetch options", params);
-  // console.log("fetch res", res);
   return res.data;
 }
 export default request;
+
+export const requestWithHeaders = ({ ...headers }) => {
+  const ins = axios.create({
+    // baseURL: "http://192.168.3.106:9080",
+    headers: {
+      ...headers
+    }
+  });
+  return async (url, params = {}) => {
+    const headers = params.headers || {};
+    const res = await ins({
+      url,
+      headers,
+      data: params.data || {},
+      params: params.params || {},
+      method: params.method || "GET"
+    });
+    return res.data;
+  };
+};

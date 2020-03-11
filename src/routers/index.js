@@ -1,6 +1,6 @@
 import AppList from "../pages/Apps";
 import Backlog from "../pages/Backlog";
-import UserManagement from "../pages/User";
+import TeamManagement from "../pages/TeamManagement";
 
 import Placeholder from "../pages/Placeholder";
 import AppDetail from "../pages/AppDetail";
@@ -32,7 +32,7 @@ export const main = [
     label: "团队管理",
     path: "/user",
     icon: "web",
-    component: UserManagement
+    component: TeamManagement
   },
   {
     key: "authority",

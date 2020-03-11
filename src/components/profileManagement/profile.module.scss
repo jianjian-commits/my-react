@@ -1,58 +1,63 @@
 .wrapper {
-  padding: 10px;
-  .tableStyles {
-    padding-top: 10px;
-    padding-bottom: 5px;
-    :global(.ant-table-thead > tr > th:first-child) {
-      width: 250px;
-    }
-    :global(.ant-table-thead > tr > th) {
-      background-color: #c0c0c0;
-    }
-    :global(.ant-table-middle
-        > .ant-table-content
-        > .ant-table-body
-        > table
-        > .ant-table-tbody
-        > tr
-        > td) {
-      padding: 7px 8px;
-      border-bottom: 1px solid #979797;
-    }
-    :global(.ant-spin-container) {
-      border-radius: 5px;
-    }
+  padding: 37px 21px;
+  > span {
+    font-size: 16px;
+    display: inline-block;
+    padding: 8px 0 0 0;
+    color: #333333;
   }
-}
-
-.actionStyle {
-  a {
-    margin: 0 30px 0 0;
-  }
-  :global(.ant-btn) {
-    padding: 0 30px 0 0;
+  > button {
+    float: right;
     color: #1890ff;
+    width: 100px;
+    padding: 0;
+    margin-left: 20px;
+  }
+  :global(.ant-table) {
+    padding: 34px 0 0 0;
+    tr:nth-child(odd) {
+      background: #f3f5f9;
+    }
+    tr:nth-child(even) {
+      background: #fff;
+    }
+    button {
+      padding: 0 30px 0 0;
+    }
+    td {
+      color: #000000;
+    }
+  }
+  :global(.ant-table-thead > tr > th) {
+    padding: 14px 16px;
+    background: #fff;
+  }
+  :global(.ant-table-tbody > tr > td) {
+    padding: 9px 16px;
+  }
+  :global(.ant-table-column-title) {
+    color: #777f97;
   }
 }
 
 // 分组详情
-.groupContainer {
-  padding: 20px;
-}
+// .groupContainer {
+//   padding: 20px;
+// }
 
-.groupHeader {
-  i {
-    font-size: 20px;
-  }
-  > span {
-    margin-left: 20px;
-    font-size: 17px;
-  }
-  button {
-    float: right;
-    margin-right: 15px;
-  }
-}
+// .groupHeader {
+//   i {
+//     font-size: 20px;
+//   }
+//   > span {
+//     margin-left: 20px;
+//     font-size: 17px;
+//   }
+//   button {
+//     float: right;
+//     margin-right: 15px;
+//   }
+// }
 
 // 基础信息
 .groupBasic {

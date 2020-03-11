@@ -1,32 +1,35 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Layout, Button, Card, Icon, message } from "antd";
-import HomeHeader from "../components/header/HomeHeader";
-import commonClasses from "../styles/common.module.scss";
-import classes from "../styles/apps.module.scss";
 import { history } from "../store";
-import CreateFormModal from "../components/createApp";
+import { Layout, Button, Card, message } from "antd";
+import HomeHeader from "../components/header/HomeHeader";
+import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
+import Authenticate from "../components/shared/Authenticate";
+import { APP_VISIABLED } from "../auth";
+import commonClasses from "../styles/common.module.scss";
+import classes from "../styles/apps.module.scss";
 const { Content } = Layout;
 const { Meta } = Card;
 
 const getApps = list => {
   return list.map(e => {
     return (
-      <Card
-        key={e.id}
-        className={classes.appCard}
-        loading={false}
-        onClick={() => history.push(`/app/${e.id}/detail`)}
-      >
-        <Meta
-          className={classes.appCardMeta}
-          avatar={<Icon type={e.icon} className={classes.avatarIcon} />}
-          title={e.name}
-          description={e.description}
-        />
-      </Card>
+      <Authenticate key={e.id} auth={APP_VISIABLED(e.id)}>
+        <Card
+          className={classes.appCard}
+          loading={false}
+          onClick={() => history.push(`/app/${e.id}/detail`)}
+        >
+          <Meta
+            className={classes.appCardMeta}
+            avatar={<img src={`/image/appCreateIcons/${e.icon}.png`} alt="" />}
+            title={e.name}
+            description={e.description}
+          />
+        </Card>
+      </Authenticate>
     );
   });
 };
@@ -85,7 +88,7 @@ class Apps extends React.Component {
             </Button>
           </header>
           <content>{getApps(this.props.appList)}</content>
-          <CreateFormModal
+          <ModalCreation
             title={"创建应用"}
             visible={this.state.open}
             onOk={data => this.handleCreate(data)}
