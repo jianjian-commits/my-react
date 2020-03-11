@@ -83,7 +83,7 @@ export default class TextArea extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
 
     let errMsg = this.props.item.validate.customMessage;
     let tip = "";
@@ -118,7 +118,7 @@ export default class TextArea extends React.Component {
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
-          initialValue: item.defaultValue,
+          initialValue: initData || item.defaultValue,
           rules: [
             ...rules,
             {
