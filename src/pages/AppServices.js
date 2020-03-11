@@ -10,21 +10,20 @@ import CommonHeader from "../components/header/CommonHeader";
 import CreateForm from "../components/formBuilder/component/formBuilder/formBuilder";
 import classes from "../styles/apps.module.scss";
 import { Process, Approval } from "componentized-process";
-import { processRequst } from "../utils/request";
+import { requestWithHeaders } from "../utils/request";
 
 const { Content, Sider } = Layout;
 
-const defaultConfig = {
-  request: processRequst
-};
-
 const Proc = () => {
   const { url } = useRouteMatch();
-  const puginConfig = {
+  const { appId, formId } = useParams();
+  const config = {
+    request: requestWithHeaders({ appid: appId, formid: formId }),
     pathPrefix: `${url}`,
-    history
+    history,
+    appId,
+    formId
   };
-  const composedConfig = Object.assign({}, defaultConfig, puginConfig);
   return (
     <Switch>
       <PrivateRoute
@@ -32,19 +31,19 @@ const Proc = () => {
         exact
         component={Process.List}
         key={"process/list"}
-        options={{ config: composedConfig }}
+        options={{ config }}
       />
       <PrivateRoute
         path={`${url}/builder`}
         component={Process.Builder}
         key={"process/builder"}
-        options={{ config: composedConfig }}
+        options={{ config }}
       />
       <PrivateRoute
         path={`${url}/log`}
         component={Process.Log}
         key={"process/log"}
-        options={{ config: composedConfig }}
+        options={{ config }}
       />
     </Switch>
   );
@@ -52,11 +51,14 @@ const Proc = () => {
 
 const Appr = () => {
   const { url } = useRouteMatch();
-  const puginConfig = {
+  const { appId, formId } = useParams();
+  const config = {
+    request: requestWithHeaders({ appid: appId, formid: formId }),
     pathPrefix: `${url}`,
-    history
+    history,
+    appId,
+    formId
   };
-  const composedConfig = Object.assign({}, defaultConfig, puginConfig);
   return (
     <Switch>
       <PrivateRoute
@@ -64,19 +66,19 @@ const Appr = () => {
         exact
         component={Approval.List}
         key={"approval/list"}
-        options={{ config: composedConfig }}
+        options={{ config }}
       />
       <PrivateRoute
         path={`${url}/builder`}
         component={Approval.Builder}
         key={"approval/builder"}
-        options={{ config: composedConfig }}
+        options={{ config }}
       />
       <PrivateRoute
         path={`${url}/log`}
         component={Approval.Log}
         key={"approval/log"}
-        options={{ config: composedConfig }}
+        options={{ config }}
       />
     </Switch>
   );
