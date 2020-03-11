@@ -29,6 +29,8 @@ import CheckboxInput from "../checkboxInput/checkboxTestItem";
 import RadioButtons from "../radioInput/radioTestItem";
 import DropDown from "./components/dropDown";
 import MultiDropDown from "./components/multiDropDown";
+import moment from "moment";
+
 export default class FormChildTest extends React.Component {
   constructor(props) {
     super(props);
@@ -763,6 +765,7 @@ export default class FormChildTest extends React.Component {
                 content={
                   <>
                     <CheckboxInput
+                      value={item.data || []}
                       item={item}
                       onChange={value => {
                         item.data = value;
@@ -776,29 +779,6 @@ export default class FormChildTest extends React.Component {
                         this._checkFormChildHasError(submitDataArray);
                       }}
                     />
-                    {/* <Checkbox.Group
-                      onChange={value => {
-                        item.data = value;
-
-                        checkValueValidByType(item, value)
-                          ? (item.hasErr = false)
-                          : (item.hasErr = true);
-
-                        this.setState(state => ({
-                          ...state,
-                          refesh: !this.state.refesh
-                        }));
-                      }}
-                    >
-                      {item.values.map((item, index) => (
-                        <Checkbox
-                          key={index}
-                          value={typeof item === "object" ? item.value : item}
-                        >
-                          {typeof item === "object" ? item.value : item}
-                        </Checkbox>
-                      ))}
-                    </Checkbox.Group> */}
                   </>
                 }
                 title=""
@@ -829,6 +809,7 @@ export default class FormChildTest extends React.Component {
                   <>
                     <MultiDropDown
                       item={item}
+                      value={item.data || []}
                       onChange={value => {
                         item.data = value;
                         checkValueValidByType(item, value)
@@ -841,29 +822,6 @@ export default class FormChildTest extends React.Component {
                         this._checkFormChildHasError(submitDataArray);
                       }}
                     />
-                    {/* <Checkbox.Group
-                      onChange={value => {
-                        item.data = value;
-
-                        checkValueValidByType(item, value)
-                          ? (item.hasErr = false)
-                          : (item.hasErr = true);
-
-                        this.setState(state => ({
-                          ...state,
-                          refesh: !this.state.refesh
-                        }));
-                      }}
-                    >
-                      {dropDownOptions.map((item, index) => (
-                        <Checkbox
-                          key={index}
-                          value={typeof item === "object" ? item.value : item}
-                        >
-                          {typeof item === "object" ? item.value : item}
-                        </Checkbox>
-                      ))}
-                    </Checkbox.Group> */}
                   </>
                 }
                 title=""
@@ -871,7 +829,6 @@ export default class FormChildTest extends React.Component {
                 trigger="click"
               >
                 <div className="checkboxComponent">
-                  {/* {this._truncateValue(item.data)} */}
                   <span className="dataSpan">
                     {item.data ? item.data.join(",") : ""}
                   </span>
@@ -902,27 +859,6 @@ export default class FormChildTest extends React.Component {
                       this._checkFormChildHasError(submitDataArray);
                     }}
                   />
-                  // <Radio.Group
-                  //   onChange={e => {
-                  //     let { value } = e.target;
-                  //     item.data = value;
-
-                  //     checkValueValidByType(item, value)
-                  //       ? (item.hasErr = false)
-                  //       : (item.hasErr = true);
-
-                  //     this.setState(state => ({
-                  //       ...state,
-                  //       refesh: !this.state.refesh
-                  //     }));
-                  //   }}
-                  // >
-                  //   {item.values.map((item, index) => (
-                  //     <Radio key={index} value={item.label}>
-                  //       {item.label}
-                  //     </Radio>
-                  //   ))}
-                  // </Radio.Group>
                 }
                 title=""
                 placement="bottom"
@@ -979,6 +915,7 @@ export default class FormChildTest extends React.Component {
                 overlayClassName="normalProver"
                 content={
                   <FileUpload
+                    value={item.data || []}
                     item={item.component}
                     onChange={value => {
                       item.data = value;
@@ -1001,7 +938,6 @@ export default class FormChildTest extends React.Component {
               >
                 <div className="checkboxComponent">
                   {item.data.length !== 0 ? (
-                    // ? this._truncateValue(item.data[0].name)
                     <span className="dataSpan">{item.data[0].name}</span>
                   ) : (
                     ""
@@ -1019,7 +955,7 @@ export default class FormChildTest extends React.Component {
                 overlayClassName="normalProver"
                 content={
                   <ImageUpload
-                    data={item.data}
+                    value={item.data || []}
                     item={item.component}
                     onChange={value => {
                       item.data = value;
@@ -1040,7 +976,6 @@ export default class FormChildTest extends React.Component {
               >
                 <div className="checkboxComponent">
                   {item.data.length !== 0 ? (
-                    // ? this._truncateValue(item.data[0].name)
                     <span className="dataSpan">{item.data[0].name}</span>
                   ) : (
                     ""
@@ -1051,13 +986,17 @@ export default class FormChildTest extends React.Component {
             </div>
           );
           break;
-        case "DateInput":
+        case "DateInput":{
+          let valueOption = {}
+          if(item.data && item.data.moment){
+            valueOption.value = moment(item.data.moment) 
+          }
           resultArray.push(
             <div key={key} style={{ width: 200 }} className={className}>
               <DatePicker
                 showTime
-                // value={item.data && item.data.moment}
                 locale={locale}
+                {...valueOption}
                 placeholder="请选择时间/日期"
                 onChange={(value, dataString) => {
                   item.data.time = dataString;
@@ -1075,6 +1014,7 @@ export default class FormChildTest extends React.Component {
               />
             </div>
           );
+        }
           break;
         case "Address":
           resultArray.push(

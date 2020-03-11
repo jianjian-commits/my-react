@@ -149,10 +149,14 @@ export const getSubmissionDetail = (formId, submissionId) => dispatch => {
 };
 
 // 修改表单数据详情
-export const modifySubmissionDetail = (formPath, submissionId, formData) => dispatch => {
+export const modifySubmissionDetail = (formId, submissionId, formData) => dispatch => {
   return instanceAxios
     .put(
       config.apiUrl + `/submission/${submissionId}`,
-      {data:formData}
+      {
+        data: formData,
+        formId: formId
+      
+      }
     )
 };

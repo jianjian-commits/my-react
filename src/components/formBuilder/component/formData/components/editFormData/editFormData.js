@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import GridLayout from "react-grid-layout";
 import { Button, Form, message, Spin } from "antd";
-import { getSubmissionDetail, modifySubmissionDetail } from "../../redux/utils/getDataUtils";
+import axios from 'axios'
+import config from '../../../../config/config'
+import { modifySubmissionDetail } from "../../redux/utils/getDataUtils";
 
 import { connect } from "react-redux";
 import HeaderBar from "../../../base/NavBar";
@@ -61,10 +63,12 @@ class EditFormData extends Component {
       showFormChildErr: false,
       currentPage: 1,
       pageSize: 10,
-      isSubmitted: false,
+      isSubmitted: true,
       initflag : true,
       initPureFormComponents: true,
-      errorResponseMsg: {}
+      errorResponseMsg: {},
+      currentForm: { components: [], name: "" },
+      formDetail: []
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -76,38 +80,43 @@ class EditFormData extends Component {
       mobile = {}
     } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
-          console.log("formPath",this.state.formId)
-          this.props.getSubmissionDetail(this.state.formId, this.state.submissionId);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { currentForm, formDetail} = nextProps;
-
-    if (currentForm.components && this.state.initPureFormComponents) {
-      const pureFormComponents = currentForm.components.filter(item => {
-        return item.type !== "Button";
-      });
-      //渲染表单说明
-      let formInfo = currentForm.formInfo;
-      document.getElementById("submission-title").innerHTML = formInfo;
-      this.setState({
-        pureFormComponents,
-        initPureFormComponents: false
-      });
-    }
-
-    if(formDetail && currentForm.components && this.state.initflag){
-      let formChildDataObj = {};
-       currentForm.components.filter(item => {
-        if (item.type == "FormChildTest" && formDetail[item.key]) {
-          formChildDataObj[item.key] = formDetail[item.key].map(item =>{
-            item.isShow = false;
-            return item
+          const { formId, submissionId } = this.state;
+          axios.get(config.apiUrl + `/form/${formId}`).then(res => {
+            let currentForm = res.data;
+            const pureFormComponents = currentForm.components.filter(item => {
+              return item.type !== "Button";
+            });
+            axios
+              .get(
+                config.apiUrl + `/submission/${submissionId}`,
+              )
+              .then(res => {
+                let formDetail = res.data.data;
+                let formChildDataObj = {};
+                pureFormComponents.filter(item => {
+                  if (item.type == "FormChildTest" && formDetail[item.key]) {
+                    formChildDataObj[item.key] = formDetail[item.key].map(item =>{
+                      item.isShow = false;
+                      return item
+                    });
+                  }
+                });
+                this.setState({
+                  currentForm,
+                  formDetail,
+                  pureFormComponents,
+                  formChildDataObj,
+                  initflag: false,
+                  isSubmitted: false
+                })
+              });
+          }).catch((error) => {
+            console.log(error);
+            this.state({
+              isSubmitted: false
+            })
+            message.error("获取数据失败")
           });
-        }
-      });
-      this.setState({ formChildDataObj, initflag: false});
-    }
   }
 
   getFileUrl(key, fileUrl) {
@@ -157,7 +166,7 @@ class EditFormData extends Component {
     }
   }
   _setNumberValue(values) {
-    this.props.currentForm.components.map(component => {
+    this.state.currentForm.components.map(component => {
       if (values[component.id] == "") {
         delete values[component.id];
       }
@@ -169,7 +178,7 @@ class EditFormData extends Component {
   }
 
   _setDateTimeVaule(values) {
-    this.props.currentForm.components.map(component => {
+    this.state.currentForm.components.map(component => {
       if (
         component.type == "DateInput" &&
         values.hasOwnProperty(component.id) &&
@@ -187,7 +196,7 @@ class EditFormData extends Component {
   }
 
   _setAddressValue(values) {
-    this.props.currentForm.components.map(component => {
+    this.state.currentForm.components.map(component => {
       if (
         component.type == "Address" &&
         values.hasOwnProperty(component.id) &&
@@ -357,7 +366,7 @@ class EditFormData extends Component {
 
     if (!this.state.isSubmitted) {
       this.props.form.validateFields((err, values) => {
-        let formComponentArray = this.props.currentForm.components;
+        let formComponentArray = this.state.currentForm.components;
         let customDataArray = [];
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
@@ -383,7 +392,7 @@ class EditFormData extends Component {
         }
         this.setState({ isSubmitted: true,errorResponseMsg:{} });
         this.props
-          .modifySubmissionDetail(this.props.currentForm.path, this.state.submissionId, values)
+          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values)
           .then(response => {
            isMobile
           ? Toast.success("提交成功!")
@@ -397,12 +406,6 @@ class EditFormData extends Component {
           })
           .catch(error => {
              console.log(err);
-            //  这里记得改回来！！！
-             setTimeout(() => {
-              let submissionId = null;
-              let submitFlag = false;
-              this.props.actionFun(submissionId, submitFlag);
-              }, 1000);
              if (error.response && error.response.data.code === 9998) {
              this._setErrorResponseData(error.response.data);
               isMobile ? Toast.fail("提交失败") : message.error("提交失败");
@@ -412,8 +415,8 @@ class EditFormData extends Component {
     }
   };
 
-  renderFormComponent = (getFieldDecorator, components, errorResponseMsg, formDataDetail) => {
-    const { currentForm } = this.props;
+  renderFormComponent = (getFieldDecorator, components, errorResponseMsg) => {
+    const { currentForm, formDetail } = this.state;
     const { mobile } = this.props;
 
     return components
@@ -433,7 +436,7 @@ class EditFormData extends Component {
           getFieldDecorator: getFieldDecorator,
           item: item,
           form: this.props.form,
-          initData: formDataDetail[item.key],
+          initData: formDetail[item.key],
           errorResponseMsg: errorResponseMsg[item.key],
           resetErrorMsg: this._changeErrorResponseData
         }
@@ -669,7 +672,7 @@ class EditFormData extends Component {
                     forms={currentForm}
                     form={this.props.form}
                     handleSetComponentEvent={this.handleSetComponentEvent}
-                    initData = {formDataDetail[item.key]}
+                    initData = {formDetail[item.key]}
                     submitDataArray={this.state.formChildDataObj[item.key]}
                     handleSetFormChildData={this.handleSetFormChildData}
                     saveSubmitData={newArray => {
@@ -685,7 +688,7 @@ class EditFormData extends Component {
                       key={`${item.key}${i}`}
                       getFieldDecorator={getFieldDecorator}
                       item={item}
-                      initData = {formDataDetail[item.key]}
+                      initData = {formDetail[item.key]}
                       showFormChildErr={this.state.showFormChildErr}
                       forms={currentForm}
                       form={this.props.form}
@@ -827,11 +830,10 @@ class EditFormData extends Component {
       // id子表单的第idnex项数据替换
       formChildDataObj[id][index] = data;
     });
-    console.log("formChildDataObj",formChildDataObj)
+
     if(initData != void 0){
       formChildDataObj = initData
     }
-    console.log("formChildDataObj before _reSetDataLinkFormChildItem", formChildDataObj)
     this.setState(
       {
         formChildDataObj
@@ -867,9 +869,9 @@ class EditFormData extends Component {
   };
 
   render() {
-    const { currentForm,form, formData, formDetail, mobile = {}} = this.props;
+    const { form, mobile = {} } = this.props;
     const { getFieldDecorator } = form;
-    let { pureFormComponents, currentLayout, errorResponseMsg } = this.state;
+    let { pureFormComponents, currentLayout, errorResponseMsg, currentForm } = this.state;
     let layout = null;
 
     if (currentLayout == void 0) {
@@ -893,10 +895,6 @@ class EditFormData extends Component {
       });
     }
 
-    const uniqueComponents = pureFormComponents.filter(component => {
-      return component.unique === true;
-    });
-
     // 将存储在layout中的isShow信息置入component
     // const layoutIdList = layout.map(item => item.i);
     pureFormComponents = pureFormComponents.map(component => {
@@ -905,7 +903,7 @@ class EditFormData extends Component {
     });
 
 
-    let submitBtnObj = this.props.currentForm.components.filter(
+    let submitBtnObj = currentForm.components.filter(
       component => component.type === "Button"
     )[0];
     return (
@@ -914,7 +912,7 @@ class EditFormData extends Component {
           {mobile.is ? null : (
             <HeaderBar
               backCallback={() => {
-                let skipToSubmissionDataFlag = true;
+                let skipToSubmissionDataFlag = false;
                 this.props.actionFun(skipToSubmissionDataFlag);
               }}
               name={currentForm.name}
@@ -924,7 +922,7 @@ class EditFormData extends Component {
           <div className={"formBuilder-Submission"}>
             <div className="Content">
               <div className="submission-title">{currentForm.name}</div>
-              {this.props.currentForm.formInfo != "" ? (
+              {currentForm.formInfo != "" ? (
                 <div
                   className="submission-formInfo"
                   id="submission-title"
@@ -939,8 +937,7 @@ class EditFormData extends Component {
                       {this.renderFormComponent(
                         getFieldDecorator,
                         pureFormComponents,
-                        errorResponseMsg,
-                        formDetail
+                        errorResponseMsg
                       )}
                     </>
                   ) : (
@@ -957,8 +954,7 @@ class EditFormData extends Component {
                       {this.renderFormComponent(
                         getFieldDecorator,
                         pureFormComponents,
-                        errorResponseMsg,
-                        formDetail
+                        errorResponseMsg
                       )}
                     </GridLayout>
                   )}
@@ -1015,11 +1011,8 @@ const EditFormDataForm = Form.create()(EditFormData);
 export default connect(
   store => ({
     formData: store.formSubmitData.formData,
-    formDetail: store.formSubmitData.formDetail,
-    currentForm: store.formSubmitData.forms,
   }),
   {
-    getSubmissionDetail,
     modifySubmissionDetail
   }
 )(EditFormDataForm);

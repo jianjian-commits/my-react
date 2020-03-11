@@ -11,7 +11,6 @@ import CheckboxTestItem from "./checkboxTestItem";
 export default class CheckboxInput extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       inputValue: undefined
     };
@@ -101,14 +100,13 @@ export default class CheckboxInput extends React.Component {
   };
   render() {
     // const { inputValue } = this.state;
-    const { getFieldDecorator, item } = this.props;
+    const { getFieldDecorator, item, initData } = this.props;
     // const { values } = item;
     // let errMsg = this.props.item.validate.customMessage;
     // const layoutClassName = this.props.item.inline ? "row-layout" :"column-layout";
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
-          // initialValue: inputValue || item.defaultValue,
           rules: [
             {
               // required: true,
@@ -121,8 +119,7 @@ export default class CheckboxInput extends React.Component {
               validator: this.checkSelecNumber
             }
           ],
-          // validateTrigger: 'onSubmit',
-          initialValue:[]
+          initialValue: initData || []
         })(
           <CheckboxTestItem handleChange={this.handleChange} item={item} />
         )}

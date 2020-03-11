@@ -4,31 +4,16 @@ import { Form, Icon, Tooltip, Spin, Upload, Button, message } from "antd";
 export default class ImageUpload extends React.Component {
   constructor(props) {
     super(props);
-    const {item, value } = props;
-    let uploadFileList = [];
-    let canUpload = true;
-    let loadStatusMsg = (
-      <div>
-        <Icon type="plus-circle" theme="filled" />
-        <p>点击添加图片</p>
-        <p>0/{this.props.item.validate.fileCount}</p>
-      </div>
-    )
-    if (value) {
-        uploadFileList = value;
-        canUpload = item.fileCount > value.length;
-        loadStatusMsg= (
-          <div>
-            <Icon type="plus-circle" theme="filled" />
-            <p>点击添加图片</p>
-            <p>{ value.length}/{item.fileCount}</p>
-          </div>
-        );
-    }
     this.state = {
-      loadStatusMsg,
-      uploadFileList,
-      canUpload//能否上传的一个标志位
+      loadStatusMsg: (
+        <div>
+          <Icon type="plus-circle" theme="filled" />
+          <p>点击添加图片</p>
+          <p>{props.value.length}/{props.item.validate.fileCount}</p>
+        </div>
+      ),
+      uploadFileList: props.value,
+      canUpload: props.item.validate.fileCount > props.value.length //能否上传的一个标志位
     };
     this.handleBeforeUpload = this.handleBeforeUpload.bind(this);
   }

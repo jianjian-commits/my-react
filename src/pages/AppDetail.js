@@ -131,8 +131,6 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
-  console.log("submissionId",submissionId);
-  console.log("submit",submit);
   return (
     <Layout>
       <CommonHeader
@@ -156,6 +154,7 @@ const AppDetail = props => {
               onClick={e => {
                 setSelectedForm(e.key);
                 setSubmit(false);
+                setSubmissionId(null)
               }}
               groups={groups}
               list={list}

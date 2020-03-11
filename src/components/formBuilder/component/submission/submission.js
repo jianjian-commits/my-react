@@ -361,9 +361,6 @@ class Submission extends Component {
     this.setState(
       {
         errorResponseMsg
-      },
-      () => {
-        // console.log("this.state.errorResponseMsg", this.state.errorResponseMsg);
       }
     );
   };
@@ -1048,7 +1045,6 @@ class Submission extends Component {
         formChildDataObj
       },
       () => {
-        // console.log("formChildDataObj", formChildDataObj)
         that._reSetDataLinkFormChildItem();
       }
     );

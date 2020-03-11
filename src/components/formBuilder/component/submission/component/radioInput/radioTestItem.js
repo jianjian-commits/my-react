@@ -39,6 +39,29 @@ export default class RadioTest extends React.Component {
     };
     this.handleSelect = this.handleSelect.bind(this);
   }
+
+    // 设置默认的选中值
+  setDefaultSetected = (selectedValues, allvalues=[]) => {
+    const indexs = allvalues.map(item => item.value);
+    const index = indexs.indexOf(selectedValues);
+
+    this.setState({
+      selectValue: index
+    });
+  };
+
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.hasClicked) {
+      const {item, value} = nextProps;
+      if(value) {
+        this.setDefaultSetected(value, item.values);
+      } else if(item.isMobileChild) {
+        this.setDefaultSetected(item.data, item.values);
+      }
+    }
+  }
+  
   handleSelect(index) {
     const { onChange } = this.props;
     if (this.state.selectValue === index) {

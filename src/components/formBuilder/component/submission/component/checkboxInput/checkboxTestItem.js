@@ -26,7 +26,7 @@ class CheckboxOption extends React.Component {
 export default class CheckboxInput extends React.Component {
   constructor(props) {
     super(props);
-    const {item, value } = props;
+    const {item, value} = props;
     const indexs = item.values.map(item => item.value);
     let selectValues = [];
       if (value) {
@@ -51,9 +51,32 @@ export default class CheckboxInput extends React.Component {
     };
     this.handleSelect = this.handleSelect.bind(this);
   }
-  // componentDidMount(){
-  //   this.props.onChange("");
-  // }
+    // 设置默认的选中值
+    setDefaultSetected = (selectedValues = [], allvalues = []) => {
+      const indexs = allvalues.map(item => item.value);
+      const defaultSelected = [];
+      selectedValues.forEach(value => {
+        let index = indexs.indexOf(value);
+        if (index > -1) {
+          defaultSelected.push(index);
+        }
+      });
+      this.setState({
+        selectValues: defaultSelected
+      });
+    };
+  
+  componentWillReceiveProps(nextProps) {
+     if (!this.state.hasClicked) {
+       const {item, value } = nextProps;
+      if (value) {
+        this.setDefaultSetected(value, item.values);
+      } else if (item.isMobileChild && item.data) {
+      this.setDefaultSetected(item.data, item.values);
+      }
+    }
+  }
+  
   handleSelect(index) {
     const { onChange } = this.props;
     if (this.state.selectValues.includes(index)) {

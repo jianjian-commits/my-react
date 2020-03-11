@@ -7,12 +7,14 @@ export default class MultiDropDownItem extends React.Component {
     let { item } = this.props;
     const indexs = item.dropDownOptions.map(item => item.value);
     let selectValues = [];
-    item.data.forEach(value => {
-      let index = indexs.indexOf(value);
-      if (index > -1) {
-        selectValues.push(index);
-      }
-    });
+    if(item.data){
+      item.data.forEach(value => {
+        let index = indexs.indexOf(value);
+        if (index > -1) {
+          selectValues.push(index);
+        }
+      });
+    }
     this.state = {
       selectIndexArr: selectValues,
       isPopoverVisible: false

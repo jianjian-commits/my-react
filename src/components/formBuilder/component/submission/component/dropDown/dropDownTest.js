@@ -120,7 +120,7 @@ export default class DropDown extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
     const { selections } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
@@ -136,22 +136,9 @@ export default class DropDown extends React.Component {
               message: "此字段为必填"
             }
           ],
-          initialValue: ""
+          initialValue: initData ||""
         })(
           <DropDownTestItem selections={selections} item={item} />
-          //   <Select
-          //     disabled={disabled}
-          //     placeholder="请选择"
-          //     style={{ width: "100%" }}
-          //     onChange={this.handleChange}
-          //     getPopupContainer = {triggerNode => triggerNode.parentNode}
-          //   >
-          //     {selections.map((item, index) => (
-          //       <Select.Option key={index} value={item.value}>
-          //         {item.label}
-          //       </Select.Option>
-          //     ))}
-          //   </Select>
         )}
       </Form.Item>
     );
