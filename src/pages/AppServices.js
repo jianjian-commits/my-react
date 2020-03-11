@@ -20,7 +20,9 @@ const Proc = () => {
   const config = {
     request: requestWithHeaders({ appid: appId, formid: formId }),
     pathPrefix: `${url}`,
-    history
+    history,
+    appId,
+    formId
   };
   return (
     <Switch>
@@ -53,7 +55,9 @@ const Appr = () => {
   const config = {
     request: requestWithHeaders({ appid: appId, formid: formId }),
     pathPrefix: `${url}`,
-    history
+    history,
+    appId,
+    formId
   };
   return (
     <Switch>
