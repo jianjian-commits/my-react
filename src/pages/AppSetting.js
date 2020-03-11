@@ -101,7 +101,7 @@ const AppSetting = props => {
         list: newList
       });
     });
-  }, []);
+  }, [appId]);
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
