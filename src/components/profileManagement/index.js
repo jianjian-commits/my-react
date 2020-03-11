@@ -26,18 +26,10 @@ function GroupList(props) {
   return (
     <>
       <span>分组</span>
-      <Button icon="filter">筛选</Button>
-      <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
-        <Button icon="plus" onClick={handleClick}>
-          添加分组
-        </Button>
-      </Authenticate>
-      <Table
-        // size="middle"
-        columns={columns}
-        dataSource={dataSource}
-        rowKey="roleId"
-      ></Table>
+      <Button icon="plus" onClick={handleClick}>
+        添加分组
+      </Button>
+      <Table columns={columns} dataSource={dataSource} rowKey="roleId"></Table>
       <ModalCreation
         title={title}
         visible={visible}
