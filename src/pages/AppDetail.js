@@ -9,7 +9,7 @@ import FormBuilderSubmitData from "../components/formBuilder/component/formData/
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 
 import selectCom from "../utils/selectCom";
-import request from "../utils/request";
+import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import { appDetailMenu } from "../components/transactList/appDetailMenu";
 
 import classes from "../styles/apps.module.scss";
@@ -29,40 +29,6 @@ const getOreations = (appId, history) => [
   }
 ];
 
-// const mockForms = {
-//   groups: [
-//     {
-//       name: "基础设置",
-//       key: "base",
-//       list: [
-//         { key: "sWw", name: "车队信息" },
-//         { key: "clr", name: "油卡信息" },
-//         { key: "CrE", name: "车辆信息" }
-//       ]
-//     },
-//     {
-//       name: "用车管理",
-//       key: "use",
-//       list: [
-//         { key: "short", name: "短途申请" },
-//         { key: "long", name: "长途用车申请" }
-//       ]
-//     },
-//     {
-//       name: "违章管理",
-//       key: "ban",
-//       list: [
-//         { key: "aban", name: "违章记录" },
-//         { key: "handle", name: "违章处理记录" }
-//       ]
-//     }
-//   ],
-//   list: [
-//     { key: "genernal", name: "车辆状态一览" },
-//     { key: "check", name: "车辆年检记录" }
-//   ]
-// };
-
 const AppDetail = props => {
   const { appId, menuId } = useParams();
   const history = useHistory();
@@ -71,15 +37,17 @@ const AppDetail = props => {
   const [submit, setSubmit] = React.useState(false);
   const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
   // zxx mockForms存储表单列表数据
-  const [mockForms, setMockForms] = React.useState({ groups: [], list: [] });
+  const [mockForms, setMockForms] = React.useState({
+    groups: [],
+    list: [],
+    searchList: []
+  });
 
   //zxx groups目录结构 list无目录结构的表单
-  let { groups, list } = mockForms;
+  let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
-    request("/form?desc=createdTime", {
-      methods: "get"
-    }).then(res => {
+    getFormsAll().then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name
@@ -96,19 +64,49 @@ const AppDetail = props => {
             ]
           }
         ],
+        searchList: [
+          {
+            name: "基础设置",
+            key: "ban",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
         list: newList
       });
     });
   }, []);
+
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
 
+  const searchForms = (keyword, groupsParams) => {
+    let _groups = groupsParams;
+
+    for (let i = 0, maxLength = _groups.length; i < maxLength; i++) {
+      let arr = _groups[i].list.filter(
+        item => item.name.indexOf(keyword) !== -1
+      );
+      if (arr.length !== 0) {
+        _groups[i].list = arr;
+      } else {
+        _groups = null;
+      }
+    }
+    return _groups;
+  };
+
   if (searchKey) {
-    const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
-    groups = null;
+    const all = JSON.parse(JSON.stringify(list));
+    const allGroups = JSON.parse(JSON.stringify(groups));
+    groups =
+      searchKey === "" ? searchList : searchForms(searchKey, [...allGroups]);
     list = all.filter(i => i.name.indexOf(searchKey) !== -1);
-    if (list.length === 0) {
+    if (list.length === 0 && groups === null) {
       list = [{ key: "", name: "暂无匹配项" }];
     }
   }
