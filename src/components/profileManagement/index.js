@@ -22,16 +22,10 @@ function GroupList(props) {
   return (
     <>
       <span>分组</span>
-      <Button icon="filter">筛选</Button>
       <Button icon="plus" onClick={handleClick}>
         添加分组
       </Button>
-      <Table
-        // size="middle"
-        columns={columns}
-        dataSource={dataSource}
-        rowKey="roleId"
-      ></Table>
+      <Table columns={columns} dataSource={dataSource} rowKey="roleId"></Table>
       <ModalCreation
         title={title}
         visible={visible}
