@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Icon } from "antd";
+import { Layout, Menu } from "antd";
 import { history } from "../store";
 // import CommonHeader from "../components/header/CommonHeader";
 import HomeHeader from "../components/header/HomeHeader";
@@ -18,7 +18,7 @@ const webs = [
     path: "/user/info",
     key: "info",
     label: "团队信息",
-    icon: "file-text",
+    icon: "info",
     component: TeamInfo
   },
   {
@@ -26,7 +26,7 @@ const webs = [
     key: "member",
     label: "团队成员",
     auth: TEAM_MANAGEMENT_LIST,
-    icon: "team",
+    icon: "member",
     component: TeamMember
   },
   {
@@ -34,7 +34,7 @@ const webs = [
     key: "profile",
     label: "分组",
     auth: PROFILE_MANAGEMENT_LIST,
-    icon: "switcher",
+    icon: "profile",
     exact: true,
     component: ProfileManagement
   }
@@ -54,10 +54,17 @@ class TeamManagement extends React.Component {
   }
   getMenu = webs =>
     webs.map(w => (
-      <Menu.Item key={w.key} onClick={() => this.setSelectedKey(w.key, w.path)}>
+      <Menu.Item
+        key={w.key}
+        onClick={() => this.setSelectedKey(w.key, w.path)}
+        className={commonClasses.menu}
+      >
         <Authenticate auth={w.auth}>
-          <Icon type={w.icon} />
-          <span>{w.label}</span>
+          {/* <Icon type={w.icon} /> */}
+          <span>
+            <img src={`/image/davinci/${w.icon}.png`} alt="" />
+            {w.label}
+          </span>
         </Authenticate>
       </Menu.Item>
     ));

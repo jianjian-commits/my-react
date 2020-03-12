@@ -1,10 +1,15 @@
 .wrapper {
-  padding: 37px 21px;
+  // padding: 37px 21px;
+  width: calc(100vw - 230px);
+  padding: 29px 21px;
   > span {
-    font-size: 16px;
+    font-size: 18px;
     display: inline-block;
     padding: 8px 0 0 0;
     color: #333333;
+  }
+  img {
+    margin: 0 6px 3px 0;
   }
   > button {
     float: right;
@@ -12,7 +17,7 @@
     width: 100px;
     padding: 0;
     margin-left: 20px;
-    margin-bottom: 34px;
+    margin-bottom: 44px;
   }
   :global(.ant-table) {
     tr:nth-child(odd) {
@@ -69,11 +74,14 @@
     display: inline-table;
     width: calc(100vw - 270px);
     margin-top: 10px;
+    padding: 10px;
+    display: inline-block;
     tr {
       td:first-child {
         width: 200px;
         padding: 7px;
         color: #777f97;
+        text-indent: 10px;
       }
       td:last-child {
         color: #333;

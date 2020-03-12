@@ -26,7 +26,8 @@ function GroupList(props) {
   return (
     <>
       <span>分组</span>
-      <Button icon="plus" onClick={handleClick}>
+      <Button onClick={handleClick}>
+        <img src="/image/davinci/create.png" alt="" />
         添加分组
       </Button>
       <Table columns={columns} dataSource={dataSource} rowKey="roleId"></Table>
