@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout, Input } from "antd";
+import { Layout, Input, Button } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
+import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
+import Authenticate from "../components/shared/Authenticate";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
-
-import selectCom from "../utils/selectCom";
-import { appDetailMenu } from "../components/transactList/appDetailMenu";
+import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
+import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
+import TransactList from "../components/transactList/TransactList";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -23,123 +25,173 @@ const getOreations = (appId, history) => [
     key: "setting",
     icon: "setting",
     label: "应用设置",
+    auth: APP_SETTING_ABLED(appId),
     onClick: () => history.push(`/app/${appId}/setting`)
   }
 ];
 
-const mockForms = {
-  groups: [
-    {
-      name: "基础设置",
-      key: "base",
-      list: [
-        { key: "sWw", name: "车队信息" },
-        { key: "clr", name: "油卡信息" },
-        { key: "CrE", name: "车辆信息" }
-      ]
-    },
-    {
-      name: "用车管理",
-      key: "use",
-      list: [
-        { key: "short", name: "短途申请" },
-        { key: "long", name: "长途用车申请" }
-      ]
-    },
-    {
-      name: "违章管理",
-      key: "ban",
-      list: [
-        { key: "aban", name: "违章记录" },
-        { key: "handle", name: "违章处理记录" }
-      ]
-    }
-  ],
-  list: [
-    { key: "genernal", name: "车辆状态一览" },
-    { key: "check", name: "车辆年检记录" }
-  ]
-};
-
 const AppDetail = props => {
-  const { appId, menuId } = useParams();
+  const { appId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
-  const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
-  let { groups, list } = mockForms;
+  const [submit, setSubmit] = React.useState(false);
+  // zxx mockForms存储表单列表数据
+  const [mockForms, setMockForms] = React.useState({
+    groups: [],
+    list: [],
+    searchList: []
+  });
+
+  //zxx groups目录结构 list无目录结构的表单
+  let { groups, list, searchList } = mockForms;
+  useEffect(() => {
+    let newList = [];
+    getFormsAll().then(res => {
+      newList = res.map(item => ({
+        key: item.id,
+        name: item.name
+      }));
+      setMockForms({
+        groups: [
+          {
+            name: "基础设置",
+            key: "base",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
+        searchList: [
+          {
+            name: "基础设置",
+            key: "ban",
+            list: [
+              { key: "sWw", name: "车队信息" },
+              { key: "clr", name: "油卡信息" },
+              { key: "CrE", name: "车辆信息" }
+            ]
+          }
+        ],
+        list: newList
+      });
+    });
+  }, [appId]);
+
+  const [approvalKey, setApprovalKey] = React.useState(null);
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
 
-  if (searchKey) {
-    const all = groups.reduce((acc, e) => acc.concat(e.list), []).concat(list);
-    groups = null;
-    list = all.filter(i => i.name.indexOf(searchKey) !== -1);
-  }
+  const searchForms = (keyword, groupsParams) => {
+    let _groups = groupsParams;
 
+    for (let i = 0, maxLength = _groups.length; i < maxLength; i++) {
+      let arr = _groups[i].list.filter(
+        item => item.name.indexOf(keyword) !== -1
+      );
+      if (arr.length !== 0) {
+        _groups[i].list = arr;
+      } else {
+        _groups = null;
+      }
+    }
+    return _groups;
+  };
+
+  if (searchKey) {
+    const all = JSON.parse(JSON.stringify(list));
+    const allGroups = JSON.parse(JSON.stringify(groups));
+    groups =
+      searchKey === "" ? searchList : searchForms(searchKey, [...allGroups]);
+    list = all.filter(i => i.name.indexOf(searchKey) !== -1);
+    if (list.length === 0 && groups === null) {
+      list = [{ key: "", name: "暂无匹配项" }];
+    }
+  }
+  //zxx 更改搜索的关键值
   const searchHandle = e => {
     const { value } = e.target;
     setSearchKey(value);
   };
 
-  //根据点击菜单栏加载内容组件
+  //根据点击菜单栏
   const onClickMenu = (key, e) => {
-    setSelectedForm(null);
-    setEle(selectCom(key, appDetailMenu));
+    setApprovalKey(key);
+  };
+
+  // 父传子的方法
+  const skipToSubmissionData = val => {
+    setSubmit(!val);
   };
 
   return (
-    <Layout>
-      <CommonHeader
-        navigationList={navigationList(appName, history)}
-        operations={getOreations(appId, history)}
-      />
+    <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <Layout>
-        <Sider className={classes.appSider} style={{ background: "#fff" }}>
-          <ApprovalSection fn={onClickMenu} />
-          <div className={classes.searchBox}>
-            <Input
-              placeholder="输入名称来搜索"
-              value={searchKey}
-              onChange={searchHandle}
-            />
-          </div>
-          <div className={classes.formArea}>
-            <DraggableList
-              selected={selectedForm}
-              draggable={false}
-              onClick={e => {
-                setSelectedForm(e.key);
-              }}
-              groups={groups}
-              list={list}
-            />
-          </div>
-        </Sider>
-        <Content className={classes.container}>
-          {selectedForm !== void 0 ? (
-            <>
-              <button
-                onClick={_e => {
-                  history.push(
-                    `/app/${appId}/detail/submission?formId=${selectedForm}`
-                  );
+        <CommonHeader
+          navigationList={navigationList(appName, history)}
+          operations={getOreations(appId, history)}
+        />
+        <Layout>
+          <Sider className={classes.appSider} style={{ background: "#fff" }}>
+            <ApprovalSection fn={onClickMenu} />
+            <div className={classes.searchBox}>
+              <Input
+                placeholder="输入名称来搜索"
+                value={searchKey}
+                onChange={searchHandle}
+              />
+            </div>
+            <div className={classes.formArea}>
+              <DraggableList
+                selected={selectedForm}
+                draggable={false}
+                onClick={e => {
+                  setSelectedForm(e.key);
+                  setSubmit(false);
                 }}
-              >
-                提交数据
-              </button>
-              <FormBuilderSubmitData
-                key={Math.random()}
-                formId={selectedForm}
-              ></FormBuilderSubmitData>
-            </>
-          ) : ele != null ? (
-            <ele.ContentEle count={ele.key} />
-          ) : null}
-        </Content>
+                groups={groups}
+                list={list}
+              />
+            </div>
+          </Sider>
+          <Content className={classes.container}>
+            {// eslint-disable-next-line
+            selectedForm != void 0 ? (
+              <>
+                {!submit ? (
+                  <Button
+                    type="primary"
+                    className="form-submit-data-button"
+                    onClick={_e => {
+                      setSubmit(!submit);
+                    }}
+                  >
+                    提交数据
+                  </Button>
+                ) : null}
+                {submit ? (
+                  <FormBuilderSubmission
+                    key={Math.random()}
+                    formId={selectedForm}
+                    actionFun={skipToSubmissionData}
+                  ></FormBuilderSubmission>
+                ) : (
+                  <FormBuilderSubmitData
+                    key={Math.random()}
+                    formId={selectedForm}
+                  ></FormBuilderSubmitData>
+                )}
+              </>
+            ) : approvalKey !== null ? (
+              <TransactList fn={onClickMenu} approvalKey={approvalKey} />
+            ) : null}
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default connect(({ app }) => ({

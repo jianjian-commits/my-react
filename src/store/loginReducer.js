@@ -65,6 +65,7 @@ export const switchCurrentTeam = teamId => async dispatch => {
     const res = await request(`/team/${teamId}/currentTeam`, { method: "put" });
     if (res && res.status === "SUCCESS") {
       dispatch(getCurrentTeam());
+      dispatch(getUserDetail());
       dispatch(getAppList());
     } else {
       message.error("团队转换失败");

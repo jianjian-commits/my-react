@@ -4,13 +4,21 @@ import { Layout, Breadcrumb, Button } from "antd";
 import User from "./UserSection";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
+import Authenticate from "../shared/Authenticate";
 import { getAppList } from "../../store/appReducer";
 
 const { Header } = Layout;
+const homeHeaderStyle = {
+  background: "#2A7FFF",
+  height: 50,
+  padding: "0 20px",
+  lineHeight: "50px"
+};
 const logoStyle = {
-  background: "#eee",
+  background: "rgba(255, 255, 255, 0.4)",
+  height: "100%",
   color: "#333",
-  lineHeight: "44px",
+  lineHeight: "37px",
   textAlign: "center"
 };
 
@@ -41,9 +49,16 @@ const getNavigationList = navs => {
 const getOperations = ops => {
   if (!ops || !ops.length) return null;
   return ops.map(o => (
-    <Button key={o.key} icon={o.icon ? o.icon : undefined} onClick={o.onClick}>
-      {o.label}
-    </Button>
+    <Authenticate key={o.key} auth={o.auth}>
+      <Button
+        type="link"
+        ghost
+        icon={o.icon ? o.icon : undefined}
+        onClick={o.onClick}
+      >
+        {o.label}
+      </Button>
+    </Authenticate>
   ));
 };
 
@@ -58,7 +73,7 @@ export default connect(
     props.getAppList();
   }
   return (
-    <Header className={classes.homeHeader}>
+    <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
         <div className={classes.logo}>
           <div style={logoStyle}>logo</div>

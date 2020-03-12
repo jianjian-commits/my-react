@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { Input, Button, Modal, message } from "antd";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
+import classes from "./inviteUser.module.scss";
+
+const bodyStyle = {
+  padding: "46px 30px 182px",
+  boxShadow: "0px 4px 26px rgba(46, 106, 162, 0.25)",
+  borderRadius: "5px"
+};
 
 export default function InviteUser(props) {
   const { currentTeam, userDetail } = props;
@@ -23,20 +30,29 @@ export default function InviteUser(props) {
   const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;
   return (
     <>
-      <Button type="primary" onClick={() => handleInviteUserBtn()}>
-        邀请用户
+      <Button icon="plus" type="primary" onClick={() => handleInviteUserBtn()}>
+        邀请
       </Button>
       <Modal
-        title="邀请同事"
+        // title="邀请新成员加入"
+        bodyStyle={bodyStyle}
         visible={visible}
         footer={null}
-        width="419px"
+        width="690px"
         onCancel={() => setVisible(false)}
       >
-        <p> 将链接发给同事，即可通过注册的方式加入企业。</p>
+        <p className={classes.title}>邀请新成员加入</p>
+        <p className={classes.text}>
+          {" "}
+          发送以下链接给新成员，点击链接即可加入团队
+        </p>
         <div style={{ display: "flex" }}>
-          <Input value={inviteUrl} />
+          <Input
+            value={inviteUrl}
+            style={{ marginRight: "10px", backgroundColor: "#F3F4F6" }}
+          />
           <Button
+            type="primary"
             onClick={() => {
               copy(inviteUrl);
               message.success("复制成功!");
@@ -45,7 +61,7 @@ export default function InviteUser(props) {
             复制链接
           </Button>
         </div>
-        <p> 链接14天有效</p>
+        <p className={classes.warn}> 邀请链接14天有效</p>
       </Modal>
     </>
   );

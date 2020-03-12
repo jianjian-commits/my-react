@@ -105,6 +105,8 @@ class Preview extends React.Component {
     }
 
     newDataArray.splice(index, 1);
+
+    this.props.updateOrder(newDataArray);
   }
 
   insertCard(item, hoverIndex) {

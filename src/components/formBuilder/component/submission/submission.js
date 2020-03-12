@@ -50,13 +50,15 @@ import CheckboxInput from "./component/checkboxInput";
 import RadioButtonsMobile from "./component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
+import mobileAdoptor from "../../utils/mobileAdoptor";
 
 class Submission extends Component {
   constructor(props) {
     super(props);
     this.state = {
       tipVisibility: false,
-      formId: locationUtils.getUrlParamObj().formId,
+      //
+      formId: this.props.formId,
       formChildDataObj: {},
       currentLayout: null,
       customValicate: {
@@ -92,6 +94,9 @@ class Submission extends Component {
       this.setState({
         pureFormComponents
       });
+      //渲染表单说明
+      let formInfo = formComponent.formInfo;
+      document.getElementById("submission-title").innerHTML = formInfo;
     }
   }
 
@@ -447,8 +452,8 @@ class Submission extends Component {
                     ? Toast.success("提交成功!")
                     : message.success("提交成功!");
                   setTimeout(() => {
-                    let appId = this.props.match.params.appId;
-                    this.props.history.push(`/app/${appId}/detail`);
+                    let skipToSubmissionDataFlag = true;
+                    this.props.actionFun(skipToSubmissionDataFlag);
                   }, 1000);
                 }
               })
@@ -1079,22 +1084,30 @@ class Submission extends Component {
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];
-
     return (
       <>
         <Spin spinning={this.state.isSubmitted}>
           {mobile.is ? null : (
             <HeaderBar
               backCallback={() => {
-                let appId = this.props.match.params.appId;
-                this.props.history.push(`/app/${appId}/detail`);
+                let skipToSubmissionDataFlag = true;
+                this.props.actionFun(skipToSubmissionDataFlag);
               }}
+              name={formComponent.name}
               isShowBtn={false}
             />
           )}
           <div className={"formBuilder-Submission"}>
             <div className="Content">
               <div className="submission-title">{formComponent.name}</div>
+              {this.props.formComponent.formInfo != "" ? (
+                <div
+                  className="submission-formInfo"
+                  id="submission-title"
+                ></div>
+              ) : (
+                ""
+              )}
               <div className="form-layout">
                 <Form onSubmit={this.handleSubmit}>
                   {mobile.is ? (
@@ -1186,4 +1199,4 @@ export default connect(
     submitSubmission,
     getFormComponent
   }
-)(withRouter(SubmissionForm));
+)(withRouter(mobileAdoptor.data(SubmissionForm)));

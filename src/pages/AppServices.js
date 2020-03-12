@@ -1,86 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Switch, useRouteMatch } from "react-router-dom";
-import { history } from "../store";
-import { PrivateRoute } from "../components/shared";
 import { Layout, Menu, Icon, Tooltip } from "antd";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
-// import PlaceHolder from "./Placeholder";
+import { APP_FORM_EDIT } from "../auth";
 import CreateForm from "../components/formBuilder/component/formBuilder/formBuilder";
+import Approval from "../components/ApprovalProcess";
+import Process from "../components/ProcessAuto";
 import classes from "../styles/apps.module.scss";
-import { Process, Approval } from "componentized-process";
-import { processRequst } from "../utils/request";
 
 const { Content, Sider } = Layout;
-
-const defaultConfig = {
-  request: processRequst
-};
-
-const Proc = () => {
-  const { url } = useRouteMatch();
-  const puginConfig = {
-    pathPrefix: `${url}`,
-    history
-  };
-  const composedConfig = Object.assign({}, defaultConfig, puginConfig);
-  return (
-    <Switch>
-      <PrivateRoute
-        path={`${url}/list`}
-        exact
-        component={Process.List}
-        key={"process/list"}
-        options={{ config: composedConfig }}
-      />
-      <PrivateRoute
-        path={`${url}/builder`}
-        component={Process.Builder}
-        key={"process/builder"}
-        options={{ config: composedConfig }}
-      />
-      <PrivateRoute
-        path={`${url}/log`}
-        component={Process.Log}
-        key={"process/log"}
-        options={{ config: composedConfig }}
-      />
-    </Switch>
-  );
-};
-
-const Appr = () => {
-  const { url } = useRouteMatch();
-  const puginConfig = {
-    pathPrefix: `${url}`,
-    history
-  };
-  const composedConfig = Object.assign({}, defaultConfig, puginConfig);
-  return (
-    <Switch>
-      <PrivateRoute
-        path={`${url}/list`}
-        exact
-        component={Approval.List}
-        key={"approval/list"}
-        options={{ config: composedConfig }}
-      />
-      <PrivateRoute
-        path={`${url}/builder`}
-        component={Approval.Builder}
-        key={"approval/builder"}
-        options={{ config: composedConfig }}
-      />
-      <PrivateRoute
-        path={`${url}/log`}
-        component={Approval.Log}
-        key={"approval/log"}
-        options={{ config: composedConfig }}
-      />
-    </Switch>
-  );
-};
 
 const services = [
   { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
@@ -88,9 +17,10 @@ const services = [
     key: "process/list",
     name: "自动化",
     icon: "cloud-sync",
-    component: Proc
+    auth: APP_FORM_EDIT,
+    component: Process
   },
-  { key: "approval/list", name: "审批流", icon: "audit", component: Appr }
+  { key: "approval/list", name: "审批流", icon: "audit", component: Approval }
 ];
 const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
@@ -117,7 +47,11 @@ const AppServices = props => {
     return s.key.indexOf(serviceId) !== -1;
   });
   const clickHandle = e => {
-    history.push(`/app/${appId}/setting/form/${formId}/${e.key}`);
+    if (e.key === "edit")
+      history.push(
+        `/app/${appId}/setting/form/${formId}/${e.key}?formId=${formId}`
+      );
+    else history.push(`/app/${appId}/setting/form/${formId}/${e.key}`);
   };
 
   if (!service) {
@@ -128,14 +62,16 @@ const AppServices = props => {
       <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light" width={64}>
-          <Menu className={classes.menuBorderNone} selectedKeys={serviceId}>
-            {services.map(s => (
-              <Menu.Item key={s.key} onClick={clickHandle}>
-                <Tooltip title={s.name}>
-                  <Icon type={s.icon} style={{ fontSize: 22 }} />
-                </Tooltip>
-              </Menu.Item>
-            ))}
+          <Menu className={classes.menuBorderNone} selectedKeys={service.key}>
+            {services
+              .filter(w => w)
+              .map(s => (
+                <Menu.Item key={s.key} onClick={clickHandle}>
+                  <Tooltip placement="right" title={s.name}>
+                    <Icon type={s.icon} style={{ fontSize: 22 }} />
+                  </Tooltip>
+                </Menu.Item>
+              ))}
           </Menu>
         </Sider>
         <Content>
@@ -145,6 +81,9 @@ const AppServices = props => {
     </Layout>
   );
 };
-export default connect(({ app }) => ({
-  appList: app.appList
+export default connect(({ app, login, debug }) => ({
+  appList: app.appList,
+  permissions: (login.userDetail && login.userDetail.permissions) || [],
+  teamId: login.currentTeam && login.currentTeam.id,
+  debug: debug.isOpen
 }))(AppServices);
