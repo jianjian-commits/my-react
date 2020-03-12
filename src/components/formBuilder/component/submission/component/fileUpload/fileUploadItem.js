@@ -6,16 +6,8 @@ export default class FileUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // loadStatusMsg: (
-      //   <div className="fileUploadStatus">
-      //     <img src="/image/icons/file@2x.png" />
-      //     <span>选择文件上传</span>
-      //   </div>
-      // ),
-      // uploadFileList: [],
-      // canUpload: true //能否上传的一个标志位
       clicked: "none",
-      uploadFileList: [],
+      uploadFileList: props.value ,
       loadStatusMsg: null,
       canUpload: true,
       visible: false
@@ -164,24 +156,6 @@ export default class FileUpload extends React.Component {
       } else {
         uploadFileSize = null;
       }
-
-      // reader.onload = e => {
-      //   let newImgList = [...this.state.uploadFileList];
-      //   newImgList.push({
-      //     name: fileObj.name,
-      //     url: e.target.result,
-      //     size:uploadFileSize
-      //   });
-      //   this.setState(
-      //     {
-      //       uploadFileList: newImgList,
-      //       canUpload: fileCount > newImgList.length
-      //     },
-      //     () => {
-      //       onChange && onChange(this.state.uploadFileList);
-      //     }
-      //   );
-      // };
       
       let identification = ID.uuid();
       postFile(fileObj,identification);
@@ -254,17 +228,3 @@ export default class FileUpload extends React.Component {
   }
 }
 
-{
-  /* <Upload
-          name=""
-          action=""
-          fileList={this.state.fileList}
-          beforeUpload={this.handleBeforeUpload}
-          transformFile={file => {
-            this.handleTransformFile(file, item.key);
-          }}
-          disabled={!this.state.canUpload}
-        >
-          <Button>{this.state.loadStatusMsg}</Button>
-        </Upload> */
-}

@@ -6,7 +6,7 @@ export default class HandWrittenSignatureMobile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgStr: null,
+      imgStr: props.value != void 0 ? props.value.url : null,
       mousePressed: false,
       lastX: 0,
       lastY: 0,

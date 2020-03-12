@@ -70,7 +70,9 @@ export const getResIndexArray = (value, originArr) => {
   if (value instanceof Array) {
     value.sort();
     originArr.forEach((oArr, i) => {
-      oArr.sort();
+      if (Array.isArray(oArr)) {
+        oArr.sort();
+      }
       if (oArr.toString() === value.toString()) {
         indexs.push(i);
       }

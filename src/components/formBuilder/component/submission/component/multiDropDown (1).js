@@ -140,7 +140,7 @@ export default class MultiDropDown extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
     const { selections } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
@@ -148,6 +148,7 @@ export default class MultiDropDown extends React.Component {
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
+          initialValue: initData || item.defaultValue,
           rules: [
             {
               required: isValueValid(item.validate.required)

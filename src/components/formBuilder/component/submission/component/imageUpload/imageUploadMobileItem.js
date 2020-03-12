@@ -7,7 +7,7 @@ class ImageUploadTestItem extends React.Component {
     super(props);
     this.state = {
       clicked: "none",
-      uploadImgList: [],
+      uploadImgList: props.value || [],
       loadStatusMsg: null,
       canUpload: true,
       visible: false

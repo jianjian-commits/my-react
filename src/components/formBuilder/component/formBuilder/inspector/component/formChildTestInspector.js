@@ -65,7 +65,7 @@ class FormChildTestInspector extends React.Component {
   }
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
-    let { validate } = this.props.element;
+    let { validate} = this.props.element;
     validate = { ...validate };
     switch (name) {
       case "customMessage": {
@@ -121,6 +121,12 @@ class FormChildTestInspector extends React.Component {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if(errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       // 数据联动组件
@@ -128,13 +134,13 @@ class FormChildTestInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
               {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
