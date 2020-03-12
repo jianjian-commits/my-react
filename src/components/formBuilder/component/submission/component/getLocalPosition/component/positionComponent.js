@@ -179,6 +179,7 @@ export default class PositionComponent extends Component {
     //eslint-disable-next-line
     AMap.service(["AMap.PlaceSearch"], () => {
       //构造地点查询类
+      //eslint-disable-next-line
       var placeSearch = new AMap.PlaceSearch({
         pageSize: 5, // 单页显示结果条数
         pageIndex: 1, // 页码
