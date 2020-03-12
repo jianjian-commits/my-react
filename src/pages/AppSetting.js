@@ -31,10 +31,14 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
+  const [user,setUser] = React.useState('')
 
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
+
+    setUser(JSON.parse(localStorage.getItem("userDetail")))
+
     getFormsAll(appId).then(res => {
       newList = res.map(item => ({
         key: item.id,
@@ -122,6 +126,8 @@ const AppSetting = props => {
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
+        extraProp={{ user: { id: user.id, name: user.name } }}
+        appid = { appId }
         url={`/app/${appId}/setting/form/`}
       />
       <CommonHeader navigationList={navigationList(history, appId, appName)} />
