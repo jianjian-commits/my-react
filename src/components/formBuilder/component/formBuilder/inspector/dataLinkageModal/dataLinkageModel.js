@@ -239,7 +239,7 @@ class DataLinkageModal extends React.Component {
           ...this.state.formChildData,
           {
             label: childData.label,
-            id: childData.id,
+            id: childData.key,
             type: childData.element
           }
         ]
@@ -453,8 +453,8 @@ class DataLinkageModal extends React.Component {
                         item.type
                       ).map(item => (
                         <Option
-                          value={item.id + "|" + item.label}
-                          key={item.id}
+                          value={item.key + "|" + item.label}
+                          key={item.key}
                         >
                           {item.label}
                         </Option>

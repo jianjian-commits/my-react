@@ -1040,7 +1040,7 @@ class Submission extends Component {
   // id -> 联动子表单id  formchildData -> 联动数据
   handleSetFormChildData = (element, formchildData, linkData, that) => {
     let { formChildDataObj } = this.state;
-    const { id } = element;
+    const { id, key } = element;
     const { values } = element;
     let rowTemplate = {};
     values.forEach(item => {
@@ -1066,13 +1066,13 @@ class Submission extends Component {
     });
     // 如果没找到对应数据 则返回默认值
     if (formchildData === null) {
-      formChildDataObj[id] = [rowTemplate]; //清空对应id子表单的数据
+      formChildDataObj[key] = [rowTemplate]; //清空对应id子表单的数据
       this.setState({
         formChildDataObj
       });
       return;
     }
-    formChildDataObj[id] = []; //清空对应id子表单的数据
+    formChildDataObj[key] = []; //清空对应id子表单的数据
     // 根据数据显示
     formchildData.forEach((item, index) => {
       // 替换关联数据
@@ -1091,7 +1091,7 @@ class Submission extends Component {
           (data[link.id].callEventArr = rowTemplate[link.id].callEventArr);
       });
       // id子表单的第idnex项数据替换
-      formChildDataObj[id][index] = data;
+      formChildDataObj[key][index] = data;
     });
 
     this.setState(

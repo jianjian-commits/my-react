@@ -139,7 +139,7 @@ export const filterFormChildAllComponent = (
 // 过滤已关联的子表单组件
 export const filterLinkedFormChildItem = (components, formChildData = []) => {
   const linkedFormids = formChildData.map(item => item.id);
-  return components.filter(item => !linkedFormids.includes(item.id));
+  return components.filter(item => !linkedFormids.includes(item.key));
 };
 
 // 格式化关联表单数据
