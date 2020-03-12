@@ -183,6 +183,7 @@ const AppDetail = props => {
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
+                  appId={appId}
                 ></FormBuilderSubmitData>
               )}
             </>

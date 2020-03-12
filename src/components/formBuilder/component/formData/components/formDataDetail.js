@@ -1,19 +1,19 @@
 import React, { PureComponent } from "react";
-import GridLayout from "react-grid-layout";
-import { Form, Table } from "antd";
+import { Form, Table, Button } from "antd";
 import { connect } from "react-redux";
 import locationUtils from "../../../utils/locationUtils";
 import { getSubmissionDetail } from "../redux/utils/getDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
-import coverTimeUtils from "../../../utils/coverTimeUtils";
+import HeaderBar from "../../base/NavBar";
+import { submitSubmissionApproval } from "../redux/utils/submitApprovalUtils";
 
 class FormDataDetail extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       tipVisibility: false,
-      formId: locationUtils.getUrlParamObj().id,
-      submissionId: locationUtils.getUrlParamObj().dataId
+      formId: this.props.id,
+      submissionId: this.props.dataId
     };
   }
 
@@ -32,44 +32,93 @@ class FormDataDetail extends PureComponent {
         console.error(err);
       });
   }
-
-  handleSubmit = e => {
-    e.preventDefault();
+  _renderFileData = fileData => {
+    // console.log(fileData, typeof fileData);
+    // if (fileData && fileData.name) {
+    if (fileData.length > 0) {
+      return fileData.map((item, index) => (
+        <p key={index} style={{ marginBottom: 0 }}>
+          {item["name"]}
+          &nbsp; &nbsp;
+          <a
+            href={item["url"]}
+            download={item["name"]}
+            style={{ textDecoration: "none" }}
+          >
+            点击下载
+          </a>
+        </p>
+      ));
+    }
+    return "";
   };
-
   _renderFormChildDataByType(component, submitData) {
     switch (component.type) {
       case "GetLocalPosition":
-        return submitData.address ? submitData.address : "";
+        return (
+          <div className="formChildData">
+            {submitData.address ? submitData.address : ""}
+          </div>
+        );
       case "DateInput":
-        return submitData.time ? submitData.time : "";
+        return (
+          <div className="formChildData">
+            {submitData.time ? submitData.time : ""}
+          </div>
+        );
       case "FileUpload":
-      case "ImageUpload":
       case "HandWrittenSignature":
-        return <div>{this._renderFileData(submitData)}</div>;
-      case "Address": {
-        let { province, county, city, detail } = submitData;
-        return [province, city, county, detail].filter(item => item).join("");
-      }
+        return (
+          <div className="formChildData">
+            {this._renderFileData(submitData)}
+          </div>
+        );
+      case "ImageUpload":
+        return (
+          <div className="formChildData">
+            {/* {submitData.length>0?<img src={submitData[0].url}/>:""} */}
+            {submitData.length > 0
+              ? submitData.map((item, index) => (
+                  <a href={item.url} target="_blank">
+                    <img src={item.url} key={index} />
+                  </a>
+                ))
+              : ""}
+          </div>
+        );
+      case "Address":
+        let { province, county, city, detail } = submitData || {};
+        let address = [province, city, county, detail]
+          .filter(item => item)
+          .join("");
+        return <div className="formChildData">{address}</div>;
+      case "CheckboxInput":
+      case "MultiDropDown":
+        return (
+          <div className="formChildData">
+            {submitData ? submitData.join(",") : ""}
+          </div>
+        );
       default:
-        return submitData;
+        return <div className="formChildData">{submitData}</div>;
     }
   }
-  renderChildFormTest = (data, components) => {
+  renderChildFormTest = (data = [], components = []) => {
     let columns = components.map(component => {
       return {
         title: component.label,
         dataIndex: component.key,
-        key: component.key
+        key: component.key,
+        width: 100
       };
     });
     // 一条数据里有 components 里所有组件的一个记录
+    if (data.length == 0) {
+      data = [""];
+    }
     let dataSource = data.map((record, index) => {
       let oneRecord = components.map(component => {
-        if (
-          component.key !== undefined &&
-          record[component.key] !== undefined
-        ) {
+        if (component.key != undefined && record[component.key] != undefined) {
           let data = {};
           data.key = Math.random();
           data[component.key] = this._renderFormChildDataByType(
@@ -85,125 +134,218 @@ class FormDataDetail extends PureComponent {
     });
 
     return (
-      <div className="table-detail">
+      <div className="formChildTable">
         <Table
           columns={columns}
-          scroll={{ x: "calc(120%)", y: 90 }}
+          scroll={{ x: 482 }}
           dataSource={dataSource}
           pagination={false}
+          size="small"
         />
       </div>
     );
   };
-  _truncateValue(value) {
-    if (value == void 0) {
-      return "";
-    } else if (value.length >= 11) {
-      return value.substr(0, 11) + "...";
-    } else {
-      return value;
-    }
-  }
-  _renderFileData = fileData => {
-    // if (fileData && fileData.name) {
-    if (fileData.length > 0) {
-      return fileData.map((item, index) => (
-        <span key={index}>
-          {this._truncateValue(item["name"])}
-          &nbsp; &nbsp;
-          <a
-            href={item["url"]}
-            download={item["name"]}
-            style={{ textDecoration: "none" }}
-          >
-            点击下载
-          </a>
-        </span>
-      ));
-    }
-    return "";
-  };
-  getComponentDataByType = (item, formDetail) => {
-    const { type, key } = item;
-    if (formDetail[key]) {
-      console.log(type);
-      switch (type) {
-        case "GetLocalPosition":
-          return formDetail[key].address;
-        case "DateInput":
-          return formDetail[key]
-            ? coverTimeUtils.localTime(formDetail[key])
-            : "";
-        case "FileUpload":
-          return this._renderFileData(formDetail[key]);
-        case "ImageUpload":
-          return <img src={formDetail[key].url} height={200} />;
-        case "FormChildTest":
-          return this.renderChildFormTest(formDetail[key], item.values);
-        case "HandWrittenSignature":
-          return <img src={formDetail[key].url} height={100} />;
-        case "Address": {
-          let { province, county, city, detail } = formDetail[key];
-          return [province, city, county, detail].filter(item => item).join("");
+  _renderDataByType(formDetail, components) {
+    return components
+      .filter(item => item.type != "CustomValue")
+      .map(item => {
+        switch (item.type) {
+          case "SingleText":
+          case "TextArea":
+          case "RadioButtons":
+          case "DropDown":
+          case "number":
+          case "EmailInput":
+          case "PhoneInput":
+          case "IdCardInput":
+          case "DateInput":
+            return (
+              <div key={item.key} className="dataDteailText">
+                <p className="dataTitle">{item.label}</p>
+                <p className="dataContent">{formDetail[item.key]}</p>
+              </div>
+            );
+          case "MultiDropDown":
+          case "CheckboxInput":
+            return (
+              <div key={item.key} className="dataDteailText">
+                <p className="dataTitle">{item.label}</p>
+                <p className="dataContent">
+                  {formDetail[item.key] ? formDetail[item.key].join(",") : ""}
+                </p>
+              </div>
+            );
+          case "Address": {
+            if (formDetail[item.key] != void 0) {
+              let { province, county, city, detail } =
+                formDetail[item.key] || {};
+              let address = [province, city, county, detail]
+                .filter(item => item)
+                .join("");
+              return (
+                <div key={item.key} className="dataDteailText">
+                  <p className="dataTitle">{item.label}</p>
+                  <p className="dataContent">{address}</p>
+                </div>
+              );
+            } else {
+              return (
+                <div key={item.key} className="dataDteailText">
+                  <p className="dataTitle">{item.label}</p>
+                  <p className="dataContent"></p>
+                </div>
+              );
+            }
+          }
+          case "ImageUpload":
+            return (
+              <div key={item.key} className="dataDteailFile">
+                <p className="dataTitle">{item.label}</p>
+                <div className="imageList">
+                  {formDetail[item.key]
+                    ? formDetail[item.key].map((data, index) => (
+                        <div key={index} className="imageContainer">
+                          <img
+                            onMouseOver={() => {
+                              document.getElementById(
+                                String(item.key + "" + index)
+                              ).style.display = "inline-block";
+                            }}
+                            src={data.url}
+                          />
+                          {/* 谷歌浏览器点击显示详情需要进行浏览器设置 */}
+                          <a href={data.url} target="_blank">
+                            <div
+                              onMouseOut={() => {
+                                document.getElementById(
+                                  String(item.key + "" + index)
+                                ).style.display = "none";
+                              }}
+                              id={String(item.key + index)}
+                              className="imageHover"
+                            >
+                              <p>{data.name}</p>
+                              <p>{data.size}</p>
+                            </div>
+                          </a>
+                        </div>
+                      ))
+                    : ""}
+                </div>
+              </div>
+            );
+          case "FileUpload":
+            return (
+              <div key={item.key} className="dataDteailFile">
+                <p className="dataTitle">{item.label}</p>
+                <div className="fileList">
+                  {formDetail[item.key]
+                    ? formDetail[item.key].map((item, index) => (
+                        <div key={index} className="fileContainer">
+                          <span>{item.name}</span>,
+                          <a href={item.url} download={item.name}>
+                            点击下载
+                          </a>
+                        </div>
+                      ))
+                    : ""}
+                </div>
+              </div>
+            );
+          case "HandWrittenSignature":
+            return (
+              <div key={item.key} className="dataDteailFile">
+                <p className="dataTitle">{item.label}</p>
+                <div className="imageList">
+                  {formDetail[item.key] ? (
+                    <div className="imageContainer">
+                      <img
+                        src={
+                          formDetail[item.key] ? formDetail[item.key].url : ""
+                        }
+                      />
+                      <div id={String(item.key)} className="imageHover">
+                        <span>{formDetail[item.key].name}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            );
+          case "FormChildTest":
+            return (
+              <div key={item.key} className="dataDteailFormChild">
+                <p className="dataTitle">{item.label}</p>
+                {this.renderChildFormTest(formDetail[item.key], item.values)}
+              </div>
+            );
+          case "GetLocalPosition":
+            return (
+              <div key={item.key} className="dataDteailText">
+                <p className="dataTitle">{item.label}</p>
+                {formDetail[item.key] ? (
+                  <p className="dataContent">{formDetail[item.key].address}</p>
+                ) : (
+                  ""
+                )}
+              </div>
+            );
+          default:
+            return "";
         }
-        default:
-          return formDetail[key];
-      }
+      });
+  }
+  _handleSubmitApproval = () => {
+    const { appId, dataId } = this.props;
+    const { formDetail } = this.props;
+    const { components } = this.props.currentForm;
+    let dataArr = [];
+    for (let i = 0; i < components.length; i++) {
+      dataArr[i] = {};
+      dataArr[i][components[i].label] = formDetail[components[i].key];
     }
-    return null;
-  };
-
-  renderFormComponent = (components, formDetail) => {
-    return components.map(item => {
-      return (
-        <div key={item.key}>
-          <span style={{ fontWeight: 500 }}>{item.label}</span>
-          <br />
-          <span>{this.getComponentDataByType(item, formDetail)}</span>
-        </div>
-      );
-    });
+    // this.props.submitSubmissionApproval(appId,dataId,dataArr)
   };
 
   render() {
-    const { formDetail, currentForm, mobile = {}, title } = this.props;
-    // console.log(this.props);
-    let newCurrentComponents = currentForm.components.filter(
-      item => item.type != "Button"
-    );
-    let layout = newCurrentComponents.map(item => {
-      return {
-        ...item.layout,
-        static: true
-      };
-    });
-    // console.log('layout',layout);
+    const { formDetail, currentForm, mobile = {} } = this.props;
 
+    let newCurrentComponents = currentForm.components.filter(
+      item => item.type != "CustomValue"
+    );
     return (
-      <>
-        <div className="formBuilder-Submission" style={{ paddingTop: 0 }}>
-          <div className="Content" style={{ marginTop: 0 }}>
-            <div className="submission-title">{currentForm.title}</div>
-            <div className="form-layout">
-              <Form onSubmit={this.handleSubmit}>
-                {mobile.is ? (
-                  this.renderFormComponent(newCurrentComponents, formDetail)
-                ) : (
-                  <GridLayout
-                    className="layout"
-                    layout={layout}
-                    cols={12}
-                    rowHeight={10}
-                    width={850}
-                  >
-                    {this.renderFormComponent(newCurrentComponents, formDetail)}
-                  </GridLayout>
-                )}
-              </Form>
-            </div>
-          </div>
+      <div style={{ width: "100%", height: "100%", paddingBottom: 100 }}>
+        <HeaderBar
+          backCallback={() => {
+            this.props.showformDataDetail("");
+          }}
+          // name={formComponent.name}
+          isShowBtn={false}
+        />
+        <div className="formDataDetailBtnGroups">
+          <Button type="primary" style={{ marginRight: 15 }}>
+            编辑
+          </Button>
+          <Button type="primary" style={{ marginRight: 15 }}>
+            删除
+          </Button>
+          <Button
+            type="primary"
+            onClick={this._handleSubmitApproval}
+            style={{ marginRight: 15 }}
+          >
+            提交审批
+          </Button>
         </div>
-      </>
+        <div className="formDataDetailContainer">
+          <div className="formDataDetailTitle">
+            <p className="dataTitle">详情</p>
+          </div>
+          {this._renderDataByType(this.props.formDetail, newCurrentComponents)}
+        </div>
+      </div>
     );
   }
 }
@@ -217,6 +359,7 @@ export default connect(
     token: store.rootData.token
   }),
   {
-    getSubmissionDetail
+    getSubmissionDetail,
+    submitSubmissionApproval
   }
 )(DataDetail);

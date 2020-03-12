@@ -96,7 +96,11 @@ class Submission extends Component {
       });
       //渲染表单说明
       let formInfo = formComponent.formInfo;
-      document.getElementById("submission-title").innerHTML = formInfo;
+      if (formInfo) {
+        document.getElementById("submission-title").innerHTML = formInfo;
+      } else {
+        document.getElementById("submission-title").style.display = "none";
+      }
     }
   }
 

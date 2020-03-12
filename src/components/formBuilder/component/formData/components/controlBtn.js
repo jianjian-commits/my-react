@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { Button, Popconfirm } from "antd";
 function ControlBtn(props) {
   const handleSeeDetail = () => {
-    props.showModal(props.submissionId)
+    props.showModal(props.submissionId);
     props.getSubmissionDetail(props.formId, props.submissionId);
   };
 
@@ -11,9 +11,15 @@ function ControlBtn(props) {
     props.handleDeleteSubmisson(props.submissionId);
   };
 
+  const handleSetDataId = () => {
+    props.showformDataDetail(props.submissionId);
+  };
+
   return (
     <Button.Group>
-      <Button type="link" onClick={handleSeeDetail}>查看</Button>
+      <Button type="link" onClick={handleSetDataId}>
+        查看
+      </Button>
       <Popconfirm
         placement="bottom"
         title="确定要删除该记录吗"
