@@ -88,9 +88,13 @@ class NumberInputInspector extends React.PureComponent {
         this.props.element
       );
     } else {
-      this.props.setItemAttr(this.props.element, "validate", newValidate);
+      this.props.setItemAttr(
+        this.props.element,
+        "validate",
+        newValidate
+      );
     }
-  };
+  }
 
   handleChangeAttrMax = value => {
     const { validate } = this.props.element;
@@ -114,6 +118,12 @@ class NumberInputInspector extends React.PureComponent {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if(errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -134,13 +144,13 @@ class NumberInputInspector extends React.PureComponent {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
               {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -182,13 +192,8 @@ class NumberInputInspector extends React.PureComponent {
   handleSelectChange = value => {
     switch (value) {
       case "custom": {
-        const {
-          elementParent,
-          element,
-          setItemValues,
-          setFormChildItemValues
-        } = this.props;
-        if (elementParent) {
+        const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
+        if(elementParent) {
           setFormChildItemValues(elementParent, "data", {}, element);
         } else {
           setItemValues(this.props.element, "data", {});
@@ -227,57 +232,56 @@ class NumberInputInspector extends React.PureComponent {
         <div className="base-form-tool">
           <div className="costom-info-card">
             <p htmlFor="number-input-title">标题</p>
-            <Input
-              id="number-input-title"
-              name="label"
-              placeholder="数字"
-              value={label}
-              onChange={this.handleChangeAttr}
-              autoComplete="off"
-            />
-            {isInFormChild(this.props.elementParent) ? null : (
-              <>
-                <p htmlFor="number-input-title-tip">提示信息</p>
-                <Input
-                  id="number-input-title-tip"
-                  name="tooltip"
-                  placeholder="请输入提示信息"
-                  value={tooltip}
-                  onChange={this.handleChangeAttr}
-                  autoComplete="off"
-                />
-                <p htmlFor="number-input-title-err-tip">错误提示</p>
-                <Input
-                  id="number-input-title-err-tip"
-                  name="customMessage"
-                  placeholder="请输入错误提示"
-                  value={validate.customMessage}
-                  onChange={this.handleChangeAttr}
-                  autoComplete="off"
-                />
-              </>
-            )}
-
-            <p htmlFor="number-input-title-default-value">默认值</p>
-            {isLinked ? (
               <Input
-                defaultValue="以子表单联动为准，不支持设置默认值"
-                disabled
+                id="number-input-title"
+                name="label"
+                placeholder="数字"
+                value={label}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
               />
-            ) : (
-              <>
-                <Select
-                  value={optionType}
-                  style={{ width: "100%" }}
-                  onChange={this.handleSelectChange}
-                  className="data-source-select"
-                >
-                  <Option value="custom">自定义</Option>
-                  <Option value="DataLinkage">数据联动</Option>
-                </Select>
-                {this.renderOptionDataFrom(optionType)}
-              </>
-            )}
+            {
+              isInFormChild(this.props.elementParent)
+               ? null 
+               :<>
+                  <p htmlFor="number-input-title-tip">提示信息</p>
+                  <Input
+                    id="number-input-title-tip"
+                    name="tooltip"
+                    placeholder="请输入提示信息"
+                    value={tooltip}
+                    onChange={this.handleChangeAttr}
+                    autoComplete="off"
+                  />
+                  <p htmlFor="number-input-title-err-tip">错误提示</p>
+                  <Input
+                    id="number-input-title-err-tip"
+                    name="customMessage"
+                    placeholder="请输入错误提示"
+                    value={validate.customMessage}
+                    onChange={this.handleChangeAttr}
+                    autoComplete="off"
+                  />
+               </>
+            }
+            
+              <p htmlFor="number-input-title-default-value">默认值</p>
+              {isLinked ? (
+                <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
+              ) : (
+                <>
+                  <Select
+                    value={optionType}
+                    style={{ width: "100%" }}
+                    onChange={this.handleSelectChange}
+                    className="data-source-select"
+                  >
+                    <Option value="custom">自定义</Option>
+                    <Option value="DataLinkage">数据联动</Option>
+                  </Select>
+                  {this.renderOptionDataFrom(optionType)}
+                </>
+              )}
           </div>
           <Divider />
           <div className="costom-info-card">
@@ -303,11 +307,7 @@ class NumberInputInspector extends React.PureComponent {
                 name="minLength"
                 placeholder="不限"
                 onChange={this.handleChangeAttrMin}
-                value={
-                  Math.abs(validate.min) === Number.MAX_VALUE
-                    ? ""
-                    : validate.min
-                }
+                value={Math.abs(validate.min ) === Number.MAX_VALUE ? "" : validate.min}
                 autoComplete="off"
               />
               ~
@@ -319,17 +319,19 @@ class NumberInputInspector extends React.PureComponent {
                 autoComplete="off"
               />
             </div>
-            {isInFormChild(this.props.elementParent) ? null : (
-              <div className="checkbox-wrapper">
-                <Checkbox
-                  name="unique"
-                  checked={unique}
-                  onChange={this.handleChangeAttr}
-                >
-                  不允许重复
-                </Checkbox>
-              </div>
-            )}
+            {
+              isInFormChild(this.props.elementParent)
+              ? null
+              : <div className="checkbox-wrapper">
+                  <Checkbox
+                    name="unique"
+                    checked={unique}
+                    onChange={this.handleChangeAttr}
+                  >
+                    不允许重复
+                  </Checkbox>
+                </div>
+            }
           </div>
         </div>
       </div>
@@ -340,12 +342,13 @@ class NumberInputInspector extends React.PureComponent {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,
     setItemValues,
     setFormChildItemAttr,
-    setFormChildItemValues
+    setFormChildItemValues,
   }
 )(NumberInputInspector);

@@ -35,37 +35,20 @@ const AppSetting = props => {
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
-    getFormsAll().then(res => {
+    getFormsAll(appId).then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name
       }));
 
-      setMockForms({
+       setMockForms({
         groups: [
-          {
-            name: "基础设置",
-            key: "ban",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
         ],
         searchList: [
-          {
-            name: "基础设置",
-            key: "ban",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
         ],
         list: newList
       });
+
     });
   }, []);
 

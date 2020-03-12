@@ -16,8 +16,10 @@ class ConditionModal extends React.Component {
       componentLabelArray: [],
       showFormualContent: "",
       verificationStr: "",
+      verificationValue: "",
       textAreaInput: "",
       cursorIndex: 0,
+      valueCursorIndex: 0, // value的索引位置
       dataSource: [], //校验规则的自动补全
       searchFieldArray: [], //搜索字段数组
       searchFormulaArray: [], //搜索公式数组
@@ -47,7 +49,8 @@ class ConditionModal extends React.Component {
 
     this.setState({ 
       componentLabelArray: resultArray ,
-      verificationStr: this.props.verificationStr
+      verificationStr: this.props.verificationStr,
+      verificationValue: this.props.verificationValue
     });
   }
 
@@ -66,13 +69,80 @@ class ConditionModal extends React.Component {
   }
   handleOnchange(e) {
     var newStr = e.target.value;
-    this.setState(state => ({
-      ...state,
-      verificationStr: newStr
-    }));
+    if(newStr === ""){
+      this.setState({
+        verificationValue : ""
+      })
+    }
+    let cursorIndex = this.getCursortPosition(
+      document.querySelector(".custom")
+    );
+    this.setState(state => {
+      let resultValue = "";
+      if(newStr.length >= state.verificationStr.length){
+        // 增加文字的时候
+        if(newStr.length > cursorIndex){
+          // 光标不在最末尾的位置
+          let valueCursorIndex = this.calculateKeyCursor(state.verificationStr, cursorIndex, 26);
+          console.log("valueCursorIndex",valueCursorIndex)
+            resultValue = this.insertStr(state.verificationValue, newStr[cursorIndex-1], valueCursorIndex-1)
+        }else if(newStr !==""){
+           // 光标在最末尾的位置
+          resultValue = state.verificationValue + newStr[cursorIndex-1];
+        }
+      } else {
+        // 删除文字的时候。。先考虑
+        let valueCursorIndex = this.calculateKeyCursor(state.verificationStr, cursorIndex, 26);
+        resultValue = state.verificationValue.substring(0,valueCursorIndex) + state.verificationValue.substring(valueCursorIndex+1,state.verificationValue.length);
+                                            
+      }
+      return ({
+        ...state,
+        verificationStr: newStr,
+        verificationValue: resultValue
+      })
+    });
   }
 
-  addFromData(value) {
+
+  insertStr(oldstr, newStr ,cursorIndex) {
+    let result = "";
+    if (cursorIndex === 0) {
+      result = newStr + oldstr;
+    } else {
+      let start = oldstr.substr(0, cursorIndex);
+      let end = oldstr.substr(cursorIndex);
+      result = start + newStr + end;
+    }
+    return result;
+  }
+
+  // 计算value的cursor 
+  /**
+   * 计算当前光标之前有几个字段  -->只能使用字符串的匹配。。
+   * 字段*id.length+光标的当前位置等于value的cursor值
+   */
+  calculateKeyCursor(verificationStr, cursorIndex, idLength) {
+    // this.state.componentLabelArray 代表所有的组件 (label,value)
+    let {componentLabelArray} = this.state;
+    let LabelArray = componentLabelArray.map( item => item.label);
+    // label去重，方便计算有几个字符
+    LabelArray = [...new Set(LabelArray)];
+    // 当前光标前的字符串
+    let suffixStr = verificationStr.substring(0,cursorIndex);
+    let count = LabelArray.reduce( (total, lable, currentIndex, arr) => {
+      return total + suffixStr.split(lable).length -1
+    },0);
+
+    let FieldStrLength = LabelArray.reduce( (total, lable, currentIndex, arr) => {
+      return total + (suffixStr.split(lable).length -1) * lable.length
+    },0);
+    return suffixStr.length - FieldStrLength + count * idLength ;
+  }
+
+  addFromData(filed) {
+    let value = filed.label;
+    let id = filed.id;
     let textAreaInput = this.textAreaInput;
     let cursorIndex = this.getCursortPosition(
       document.querySelector(".custom")
@@ -81,19 +151,13 @@ class ConditionModal extends React.Component {
 
     this.setState(
       state => {
-        let result = "";
-        if (cursorIndex === 0) {
-          result = value + state.verificationStr;
-        } else {
-          let start = state.verificationStr.substr(0, cursorIndex);
-          let end = state.verificationStr.substr(cursorIndex);
-
-          result = start + value + end;
-        }
-
+        let result = this.insertStr(state.verificationStr, value, cursorIndex);
+        let valueCursorIndex = this.calculateKeyCursor(result, cursorIndex,id.length);
+        let resultValue = this.insertStr(state.verificationValue,id, valueCursorIndex);
         return {
           ...state,
           verificationStr: result,
+          verificationValue: resultValue,
           cursorIndex: newCursor
         };
       },
@@ -133,20 +197,16 @@ class ConditionModal extends React.Component {
 
     this.setState(
       state => {
-        let result = "";
-        if (cursorIndex === 0) {
-          result = value + state.verificationStr;
-        } else {
-          let start = state.verificationStr.substr(0, cursorIndex);
-          let end = state.verificationStr.substr(cursorIndex);
+        let result = this.insertStr(state.verificationStr, value, cursorIndex);
+        let valueCursorIndex = this.calculateKeyCursor(result, cursorIndex, 26);
 
-          result = start + value + end;
-        }
+        let resultValue = this.insertStr(state.verificationValue,value, valueCursorIndex);
 
         return {
           ...state,
           verificationStr: result,
-          cursorIndex: newCursor
+          cursorIndex: newCursor,
+          verificationValue: resultValue
         };
       },
       () => {
@@ -228,14 +288,16 @@ class ConditionModal extends React.Component {
           this.props.handleOk();
           if (this.state.verificationStr) {
             this.props.index === -1
-              ? this.props.addVerification(this.state.verificationStr)
+              ? this.props.addVerification(this.state.verificationStr,this.state.verificationValue)
               : this.props.editVerification(
                 this.state.verificationStr,
+                this.state.verificationValue,
                 this.props.index
               );
             this.setState(state => ({
               ...state,
-              verificationStr: ""
+              verificationStr: "",
+              verificationValue: ""
             }));
           }
 
@@ -283,7 +345,7 @@ class ConditionModal extends React.Component {
                       <p
                         key={item.id}
                         onClick={_e => {
-                          this.addFromData(item.label);
+                          this.addFromData(item);
                         }}
                       >
                         {item.label}
@@ -293,7 +355,7 @@ class ConditionModal extends React.Component {
                       <p
                         key={item.id}
                         onClick={_e => {
-                          this.addFromData(item.label);
+                          this.addFromData(item);
                         }}
                       >
                         {item.label}

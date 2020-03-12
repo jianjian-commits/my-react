@@ -6,9 +6,11 @@ import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 import { APP_SETTING_ABLED } from "../auth";
+import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
-// import selectCom from "../utils/selectCom";
+import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
+
 import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import TransactList from "../components/transactList/TransactList";
@@ -31,13 +33,14 @@ const getOreations = (appId, history) => [
   }
 ];
 
+const FormBuilderEditFormData = mobileAdoptor.submission(EditFormData);
 const AppDetail = props => {
   const { appId } = useParams();
   const history = useHistory();
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
-  // const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
+  const [submissionId, setSubmissionId] = React.useState(null);
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -49,33 +52,15 @@ const AppDetail = props => {
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
-    getFormsAll().then(res => {
+    getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name
       }));
       setMockForms({
         groups: [
-          {
-            name: "基础设置",
-            key: "base",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
         ],
         searchList: [
-          {
-            name: "基础设置",
-            key: "ban",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
         ],
         list: newList
       });
@@ -153,6 +138,7 @@ const AppDetail = props => {
               onClick={e => {
                 setSelectedForm(e.key);
                 setSubmit(false);
+                setSubmissionId(null)
               }}
               groups={groups}
               list={list}
@@ -173,16 +159,34 @@ const AppDetail = props => {
                   提交数据
                 </Button>
               ) : null}
-              {submit ? (
-                <FormBuilderSubmission
+              {submit  ? (
+                submissionId ? (
+                  <FormBuilderEditFormData
+                    key={Math.random()}
+                    formId={selectedForm}
+                    submissionId = {submissionId}
+                    actionFun={(submission_id, submitFlag = false)=>{
+                      setSubmissionId(submission_id)
+                      setSubmit(submitFlag);
+                    }}
+                  ></FormBuilderEditFormData>
+                )
+                :(
+                  <FormBuilderSubmission
                   key={Math.random()}
                   formId={selectedForm}
                   actionFun={skipToSubmissionData}
                 ></FormBuilderSubmission>
+                )
               ) : (
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
+                  actionFun={(submission_id)=>{
+                    console.log("actionFun",submission_id)
+                    setSubmit(true);
+                    setSubmissionId(submission_id)
+                  }}
                 ></FormBuilderSubmitData>
               )}
             </>
