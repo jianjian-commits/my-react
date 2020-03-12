@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "antd";
-import { ConnectedRouter } from "connected-react-router";
+import { ConnectedRouter, routerActions } from "connected-react-router";
 import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute, SpecialRoute } from "./shared";
@@ -21,6 +21,7 @@ export const getRoutes = routes =>
       getRoutes(route.content)
     ) : (
       <PrivateRoute
+        auth={routerActions.auth}
         path={route.path}
         component={route.component}
         key={route.key}
@@ -34,6 +35,7 @@ const AppInsideRouter = () => {
     <Switch>
       {appPaths.map(p => (
         <PrivateRoute
+          auth={p.auth}
           exact={!p.rough}
           key={p.key}
           path={p.path}

@@ -7,7 +7,7 @@ import ModalCreation from "../components/profileManagement/modalCreate/ModalCrea
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
 import Authenticate from "../components/shared/Authenticate";
-import { APP_VISIABLED } from "../auth";
+import { SUPER_ADMINISTRATOR, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import classes from "../styles/apps.module.scss";
 const { Content } = Layout;
@@ -72,20 +72,21 @@ class Apps extends React.Component {
   }
 
   render() {
-    console.log(this.props.name);
     return (
       <Layout>
         <HomeHeader />
         <Content className={commonClasses.container}>
           <header className={commonClasses.header}>
             <span style={{ fontSize: 20 }}>我的应用</span>
-            <Button
-              type="link"
-              icon="plus"
-              onClick={() => this.setState({ open: true })}
-            >
-              创建应用
-            </Button>
+            <Authenticate auth={SUPER_ADMINISTRATOR}>
+              <Button
+                type="link"
+                icon="plus"
+                onClick={() => this.setState({ open: true })}
+              >
+                创建应用
+              </Button>
+            </Authenticate>
           </header>
           <content>{getApps(this.props.appList)}</content>
           <ModalCreation
