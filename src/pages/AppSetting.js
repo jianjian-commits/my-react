@@ -10,6 +10,8 @@ import DraggableList, {
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
+import Authenticate from "../components/shared/Authenticate";
+import { APP_SETTING_ABLED, APP_NEW_FORM } from "../auth";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -167,58 +169,64 @@ const AppSetting = props => {
   };
 
   return (
-    <Layout>
-      <ForInfoModal
-        key={Math.random()}
-        {...modalProps}
-        url={`/app/${appId}/setting/form/`}
-      />
-      <CommonHeader navigationList={navigationList(history, appId, appName)} />
+    <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <Layout>
-        <Sider className={classes.appSider} theme="light">
-          <div className={classes.newForm}>
-            <Button
-              type="primary"
-              block
-              onClick={e => {
-                modalProps.showModal();
-              }}
-            >
-              新建表单
-            </Button>
-          </div>
-          <div className={classes.searchBox}>
-            <Input
-              style={{ width: 150 }}
-              placeholder="输入名称来搜索"
-              value={searchKey}
-              onChange={searchHandle}
-            />
-            <Icon
-              type="folder-add"
-              className={classes.addFolder}
-              onClick={addFolder}
-            />
-          </div>
-          <div className={classes.formArea}>
-            <DraggableList
-              draggable={!searchKey}
-              onClick={formEnterHandle}
-              groups={groups}
-              list={list}
-              onDrop={dragFileToFolder}
-            />
-            <DropableWrapper
-              className={classes.empty}
-              onDrop={e =>
-                dragFileToFolder(e.dataTransfer.getData("formId"), null)
-              }
-            ></DropableWrapper>
-          </div>
-        </Sider>
-        <Content className={classes.container}></Content>
+        <ForInfoModal
+          key={Math.random()}
+          {...modalProps}
+          url={`/app/${appId}/setting/form/`}
+        />
+        <CommonHeader
+          navigationList={navigationList(history, appId, appName)}
+        />
+        <Layout>
+          <Sider className={classes.appSider} theme="light">
+            <Authenticate auth={APP_NEW_FORM(appId)}>
+              <div className={classes.newForm}>
+                <Button
+                  type="primary"
+                  block
+                  onClick={e => {
+                    modalProps.showModal();
+                  }}
+                >
+                  新建表单
+                </Button>
+              </div>
+            </Authenticate>
+            <div className={classes.searchBox}>
+              <Input
+                style={{ width: 150 }}
+                placeholder="输入名称来搜索"
+                value={searchKey}
+                onChange={searchHandle}
+              />
+              <Icon
+                type="folder-add"
+                className={classes.addFolder}
+                onClick={addFolder}
+              />
+            </div>
+            <div className={classes.formArea}>
+              <DraggableList
+                draggable={!searchKey}
+                onClick={formEnterHandle}
+                groups={groups}
+                list={list}
+                onDrop={dragFileToFolder}
+              />
+              <DropableWrapper
+                className={classes.empty}
+                onDrop={e =>
+                  dragFileToFolder(e.dataTransfer.getData("formId"), null)
+                }
+              ></DropableWrapper>
+            </div>
+          </Sider>
+          <Content className={classes.container}></Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default connect(({ app }) => ({

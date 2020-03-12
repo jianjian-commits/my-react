@@ -82,7 +82,7 @@ class TeamManagement extends React.Component {
           </Sider>
           <Content className={commonClasses.container}>
             {webs.map(route => (
-              <Authenticate auth={route.auth}>
+              <Authenticate key={route.key} auth={route.auth}>
                 <Route {...route} />
               </Authenticate>
             ))}
