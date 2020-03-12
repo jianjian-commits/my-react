@@ -52,6 +52,8 @@
 }
 
 .table {
+  width: 100%;
+  height: 100%;
   tr {
     height: 60px;
   }
@@ -69,4 +71,64 @@
 
 .overlay {
   top: 64px !important;
+}
+
+.userDetail {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  background: #f0f2f5;
+  & > div {
+    position: absolute;
+    top: 6vw;
+    background: #ffffff;
+    width: 1200px;
+    height: 300px;
+    & > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 53px;
+      & > span {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        color: #333333;
+      }
+    }
+    & > ul {
+      list-style-type: none;
+      & > li {
+        display: flex;
+        align-items: center;
+        height: 47px;
+        border-top: 1px solid #eeeeee;
+        & > span:first-child {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          color: #777f97;
+          position: absolute;
+          left: 39px;
+        }
+        & > span:nth-child(2) {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          color: #333333;
+          position: absolute;
+          left: 970px;
+          & > span {
+            margin-left: 19px;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            color: #2a7fff;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
 }
