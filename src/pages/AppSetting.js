@@ -22,40 +22,6 @@ const navigationList = (history, appId, appName) => [
   { key: 1, label: "应用设置", disabled: true }
 ];
 
-// const mockForms = {
-//   groups: [
-//     {
-//       name: "基础设置",
-//       key: "base",
-//       list: [
-//         { key: "sWw", name: "车队信息" },
-//         { key: "clr", name: "油卡信息" },
-//         { key: "CrE", name: "车辆信息" }
-//       ]
-//     },
-//     {
-//       name: "用车管理",
-//       key: "use",
-//       list: [
-//         { key: "short", name: "短途申请" },
-//         { key: "long", name: "长途用车申请" }
-//       ]
-//     },
-//     {
-//       name: "违章管理",
-//       key: "ban",
-//       list: [
-//         { key: "aban", name: "违章记录" },
-//         { key: "handle", name: "违章处理记录" }
-//       ]
-//     }
-//   ],
-//   list: [
-//     { key: "short", name: "短途申请" },
-//     { key: "long", name: "长途用车申请" }
-//   ]
-// };
-
 const AppSetting = props => {
   const { appId } = useParams();
   const history = useHistory();
@@ -75,7 +41,14 @@ const AppSetting = props => {
         name: item.name
       }));
 
-      console.log(res);
+       setMockForms({
+        groups: [
+        ],
+        searchList: [
+        ],
+        list: newList
+      });
+
     });
   }, []);
   const currentApp =

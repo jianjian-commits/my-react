@@ -65,7 +65,6 @@ class ForBuilderHeader extends React.Component {
           "back"
         )
       : this.props.saveForm(
-          this.props.formData,
           this.props.submissionAccess,
           this.props.name,
           this.props.verificationList,
@@ -192,7 +191,6 @@ class ForBuilderHeader extends React.Component {
                       const checkRes = checkAndSaveForm(this.props);
                       if(checkRes.res){
                         this.props.saveForm(
-                          this.props.formData,
                           this.props.submissionAccess,
                           this.props.name,
                           this.props.verificationList,

@@ -168,7 +168,6 @@ function updateCustomValue(components, verificationList = [], errMessage = "") {
 }
 
 export const saveForm = (
-  formDataArray,
   submissionAccess,
   name,
   verificationList,
@@ -195,17 +194,10 @@ export const saveForm = (
     modified: Date.now()
   };
 
-  formDataArray.forEach(item => {
-    defaultLayout.layout.push({
-      ...item.layout,
-      isShow: true
-    });
-  });
-
   const time = new Date();
   let formData = {
     display: "form",
-    components: _checkMinAndMax(formDataArray),
+    components: [],
     type: "resource",
     tags: ["common"],
     page: 0,
