@@ -5,10 +5,9 @@ import { Button } from "antd";
 import { ConnectedRouter, routerActions } from "connected-react-router";
 import { main, appPaths } from "../routers";
 import { history } from "../store";
-import { PrivateRoute, PublicRoute, SpecialRoute } from "./shared";
+import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
 import Login from "./login/login";
-import Register from "./login/register";
 import ForgetPassword from "./login/forgetPassword";
 import InviteUser from "../components/login/inviteUser";
 import { setDebug } from "../store/debugReducer";
@@ -51,22 +50,11 @@ const App = ({ debug, setDebug }) => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
-        <SpecialRoute
+        <PublicRoute
           exact
           path="/invite/:userId/:teamId/:token"
           component={InviteUser}
         />
-        <SpecialRoute
-          exact
-          path="/register/:userId/:teamId/:token"
-          component={Register}
-        />
-        <SpecialRoute
-          exact
-          path="/login/:userId/:teamId/:token"
-          component={Login}
-        />
-        <PublicRoute path="/register" component={Register} />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />
         <PublicRoute path="/login" component={Login} />
         {getRoutes(main)}
