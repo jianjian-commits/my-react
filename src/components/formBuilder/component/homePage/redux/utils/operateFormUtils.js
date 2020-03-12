@@ -73,11 +73,15 @@ export const getForms = (pageSize, currentPage) => dispatch => {
   });
 };
 
-export const getFormsAll = () => {
+export const getFormsAll = appId => {
   return new Promise((resolve, reject) => {
     axios({
       url: config.apiUrl + `/form?desc=createdTime`,
-      method: "get"
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        appid: appId
+      }
     })
       .then(response => {
         const forms = response.data

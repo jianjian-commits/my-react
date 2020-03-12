@@ -176,9 +176,9 @@ export const saveForm = (
   path,
   formInfo = "",
   callback,
-  url
+  url,
+  extraProp
 ) => dispatch => {
-  // _calcFormComponentLayout(formDataArray);
   if (formInfo != "") {
     formInfo = formInfo
       .replace(/\r\n/g, "<br/>")
@@ -201,8 +201,6 @@ export const saveForm = (
     });
   });
 
-  // const path = new String((Math.random() * 1000000000) | 0);
-  // const id = new String((Math.random() * 1000000000) | 0);
   const time = new Date();
   let formData = {
     display: "form",
@@ -215,8 +213,8 @@ export const saveForm = (
     path: path,
     name: name,
     formInfo: formInfo,
-    // id,
     createdTime: time,
+    extraProp: extraProp,
     updateTime: time,
     formValidation: {
       errMessage: errMessage,
@@ -238,35 +236,8 @@ export const saveForm = (
       let id = response.data.id;
       console.log(id);
       callback(`${url}${id}/edit?formId=${id}`);
-      // if (type === "back") {
-      //   // console.log("response",response);
-      //   message.success("保存成功", 1, () => {
-      //     dispatch({
-      //       type: SAVE_FORM_CHANGE,
-      //       localForm: response.data,
-      //       data: response.data.components
-      //     });
-      //     let newPath = window.location.pathname
-      //       .split("/")
-      //       .splice(0, window.location.pathname.split("/").length - 3)
-      //       .join("/");
-      //     window.location.href = `${window.location.origin}${newPath}`;
-      //   });
-      // } else {
-      //   message.success("保存成功", 1);
-      //   dispatch({
-      //     type: SAVE_FORM_CHANGE,
-      //     localForm: response.data,
-      //     data: response.data.components
-      //   });
-      //   callback();
-      // }
     })
     .catch(err => {
-      // if (err.response.data === "Token Expired") {
-      //   console.log("token 已过期，正在请求新的token");
-      //   // mockLoginAndSetData(false, true );
-      // } else {
       console.info(err);
       if ((err.response.data.code = "1002")) {
         message.error("该api已存在");
@@ -411,10 +382,11 @@ export const initForm = id => dispatch => {
       // mockLoginAndSetData(false, true);
     });
 };
-let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => dispatch => {
-  Axios.get(config.apiUrl + "/form")
+  Axios.get({
+    url: config.apiUrl + "/form"
+  })
     .then(response => {
       console.log(1);
       console.log(response);
