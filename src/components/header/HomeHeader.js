@@ -8,14 +8,22 @@ import classes from "./header.module.scss";
 import { connect } from "react-redux";
 
 const { Header } = Layout;
+const homeHeaderStyle = {
+  background: "#2A7FFF",
+  height: 50,
+  padding: "0 20px",
+  lineHeight: "50px"
+};
 const logoStyle = {
-  background: "#eee",
+  background: "rgba(255, 255, 255, 0.4)",
+  height: "100%",
   color: "#333",
-  lineHeight: "44px",
+  lineHeight: "37px",
   textAlign: "center"
 };
 const menuStyle = {
-  lineHeight: "64px"
+  // lineHeight: "50px",
+  background: "transparent"
 };
 
 export default connect(({ router }) => ({
@@ -27,7 +35,7 @@ export default connect(({ router }) => ({
   };
   const toTeamMangement = () => history.push("/team/info");
   return (
-    <Header className={classes.homeHeader}>
+    <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
         <div className={classes.logo}>
           <div style={logoStyle}>logo</div>
@@ -37,7 +45,7 @@ export default connect(({ router }) => ({
             style={menuStyle}
             selectedKeys={props.router.location.pathname}
             mode="horizontal"
-            theme="dark"
+            // theme="dark"
             onClick={selectHandle}
           >
             <Menu.Item key="/app/list">我的应用</Menu.Item>
@@ -48,7 +56,7 @@ export default connect(({ router }) => ({
         </div>
         <div className={classes.operations}>
           <Authenticate auth={TEAM_MANAGEMENT_ABLE}>
-            <Button icon="user" onClick={toTeamMangement}>
+            <Button type="link" ghost icon="user" onClick={toTeamMangement}>
               团队管理
             </Button>
           </Authenticate>
