@@ -5,7 +5,8 @@ import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
-import { APP_SETTING_ABLED } from "../auth";
+import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
+import Authenticate from "../components/shared/Authenticate";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
@@ -127,68 +128,70 @@ const AppDetail = props => {
   };
 
   return (
-    <Layout>
-      <CommonHeader
-        navigationList={navigationList(appName, history)}
-        operations={getOreations(appId, history)}
-      />
+    <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <Layout>
-        <Sider className={classes.appSider} style={{ background: "#fff" }}>
-          <ApprovalSection fn={onClickMenu} />
-          <div className={classes.searchBox}>
-            <Input
-              placeholder="输入名称来搜索"
-              value={searchKey}
-              onChange={searchHandle}
-            />
-          </div>
-          <div className={classes.formArea}>
-            <DraggableList
-              selected={selectedForm}
-              draggable={false}
-              onClick={e => {
-                setSelectedForm(e.key);
-                setSubmit(false);
-              }}
-              groups={groups}
-              list={list}
-            />
-          </div>
-        </Sider>
-        <Content className={classes.container}>
-          {// eslint-disable-next-line
-          selectedForm != void 0 ? (
-            <>
-              {!submit ? (
-                <Button
-                  type="primary"
-                  className="form-submit-data-button"
-                  onClick={_e => {
-                    setSubmit(!submit);
-                  }}
-                >
-                  提交数据
-                </Button>
-              ) : null}
-              {submit ? (
-                <FormBuilderSubmission
-                  key={Math.random()}
-                  formId={selectedForm}
-                  actionFun={skipToSubmissionData}
-                ></FormBuilderSubmission>
-              ) : (
-                <FormBuilderSubmitData
-                  key={Math.random()}
-                  formId={selectedForm}
-                ></FormBuilderSubmitData>
-              )}
-            </>
-          ) : approvalKey !== null ? (
-            <TransactList fn={onClickMenu} approvalKey={approvalKey} />
-          ) : null}
-        </Content>
+        <CommonHeader
+          navigationList={navigationList(appName, history)}
+          operations={getOreations(appId, history)}
+        />
+        <Layout>
+          <Sider className={classes.appSider} style={{ background: "#fff" }}>
+            <ApprovalSection fn={onClickMenu} />
+            <div className={classes.searchBox}>
+              <Input
+                placeholder="输入名称来搜索"
+                value={searchKey}
+                onChange={searchHandle}
+              />
+            </div>
+            <div className={classes.formArea}>
+              <DraggableList
+                selected={selectedForm}
+                draggable={false}
+                onClick={e => {
+                  setSelectedForm(e.key);
+                  setSubmit(false);
+                }}
+                groups={groups}
+                list={list}
+              />
+            </div>
+          </Sider>
+          <Content className={classes.container}>
+            {// eslint-disable-next-line
+            selectedForm != void 0 ? (
+              <>
+                {!submit ? (
+                  <Button
+                    type="primary"
+                    className="form-submit-data-button"
+                    onClick={_e => {
+                      setSubmit(!submit);
+                    }}
+                  >
+                    提交数据
+                  </Button>
+                ) : null}
+                {submit ? (
+                  <FormBuilderSubmission
+                    key={Math.random()}
+                    formId={selectedForm}
+                    actionFun={skipToSubmissionData}
+                  ></FormBuilderSubmission>
+                ) : (
+                  <FormBuilderSubmitData
+                    key={Math.random()}
+                    formId={selectedForm}
+                  ></FormBuilderSubmitData>
+                )}
+              </>
+            ) : approvalKey !== null ? (
+              <TransactList fn={onClickMenu} approvalKey={approvalKey} />
+            ) : null}
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default connect(({ app }) => ({

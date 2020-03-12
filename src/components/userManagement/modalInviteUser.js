@@ -23,9 +23,11 @@ export default function InviteUser(props) {
       if (res && res.status === "SUCCESS") {
         setToken(res.data);
         setVisible(true);
+      } else {
+        message.error("invitedToken获取失败");
       }
     } catch (err) {
-      message.error("token获取失败");
+      message.error("invitedToken获取失败");
     }
   }
   const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;

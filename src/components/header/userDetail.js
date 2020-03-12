@@ -84,23 +84,43 @@ export default Form.create({ name: "reset-form" })(
     return (
       <>
         <HomeHeader />
-        <div
-          style={{
-            width: "100vw",
-            display: "flex",
-            justifyContent: "center",
-            position: "relative"
-          }}
-        >
-          <div
-            style={{
-              width: "90vw",
-              position: "absolute",
-              top: "6vw"
-            }}
-          >
-            <h2>个人信息</h2>
-            <table className={userDetailStyles.table}>
+        <div className={userDetailStyles.userDetail}>
+          <div>
+            <div>
+              <span>个人信息</span>
+            </div>
+            <ul>
+              <li>
+                <span>{rest0.key}</span>
+                <span>
+                  {userDetail[rest0.value]}
+                  <span onClick={() => setModalMeter(rest0)}>
+                    {rest0.render(rest0.meter)}
+                  </span>
+                </span>
+              </li>
+              {rest.map(r => {
+                return (
+                  <li key={r.value}>
+                    <span>{r.key}</span>
+                    <span>
+                      {r.value === "oldPassWord"
+                        ? "********"
+                        : userDetail[r.value]}
+                      <span
+                        onClick={() => setModalMeter(r)}
+                        style={{ color: "#1890ff", cursor: "pointer" }}
+                      >
+                        {r.render(r.meter)}
+                      </span>
+                    </span>
+
+                    {/* <hr /> */}
+                  </li>
+                );
+              })}
+            </ul>
+            {/* <table className={userDetailStyles.table}>
               <thead>
                 <tr>
                   <th>{rest0.key}</th>
@@ -108,7 +128,7 @@ export default Form.create({ name: "reset-form" })(
                   <th>
                     <span
                       onClick={() => setModalMeter(rest0)}
-                      style={{ color: "#1548EB", cursor: "pointer" }}
+                      style={{ color: "#1890ff", cursor: "pointer" }}
                     >
                       {rest0.render(rest0.meter)}
                     </span>
@@ -128,7 +148,7 @@ export default Form.create({ name: "reset-form" })(
                       <td>
                         <span
                           onClick={() => setModalMeter(r)}
-                          style={{ color: "#1548EB", cursor: "pointer" }}
+                          style={{ color: "#1890ff", cursor: "pointer" }}
                         >
                           {r.render(r.meter)}
                         </span>
@@ -137,7 +157,7 @@ export default Form.create({ name: "reset-form" })(
                   );
                 })}
               </tbody>
-            </table>
+            </table> */}
           </div>
         </div>
         <Modal
@@ -145,7 +165,7 @@ export default Form.create({ name: "reset-form" })(
           visible={!!modalMeter.meter}
           footer={null}
           width="419px"
-          onCancel={() => setModalMeter(initModalMeter)}
+          onCancel={() => setModalMeter({ ...modalMeter, meter: false })}
         >
           <Form onSubmit={e => handleSubmit(e)}>
             {items.map((o, index) => (
