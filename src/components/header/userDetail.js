@@ -47,7 +47,7 @@ export default Form.create({ name: "reset-form" })(
         redit: true
       },
       {
-        key: "昵称",
+        key: "用户昵称",
         value: "name",
         meter: "resetName",
         render: meter => render(meter),
