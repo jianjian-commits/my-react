@@ -157,6 +157,8 @@ $unHoverGray: #b6b6ba;
   & form {
     & button {
       height: 40px !important;
+      background: #1890ff;
+      opacity: 0.5;
     }
     & > div:last-child {
       & button {

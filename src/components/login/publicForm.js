@@ -11,7 +11,6 @@ export default Form.create({ name: "login-form" })(function PublicForm({
   setActiveKey,
   history
 }) {
-  console.log(history);
   const { getFieldDecorator, validateFields, getFieldError } = form;
   const handleSubmit = e => {
     e.preventDefault();
@@ -26,19 +25,9 @@ export default Form.create({ name: "login-form" })(function PublicForm({
       }
     });
   };
-  console.log(parameter);
   return (
     <Form onSubmit={e => handleSubmit(e)}>
       {parameter.map(p => {
-        console.log(
-          formItems[p.key]({
-            form,
-            payload: p.value,
-            itemName: p.itemName,
-            icon: p.icon,
-            setActiveKey
-          })
-        );
         const formItem =
           p.key === "submit" && params.token
             ? formItems[p.key]({
@@ -56,9 +45,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
                 icon: p.icon,
                 setActiveKey
               });
-        // debugger;
         const helpText = getFieldError(formItem.itemName);
-        console.log(formItem.itemName);
         return (
           <Form.Item
             key={formItem.itemName}

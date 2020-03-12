@@ -109,7 +109,6 @@ export default connect(
   const params = userId && teamId && token ? { userId, teamId, token } : {};
   const query = inviter && invitedTeam ? { inviter, invitedTeam } : {};
   const [activeKey, setActiveKey] = useState(active || "initSignin");
-  console.log(activeKey);
   return (
     <Loading spinning={isLoading}>
       <div className={Styles.background}>
