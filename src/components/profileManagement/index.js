@@ -26,10 +26,12 @@ function GroupList(props) {
   return (
     <>
       <span>分组</span>
-      <Button onClick={handleClick}>
-        <img src="/image/davinci/create.png" alt="" />
-        添加分组
-      </Button>
+      <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
+        <Button onClick={handleClick}>
+          <img src="/image/davinci/create.png" alt="" />
+          添加分组
+        </Button>
+      </Authenticate>
       <Table columns={columns} dataSource={dataSource} rowKey="roleId"></Table>
       <ModalCreation
         title={title}
