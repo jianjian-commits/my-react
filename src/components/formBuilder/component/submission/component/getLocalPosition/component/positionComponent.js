@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Input, Form, Tooltip, Icon, Button, Modal } from "antd";
 
-let AMap;
+// let AMap;
 
 export default class PositionComponent extends Component {
   static getDerivedStateFromProps(nextProps) {
@@ -36,8 +36,9 @@ export default class PositionComponent extends Component {
     this.geocoder = null;
     this.marker = null;
     this.mapList = React.createRef();
-
+    //eslint-disable-next-line
     AMap.plugin("AMap.Geolocation", () => {
+      //eslint-disable-next-line
       this.geolocation = new AMap.Geolocation({
         enableHighAccuracy: true, //是否使用高精度定位，默认:true
         zoomToAccuracy: true, //定位成功后是否自动调整地图视野到定位点
@@ -47,6 +48,7 @@ export default class PositionComponent extends Component {
   }
 
   componentDidMount() {
+    //eslint-disable-next-line
     this.map = new AMap.Map("map-container", {
       resizeEnable: true,
       zoom: 14
@@ -56,6 +58,7 @@ export default class PositionComponent extends Component {
     this.map.on("complete", () => {
       // this.map.on("click", (e)=>{this.showInfoClick(this.map,this.lnglat,e)});
       this.map.setZoomAndCenter(14, this.lnglat);
+      //eslint-disable-next-line
       this.marker = new AMap.Marker({
         position: this.lnglat
       });
@@ -63,6 +66,7 @@ export default class PositionComponent extends Component {
       this.marker.setMap(this.map);
       this.map.setFitView();
     });
+    //eslint-disable-next-line
     this.geocoder = new AMap.Geocoder();
   }
 
@@ -172,6 +176,7 @@ export default class PositionComponent extends Component {
   showPositionList = () => {
     let adjustmentRange = this.props.item.adjustmentRange;
     let rangeNumber = adjustmentRange;
+    //eslint-disable-next-line
     AMap.service(["AMap.PlaceSearch"], () => {
       //构造地点查询类
       var placeSearch = new AMap.PlaceSearch({
@@ -182,11 +187,13 @@ export default class PositionComponent extends Component {
         // autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
         extensions: "base"
       });
+      //eslint-disable-next-line
       AMap.event.addListener(
         placeSearch,
         "listElementClick",
         this.clickPositionItem
       );
+      //eslint-disable-next-line
       AMap.event.addListener(
         placeSearch,
         "markerClick",
