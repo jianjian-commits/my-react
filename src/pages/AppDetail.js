@@ -8,9 +8,9 @@ import DraggableList from "../components/shared/DraggableList";
 import { APP_SETTING_ABLED } from "../auth";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
-import selectCom from "../utils/selectCom";
+// import selectCom from "../utils/selectCom";
 import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
-import { appDetailMenu } from "../components/transactList/appDetailMenu";
+// import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import TransactList from "../components/transactList/TransactList";
 
 import classes from "../styles/apps.module.scss";
@@ -37,7 +37,7 @@ const AppDetail = props => {
   const [selectedForm, setSelectedForm] = React.useState(null);
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
-  const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
+  // const [ele, setEle] = React.useState(selectCom(menuId, appDetailMenu));
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -83,7 +83,7 @@ const AppDetail = props => {
   }, []);
 
   const [approvalKey, setApprovalKey] = React.useState(null);
-  let { groups, list } = mockForms;
+  // let { groups, list } = mockForms;
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
