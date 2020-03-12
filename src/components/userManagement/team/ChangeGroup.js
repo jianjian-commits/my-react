@@ -1,12 +1,10 @@
 import React from "react";
-import { Modal, Select, Row, Col, message } from "antd";
-import request from "../../utils/request";
+import { Modal, Select, Row, Col } from "antd";
 
 const { Option } = Select;
 
 const ChangeGroup = props => {
-  // console.log(props)
-  const [groupKey, setGroupKey] = React.useState(null); //分组关键字
+  const [groupKey, setGroupKey] = React.useState(props.groupKey); //分组关键字
   const onChange = value => {
     setGroupKey(value);
   };
@@ -14,21 +12,7 @@ const ChangeGroup = props => {
     props.fn();
   };
   const handleOk = () => {
-    if (groupKey) {
-      request(`/sysUser/${props.userKey}/group`, {
-        method: "PUT",
-        data: { oldGroupId: props.groupKey, newGroupId: groupKey }
-      })
-        .then(res => {
-          message.success("成功");
-          props.fn();
-        })
-        .catch(err => {
-          message.error("变更失败");
-        });
-    } else {
-      props.fn();
-    }
+    props.fn(groupKey);
   };
   return (
     <Modal
@@ -43,6 +27,7 @@ const ChangeGroup = props => {
         <Col>选择分组</Col>
         <Col>
           <Select
+            defaultValue={props.groupKey}
             showSearch
             style={{ width: 100 }}
             placeholder="分组"

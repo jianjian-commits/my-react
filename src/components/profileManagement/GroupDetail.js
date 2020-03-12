@@ -73,6 +73,8 @@ class GroupDetail extends Component {
         // 团队按钮旧数据被选中，如果被选中就返回value，否则为[]
         this.state.teamVisible.checked &&
           this.oldTeamVisibleTrue.push(this.state.teamVisible.value);
+      } else {
+        message.error("获取详情失败");
       }
     } catch (err) {
       message.error("获取详情失败");
@@ -186,11 +188,14 @@ class GroupDetail extends Component {
       });
       if (res && res.status === "SUCCESS") {
         message.success("保存成功！");
+        this.props.enterDetail(false);
       } else {
         message.error("保存失败！");
+        this.props.enterDetail(false);
       }
     } catch (err) {
       message.error("保存失败！");
+      this.props.enterDetail(false);
     }
   }
 
