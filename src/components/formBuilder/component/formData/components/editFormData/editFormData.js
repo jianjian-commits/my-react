@@ -112,7 +112,7 @@ class EditFormData extends Component {
               });
           }).catch((error) => {
             console.log(error);
-            this.state({
+            this.setState({
               isSubmitted: false
             })
             message.error("获取数据失败")
@@ -167,10 +167,10 @@ class EditFormData extends Component {
   }
   _setNumberValue(values) {
     this.state.currentForm.components.map(component => {
-      if (values[component.id] == "") {
+      if (values[component.id] === "") {
         delete values[component.id];
       }
-      if (component.type == "number" && values.hasOwnProperty(component.id)) {
+      if (component.type === "number" && values.hasOwnProperty(component.id)) {
         values[component.id] = Number(values[component.id]);
       }
     });
@@ -180,9 +180,9 @@ class EditFormData extends Component {
   _setDateTimeVaule(values) {
     this.state.currentForm.components.map(component => {
       if (
-        component.type == "DateInput" &&
+        component.type === "DateInput" &&
         values.hasOwnProperty(component.id) &&
-        values[component.id] !== void 0
+        values[component.id] != void 0
       ) {
         // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
         if (values[component.id].constructor == Date) {
@@ -198,7 +198,7 @@ class EditFormData extends Component {
   _setAddressValue(values) {
     this.state.currentForm.components.map(component => {
       if (
-        component.type == "Address" &&
+        component.type === "Address" &&
         values.hasOwnProperty(component.id) &&
         values[component.id] !== void 0
       ) {
@@ -207,7 +207,7 @@ class EditFormData extends Component {
         let address = [province, city, county, detail]
           .filter(item => item)
           .join("");
-        if (address.trim() == "") {
+        if (address.trim() === "") {
           delete values[component.id];
         }
       }
@@ -240,7 +240,7 @@ class EditFormData extends Component {
       })[0];
       currentComponent || (currentComponent = {});
 
-      if (currentComponent.type == "FormChildTest") {
+      if (currentComponent.type === "FormChildTest") {
         let formChildDataArray = this.state.formChildDataObj[i];
         let resObj = {};
 
