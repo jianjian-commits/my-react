@@ -7,11 +7,14 @@ import classes from "./team.module.scss";
 import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
 import InviteUser from "../modalInviteUser";
+import Authenticate from "../../shared/Authenticate";
+import { ReactComponent as Funnel } from "./svg/filter.svg";
+import {
+  TEAM_MANAGEMENT_INVITE,
+  TEAM_MANAGEMENT_DROP,
+  TEAM_MANAGEMENT_SWITCH
+} from "../../../auth";
 
-const customCss = {
-  filter: { backgroundColor: "#ffffff", marginLeft: "20px" },
-  action: { color: "#333" }
-};
 export default connect(
   ({ login }) => ({
     loginData: login
@@ -66,25 +69,26 @@ export default connect(
           true
         ) : false ? null : (
           <span>
-            <Button
-              type="link"
-              onClick={handleChange.bind(this, text)}
-              style={{ paddingLeft: "0" }}
-              icon="swap"
-            >
-              <span style={customCss.action}>变更分组</span>
-            </Button>
-            <Popconfirm
-              title="把该成员从团队中踢出?"
-              onConfirm={confirm.bind(this, text.id)}
-              okText="确认"
-              cancelText="取消"
-              placement="bottom"
-            >
-              <Button className={classes.btn} icon="minus-circle" type="link">
-                <span style={customCss.action}>踢出</span>
+            <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
+              <Button
+                type="link"
+                onClick={handleChange.bind(this, text)}
+                className={classes.changeGroup}
+              >
+                变更分组
               </Button>
-            </Popconfirm>
+            </Authenticate>
+            <Authenticate auth={TEAM_MANAGEMENT_DROP}>
+              <Popconfirm
+                title="把该成员从团队中踢出?"
+                onConfirm={confirm.bind(this, text.id)}
+                okText="确认"
+                cancelText="取消"
+                placement="bottom"
+              >
+                <Button type="link">踢出</Button>
+              </Popconfirm>
+            </Authenticate>
           </span>
         );
       }
@@ -199,18 +203,20 @@ export default connect(
 
   return currentTeam ? (
     <div className={classes.container}>
-      <Row type="flex" justify="space-between" className={classes.box}>
+      <Row type="flex" justify="space-between">
         <Col>
           <div className={classes.title}>团队成员</div>
         </Col>
         <Col>
-          <InviteUser {...loginData} />
+          <Authenticate auth={TEAM_MANAGEMENT_INVITE}>
+            <InviteUser {...loginData} />
+          </Authenticate>
           <Button
-            style={customCss.filter}
+            className={classes.filterBtn}
             type="link"
-            icon="filter"
             onClick={onClickFilter}
           >
+            <Funnel className={classes.filterSvg} />
             筛选
           </Button>
         </Col>

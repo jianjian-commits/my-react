@@ -30,7 +30,7 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
             <Input
               defaultValue={defaultValue}
               onChange={changeValue}
-              style={{ width: "auto" }}
+              className={classes.infoInput}
             />
             <Button type="link" onClick={submitAmend}>
               确认
@@ -42,7 +42,12 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
         ) : (
           <Col span={14}>
             {defaultValue}
-            <Button type="link" icon="form" onClick={switchRedact}></Button>
+            <Button
+              size="small"
+              type="link"
+              icon="form"
+              onClick={switchRedact}
+            ></Button>
           </Col>
         )}
       </Row>

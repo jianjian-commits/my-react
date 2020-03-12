@@ -1,11 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import Authenticate from "../shared/Authenticate";
 import { Button, Table, message, Popconfirm } from "antd";
 import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
 import PermissionSetting from "../userManagement/applyPermissionSettings";
-
+import {
+  PROFILE_MANAGEMENT_NEW,
+  PROFILE_MANAGEMENT_UPDATE,
+  PROFILE_MANAGEMENT_DELETE
+} from "../../auth";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 
@@ -23,9 +27,11 @@ function GroupList(props) {
     <>
       <span>分组</span>
       <Button icon="filter">筛选</Button>
-      <Button icon="plus" onClick={handleClick}>
-        添加分组
-      </Button>
+      <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
+        <Button icon="plus" onClick={handleClick}>
+          添加分组
+        </Button>
+      </Authenticate>
       <Table
         // size="middle"
         columns={columns}
@@ -167,12 +173,14 @@ class ProfileManagement extends React.Component {
             {
               key: "edit",
               text: "编辑",
+              auth: PROFILE_MANAGEMENT_UPDATE,
               options: () => this.enterDetail(true, "edit", record),
               hide: record.code === "SUPER_ADMIN"
             },
             {
               key: "clone",
               text: "克隆",
+              auth: PROFILE_MANAGEMENT_NEW,
               options: () =>
                 this.setState({
                   open: true,
@@ -183,30 +191,32 @@ class ProfileManagement extends React.Component {
             {
               key: "delete",
               text: "删除",
+              auth: PROFILE_MANAGEMENT_DELETE,
               hide: record.code === "SUPER_ADMIN" || record.code === "GENERAL"
             }
           ];
           return roleList
             .filter(v => !v.hide)
-            .map(w => {
-              return w.key === "delete" ? (
-                <Popconfirm
-                  title="是否删除这个分组？"
-                  okText="是"
-                  cancelText="否"
-                  onConfirm={() => this.removeGroup(record)}
-                  key={w.key}
-                >
-                  <Button type="link" key={w.key}>
+            .map(w => (
+              <Authenticate key={w.key} auth={w.auth}>
+                {w.key === "delete" ? (
+                  <Popconfirm
+                    title="是否删除这个分组？"
+                    okText="是"
+                    cancelText="否"
+                    onConfirm={() => this.removeGroup(record)}
+                  >
+                    <Button type="link" key={w.key}>
+                      {w.text}
+                    </Button>
+                  </Popconfirm>
+                ) : (
+                  <Button type="link" onClick={w.options} key={w.key}>
                     {w.text}
                   </Button>
-                </Popconfirm>
-              ) : (
-                <Button type="link" onClick={w.options} key={w.key}>
-                  {w.text}
-                </Button>
-              );
-            });
+                )}
+              </Authenticate>
+            ));
         }
       }
     ];
