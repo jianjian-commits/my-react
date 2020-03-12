@@ -28,10 +28,11 @@ export default function loginReducer(state = initialState, { type, payload }) {
 export const getAppList = () => async dispatch => {
   try {
     const res = await request("/customApplication/list", {
-      data: {
-        page: "1",
-        size: "10"
-      }
+      // method: "POST",
+      // data: {
+      //   page: "1",
+      //   size: "10"
+      // }
     });
     if (res && res.status === "SUCCESS") {
       dispatch(saveAppList(res.data));

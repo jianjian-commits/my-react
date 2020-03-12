@@ -28,7 +28,7 @@ export const getBasicInfo = (a, baseInfoBo, onChange, edit, inputEdit) => {
 
   return (
     <div className={classes.groupBasic}>
-      <span>基本信息</span>
+      <div className={classes.moduleTitle}>基本信息</div>
       <table>
         <tbody>
           {basicInfo.map(i => {
