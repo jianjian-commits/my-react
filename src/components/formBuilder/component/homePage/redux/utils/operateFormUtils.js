@@ -34,7 +34,7 @@ export const getForms = (pageSize, currentPage) => dispatch => {
       url:
         config.apiUrl +
         `/form?limit=${pageSize}&skip=${(currentPage - 1) *
-          pageSize}&desc=createdTime`,
+        pageSize}&desc=createdTime`,
       method: "get"
     })
       .then(response => {
@@ -73,15 +73,19 @@ export const getForms = (pageSize, currentPage) => dispatch => {
   });
 };
 
-export const getFormsAll = appId => {
+export const getFormsAll = (appId, isDataPage) => {
+  let headerObj = {
+    "Content-Type": "application/json",
+    appid: appId,
+  };
+  if (isDataPage == true) {
+    headerObj.isDataPage = true
+  }
   return new Promise((resolve, reject) => {
     axios({
       url: config.apiUrl + `/form?desc=createdTime`,
       method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        appid: appId
-      }
+      headers: headerObj
     })
       .then(response => {
         const forms = response.data
