@@ -1,11 +1,11 @@
 .wrapper {
   // padding: 37px 21px;
-  width: calc(100vw - 230px);
+  width: calc(100vw - 220px);
   padding: 29px 21px;
   > span {
     font-size: 18px;
     display: inline-block;
-    padding: 8px 0 0 0;
+    padding: 0 0 41px 0;
     color: #333333;
   }
   img {
@@ -14,10 +14,10 @@
   > button {
     float: right;
     color: #1890ff;
-    width: 100px;
+    width: 104px;
+    height: 36px;
     padding: 0;
     margin-left: 20px;
-    margin-bottom: 44px;
   }
   :global(.ant-table) {
     tr:nth-child(odd) {
@@ -50,6 +50,8 @@
     border: 2px solid #1890ff;
     border-top: 0;
     border-left: 0;
+    transform: rotate(45deg) scale(1) translate(-50%, -50%);
+    -ms-transform: rotate(45deg) scale(1) translate(-50%, -50%);
   }
 }
 
@@ -57,8 +59,8 @@
   font-size: 15px;
   margin: 30px 0 10px 0;
   display: inline-block;
-  color: rgba(0, 0, 0, 0.65);
 }
+
 // 基础信息
 .groupBasic {
   > span {
@@ -72,18 +74,18 @@
   tbody {
     background: #fff;
     display: inline-table;
-    width: calc(100vw - 270px);
+    width: calc(100vw - 260px);
     margin-top: 10px;
     padding: 10px;
     display: inline-block;
     tr {
       td:first-child {
         width: 200px;
-        padding: 7px;
+        padding: 7px 20px;
         color: #777f97;
         text-indent: 10px;
       }
-      td:last-child {
+      td:nth-child(2) {
         color: #333;
       }
     }
@@ -96,8 +98,8 @@
 
 // 应用管理
 .groupApp {
-  :global(td:nth-child(2)) {
-    text-indent: 10px;
+  :global(td:nth-child(2) label) {
+    margin-left: 20px;
   }
 }
 
@@ -115,6 +117,7 @@
   }
   :global(.ant-checkbox-group-item) {
     margin: 0 20px 0 10px;
+    color: #333;
   }
 }
 

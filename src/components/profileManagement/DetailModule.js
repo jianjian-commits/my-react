@@ -28,7 +28,7 @@ export const getBasicInfo = (a, baseInfoBo, onChange, edit, inputEdit) => {
 
   return (
     <div className={classes.groupBasic}>
-      <div className={classes.moduleTitle}>基本信息</div>
+      <div style={{ fontSize: "15px" }}>基本信息</div>
       <table>
         <tbody>
           {basicInfo.map(i => {

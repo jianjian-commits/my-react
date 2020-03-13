@@ -35,10 +35,11 @@ export default function InviteUser(props) {
     <>
       <Button
         className={classes.btn}
-        icon="plus"
+        // icon="plus"
         type="primary"
         onClick={() => handleInviteUserBtn()}
       >
+        <img src="/image/davinci/create-white.png" alt="" />
         邀请
       </Button>
       <Modal
