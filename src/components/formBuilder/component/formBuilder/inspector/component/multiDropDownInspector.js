@@ -191,16 +191,12 @@ class MultiDropDownInspector extends React.Component {
   };
 
   handleOtherFormDataChange = data => {
-<<<<<<< HEAD
     const {
       selectedFormId,
       selectedOptionId,
       optionLabel,
       linkComponentType
     } = data;
-=======
-    const { selectedFormId, selectedOptionId, optionLabel, linkComponentType } = data;
->>>>>>> mickey-formBuilder
     let values = {
       formId: selectedFormId,
       optionId: selectedOptionId,
@@ -269,11 +265,7 @@ class MultiDropDownInspector extends React.Component {
     const { forms, element, elementParent } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
-<<<<<<< HEAD
     if (errorComponentIndex > -1) {
-=======
-    if(errorComponentIndex > -1) {
->>>>>>> mickey-formBuilder
       let currentIndex = data.indexOf(element);
       currentIndex === errorComponentIndex && (isLinkError = true);
     }
@@ -316,26 +308,17 @@ class MultiDropDownInspector extends React.Component {
         return (
           <>
             <Button
-<<<<<<< HEAD
               className={
                 isLinkError ? "data-link-set has-error" : "data-link-set"
               }
-=======
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
->>>>>>> mickey-formBuilder
               onClick={() => {
                 this.handleSetOtherDataModal(true);
               }}
             >
-<<<<<<< HEAD
               {element.data.type == "otherFormData"
                 ? isLinkError
                   ? "数据关联失效"
                   : "已设置数据关联"
-=======
-              {element.data.type === "otherFormData"
-                ? (isLinkError ? "数据关联失效" : "已设置数据关联")
->>>>>>> mickey-formBuilder
                 : "关联表单数据设置"}
             </Button>
             <OtherDataModal
@@ -356,26 +339,17 @@ class MultiDropDownInspector extends React.Component {
         return (
           <>
             <Button
-<<<<<<< HEAD
               className={
                 isLinkError ? "data-link-set has-error" : "data-link-set"
               }
-=======
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
->>>>>>> mickey-formBuilder
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-<<<<<<< HEAD
               {element.data.type == "DataLinkage"
                 ? isLinkError
                   ? "数据联动设置失效"
                   : "已设置数据联动"
-=======
-              {element.data.type === "DataLinkage"
-                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
->>>>>>> mickey-formBuilder
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -558,11 +532,7 @@ export default connect(
   store => ({
     data: store.formBuilder.data,
     forms: store.formBuilder.formArray,
-<<<<<<< HEAD
     errorComponentIndex: store.formBuilder.errorComponentIndex
-=======
-    errorComponentIndex: store.formBuilder.errorComponentIndex,
->>>>>>> mickey-formBuilder
   }),
   {
     setItemAttr,

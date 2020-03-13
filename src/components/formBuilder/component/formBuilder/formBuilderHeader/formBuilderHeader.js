@@ -3,10 +3,8 @@ import { Button, Icon, Modal, Tooltip, Spin } from "antd";
 import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
 import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
 import { connect } from "react-redux";
-import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
 import checkAndSaveForm from "../utils/checkSaveFormUtils";
 import { withRouter } from "react-router-dom";
-import checkAndSaveForm from "../utils/checkSaveFormUtils";
 class ForBuilderHeader extends React.Component {
   constructor(props) {
     super(props);

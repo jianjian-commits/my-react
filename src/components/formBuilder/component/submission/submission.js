@@ -92,8 +92,8 @@ class Submission extends Component {
     mobile.is && mountClassNameOnRoot(mobile.className);
 
     // initToken().then(res => {
-    // getFormComponent(this.state.formId);
-    getFormComponentByPath(this.state.formPath);
+    getFormComponent(this.state.formId);
+    // getFormComponentByPath(this.state.formPath);
     // });
   }
 

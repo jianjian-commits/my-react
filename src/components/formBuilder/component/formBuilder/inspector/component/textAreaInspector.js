@@ -139,11 +139,7 @@ class TextAreaInspector extends React.Component {
     const { forms, element, elementParent } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
-<<<<<<< HEAD
     if (errorComponentIndex > -1) {
-=======
-    if(errorComponentIndex > -1) {
->>>>>>> mickey-formBuilder
       let currentIndex = data.indexOf(element);
       currentIndex === errorComponentIndex && (isLinkError = true);
     }
@@ -167,26 +163,17 @@ class TextAreaInspector extends React.Component {
         return (
           <>
             <Button
-<<<<<<< HEAD
               className={
                 isLinkError ? "data-link-set has-error" : "data-link-set"
               }
-=======
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
->>>>>>> mickey-formBuilder
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-<<<<<<< HEAD
               {element.data.type == "DataLinkage"
                 ? isLinkError
                   ? "数据联动设置失效"
                   : "已设置数据联动"
-=======
-              {element.data.type === "DataLinkage"
-                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
->>>>>>> mickey-formBuilder
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal

@@ -23,7 +23,6 @@ import config from "../../config/config";
 import HeaderBar from "../../component/base/NavBar";
 import {
   getSubmissionData,
-  getSubmissionDataByPath,
   getSubmissionDetail,
   getFilterSubmissionData
 } from "./redux/utils/getDataUtils";
@@ -87,8 +86,7 @@ class FormSubmitData extends PureComponent {
       () => {
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            // this.props.forms.path,
-            this.props.forms.id,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -97,16 +95,14 @@ class FormSubmitData extends PureComponent {
           );
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData(
-            // this.state.formId,
-            this.props.forms.id,
+            this.state.formId,
             this.state.showNumber,
             1,
             this.state.showNumber
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            // this.props.forms.path,
-            this.props.forms.id,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -114,8 +110,7 @@ class FormSubmitData extends PureComponent {
           );
         } else {
           this.props.getSubmissionData(
-            // this.state.formId,
-            this.props.forms.id,
+            this.state.formId,
             this.state.pageSize,
             this.state.currentPage
           );
@@ -129,8 +124,8 @@ class FormSubmitData extends PureComponent {
 
     initToken()
       .then(() => {
-        this.props.getSubmissionDataByPath(
-          this.props.formPath,
+        this.props.getSubmissionData(
+          this.props.formId,
           this.state.pageSize,
           this.state.currentPage
         );
@@ -479,8 +474,7 @@ class FormSubmitData extends PureComponent {
         this.onChangePages(this.state.currentPage, this.state.pageSize);
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            // this.props.forms.path,
-            this.props.forms.id,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -489,16 +483,14 @@ class FormSubmitData extends PureComponent {
           );
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData(
-            // this.state.formId,
-            this.props.forms.id,
+            this.state.formId,
             this.state.showNumber,
             1,
             this.state.showNumber
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            // this.props.forms.path,
-            this.props.forms.id,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -506,8 +498,7 @@ class FormSubmitData extends PureComponent {
           );
         } else {
           this.props.getSubmissionData(
-            // this.state.formId,
-            this.props.forms.id,
+            this.state.formId,
             this.state.pageSize,
             this.state.currentPage
           );
@@ -603,7 +594,7 @@ class FormSubmitData extends PureComponent {
         render: (id, record) => {
           return (
             <ControlBtn
-              formId={this.props.forms.id}
+              formId={this.state.formId}
               submissionId={record.id}
               data={record}
               handleDeleteSubmisson={this.handleDeleteSubmisson}
@@ -942,11 +933,9 @@ export default connect(
   }),
   {
     getSubmissionData,
-    getSubmissionDataByPath,
     getFilterSubmissionData,
     deleteFormData,
     clearFormData,
-    getSubmissionDetail,
-    getFilterSubmissionData
+    getSubmissionDetail
   }
 )(withRouter(FormSubmitData));

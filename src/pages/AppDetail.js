@@ -54,7 +54,7 @@ const AppDetail = props => {
     let newList = [];
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
-        key: item.path,
+        key: item.id,
         name: item.name
       }));
       setMockForms({
