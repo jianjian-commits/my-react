@@ -108,6 +108,7 @@ const AppDetail = props => {
   //根据点击菜单栏
   const onClickMenu = (key, e) => {
     setApprovalKey(key);
+    setSelectedForm(null);
   };
 
   // 父传子的方法
