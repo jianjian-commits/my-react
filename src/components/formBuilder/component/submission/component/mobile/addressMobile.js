@@ -119,6 +119,32 @@ export default class address extends Component {
     }
   }
 
+    // 根据地址数据改变选中的索引
+    handleGetRightSelectedIndex = address => {
+      let { city, province } = address;
+      const { CityData } = this.state;
+      let currentProvinceIndex = -1,
+        currentCityIndex = -1;
+      if (province && CityData && CityData.districtList) {
+        currentProvinceIndex = CityData.districtList.findIndex(
+          item => item.name === province
+        );
+      }
+      if (
+        currentProvinceIndex > -1 &&
+        CityData &&
+        CityData.districtList[currentProvinceIndex].districtList
+      ) {
+        currentCityIndex = CityData.districtList[
+          currentProvinceIndex
+        ].districtList.findIndex(item => item.name === city);
+      }
+      this.setState({
+        currentProvinceIndex,
+        currentCityIndex
+      });
+    };
+
   // 数据联动 设置数据
   handleSetDataLinkData = value => {
     const { handleSetAddress } = this.props;

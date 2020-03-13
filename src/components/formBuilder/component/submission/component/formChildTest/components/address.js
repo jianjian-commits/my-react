@@ -57,6 +57,32 @@ export default class address extends Component {
     });
   }
 
+    // 根据地址数据改变选中的索引
+    handleGetRightSelectedIndex = address => {
+      let { city, province } = address;
+      const { CityData } = this.state;
+      let currentProvinceIndex = -1,
+        currentCityIndex = -1;
+      if (province && CityData && CityData.districtList) {
+        currentProvinceIndex = CityData.districtList.findIndex(
+          item => item.name === province
+        );
+      }
+      if (
+        currentProvinceIndex > -1 &&
+        CityData &&
+        CityData.districtList[currentProvinceIndex].districtList
+      ) {
+        currentCityIndex = CityData.districtList[
+          currentProvinceIndex
+        ].districtList.findIndex(item => item.name === city);
+      }
+      this.setState({
+        currentProvinceIndex,
+        currentCityIndex
+      });
+    };
+
   handleSelectedProvince = (value, ev) => {
     const index = ev.props.index;
     if (index > -1) {
@@ -139,12 +165,13 @@ export default class address extends Component {
       currentProvinceIndex,
       city,
       county,
-      province
+      province,
+      detail
     } = this.state;
     return (
       <div className="form-address">
         <div className="row">
-          <Select defaultValue="none" onChange={this.handleSelectedProvince}>
+          <Select value={province || "none"} onChange={this.handleSelectedProvince}>
             <Option value="none" disabled>
               -请选择-
             </Option>
@@ -192,6 +219,7 @@ export default class address extends Component {
         <div className="row">
           <TextArea
             onChange={this.handleSetDetail}
+            value={detail}
             placeholder="详细地址"
             autoSize={{ minRows: 2, maxRows: 2 }}
           />

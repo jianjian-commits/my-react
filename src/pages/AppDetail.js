@@ -107,6 +107,7 @@ const AppDetail = props => {
   //根据点击菜单栏
   const onClickMenu = (key, e) => {
     setApprovalKey(key);
+    setSelectedForm(null);
   };
 
   // 父传子的方法
@@ -178,16 +179,17 @@ const AppDetail = props => {
                     ></FormBuilderSubmission>
                   )
               ) : (
-                  <FormBuilderSubmitData
-                    key={Math.random()}
-                    formId={selectedForm}
-                    actionFun={(submission_id) => {
-                      console.log("actionFun", submission_id)
-                      setSubmit(true);
-                      setSubmissionId(submission_id)
-                    }}
-                  ></FormBuilderSubmitData>
-                )}
+                <FormBuilderSubmitData
+                  key={Math.random()}
+                  formId={selectedForm}
+                  actionFun={(submission_id)=>{
+                    console.log("actionFun",submission_id)
+                    setSubmit(true);
+                    setSubmissionId(submission_id)
+                  }}
+                  appId={appId}
+                ></FormBuilderSubmitData>
+              )}
             </>
           ) : approvalKey !== null ? (
             <TransactList fn={onClickMenu} approvalKey={approvalKey} />
