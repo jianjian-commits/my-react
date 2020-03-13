@@ -4,10 +4,13 @@ import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 import classes from "./inviteUser.module.scss";
 
-const bodyStyle = {
-  padding: "46px 30px 182px",
-  boxShadow: "0px 4px 26px rgba(46, 106, 162, 0.25)",
-  borderRadius: "5px"
+const customCss = {
+  bodyStyle: {
+    padding: "46px 30px 182px",
+    boxShadow: "0px 4px 26px rgba(46, 106, 162, 0.25)",
+    borderRadius: "5px"
+  },
+  input: { marginRight: "10px", backgroundColor: "#F3F4F6" }
 };
 
 export default function InviteUser(props) {
@@ -35,7 +38,7 @@ export default function InviteUser(props) {
       </Button>
       <Modal
         // title="邀请新成员加入"
-        bodyStyle={bodyStyle}
+        bodyStyle={customCss.bodyStyle}
         visible={visible}
         footer={null}
         width="690px"
@@ -43,14 +46,10 @@ export default function InviteUser(props) {
       >
         <p className={classes.title}>邀请新成员加入</p>
         <p className={classes.text}>
-          {" "}
           发送以下链接给新成员，点击链接即可加入团队
         </p>
         <div style={{ display: "flex" }}>
-          <Input
-            value={inviteUrl}
-            style={{ marginRight: "10px", backgroundColor: "#F3F4F6" }}
-          />
+          <Input value={inviteUrl} style={customCss.input} />
           <Button
             type="primary"
             onClick={() => {

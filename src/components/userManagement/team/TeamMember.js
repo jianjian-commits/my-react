@@ -8,6 +8,7 @@ import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
 import InviteUser from "../modalInviteUser";
 import Authenticate from "../../shared/Authenticate";
+import { ReactComponent as Funnel } from "./svg/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
   TEAM_MANAGEMENT_DROP,
@@ -33,7 +34,7 @@ export default connect(
   });
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
-    pageSize: 1
+    pageSize: 10
   });
   const columns = [
     {
@@ -72,7 +73,7 @@ export default connect(
               <Button
                 type="link"
                 onClick={handleChange.bind(this, text)}
-                style={{ paddingLeft: "0" }}
+                className={classes.changeGroup}
               >
                 变更分组
               </Button>
@@ -202,7 +203,7 @@ export default connect(
 
   return currentTeam ? (
     <div className={classes.container}>
-      <Row type="flex" justify="space-between" className={classes.box}>
+      <Row type="flex" justify="space-between">
         <Col>
           <div className={classes.title}>团队成员</div>
         </Col>
@@ -211,11 +212,11 @@ export default connect(
             <InviteUser {...loginData} />
           </Authenticate>
           <Button
-            style={{ backgroundColor: "#ffffff" }}
+            className={classes.filterBtn}
             type="link"
-            icon="filter"
             onClick={onClickFilter}
           >
+            <Funnel className={classes.filterSvg} />
             筛选
           </Button>
         </Col>
