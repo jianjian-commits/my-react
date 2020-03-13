@@ -10,6 +10,8 @@ import DraggableList, {
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
+import Authenticate from "../components/shared/Authenticate";
+import { APP_SETTING_ABLED, APP_NEW_FORM } from "../auth";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -50,7 +52,7 @@ const AppSetting = props => {
       });
 
     });
-  }, []);
+  }, [appId]);
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
@@ -116,13 +118,15 @@ const AppSetting = props => {
   };
 
   return (
-    <Layout>
+    <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
         url={`/app/${appId}/setting/form/`}
       />
-      <CommonHeader navigationList={navigationList(history, appId, appName)} />
+      <CommonHeader
+        navigationList={navigationList(history, appId, appName)}
+      />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
@@ -176,7 +180,7 @@ const AppSetting = props => {
         </Sider>
         <Content className={classes.container}></Content>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default connect(({ app }) => ({

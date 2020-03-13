@@ -5,14 +5,14 @@ import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
-import { APP_SETTING_ABLED } from "../auth";
 import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
-
 import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
+import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
+import Authenticate from "../components/shared/Authenticate";
 import TransactList from "../components/transactList/TransactList";
 
 import classes from "../styles/apps.module.scss";
@@ -65,10 +65,9 @@ const AppDetail = props => {
         list: newList
       });
     });
-  }, []);
+  }, [appId]);
 
   const [approvalKey, setApprovalKey] = React.useState(null);
-  // let { groups, list } = mockForms;
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
@@ -116,7 +115,7 @@ const AppDetail = props => {
   };
 
   return (
-    <Layout>
+    <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
         navigationList={navigationList(appName, history)}
         operations={getOreations(appId, history)}
@@ -159,43 +158,43 @@ const AppDetail = props => {
                   提交数据
                 </Button>
               ) : null}
-              {submit  ? (
+              {submit ? (
                 submissionId ? (
                   <FormBuilderEditFormData
                     key={Math.random()}
                     formId={selectedForm}
-                    submissionId = {submissionId}
-                    actionFun={(submission_id, submitFlag = false)=>{
+                    submissionId={submissionId}
+                    actionFun={(submission_id, submitFlag = false) => {
                       setSubmissionId(submission_id)
                       setSubmit(submitFlag);
                     }}
                   ></FormBuilderEditFormData>
                 )
-                :(
-                  <FormBuilderSubmission
-                  key={Math.random()}
-                  formId={selectedForm}
-                  actionFun={skipToSubmissionData}
-                ></FormBuilderSubmission>
-                )
+                  : (
+                    <FormBuilderSubmission
+                      key={Math.random()}
+                      formId={selectedForm}
+                      actionFun={skipToSubmissionData}
+                    ></FormBuilderSubmission>
+                  )
               ) : (
-                <FormBuilderSubmitData
-                  key={Math.random()}
-                  formId={selectedForm}
-                  actionFun={(submission_id)=>{
-                    console.log("actionFun",submission_id)
-                    setSubmit(true);
-                    setSubmissionId(submission_id)
-                  }}
-                ></FormBuilderSubmitData>
-              )}
+                  <FormBuilderSubmitData
+                    key={Math.random()}
+                    formId={selectedForm}
+                    actionFun={(submission_id) => {
+                      console.log("actionFun", submission_id)
+                      setSubmit(true);
+                      setSubmissionId(submission_id)
+                    }}
+                  ></FormBuilderSubmitData>
+                )}
             </>
           ) : approvalKey !== null ? (
             <TransactList fn={onClickMenu} approvalKey={approvalKey} />
           ) : null}
         </Content>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default connect(({ app }) => ({

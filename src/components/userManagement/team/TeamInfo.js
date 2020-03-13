@@ -4,8 +4,6 @@ import { Input, Row, Col, List, Button, Spin, message } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
-import Authenticate from "../../shared/Authenticate";
-import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   const [isRedact, setIsRedact] = useState(false);
@@ -25,14 +23,14 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
 
   return (
     <div className={classes.rowBox}>
-      {isRedact ? (
-        <Row type="flex" align="middle">
-          <Col span={10}>{lable}</Col>
+      <Row type="flex" align="middle">
+        <Col span={10}>{lable}</Col>
+        {isRedact ? (
           <Col span={14}>
             <Input
               defaultValue={defaultValue}
               onChange={changeValue}
-              style={{ width: "auto" }}
+              className={classes.infoInput}
             />
             <Button type="link" onClick={submitAmend}>
               确认
@@ -41,18 +39,18 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
               取消
             </Button>
           </Col>
-        </Row>
-      ) : (
-        <Row type="flex" align="middle">
-          <Col span={10}>{lable}</Col>
+        ) : (
           <Col span={14}>
             {defaultValue}
-            <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
-              <Button type="link" icon="form" onClick={switchRedact}></Button>
-            </Authenticate>
+            <Button
+              size="small"
+              type="link"
+              icon="form"
+              onClick={switchRedact}
+            ></Button>
           </Col>
-        </Row>
-      )}
+        )}
+      </Row>
     </div>
   );
 };
