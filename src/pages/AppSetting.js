@@ -41,7 +41,7 @@ const AppSetting = props => {
         name: item.name
       }));
 
-       setMockForms({
+      setMockForms({
         groups: [
         ],
         searchList: [
@@ -126,6 +126,15 @@ const AppSetting = props => {
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
+            <Button
+              type="primary"
+              block
+              onClick={e => {
+                modalProps.showModal();
+              }}
+            >
+              新建仪表盘
+            </Button>
             <Button
               type="primary"
               block
