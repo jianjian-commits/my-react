@@ -47,11 +47,15 @@ const AppDetail = props => {
     list: [],
     searchList: []
   });
+  const [user,setUser] = React.useState({})
 
   //zxx groups目录结构 list无目录结构的表单
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
+
+    setUser(JSON.parse(localStorage.getItem("userDetail")))
+
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
         key: item.id,
@@ -165,6 +169,7 @@ const AppDetail = props => {
                     key={Math.random()}
                     formId={selectedForm}
                     submissionId = {submissionId}
+                    
                     actionFun={(submission_id, submitFlag = false)=>{
                       setSubmissionId(submission_id)
                       setSubmit(submitFlag);
