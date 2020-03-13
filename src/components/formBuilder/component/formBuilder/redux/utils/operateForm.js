@@ -229,7 +229,7 @@ export const saveForm = (
   })
     .then(response => {
       let id = response.data.id;
-      console.log(id);
+      // console.log(id);
       callback(`${url}${id}/edit?formId=${id}`);
     })
     .catch(err => {
@@ -250,7 +250,9 @@ export const updateForm = (
   localForm,
   errMessage,
   type,
-  callback
+  callback,
+  appid,
+  extraProp
 ) => dispatch => {
   _calcFormComponentLayout(formDataArray);
 
@@ -295,7 +297,8 @@ export const updateForm = (
       validate: verificationList
     },
     currentLayoutId, //默认布局ID
-    layoutArray //布局
+    layoutArray ,//布局
+    extraProp
   };
 
 
@@ -305,7 +308,8 @@ export const updateForm = (
     method: "PUT",
     data: formData,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      appid:appid
     }
   })
     .then(response => {

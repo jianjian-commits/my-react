@@ -7,6 +7,7 @@ import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 import { APP_SETTING_ABLED } from "../auth";
 import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
+
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
@@ -55,6 +56,8 @@ const AppDetail = props => {
     let newList = [];
 
     setUser(JSON.parse(localStorage.getItem("userDetail")))
+
+    let extraProp = { user: { id: (JSON.parse(localStorage.getItem("userDetail"))).id , name:  (JSON.parse(localStorage.getItem("userDetail"))).name} }
 
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
@@ -180,6 +183,8 @@ const AppDetail = props => {
                   <FormBuilderSubmission
                   key={Math.random()}
                   formId={selectedForm}
+                  extraProp={{ user: { id: user.id, name: user.name } }}
+                  appid = { appId }
                   actionFun={skipToSubmissionData}
                 ></FormBuilderSubmission>
                 )
