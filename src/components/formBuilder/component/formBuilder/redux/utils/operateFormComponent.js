@@ -9,6 +9,7 @@ import {
   SET_FORMCHILDITEM_ATTR,
   SET_FORMCHILDITEM_VALUES,
   SET_ACTIVEINNERINDEX,
+  GET_ALL_FORMS,
   SET_ERROR_COMPONENT_INDEX
 } from "../action";
 
@@ -123,3 +124,11 @@ export const setErrorComponentIndex = (index) => {
     index,
   }
 }
+
+export const setAllForms = (forms) => dispatch => {
+  dispatch({
+    type: GET_ALL_FORMS,
+    formArray: forms
+  });
+}
+
