@@ -94,7 +94,7 @@
     position: absolute;
     top: 6vw;
     background: #ffffff;
-    width: 1200px;
+    width: 1000px;
     height: 300px;
     & > div {
       display: flex;
@@ -129,7 +129,7 @@
           font-size: 14px;
           color: #333333;
           position: absolute;
-          left: 970px;
+          left: 770px;
           & > span {
             margin-left: 19px;
             font-style: normal;
@@ -139,6 +139,26 @@
             cursor: pointer;
           }
         }
+      }
+    }
+  }
+}
+
+.detailUpdateModal {
+  & form {
+    & button {
+      opacity: 0.5;
+    }
+    & input {
+      width: 371px;
+      height: 40px;
+      border: 1px solid #d6d8de;
+      box-sizing: border-box;
+      border-radius: 6px;
+    }
+    & > div:last-child {
+      & button {
+        width: 371px;
       }
     }
   }
