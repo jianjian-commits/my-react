@@ -14,6 +14,7 @@ import EditFormData from "../components/formBuilder/component/formData/component
 import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import TransactList from "../components/transactList/TransactList";
+import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -57,6 +58,7 @@ const AppDetail = props => {
         key: item.id,
         name: item.name
       }));
+      props.setAllForms(res);
       setMockForms({
         groups: [
         ],
@@ -200,4 +202,6 @@ const AppDetail = props => {
 };
 export default connect(({ app }) => ({
   appList: app.appList
-}))(AppDetail);
+}), {
+  setAllForms
+})(AppDetail);
