@@ -188,6 +188,7 @@ const AppDetail = props => {
                     setSubmit(true);
                     setSubmissionId(submission_id)
                   }}
+                  appId={appId}
                 ></FormBuilderSubmitData>
               )}
             </>
