@@ -47,7 +47,7 @@ export default Form.create({ name: "reset-form" })(
         redit: true
       },
       {
-        key: "昵称",
+        key: "用户昵称",
         value: "name",
         meter: "resetName",
         render: meter => render(meter),
@@ -166,6 +166,7 @@ export default Form.create({ name: "reset-form" })(
           footer={null}
           width="419px"
           onCancel={() => setModalMeter({ ...modalMeter, meter: false })}
+          className={userDetailStyles.detailUpdateModal}
         >
           <Form onSubmit={e => handleSubmit(e)}>
             {items.map((o, index) => (
