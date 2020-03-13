@@ -166,7 +166,7 @@ const password = ({ form, payload, itemName, icon }) => ({
   },
   component: (
     <Input
-      type={icon ? null : "password"}
+      type={"password"}
       onChange={() => form.setFields({ password: { errors: null } })}
       placeholder={
         payload === "reconfirm"
