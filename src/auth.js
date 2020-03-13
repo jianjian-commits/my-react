@@ -55,28 +55,28 @@ export const TEAM_MANAGEMENT_DROP = `${TEAM_MANAGEMENT_PREFIX}TU`;
 export const TEAM_MANAGEMENT_SWITCH = `${TEAM_MANAGEMENT_PREFIX}RU`;
 
 export const APP_SETTING_ABLED = appId => `${appId}:?:?:?:AMV`;
-export const APP_VISIABLED = appId => `${appId}?:?:?:CAV`;
-export const APP_NEW_FORM = appId => `${appId}?:?:?:MC`;
+export const APP_VISIABLED = appId => `${appId}:?:?:?:CAV`;
+export const APP_NEW_FORM = appId => `${appId}:?:?:?:MC`;
 
-export const APP_FORM_EDIT = (appId, formId) => `${appId}:${formId}?:?:?:MU`;
-export const APP_FORM_DELETE = (appId, formId) => `${appId}:${formId}?:?:?:MD`;
+export const APP_FORM_EDIT = (appId, formId) => `${appId}:${formId}:?:?:?:MU`;
+export const APP_FORM_DELETE = (appId, formId) => `${appId}:${formId}:?:?:?:MD`;
 
 export const APP_FORM_PROCESS_NEW = (appId, formId) =>
-  `${appId}:${formId}?:?:?:DFC`;
+  `${appId}:${formId}:?:?:?:DFC`;
 export const APP_FORM_PROCESS_DEIT = (appId, formId) =>
-  `${appId}:${formId}?:?:?:DFU`;
+  `${appId}:${formId}:?:?:?:DFU`;
 export const APP_FORM_PROCESS_DELETE = (appId, formId) =>
-  `${appId}:${formId}?:?:?:DFD`;
+  `${appId}:${formId}:?:?:?:DFD`;
 export const APP_FORM_PROCESS_ENABLE = (appId, formId) =>
-  `${appId}:${formId}?:?:?:DFE`;
+  `${appId}:${formId}:?:?:?:DFE`;
 
 export const APP_FORM_APPROVAL_NEW = (appId, formId) =>
-  `${appId}:${formId}?:?:?:AFC`;
+  `${appId}:${formId}:?:?:?:AFC`;
 export const APP_FORM_APPROVAL_DEIT = (appId, formId) =>
-  `${appId}:${formId}?:?:?:AFU`;
+  `${appId}:${formId}:?:?:?:AFU`;
 export const APP_FORM_APPROVAL_DELETE = (appId, formId) =>
-  `${appId}:${formId}?:?:?:AFD`;
+  `${appId}:${formId}:?:?:?:AFD`;
 export const APP_FORM_APPROVAL_ENABLE = (appId, formId) =>
-  `${appId}:${formId}?:?:?:AFE`;
+  `${appId}:${formId}:?:?:?:AFE`;
 
 export default {};
