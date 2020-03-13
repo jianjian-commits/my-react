@@ -354,6 +354,6 @@ export default connect(
     setItemAttr,
     setItemValues,
     setFormChildItemAttr,
-    setFormChildItemValues
+    setFormChildItemValues,
   }
 )(PhoneInputInspector);

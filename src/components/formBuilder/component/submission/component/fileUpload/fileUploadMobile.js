@@ -18,20 +18,16 @@ export default class FileUpload extends React.Component {
     callback();
   };
   render() {
-    const { getFieldDecorator, item, isChild, isShowTitle } = this.props;
+    const { getFieldDecorator, item, isChild, isShowTitle, initData, data } = this.props;
     return (
       <Form.Item label={isShowTitle === false ? null : <LabelUtils data={item} />}>
-        {isChild ? <FileUploadItem onChange={this.props.onChange} item={item}/> : getFieldDecorator(item.key, {
+        {isChild ? <FileUploadItem onChange={this.props.onChange} item={item} value={data}/> : getFieldDecorator(item.key, {
           rules: [
             {  required: isValueValid(item.validate.required)
               ? item.validate.required
               : false, message: "文件上传不能为空" },
-            // {
-            //   validator: this.validFunction
-            // }
           ],
-          // validateTrigger: 'onSubmit',
-          initialValue:[]
+          initialValue: initData || []
         })(
          <FileUploadItem type={this.props.type} item={item}/>
         )}

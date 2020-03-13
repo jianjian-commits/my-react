@@ -7,7 +7,6 @@ import {
   getResIndexArray
 } from "../../utils/dataLinkUtils";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
-import locale from "antd/lib/date-picker/locale/zh_CN";
 import Address from "./formChildComponents";
 import { checkValueValidByType } from "../../../formBuilder/utils/checkComponentDataValidUtils";
 import FileUpload from "./formChildComponents";
@@ -36,10 +35,200 @@ export default class FormChildTest extends React.Component {
         url: ""
       },
       refesh: true,
-      formChildTitle: []
+      formChildTitle: [],
+      initFlag: true
     };
     this.handleAddRow = this.handleAddRow.bind(this);
     this.renderFormChild = this.renderFormChild.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {initData, item} = nextProps;
+    if(initData && this.state.initFlag){
+      this.props.saveSubmitData(this._initSubmitData(item, initData));
+      this.setState({
+        initFlag: false
+      })
+    }
+  }
+  _initSubmitData = (item , submitDataArray) =>{
+    // 初始化子表单的数据，补齐或者填充数据
+    let childComponent = item.values;
+    let newSubmitDataArray = [];
+    newSubmitDataArray = submitDataArray.map( submission =>{
+      let result = {};
+      childComponent.map(component =>{
+        result[component.key] = this._buildDefaultValueByType(component, submission)
+      })
+      result.isShow = submission.isShow;
+      return result;
+    })
+    return newSubmitDataArray
+
+  }
+
+  _buildDefaultValueByType = (item, submission) =>{
+    let result = {};
+    let newArray = [...this.props.submitDataArray];
+    let { handleSetComponentEvent } = this.props;
+    let data = submission[item.key] != void 0 ? submission[item.key].data : null ;
+    switch (item.type) {
+      case "SingleText":
+      case "TextArea":
+      case "number":
+      case "PhoneInput":
+      case "IdCardInput":
+      case "EmailInput":
+      case "Address":
+        result = {
+          key: item.key,
+          type: item.label,
+          formType: item.type,
+          data: data || item.defaultValue || null,
+          validate: item.validate,
+          hasErr: false,
+        };
+        break;
+      case "DateInput":
+        result = {
+          key: item.key,
+          type: item.label,
+          formType: item.type,
+          validate: item.validate,
+          hasErr: false,
+          data: data || {
+            time: null,
+            moment: null
+          }
+        };
+        break;
+      case "RadioButtons": {
+        result = {
+          key: item.key,
+          type: item.label,
+          formType: item.type,
+          data: data || null,
+          hasErr: false,
+          validate: item.validate,
+          values: item.values
+        };
+      }
+      case "CheckboxInput":
+        {
+          result = {
+            key: item.key,
+            type: item.label,
+            formType: item.type,
+            data: data,
+            hasErr: false,
+            validate: item.validate,
+            values: item.values
+          };
+          break;
+        }
+      case "MultiDropDown":
+      case "DropDown": {
+        let dropDownOptions = [];
+        let values = item.data.values;
+        if (values.type == "otherFormData") {
+          // 子表单关联其他数据
+          getSelection(values.formId, values.optionId).then(res => {
+            result[item.key].dropDownOptions = res.map(data => data.value);
+            this.setState({
+              refesh: !this.state.refesh
+            });
+          });
+        } else {
+          dropDownOptions = Array.isArray(values) ? values : [];
+        }
+        result = {
+          key: item.key,
+          type: item.label,
+          formType: item.type,
+          data: data || null,
+          hasErr: false,
+          validate: item.validate,
+          values,
+          dropDownOptions
+        };
+        break;
+      }
+      case "HandWrittenSignature":
+      case "FileUpload":
+      case "ImageUpload":
+      case "GetLocalPosition":
+        result = {
+          key: item.key,
+          component: item,
+          type: item.label,
+          formType: item.type,
+          validate: item.validate,
+          hasErr: false,
+          data: data || []
+        };
+        break;
+      default:
+        break;
+    }
+    if (item.data && item.data.values && item.data.values.linkFormId) {
+      const {
+        conditionId, //联动条件 id(当前表单)
+        linkComponentId, //联动条件 id(联动表单)
+        linkDataId, //联动数据 id(联动表单)
+        linkFormId //联动表单 id
+      } = item.data.values;
+      // 得到id表单的所有提交数据
+      getFormAllSubmission(linkFormId).then(submissions => {
+        // 根据联动表单的组件id 得到对应所有数据
+        let dataArr = filterSubmissionData(submissions, linkComponentId);
+        if (item.type === "DropDown" || item.type === "MultiDropDown") {
+          handleSetComponentEvent(
+            conditionId,
+            value =>
+              this.dataLinkCallEventForSelection({
+                value,
+                dataArr,
+                submissions,
+                linkDataId,
+                result,
+                item,
+                newArray
+              }),
+            newArray.length - 1,
+            this.props.item.key
+          );
+        } else {
+          // 为需要联动的表单添加 change事件
+          handleSetComponentEvent(
+            conditionId,
+            value => {
+              let index = -1;
+              // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
+              // 如果change数据为数组 则进行深度比较
+              if (value instanceof Array) {
+                index = compareEqualArray(dataArr, value);
+              } else {
+                index = dataArr.indexOf(value);
+              }
+              // 如果存在 获得提交数据中关联字段的数据
+              if (index > -1) {
+                let data = filterSubmissionData(submissions, linkDataId);
+                // 根据查找的idnex取得对应的关联数据
+                const res = data[index];
+                // 更新对应字段的值
+                result[item.key].data = res;
+                this.props.saveSubmitData(newArray);
+              } else {
+                result[item.key].data = null;
+              }
+            },
+            newArray.length - 1,
+            this.props.item.key
+          );
+        }
+      });
+    }
+    return result
   }
 
   // 重新计算子字段的数据联动
@@ -91,7 +280,7 @@ export default class FormChildTest extends React.Component {
           case "DropDown": {
             let dropDownOptions = [];
             let values = item.data.values;
-            if (values.type == "otherFormData") {
+            if (values.type === "otherFormData") {
               // 子表单关联其他数据
               getSelection(values.formId, values.optionId).then(res => {
                 result[item.key].dropDownOptions = res.map(data => data.value);
@@ -148,7 +337,7 @@ export default class FormChildTest extends React.Component {
           getFormAllSubmission(linkFormId).then(submissions => {
             // 根据联动表单的组件id 得到对应所有数据
             let dataArr = filterSubmissionData(submissions, linkComponentId);
-            if (item.type == "DropDown" || item.type == "MultiDropDown") {
+            if (item.type === "DropDown" || item.type === "MultiDropDown") {
               handleSetComponentEvent(
                 conditionId,
                 value =>
@@ -251,7 +440,7 @@ export default class FormChildTest extends React.Component {
         case "DropDown": {
           let dropDownOptions = [];
           let values = item.data.values;
-          if (values.type == "otherFormData") {
+          if (values.type === "otherFormData") {
             // 子表单关联其他数据
             getSelection(values.formId, values.optionId).then(res => {
               result[item.key].dropDownOptions = res.map(data => data.value);
@@ -305,7 +494,7 @@ export default class FormChildTest extends React.Component {
         getFormAllSubmission(linkFormId).then(submissions => {
           // 根据联动表单的组件id 得到对应所有数据
           let dataArr = filterSubmissionData(submissions, linkComponentId);
-          if (item.type == "DropDown" || item.type == "MultiDropDown") {
+          if (item.type === "DropDown" || item.type === "MultiDropDown") {
             handleSetComponentEvent(
               conditionId,
               value =>
@@ -408,7 +597,7 @@ export default class FormChildTest extends React.Component {
     } = this.props;
     const { data } = item;
     // 是否为数据联动
-    if (data && data.type == "DataLinkage" && data.values.linkFormId) {
+    if (data && data.type === "DataLinkage" && data.values.linkFormId) {
       const {
         conditionId, //联动条件 id(当前表单)
         linkComponentId, //联动条件 id(联动表单)
@@ -512,7 +701,7 @@ export default class FormChildTest extends React.Component {
                 value={item.data}
               />
               {item.hasErr ? (
-                item.data == "" || item.data == void 0 ? (
+                item.data === "" || item.data == void 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -557,7 +746,7 @@ export default class FormChildTest extends React.Component {
                 value={item.data}
               />
               {item.hasErr ? (
-                item.data == "" || item.data == void 0 ? (
+                item.data === "" || item.data == void 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -600,7 +789,7 @@ export default class FormChildTest extends React.Component {
                 item={item}
               ></MultiDropDownMobile>
               {item.hasErr ? (
-                item.data == void 0 || item.data.length == 0 ? (
+                item.data == void 0 || item.data.length === 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -615,7 +804,7 @@ export default class FormChildTest extends React.Component {
         case "CheckboxInput": {
           let dropDownOptions = [];
           let values = item.values;
-          if (values.type == "otherFormData") {
+          if (values.type === "otherFormData") {
             console.warn("暂不支持子表单关联其他数据");
           } else {
             dropDownOptions = Array.isArray(values) ? values : [];
@@ -647,7 +836,7 @@ export default class FormChildTest extends React.Component {
                 }}
               />
               {item.hasErr ? (
-                item.data.length == 0 || item.data == void 0 ? (
+                item.data.length === 0 || item.data == void 0 ? (
                   <span className="item-error-info">此项为必填项</span>
                 ) : (
                   <span className="item-error-info">此项格式不正确</span>
@@ -673,9 +862,9 @@ export default class FormChildTest extends React.Component {
                   <Checkbox
                     key={index}
                     className="formchild-checkbox"
-                    value={typeof item == "object" ? item.value : item}
+                    value={typeof item === "object" ? item.value : item}
                   >
-                    {typeof item == "object" ? item.value : item}
+                    {typeof item === "object" ? item.value : item}
                   </Checkbox>
                 ))}
               </Checkbox.Group> */}
@@ -849,7 +1038,7 @@ export default class FormChildTest extends React.Component {
           break;
         case "DateInput":
           let currentDate = "";
-          if (typeof item.data == "string") {
+          if (typeof item.data === "string") {
             currentDate = item.data;
           } else if (item.data) {
             currentDate = item.data.time;
@@ -1024,8 +1213,8 @@ export default class FormChildTest extends React.Component {
               for (let m in formItem) {
                 let item = formItem[m];
 
-                if (typeof item == "object") {
-                  if (item.hasErr == true) {
+                if (typeof item === "object") {
+                  if (item.hasErr === true) {
                     hasItemErr = true;
                   }
                 }

@@ -9,7 +9,11 @@ const LinkComponentType = [
   "RadioButtons",
   "CheckboxInput",
   "MultiDropDown",
+<<<<<<< HEAD
   "number",
+=======
+  "NumberInput",
+>>>>>>> mickey-formBuilder
   "DateInput",
   "DropDown"
 ];
@@ -34,10 +38,17 @@ class OtherDataModal extends Component {
     let { formId, optionId, optionLabel, hasError } = this.props.data;
     // 过滤自身表单
     const forms = this.props.forms.filter(
+<<<<<<< HEAD
       form => form._id != this.props.formId
     );
     forms.reverse();
     let hasform = forms.some(form => form._id === formId);
+=======
+      form => form.id != this.props.formId
+    );
+    forms.reverse();
+    let hasform = forms.some(form => form.id === formId);
+>>>>>>> mickey-formBuilder
     let formIndex = -1;
     if (hasform && formId) {
       forms.forEach((form, index) => {
@@ -205,7 +216,11 @@ class OtherDataModal extends Component {
               ? this.filterFormComponents(forms[formIndex]).map(component => (
                   <li
                     key={component.id}
+<<<<<<< HEAD
                     data-value={component.key}
+=======
+                    data-value={component.id}
+>>>>>>> mickey-formBuilder
                     data-type={component.type}
                     className="select-option-item"
                   >
@@ -227,6 +242,7 @@ class OtherDataModal extends Component {
   }
 }
 
+<<<<<<< HEAD
 export default connect(
   store => ({
     formId: store.formBuilder.formId
@@ -235,3 +251,8 @@ export default connect(
     setErrorComponentIndex
   }
 )(OtherDataModal);
+=======
+export default connect(store => {}, {
+  setErrorComponentIndex
+})(OtherDataModal);
+>>>>>>> mickey-formBuilder

@@ -42,34 +42,48 @@ export const getFilterSubmissionData = (
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formPath, filterStr, pageSize, currentPage)
-      .then(res => {
-        dispatch({
-          type: Filter_FORM_DATA,
-          submissionDataTotal:
-            totalNumber == -1 || getSubmissionDataTotal(res) < totalNumber
-              ? getSubmissionDataTotal(res)
-              : totalNumber,
-          formData: res.data.map(item => {
-            return {
-              data: item.data,
-              created: item.createdTime,
-              modified: item.updateTime,
-              id: item.id
-            };
-          })
-        });
-      })
-      .catch(error => {
-        if (error.response && error.response.data.code === 9999) {
-          message.error("查询条件矛盾，请检查");
-        }
+    filterData(formPath, filterStr, pageSize, currentPage).then(res => {
+      dispatch({
+        type: Filter_FORM_DATA,
+        submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
+        formData: res.data.map(item => {
+          return {
+            data: item.data,
+            created: item.createdTime,
+            modified: item.updateTime,
+            id: item.id
+          }
+        })
       });
+    }).catch((error)=> {
+      if (error.response) {
+           message.error(error.response.data.msg);
+         }
+    });
   } else {
-    axios
-      .all(
-        filterArray.map(filter => {
-          return filterData(formPath, filter, -1, 1);
+    axios.all(filterArray.map(filter => {
+      return filterData(formPath, filter, -1, 1)
+    })).then(axios.spread((...data) => {
+      const filterdata = data.map(data => data.data);
+      const allSubmission = filterdata.flat();
+      const submissionKeys = allSubmission.map(item => {
+        return item.id
+      });
+      const filterSubmisstion = [...new Set(submissionKeys)].map(key => {
+        return allSubmission.filter(item => {
+          return item.id === key
+        })[0]
+      })
+      dispatch({
+        type: Filter_FORM_DATA,
+        submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
+        formData: filterSubmisstion.map(item => {
+          return {
+            data: item.data,
+            created: item.createdTime,
+            modified: item.updateTime,
+            id: item.id
+          }
         })
       )
       .then(
@@ -106,6 +120,11 @@ export const getFilterSubmissionData = (
           message.error("查询条件矛盾，请检查");
         }
       });
+    })).catch((error)=> {
+      if (error.response) {
+        message.error(error.response.data.msg);
+      }
+    });
   }
 };
 //获取提交的数据
@@ -210,4 +229,17 @@ export const getSubmissionDetail = (formId, submissionId) => dispatch => {
         });
       });
   });
+};
+
+// 修改表单数据详情
+export const modifySubmissionDetail = (formId, submissionId, formData) => dispatch => {
+  return instanceAxios
+    .put(
+      config.apiUrl + `/submission/${submissionId}`,
+      {
+        data: formData,
+        formId: formId
+      
+      }
+    )
 };

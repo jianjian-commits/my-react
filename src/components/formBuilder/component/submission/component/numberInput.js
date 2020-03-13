@@ -1,7 +1,7 @@
 import React from "react";
 
 import { isValueValid, isStringValid } from "../../../utils/valueUtils";
-import { Input, Form, Tooltip, Icon } from "antd";
+import { Input, Form} from "antd";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import {
   getFormAllSubmission,
@@ -19,7 +19,6 @@ export default class NumberInput extends React.Component {
       const {
         conditionId,
         linkComponentId,
-        linkComponentType,
         linkDataId,
         linkFormId
       } = data.values;
@@ -112,7 +111,7 @@ export default class NumberInput extends React.Component {
   };
   
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
 
     let errMsg = this.props.item.validate.customMessage;
     let itemOption = {}
@@ -128,7 +127,7 @@ export default class NumberInput extends React.Component {
        {...itemOption}>
 
         {getFieldDecorator(item.key, {
-          initialValue: item.defaultValue, 
+          initialValue: initData || item.defaultValue, 
           rules: [
             {
               validator: this.checkNumber

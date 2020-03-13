@@ -92,13 +92,17 @@ export default class DateInput extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
 
     let errMsg = this.props.item.validate.customMessage;
-
+    let options = {};
+    if(initData){
+      options.initialValue = moment(initData) 
+    }
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
+          ...options,
           rules: [
             {
               required: isValueValid(item.validate.required)

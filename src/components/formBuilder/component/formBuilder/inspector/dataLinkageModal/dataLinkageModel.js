@@ -226,7 +226,11 @@ class DataLinkageModal extends React.Component {
   handleCheckingHasForm = () => {
     const { forms = [] } = this.props;
     const { linkFormId } = this.state;
+<<<<<<< HEAD
     const formsIds = forms.map(form => form._id);
+=======
+    const formsIds = forms.map(form => form.id);
+>>>>>>> mickey-formBuilder
     const hasLinkedFormId = formsIds.includes(linkFormId);
     return hasLinkedFormId;
   };

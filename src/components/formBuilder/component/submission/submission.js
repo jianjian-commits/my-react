@@ -54,6 +54,10 @@ import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
 
+function hasErrors(fieldsError) {
+  return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
+
 class Submission extends Component {
   constructor(props) {
     super(props);
@@ -123,7 +127,6 @@ class Submission extends Component {
     }));
   }
 
-  _checkoutFormChildData() {}
 
   // 设置地址(解决只能获取单个数据)
   handleSetAddress = address => {
@@ -164,11 +167,8 @@ class Submission extends Component {
       if (values[component.id] === "") {
         delete values[component.id];
       }
-      if (
-        component.type === "NumberInput" &&
-        values.hasOwnProperty(component.id)
-      ) {
-        values[component.id] = Number(values[component.id]);
+      if (component.type === "NumberInput" && values.hasOwnProperty(component.id)) {
+        values[component.id] = Number(values[component.id])
       }
     });
     return values;
@@ -333,7 +333,8 @@ class Submission extends Component {
               case "FileUpload":
               case "ImageUpload":
               case "GetLocalPosition":
-                checkData = item[m].data.url;
+                let dataArr = item[m].data;
+                checkData = dataArr.length === 0 ? null : "hasData";
                 break;
               default:
                 checkData = item[m].data;
@@ -373,9 +374,6 @@ class Submission extends Component {
     this.setState(
       {
         errorResponseMsg
-      },
-      () => {
-        console.log("this.state.errorResponseMsg", this.state.errorResponseMsg);
       }
     );
   };
@@ -467,13 +465,13 @@ class Submission extends Component {
         // console.log("custom data", customDataArray);
         // console.log("custom valicate", customValicate.validate);
 
-        let customCheckResult = customValicate.validate.reduce(
-          (result, validateStr) => {
-            let res = checkCustomValidate(customDataArray, validateStr);
-            return result === false ? false : res;
-          },
-          true
-        );
+        // let customCheckResult = customValicate.validate.reduce(
+        //   (result, validateStr) => {
+        //     let res = checkCustomValidate(customDataArray, validateStr.name);
+        //     return result === false ? false : res;
+        //   },
+        //   true
+        // );
 
         //如果含有移动端组件且为必填，则阻止提交并警告
         if (
@@ -492,14 +490,13 @@ class Submission extends Component {
         //     return false;
         // }
 
-        if (customCheckResult != void 0) {
-          if (customCheckResult === true) {
-            // this.setHiddenComponentsValue(formComponentArray, values);
-            this.setState({ isSubmitted: true, errorResponseMsg: {} });
+        if (true) {
+          if (true) {
+            this.setState({ isSubmitted: true,errorResponseMsg:{} });
             this.props
               .submitSubmission(this.props.formComponent.id, values)
               .then(response => {
-                if (response.data.id != void 0) {
+                if(response.data.id != void 0){
                   isMobile
                     ? Toast.success("提交成功!")
                     : message.success("提交成功!");
@@ -1099,7 +1096,6 @@ class Submission extends Component {
         formChildDataObj
       },
       () => {
-        // console.log("formChildDataObj", formChildDataObj)
         that._reSetDataLinkFormChildItem();
       }
     );
@@ -1123,7 +1119,6 @@ class Submission extends Component {
           };
         });
     } else {
-      // console.log(currentLayout);
       layout = currentLayout.map(item => {
         return {
           ...item,

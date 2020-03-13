@@ -24,7 +24,6 @@ class FormInforModal extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.saveForm(
-          this.props.formData,
           this.props.submissionAccess,
           values.formName,
           this.props.verificationList,

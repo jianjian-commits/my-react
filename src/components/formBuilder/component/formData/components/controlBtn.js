@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 import { Button, Popconfirm } from "antd";
 function ControlBtn(props) {
   const handleSeeDetail = () => {
@@ -14,6 +14,10 @@ function ControlBtn(props) {
   return (
     <Button.Group>
       <Button type="link" onClick={handleSeeDetail}>查看</Button>
+      <Button type="link" onClick={() => {
+          props.setSubmissionId(props.submissionId)
+        }
+      }>编辑</Button>
       <Popconfirm
         placement="bottom"
         title="确定要删除该记录吗"

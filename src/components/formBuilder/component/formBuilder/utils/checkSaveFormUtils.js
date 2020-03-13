@@ -1,7 +1,7 @@
 /*
  * @Author: komons
  * @Date: 2020-02-17 10:23:58
- * @LastEditTime: 2020-03-11 14:32:08
+ * @LastEditTime: 2020-03-13 10:01:44
  * @LastEditors: komons
  * @Description: 用于检验编辑的表单是否合理， 如果合理返回true
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formBuilder\utils\checkSaveFormUtils.js

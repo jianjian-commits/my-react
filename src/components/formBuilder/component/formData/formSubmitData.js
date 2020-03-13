@@ -609,6 +609,7 @@ class FormSubmitData extends PureComponent {
               handleDeleteSubmisson={this.handleDeleteSubmisson}
               showModal={this.showModal}
               getSubmissionDetail={this.props.getSubmissionDetail}
+              setSubmissionId={this.props.actionFun}
             />
           );
         }

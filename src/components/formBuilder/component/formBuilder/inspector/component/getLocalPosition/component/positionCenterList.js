@@ -2,7 +2,7 @@ import React from "react";
 import { Icon, Button, Modal, InputNumber, Form, Input, message } from "antd";
 import PositionCenterItem from "./positionCenterItem"
 
-var AMap;
+// var AMap;
 
 export default class PositionCenterList extends React.Component {
   constructor(props) {
@@ -23,6 +23,7 @@ export default class PositionCenterList extends React.Component {
   
 
   componentDidMount() {  //组件加载后初始化地图
+    //eslint-disable-next-line
     this.map = new AMap.Map("container", {
       resizeEnable: true,
       // position: [this.state.latitude, this.state.longitude]
@@ -109,7 +110,7 @@ export default class PositionCenterList extends React.Component {
 
   showMap = (position) => {
     var _this = this;
-    // console.log("map in showMap", this.map);
+    //eslint-disable-next-line
     this.map = new AMap.Map("container", {
       resizeEnable: true,
       // position: [this.state.latitude, this.state.longitude],
@@ -117,7 +118,9 @@ export default class PositionCenterList extends React.Component {
     });
 
     if (this.state.isChangeCenterPosition) {
+      //eslint-disable-next-line
       var marker = new AMap.Marker({
+        //eslint-disable-next-line
         position: new AMap.LngLat(position.longitude, position.latitude),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
       });
       this.map.setCenter([position.longitude, position.latitude]);
@@ -128,10 +131,13 @@ export default class PositionCenterList extends React.Component {
     var autoOptions = {
       input: "tipinput"
     };
+    //eslint-disable-next-line
     var auto = new AMap.Autocomplete(autoOptions);
+    //eslint-disable-next-line
     var placeSearch = new AMap.PlaceSearch({
       map: this.map
     });  //构造地点查询类
+    //eslint-disable-next-line
     AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
 
 

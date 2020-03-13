@@ -11,7 +11,7 @@ import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/util
 
 const { Option } = Select;
 const { TextArea } = Input;
-let AMap;
+// let AMap;
 
 export default class address extends Component {
   constructor(props) {
@@ -29,7 +29,9 @@ export default class address extends Component {
 
   componentDidMount() {
     const that = this;
+    //eslint-disable-next-line
     AMap.plugin("AMap.DistrictSearch", function() {
+      //eslint-disable-next-line
       var districtSearch = new AMap.DistrictSearch({
         // 关键字对应的行政区级别，country表示国家
         level: "中国",
@@ -43,6 +45,18 @@ export default class address extends Component {
           that.setState({
             CityData: that.filterCityData(result.districtList[0].districtList)
           });
+          let { initData } = that.props
+            if(initData != void 0){
+              that.props.handleSetAddress({
+                id: item.id,
+                county: initData.county || "",
+                city: initData.city || "",
+                province: initData.province || "",
+                detail: initData.detail ||"",
+                hasErr: item.validate.required
+              });
+              that.handleGetRightSelectedIndex(initData)
+            }
         } else {
           console.error("城市信息获取失败！");
         }

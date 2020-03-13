@@ -1,11 +1,12 @@
 import React from "react";
-import { Button, Icon, Modal, Tooltip, message, Spin } from "antd";
+import { Button, Icon, Modal, Tooltip, Spin } from "antd";
 import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
 import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
 import { connect } from "react-redux";
+import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
+import checkAndSaveForm from "../utils/checkSaveFormUtils";
 import { withRouter } from "react-router-dom";
 import checkAndSaveForm from "../utils/checkSaveFormUtils";
-import config from "../../../config/config";
 class ForBuilderHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -53,27 +54,25 @@ class ForBuilderHeader extends React.Component {
       visible: false
     }));
 
-    if (this.handleIsRightConditions()) {
+    const checkRes = checkAndSaveForm(this.props);
+    if (checkRes.res) {
       editForm || this.props.localForm !== null
         ? this.props.updateForm(
-            this.props.formData,
-            this.props.submissionAccess,
-            this.props.name,
-            this.props.verificationList,
-            this.props.localForm,
-            this.props.errMessage,
-            "back"
-          )
-        : this.props.saveForm(
-            this.props.formData,
-            this.props.submissionAccess,
-            this.props.name,
-            this.props.verificationList,
-            this.props.errMessage,
-            "back"
-          );
-    } else {
-      message.error("联动条件失效，请重新设置！", 2);
+          this.props.formData,
+          this.props.submissionAccess,
+          this.props.name,
+          this.props.verificationList,
+          this.props.localForm,
+          this.props.errMessage,
+          "back"
+        )
+      : this.props.saveForm(
+          this.props.submissionAccess,
+          this.props.name,
+          this.props.verificationList,
+          this.props.errMessage,
+          "back"
+        );
     }
   };
   handleCancel = e => {
@@ -85,27 +84,6 @@ class ForBuilderHeader extends React.Component {
     this.props.history.push(`/app/${appId}/setting`);
   };
 
-  /*
-   * 检查数据联动是否合理 合理返回true
-   * 完成数据联动前驱校验
-   */
-  handleIsRightConditions = () => {
-    const { formData } = this.props;
-    let linkIdArray = [];
-    let allComponentsId = formData.map(item => {
-      if (item.data && item.data.type === "DataLinkage") {
-        linkIdArray.push(item.data.values.conditionId);
-      }
-      return item.id;
-    });
-    let isMeetingConditions = true;
-    linkIdArray.forEach(item => {
-      if (allComponentsId.includes(item) === false) {
-        isMeetingConditions = false;
-      }
-    });
-    return isMeetingConditions;
-  };
   _truncateValue(value) {
     if (value == void 0) {
       return "";
@@ -196,7 +174,8 @@ class ForBuilderHeader extends React.Component {
               this.setState({ btnCanClick: false }, () => {
                 editForm || this.props.localForm !== null
                   ? (() => {
-                      if (this.handleIsRightConditions()) {
+                      const checkRes = checkAndSaveForm(this.props);
+                      if (checkRes.res) {
                         this.props.updateForm(
                           this.props.formData,
                           this.props.submissionAccess,
@@ -210,13 +189,14 @@ class ForBuilderHeader extends React.Component {
                           }
                         );
                       } else {
-                        message.error("联动条件失效，请重新设置！", 2);
+                        this.props.setErrorComponentIndex(checkRes.componentsIndex);
+                        this.setState({ btnCanClick: true });
                       }
                     })()
                   : (() => {
-                      if (this.handleIsRightConditions()) {
+                      const checkRes = checkAndSaveForm(this.props);
+                      if(checkRes.res){
                         this.props.saveForm(
-                          this.props.formData,
                           this.props.submissionAccess,
                           this.props.name,
                           this.props.verificationList,
@@ -227,7 +207,7 @@ class ForBuilderHeader extends React.Component {
                           }
                         );
                       } else {
-                        message.error("联动条件失效，请重新设置！", 2);
+                        this.setState({ btnCanClick: true });
                       }
                     })();
               });

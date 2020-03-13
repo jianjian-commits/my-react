@@ -67,7 +67,7 @@ export default class radioInput extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
 
     let errMsg = this.props.item.validate.customMessage;
     const layoutClassName = this.props.item.inline ? "row-layout" :"column-layout";
@@ -78,7 +78,7 @@ export default class radioInput extends React.Component {
         }
       >
         {getFieldDecorator(item.key, {
-          initialValue:item.defaultValue,
+          initialValue: initData || item.defaultValue,
           rules: [{
             required: isValueValid(item.validate.required)
               ? item.validate.required

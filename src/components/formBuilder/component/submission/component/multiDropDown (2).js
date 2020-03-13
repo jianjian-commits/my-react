@@ -130,7 +130,7 @@ export default class PhoneNumber extends React.Component {
     return (
       <Form.Item label={<LabelUtils data={item} />} {...itemOption}>
         {getFieldDecorator(item.key, {
-          initialValue: item.defaultValue,
+          initialValue: initData || item.defaultValue,
           rules: [
             {
               validator: this.checkPhoneNumber
