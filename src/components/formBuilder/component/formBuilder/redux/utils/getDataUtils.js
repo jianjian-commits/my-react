@@ -13,8 +13,7 @@ import config from "../../../../config/config";
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => {
-  axios
-    .get(config.apiUrl + "/form")
+  axios.get(config.apiUrl + "/form")
     .then(response => {
       console.log(2);
       dispatch({

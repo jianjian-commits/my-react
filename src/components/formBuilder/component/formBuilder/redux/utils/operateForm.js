@@ -226,12 +226,11 @@ export const saveForm = (
       "Content-Type": "application/json",
       appid: appId
     }
+  }).then(response => {
+    let id = response.data.id;
+    console.log(id);
+    callback(`${url}${id}/edit?formId=${id}`);
   })
-    .then(response => {
-      let id = response.data.id;
-      console.log(id);
-      callback(`${url}${id}/edit?formId=${id}`);
-    })
     .catch(err => {
       console.info(err);
       if ((err.response.data.code = "1002")) {
