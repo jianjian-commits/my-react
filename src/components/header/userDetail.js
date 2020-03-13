@@ -166,6 +166,7 @@ export default Form.create({ name: "reset-form" })(
           footer={null}
           width="419px"
           onCancel={() => setModalMeter({ ...modalMeter, meter: false })}
+          className={userDetailStyles.detailUpdateModal}
         >
           <Form onSubmit={e => handleSubmit(e)}>
             {items.map((o, index) => (

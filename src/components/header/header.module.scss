@@ -129,7 +129,7 @@
           font-size: 14px;
           color: #333333;
           position: absolute;
-          left: 970px;
+          left: 770px;
           & > span {
             margin-left: 19px;
             font-style: normal;
@@ -141,5 +141,11 @@
         }
       }
     }
+  }
+}
+
+.detailUpdateModal {
+  & form button {
+    width: 371px;
   }
 }

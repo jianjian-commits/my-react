@@ -127,7 +127,7 @@ export default connect()(function InviteUser({ match, history }) {
   };
 
   const BlueFont = props => {
-    return <span style={{ color: "#6eefff" }}>{props.children}</span>;
+    return <span style={{ color: "rgb(42, 127, 255)" }}>{props.children}</span>;
   };
   if (!init) return null;
   return (
@@ -150,7 +150,9 @@ export default connect()(function InviteUser({ match, history }) {
                         <div>
                           <Button onClick={handleCurrentUserAddTeam}>
                             当前账号:
-                            <BlueFont>{currentUserDetail.name}</BlueFont>
+                            <span style={{ color: "#73F7FF" }}>
+                              {currentUserDetail.name}
+                            </span>
                             加入
                           </Button>
                         </div>
