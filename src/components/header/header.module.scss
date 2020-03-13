@@ -145,7 +145,21 @@
 }
 
 .detailUpdateModal {
-  & form button {
-    width: 371px;
+  & form {
+    & button {
+      opacity: 0.5;
+    }
+    & input {
+      width: 371px;
+      height: 40px;
+      border: 1px solid #d6d8de;
+      box-sizing: border-box;
+      border-radius: 6px;
+    }
+    & > div:last-child {
+      & button {
+        width: 371px;
+      }
+    }
   }
 }
