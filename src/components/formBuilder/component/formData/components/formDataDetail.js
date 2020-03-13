@@ -5,7 +5,6 @@ import locationUtils from "../../../utils/locationUtils";
 import { getSubmissionDetail } from "../redux/utils/getDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import HeaderBar from "../../base/NavBar";
-import { submitSubmissionApproval } from "../redux/utils/submitApprovalUtils";
 
 class FormDataDetail extends PureComponent {
   constructor(props) {
@@ -297,17 +296,6 @@ class FormDataDetail extends PureComponent {
         }
       });
   }
-  _handleSubmitApproval = () => {
-    const { appId, dataId } = this.props;
-    const { formDetail } = this.props;
-    const { components } = this.props.currentForm;
-    let dataArr = [];
-    for (let i = 0; i < components.length; i++) {
-      dataArr[i] = {};
-      dataArr[i][components[i].label] = formDetail[components[i].key];
-    }
-    // this.props.submitSubmissionApproval(appId,dataId,dataArr)
-  };
 
   render() {
     const { formDetail, currentForm, mobile = {} } = this.props;
@@ -324,21 +312,6 @@ class FormDataDetail extends PureComponent {
           // name={formComponent.name}
           isShowBtn={false}
         />
-        <div className="formDataDetailBtnGroups">
-          <Button type="primary" style={{ marginRight: 15 }}>
-            编辑
-          </Button>
-          <Button type="primary" style={{ marginRight: 15 }}>
-            删除
-          </Button>
-          <Button
-            type="primary"
-            onClick={this._handleSubmitApproval}
-            style={{ marginRight: 15 }}
-          >
-            提交审批
-          </Button>
-        </div>
         <div className="formDataDetailContainer">
           <div className="formDataDetailTitle">
             <p className="dataTitle">详情</p>
@@ -359,7 +332,6 @@ export default connect(
     token: store.rootData.token
   }),
   {
-    getSubmissionDetail,
-    submitSubmissionApproval
+    getSubmissionDetail
   }
 )(DataDetail);
