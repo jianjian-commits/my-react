@@ -193,7 +193,7 @@ const AppDetail = props => {
                   key={Math.random()}
                   formId={selectedForm}
                   actionFun={(submission_id)=>{
-                    console.log("actionFun",submission_id)
+                    // console.log("actionFun",submission_id)
                     setSubmit(true);
                     setSubmissionId(submission_id)
                   }}
