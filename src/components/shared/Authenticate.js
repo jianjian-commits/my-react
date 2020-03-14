@@ -14,10 +14,11 @@ const Authenticate = props => {
     auth = "",
     unAuthComponent = null,
     options = {},
-    children
+    children,
+    hide = false
   } = props;
   if (debug) return children;
-  if (!permissions || state === "pending") return null;
+  if (!permissions || state === "pending" || hide) return null;
   if (!authorityIsValid({ debug, permissions, teamId, auth })) {
     switch (type) {
       case "redirect":
