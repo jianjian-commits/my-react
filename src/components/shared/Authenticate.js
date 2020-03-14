@@ -1,14 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { SUPER_ADMINISTRATOR } from "../../auth";
-
-const isValid = (debug, permissions, teamId, auth) => {
-  if (!auth) return true;
-  if (permissions.includes(`${teamId}:${SUPER_ADMINISTRATOR}`)) return true;
-  return !!permissions.includes(`${teamId}:${auth}`);
-};
-// const noop = () => {};
+import { authorityIsValid } from "../../utils";
 
 const Authenticate = props => {
   const {
@@ -25,7 +18,7 @@ const Authenticate = props => {
   } = props;
   if (debug) return children;
   if (!permissions || state === "pending") return null;
-  if (!isValid(debug, permissions, teamId, auth)) {
+  if (!authorityIsValid({ debug, permissions, teamId, auth })) {
     switch (type) {
       case "redirect":
         return <Redirect to={to} />;
@@ -39,7 +32,10 @@ const Authenticate = props => {
         return null;
     }
   }
-  return children;
+  switch (type) {
+    default:
+      return children;
+  }
 };
 
 const mapStatesToProps = ({ login, debug }) => ({

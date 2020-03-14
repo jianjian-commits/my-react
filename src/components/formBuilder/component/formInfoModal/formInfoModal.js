@@ -32,7 +32,9 @@ class FormInforModal extends React.Component {
           values.formPath,
           values.formInfo,
           this.props.push,
-          this.props.url
+          this.props.url,
+          this.props.extraProp,
+          this.props.appid
         );
       }
     });

@@ -10,6 +10,8 @@ import DraggableList, {
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
+import Authenticate from "../components/shared/Authenticate";
+import { APP_SETTING_ABLED, APP_NEW_FORM } from "../auth";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -31,11 +33,18 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
+  const [user, setUser] = React.useState({})
 
   let { groups, list, searchList } = mockForms;
+
   useEffect(() => {
     let newList = [];
-    getFormsAll(appId).then(res => {
+
+    setUser(JSON.parse(localStorage.getItem("userDetail")))
+    let extraProp = { user: { id: user.id, name: user.name } }
+
+    getFormsAll(appId, true).then(res => {
+      console.log(1)
       newList = res.map(item => ({
         key: item.id,
         name: item.name
@@ -43,6 +52,7 @@ const AppSetting = props => {
 
       setMockForms({
         groups: [
+          // {key:'',name:'',list:[]}
         ],
         searchList: [
         ],
@@ -51,10 +61,10 @@ const AppSetting = props => {
 
     });
   }, []);
+
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
-
   const searchForms = (keyword, groupsParams) => {
     let _groups = groupsParams;
 
@@ -72,6 +82,7 @@ const AppSetting = props => {
   };
 
   if (searchKey) {
+    // 深拷贝数据
     const all = JSON.parse(JSON.stringify(list));
     const allGroups = JSON.parse(JSON.stringify(groups));
     groups =
@@ -83,6 +94,7 @@ const AppSetting = props => {
   }
 
   const searchHandle = e => {
+    console.log(e);
     const { value } = e.target;
     setSearchKey(value);
   };
@@ -92,9 +104,9 @@ const AppSetting = props => {
     alert(formId + " 放进 " + groupId);
   };
 
+  // 处理点击表单名字事件
   const formEnterHandle = e => {
     if (list[0].key !== "") {
-      console.log(e);
       history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
     }
   };
@@ -116,13 +128,17 @@ const AppSetting = props => {
   };
 
   return (
-    <Layout>
+    <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
+        extraProp={{ user: { id: user.id, name: user.name } }}
+        appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
-      <CommonHeader navigationList={navigationList(history, appId, appName)} />
+      <CommonHeader
+        navigationList={navigationList(history, appId, appName)}
+      />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
@@ -176,7 +192,7 @@ const AppSetting = props => {
         </Sider>
         <Content className={classes.container}></Content>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default connect(({ app }) => ({
