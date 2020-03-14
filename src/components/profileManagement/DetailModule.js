@@ -154,8 +154,6 @@ export const getOtherManage = (a, permissions, onChange) => {
       key: "groupPermissions"
     }
   ];
-  console.log("permissions", permissions);
-  console.log("teamInfo", teamInfo);
 
   return (
     <>
