@@ -6,6 +6,7 @@ import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
+
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
@@ -47,11 +48,17 @@ const AppDetail = props => {
     list: [],
     searchList: []
   });
+  const [user,setUser] = React.useState({})
 
   //zxx groups目录结构 list无目录结构的表单
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
+
+    setUser(JSON.parse(localStorage.getItem("userDetail")))
+
+    let extraProp = { user: { id: (JSON.parse(localStorage.getItem("userDetail"))).id , name:  (JSON.parse(localStorage.getItem("userDetail"))).name} }
+
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
         key: item.id,
@@ -171,13 +178,15 @@ const AppDetail = props => {
                     }}
                   ></FormBuilderEditFormData>
                 )
-                  : (
-                    <FormBuilderSubmission
-                      key={Math.random()}
-                      formId={selectedForm}
-                      actionFun={skipToSubmissionData}
-                    ></FormBuilderSubmission>
-                  )
+                :(
+                  <FormBuilderSubmission
+                  key={Math.random()}
+                  formId={selectedForm}
+                  extraProp={{ user: { id: user.id, name: user.name } }}
+                  appid = { appId }
+                  actionFun={skipToSubmissionData}
+                ></FormBuilderSubmission>
+                )
               ) : (
                 <FormBuilderSubmitData
                   key={Math.random()}
