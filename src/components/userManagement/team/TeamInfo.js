@@ -5,6 +5,8 @@ import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "./svg/edit.svg";
+import Authenticate from "../../shared/Authenticate";
+import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   const [isRedact, setIsRedact] = useState(false);
@@ -25,9 +27,11 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   return (
     <div className={classes.rowBox}>
       <Row type="flex" align="middle">
-        <Col span={10}>{lable}</Col>
+        <Col span={8} className={classes.lable}>
+          {lable}
+        </Col>
         {isRedact ? (
-          <Col span={14}>
+          <Col span={16} className={classes.text}>
             <Input
               defaultValue={defaultValue}
               onChange={changeValue}
@@ -41,17 +45,18 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
             </Button>
           </Col>
         ) : (
-          <Col span={14}>
-            {defaultValue}
-            <Button
-              size="small"
-              type="link"
-              className={classes.edit}
-              onClick={switchRedact}
-            >
-              {" "}
-              <Edit />
-            </Button>
+          <Col span={16} className={classes.text}>
+            <div> {defaultValue}</div>
+            <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
+              <Button
+                size="small"
+                type="link"
+                className={classes.edit}
+                onClick={switchRedact}
+              >
+                <Edit />
+              </Button>
+            </Authenticate>
           </Col>
         )}
       </Row>
@@ -110,17 +115,23 @@ export default connect(
           <List.Item>
             <div className={classes.rowBox}>
               <Row>
-                <Col span={10}>创建人</Col>
-                <Col span={14}>{currentTeam.sysUserName}</Col>
+                <Col span={8} className={classes.lable}>
+                  创建人
+                </Col>
+                <Col span={16} className={classes.text}>
+                  {currentTeam.sysUserName}
+                </Col>
               </Row>
             </div>
           </List.Item>
           <List.Item>
             <div className={classes.rowBox}>
               <Row>
-                <Col span={10}>创建时间</Col>
-                <Col span={14}>
-                  {new Date(currentTeam.createDate).toLocaleString()}
+                <Col span={8} className={classes.lable}>
+                  创建时间
+                </Col>
+                <Col span={16} className={classes.text}>
+                  {new Date(currentTeam.createdDate).toLocaleString()}
                 </Col>
               </Row>
             </div>

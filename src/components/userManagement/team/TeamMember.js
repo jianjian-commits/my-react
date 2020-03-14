@@ -38,7 +38,7 @@ export default connect(
   });
   const columns = [
     {
-      title: "姓名",
+      title: "用户昵称",
       dataIndex: "name",
       width: 100
     },
@@ -221,7 +221,9 @@ export default connect(
           </Button>
         </Col>
       </Row>
-      {onOff.filterSwith ? <Filter fn={filterData} /> : null}
+      {onOff.filterSwith ? (
+        <Filter groups={currentTeam.groups} fn={filterData} />
+      ) : null}
       <div className={classes.tableBox}>
         <Table
           pagination={{
