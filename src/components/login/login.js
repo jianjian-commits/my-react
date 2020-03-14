@@ -10,6 +10,7 @@ import clx from "classnames";
 import signinImg from "./style/signin.png";
 import registerImg from "./style/register.png";
 import Register from "./register";
+import { Redirect } from "react-router";
 
 function Registe({ params, history, setActiveKey, query }) {
   return (
@@ -98,9 +99,6 @@ export default connect(
     loginUser
   }
 )(function Login({ loginUser, isLoading, history, isAuthenticated }) {
-  if (!history.location.query) {
-    if (isAuthenticated) history.push("/");
-  }
   // if (isAuthenticated && history.location.query ) history.push("/");
   // if (!history.location.query && history.location.pathname !== "/login")
   //   history.push("/login");
@@ -109,6 +107,9 @@ export default connect(
   const params = userId && teamId && token ? { userId, teamId, token } : {};
   const query = inviter && invitedTeam ? { inviter, invitedTeam } : {};
   const [activeKey, setActiveKey] = useState(active || "initSignin");
+  if (!history.location.query && isAuthenticated) {
+    return <Redirect to="/" />;
+  }
   return (
     <Loading spinning={isLoading}>
       <div className={Styles.background}>
@@ -148,13 +149,6 @@ export default connect(
             </div>
           </div>
         </div>
-        {/* <div>
-          <div>
-            <div>
-
-            </div>
-          </div>
-        </div> */}
       </div>
     </Loading>
   );
