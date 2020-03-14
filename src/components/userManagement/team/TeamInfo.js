@@ -4,6 +4,7 @@ import { Input, Row, Col, List, Button, Spin, message } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
+import { ReactComponent as Edit } from "./svg/edit.svg";
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   const [isRedact, setIsRedact] = useState(false);
@@ -45,9 +46,12 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
             <Button
               size="small"
               type="link"
-              icon="form"
+              className={classes.edit}
               onClick={switchRedact}
-            ></Button>
+            >
+              {" "}
+              <Edit />
+            </Button>
           </Col>
         )}
       </Row>
