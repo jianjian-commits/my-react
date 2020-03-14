@@ -1,5 +1,4 @@
 .wrapper {
-  // padding: 37px 21px;
   width: calc(100vw - 220px);
   padding: 29px 21px;
   > span {
@@ -18,23 +17,21 @@
     height: 36px;
     padding: 0;
     margin-left: 20px;
+    border: 0;
   }
   :global(.ant-table) {
-    tr:nth-child(odd) {
-      background-color: #edf2fd;
-    }
-    tr:nth-child(even) {
+    tr {
       background-color: #fff;
+      td:first-child {
+        color: #000000;
+      }
     }
     button {
       padding: 0 30px 0 0;
     }
-    td {
-      color: #000000;
-    }
   }
   :global(.ant-table-thead > tr > th) {
-    padding: 14px 16px;
+    padding: 14px;
     background: #fff;
   }
   :global(.ant-table-tbody > tr > td) {
@@ -50,48 +47,50 @@
     border: 2px solid #1890ff;
     border-top: 0;
     border-left: 0;
-    transform: rotate(45deg) scale(1) translate(-50%, -50%);
-    -ms-transform: rotate(45deg) scale(1) translate(-50%, -50%);
   }
 }
 
 .moduleTitle {
   font-size: 15px;
-  margin: 30px 0 10px 0;
+  margin: 30px 8px 10px 0;
   display: inline-block;
 }
 
 // 基础信息
 .groupBasic {
-  > span {
-    font-size: 15px;
-    margin-top: 10px;
-    display: inline-block;
-  }
-  :global(.ant-input[disabled]) {
-    background-color: #fff;
-  }
   tbody {
     background: #fff;
-    display: inline-table;
     width: calc(100vw - 260px);
     margin-top: 10px;
     padding: 10px;
     display: inline-block;
     tr {
-      td:first-child {
-        width: 200px;
+      line-height: 36px;
+      td {
         padding: 7px 20px;
+      }
+      td:first-child {
+        width: 250px;
         color: #777f97;
-        text-indent: 10px;
       }
       td:nth-child(2) {
+        display: block;
+        max-width: 600px;
+        min-width: 500px;
+        max-height: 50px;
         color: #333;
+        overflow-y: hidden;
+        span {
+          max-width: 500px;
+          display: inline-block;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        img {
+          margin: 0 0 30px 4px;
+          cursor: pointer;
+        }
       }
-    }
-    img {
-      margin: 0 0 3px 2px;
-      cursor: pointer;
     }
   }
 }
@@ -101,11 +100,11 @@
   :global(td:nth-child(2) label) {
     margin-left: 20px;
   }
-}
-
-.switch {
-  :global(.ant-checkbox-wrapper) {
-    margin-left: 5px;
+  :global(.ant-table-thead > tr > th) {
+    padding: 14px 14px 14px 30px;
+  }
+  :global(.ant-table-tbody > tr > td) {
+    padding: 9px 16px 9px 30px;
   }
 }
 
@@ -113,10 +112,10 @@
   :global(.ant-checkbox-group) {
     display: block;
     background: #fff;
-    padding: 14px 0;
+    padding: 14px 16px;
   }
   :global(.ant-checkbox-group-item) {
-    margin: 0 20px 0 10px;
+    margin: 0 60px 0 10px;
     color: #333;
   }
 }

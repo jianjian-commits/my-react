@@ -35,12 +35,11 @@ export const getBasicInfo = (a, baseInfoBo, onChange, edit, inputEdit) => {
             return (
               <tr key={i.title}>
                 <td>{i.title}</td>
-                <td width="150px">
+                <td>
                   {edit && i.title === "分组名" ? (
                     <Input
                       disabled={a === "view" || i.title !== "分组名"}
                       value={i.value}
-                      // className={classes.inputStyle}
                       onChange={e => onChange(e.target.value, "getBasicInfo")}
                       onBlur={() => inputEdit(false)}
                     ></Input>
@@ -57,7 +56,6 @@ export const getBasicInfo = (a, baseInfoBo, onChange, edit, inputEdit) => {
                     </>
                   )}
                 </td>
-                <td></td>
               </tr>
             );
           })}
@@ -156,6 +154,8 @@ export const getOtherManage = (a, permissions, onChange) => {
       key: "groupPermissions"
     }
   ];
+  console.log("permissions", permissions);
+  console.log("teamInfo", teamInfo);
 
   return (
     <>
