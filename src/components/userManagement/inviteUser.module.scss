@@ -10,6 +10,17 @@
   color: #333333;
 }
 
+.btn {
+  width: 104px;
+  height: 36px !important;
+  background: #2a7fff !important;
+  border-radius: 3px !important;
+  img {
+    margin-bottom: 3px;
+    margin-right: 5px;
+  }
+}
+
 .warn {
   color: #b6b6ba;
   margin-top: 18px;

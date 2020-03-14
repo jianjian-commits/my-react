@@ -153,7 +153,7 @@ class ProfileManagement extends React.Component {
   render() {
     const { open, title, roleList } = this.state;
     const columns = [
-      { title: "组名", dataIndex: "roleName" },
+      { title: "组名", dataIndex: "roleName", width: 1100 },
       {
         title: "操作",
         dataIndex: "action",
