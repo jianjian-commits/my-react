@@ -41,7 +41,6 @@ const AppSetting = props => {
         key: item.id,
         name: item.name
       }));
-      console.log(res);
 
       props.setAllForms(res);
 

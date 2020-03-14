@@ -14,6 +14,7 @@ import {
   filterLinkedFormChildItem
 } from "../utils/filterData";
 import { setErrorComponentIndex } from "../../redux/utils/operateFormComponent";
+import { getDataFromUrl } from "../../../../utils/locationUtils";
 const { Option } = Select;
 
 const defaultStyle = {
@@ -39,7 +40,8 @@ class DataLinkageModal extends React.Component {
       isError: false,
       linkFormClass: "data-link-form", //关联表单的class
       isLinkFormError: false, //关联表单的状态
-      formChildData: [] // 子表单关联对象
+      formChildData: [], // 子表单关联对象
+      formId: getDataFromUrl("formId")
     };
   }
 
@@ -274,12 +276,11 @@ class DataLinkageModal extends React.Component {
     const {
       showOrHideModal,
       forms,
-      formId,
       element,
       data,
       elementParent
     } = this.props;
-    console.log(forms, data, formId)
+    const { formId } = this.state;
 
     const {
       linkFormId,

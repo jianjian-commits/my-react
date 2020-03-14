@@ -100,8 +100,10 @@ export default class DropDown extends React.Component {
       getSelection(values.formId, values.optionId).then(res => {
         this.setState({
           selections: res
-        });
-      });
+        })
+      }).catch(err => {
+        console.error(err);
+      });;
     } else {
       this.setState({
         selections: this.props.item.data.values

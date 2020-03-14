@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Modal, Select, Icon, Input, message } from "antd";
 import { connect } from "react-redux";
 import { setErrorComponentIndex } from "../../redux/utils/operateFormComponent";
+import { getDataFromUrl } from "../../../../utils/locationUtils";
 const Option = Select.Option;
 
 const LinkComponentType = [
@@ -26,7 +27,8 @@ class OtherDataModal extends Component {
       optionLabel: undefined,
       isOpenList: false,
       hasError: false,
-      forms: []
+      forms: [],
+      formId: getDataFromUrl("formId")
     };
   }
 
@@ -34,9 +36,8 @@ class OtherDataModal extends Component {
     let { formId, optionId, optionLabel, hasError } = this.props.data;
     // 过滤自身表单
     const forms = this.props.forms.filter(
-      form => form.id != this.props.formId
+      form => form.id !== this.state.formId
     );
-    forms.reverse();
     let hasform = forms.some(form => form.id === formId);
     let formIndex = -1;
     if (hasform && formId) {
@@ -182,7 +183,7 @@ class OtherDataModal extends Component {
           >
             {forms.map((form, index) => (
               <Option key={form.id} index={index} value={form.id}>
-                {form.title}
+                {form.name}
               </Option>
             ))}
           </Select>
