@@ -23,10 +23,16 @@ class EmailInputInspector extends React.PureComponent {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if(errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
-        return(
+        return (
           <>
             {/* <Input
               id="email-default-value"
@@ -41,13 +47,13 @@ class EmailInputInspector extends React.PureComponent {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
               {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -114,20 +120,22 @@ class EmailInputInspector extends React.PureComponent {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-          {
-            isInFormChild(this.props.elementParent)
-            ? null 
-            :<>
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
               <p htmlFor="email-tip">提示信息</p>
-              <Input id="email-tip" placeholder="请输入提示信息" autoComplete="off" />
+              <Input
+                id="email-tip"
+                placeholder="请输入提示信息"
+                autoComplete="off"
+              />
               <p htmlFor="email-err-tip">错误提示</p>
               <Input
                 id="email-err-tip"
                 placeholder="请输入错误提示"
                 autoComplete="off"
               />
-              </>
-          }
+            </>
+          )}
           <p htmlFor="email-default-value">默认值</p>
           <Select
             value={optionType}
@@ -145,11 +153,9 @@ class EmailInputInspector extends React.PureComponent {
           <p htmlFor="email-tip">校验</p>
           <div className="checkbox-wrapper">
             <Checkbox>必填</Checkbox>
-            {
-              isInFormChild(this.props.elementParent) 
-              ? null
-              : <Checkbox>不允许重复</Checkbox>
-            }
+            {isInFormChild(this.props.elementParent) ? null : (
+              <Checkbox>不允许重复</Checkbox>
+            )}
             <Checkbox>格式校验</Checkbox>
           </div>
         </div>
@@ -157,6 +163,11 @@ class EmailInputInspector extends React.PureComponent {
     );
   }
 }
-export default connect(store => ({}), {
-  setItemAttr
-})(EmailInputInspector);
+export default connect(
+  store => ({
+    errorComponentIndex: store.formBuilder.errorComponentIndex
+  }),
+  {
+    setItemAttr
+  }
+)(EmailInputInspector);

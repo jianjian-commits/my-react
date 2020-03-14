@@ -38,7 +38,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
     filterData(formPath, filterStr, pageSize, currentPage).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal: (totalNumber== -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
+        submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
           return {
             data: item.data,
@@ -49,8 +49,8 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         })
       });
     }).catch((error)=> {
-      if (error.response && error.response.data.code === 9999 ) {
-           message.error("查询条件矛盾，请检查");
+      if (error.response) {
+           message.error(error.response.data.msg);
          }
     });
   } else {
@@ -69,7 +69,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
       })
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal:(totalNumber== -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
+        submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
         formData: filterSubmisstion.map(item => {
           return {
             data: item.data,
@@ -80,9 +80,9 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         })
       });
     })).catch((error)=> {
-      if (error.response && error.response.data.code === 9999 ) {
-           message.error("查询条件矛盾，请检查");
-         }
+      if (error.response) {
+        message.error(error.response.data.msg);
+      }
     });
   }
 
@@ -146,4 +146,17 @@ export const getSubmissionDetail = (formId, submissionId) => dispatch => {
         });
       });
   });
+};
+
+// 修改表单数据详情
+export const modifySubmissionDetail = (formId, submissionId, formData) => dispatch => {
+  return instanceAxios
+    .put(
+      config.apiUrl + `/submission/${submissionId}`,
+      {
+        data: formData,
+        formId: formId
+      
+      }
+    )
 };

@@ -77,6 +77,13 @@ class PhoneInputInspector extends React.PureComponent {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
+    const { defaultValue } = element;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if(errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -97,13 +104,13 @@ class PhoneInputInspector extends React.PureComponent {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
               {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -270,12 +277,13 @@ class PhoneInputInspector extends React.PureComponent {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,
     setItemValues,
     setFormChildItemAttr,
-    setFormChildItemValues
+    setFormChildItemValues,
   }
 )(PhoneInputInspector);
