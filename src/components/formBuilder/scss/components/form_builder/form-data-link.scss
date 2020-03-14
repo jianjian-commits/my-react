@@ -5,4 +5,8 @@
 .data-link-set {
   width: 100%;
   margin-bottom: 26px;
+  &.has-error {
+    border-color: #f5222d;
+    color: #f5222d;
+  }
 }

@@ -9,7 +9,7 @@ import {
   SET_FORMCHILDITEM_ATTR,
   SET_FORMCHILDITEM_VALUES,
   SET_ACTIVEINNERINDEX,
-  INIT_ACTIVEINNERINDEX,
+  SET_ERROR_COMPONENT_INDEX
 } from "../action";
 
 export const setData = (data, saveData) => dispatch => {
@@ -92,6 +92,7 @@ export const setActiveIndex = index => {
   };
 };
 
+
 export const setActiveInnerIndex = index => {
   return {
     type: SET_ACTIVEINNERINDEX,
@@ -108,3 +109,11 @@ export const setFormChildItemValues = (element, attr, value, innerElement) => {
     innerElement
   };
 };
+
+// 设置当前错误组件index
+export const setErrorComponentIndex = (index) => {
+  return {
+    type: SET_ERROR_COMPONENT_INDEX,
+    index,
+  }
+}

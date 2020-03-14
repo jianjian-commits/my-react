@@ -7,7 +7,7 @@ export const getFormById = formId => {
     instanceAxios
       .get(config.apiUrl + "/form/" + formId)
       .then(res => {
-        console.log(1);
+        // console.log(1);
         resolve(res.data);
       })
       .catch(err => {
@@ -70,7 +70,9 @@ export const getResIndexArray = (value, originArr) => {
   if (value instanceof Array) {
     value.sort();
     originArr.forEach((oArr, i) => {
-      oArr.sort();
+      if (Array.isArray(oArr)) {
+        oArr.sort();
+      }
       if (oArr.toString() === value.toString()) {
         indexs.push(i);
       }

@@ -27,7 +27,7 @@ export default class ImageUpload extends React.Component {
     callback();
   };
   render() {
-    const { getFieldDecorator, item } = this.props;
+    const { getFieldDecorator, item, initData } = this.props;
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
@@ -40,7 +40,7 @@ export default class ImageUpload extends React.Component {
             // }
           ],
           // validateTrigger: 'onSubmit',
-          initialValue:[]
+          initialValue: initData || []
         })(
           <ImageUploadItem
             canUpload={this.state.canUpload}

@@ -24,7 +24,6 @@ class FormInforModal extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.saveForm(
-          this.props.formData,
           this.props.submissionAccess,
           values.formName,
           this.props.verificationList,
@@ -33,7 +32,9 @@ class FormInforModal extends React.Component {
           values.formPath,
           values.formInfo,
           this.props.push,
-          this.props.url
+          this.props.url,
+          this.props.extraProp,
+          this.props.appid
         );
       }
     });

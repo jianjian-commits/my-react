@@ -24,7 +24,7 @@ export default class multiDropDown extends React.Component {
 
   componentDidMount() {
     // 根据 type 决定渲染的数据来源
-    const { form, item, handleSetComponentEvent } = this.props;
+    const { form, item, handleSetComponentEvent, initData } = this.props;
     const { data } = item;
     // 数据联动请看单行文本组件
     if (data && data.values) {
@@ -107,27 +107,51 @@ export default class multiDropDown extends React.Component {
             setValueTempIndex: []
           });
         });
-      } else {
-        this.setState({
-          selections:
-            (Array.isArray(this.props.item.data.values) &&
-              this.props.item.data.values) ||
+      } else if(this.props.isChild){
+        let selectIndexArr = [];
+          item.data.map( value =>{
+            item.values.map((item,index) => {
+              if(item.value === value){
+                selectIndexArr.push(index)
+              }
+            })
+          })
+          this.setState({
+            setValue: item.data,
+            setValueTemp: item.data,
+            setValueTempIndex: selectIndexArr,
+          });
+      }else {
+        // 子表单外部的组件
+        let selectIndexArr = [];
+        if(initData){
+          initData.map( value =>{
+            item.data.values.map((item,index) => {
+              if(item.value === value){
+                selectIndexArr.push(index)
+              }
+            })
+          })
+          this.setState({
+            selections: (Array.isArray(this.props.item.data.values) &&
+            this.props.item.data.values) ||
             this.props.item.data ||
             this.props.item.values ||
             this.props.item.dropDownOptions ||
-            []
-        });
+            [],
+            setValue: initData,
+            setValueTemp: initData,
+            setValueTempIndex: selectIndexArr,
+          });
+        }
       }
     } else if (this.props.isChild) {
       let dropDownOptions = [];
       let values = item.values;
-      if (values.type === "otherFormData") {
+      if (values.type == "otherFormData") {
         getSelection(values.formId, values.optionId).then(res => {
           this.setState({
             selections: this.filterUniqueSelections(res),
-            setValue: [],
-            setValueTemp: [],
-            setValueTempIndex: []
           });
         });
       } else {
@@ -137,7 +161,7 @@ export default class multiDropDown extends React.Component {
         selections: this.filterUniqueSelections(dropDownOptions),
         setValue: [],
         setValueTemp: [],
-        setValueTempIndex: []
+        setValueTempIndex: [],
       });
     }
   }

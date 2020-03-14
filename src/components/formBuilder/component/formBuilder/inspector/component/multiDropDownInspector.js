@@ -183,11 +183,12 @@ class MultiDropDownInspector extends React.Component {
   };
 
   handleOtherFormDataChange = data => {
-    const { selectedFormId, selectedOptionId, optionLabel } = data;
+    const { selectedFormId, selectedOptionId, optionLabel, linkComponentType } = data;
     let values = {
       formId: selectedFormId,
       optionId: selectedOptionId,
-      optionLabel
+      optionLabel,
+      linkComponentType
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemValues(
@@ -249,6 +250,12 @@ class MultiDropDownInspector extends React.Component {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, isShowOtherDataModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if(errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -288,13 +295,13 @@ class MultiDropDownInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetOtherDataModal(true);
               }}
             >
               {element.data.type === "otherFormData"
-                ? "已设置表单数据关联"
+                ? (isLinkError ? "数据关联失效" : "已设置数据关联")
                 : "关联表单数据设置"}
             </Button>
             <OtherDataModal
@@ -315,13 +322,13 @@ class MultiDropDownInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
               {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -446,9 +453,7 @@ class MultiDropDownInspector extends React.Component {
               max={values.length}
               precision={0}
               onChange={this.handleChangeAttrMinLength}
-              value={
-                validate.minOptionNumber == 0 ? "" : validate.minOptionNumber
-              }
+              value={validate.minOptionNumber === 0 ? "" : validate.minOptionNumber}
               autoComplete="off"
             />
             ~
@@ -459,11 +464,7 @@ class MultiDropDownInspector extends React.Component {
               max={values.length}
               precision={0}
               onChange={this.handleChangeAttrMaxLength}
-              value={
-                validate.maxOptionNumber == Number.MAX_SAFE_INTEGER
-                  ? ""
-                  : validate.maxOptionNumber
-              }
+              value={validate.maxOptionNumber === Number.MAX_SAFE_INTEGER ? "" : validate.maxOptionNumber}
               autoComplete="off"
             />
           </div>
@@ -476,12 +477,13 @@ class MultiDropDownInspector extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex,
   }),
   {
     setItemAttr,
     setItemValues,
     setFormChildItemAttr,
-    setFormChildItemValues
+    setFormChildItemValues,
   }
 )(MultiDropDownInspector);

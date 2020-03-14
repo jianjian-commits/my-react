@@ -16,7 +16,6 @@ class RadioOption extends React.Component {
           this.props.handleSelect(this.props.index);
         }}
       >
-        {/* <i className={classNames({ selectOption: this.props.isSelect })} /> */}
         <i className='out_i'>
           <i className={classNames('inner_i',{ selectOption: this.props.isSelect })}/>
         </i>
@@ -29,11 +28,40 @@ class RadioOption extends React.Component {
 export default class RadioTest extends React.Component {
   constructor(props) {
     super(props);
+    const {item} = this.props;
+    let index = -1;
+    if(item != void 0){
+      const indexs = this.props.item.values.map(item => item.value);
+      index = indexs.indexOf(item.data);
+    }
     this.state = {
-      selectValue: -1
+      selectValue: index
     };
     this.handleSelect = this.handleSelect.bind(this);
   }
+
+    // 设置默认的选中值
+  setDefaultSetected = (selectedValues, allvalues=[]) => {
+    const indexs = allvalues.map(item => item.value);
+    const index = indexs.indexOf(selectedValues);
+
+    this.setState({
+      selectValue: index
+    });
+  };
+
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.hasClicked) {
+      const {item, value} = nextProps;
+      if(value) {
+        this.setDefaultSetected(value, item.values);
+      } else if(item.isMobileChild) {
+        this.setDefaultSetected(item.data, item.values);
+      }
+    }
+  }
+  
   handleSelect(index) {
     const { onChange } = this.props;
     if (this.state.selectValue === index) {

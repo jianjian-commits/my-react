@@ -7,8 +7,8 @@ export default class FileUpload extends React.Component {
     super(props);
     this.state = {
       loadStatusMsg: <div>添加文件</div>,
-      uploadFileList: [],
-      canUpload: true //能否上传的一个标志位
+      uploadFileList: props.value,
+      canUpload: props.value < props.item.validate.fileCount//能否上传的一个标志位
     };
     this.handleBeforeUpload = this.handleBeforeUpload.bind(this);
   }

@@ -59,15 +59,11 @@ export default class RadioInput extends React.Component {
     }
   };
   render() {
-    // const { inputValue } = this.state;
-    const { getFieldDecorator, item } = this.props;
-    // const { values } = item;
-    // let errMsg = this.props.item.validate.customMessage;
-    // const layoutClassName = this.props.item.inline ? "row-layout" :"column-layout";
+    const { getFieldDecorator, item, initData } = this.props;
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
-          // initialValue: inputValue || item.defaultValue,
+          initialValue: initData || item.defaultValue,
           rules: [
             {
               required: isValueValid(item.validate.required)
@@ -79,7 +75,6 @@ export default class RadioInput extends React.Component {
               validator: this.checkSelecNumber
             }
           ],
-          initialValue: ""
           // validateTrigger: 'onSubmit',
         })(<RadioTestItem handleChange={this.handleChange} item={item} />)}
       </Form.Item>
