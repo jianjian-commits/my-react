@@ -30,10 +30,11 @@ export default Form.create({ name: "reset-form" })(
         return formItems[m.key]({
           form,
           payload: m.value,
-          newPassWord: getFieldValue("newPassWord")
+          newPassWord: getFieldValue("newPassWord"),
+          itemName: m.itemName
         });
       }
-      return formItems[m.key]({ form, payload: m.value });
+      return formItems[m.key]({ form, payload: m.value, itemName: m.itemName });
     });
     const render = meter => {
       return <>{meter === "resetPassword" ? "修改密码" : "修改"}</>;

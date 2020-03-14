@@ -98,7 +98,7 @@ class Apps extends React.Component {
               <img
                 src="/image/davinci/noapps-normal.png"
                 alt=""
-                style={{ paddingBottom: "15px" }}
+                style={{ paddingBottom: "16px", paddingRight: "28px" }}
               />
             )}
           </Content>

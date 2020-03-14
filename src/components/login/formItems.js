@@ -166,7 +166,7 @@ const password = ({ form, payload, itemName, icon }) => ({
   },
   component: (
     <Input
-      type={icon ? null : "password"}
+      type={"password"}
       onChange={() => form.setFields({ password: { errors: null } })}
       placeholder={
         payload === "reconfirm"
@@ -319,41 +319,6 @@ const verificationCode = ({ form, payload, icon }) => {
 };
 
 const mobilePhone = ({ form, payload, icon }) => {
-  // const { getFieldValue } = form;
-  // const verificationCodeSpanRef = React.createRef();
-  // const verificationCodeButtonRef = React.createRef();
-  // const buttonConfirm = () => {
-  //   const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
-  //     verificationCodeButtonRef.current.buttonNode.disabled = true;
-  //     verificationCodeSpanRef.current.innerHTML = sended
-  //       ? `验证码已发送,如未收到请在${initNum}s后重试`
-  //       : `验证码发送失败,请在${initNum}s后重试`;
-  //     let num = initNum - 1;
-  //     const int = setInterval(() => {
-  //       verificationCodeSpanRef.current.innerHTML = sended
-  //         ? `验证码已发送,如未收到请在${num}s后重试`
-  //         : `验证码发送失败,请在${num}s后重试`;
-  //       num = num - 1;
-  //     }, timeTerval);
-  //     setTimeout(() => {
-  //       window.clearInterval(int);
-  //       verificationCodeButtonRef.current.buttonNode.disabled = false;
-  //       verificationCodeSpanRef.current.innerHTML = "";
-  //       num = initNum - 1;
-  //     }, timeOut);
-  //   };
-  //   sendVerificationCode(getFieldValue("mobilePhone")).then(res => {
-  //     if (res) {
-  //       setTime({
-  //         sended: true,
-  //         initNum: 60,
-  //         timeOut: 60000
-  //       });
-  //     } else {
-  //       setTime({ sended: false, initNum: 6, timeOut: 6000 });
-  //     }
-  //   });
-  // };
   return {
     itemName: "mobilePhone",
     options: {
@@ -376,24 +341,9 @@ const mobilePhone = ({ form, payload, icon }) => {
           )
         }
         onChange={() => form.setFields({ mobilePhone: { errors: null } })}
-        // addonAfter={
-        //   <Button
-        //     ref={verificationCodeButtonRef}
-        //     disabled={null}
-        //     onClick={buttonConfirm}
-        //   >
-        //     发送验证码
-        //   </Button>
-        // }
       />
     ),
     additionComponent: null
-    // (
-    //   <span
-    //     ref={verificationCodeSpanRef}
-    //     style={{ position: "absolute", right: 0, top: "18px" }}
-    //   ></span>
-    // )
   };
 };
 
@@ -616,22 +566,22 @@ export const registerParameter = [
 export const userDetailParameter = {
   resetCompanyName: [
     { key: "companyName", value: "redit" },
-    { key: "submit", value: "submit" }
+    { key: "submit", value: "submit", itemName: "resetSubmit" }
   ],
   resetName: [
     { key: "name", value: null },
-    { key: "submit", value: "submit" }
+    { key: "submit", value: "submit", itemName: "resetSubmit" }
   ],
   resetMobilePhone: [
     { key: "mobilePhone", value: null },
     { key: "verificationCode", value: null },
-    { key: "submit", value: "submit" }
+    { key: "submit", value: "submit", itemName: "resetSubmit" }
   ],
   resetPassword: [
     { key: "oldPassWord", value: null },
     { key: "newPassWord", value: null },
     { key: "confirmPassWord", value: null },
-    { key: "submit", value: "submit" }
+    { key: "submit", value: "submit", itemName: "resetSubmit" }
   ]
 };
 
