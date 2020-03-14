@@ -17,4 +17,31 @@
 .approvalbox{
   padding-right:30px;
 }
+.toolbarBox{
+  color: #2A7FFF;
+  span:first-child {
+    margin-right: 30px
+  }
+}
+.detailList{
+  border: 1px solid red;
+}
+.detailTitle {
+  font-family: Microsoft YaHei;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #777F97;
+  padding-bottom: 5px;
+}
+.detailValue {
+  font-family: Microsoft YaHei;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #333333;
+  padding-top: 5px;
+}
 

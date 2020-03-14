@@ -1,3 +1,8 @@
+.FormDataDetailHeader{
+  width: 1100px;
+  margin: auto;
+  margin-top: 40px;
+}
 .formDataDetailContainer {
   width: 1100px;
   min-height: 659px;
@@ -19,11 +24,17 @@
     height: 53px;
     line-height: 53px;
     margin-top: 0px;
-    padding-left: 30px;
+    padding:0 30px;
     border-bottom: 1px solid rgba(237, 239, 243, 1);
     .dataTitle {
       font-size: 16px;
       color: #333333;
+    }
+    .toolbarBox {
+      color: #2A7FFF;
+      span:first-child {
+        margin-right: 30px
+      }
     }
   }
   .dataDteailText {
