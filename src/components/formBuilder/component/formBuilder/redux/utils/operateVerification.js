@@ -7,10 +7,11 @@ export const SET_VERIFICATION_MSG = "SET_VERIFICATION_MSG";
 
 
 // 增加和删除校验条件
-export const addVerification = (verificationStr) => dispatch => {
+export const addVerification = (verificationStr,verificationValue) => dispatch => {
     dispatch({
       type: ADD_VERIFICATION,
-      value: verificationStr
+      name: verificationStr,
+      value: verificationValue
     })
   }
   
@@ -20,10 +21,11 @@ export const addVerification = (verificationStr) => dispatch => {
       index
     })
   }
-  export const editVerification = (verificationStr, index) => dispatch => {
+  export const editVerification = (verificationStr, verificationValue, index) => dispatch => {
     dispatch({
       type: EDIT_VERIFICATION,
-      value: verificationStr,
+      name: verificationStr,
+      value: verificationValue,
       index
     })
   }

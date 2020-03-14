@@ -6,20 +6,22 @@ import {
   GET_CHILD_FORM_COMPONENT,
   GET_ALL_FORMS
 } from "../action";
-export const submitSubmission = (formId, values) => dispatch => {
+export const submitSubmission = (formId, values, appid, extraProp) => dispatch => {
   const date = new Date();
   return instanceAxios({
     url: config.apiUrl + `/submission`,
     method: "POST",
     headers: {
       // "X-Custom-Header": "ProcessThisImmediately",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      appid:appid
     },
     data: {
       data: values,
       formId: formId,
       createdTime: date,
-      updateTime: date
+      updateTime: date,
+      extraProp
     }
   });
 };

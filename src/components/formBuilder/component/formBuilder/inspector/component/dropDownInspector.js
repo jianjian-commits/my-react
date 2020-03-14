@@ -172,11 +172,12 @@ class DropdownInspector extends React.Component {
   };
 
   handleOtherFormDataChange = data => {
-    const { selectedFormId, selectedOptionId, optionLabel } = data;
+    const { selectedFormId, selectedOptionId, optionLabel, linkComponentType } = data;
     let values = {
       formId: selectedFormId,
       optionId: selectedOptionId,
-      optionLabel
+      optionLabel,
+      linkComponentType
     };
     if (this.props.elementParent) {
       values.type = this.state.optionType;
@@ -213,6 +214,12 @@ class DropdownInspector extends React.Component {
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, isShowOtherDataModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
+    let isLinkError = false;
+    const { data, errorComponentIndex } = this.props;
+    if(errorComponentIndex > -1) {
+      let currentIndex = data.indexOf(element);
+      currentIndex === errorComponentIndex && (isLinkError = true);
+    }
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -252,13 +259,13 @@ class DropdownInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetOtherDataModal(true);
               }}
             >
               {element.data.type === "otherFormData"
-                ? "已设置表单数据关联"
+                ? (isLinkError ? "数据关联失效" : "已设置数据关联")
                 : "关联表单数据设置"}
             </Button>
             <OtherDataModal
@@ -279,13 +286,13 @@ class DropdownInspector extends React.Component {
         return (
           <>
             <Button
-              className="data-link-set"
+              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
               {element.data.type === "DataLinkage"
-                ? "已设置数据联动"
+                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -323,7 +330,7 @@ class DropdownInspector extends React.Component {
 
   render() {
     const { optionType, isLinked } = this.state;
-    const { elementParent } = this.props;
+    const { elementParent, element} = this.props;
     const { label, validate, tooltip } = this.props.element;
     
     return (
@@ -393,7 +400,8 @@ class DropdownInspector extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,

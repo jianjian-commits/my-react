@@ -7,6 +7,8 @@ import {
   LESS_THAN, LESS_THAN_OR_EQUAL_TO,
   IN, NOT_IN, EXISTS, NOT_EXISTS, REGEX
 } from "./operators.js";
+import { instanceAxios } from "../../../../utils/tokenUtils";
+import config from "../../../../config/config";
 const ButtonGroup = Button.Group;
 const numberLogicalOperators = [
   { type: "EQUALS", operator: EQUALS, label: "等于" },
@@ -88,6 +90,7 @@ class FilterItem extends Component {
       filed: {
         key: Math.random()
       },
+      options:[],
       operator: "",
       filterMode: false
     }
@@ -99,6 +102,25 @@ class FilterItem extends Component {
     this.props.setFilterAttr("costomValue", value._d.toISOString().match(/(\S*)Z/)[1], this.props.index);
   }
 
+  getComponentSubmission = (formId, optionId) =>{
+    let options =[];
+    instanceAxios.get(config.apiUrl + `/form/${formId}/submission?selectInclude=data.${optionId}`)
+    .then((res) =>{         
+      options = res.data.map( data =>{
+        return ({
+          value: data.data[optionId],
+          label: data.data[optionId],
+          shortcut: ""
+        })
+      })
+      this.setState({
+        options
+      })
+    })
+    .catch((err) =>{
+      console.log("error", err)
+    })
+  }
   getOperatorArrayByFiledType = (type) => {
     switch (type) {
       case "FileUpload":
@@ -145,7 +167,7 @@ class FilterItem extends Component {
             style={{ width: "100%" }} />;
         }
       case "DropDown":
-        if(this.state.operator=="RADIO_IN" || this.state.operator=="RADIO_NOT_IN") {
+        if (this.state.operator === "RADIO_IN" || this.state.operator === "RADIO_NOT_IN") {
          return (
           <Select
             key={filed.key}
@@ -158,7 +180,7 @@ class FilterItem extends Component {
             suffixIcon={<Icon type="caret-down" />}
             // getPopupContainer = {triggerNode => triggerNode.parentNode}
           >
-            {filed.data.values.map((item, index) => (
+            {this.state.options.map((item, index) => (
               <Select.Option key={index} value={item.value}>
                 {item.label}
               </Select.Option>
@@ -177,7 +199,7 @@ class FilterItem extends Component {
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
-              {filed.data.values.map((item, index) => (
+              {this.state.options.map((item, index) => (
                 <Select.Option key={index} value={item.value}>
                   {item.label}
                 </Select.Option>
@@ -186,7 +208,7 @@ class FilterItem extends Component {
           );
         }
       case "RadioButtons":
-        if(this.state.operator=="RADIO_IN" || this.state.operator=="RADIO_NOT_IN") {
+        if(this.state.operator === "RADIO_IN" || this.state.operator === "RADIO_NOT_IN") {
           return (
            <Select
              key={filed.key}
@@ -261,7 +283,7 @@ class FilterItem extends Component {
             suffixIcon={<Icon type="caret-down" />}
             // getPopupContainer = {triggerNode => triggerNode.parentNode}
           >
-            {filed.data.values.map((item, index) => (
+            {this.state.options.map((item, index) => (
               <Select.Option key={index} value={item.value}>
                 {item.label}
               </Select.Option>
@@ -288,6 +310,27 @@ class FilterItem extends Component {
       value = `${value}.address`
     }
     const logicalOperators = this.getOperatorArrayByFiledType(filed.type);
+    let options = [];
+    if(filed.type === "DropDown" || filed.type === "MultiDropDown") {
+        
+      let {values} = filed.data;
+      let type = filed.data.type;
+      if(type != void 0){
+        // 判断有没有type, 没有就是数据关联或者数据联动
+          if(type === "DataLinkage") {
+            // 数据联动  获取数据联动相关的数据
+            // const {formId, linkComponentId} = values;
+            this.getComponentSubmission(values.linkFormId, values.linkDataId)
+          } else if(type === "otherFormData"){
+            // 数据关联 获取数据关联的相关数据
+            this.getComponentSubmission(values.formId, values.optionId)}
+      }else {
+        options = filed.data.values;
+        this.setState({
+          options
+        })
+      }
+    }
     this.setState({
       logicalOperators,
       filed: filed,
@@ -445,7 +488,7 @@ export default class FilterComponent extends Component {
     if(filter.filterType=="EXISTS"){
       return true
     }
-    return filter.selectedFiled !== "" && filter.costomValue !== "" && filter.selectedLogicalOperator !== ""
+    return filter.selectedFiledKey !== "" && filter.costomValue !== "" && filter.selectedLogicalOperator !== ""
   }
 
   deleteFilter = (index) => {
@@ -484,8 +527,9 @@ export default class FilterComponent extends Component {
 
 
   filterSubmitData = () => { 
-    if(this.state.filterArray.every(this.isAllFilled)){
-    let setFilterMode = true;
+    let isAllFilled = this.state.filterArray.every(this.isAllFilled);
+    let ISConditionalContradiction = this.ISConditionalContradiction();
+    if(isAllFilled && !ISConditionalContradiction){
     const filterArray = this.state.filterArray.map(filter => {
       switch (filter.filterType) {
         case "EXISTS": return `data.${filter.selectedFiled}${filter.selectedLogicalOperator}`;
@@ -500,10 +544,33 @@ export default class FilterComponent extends Component {
     })
 
     this.props.setFilterMode(filterArray, this.state.connectCondition, true);
-    } else {
+    } else if(!isAllFilled){
       message.error("请填写完整的过滤条件", 1);
+    } else if(ISConditionalContradiction){
+      message.error("填写条件矛盾，请检查填写条件",1);
     }
 
+  }
+
+  ISConditionalContradiction(){
+    let filterArray = this.state.filterArray;
+    // 在条件为满足所有条件的时候才执行这个检查
+    if(this.state.connectCondition !== "&"){
+      return false;
+    }
+
+    filterArray = filterArray.filter((filter,index) => {
+        for(let i = index + 1; i < filterArray.length; i++){
+          if(filter.selectedFiled === filterArray[i].selectedFiled && filter.selectedLogicalOperator === filterArray[i].selectedLogicalOperator){
+            return true
+          }
+        }
+    })
+    if(filterArray.length > 0){
+      return true;
+    }
+
+    return false
   }
 
   onChangeConditionAnd = () => {
@@ -528,11 +595,6 @@ export default class FilterComponent extends Component {
 
 
   render() {
-    // const fileds = this.props.fileds.filter(fileds => {
-    //   // return !this.state.filterArray.some(filter => {
-    //     return filter.selectedFiledKey === fileds.key
-    //   // })
-    // })
     const fileds = this.props.fileds;
     const { conditionIsAll } = this.state;
     return (

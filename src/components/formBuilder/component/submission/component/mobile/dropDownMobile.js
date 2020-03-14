@@ -24,7 +24,7 @@ export default class DropDown extends React.Component {
 
   componentDidMount() {
     // 根据 type 决定渲染的数据来源
-    const { form, item, handleSetComponentEvent } = this.props;
+    const { form, item, handleSetComponentEvent, initData,value } = this.props;
     const { data } = item;
     // 数据联动请看单行文本组件
     if (data && data.values) {
@@ -71,20 +71,6 @@ export default class DropDown extends React.Component {
                 setValueTemp: "",
                 setValueTempIndex: -1
               });
-              // let currentSelectedValue = form.getFieldValue(item.key);
-              // let hasInput = selections.filter(
-              //   item => item.value === currentSelectedValue
-              // );
-              // 是否清空选择的内容
-              // if (hasInput.length <= 0) {
-              //   form.setFieldsValue({
-              //     [item.key]: undefined
-              //   });
-              // }
-              // form.setFieldsValue({
-              //   [item.key]: undefined
-              // });
-              // 触发多级联动
               this.handleChange(value);
             } else {
               this.setState({
@@ -110,6 +96,8 @@ export default class DropDown extends React.Component {
           });
         });
       } else {
+        let selectIndex = -1;
+        selectIndex = item.data.values.map(item =>item.value).indexOf(initData)
         this.setState({
           selections:
             (Array.isArray(this.props.item.data.values) &&
@@ -117,7 +105,10 @@ export default class DropDown extends React.Component {
             this.props.item.data ||
             this.props.item.values ||
             this.props.item.dropDownOptions ||
-            []
+            [],
+            setValue: initData || "",
+            setValueTemp: initData || "",
+            setValueTempIndex:  selectIndex
         });
       }
     } else if (this.props.isChild) {
@@ -134,18 +125,16 @@ export default class DropDown extends React.Component {
         });
       } else {
         dropDownOptions = Array.isArray(values) ? values : [];
+        let selectIndex = -1;
+      selectIndex = item.values.map(item =>item.value).indexOf(value)
+      this.setState({
+        selections: this.filterUniqueSelections(dropDownOptions),
+        setValue: item.data || "",
+        setValueTemp: item.data || "",
+        setValueTempIndex:  selectIndex
+      });
+
       }
-      this.setState(
-        {
-          selections: this.filterUniqueSelections(dropDownOptions),
-          setValue: "",
-          setValueTemp: "",
-          setValueTempIndex: -1
-        },
-        () => {
-          // console.log("---", this.state, this.props.item)
-        }
-      );
     }
   }
 
@@ -175,28 +164,6 @@ export default class DropDown extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.value === null) {
-    //   this.setState({
-    //     selections: this.filterUniqueSelections(nextProps.item.values),
-    //     setValue: []
-    //   });
-    // } else if (nextProps.value && Array.isArray(nextProps.value)) {
-    //   this.setState({
-    //     selections: this.filterUniqueSelections(nextProps.value),
-    //     setValue: [],
-    //     setValueTemp: []
-    //   });
-    // } else if (
-    //   nextProps.item.data &&
-    //   nextProps.item.data !== "" &&
-    //   nextProps.isChild
-    // ) {
-    //   this.setState({
-    //     selections: [nextProps.item.data],
-    //     setValue: nextProps.item.data,
-    //     setValueTemp: nextProps.item.data
-    //   });
-    // }
     if (nextProps.isChild) {
       this.setState({
         selections: nextProps.item.dropDownOptions || [],

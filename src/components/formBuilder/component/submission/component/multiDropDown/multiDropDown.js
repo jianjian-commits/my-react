@@ -144,9 +144,7 @@ export default class MultiDropDown extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
-    const { selections } = this.state;
-
+    const { getFieldDecorator, item, initData } = this.props;
     let errMsg = this.props.item.validate.customMessage;
 
     return (
@@ -163,24 +161,8 @@ export default class MultiDropDown extends React.Component {
               validator: this.checkSelecNumber
             }
           ],
-          // validateTrigger: 'onSubmit',
-          initialValue: []
+          initialValue: initData || []
         })(
-          //   <Select
-          //     disabled={disabled}
-          //     mode="multiple"
-          //     placeholder="请选择"
-          //     style={{ width: "100%" }}
-          //     showArrow={true}
-          //     onChange={this.handleChange}
-          //     getPopupContainer = {triggerNode => triggerNode.parentNode}
-          //   >
-          //     {selections.map((item, index) => (
-          //       <Select.Option key={index} value={item.value}>
-          //         {item.label}
-          //       </Select.Option>
-          //     ))}
-          //   </Select>
           <MultiDropDownItem selections={this.state.selections} item={item} />
         )}
       </Form.Item>

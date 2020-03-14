@@ -4,7 +4,7 @@ import { Form } from "antd";
 
 const { Option } = Select;
 const { TextArea } = Input;
-let AMap;
+// let AMap;
 
 export default class address extends Component {
   constructor(props) {
@@ -22,7 +22,9 @@ export default class address extends Component {
 
   componentDidMount() {
     const that = this;
+    //eslint-disable-next-line
     AMap.plugin("AMap.DistrictSearch", function() {
+      //eslint-disable-next-line
       var districtSearch = new AMap.DistrictSearch({
         // 关键字对应的行政区级别，country表示国家
         level: "中国",
@@ -35,6 +37,18 @@ export default class address extends Component {
         if (result.info === "OK") {
           that.setState({
             CityData: result.districtList[0]
+          },()=>{
+            let { item } = that.props;
+            let data = item.data;
+            if(data != void 0){
+              that.setState({
+                county: data.county || "",
+                city: data.city || "",
+                province: data.province || "",
+                detail: data.detail ||""
+              });
+              that.handleGetRightSelectedIndex(data)
+            }
           });
         } else {
           console.error("城市信息获取失败！");
@@ -42,6 +56,32 @@ export default class address extends Component {
       });
     });
   }
+
+    // 根据地址数据改变选中的索引
+    handleGetRightSelectedIndex = address => {
+      let { city, province } = address;
+      const { CityData } = this.state;
+      let currentProvinceIndex = -1,
+        currentCityIndex = -1;
+      if (province && CityData && CityData.districtList) {
+        currentProvinceIndex = CityData.districtList.findIndex(
+          item => item.name === province
+        );
+      }
+      if (
+        currentProvinceIndex > -1 &&
+        CityData &&
+        CityData.districtList[currentProvinceIndex].districtList
+      ) {
+        currentCityIndex = CityData.districtList[
+          currentProvinceIndex
+        ].districtList.findIndex(item => item.name === city);
+      }
+      this.setState({
+        currentProvinceIndex,
+        currentCityIndex
+      });
+    };
 
   handleSelectedProvince = (value, ev) => {
     const index = ev.props.index;
@@ -125,12 +165,13 @@ export default class address extends Component {
       currentProvinceIndex,
       city,
       county,
-      province
+      province,
+      detail
     } = this.state;
     return (
       <div className="form-address">
         <div className="row">
-          <Select defaultValue="none" onChange={this.handleSelectedProvince}>
+          <Select value={province || "none"} onChange={this.handleSelectedProvince}>
             <Option value="none" disabled>
               -请选择-
             </Option>
@@ -178,6 +219,7 @@ export default class address extends Component {
         <div className="row">
           <TextArea
             onChange={this.handleSetDetail}
+            value={detail}
             placeholder="详细地址"
             autoSize={{ minRows: 2, maxRows: 2 }}
           />
