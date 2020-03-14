@@ -48,6 +48,7 @@ const AppSetting = props => {
 
        setMockForms({
         groups: [
+          // {key:'',name:'',list:[]}
         ],
         searchList: [
         ],
