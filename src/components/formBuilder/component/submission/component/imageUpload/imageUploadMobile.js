@@ -26,11 +26,11 @@ export default class ImageUpload extends React.Component {
     callback();
   };
   render() {
-    const { getFieldDecorator, item, isChild, isShowTitle } = this.props;
+    const { getFieldDecorator, item, isChild, isShowTitle, initData, data } = this.props;
     return (
       <Form.Item label={isShowTitle === false ? null : <LabelUtils data={item} />}>
         {isChild ? (
-          <ImageUploadItem onChange={this.props.onChange} canUpload={this.state.canUpload} item={item} />
+          <ImageUploadItem onChange={this.props.onChange} canUpload={this.state.canUpload} item={item} value={data}/>
         ) : (
           getFieldDecorator(item.key, {
             rules: [
@@ -42,7 +42,7 @@ export default class ImageUpload extends React.Component {
               // }
             ],
             // validateTrigger: "onSubmit"
-            initialValue:[]
+            initialValue: initData || []
           })(<ImageUploadItem canUpload={this.state.canUpload} item={item} />)
         )}
       </Form.Item>

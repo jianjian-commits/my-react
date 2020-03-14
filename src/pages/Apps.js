@@ -1,32 +1,35 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Layout, Button, Card, Icon, message } from "antd";
-import HomeHeader from "../components/header/HomeHeader";
-import commonClasses from "../styles/common.module.scss";
-import classes from "../styles/apps.module.scss";
 import { history } from "../store";
-import CreateFormModal from "../components/createApp";
+import { Layout, Button, Card, message } from "antd";
+import HomeHeader from "../components/header/HomeHeader";
+import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
+import Authenticate from "../components/shared/Authenticate";
+import { SUPER_ADMINISTRATOR, APP_VISIABLED } from "../auth";
+import commonClasses from "../styles/common.module.scss";
+import classes from "../styles/apps.module.scss";
 const { Content } = Layout;
 const { Meta } = Card;
 
 const getApps = list => {
   return list.map(e => {
     return (
-      <Card
-        key={e.id}
-        className={classes.appCard}
-        loading={false}
-        onClick={() => history.push(`/app/${e.id}/detail`)}
-      >
-        <Meta
-          className={classes.appCardMeta}
-          avatar={<Icon type={e.icon} className={classes.avatarIcon} />}
-          title={e.name}
-          description={e.description}
-        />
-      </Card>
+      <Authenticate key={e.id} auth={APP_VISIABLED(e.id)}>
+        <Card
+          className={classes.appCard}
+          loading={false}
+          onClick={() => history.push(`/app/${e.id}/detail`)}
+        >
+          <Meta
+            className={classes.appCardMeta}
+            avatar={<img src={`/image/appCreateIcons/${e.icon}.png`} alt="" />}
+            title={e.name}
+            description={e.description}
+          />
+        </Card>
+      </Authenticate>
     );
   });
 };
@@ -69,23 +72,37 @@ class Apps extends React.Component {
   }
 
   render() {
-    console.log(this.props.name);
+    const { appList, sysUserName, name } = this.props;
     return (
       <Layout>
         <HomeHeader />
         <Content className={commonClasses.container}>
           <header className={commonClasses.header}>
-            <span style={{ fontSize: 20 }}>我的应用</span>
-            <Button
-              type="link"
-              icon="plus"
-              onClick={() => this.setState({ open: true })}
-            >
-              创建应用
-            </Button>
+            <span style={{ fontSize: 14 }}>我的应用</span>
           </header>
-          <content>{getApps(this.props.appList)}</content>
-          <CreateFormModal
+          <Content className={classes.innerMain}>
+            {getApps(appList)}
+            <Authenticate auth={SUPER_ADMINISTRATOR}>
+              <Button
+                type="dashed"
+                icon="plus"
+                onClick={() => this.setState({ open: true })}
+              >
+                创建应用
+              </Button>
+              {appList.length < 2 && (
+                <img src="/image/davinci/noapps.png" alt="" />
+              )}
+            </Authenticate>
+            {appList.length < 1 && sysUserName !== name && (
+              <img
+                src="/image/davinci/noapps-normal.png"
+                alt=""
+                style={{ paddingBottom: "15px" }}
+              />
+            )}
+          </Content>
+          <ModalCreation
             title={"创建应用"}
             visible={this.state.open}
             onOk={data => this.handleCreate(data)}
@@ -98,8 +115,10 @@ class Apps extends React.Component {
 }
 
 export default connect(
-  ({ app }) => ({
-    appList: app.appList
+  ({ app, login }) => ({
+    appList: app.appList,
+    sysUserName: login.currentTeam.sysUserName,
+    name: login.userDetail.name
   }),
   {
     getAppList

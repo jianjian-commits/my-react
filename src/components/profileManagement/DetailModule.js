@@ -1,9 +1,9 @@
 import React from "react";
-import { Checkbox, Button, Table } from "antd";
+import { Checkbox, Button, Table, Input } from "antd";
 import classes from "./profile.module.scss";
 
 // 基础信息
-export const getBasicInfo = (a, baseInfoBo, onChange) => {
+export const getBasicInfo = (a, baseInfoBo, onChange, edit, inputEdit) => {
   let {
     roleName,
     createName,
@@ -28,21 +28,36 @@ export const getBasicInfo = (a, baseInfoBo, onChange) => {
 
   return (
     <div className={classes.groupBasic}>
-      <span>基础信息</span>
+      <div className={classes.moduleTitle}>基本信息</div>
       <table>
         <tbody>
           {basicInfo.map(i => {
             return (
               <tr key={i.title}>
                 <td>{i.title}</td>
-                <td>
-                  <input
-                    readOnly={a === "view" || i.title !== "分组名"}
-                    defaultValue={i.value}
-                    className={classes.inputStyle}
-                    onChange={e => onChange(e.target.value, "getBasicInfo")}
-                  ></input>
+                <td width="150px">
+                  {edit && i.title === "分组名" ? (
+                    <Input
+                      disabled={a === "view" || i.title !== "分组名"}
+                      value={i.value}
+                      // className={classes.inputStyle}
+                      onChange={e => onChange(e.target.value, "getBasicInfo")}
+                      onBlur={() => inputEdit(false)}
+                    ></Input>
+                  ) : (
+                    <>
+                      <span>{i.value}</span>
+                      {a === "edit" && i.title === "分组名" && (
+                        <img
+                          src="/image/davinci/edit.png"
+                          alt=""
+                          onClick={() => inputEdit(true)}
+                        />
+                      )}
+                    </>
+                  )}
                 </td>
+                <td></td>
               </tr>
             );
           })}
@@ -97,13 +112,13 @@ export const getAppManage = (a, appManagerBos, onChange, enterPermission) => {
   ];
   return (
     <div className={classes.groupApp}>
-      <span>应用管理</span>
-      <div className={classes.tableStyles}>
+      <span className={classes.moduleTitle}>应用管理</span>
+      <div>
         <Table
-          size="middle"
           columns={columns}
           dataSource={appManagerBos}
           rowKey="appId"
+          pagination={false}
         ></Table>
       </div>
     </div>
@@ -147,7 +162,7 @@ export const getOtherManage = (a, permissions, onChange) => {
       {teamInfo.map(i => {
         return (
           <div className={classes.groupManage} key={i.title}>
-            <span>{i.title}</span>
+            <span className={classes.moduleTitle}>{i.title}</span>
             <Checkbox.Group
               options={i.options}
               value={i.value}
@@ -171,18 +186,23 @@ export const getOtherManage = (a, permissions, onChange) => {
 
 // 设置
 // export const getSetting = (a, setting) => {
+//   console.log("setting", setting);
+//   const { sessionTime, passwordMinLength, passwordDiffer } = setting;
 //   return (
 //     <div className={classes.groupSetting}>
-//       <span>Session设置</span>
-//       * 过期时间
-//       <input defaultValue={setting.sessionTime} readOnly />
-//       小时（不活跃状态）
-//       <span>Password设置</span>
-//       * 最小位数
-//       <input defaultValue={setting.passwordMinLength} readOnly />
-//       <br />
-//       * 密码复杂度
-//       <input defaultValue={setting.passwordDiffer} readOnly />
+//       <span className={classes.moduleTitle}>Session设置</span>
+//       <div>
+//         <span className={classes.star}>*</span> 过期时间
+//         <Input value={sessionTime} disabled={a === "view"} />
+//         小时（不活跃状态）
+//       </div>
+//       <span className={classes.moduleTitle}>Password设置</span>
+//       <div>
+//         <span className={classes.star}>*</span> 最小位数
+//         <Input value={passwordMinLength} disabled={a === "view"} />
+//         <span className={classes.star}>*</span> 密码复杂度
+//         <Input value={passwordDiffer} disabled={a === "view"} />
+//       </div>
 //     </div>
 //   );
 // };

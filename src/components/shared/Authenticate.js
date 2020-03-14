@@ -1,26 +1,24 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-
-const isValid = (authorities, auth) => {
-  return !!auth(authorities);
-};
-const noop = () => {};
+import { authorityIsValid } from "../../utils";
 
 const Authenticate = props => {
   const {
     type = "default",
     state = "fulfilled",
     to = "/app/list",
-    authorities,
-    auth = noop,
+    debug,
+    permissions,
+    teamId,
+    auth = "",
     unAuthComponent = null,
     options = {},
     children
   } = props;
-
-  if (!authorities || state === "pending") return null;
-  if (!isValid(authorities, auth)) {
+  if (debug) return children;
+  if (!permissions || state === "pending") return null;
+  if (!authorityIsValid({ debug, permissions, teamId, auth })) {
     switch (type) {
       case "redirect":
         return <Redirect to={to} />;
@@ -34,11 +32,16 @@ const Authenticate = props => {
         return null;
     }
   }
-  return children;
+  switch (type) {
+    default:
+      return children;
+  }
 };
 
-const mapStatesToProps = ({ login }) => ({
-  authorities: login.authorities || []
+const mapStatesToProps = ({ login, debug }) => ({
+  permissions: (login.userDetail && login.userDetail.permissions) || [],
+  teamId: login.currentTeam && login.currentTeam.id,
+  debug: debug.isOpen
 });
 
 export default connect(mapStatesToProps)(Authenticate);

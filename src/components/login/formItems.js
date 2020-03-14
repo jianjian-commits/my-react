@@ -1,8 +1,41 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input, Button, Icon, message } from "antd";
+import { Input as Inp, Button, Icon, message } from "antd";
 import request from "../../utils/request";
-import itemsStyles from "../../styles/login.module.scss";
+import clx from "classnames";
+import itemsStyles from "./style/login.module.scss";
+import usernameImg from "./style/username.svg";
+import passwordImg from "./style/password.svg";
+
+const meteImg = {
+  username: usernameImg,
+  password: passwordImg
+};
+
+class Input extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    const { src, classes, icon, ...rest } = this.props;
+    return (
+      <Inp
+        className={clx(itemsStyles.input, classes)}
+        prefix={
+          icon ? null : (
+            <img
+              style={{ marginLeft: "10px" }}
+              src={meteImg[this.props.type]}
+              alt=""
+            />
+          )
+        }
+        {...rest}
+      />
+    );
+  }
+}
 
 // 发送验证码
 async function sendVerificationCode(mobilePhone) {
@@ -90,8 +123,8 @@ const username = ({ form, payload }) => {
     },
     component: (
       <Input
-        prefix={<Icon type="solution" style={{ color: "rgba(0,0,0,.25)" }} />}
-        placeholder="请输入注册时绑定的邮箱/手机号"
+        type={"username"}
+        placeholder={"请输入注册时绑定的邮箱/手机号"}
         onChange={() => form.setFields({ username: { errors: null } })}
       />
     ),
@@ -99,21 +132,25 @@ const username = ({ form, payload }) => {
   };
 };
 
-const name = ({ form, payload }) => {
+const name = ({ form, payload, icon }) => {
   return {
     itemName: "name",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        required("姓名不可为空"),
+        required("昵称不可为空"),
         whitespace(),
-        maxLength(20, "姓名过长，最多20个字符")
+        maxLength(20, "昵称过长，最多20个字符")
       ]
     },
     component: (
       <Input
-        prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-        placeholder="用户昵称"
+        prefix={
+          icon ? null : (
+            <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+          )
+        }
+        placeholder={"请输入用户昵称"}
         onChange={() => form.setFields({ name: { errors: null } })}
       />
     ),
@@ -121,35 +158,27 @@ const name = ({ form, payload }) => {
   };
 };
 
-const password = ({ form, payload }) => ({
-  itemName: "password",
+const password = ({ form, payload, itemName, icon }) => ({
+  itemName: itemName,
   options: {
     validateTrigger: "onBlur",
     rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
   },
   component: (
     <Input
-      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-      type="password"
+      type={icon ? null : "password"}
       onChange={() => form.setFields({ password: { errors: null } })}
       placeholder={
         payload === "reconfirm"
           ? ""
           : payload === "login" || payload === "old"
-          ? "密码"
+          ? "请输入密码"
           : "密码为数字和字母组合,且为8-20位字符"
       }
+      icon={icon}
     />
   ),
-  additionComponent: (
-    <>
-      {payload === "login" ? (
-        <div style={{ position: "absolute", right: 0, top: "16px" }}>
-          <Link to="/forgetPassword">忘记密码?</Link>
-        </div>
-      ) : null}
-    </>
-  )
+  additionComponent: null
 });
 const oldPassWord = ({ form, payload }) => ({
   itemName: "oldPassWord",
@@ -213,30 +242,7 @@ const confirmPassWord = ({ form, payload, newPassWord }) => {
   };
 };
 
-const verificationCode = ({ form, payload }) => {
-  return {
-    itemName: "verificationCode",
-    options: {
-      validateTrigger: "onBlur",
-      rules: [required("请输入验证码"), whitespace()]
-    },
-    component: (
-      <Input
-        onChange={() => form.setFields({ verificationCode: { errors: null } })}
-        prefix={
-          <Icon
-            type="safety-certificate"
-            style={{ color: "rgba(0,0,0,.25)" }}
-          />
-        }
-        placeholder="验证码"
-      />
-    ),
-    additionComponent: null
-  };
-};
-
-const mobilePhone = ({ form, payload }) => {
+const verificationCode = ({ form, payload, icon }) => {
   const { getFieldValue } = form;
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
@@ -273,6 +279,82 @@ const mobilePhone = ({ form, payload }) => {
     });
   };
   return {
+    itemName: "verificationCode",
+    options: {
+      validateTrigger: "onBlur",
+      rules: [required("请输入验证码"), whitespace()]
+    },
+    component: (
+      <Input
+        classes={itemsStyles.loginPhoneCard}
+        onChange={() => form.setFields({ verificationCode: { errors: null } })}
+        prefix={
+          icon ? null : (
+            <Icon
+              type="safety-certificate"
+              style={{ color: "rgba(0,0,0,.25)" }}
+            />
+          )
+        }
+        placeholder={"请输入验证码"}
+        addonAfter={
+          <Button
+            ref={verificationCodeButtonRef}
+            disabled={null}
+            onClick={buttonConfirm}
+            style={{ height: "42px", background: "#2A7FFF", color: "#ffffff" }}
+          >
+            发送验证码
+          </Button>
+        }
+      />
+    ),
+    additionComponent: (
+      <span
+        ref={verificationCodeSpanRef}
+        style={{ position: "absolute", right: 0, top: "24px" }}
+      ></span>
+    )
+  };
+};
+
+const mobilePhone = ({ form, payload, icon }) => {
+  // const { getFieldValue } = form;
+  // const verificationCodeSpanRef = React.createRef();
+  // const verificationCodeButtonRef = React.createRef();
+  // const buttonConfirm = () => {
+  //   const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
+  //     verificationCodeButtonRef.current.buttonNode.disabled = true;
+  //     verificationCodeSpanRef.current.innerHTML = sended
+  //       ? `验证码已发送,如未收到请在${initNum}s后重试`
+  //       : `验证码发送失败,请在${initNum}s后重试`;
+  //     let num = initNum - 1;
+  //     const int = setInterval(() => {
+  //       verificationCodeSpanRef.current.innerHTML = sended
+  //         ? `验证码已发送,如未收到请在${num}s后重试`
+  //         : `验证码发送失败,请在${num}s后重试`;
+  //       num = num - 1;
+  //     }, timeTerval);
+  //     setTimeout(() => {
+  //       window.clearInterval(int);
+  //       verificationCodeButtonRef.current.buttonNode.disabled = false;
+  //       verificationCodeSpanRef.current.innerHTML = "";
+  //       num = initNum - 1;
+  //     }, timeOut);
+  //   };
+  //   sendVerificationCode(getFieldValue("mobilePhone")).then(res => {
+  //     if (res) {
+  //       setTime({
+  //         sended: true,
+  //         initNum: 60,
+  //         timeOut: 60000
+  //       });
+  //     } else {
+  //       setTime({ sended: false, initNum: 6, timeOut: 6000 });
+  //     }
+  //   });
+  // };
+  return {
     itemName: "mobilePhone",
     options: {
       validateTrigger: "onBlur",
@@ -286,32 +368,36 @@ const mobilePhone = ({ form, payload }) => {
     },
     component: (
       <Input
-        className={itemsStyles.loginPhoneCard}
-        prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,.25)" }} />}
-        placeholder="手机号"
-        addonBefore="+86"
-        onChange={() => form.setFields({ mobilePhone: { errors: null } })}
-        addonAfter={
-          <Button
-            ref={verificationCodeButtonRef}
-            disabled={null}
-            onClick={buttonConfirm}
-          >
-            发送验证码
-          </Button>
+        placeholder={"请输入绑定的手机号"}
+        addonBefore={<span>+86</span>}
+        prefix={
+          icon ? null : (
+            <Icon type="phone" style={{ color: "rgba(0,0,0,0.25)" }} />
+          )
         }
+        onChange={() => form.setFields({ mobilePhone: { errors: null } })}
+        // addonAfter={
+        //   <Button
+        //     ref={verificationCodeButtonRef}
+        //     disabled={null}
+        //     onClick={buttonConfirm}
+        //   >
+        //     发送验证码
+        //   </Button>
+        // }
       />
     ),
-    additionComponent: (
-      <span
-        ref={verificationCodeSpanRef}
-        style={{ position: "absolute", right: 0, top: "18px" }}
-      ></span>
-    )
+    additionComponent: null
+    // (
+    //   <span
+    //     ref={verificationCodeSpanRef}
+    //     style={{ position: "absolute", right: 0, top: "18px" }}
+    //   ></span>
+    // )
   };
 };
 
-const companyName = ({ form, payload }) => {
+const companyName = ({ form, payload, icon }) => {
   return {
     itemName: "companyName",
     options: {
@@ -326,16 +412,20 @@ const companyName = ({ form, payload }) => {
     },
     component: (
       <Input
-        prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
+        prefix={
+          icon ? null : (
+            <Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />
+          )
+        }
         onChange={() => form.setFields({ companyName: { errors: null } })}
-        placeholder="公司名"
+        placeholder={"请输入公司名"}
       />
     ),
     additionComponent: null
   };
 };
 
-const userEmail = ({ form, payload }) => {
+const userEmail = ({ form, payload, icon }) => {
   return {
     itemName: "userEmail",
     options: {
@@ -349,8 +439,12 @@ const userEmail = ({ form, payload }) => {
     },
     component: (
       <Input
-        prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
-        placeholder="电子邮箱"
+        prefix={
+          icon ? null : (
+            <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
+          )
+        }
+        placeholder={"请输入绑定的电子邮箱"}
         onChange={() => form.setFields({ userEmail: { errors: null } })}
       />
     ),
@@ -358,8 +452,16 @@ const userEmail = ({ form, payload }) => {
   };
 };
 
-const submit = ({ form, payload, teamId, userId, token }) => ({
-  itemName: "actionType",
+const submit = ({
+  form,
+  payload,
+  teamId,
+  userId,
+  token,
+  itemName,
+  setActiveKey
+}) => ({
+  itemName: itemName,
   options: {
     initialValue: payload
   },
@@ -375,23 +477,34 @@ const submit = ({ form, payload, teamId, userId, token }) => ({
   additionComponent: (
     <>
       {payload === "login" && (
-        <div style={{ textAlign: "center" }}>
-          没有账号?<Link to="/register">注册一个</Link>
+        <div
+          className={itemsStyles.buttonSuffix}
+          style={{ width: "100%", marginLeft: "0px" }}
+        >
+          <Link to="/forgetPassword">忘记密码</Link>&nbsp;&nbsp;|&nbsp;&nbsp;
+          <span onClick={() => setActiveKey("register")}>注册</span>
         </div>
       )}
       {payload === "register" && (
-        <div style={{ textAlign: "center" }}>
-          已有账号?直接<Link to="/login">登录</Link>
+        <div className={itemsStyles.buttonSuffix}>
+          已有账号?直接
+          <span
+            style={{ color: "#096dd9", cursor: "pointer" }}
+            onClick={() => setActiveKey("signin")}
+          >
+            登录
+          </span>
         </div>
       )}
       {payload === "resetPassword" && (
-        <div style={{ textAlign: "center" }}>
-          返回<Link to="/login">登录</Link>
+        <div className={itemsStyles.buttonSuffix}>
+          <Link to="/login">返回登录</Link>
         </div>
       )}
       {payload === "addTeam" && (
-        <div style={{ textAlign: "center" }}>
+        <div className={itemsStyles.buttonSuffix}>
           <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
+          <span></span>
         </div>
       )}
     </>
@@ -402,26 +515,103 @@ const submit = ({ form, payload, teamId, userId, token }) => ({
 export const loginPasswordParameter = [
   { key: "username", value: null, itemName: "username" },
   { key: "password", value: "login", itemName: "password" },
-  { key: "submit", value: "login", itemName: "submit" }
+  { key: "submit", value: "login", itemName: "loginPasswordSubmit" }
 ];
 export const loginPhoneParameter = [
   { key: "mobilePhone", value: "login" },
   { key: "verificationCode", value: null },
-  { key: "submit", value: "login" }
+  { key: "submit", value: "login", itemName: "loginPhoneSubmit" }
 ];
 export const loginForgetPasswordParameter = [
-  { key: "mobilePhone", value: "forgrtPassword" },
-  { key: "password", value: null },
-  { key: "submit", value: "resetPassword" }
+  {
+    help: "forgetPassword",
+    key: "username",
+    value: null,
+    itemName: "username",
+    label: "用户名",
+    hasFeedback: true,
+    colon: false,
+    icon: true
+  },
+  // { key: "mobilePhone", value: "forgrtPassword" },
+  {
+    help: "forgetPassword",
+    key: "verificationCode",
+    value: null,
+    label: "验证码",
+    hasFeedback: true,
+    colon: false,
+    icon: true
+  },
+  {
+    help: "forgetPassword",
+    key: "password",
+    value: null,
+    label: "密码",
+    hasFeedback: true,
+    colon: false,
+    itemName: "password",
+    icon: true
+  },
+  { key: "submit", value: "resetPassword", itemName: "resetPasswordSubmit" }
 ];
 export const registerParameter = [
-  { key: "name", value: null },
-  { key: "userEmail", value: null },
-  { key: "mobilePhone", value: "register" },
-  { key: "verificationCode", value: null },
-  { key: "password", value: "register" },
-  { key: "companyName", value: null },
-  { key: "submit", value: "register" }
+  {
+    help: "register",
+    key: "name",
+    value: null,
+    label: "用户昵称",
+    hasFeedback: true,
+    colon: false,
+    icon: true
+  },
+  {
+    help: "register",
+    key: "userEmail",
+    value: null,
+    label: "邮箱",
+    hasFeedback: true,
+    colon: false,
+    icon: true
+  },
+  {
+    help: "register",
+    key: "mobilePhone",
+    value: "register",
+    label: "手机号",
+    hasFeedback: true,
+    colon: false,
+    icon: true
+  },
+  {
+    help: "register",
+    key: "verificationCode",
+    value: null,
+    label: "验证码",
+    hasFeedback: true,
+    colon: false,
+    icon: true
+  },
+  {
+    help: "register",
+    key: "password",
+    value: "register",
+    label: "密码",
+    hasFeedback: true,
+    colon: false,
+    itemName: "registerPassword",
+    icon: true
+  },
+  {
+    help: "register",
+    key: "companyName",
+    value: null,
+    label: "公司名",
+    hasFeedback: true,
+    colon: false,
+    icon: true
+  },
+  { key: "submit", value: "register", itemName: "registerSubmit" }
 ];
 export const userDetailParameter = {
   resetCompanyName: [

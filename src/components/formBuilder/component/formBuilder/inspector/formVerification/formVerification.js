@@ -9,16 +9,16 @@ import { Input, Button, Icon, Tooltip } from "antd";
 import ConditionModal from "./conditionModal";
 class VerificationItem extends React.Component {
   render() {
-    const { span, index } = this.props;
+    const { item, index } = this.props;
     return (
       <div className="VerificationItem">
         <Input
-          value={span}
+          value={item.name}
           disabled={true}
         />
         <Tooltip title="编辑">
           <img src="/image/icons/edit.png" onClick={() => {
-            this.props.editFunc(span, index);
+            this.props.editFunc(item, index);
           }} />
         </Tooltip>
         <Tooltip title="删除">
@@ -42,6 +42,7 @@ class FormVerification extends React.Component {
       customValue: null,
       modalProps: {
         verificationStr: "",
+        verificationValue: "",
         index: -1,
       }
     };
@@ -52,15 +53,12 @@ class FormVerification extends React.Component {
   }
 
   componentDidMount() {
-    // let customValue = this.state.customValue;
+    let formValidation = this.props.verificationList;
+    let errMessage = this.props.errMessage;
 
-    let customValue = this.props.data.filter(item => {
-      return item.type === "CustomValue";
-    })[0];
-
-    if (customValue  != void 0) {
-      this.props.setVerification(customValue.validate)
-      this.props.setVerificationMsg(customValue.errMessage, 'init');
+    if (formValidation != void 0) {
+      this.props.setVerification(formValidation)
+      this.props.setVerificationMsg(errMessage, 'init');
     }
 
   }
@@ -71,12 +69,14 @@ class FormVerification extends React.Component {
       visible: true
     }));
   };
-  showEditModal = (verificationStr, index) => {
+  showEditModal = (validate, index) => {
+    const {name, value} = validate;
     this.setState(state => ({
       ...state,
       visible: true,
       modalProps: {
-        verificationStr,
+        verificationStr: name,
+        verificationValue : value,
         index
       }
     }));
@@ -87,6 +87,7 @@ class FormVerification extends React.Component {
       visible: false,
       modalProps: {
         verificationStr: "",
+        verificationValue : "",
         index: -1,
       }
     }));
@@ -97,6 +98,7 @@ class FormVerification extends React.Component {
       visible: false,
       modalProps: {
         verificationStr: "",
+        verificationValue: "",
         index: -1,
       }
     }));
@@ -120,7 +122,7 @@ class FormVerification extends React.Component {
                 deleteFunc={this.props.deleteVerification}
                 editFunc={()=>{this.showEditModal(item,index);;
                 }}
-                span={item}
+                item={item}
                 showModal={this.showModal}
               />
             </div>

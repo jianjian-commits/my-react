@@ -102,7 +102,7 @@ export default class Email extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
 
     let errMsg = item.validate.customMessage || "";
     let itemOption = {}
@@ -115,7 +115,7 @@ export default class Email extends React.Component {
       <Form.Item label={<LabelUtils data={item} />}
       {...itemOption}>
         {getFieldDecorator(item.key, {
-          initialValue: item.defaultValue,
+          initialValue: initData || item.defaultValue,
           rules: [
             {
               validator: this.checkUnique

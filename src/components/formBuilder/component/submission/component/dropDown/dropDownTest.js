@@ -25,7 +25,7 @@ export default class DropDown extends React.Component {
     const { data } = item;
     let { values, type } = data;
     // 数据联动请看单行文本组件
-    if (data && data.type === "DataLinkage") {
+    if (data && data.type == "DataLinkage") {
       const {
         conditionId,
         linkComponentId,
@@ -41,8 +41,8 @@ export default class DropDown extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = [];
             indexArr.forEach(i => {
-              if (data[i]) {
-                res.push(data[i]);
+              if(data[i]) {
+                res.push(data[i])
               }
             });
 
@@ -93,7 +93,7 @@ export default class DropDown extends React.Component {
           }
         });
       });
-    } else if (type === "otherFormData") {
+    } else if (type == "otherFormData") {
       // 关联其他数据
       // 通过表单id和字段id过滤对应的提交数据
       // 将过滤的数据作为该表单的选项
@@ -120,7 +120,7 @@ export default class DropDown extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
     const { selections } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
@@ -136,22 +136,9 @@ export default class DropDown extends React.Component {
               message: "此字段为必填"
             }
           ],
-          initialValue: ""
+          initialValue: initData ||""
         })(
           <DropDownTestItem selections={selections} item={item} />
-          //   <Select
-          //     disabled={disabled}
-          //     placeholder="请选择"
-          //     style={{ width: "100%" }}
-          //     onChange={this.handleChange}
-          //     getPopupContainer = {triggerNode => triggerNode.parentNode}
-          //   >
-          //     {selections.map((item, index) => (
-          //       <Select.Option key={index} value={item.value}>
-          //         {item.label}
-          //       </Select.Option>
-          //     ))}
-          //   </Select>
         )}
       </Form.Item>
     );

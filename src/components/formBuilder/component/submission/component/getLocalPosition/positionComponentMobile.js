@@ -4,7 +4,7 @@ import { Input, Form, Tooltip, Icon, Button } from "antd";
 import PositionComponent from "./component/positionComponent";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 
-let AMap;
+// let AMap;
 
 export default class PositionComponentMoblie extends React.Component {
   isInCenter = value => {
@@ -19,6 +19,7 @@ export default class PositionComponentMoblie extends React.Component {
       // 这是一个数组的坐标
       const centerPostion = [center.longitude, center.latitude];
       const orientationRange = center.orientationRange;
+      //eslint-disable-next-line
       let dis = AMap.GeometryUtil.distance(centerPostion, currentPosition);
       const isInCenter = dis < orientationRange;
       return isInCenter;
@@ -42,7 +43,7 @@ export default class PositionComponentMoblie extends React.Component {
     }
   };
   render() {
-    const { getFieldDecorator, item } = this.props;
+    const { getFieldDecorator, item, initData } = this.props;
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
@@ -54,8 +55,8 @@ export default class PositionComponentMoblie extends React.Component {
               required: item.validate.required,
               message: `${item.label}不能为空`
             }
-          ]
-          // initialValue:{address:"",latitude:0,longitude:0},
+          ],
+          initialValue: initData,
         })(<PositionComponent item={item} />)}
       </Form.Item>
     );

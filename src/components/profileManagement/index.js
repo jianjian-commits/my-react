@@ -1,14 +1,47 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import Authenticate from "../shared/Authenticate";
 import { Button, Table, message, Popconfirm } from "antd";
-import CreateFormModal from "../createGroup";
+import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
 import PermissionSetting from "../userManagement/applyPermissionSettings";
-// import Loading from "../../pages/Loading";
-
+import {
+  PROFILE_MANAGEMENT_NEW,
+  PROFILE_MANAGEMENT_UPDATE,
+  PROFILE_MANAGEMENT_DELETE
+} from "../../auth";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
+
+function GroupList(props) {
+  const {
+    handleClick,
+    columns,
+    dataSource,
+    title,
+    visible,
+    onOk,
+    onCancel
+  } = props;
+  return (
+    <>
+      <span>分组</span>
+      <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
+        <Button onClick={handleClick}>
+          <img src="/image/davinci/create.png" alt="" />
+          添加分组
+        </Button>
+      </Authenticate>
+      <Table columns={columns} dataSource={dataSource} rowKey="roleId"></Table>
+      <ModalCreation
+        title={title}
+        visible={visible}
+        onOk={onOk}
+        onCancel={onCancel}
+      />
+    </>
+  );
+}
 
 class ProfileManagement extends React.Component {
   constructor(props) {
@@ -20,12 +53,10 @@ class ProfileManagement extends React.Component {
       title: "",
       oldRoleId: "",
       roleList: []
-      // spinning: false
     };
     this.action = "view";
     this.roleId = "";
     this.appId = "";
-    this.handleCancel = this.handleCancel.bind(this);
     this.enterDetail = this.enterDetail.bind(this);
     this.enterPermission = this.enterPermission.bind(this);
   }
@@ -42,18 +73,18 @@ class ProfileManagement extends React.Component {
 
   // 获取分组总列表
   async getGroupList() {
-    // this.setState({ spinning: true });
     try {
       const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
         this.setState({
           roleList: res.data
         });
+      } else {
+        message.error("获取分组列表失败");
       }
     } catch (err) {
       message.error("获取分组列表失败");
     }
-    // this.setState({ spinning: false });
   }
 
   // 新建分组
@@ -73,12 +104,14 @@ class ProfileManagement extends React.Component {
             });
       if (res && res.status === "SUCCESS") {
         message.success(`${title}成功!`);
-        this.handleCancel();
         this.getGroupList();
+      } else {
+        message.error(`${title}失败`);
       }
     } catch (err) {
       message.error(`${title}失败`);
-      this.handleCancel();
+    } finally {
+      this.setState({ open: false });
     }
   }
 
@@ -91,17 +124,12 @@ class ProfileManagement extends React.Component {
       if (res && res.status === "SUCCESS") {
         message.success("删除成功！");
         this.getGroupList();
+      } else {
+        message.error("删除失败！");
       }
     } catch (err) {
       message.error("删除失败！");
     }
-  }
-
-  // 取消新建分组/关闭模态窗
-  handleCancel() {
-    this.setState({
-      open: false
-    });
   }
 
   // 进入或退出分组详情
@@ -124,56 +152,67 @@ class ProfileManagement extends React.Component {
 
   render() {
     const { open, title, roleList } = this.state;
-    // 分组列表标题和操作
     const columns = [
       { title: "组名", dataIndex: "roleName" },
       {
         title: "操作",
         dataIndex: "action",
-        render: (text, record) => (
-          <span className={classes.actionStyle}>
-            <Button
-              type="link"
-              onClick={() => {
-                this.enterDetail(true, "view", record);
-              }}
-            >
-              查看
-            </Button>
-            {record.code !== "SUPER_ADMIN" && (
-              <Button
-                type="link"
-                onClick={() => {
-                  this.enterDetail(true, "edit", record);
-                }}
-              >
-                编辑
-              </Button>
-            )}
-            <Button
-              type="link"
-              onClick={() =>
+        width: 520,
+        render: (text, record) => {
+          const roleList = [
+            {
+              key: "view",
+              text: "查看",
+              options: () => this.enterDetail(true, "view", record)
+            },
+            {
+              key: "edit",
+              text: "编辑",
+              auth: PROFILE_MANAGEMENT_UPDATE,
+              options: () => this.enterDetail(true, "edit", record),
+              hide: record.code === "SUPER_ADMIN"
+            },
+            {
+              key: "clone",
+              text: "克隆",
+              auth: PROFILE_MANAGEMENT_NEW,
+              options: () =>
                 this.setState({
                   open: true,
                   title: "克隆分组",
                   oldRoleId: record.roleId
                 })
-              }
-            >
-              克隆
-            </Button>
-            {record.code !== "SUPER_ADMIN" && record.code !== "GENERAL" && (
-              <Popconfirm
-                title="是否删除这个分组？"
-                okText="是"
-                cancelText="否"
-                onConfirm={() => this.removeGroup(record)}
-              >
-                <Button type="link">删除</Button>
-              </Popconfirm>
-            )}
-          </span>
-        )
+            },
+            {
+              key: "delete",
+              text: "删除",
+              auth: PROFILE_MANAGEMENT_DELETE,
+              hide: record.code === "SUPER_ADMIN" || record.code === "GENERAL"
+            }
+          ];
+          return roleList
+            .filter(v => !v.hide)
+            .map(w => (
+              <Authenticate key={w.key} auth={w.auth}>
+                {w.key === "delete" ? (
+                  <Popconfirm
+                    title="是否删除这个分组？"
+                    okText="是"
+                    cancelText="否"
+                    onConfirm={() => this.removeGroup(record)}
+                  >
+                    <Button type="link" key={w.key}>
+                      {w.text}
+                    </Button>
+                  </Popconfirm>
+                ) : (
+                  <Button type="link" onClick={w.options} key={w.key}>
+                    {w.text}
+                  </Button>
+                )}
+              </Authenticate>
+            ));
+        }
       }
     ];
 
@@ -194,30 +233,15 @@ class ProfileManagement extends React.Component {
             enterPermission={this.enterPermission}
           />
         ) : (
-          <>
-            {/* <Loading spinning={this.state.spinning}> */}
-            <Button
-              type="primary"
-              onClick={() => this.setState({ open: true, title: "添加分组" })}
-            >
-              添加分组
-            </Button>
-            <CreateFormModal
-              title={title}
-              visible={open}
-              onOk={(data, title) => this.handleCreate(data, title)}
-              onCancel={this.handleCancel}
-            />
-            <div className={classes.tableStyles}>
-              <Table
-                size="middle"
-                columns={columns}
-                dataSource={roleList}
-                rowKey="roleId"
-              ></Table>
-            </div>
-            {/* </Loading> */}
-          </>
+          <GroupList
+            handleClick={() => this.setState({ open: true, title: "添加分组" })}
+            columns={columns}
+            dataSource={roleList}
+            onOk={data => this.handleCreate(data, title)}
+            onCancel={() => this.setState({ open: false })}
+            visible={open}
+            title={title}
+          />
         )}
       </div>
     );

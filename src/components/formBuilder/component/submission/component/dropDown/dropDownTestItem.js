@@ -2,6 +2,7 @@ import React from "react";
 import { Spin, Icon, Popover } from "antd";
 import classNames from 'classnames';
 export default class DropDownTestItem extends React.Component {
+  // 这个的数据编辑是否有问题。。。。
   constructor(props) {
     super(props);
     this.state = {
@@ -11,8 +12,11 @@ export default class DropDownTestItem extends React.Component {
   }
 
   componentWillReceiveProps(newProps){
-    if(newProps.selections.length === 0){
+    if(newProps.selections.length == 0){
       this.setState({selectIndex:-1})
+    }else{
+      let selectIndex = newProps.item.data.values.map(item =>item.value).indexOf(newProps.value)
+      this.setState({selectIndex})
     }
   }
 

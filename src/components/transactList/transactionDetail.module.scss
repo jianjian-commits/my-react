@@ -4,6 +4,9 @@
 .title {
   padding: 10px 0;
 }
+.tabsBackground {
+    background-color: #FFFFFF;
+}
 .agree {
   border: none;
   &:hover {
@@ -11,3 +14,7 @@
     color: #fff;
   }
 }
+.approvalbox{
+  padding-right:30px;
+}
+

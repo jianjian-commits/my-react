@@ -1,0 +1,71 @@
+.container {
+  padding: 39px 31px 0px;
+}
+
+.title {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 41px;
+}
+
+.listBox {
+  padding: 5px 30px;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+.infoInput {
+  width: auto !important;
+  padding: 0 11px;
+}
+
+//teamMember
+.rowBox {
+  width: 100%;
+  height: 32px;
+  line-height: 32px;
+  box-sizing: border-box;
+}
+
+.filter {
+  padding: 0 0 10px 0;
+}
+
+.filterSvg {
+  margin-right: 8px;
+  line-height: 32px;
+  transform: translateY(2px);
+}
+
+.filterBtn {
+  background: #ffffff !important;
+  margin-left: 20px;
+  line-height: 32px;
+}
+
+.changeGroup {
+  padding-left: 0 !important;
+}
+
+.tableBox {
+  & th {
+    padding: 14px !important;
+    background: #fff !important;
+  }
+  .rowKey {
+    height: 50px;
+    box-sizing: border-box;
+
+    & td {
+      padding: 0 16px;
+    }
+  }
+
+  & .rowKey:nth-of-type(2n) {
+    background-color: #fff;
+  }
+
+  & .rowKey:nth-of-type(2n + 1) {
+    background-color: #edf2fd;
+  }
+}

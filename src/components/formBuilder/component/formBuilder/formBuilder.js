@@ -28,7 +28,9 @@ class ReactFormBuilder extends React.Component {
       isEditMode: false,
       editElement: null,
       editElementParent: null,
-      formId: locationUtils.getUrlParamObj().formId
+      formId: locationUtils.getUrlParamObj().formId,
+      appid:window.location.pathname.split("/")[2],
+      extraProp:{user:{name:(JSON.parse(localStorage.getItem('userDetail'))).name,id:(JSON.parse(localStorage.getItem('userDetail'))).id}}
     };
 
     this.editModeOn = this.editModeOn.bind(this);
@@ -36,12 +38,13 @@ class ReactFormBuilder extends React.Component {
 
   componentDidMount() {
     let { formId } = this.state;
+    
     const { initForm } = this.props;
     if (formId) {
       initForm(formId);
     }
     this.props.getAllForms();
-    console.log(this.props);
+    // console.log(this.props);
   }
   //增加一个形参判断是否点击的是子组件里面的元素
   editModeOn(editElement, e, formChildInnerElement) {
@@ -91,9 +94,9 @@ class ReactFormBuilder extends React.Component {
       toolbarProps.items = this.props.toolbarItems;
     }
     return (
-      <div className={"formBuilder"}>
-        <Spin spinning={this.props.isInitForming}>
-          <FormBuilderHeader editForm={this.props.localForm} />
+      <div className={"formBuilder"} key={Math.random()}>
+        <Spin spinning={this.props.isInitForming} >
+          <FormBuilderHeader appid={this.state.appid} extraProp={this.state.extraProp} editForm={this.props.localForm} />
           <DndProvider backend={HTML5Backend}>
             <div>
               <div className="react-form-builder clearfix">

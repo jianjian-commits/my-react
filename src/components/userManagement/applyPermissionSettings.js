@@ -627,8 +627,12 @@ function handleSaveButton({ state, initialData, enterPermission }) {
     }
   }).then(
     res => {
-      if (res && res.status === "SUCCESS") message.success("保存成功");
-      enterPermission();
+      if (res && res.status === "SUCCESS") {
+        message.success("保存成功");
+        enterPermission();
+      } else {
+        message.error("保存应用权限失败");
+      }
     },
     () => message.error("保存应用权限失败")
   );
@@ -640,12 +644,15 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
     data: { roleId, appId }
   }).then(
     res => {
-      if (res && res.status === "SUCCESS")
+      if (res && res.status === "SUCCESS") {
         setState({
           ...state,
           state: res.data,
           data: []
         });
+      } else {
+        message.error("获取应用权限失败");
+      }
     },
     () => message.error("获取应用权限失败")
   );

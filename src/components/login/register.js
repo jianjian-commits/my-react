@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Result } from "antd";
 import request from "../../utils/request";
-import registerStyles from "../../styles/login.module.scss";
 import PublicForm from "./publicForm";
 import { registerParameter } from "./formItems";
 import Loading from "../../pages/Loading";
+import Styles from "./style/login.module.scss";
 
-export default connect()(function Register({ history, match }) {
-  const { token } = match.params;
-  if (!history.location.query && history.location.pathname !== "/register")
-    history.push("/register");
-  const { inviter, invitedTeam } = history.location.query || {};
+export default connect()(function Register({
+  history,
+  params,
+  setActiveKey,
+  query
+}) {
+  const { token } = params;
+  // if (!history.location.query && history.location.pathname !== "/register")
+  //   history.push("/register");
+  const { inviter, invitedTeam } = history.location.query || query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
   const [spinning, setSpinning] = useState(false);
@@ -20,7 +25,7 @@ export default connect()(function Register({ history, match }) {
     try {
       const res = await request(token ? `/reg?token=${token}` : "/reg", {
         method: "post",
-        data: rest
+        data: { ...rest, password: rest.registerPassword }
       });
       if (res && res.status === "SUCCESS") {
         setStatus(true);
@@ -44,34 +49,35 @@ export default connect()(function Register({ history, match }) {
   };
 
   const component = (
-    <div className={registerStyles.signin}>
-      <div className={registerStyles.form}>
-        <div className={registerStyles.title}>
-          <div>
-            <h2>
-              {token ? (
-                <>
-                  <BlueFont>{inviter}</BlueFont>
-                  邀请您加入团队<BlueFont>{invitedTeam}</BlueFont>
-                </>
-              ) : (
-                "感谢您的选择,"
-              )}
-            </h2>
-          </div>
-          <div>
-            <h2>完善个人信息立即开始试用吧!</h2>
-          </div>
+    <>
+      <div className={Styles.title}>
+        <div>
+          <span>
+            {token ? (
+              <>
+                <BlueFont>{inviter}</BlueFont>
+                邀请您加入-<BlueFont>{invitedTeam}</BlueFont>
+              </>
+            ) : (
+              "感谢您的选择,"
+            )}
+          </span>
         </div>
         <div>
-          <PublicForm
-            parameter={registerParameter}
-            func={registerUser}
-            params={match.params}
-          />
+          <span>完善个人信息立即开始试用吧</span>
         </div>
       </div>
-    </div>
+      <div>
+        <PublicForm
+          marginBottom={24}
+          parameter={registerParameter}
+          func={registerUser}
+          params={params}
+          setActiveKey={setActiveKey}
+          history={history}
+        />
+      </div>
+    </>
   );
   const registerResult = (
     <Result

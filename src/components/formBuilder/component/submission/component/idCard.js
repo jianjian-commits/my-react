@@ -210,7 +210,7 @@ export default class IdCard extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled } = this.props;
+    const { getFieldDecorator, item, disabled, initData } = this.props;
     let itemOption = {};
     if (this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0) {
       itemOption.validateStatus = "error";
@@ -219,7 +219,7 @@ export default class IdCard extends React.Component {
     return (
       <Form.Item label={<LabelUtils data={item} />} {...itemOption}>
         {getFieldDecorator(item.key, {
-          initialValue: item.defaultValue,
+          initialValue: initData || item.defaultValue,
           rules: [
             {
               validator: this.checkIdCardNumber

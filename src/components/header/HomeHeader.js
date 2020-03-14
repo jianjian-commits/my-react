@@ -2,18 +2,28 @@ import React from "react";
 import { Layout, Menu, Badge, Button } from "antd";
 import { useHistory } from "react-router-dom";
 import User from "./UserSection";
+import Authenticate from "../shared/Authenticate";
+import { TEAM_MANAGEMENT_ABLE } from "../../auth";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
 
 const { Header } = Layout;
+const homeHeaderStyle = {
+  background: "#2A7FFF",
+  height: 50,
+  padding: "0 20px",
+  lineHeight: "50px"
+};
 const logoStyle = {
-  background: "#eee",
+  background: "rgba(255, 255, 255, 0.4)",
+  height: "100%",
   color: "#333",
-  lineHeight: "44px",
+  lineHeight: "37px",
   textAlign: "center"
 };
 const menuStyle = {
-  lineHeight: "64px"
+  // lineHeight: "50px",
+  background: "transparent"
 };
 
 export default connect(({ router }) => ({
@@ -23,9 +33,9 @@ export default connect(({ router }) => ({
   const selectHandle = e => {
     history.push(e.key);
   };
-  const toUserMangement = () => history.push("/user/info");
+  const toTeamMangement = () => history.push("/team/info");
   return (
-    <Header className={classes.homeHeader}>
+    <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
         <div className={classes.logo}>
           <div style={logoStyle}>logo</div>
@@ -35,7 +45,7 @@ export default connect(({ router }) => ({
             style={menuStyle}
             selectedKeys={props.router.location.pathname}
             mode="horizontal"
-            theme="dark"
+            // theme="dark"
             onClick={selectHandle}
           >
             <Menu.Item key="/app/list">我的应用</Menu.Item>
@@ -45,9 +55,11 @@ export default connect(({ router }) => ({
           </Menu>
         </div>
         <div className={classes.operations}>
-          <Button icon="user" onClick={toUserMangement}>
-            团队管理
-          </Button>
+          <Authenticate auth={TEAM_MANAGEMENT_ABLE}>
+            <Button type="link" ghost icon="user" onClick={toTeamMangement}>
+              团队管理
+            </Button>
+          </Authenticate>
         </div>
         <div className={classes.user}>
           <User />
