@@ -226,7 +226,7 @@ class DataLinkageModal extends React.Component {
   handleCheckingHasForm = () => {
     const { forms = [] } = this.props;
     const { linkFormId } = this.state;
-    const formsIds = forms.map(form => form._id);
+    const formsIds = forms.map(form => form.id);
     const hasLinkedFormId = formsIds.includes(linkFormId);
     return hasLinkedFormId;
   };
@@ -279,6 +279,8 @@ class DataLinkageModal extends React.Component {
       data,
       elementParent
     } = this.props;
+    console.log(forms, data, formId)
+
     const {
       linkFormId,
       linkComponentId,
@@ -324,10 +326,9 @@ class DataLinkageModal extends React.Component {
             defaultValue={isLinkFormError ? "字段失效，请重新选择" : linkFormId}
           >
             {filterFormExceptSelf(forms, formId)
-              .reverse()
               .map(form => (
-                <Option value={form._id} key={form._id}>
-                  {form.title}
+                <Option value={form.id} key={form.id}>
+                  {form.name}
                 </Option>
               ))}
           </Select>
@@ -485,6 +486,7 @@ class DataLinkageModal extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder.data,
+    // forms: store.formBuilder.formArray,
     formId: store.formBuilder.formId
   }),
   {

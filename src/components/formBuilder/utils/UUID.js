@@ -4,9 +4,13 @@ var CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".spl
   ""
 );
 var ID = {};
-const uuidTypeIndex = {};
+let uuidTypeIndex = {};
 
 ID.uuid = function(type, components = []) {
+  if(components.length === 0) {
+    uuidTypeIndex = {};
+  }
+
   const keys = [];
   components.forEach(component => {
     if (component.type === "FormChildTest") {
@@ -18,6 +22,7 @@ ID.uuid = function(type, components = []) {
       keys.push(component.key);
     }
   });
+  console.log(keys);
 
   while (
     keys.includes(type) &&

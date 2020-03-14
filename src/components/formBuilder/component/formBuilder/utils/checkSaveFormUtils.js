@@ -1,7 +1,7 @@
 /*
  * @Author: komons
  * @Date: 2020-02-17 10:23:58
- * @LastEditTime: 2020-03-13 10:01:44
+ * @LastEditTime: 2020-03-14 12:58:47
  * @LastEditors: komons
  * @Description: 用于检验编辑的表单是否合理， 如果合理返回true
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formBuilder\utils\checkSaveFormUtils.js
@@ -10,11 +10,11 @@ import { message } from "antd";
 import { getDataFromUrl } from "../../../utils/locationUtils";
 // 检查是否可以保存表单
 export default function checkAndSaveForm(props) {
-  const { formData, forms } = props;
+  const { formData, formArray } = props;
   const [...result] = [
     checkHasUniqueApiName(formData),
     checkHasLinkComponent(formData),
-    checkHasLinkForm(forms, formData)
+    checkHasLinkForm(formArray, formData)
   ];
   for (let i = 0; i < result.length; i++) {
     if (!result[i].res) {
@@ -46,7 +46,7 @@ export function checkHasLinkComponent(formData) {
 
 // 检查联动表单是否存在
 export function checkHasLinkForm(forms = [], components = []) {
-  const formsIds = forms.map(form => form._id);
+  const formsIds = forms.map(form => form.id);
   for (let i = 0; i < components.length; i++) {
     let component = components[i];
     if (

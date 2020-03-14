@@ -34,14 +34,14 @@ class OtherDataModal extends Component {
     let { formId, optionId, optionLabel, hasError } = this.props.data;
     // 过滤自身表单
     const forms = this.props.forms.filter(
-      form => form._id != this.props.formId
+      form => form.id != this.props.formId
     );
     forms.reverse();
-    let hasform = forms.some(form => form._id === formId);
+    let hasform = forms.some(form => form.id === formId);
     let formIndex = -1;
     if (hasform && formId) {
       forms.forEach((form, index) => {
-        if (form._id === formId) {
+        if (form.id === formId) {
           formIndex = index;
         }
       });
@@ -181,7 +181,7 @@ class OtherDataModal extends Component {
             value={selectedFormId}
           >
             {forms.map((form, index) => (
-              <Option key={form._id} index={index} value={form._id}>
+              <Option key={form.id} index={index} value={form.id}>
                 {form.title}
               </Option>
             ))}

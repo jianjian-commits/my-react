@@ -34,7 +34,7 @@ const LinkFormAcceptDataType = {
 // 过滤自生表单
 export const filterFormExceptSelf = (forms = [], formId) => {
   return forms.filter(form => {
-    if (form._id == formId) {
+    if (form.id == formId) {
       return false;
     } else {
       return true;
@@ -96,7 +96,7 @@ export const filterAcceptComponent = (components, type) => {
 // 根据表单id获得该表单的所有组件
 export const filterLinkFormAndGetComponent = (forms = [], formId, type) => {
   const form = forms.filter(form => {
-    if (form._id == formId) {
+    if (form.id == formId) {
       return true;
     } else {
       return false;
@@ -115,7 +115,7 @@ export const filterFormChildAllComponent = (
 ) => {
   // 获得对应id的表单
   const form = forms.filter(form => {
-    if (form._id == formId) {
+    if (form.id == formId) {
       return true;
     } else {
       return false;
@@ -149,15 +149,15 @@ export const filterFormsForRelation = (forms = [], formId) => {
   forms.forEach(form => {
     let formData = {
       title: form.title,
-      value: form._id,
-      key: form._id,
+      value: form.id,
+      key: form.id,
       children: []
     };
     form.components.forEach(item => {
       if (item.element != "CustomValue") {
         formData.children.push({
           title: form.title + "-" + item.label,
-          value: form._id + "|" + item.key,
+          value: form.id + "|" + item.key,
           key: item.key
         });
       }
@@ -173,7 +173,7 @@ export const filterFormSubmitOption = (forms, values) => {
   let formName = "";
   let optionName = "";
   forms.forEach(form => {
-    if (form._id == formId) {
+    if (form.id == formId) {
       formName = form.title;
     }
     form.components.forEach(item => {

@@ -225,7 +225,7 @@ export default connect(
     submissionAccess: store.rootData.submissionAccess,
     verificationList: store.formBuilder.verificationList,
     name: store.formBuilder.name,
-    formArray: store.forms.formArray,
+    formArray: store.formBuilder.formArray,
     errMessage: store.formBuilder.errMessage,
     isFormChanged: store.formBuilder.isFormChanged,
     localForm: store.formBuilder.localForm
