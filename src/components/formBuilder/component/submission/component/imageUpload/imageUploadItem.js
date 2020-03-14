@@ -9,11 +9,11 @@ export default class ImageUpload extends React.Component {
         <div>
           <Icon type="plus-circle" theme="filled" />
           <p>点击添加图片</p>
-          <p>0/{this.props.item.validate.fileCount}</p>
+          <p>{props.value.length}/{props.item.validate.fileCount}</p>
         </div>
       ),
-      uploadFileList: [],
-      canUpload: true //能否上传的一个标志位
+      uploadFileList: props.value,
+      canUpload: props.item.validate.fileCount > props.value.length //能否上传的一个标志位
     };
     this.handleBeforeUpload = this.handleBeforeUpload.bind(this);
   }

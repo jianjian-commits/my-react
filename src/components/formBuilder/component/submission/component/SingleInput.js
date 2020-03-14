@@ -54,7 +54,7 @@ export default class SingleInput extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator, item } = this.props;
+    const { getFieldDecorator, item, initData } = this.props;
 
     let errMsg = this.props.item.validate.customMessage;
 
@@ -72,7 +72,7 @@ export default class SingleInput extends React.Component {
         }
       >
         {getFieldDecorator(item.key, {
-          initialValue: item.defaultValue,
+          initialValue: initData || item.defaultValue,
           rules: [
             {
               required:

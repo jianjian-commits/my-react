@@ -53,9 +53,14 @@ class FormSubmitData extends PureComponent {
       limitDataNumber: false,
       isFilterMode: false,
       filterArray: [],
-      connectCondition: "&"
+      connectCondition: "&",
+      formDataDetailId: ""
     };
   }
+  showformDataDetail = id => {
+    this.setState({ formDataDetailId: id });
+  };
+
   showModal = submissionId => {
     this.setState(state => ({
       ...state,
@@ -600,6 +605,8 @@ class FormSubmitData extends PureComponent {
               handleDeleteSubmisson={this.handleDeleteSubmisson}
               showModal={this.showModal}
               getSubmissionDetail={this.props.getSubmissionDetail}
+              setSubmissionId={this.props.actionFun}
+              showformDataDetail={this.showformDataDetail}
             />
           );
         }
@@ -818,106 +825,110 @@ class FormSubmitData extends PureComponent {
     );
     return (
       <>
-        {mobile.is ? null : (
-          <HeaderBar
-            backCallback={() => {
-              this.props.history.go(-1);
-            }}
-            name={this.props.forms.name}
-            isShowBtn={false}
-            isShowBackBtn={false}
+        {this.state.formDataDetailId ? (
+          <FormDataDetail
+            id={this.props.formId}
+            dataId={this.state.formDataDetailId}
+            appId={this.props.appId}
+            showformDataDetail={this.showformDataDetail}
           />
-        )}
-        <div
-          className="form-submit-data-table"
-          style={mobile.is ? mobile.style.table : null}
-        >
-          <DataDetailModal
-            modalVisible={this.state.modalVisible}
-            handleCancel={this.handleCancel}
-            handleOk={this.handleOk}
-            submissionId={this.state.submissionId}
-            formId={this.state.formId}
-            components={this.props.forms.components}
-          />
-          <Route
-            path="/"
-            render={() => (
-              <>
-                <FilterComponent
-                  fileds={fileds}
-                  filterData={this.props.getFilterSubmissionData}
-                  setFilterMode={this.setFilterMode}
-                  formId={this.state.formId}
-                  currentPage={this.state.currentPage}
-                  pageSize={this.state.pageSize}
-                />
-
-                <div className="limit-data-number-container">
-                  <Dropdown
-                    overlay={menu}
-                    placement="bottomCenter"
-                    trigger={["click"]}
-                  >
-                    {this.state.isShowTotalData ? (
-                      <Button style={{ width: 150 }}>
-                        <span
-                          style={{
-                            display: "inline-block",
-                            width: 98,
-                            textAlign: "left"
-                          }}
-                        >
-                          全部
-                        </span>
-                        <Icon type="caret-down" style={{ color: "#777F97" }} />
-                      </Button>
-                    ) : (
-                      <Button style={{ width: 150 }}>
-                        显示
-                        <Input
-                          min={0}
-                          style={{
-                            width: 50,
-                            height: 22,
-                            marginLeft: 3,
-                            marginRight: 3
-                          }}
-                          value={this.state.showNumber}
-                          onChange={this.onChangeNumer}
-                          onClick={this.handleClickNumber}
-                        />
-                        条
-                        <Icon type="caret-down" style={{ color: "#777F97" }} />
-                      </Button>
-                    )}
-                  </Dropdown>
-                  <Button onClick={this.changeTotalNumber}>查询</Button>
-                </div>
-
-                <ConfigProvider
-                  locale={zhCN}
-                  renderEmpty={
-                    this.props.submissionDataTotal > -1 ? null : noRenderEmpty
-                  }
-                >
-                  <Table
-                    key={Math.random()}
-                    loading={this.props.submissionDataTotal <= -1}
-                    rowKey={record => record.id}
-                    columns={columns}
-                    dataSource={formDataShowArray}
-                    pagination={paginationProps}
-                    onChange={(pagination, filters, sorter) => {
-                      this.setColumnSort(sorter);
-                    }}
-                    scroll={{ x: true }}
-                  />
-                </ConfigProvider>
-              </>
+        ) : (
+          <>
+            {mobile.is ? null : (
+              <HeaderBar
+                backCallback={() => {
+                  this.props.history.go(-1);
+                }}
+                name={this.props.forms.name}
+                isShowBtn={false}
+                isShowBackBtn={false}
+              />
             )}
-          />
-        </div>
+            <div
+              className="form-submit-data-table"
+              style={mobile.is ? mobile.style.table : null}
+            >
+              <DataDetailModal
+                modalVisible={this.state.modalVisible}
+                handleCancel={this.handleCancel}
+                handleOk={this.handleOk}
+                submissionId={this.state.submissionId}
+                formId={this.state.formId}
+                components={this.props.forms.components}
+              />
+              <FilterComponent
+                fileds={fileds}
+                filterData={this.props.getFilterSubmissionData}
+                setFilterMode={this.setFilterMode}
+                formId={this.state.formId}
+                currentPage={this.state.currentPage}
+                pageSize={this.state.pageSize}
+              />
+
+              <div className="limit-data-number-container">
+                <Dropdown
+                  overlay={menu}
+                  placement="bottomCenter"
+                  trigger={["click"]}
+                >
+                  {this.state.isShowTotalData ? (
+                    <Button style={{ width: 150 }}>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          width: 98,
+                          textAlign: "left"
+                        }}
+                      >
+                        全部
+                      </span>
+                      <Icon type="caret-down" style={{ color: "#777F97" }} />
+                    </Button>
+                  ) : (
+                    <Button style={{ width: 150 }}>
+                      显示
+                      <Input
+                        min={0}
+                        style={{
+                          width: 50,
+                          height: 22,
+                          marginLeft: 3,
+                          marginRight: 3
+                        }}
+                        value={this.state.showNumber}
+                        onChange={this.onChangeNumer}
+                        onClick={this.handleClickNumber}
+                      />
+                      条
+                      <Icon type="caret-down" style={{ color: "#777F97" }} />
+                    </Button>
+                  )}
+                </Dropdown>
+                <Button onClick={this.changeTotalNumber}>查询</Button>
+              </div>
+
+              <ConfigProvider
+                locale={zhCN}
+                renderEmpty={
+                  this.props.submissionDataTotal > -1 ? null : noRenderEmpty
+                }
+              >
+                <Table
+                  key={Math.random()}
+                  loading={this.props.submissionDataTotal <= -1}
+                  rowKey={record => record.id}
+                  columns={columns}
+                  dataSource={formDataShowArray}
+                  pagination={paginationProps}
+                  onChange={(pagination, filters, sorter) => {
+                    this.setColumnSort(sorter);
+                  }}
+                  scroll={{ x: true }}
+                />
+              </ConfigProvider>
+            </div>
+          </>
+        )}
       </>
     );
   }

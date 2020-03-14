@@ -390,7 +390,7 @@ const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
         return (
           <div key={form.formId} className={Styles.form}>
             <div>
-              <span>表单:&nbsp;&nbsp;&nbsp;&nbsp;{form.formId}</span>
+              <span>表单:&nbsp;&nbsp;&nbsp;&nbsp;{form.formName}</span>
             </div>
             <div>
               <span>

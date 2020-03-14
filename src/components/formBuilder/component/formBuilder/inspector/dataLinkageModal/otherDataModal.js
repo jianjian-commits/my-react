@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 import { Modal, Select, Icon, Input, message } from "antd";
+import { connect } from "react-redux";
+import { setErrorComponentIndex } from "../../redux/utils/operateFormComponent";
 const Option = Select.Option;
 
-const IgnoreComponentType = ["CustomValue", "FormChildTest","Button"];
+const LinkComponentType = [
+  "SingleText",
+  "RadioButtons",
+  "CheckboxInput",
+  "MultiDropDown",
+  "NumberInput",
+  "DateInput",
+  "DropDown"
+];
 
-export default class OtherDataModal extends Component {
+class OtherDataModal extends Component {
   constructor(props) {
     super(props);
 
@@ -12,30 +22,38 @@ export default class OtherDataModal extends Component {
       formIndex: -1,
       selectedFormId: undefined,//关联表单id
       selectedOptionId: undefined, //关联表单字段id
+      linkComponentType: "other", //关联组件类型
       optionLabel: undefined,
       isOpenList: false,
+      hasError: false,
       forms: []
     };
   }
 
   componentDidMount() {
-    const { formId, optionId, optionLabel } = this.props.data;
+    let { formId, optionId, optionLabel, hasError } = this.props.data;
     // 过滤自身表单
     const forms = this.props.forms.filter(
-      form => form.id !== this.props.formId
+      form => form.id != this.props.formId
     );
     forms.reverse();
-    let formIndex = 0;
-    if (formId) {
+    let hasform = forms.some(form => form.id === formId);
+    let formIndex = -1;
+    if (hasform && formId) {
       forms.forEach((form, index) => {
         if (form.id === formId) {
           formIndex = index;
         }
       });
+    } else if (formId) {
+      formId = "关联条件失效，请重新设置";
+      optionLabel = "";
+      hasError = true;
     }
     this.setState({
       selectedFormId: formId,
       selectedOptionId: optionId,
+      hasError,
       optionLabel,
       formIndex,
       forms
@@ -47,17 +65,20 @@ export default class OtherDataModal extends Component {
       selectedFormId: value,
       formIndex: option.props.index,
       selectedOptionId: undefined,
-      optionLabel: undefined
+      optionLabel: undefined,
+      hasError: false
     });
   };
 
   handleOptionSelected = ev => {
     if (ev.target.tagName === "LI") {
       let value = ev.target.getAttribute("data-value");
+      let type = ev.target.getAttribute("data-type");
       let label = ev.target.innerText;
       this.setState({
         selectedOptionId: value,
-        optionLabel: label
+        optionLabel: label,
+        linkComponentType: type
       });
     }
   };
@@ -69,10 +90,10 @@ export default class OtherDataModal extends Component {
   };
 
   filterFormComponents = form => {
-    let components = form.components;
+    let components = (form && form.components) || [];
     if (Array.isArray(components)) {
-      return components.filter(
-        component => !IgnoreComponentType.includes(component.type)
+      return components.filter(component =>
+        LinkComponentType.includes(component.type)
       );
     } else {
       return [];
@@ -94,15 +115,22 @@ export default class OtherDataModal extends Component {
 
   handleOk = () => {
     const { showOrHideModal, onOk } = this.props;
-    const { selectedFormId, selectedOptionId, optionLabel } = this.state;
+    const {
+      selectedFormId,
+      selectedOptionId,
+      optionLabel,
+      linkComponentType
+    } = this.state;
     if (selectedFormId && selectedOptionId) {
       // 条件满足，进行存储
       onOk({
         selectedFormId,
         selectedOptionId,
-        optionLabel
+        optionLabel,
+        linkComponentType
       });
       showOrHideModal(false);
+      this.props.setErrorComponentIndex(-1);
     } else {
       // 配置条件未完成
       message.warn("请设置完整的关联数据条件", 2);
@@ -117,7 +145,8 @@ export default class OtherDataModal extends Component {
       selectedOptionId,
       optionLabel,
       isOpenList,
-      forms
+      forms,
+      hasError
     } = this.state;
 
     let classess = "option-list more";
@@ -147,7 +176,7 @@ export default class OtherDataModal extends Component {
           <p className="second-title">来源表单</p>
           <Select
             placeholder="请选择表单"
-            className="form-select"
+            className={hasError ? "form-select has-error" : "form-select"}
             dropdownClassName="select-dropdown"
             onSelect={this.handleFormSelected}
             value={selectedFormId}
@@ -163,7 +192,13 @@ export default class OtherDataModal extends Component {
             value={optionLabel}
             placeholder="选择字段"
             className="select-option"
-            suffix={<Icon onClick={this.handleShowOrHideList} className={arrowIconClass} type="down" />}
+            suffix={
+              <Icon
+                onClick={this.handleShowOrHideList}
+                className={arrowIconClass}
+                type="down"
+              />
+            }
             onClick={this.handleShowOrHideList}
           />
           <ul className={classess} onClick={this.handleOptionSelected}>
@@ -172,6 +207,7 @@ export default class OtherDataModal extends Component {
                   <li
                     key={component.id}
                     data-value={component.id}
+                    data-type={component.type}
                     className="select-option-item"
                   >
                     {component.label}
@@ -191,3 +227,7 @@ export default class OtherDataModal extends Component {
     );
   }
 }
+
+export default connect(store => {}, {
+  setErrorComponentIndex
+})(OtherDataModal);

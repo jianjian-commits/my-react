@@ -7,7 +7,7 @@ class FileUploadMobileItem extends React.Component {
     super(props);
     this.state = {
       clicked: "none",
-      uploadFileList: [],
+      uploadFileList: props.value || [],
       loadStatusMsg: null,
       canUpload: true,
       visible: false

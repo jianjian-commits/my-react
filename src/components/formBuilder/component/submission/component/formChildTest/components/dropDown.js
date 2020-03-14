@@ -4,8 +4,14 @@ import classNames from 'classnames';
 export default class DropDownTestItem extends React.Component {
   constructor(props) {
     super(props);
+    const { item } = props;
+    let index = -1;
+    if(item != void 0){
+      const indexs = item.values.map(item => item.value);
+      index = indexs.indexOf(item.data);
+    }
     this.state = {
-        selectIndex:-1,
+        selectIndex: index,
     };
   }
 

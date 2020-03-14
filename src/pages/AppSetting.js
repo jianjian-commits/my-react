@@ -11,7 +11,7 @@ import DraggableList, {
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
-import { APP_SETTING_ABLED, APP_NEW_FORM } from "../auth";
+import { APP_SETTING_ABLED } from "../auth";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -24,40 +24,6 @@ const navigationList = (history, appId, appName) => [
   { key: 1, label: "应用设置", disabled: true }
 ];
 
-// const mockForms = {
-//   groups: [
-//     {
-//       name: "基础设置",
-//       key: "base",
-//       list: [
-//         { key: "sWw", name: "车队信息" },
-//         { key: "clr", name: "油卡信息" },
-//         { key: "CrE", name: "车辆信息" }
-//       ]
-//     },
-//     {
-//       name: "用车管理",
-//       key: "use",
-//       list: [
-//         { key: "short", name: "短途申请" },
-//         { key: "long", name: "长途用车申请" }
-//       ]
-//     },
-//     {
-//       name: "违章管理",
-//       key: "ban",
-//       list: [
-//         { key: "aban", name: "违章记录" },
-//         { key: "handle", name: "违章处理记录" }
-//       ]
-//     }
-//   ],
-//   list: [
-//     { key: "short", name: "短途申请" },
-//     { key: "long", name: "长途用车申请" }
-//   ]
-// };
-
 const AppSetting = props => {
   const { appId } = useParams();
   const history = useHistory();
@@ -67,47 +33,38 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
+  const [user, setUser] = React.useState({})
 
   let { groups, list, searchList } = mockForms;
+
   useEffect(() => {
     let newList = [];
-    console.log(appId);
-    getFormsAll().then(res => {
+
+    setUser(JSON.parse(localStorage.getItem("userDetail")))
+    // let extraProp = { user: { id: user.id, name: user.name } }
+
+    getFormsAll(appId, true).then(res => {
+      console.log(1)
       newList = res.map(item => ({
         key: item.id,
         name: item.name
       }));
+
       setMockForms({
         groups: [
-          {
-            name: "基础设置",
-            key: "ban",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
+          // {key:'',name:'',list:[]}
         ],
         searchList: [
-          {
-            name: "基础设置",
-            key: "ban",
-            list: [
-              { key: "sWw", name: "车队信息" },
-              { key: "clr", name: "油卡信息" },
-              { key: "CrE", name: "车辆信息" }
-            ]
-          }
         ],
         list: newList
       });
+
     });
   }, [appId]);
+
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
-
   const searchForms = (keyword, groupsParams) => {
     let _groups = groupsParams;
 
@@ -125,6 +82,7 @@ const AppSetting = props => {
   };
 
   if (searchKey) {
+    // 深拷贝数据
     const all = JSON.parse(JSON.stringify(list));
     const allGroups = JSON.parse(JSON.stringify(groups));
     groups =
@@ -136,6 +94,7 @@ const AppSetting = props => {
   }
 
   const searchHandle = e => {
+    console.log(e);
     const { value } = e.target;
     setSearchKey(value);
   };
@@ -145,9 +104,9 @@ const AppSetting = props => {
     alert(formId + " 放进 " + groupId);
   };
 
+  // 处理点击表单名字事件
   const formEnterHandle = e => {
     if (list[0].key !== "") {
-      console.log(e);
       history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
     }
   };
@@ -170,61 +129,68 @@ const AppSetting = props => {
 
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
+      <ForInfoModal
+        key={Math.random()}
+        {...modalProps}
+        extraProp={{ user: { id: user.id, name: user.name } }}
+        appid={appId}
+        url={`/app/${appId}/setting/form/`}
+      />
+      <CommonHeader
+        navigationList={navigationList(history, appId, appName)}
+      />
       <Layout>
-        <ForInfoModal
-          key={Math.random()}
-          {...modalProps}
-          url={`/app/${appId}/setting/form/`}
-        />
-        <CommonHeader
-          navigationList={navigationList(history, appId, appName)}
-        />
-        <Layout>
-          <Sider className={classes.appSider} theme="light">
-            <Authenticate auth={APP_NEW_FORM(appId)}>
-              <div className={classes.newForm}>
-                <Button
-                  type="primary"
-                  block
-                  onClick={e => {
-                    modalProps.showModal();
-                  }}
-                >
-                  新建表单
-                </Button>
-              </div>
-            </Authenticate>
-            <div className={classes.searchBox}>
-              <Input
-                style={{ width: 150 }}
-                placeholder="输入名称来搜索"
-                value={searchKey}
-                onChange={searchHandle}
-              />
-              <Icon
-                type="folder-add"
-                className={classes.addFolder}
-                onClick={addFolder}
-              />
-            </div>
-            <div className={classes.formArea}>
-              <DraggableList
-                draggable={!searchKey}
-                onClick={formEnterHandle}
-                groups={groups}
-                list={list}
-                onDrop={dragFileToFolder}
-              />
-              <DropableWrapper
-                className={classes.empty}
-                onDrop={e =>
-                  dragFileToFolder(e.dataTransfer.getData("formId"), null)
-                }
-              ></DropableWrapper>
-            </div>
-          </Sider>
-          <Content className={classes.container}></Content>
-        </Layout>
+        <Sider className={classes.appSider} theme="light">
+          <div className={classes.newForm}>
+            <Button
+              type="primary"
+              block
+              onClick={e => {
+                modalProps.showModal();
+              }}
+            >
+              新建仪表盘
+            </Button>
+            <Button
+              type="primary"
+              block
+              onClick={e => {
+                modalProps.showModal();
+              }}
+            >
+              新建表单
+            </Button>
+          </div>
+          <div className={classes.searchBox}>
+            <Input
+              style={{ width: 150 }}
+              placeholder="输入名称来搜索"
+              value={searchKey}
+              onChange={searchHandle}
+            />
+            <Icon
+              type="folder-add"
+              className={classes.addFolder}
+              onClick={addFolder}
+            />
+          </div>
+          <div className={classes.formArea}>
+            <DraggableList
+              draggable={!searchKey}
+              onClick={formEnterHandle}
+              groups={groups}
+              list={list}
+              onDrop={dragFileToFolder}
+            />
+            <DropableWrapper
+              className={classes.empty}
+              onDrop={e =>
+                dragFileToFolder(e.dataTransfer.getData("formId"), null)
+              }
+            ></DropableWrapper>
+          </div>
+        </Sider>
+        <Content className={classes.container}></Content>
       </Layout>
     </Authenticate>
   );
