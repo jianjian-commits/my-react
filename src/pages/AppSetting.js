@@ -11,7 +11,7 @@ import DraggableList, {
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
-import { APP_SETTING_ABLED, APP_NEW_FORM } from "../auth";
+import { APP_SETTING_ABLED } from "../auth";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -41,7 +41,7 @@ const AppSetting = props => {
     let newList = [];
 
     setUser(JSON.parse(localStorage.getItem("userDetail")))
-    let extraProp = { user: { id: user.id, name: user.name } }
+    // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {
       console.log(1)
@@ -60,7 +60,7 @@ const AppSetting = props => {
       });
 
     });
-  }, []);
+  }, [appId]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};

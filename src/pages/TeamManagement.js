@@ -77,9 +77,20 @@ class TeamManagement extends React.Component {
     const { selectedKey } = this.state;
     return (
       <Layout>
-        <HomeHeader />
+        <HomeHeader
+          hides={{
+            logo: true,
+            menu: true,
+            teamManage: true,
+            backArrow: false
+          }}
+        />
         <Layout>
+<<<<<<< HEAD
           <Sider style={{ background: "#fff", paddingTop: "14px" }}>
+=======
+          <Sider style={{ background: "#fff" }}>
+>>>>>>> master
             <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
           </Sider>
           <Content className={commonClasses.container}>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { HOST_IP } from "../config";
+import { history } from "../store";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = `${HOST_IP}`;
@@ -13,7 +14,8 @@ axios.interceptors.response.use(
       error.response.status === 401 &&
       error.response.data.status === "UNAUTHENTICATED"
     ) {
-      if (localStorage.getItem("id_token")) localStorage.removeItem("id_token");
+      localStorage.removeItem("id_token");
+      history.push("/login");
     }
     return Promise.reject(error);
   }
@@ -34,7 +36,6 @@ export default request;
 
 export const requestWithHeaders = ({ ...headers }) => {
   const ins = axios.create({
-    // baseURL: "http://192.168.3.106:9080",
     headers: {
       ...headers
     }

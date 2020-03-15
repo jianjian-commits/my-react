@@ -11,9 +11,13 @@
 }
 
 .btn {
-  // height: 36px !important;
+  width: 104px;
   background: #2a7fff !important;
   border-radius: 3px !important;
+  img {
+    margin-bottom: 3px;
+    margin-right: 5px;
+  }
 }
 
 .warn {

@@ -21,7 +21,7 @@ export const RESET_ERROR = "Login/RESET_ERROR";
 export const LOGIN_USER = "Login/LOGIN_USER";
 export const SIGN_OUT_SUCCESS = "Login/SIGN_OUT_SUCCESS";
 export const FETCH_ALL_TEAM = "Login/FETCH_ALL_TEAM";
-export const FETCH_CURRENT_TEAM = "Login/FETCH_TEAM";
+export const FETCH_CURRENT_TEAM = "Login/FETCH_CURRENT_TEAM";
 export const FETCH_USER_DETAIL = "Login/FETCH_USER_DETAIL";
 
 export const startSpinning = () => ({
@@ -164,11 +164,8 @@ export const loginUser = ({ token, rest, history }) => async dispatch => {
       data: { loginType: "PASSWORD", ...rest }
     });
     if (res && res.status === "SUCCESS") {
-      setTimeout(() => {
-        localStorage.setItem("id_token", 1);
-        dispatch(loginSuccess());
-        history.push("/");
-      }, 2000);
+      localStorage.setItem("id_token", 1);
+      dispatch(loginSuccess());
     } else {
       dispatch(loginFailure());
       message.error("账号密码信息不匹配,请重试");
