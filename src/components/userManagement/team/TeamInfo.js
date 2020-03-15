@@ -46,7 +46,7 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
           </Col>
         ) : (
           <Col span={16} className={classes.text}>
-            <div> {defaultValue}</div>
+            <span> {defaultValue}</span>
             <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
               <Button
                 size="small"
