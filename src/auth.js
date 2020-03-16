@@ -25,7 +25,7 @@
     FORM_AUTOEDIT("PB_REDIT","?:?:?:DFU"),
     FORM_AUTODEL("PB_DELETE","?:?:?:DFD"),
     FORM_AUTOENABLE("PB_ENABLE","?:?:?:DFE"),
-    
+
     FORMDATA_VISIBLE("DISPLAY","?:?:DV"),
     FORMDATA_CHECK("FORM_SEARCHOWNER","extraProp.id#owner:?:DR"),
     FORMDATA_ADD("FORM_ADD","?:?:DC"),
@@ -69,7 +69,7 @@ export const APP_FORM_DELETE = (appId, formId) => `${appId}:$${formIdPrefix}${fo
 
 export const APP_FORM_PROCESS_NEW = (appId, formId) =>
   `${appId}:${formIdPrefix}${formId}:?:?:DFC`;
-export const APP_FORM_PROCESS_DEIT = (appId, formId) =>
+export const APP_FORM_PROCESS_EDIT = (appId, formId) =>
   `${appId}:${formIdPrefix}${formId}:?:?:DFU`;
 export const APP_FORM_PROCESS_DELETE = (appId, formId) =>
   `${appId}:${formIdPrefix}${formId}:?:?:DFD`;
@@ -78,7 +78,7 @@ export const APP_FORM_PROCESS_ENABLE = (appId, formId) =>
 
 export const APP_FORM_APPROVAL_NEW = (appId, formId) =>
   `${appId}:${formIdPrefix}${formId}:?:?:AFC`;
-export const APP_FORM_APPROVAL_DEIT = (appId, formId) =>
+export const APP_FORM_APPROVAL_EDIT = (appId, formId) =>
   `${appId}:${formIdPrefix}${formId}:?:?:AFU`;
 export const APP_FORM_APPROVAL_DELETE = (appId, formId) =>
   `${appId}:${formIdPrefix}${formId}:?:?:AFD`;
