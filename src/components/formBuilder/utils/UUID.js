@@ -14,7 +14,7 @@ ID.uuid = function (len, radix) {
     var r;
 
     // rfc4122 requires these characters
-    uuid[8] = uuid[13] = uuid[18] = '-';
+    // uuid[8] = uuid[13] = uuid[18] = '-'; //组件的ID中间不要连字符 （后端要求的，与公式校验功能有关）
     uuid[0] = 'M';
 
     // Fill in random data.  At i==19 set the high bits of clock sequence as
