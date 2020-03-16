@@ -11,6 +11,7 @@ import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class SingleTextInspector extends React.Component {
@@ -18,9 +19,10 @@ class SingleTextInspector extends React.Component {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
-      isLinked: false
+      isLinked: false,
+      apiNameTemp: undefined //api name 临时值
     };
   }
 
@@ -32,11 +34,17 @@ class SingleTextInspector extends React.Component {
         isLinked: true
       });
     }
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
-    let { validate } = this.props.element;
+    let { validate, unique } = this.props.element;
     validate = { ...validate };
     switch (name) {
       case "customMessage": {
@@ -115,11 +123,10 @@ class SingleTextInspector extends React.Component {
     const { forms, element, elementParent } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
-    if(errorComponentIndex > -1) {
+    if (errorComponentIndex > -1) {
       let currentIndex = data.indexOf(element);
       currentIndex === errorComponentIndex && (isLinkError = true);
     }
-
     switch (type) {
       // 自定义组件
       case "custom": {
@@ -140,13 +147,17 @@ class SingleTextInspector extends React.Component {
         return (
           <>
             <Button
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -197,9 +208,36 @@ class SingleTextInspector extends React.Component {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { label, tooltip, validate, unique = false } = this.props.element;
-    const { optionType, isLinked } = this.state;
+    const {
+      id,
+      label,
+      tooltip,
+      validate,
+      unique = false,
+      isSetAPIName
+    } = this.props.element;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
 
     return (
       <div className="textarea-text-input">
@@ -214,31 +252,40 @@ class SingleTextInspector extends React.Component {
               onChange={this.handleChangeAttr}
               autoComplete="off"
             />
-            {
-              isInFormChild(this.props.elementParent)
-               ? null 
-               :<>
-                  <p htmlFor="single-text-tip">提示信息</p>
-                  <Input
-                    id="single-text-tip"
-                    name="tooltip"
-                    placeholder="请输入提示信息"
-                    value={tooltip}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-                   <p htmlFor="single-text-err-tip">错误提示</p>
-                  <Input
-                    id="single-text-err-tip"
-                    name="customMessage"
-                    placeholder="请输入错误提示"
-                    value={validate.customMessage}
-                    onChange={this.handleChangeAttr}
-                    autoComplete="off"
-                  />
-               </>
-            }
 
+            <p htmlFor="url-name">API Name</p>
+            <Input
+              id="single-text-title"
+              className={isUniqueApi ? "" : "err-input"}
+              disabled={isSetAPIName ? true : false}
+              name="key"
+              placeholder="API Name"
+              value={apiNameTemp}
+              onChange={this.handleChangeAPI}
+              autoComplete="off"
+            />
+            {isInFormChild(this.props.elementParent) ? null : (
+              <>
+                <p htmlFor="single-text-tip">提示信息</p>
+                <Input
+                  id="single-text-tip"
+                  name="tooltip"
+                  placeholder="请输入提示信息"
+                  value={tooltip}
+                  onChange={this.handleChangeAttr}
+                  autoComplete="off"
+                />
+                <p htmlFor="single-text-err-tip">错误提示</p>
+                <Input
+                  id="single-text-err-tip"
+                  name="customMessage"
+                  placeholder="请输入错误提示"
+                  value={validate.customMessage}
+                  onChange={this.handleChangeAttr}
+                  autoComplete="off"
+                />
+              </>
+            )}
 
             <p htmlFor="email-title">默认值</p>
             {isLinked ? (

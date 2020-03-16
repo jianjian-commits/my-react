@@ -1,16 +1,24 @@
 import React from "react";
 import { Checkbox, Input, Select, Divider } from "antd";
 import { connect } from "react-redux";
-import { setItemAttr, setItemValues } from "../../../redux/utils/operateFormComponent";
+import {
+  setItemAttr,
+  setItemValues
+} from "../../../redux/utils/operateFormComponent";
 import PositionCenterList from "./component/positionCenterList";
-import isInFormChild from "../../utils/isInFormChild"
+import isInFormChild from "../../utils/isInFormChild";
+import locationUtils from "../../../../../utils/locationUtils";
+import { checkUniqueApi } from "../../utils/checkUniqueApiName";
 class GetLocalPositionInspector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      apiNameTemp: undefined, //api name 临时值
+      formPath: locationUtils.getUrlParamObj().path
+    };
   }
 
-  deleteCenterPosition = (index) => {
+  deleteCenterPosition = index => {
     const { validate } = this.props.element;
     let newValuesList = [...this.props.element.validate.centerList];
     newValuesList.splice(index, 1);
@@ -18,26 +26,21 @@ class GetLocalPositionInspector extends React.Component {
       ...validate,
       centerList: newValuesList
     };
-    this.props.setItemAttr(
-      this.props.element,
-      'validate',
-      newValidate
-    );
-  }
+    this.props.setItemAttr(this.props.element, "validate", newValidate);
+  };
 
-  addCenterPosition = (centerPosition) => {
+  addCenterPosition = centerPosition => {
     const { validate } = this.props.element;
-    const newValuesList = [...this.props.element.validate.centerList, centerPosition];
+    const newValuesList = [
+      ...this.props.element.validate.centerList,
+      centerPosition
+    ];
     var newValidate = {
       ...validate,
       centerList: newValuesList
     };
-    this.props.setItemAttr(
-      this.props.element,
-      'validate',
-      newValidate
-    );
-  }
+    this.props.setItemAttr(this.props.element, "validate", newValidate);
+  };
 
   changeCenterPosition = (item, index) => {
     const { validate } = this.props.element;
@@ -53,12 +56,8 @@ class GetLocalPositionInspector extends React.Component {
       ...validate,
       centerList: newValuesList
     };
-    this.props.setItemAttr(
-      this.props.element,
-      'validate',
-      newValidate
-    );
-  }
+    this.props.setItemAttr(this.props.element, "validate", newValidate);
+  };
 
   handleChangeAttr = ev => {
     let { name, value, checked } = ev.target;
@@ -84,7 +83,8 @@ class GetLocalPositionInspector extends React.Component {
         value = validate;
         break;
       }
-      default: break;
+      default:
+        break;
     }
     this.props.setItemAttr(
       this.props.element,
@@ -99,12 +99,8 @@ class GetLocalPositionInspector extends React.Component {
       ...validate,
       adjustmentRange: Number(value)
     };
-    this.props.setItemAttr(
-      this.props.element,
-      'validate',
-      newValidate
-    );
-  }
+    this.props.setItemAttr(this.props.element, "validate", newValidate);
+  };
 
   handleChangeIsAdjustmentRange = event => {
     const { validate } = this.props.element;
@@ -112,13 +108,34 @@ class GetLocalPositionInspector extends React.Component {
       ...validate,
       isAdjustmentRange: event.target.checked
     };
-    this.props.setItemAttr(
-      this.props.element,
-      'validate',
-      newValidate,
-    );
+    this.props.setItemAttr(this.props.element, "validate", newValidate);
+  };
+
+  componentDidMount() {
+    const { element } = this.props;
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
   }
 
+  // API change
+  handleChangeAPI = ev => {
+    console.log(this.props);
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
 
   render() {
     const {
@@ -126,8 +143,10 @@ class GetLocalPositionInspector extends React.Component {
       tooltip,
       defaultValue,
       validate,
-      data
+      data,
+      isSetAPIName
     } = this.props.element;
+    const { apiNameTemp, isUniqueApi = true } = this.state;
     const { adjustmentRange, isAdjustmentRange } = validate;
     // const formatChecks = inputMask ? true : false;
     return (
@@ -142,21 +161,30 @@ class GetLocalPositionInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-          {
-            isInFormChild(this.props.elementParent)
-              ? null
-              : <>
-                <p htmlFor="email-tip">提示信息</p>
-                <Input
-                  id="email-tip"
-                  name="tooltip"
-                  placeholder="请输入提示信息"
-                  value={tooltip}
-                  onChange={this.handleChangeAttr}
-                  autoComplete="off"
-                />
-              </>
-          }
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            disabled={isSetAPIName ? true : false}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p htmlFor="email-tip">提示信息</p>
+              <Input
+                id="email-tip"
+                name="tooltip"
+                placeholder="请输入提示信息"
+                value={tooltip}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
@@ -182,7 +210,8 @@ class GetLocalPositionInspector extends React.Component {
               centerList={validate.centerList}
               addCenterPosition={this.addCenterPosition}
               changeCenterPosition={this.changeCenterPosition}
-              deleteCenterPosition={this.deleteCenterPosition} />
+              deleteCenterPosition={this.deleteCenterPosition}
+            />
           </div>
           <p htmlFor="email-tip">定位设置</p>
           <div className="checkbox-wrapper">
@@ -193,9 +222,13 @@ class GetLocalPositionInspector extends React.Component {
             >
               允许微调
             </Checkbox>
-            <Select value={`${adjustmentRange}米`} onChange={this.handleChangeSelect} disabled={!isAdjustmentRange}>
-              <Select.Option value="100">100米</Select.Option>
-              <Select.Option value="200">200米</Select.Option>
+            <Select
+              value={`${adjustmentRange}米`}
+              onChange={this.handleChangeSelect}
+              disabled={!isAdjustmentRange}
+            >
+              <Select.Option value="100米">100米</Select.Option>
+              <Select.Option value="200米">200米</Select.Option>
               <Select.Option value="5000">5000米</Select.Option>
             </Select>
           </div>

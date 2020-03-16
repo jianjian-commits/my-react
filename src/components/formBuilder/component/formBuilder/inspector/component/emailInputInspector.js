@@ -1,18 +1,33 @@
 import React from "react";
-import { Input, Checkbox, Divider} from "antd";
+import { Input, Checkbox, Divider } from "antd";
 import { connect } from "react-redux";
-import { setItemAttr, setFormChildItemAttr } from "../../redux/utils/operateFormComponent";
-import isInFormChild from "../utils/isInFormChild"
+import {
+  setItemAttr,
+  setFormChildItemAttr
+} from "../../redux/utils/operateFormComponent";
+import isInFormChild from "../utils/isInFormChild";
+import locationUtils from "../../../../utils/locationUtils";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 
 class EmailInputInspector extends React.PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
-      isShowDataLinkageModal: false
+      formPath: locationUtils.getUrlParamObj().path,
+      isShowDataLinkageModal: false,
+      apiNameTemp: undefined //api name 临时值
     };
+  }
+
+  componentDidMount() {
+    const { element } = this.props;
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr = ev => {
@@ -25,7 +40,7 @@ class EmailInputInspector extends React.PureComponent {
     const { forms, element } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
-    if(errorComponentIndex > -1) {
+    if (errorComponentIndex > -1) {
       let currentIndex = data.indexOf(element);
       currentIndex === errorComponentIndex && (isLinkError = true);
     }
@@ -47,13 +62,17 @@ class EmailInputInspector extends React.PureComponent {
         return (
           <>
             <Button
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -107,8 +126,23 @@ class EmailInputInspector extends React.PureComponent {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { optionType } = this.state;
+    const { optionType, apiNameTemp, isUniqueApi = true } = this.state;
     return (
       <div className="base-form-tool">
         <div classNam="costom-info-card">

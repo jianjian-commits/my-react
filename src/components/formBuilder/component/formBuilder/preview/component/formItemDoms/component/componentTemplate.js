@@ -28,7 +28,7 @@ class ComponentTemplate extends Component {
   componentDidMount() {
     const formId = locationUtils.getUrlParamObj().id;
     // 过滤自身表单
-    const forms = this.props.forms.filter(form => form.id !== formId).reverse();
+    const forms = this.props.forms.filter(form => form.id !== formId);
     this.setState({
       forms
     });

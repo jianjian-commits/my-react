@@ -5,6 +5,7 @@ import { Button, Form, message, Layout, Spin } from "antd";
 import {
   submitSubmission,
   getFormComponent,
+  getFormComponentByPath,
   getAllForms
 } from "./redux/utils/operateSubmissionUtils";
 import { getSubmissionData } from "../formData/redux/utils/getDataUtils";
@@ -38,6 +39,7 @@ import HandWrittenSignatureMobile from "./component/handWrittenSignature/handWri
 import { initToken } from "../../utils/tokenUtils";
 import { checkCustomValidate } from "../formBuilder/utils/customValication";
 import { checkValueValidByType } from "../formBuilder/utils/checkComponentDataValidUtils";
+import { getDataFromUrl } from "../../utils/locationUtils";
 import Address from "./component/address";
 /*
  * 手机端组件
@@ -63,6 +65,7 @@ class Submission extends Component {
       tipVisibility: false,
       //
       formId: this.props.formId,
+      formPath: this.props.formPath,
       formChildDataObj: {},
       currentLayout: null,
       customValicate: {
@@ -80,11 +83,17 @@ class Submission extends Component {
   }
 
   componentDidMount() {
-    const { getFormComponent, mountClassNameOnRoot, mobile = {} } = this.props;
+    const {
+      getFormComponent,
+      getFormComponentByPath,
+      mountClassNameOnRoot,
+      mobile = {}
+    } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
 
     // initToken().then(res => {
     getFormComponent(this.state.formId);
+    // getFormComponentByPath(this.state.formPath);
     // });
   }
 
@@ -307,7 +316,7 @@ class Submission extends Component {
     let isFormChildErr = false;
     for (let key in formChildDataObj) {
       let currentComponent = formComponentArray.filter(item => {
-        return item.id === key;
+        return item.key === key;
       })[0];
       let required =
         currentComponent.validate && currentComponent.validate.required;
@@ -389,6 +398,42 @@ class Submission extends Component {
     )[0].label;
   };
 
+  // 设置正确的子表单数据
+  setCorrectFormChildData = (values, formChildDataObj) => {
+    for (let key in values) {
+      if (formChildDataObj.hasOwnProperty(key)) {
+        values[key] = formChildDataObj[key];
+      }
+    }
+  };
+
+  // 设置隐藏组件的默认值(通过组件的API Name)
+  setHiddenComponentsValue = (components, values) => {
+    // const componentsNeedSplit = ["CheckboxInput", "MultiDropDown"];
+    // components.forEach(component => {
+    //   if (!component.isShow && component.key) {
+    //     let value = getDataFromUrl(component.key);
+    //     if (value) {
+    //       if (componentsNeedSplit.includes(component.type)) {
+    //         values[component.key] = value.split(",");
+    //       } else {
+    //         values[component.key] = value;
+    //       }
+    //     }
+    //   }
+    // });
+    // 由于更换key引发未知原因， 需要过滤掉空数据
+    // for (let key in values) {
+    //   if (Array.isArray(values[key])) {
+    //     values[key].length > 0 ? null : delete values[key];
+    //   } else if (typeof values[key] === "object") {
+    //     Object.keys(values[key]).length > 0 ? null : delete values[key];
+    //   } else if (!values[key]) {
+    //     delete values[key];
+    //   }
+    // }
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     const isMobile = this.props.mobile.is;
@@ -397,6 +442,7 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
+        console.log(values, formComponentArray);
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
@@ -407,6 +453,7 @@ class Submission extends Component {
         values = this._setNumberValue(values);
         values = this._setDateTimeVaule(values);
         values = this._setAddressValue(values);
+        this.setCorrectFormChildData(values, this.state.formChildDataObj);
         this._iterateAllComponentToSetData(
           formComponentArray,
           customDataArray,
@@ -990,7 +1037,7 @@ class Submission extends Component {
   // id -> 联动子表单id  formchildData -> 联动数据
   handleSetFormChildData = (element, formchildData, linkData, that) => {
     let { formChildDataObj } = this.state;
-    const { id } = element;
+    const { id, key } = element;
     const { values } = element;
     let rowTemplate = {};
     values.forEach(item => {
@@ -1016,13 +1063,13 @@ class Submission extends Component {
     });
     // 如果没找到对应数据 则返回默认值
     if (formchildData === null) {
-      formChildDataObj[id] = [rowTemplate]; //清空对应id子表单的数据
+      formChildDataObj[key] = [rowTemplate]; //清空对应id子表单的数据
       this.setState({
         formChildDataObj
       });
       return;
     }
-    formChildDataObj[id] = []; //清空对应id子表单的数据
+    formChildDataObj[key] = []; //清空对应id子表单的数据
     // 根据数据显示
     formchildData.forEach((item, index) => {
       // 替换关联数据
@@ -1041,7 +1088,7 @@ class Submission extends Component {
           (data[link.id].callEventArr = rowTemplate[link.id].callEventArr);
       });
       // id子表单的第idnex项数据替换
-      formChildDataObj[id][index] = data;
+      formChildDataObj[key][index] = data;
     });
 
     this.setState(
@@ -1197,6 +1244,7 @@ export default connect(
   {
     getSubmissionData,
     submitSubmission,
-    getFormComponent
+    getFormComponent,
+    getFormComponentByPath
   }
 )(withRouter(mobileAdoptor.data(SubmissionForm)));
