@@ -21,7 +21,7 @@ export const basicComponentsArray = [
       isLimitLength: false
     },
     data: {
-      type: "custom"
+      type: 'custom'
     },
     icon: ["text", 16]
   }),
@@ -37,10 +37,10 @@ export const basicComponentsArray = [
       customMessage: "",
       isLimitLength: false,
       maxLength: Number.MAX_SAFE_INTEGER,
-      minLength: 0
+      minLength: 0,
     },
     data: {
-      type: "custom"
+      type: 'custom',
     },
     icon: ["textarea", 16]
   }),
@@ -54,7 +54,7 @@ export const basicComponentsArray = [
     },
     icon: ["radio", 14],
     values: [{ value: "选项", label: "选项" }],
-    inline: false
+    inline:false
   }),
   _buildDefaultProp({
     label: "多选",
@@ -70,7 +70,7 @@ export const basicComponentsArray = [
     values: [
       {
         value: "选项",
-        label: "选项"
+        label: "选项",
       }
     ],
     icon: ["checkbox", 16]
@@ -85,13 +85,13 @@ export const basicComponentsArray = [
     },
     icon: ["dropdown", 16],
     data: {
-      type: "custom",
+      type: 'custom',
       values: [
         {
           value: "选项",
           label: "选项"
         }
-      ]
+      ],
     }
   }),
   _buildDefaultProp({
@@ -107,30 +107,31 @@ export const basicComponentsArray = [
     },
     icon: ["check_dropdown", 16],
     data: {
-      type: "custom",
+      type: 'custom',
       values: [
         {
           value: "选项",
           label: "选项"
         }
-      ]
+      ],
     }
   }),
   _buildDefaultProp({
-    inputType: "number",
+    inputType: "NumberInput",
     label: "数字",
     tooltip: "",
-    type: "number",
+    type: "NumberInput",
     defaultValue: "",
+    unique: false,
     validate: {
       required: false,
       customMessage: "",
       isLimitLength: false,
-      max: Number.MAX_SAFE_INTEGER,
-      min: -Number.MAX_SAFE_INTEGER
+      max: Number.MAX_VALUE,
+      min: -Number.MAX_VALUE
     },
     data: {
-      type: "custom"
+      type: 'custom'
     },
     icon: ["number", 19]
   })
@@ -139,17 +140,17 @@ export const basicComponentsArray = [
 // 高级组件
 export const advancedComponentArray = [
   _buildDefaultProp({
-    label: "子表单",
+    label: '子表单',
     tooltip: "",
     type: "FormChildTest",
     validate: {
-      required: false
+      required: false,
     },
     data: {
-      type: "custom"
+      type: 'custom'
     },
     values: [],
-    icon: ["form", 17]
+    icon: ['form', 17],
   }),
   _buildDefaultProp({
     label: "时间/日期",
@@ -158,26 +159,25 @@ export const advancedComponentArray = [
     defaultValue: "",
     validate: {
       required: false,
-      customMessage: ""
+      customMessage: "",
     },
     data: {
-      type: "custom"
+      type: 'custom'
     },
     icon: ["date", 17]
   }),
   _buildDefaultProp({
     label: "Email",
     tooltip: "",
+    unique: false,
     type: "EmailInput",
     defaultValue: "",
     validate: {
       required: false,
       customMessage: "",
-      maxLength: null,
-      minLength: null
     },
     data: {
-      type: "custom"
+      type: 'custom'
     },
     icon: ["email", 18]
   }),
@@ -192,24 +192,21 @@ export const advancedComponentArray = [
       customMessage: ""
     },
     data: {
-      type: "custom"
+      type: 'custom'
     },
     icon: ["phone", 16]
   }),
   _buildDefaultProp({
-    label: "定位",
+    label: '定位',
     tooltip: "",
     type: "GetLocalPosition",
-    unique: false,
     validate: {
       required: false,
       customMessage: "",
-      isLimitOrientationRange: false, //是否限定范围
-      isAdjustmentRange: false, //是否微调
-      adjustmentRange: 5000 // 微调范围
-    },
-    data: {
-      values: [
+      isLimitOrientationRange: false,//是否限定范围
+      isAdjustmentRange: false,//是否微调
+      adjustmentRange: 5000,// 微调范围
+      centerList:[
         // {
         //   'center': "北京", //中心的地址
         //   'latitude':0, //经度
@@ -218,12 +215,11 @@ export const advancedComponentArray = [
         // }
       ]
     },
-    isAdjustmentRange: false,
-    adjustmentRange: "不限", //"不限" 或者数字
-    icon: ["location", 17]
+    icon: ['location', 17],
   }),
   _buildDefaultProp({
     label: "身份证号码",
+    
     tooltip: "",
     type: "IdCardInput",
     defaultValue: "",
@@ -237,12 +233,12 @@ export const advancedComponentArray = [
   _buildDefaultProp({
     label: "图片上传",
     tooltip: "",
-    fileSize: "2",
-    fileUnit: "MB",
-    fileCount: "1",
     type: "ImageUpload",
     storage: "base64",
     validate: {
+      fileSize: 2,
+      fileUnit: "MB",
+      fileCount: 1 ,
       required: false,
       customMessage: ""
     },
@@ -264,12 +260,7 @@ export const advancedComponentArray = [
   // }),
   _buildDefaultProp({
     label: "附件",
-    imageSize: "200",
     tooltip: "",
-    filePattern: "*",
-    fileSize: "2",
-    fileUnit: "MB",
-    fileCount: "1",
     type: "FileUpload",
     storage: "base64",
     validate: {
@@ -277,7 +268,7 @@ export const advancedComponentArray = [
       customMessage: "",
       fileSize: 2,
       fileUnit: "MB",
-      fileCount: 1
+      fileCount: 1 ,
     },
     icon: ["file", 18]
   }),
@@ -287,9 +278,9 @@ export const advancedComponentArray = [
     type: "HandWrittenSignature",
     validate: {
       required: false,
-      customMessage: ""
+      customMessage: "",
     },
-    icon: ["writtensign", 16]
+    icon: ['writtensign', 16],
   }),
   _buildDefaultProp({
     label: "地址",
@@ -298,12 +289,12 @@ export const advancedComponentArray = [
     addressType: "hasDetail",
     validate: {
       required: false,
-      customMessage: ""
+      customMessage: "",
     },
     data: {
-      type: "custom"
+      type: 'custom'
     },
-    icon: ["address", 18]
+    icon: ['address', 18],
   }),
   _buildDefaultProp({
     label: "嵌套表单",
@@ -311,18 +302,18 @@ export const advancedComponentArray = [
     type: "ComponentTemplate",
     validate: {
       required: false,
-      customMessage: ""
+      customMessage: "",
     },
-    icon: ["tmpForm", 20]
+    icon: ['tmpForm', 20],
   }),
   _buildDefaultProp({
     label: "按钮",
     tooltip: "",
     type: "Button",
     buttonStyle: "primary",
-    buttonSize: "default",
-    icon: ["tmpForm", 20]
-  })
+		buttonSize: "default",
+    icon: ['tmpForm', 20],
+  }),
 ];
 
 function _buildDefaultProp(customProps) {
@@ -349,7 +340,7 @@ class Toolbar extends React.Component {
 
   create(item) {
     let key = ID.oldUuid();
-    let newKey = ID.uuid(item.type, this.props.data);
+    let newKey = ID.uuid(item.type, this.props.data.data);
 
     let elementOptions = {
       ...item,
@@ -393,6 +384,8 @@ class Toolbar extends React.Component {
   }
 }
 
-export default connect(store => ({
-  data: store.formBuilder.data
-}))(Toolbar);
+export default connect(
+  store => ({
+    data: store.formBuilder
+  })
+)(Toolbar);
