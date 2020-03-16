@@ -1,6 +1,6 @@
 .form-submit-data-button {
   height: 60px;
-  width: 8%;
+  // width: 8%;
   position: absolute !important;
   right: 10px !important;
   margin-top: 15px !important;
@@ -13,12 +13,19 @@
   margin: 0 auto;
   padding-bottom: 56px;
   overflow: hidden;
+  position: relative;
   .filter-container {
+    width: 364px;
+    height: 385px;
     background-color: #ffffff;
     margin-bottom: 20px;
     padding: 22px;
+    position: absolute;
+    z-index: 10;
+    right: -38px;
+    top: 0;
     .filter-item-container {
-      max-height: 130px;
+      max-height: 275px;
       overflow-y: auto;
       overflow-x: hidden;
       .filter-item {
@@ -61,7 +68,14 @@
     }
     .filter-submit-container {
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
+      button{
+        width: 125px;
+        height: 36px;
+      }
+      button:nth-of-type(2){
+        color: #B6B6BA;
+      }
     }
   }
 

@@ -54,7 +54,8 @@ class FormSubmitData extends PureComponent {
       isFilterMode: false,
       filterArray: [],
       connectCondition: "&",
-      formDataDetailId: ""
+      formDataDetailId: "",
+      showFilterBoard: false
     };
   }
   showformDataDetail = id => {
@@ -562,7 +563,7 @@ class FormSubmitData extends PureComponent {
   };
 
   handleDeleteSubmisson = submissionId => {
-    console.log(1, this.props);
+    // console.log(1, this.props);
     this.props
       .deleteFormData(this.state.formId, submissionId)
       .then(response => {
@@ -587,9 +588,16 @@ class FormSubmitData extends PureComponent {
       });
   };
 
+  // 点击按钮显示筛选界面
+  showFilterComponent = (e)=>{
+      let hiddenFilterBoard = !this.state.showFilterBoard
+
+      this.setState({
+        showFilterBoard:  hiddenFilterBoard
+      })
+  }
   render() {
     const { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
-
     const controlCol = [
       {
         title: "操作",
@@ -746,7 +754,6 @@ class FormSubmitData extends PureComponent {
         founder: dataObj.extraProp["name"]
       };
       let dataItem = dataObj.data;
-      console.log(obj)
       for (let n in dataItem) {
         if (formChildIdArray.includes(n)) {
           dataItem[n].forEach(submitDataObj => {
@@ -766,7 +773,6 @@ class FormSubmitData extends PureComponent {
           obj[n] = this.filterSubmitDataToString(dataItem[n]);
         }
       }
-      console.log(obj)
       formDataShowArray.push(obj);
     });
 
@@ -852,6 +858,7 @@ class FormSubmitData extends PureComponent {
                 name={this.props.forms.name}
                 isShowBtn={false}
                 isShowBackBtn={false}
+                clickExtendCallBack = {this.showFilterComponent}
               />
             )}
             <div
@@ -866,14 +873,16 @@ class FormSubmitData extends PureComponent {
                 formId={this.state.formId}
                 components={this.props.forms.components}
               />
-              <FilterComponent
+              {this.state.showFilterBoard? <FilterComponent
                 fileds={fileds}
                 filterData={this.props.getFilterSubmissionData}
                 setFilterMode={this.setFilterMode}
                 formId={this.state.formId}
                 currentPage={this.state.currentPage}
                 pageSize={this.state.pageSize}
-              />
+                clickExtendCallBack = {this.showFilterComponent}
+              />:<></>}
+              
 
               <div className="limit-data-number-container">
                 <Dropdown

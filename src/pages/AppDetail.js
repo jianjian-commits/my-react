@@ -15,6 +15,7 @@ import { getFormsAll } from "../components/formBuilder/component/homePage/redux/
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
 import TransactList from "../components/transactList/TransactList";
+import{ initialState } from "../store/loginReducer";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -42,6 +43,7 @@ const AppDetail = props => {
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
+  // const [state,dispatch] = React.useReducer(loginReducer,initialState)
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -55,9 +57,9 @@ const AppDetail = props => {
   useEffect(() => {
     let newList = [];
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")))
+    setUser( initialState )
 
-    // let extraProp = { user: { id: (JSON.parse(localStorage.getItem("userDetail"))).id , name:  (JSON.parse(localStorage.getItem("userDetail"))).name} }
+    // let extraProp = { user: { id: initialState.id , name:  initialState.name} }
 
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
@@ -193,7 +195,6 @@ const AppDetail = props => {
                   key={Math.random()}
                   formId={selectedForm}
                   actionFun={(submission_id)=>{
-                    // console.log("actionFun",submission_id)
                     setSubmit(true);
                     setSubmissionId(submission_id)
                   }}

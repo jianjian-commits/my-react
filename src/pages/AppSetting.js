@@ -12,6 +12,7 @@ import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
 import { APP_SETTING_ABLED } from "../auth";
+import{ initialState } from "../store/loginReducer";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -40,7 +41,7 @@ const AppSetting = props => {
   useEffect(() => {
     let newList = [];
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")))
+    setUser(initialState)
     // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {

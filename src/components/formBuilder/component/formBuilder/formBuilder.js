@@ -18,6 +18,7 @@ import Toolbar from "./toolbar/toolbar";
 import Inspector from "./inspector/inspector";
 import locationUtils from "../../utils/locationUtils";
 import FormBuilderHeader from "./formBuilderHeader/formBuilderHeader";
+import{ initialState } from "../../../../store/loginReducer";
 import "../../scss/index.scss";
 
 class ReactFormBuilder extends React.Component {
@@ -30,7 +31,7 @@ class ReactFormBuilder extends React.Component {
       editElementParent: null,
       formId: locationUtils.getUrlParamObj().formId,
       appid:window.location.pathname.split("/")[2],
-      extraProp:{user:{name:(JSON.parse(localStorage.getItem('userDetail'))).name,id:(JSON.parse(localStorage.getItem('userDetail'))).id}}
+      extraProp:{user:{name:initialState.name,id:initialState.id}}
     };
 
     this.editModeOn = this.editModeOn.bind(this);
