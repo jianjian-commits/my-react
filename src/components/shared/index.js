@@ -2,8 +2,18 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import Authenticate from "../shared/Authenticate";
 
-export const PrivateRoute = ({ auth, component, options, ...rest }) => (
-  <Authenticate auth={auth}>
+export const PrivateRoute = ({
+  auth,
+  authOptions = {},
+  component,
+  options,
+  ...rest
+}) => (
+  <Authenticate
+    {...authOptions}
+    type={authOptions.type || "default"}
+    auth={auth}
+  >
     <Route
       {...rest}
       render={props =>

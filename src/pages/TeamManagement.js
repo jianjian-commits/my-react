@@ -93,7 +93,7 @@ class TeamManagement extends React.Component {
           }}
         />
         <Layout>
-          <Sider style={{ background: "#fff" }}>
+          <Sider style={{ background: "#fff", paddingTop: "14px" }}>
             <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
           </Sider>
           <Content className={commonClasses.container}>

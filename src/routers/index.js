@@ -10,6 +10,7 @@ import AppServices from "../pages/AppServices";
 // import AppServicesEdit from "../pages/AppServicesEdit";
 import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
+import { APP_SETTING_ABLED } from "../auth";
 
 export const main = [
   {
@@ -55,6 +56,7 @@ export const appPaths = [
     key: "setting",
     label: "应用设置",
     path: `/app/:appId/setting`,
+    auth: APP_SETTING_ABLED,
     component: AppSetting
   },
   // {
