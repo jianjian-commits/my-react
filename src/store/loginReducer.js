@@ -156,7 +156,7 @@ export const initAllDetail = () => async dispatch => {
 };
 
 //登录用户
-export const loginUser = ({ token, rest, history }) => async dispatch => {
+export const loginUser = ({ token, rest }) => async dispatch => {
   await dispatch(startLogin());
   try {
     const res = await request(token ? `/login?token=${token}` : "/login", {
