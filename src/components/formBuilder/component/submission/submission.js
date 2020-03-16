@@ -100,7 +100,11 @@ class Submission extends Component {
       });
       //渲染表单说明
       let formInfo = formComponent.formInfo;
-      document.getElementById("submission-title").innerHTML = formInfo;
+      if (formInfo) {
+        document.getElementById("submission-title").innerHTML = formInfo;
+      } else {
+        document.getElementById("submission-title").style.display = "none";
+      }
     }
   }
 
@@ -443,7 +447,7 @@ class Submission extends Component {
           if (true) {
             this.setState({ isSubmitted: true,errorResponseMsg:{} });
             this.props
-              .submitSubmission(this.state.formId, values)
+              .submitSubmission(this.state.formId, values,this.props.appid,this.props.extraProp)
               .then(response => {
                 if(response.data.id != void 0){
                   isMobile

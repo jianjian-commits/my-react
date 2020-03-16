@@ -2,11 +2,30 @@
   height: calc(100vh - 64px);
   padding: 10px;
   .header {
-    padding: 20px 40px 5px 40px;
+    padding: 37px 64px 5px 64px;
   }
 }
 .title {
   padding: 5px;
   font-size: 16px;
   font-weight: 700;
+}
+
+.menu {
+  &:global(.ant-menu-item-selected) {
+    ::before {
+      border-left: 4px solid #1890ff;
+      content: "";
+      position: absolute;
+      left: 0;
+      height: 100%;
+    }
+  }
+  span {
+    color: #333;
+  }
+  img {
+    display: inline-block;
+    margin-right: 10px;
+  }
 }

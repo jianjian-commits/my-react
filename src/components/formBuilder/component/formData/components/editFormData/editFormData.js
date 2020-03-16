@@ -408,8 +408,8 @@ class EditFormData extends Component {
              console.log(err);
              if (error.response && error.response.data.code === 9998) {
              this._setErrorResponseData(error.response.data);
-              isMobile ? Toast.fail("提交失败") : message.error("提交失败");
             }
+            isMobile ? Toast.fail(`${error.response.data.message}`) : message.error(`${error.response.data.message}`);
           });
       });
     }

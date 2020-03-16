@@ -7,7 +7,7 @@ import ModalCreation from "../components/profileManagement/modalCreate/ModalCrea
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
 import Authenticate from "../components/shared/Authenticate";
-import { APP_VISIABLED } from "../auth";
+import { SUPER_ADMINISTRATOR, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import classes from "../styles/apps.module.scss";
 const { Content } = Layout;
@@ -72,22 +72,36 @@ class Apps extends React.Component {
   }
 
   render() {
-    console.log(this.props.name);
+    const { appList, sysUserName, name } = this.props;
     return (
       <Layout>
         <HomeHeader />
         <Content className={commonClasses.container}>
           <header className={commonClasses.header}>
-            <span style={{ fontSize: 20 }}>我的应用</span>
-            <Button
-              type="link"
-              icon="plus"
-              onClick={() => this.setState({ open: true })}
-            >
-              创建应用
-            </Button>
+            <span style={{ fontSize: 14 }}>我的应用</span>
           </header>
-          <content>{getApps(this.props.appList)}</content>
+          <Content className={classes.innerMain}>
+            {getApps(appList)}
+            <Authenticate auth={SUPER_ADMINISTRATOR}>
+              <Button
+                type="dashed"
+                icon="plus"
+                onClick={() => this.setState({ open: true })}
+              >
+                创建应用
+              </Button>
+              {appList.length < 2 && (
+                <img src="/image/davinci/noapps.png" alt="" />
+              )}
+            </Authenticate>
+            {appList.length < 1 && sysUserName !== name && (
+              <img
+                src="/image/davinci/noapps-normal.png"
+                alt=""
+                style={{ paddingBottom: "15px" }}
+              />
+            )}
+          </Content>
           <ModalCreation
             title={"创建应用"}
             visible={this.state.open}
@@ -101,8 +115,10 @@ class Apps extends React.Component {
 }
 
 export default connect(
-  ({ app }) => ({
-    appList: app.appList
+  ({ app, login }) => ({
+    appList: app.appList,
+    sysUserName: login.currentTeam.sysUserName,
+    name: login.userDetail.name
   }),
   {
     getAppList

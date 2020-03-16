@@ -8,11 +8,22 @@
     flex-direction: row;
     .logo {
       width: 80px;
-      padding: 10px;
+      padding: 5px 0;
+      height: 100%;
     }
     .nav {
       flex: 1;
+      padding-left: 30px;
+      :global(.ant-menu-horizontal) {
+        border-bottom: 0;
+        color: rgba(255, 255, 255, 0.6);
+        :global(.ant-menu-item-selected) {
+          color: rgba(255, 255, 255, 1);
+          border-bottom: 4px solid rgba(255, 255, 255, 1);
+        }
+      }
     }
+
     .operations {
       flex: 1;
       text-align: right;
@@ -52,6 +63,8 @@
 }
 
 .table {
+  width: 100%;
+  height: 100%;
   tr {
     height: 60px;
   }
@@ -68,5 +81,85 @@
 }
 
 .overlay {
-  top: 64px !important;
+  top: 50px !important;
+}
+
+.userDetail {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  background: #f0f2f5;
+  & > div {
+    position: absolute;
+    top: 6vw;
+    background: #ffffff;
+    width: 1000px;
+    height: 300px;
+    & > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 53px;
+      & > span {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        color: #333333;
+      }
+    }
+    & > ul {
+      list-style-type: none;
+      & > li {
+        display: flex;
+        align-items: center;
+        height: 47px;
+        border-top: 1px solid #eeeeee;
+        & > span:first-child {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          color: #777f97;
+          position: absolute;
+          left: 39px;
+        }
+        & > span:nth-child(2) {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          color: #333333;
+          position: absolute;
+          left: 770px;
+          & > span {
+            margin-left: 19px;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            color: #2a7fff;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+.detailUpdateModal {
+  & form {
+    & button {
+      opacity: 0.5;
+    }
+    & input {
+      width: 371px;
+      height: 40px;
+      border: 1px solid #d6d8de;
+      box-sizing: border-box;
+      border-radius: 6px;
+    }
+    & > div:last-child {
+      & button {
+        width: 371px;
+      }
+    }
+  }
 }

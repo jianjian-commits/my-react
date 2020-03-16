@@ -73,19 +73,26 @@ export const getForms = (pageSize, currentPage) => dispatch => {
   });
 };
 
-export const getFormsAll = (appId, isDataPage) => {
+export const getFormsAll = (appId, isDataPage , extraProp) => {
+  let paramsObj = null;
+  if(extraProp){
+    paramsObj = {
+      extraProp
+    }
+  }
   let headerObj = {
     "Content-Type": "application/json",
     appid: appId,
   };
-  if (isDataPage == true) {
+  if (isDataPage === true) {
     headerObj.isDataPage = true
   }
   return new Promise((resolve, reject) => {
     axios({
       url: config.apiUrl + `/form?desc=createdTime`,
       method: "get",
-      headers: headerObj
+      headers: headerObj,
+      params:paramsObj
     })
       .then(response => {
         const forms = response.data
@@ -109,6 +116,23 @@ export const getFormsAll = (appId, isDataPage) => {
               components: item.components
             };
           });
+        resolve(forms);
+      })
+      .catch(err => {
+        console.log(err);
+        reject(err);
+      });
+  });
+};
+
+export const getFormsByFormId = formId => {
+  return new Promise((resolve, reject) => {
+    axios({
+      url: config.apiUrl + "/form/" + formId,
+      method: "get"
+    })
+      .then(response => {
+        const forms = response.data;
         resolve(forms);
       })
       .catch(err => {
