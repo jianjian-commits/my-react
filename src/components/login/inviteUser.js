@@ -3,11 +3,14 @@ import { connect } from "react-redux";
 import { message, Button } from "antd";
 import request from "../../utils/request";
 import Loading from "../../pages/Loading";
-import registerStyles from "../../styles/login.module.scss";
+import registerStyles from "./style/login.module.scss";
 
 export default connect()(function InviteUser({ match, history }) {
   const { userId, teamId, token } = match.params;
   const initialState = {
+    userId,
+    teamId,
+    token,
     //邀请人信息
     inviter: null,
     invitedTeam: null,
@@ -99,6 +102,8 @@ export default connect()(function InviteUser({ match, history }) {
         if (res && res.status === "SUCCESS") {
           message.success(`团队加入成功`);
           setTimeout(() => history.push("/"), 2000);
+        } else {
+          setState({ ...state, alreadyAddTeam: true });
         }
       },
       () => setState({ ...state, alreadyAddTeam: true })
@@ -108,66 +113,75 @@ export default connect()(function InviteUser({ match, history }) {
   //点击注册账号加入
   const handleRegisterAddTeam = () => {
     history.push({
-      pathname: `/register/${userId}/${teamId}/${token}`,
-      query: state
+      pathname: `/login`,
+      query: { ...state, active: "initRegister" }
     });
   };
 
   //点击其他账号加入
   const handleLoginAddTeam = () => {
     history.push({
-      pathname: `/login/${userId}/${teamId}/${token}`,
-      query: state
+      pathname: `/login`,
+      query: { ...state, active: "initSignin" }
     });
   };
 
   const BlueFont = props => {
-    return <span style={{ color: "#1890ff" }}>{props.children}</span>;
+    return <span style={{ color: "rgb(42, 127, 255)" }}>{props.children}</span>;
   };
   if (!init) return null;
   return (
     <>
       <Loading spinning={spinning}>
-        <div className={registerStyles.signin}>
-          <div className={registerStyles.form}>
+        <div className={registerStyles.inviteUser}>
+          <div>
             {!alreadyAddTeam ? (
               <>
-                <div className={registerStyles.title}>
-                  <span>
-                    <BlueFont>{inviter}</BlueFont>邀请您加入团队
-                    <BlueFont>{invitedTeam}</BlueFont>
-                  </span>
-                </div>
-                <div className={registerStyles.authenticatedDiv}>
-                  {currentUserDetail && (
-                    <>
-                      <div onClick={handleCurrentUserAddTeam}>
-                        <Button>
-                          当前账号<BlueFont>{currentUserDetail.name}</BlueFont>
-                          加入
-                        </Button>
-                      </div>
-                      <hr />
-                    </>
-                  )}
-                  <div onClick={handleRegisterAddTeam}>
-                    <Button>注册账号加入</Button>
+                <div className={registerStyles.normal}>
+                  <div>
+                    <span>
+                      {inviter}邀请您加入-
+                      <BlueFont>{invitedTeam}</BlueFont>
+                    </span>
                   </div>
-                  <div onClick={handleLoginAddTeam}>
-                    <Button>其他账号加入</Button>
+                  <div>
+                    {currentUserDetail && (
+                      <>
+                        <div>
+                          <Button onClick={handleCurrentUserAddTeam}>
+                            当前账号:
+                            <span style={{ color: "#73F7FF" }}>
+                              {currentUserDetail.name}
+                            </span>
+                            加入
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                    <div>
+                      <Button onClick={handleRegisterAddTeam}>
+                        注册账号加入
+                      </Button>
+                    </div>
+                    <div>
+                      <Button onClick={handleLoginAddTeam}>其他账号加入</Button>
+                    </div>
                   </div>
                 </div>
               </>
             ) : (
               <>
-                <div style={{ textAlign: "center" }}>
-                  <span>您的账号</span>
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <BlueFont>{currentUserDetail.name}</BlueFont>
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  已经加入团队{invitedTeam}
+                <div className={registerStyles.result}>
+                  <div>
+                    <span>您的账号</span>
+                  </div>
+                  <div>
+                    <BlueFont>{currentUserDetail.name}</BlueFont>
+                  </div>
+                  <div>已经加入团队{invitedTeam}</div>
+                  <div>
+                    <Button href="/">ok</Button>
+                  </div>
                 </div>
               </>
             )}

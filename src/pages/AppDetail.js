@@ -5,14 +5,15 @@ import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
-import { APP_SETTING_ABLED } from "../auth";
 import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
+
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
-
 import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
+import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
+import Authenticate from "../components/shared/Authenticate";
 import TransactList from "../components/transactList/TransactList";
 
 import classes from "../styles/apps.module.scss";
@@ -47,11 +48,17 @@ const AppDetail = props => {
     list: [],
     searchList: []
   });
+  const [user,setUser] = React.useState({})
 
   //zxx groups目录结构 list无目录结构的表单
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
+
+    setUser(JSON.parse(localStorage.getItem("userDetail")))
+
+    let extraProp = { user: { id: (JSON.parse(localStorage.getItem("userDetail"))).id , name:  (JSON.parse(localStorage.getItem("userDetail"))).name} }
+
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
         key: item.id,
@@ -65,10 +72,9 @@ const AppDetail = props => {
         list: newList
       });
     });
-  }, []);
+  }, [appId]);
 
   const [approvalKey, setApprovalKey] = React.useState(null);
-  // let { groups, list } = mockForms;
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";
@@ -108,6 +114,7 @@ const AppDetail = props => {
   //根据点击菜单栏
   const onClickMenu = (key, e) => {
     setApprovalKey(key);
+    setSelectedForm(null);
   };
 
   // 父传子的方法
@@ -116,7 +123,7 @@ const AppDetail = props => {
   };
 
   return (
-    <Layout>
+    <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
         navigationList={navigationList(appName, history)}
         operations={getOreations(appId, history)}
@@ -159,13 +166,13 @@ const AppDetail = props => {
                   提交数据
                 </Button>
               ) : null}
-              {submit  ? (
+              {submit ? (
                 submissionId ? (
                   <FormBuilderEditFormData
                     key={Math.random()}
                     formId={selectedForm}
-                    submissionId = {submissionId}
-                    actionFun={(submission_id, submitFlag = false)=>{
+                    submissionId={submissionId}
+                    actionFun={(submission_id, submitFlag = false) => {
                       setSubmissionId(submission_id)
                       setSubmit(submitFlag);
                     }}
@@ -175,7 +182,8 @@ const AppDetail = props => {
                   <FormBuilderSubmission
                   key={Math.random()}
                   formId={selectedForm}
-                  formPath={selectedForm}
+                  extraProp={{ user: { id: user.id, name: user.name } }}
+                  appid = { appId }
                   actionFun={skipToSubmissionData}
                 ></FormBuilderSubmission>
                 )
@@ -188,6 +196,7 @@ const AppDetail = props => {
                     setSubmit(true);
                     setSubmissionId(submission_id)
                   }}
+                  appId={appId}
                 ></FormBuilderSubmitData>
               )}
             </>
@@ -196,7 +205,7 @@ const AppDetail = props => {
           ) : null}
         </Content>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default connect(({ app }) => ({

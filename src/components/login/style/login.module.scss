@@ -1,0 +1,439 @@
+$unHoverGray: #b6b6ba;
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("./background.png");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panel {
+  width: 1240px;
+  height: 680px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.room {
+  width: 2480px;
+  height: 680px;
+  display: flex;
+  position: relative;
+  & > div {
+    width: 1240px;
+    height: 680px;
+    background: #ffffff;
+    display: flex;
+    & > div {
+      width: 50%;
+      height: 100%;
+      & .input > input {
+        height: 42px;
+        background: #f7f6f9;
+        border-radius: 6px;
+        text-indent: 20px;
+      }
+    }
+  }
+}
+
+.signin {
+  & > div:first-child {
+    & > img {
+      display: block;
+      margin: 94px auto 149.1px 100px;
+    }
+  }
+  & > div:last-child {
+    & > div {
+      margin: 190px 150px auto 57px;
+      width: 413px;
+    }
+  }
+  & form {
+    & > div:last-child {
+      & .input > input {
+        width: 413px;
+      }
+    }
+  }
+}
+
+.activeLeft {
+  animation: actionLeft 1s;
+  -webkit-animation: actionLeft 1s; /* Safari 与 Chrome */
+  animation-fill-mode: forwards;
+}
+
+@keyframes actionLeft {
+  from {
+    left: 0;
+  }
+  to {
+    left: -1240px;
+  }
+}
+@-webkit-keyframes actionLeft /* Safari 与 Chrome */ {
+  from {
+    left: 0;
+  }
+  to {
+    left: -1240px;
+  }
+}
+
+.activeRight {
+  animation: actionRight 1s;
+  -webkit-animation: actionRight 1s; /* Safari 与 Chrome */
+  animation-fill-mode: forwards;
+}
+@keyframes actionRight {
+  from {
+    left: -1240px;
+  }
+  to {
+    left: 0;
+  }
+}
+@-webkit-keyframes actionRight /* Safari 与 Chrome */ {
+  from {
+    left: -1240px;
+  }
+  to {
+    left: 0;
+  }
+}
+
+.registe {
+  width: 1240px;
+  height: 680px;
+  & .title {
+    padding-left: 57px;
+    margin: 69px 0 30px 0;
+    & > div {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      color: #000000;
+    }
+  }
+  & form {
+    & > div > div:nth-of-type(2) > div {
+      display: flex;
+      & > span > span:nth-of-type(2) {
+        position: absolute;
+        right: -32px;
+      }
+      & > span > span:nth-of-type(3) {
+        position: absolute;
+        right: -32px;
+      }
+      & > span > span:last-child {
+        position: absolute;
+        right: -32px;
+      }
+      & > span > span:first-child {
+        position: relative;
+        right: 0;
+      }
+    }
+  }
+  & form {
+    & button {
+      height: 40px !important;
+      background: #1890ff;
+      opacity: 0.5;
+    }
+    & > div:last-child {
+      & button {
+        width: 308px;
+        margin-left: 81px;
+        margin-top: 0;
+      }
+    }
+    & > div {
+      height: 40px;
+      display: flex;
+      & > div:first-child {
+        width: 81px;
+      }
+    }
+  }
+  & .input {
+    width: 308px;
+    height: 40px;
+    & > span {
+      height: 40px;
+    }
+    & input {
+      border-top-right-radius: 4px !important;
+      border-bottom-right-radius: 4px !important;
+      height: 40px !important;
+      text-indent: 0 !important;
+    }
+    & > #login-form_mobilePhone {
+      width: 260px !important;
+    }
+  }
+  & > div:first-child {
+    & > img {
+      display: block;
+      margin: 101px auto 178px 135px;
+    }
+  }
+  & > div:last-child {
+    & > div {
+      width: 413px;
+    }
+  }
+}
+
+.inviteUser {
+  width: 100vw;
+  height: 100vh;
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > div {
+    width: 720px;
+    height: 400px;
+    background: #ffffff;
+    box-shadow: 0px 3px 12px rgba(108, 121, 166, 0.1);
+    border-radius: 5px;
+    & > .normal {
+      & > div:first-child {
+        margin-top: 76px;
+        text-align: center;
+        & > span {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          color: #777f97;
+        }
+      }
+      & > div:nth-child(2) {
+        & > div {
+          height: 44px;
+          margin-top: 24px;
+          display: flex;
+          justify-content: center;
+          & > button {
+            width: 380px;
+            border-radius: 6px;
+            height: 44px;
+            background: #f2f2f2;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            color: #333333;
+          }
+        }
+        & > div:first-child {
+          margin-top: 50px;
+          & > button {
+            color: #ffffff;
+            background: #2a7fff;
+          }
+        }
+      }
+    }
+    & > .result {
+      & > div {
+        margin-top: 10pxpx;
+        text-align: center;
+      }
+      & > div:first-child {
+        margin-top: 76px;
+      }
+      & > div:last-child {
+        margin-top: 26px;
+        & > button {
+          width: 100px;
+          background: #2a7fff;
+        }
+      }
+    }
+  }
+}
+
+.normalTabName {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: #777f97;
+}
+
+.activeTabName {
+  color: #000000;
+}
+
+.button {
+  margin-top: 24px;
+  width: 413px;
+  height: 42px !important;
+  background: #2a7fff;
+  opacity: 0.5;
+  border-radius: 6px;
+}
+
+.buttonSuffix {
+  text-align: right;
+  width: 308px;
+  margin-left: 81px;
+  & > a {
+    color: $unHoverGray;
+    &:hover {
+      color: #096dd9;
+    }
+  }
+  & > span {
+    color: $unHoverGray;
+    cursor: pointer;
+    &:hover {
+      color: #096dd9;
+    }
+  }
+}
+
+.loginPhoneCard {
+  & > input {
+    border-radius: 6px !important;
+  }
+  & > span > span:last-child {
+    border: none;
+    padding: 0 0 0 11px;
+    background-color: inherit;
+  }
+}
+
+.authenticatedDiv {
+  & > div {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    & > button {
+      width: 300px;
+    }
+    & > a {
+      width: 300px;
+    }
+  }
+  & > hr {
+    width: 340px;
+    margin: 0 auto;
+  }
+}
+
+.title {
+  display: block;
+  text-align: center;
+}
+
+.forgetPassword {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > div {
+    width: 980px;
+    height: 445px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 5px solid #2a7fff;
+    border-radius: 5px 5px 0px 0px;
+    background-color: #ffffff;
+    & > form {
+      width: 422px;
+      height: 328px;
+      & > div {
+        display: flex;
+        & > div:first-child {
+          width: 81px;
+        }
+      }
+      & > div:first-child {
+        & .input {
+          & > span {
+            width: 0;
+            & > img {
+              width: 0;
+            }
+          }
+          & > input {
+            padding: 4px 11px;
+          }
+        }
+      }
+      & .input {
+        & input {
+          width: 308px;
+          height: 40px;
+          border: 1px solid #d6d8de;
+          box-sizing: border-box;
+          border-radius: 6px;
+        }
+      }
+      & > div:nth-child(2) {
+        & input {
+          width: 190px;
+          border-top-right-radius: 6px !important;
+          border-bottom-right-radius: 6px !important;
+        }
+        & button {
+          width: 104px;
+          padding-left: 14px;
+          background: #1890ff !important;
+          opacity: 0.5;
+        }
+      }
+      & > div:nth-child(3) {
+        & input {
+          width: 308px;
+          height: 40px;
+          border: 1px solid #d6d8de;
+          box-sizing: border-box;
+          border-radius: 6px;
+        }
+      }
+      & > div:last-child {
+        width: 308px;
+        & button {
+          width: 308px;
+          margin-left: 81px;
+          margin-top: 0;
+        }
+      }
+      & > div {
+        & > div:nth-child(2) {
+          & > div {
+            display: flex;
+            & > div {
+              position: absolute;
+              right: 0;
+              width: 0;
+              height: 0;
+              & > div {
+                left: 32px !important;
+              }
+            }
+            & > span {
+              & > span:nth-child(2) {
+                position: absolute;
+                right: -32px;
+              }
+              & > span:nth-child(3) {
+                position: absolute;
+                right: -32px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

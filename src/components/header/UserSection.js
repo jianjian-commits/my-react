@@ -62,7 +62,7 @@ const User = props => {
         overlayClassName={Styles.overlay}
         overlay={MenuItems(allTeam, setVisible, currentTeam, switchCurrentTeam)}
       >
-        <Link className="ant-dropdown-link" to="#">
+        <Link className="ant-dropdown-link" to="#" style={{ color: "#ffffff" }}>
           {userDetail.name}
           <Icon type="down" style={{ margin: "0 0 0 5px" }} />
           <Modal

@@ -184,7 +184,9 @@ class ForBuilderHeader extends React.Component {
                           "save",
                           () => {
                             this.setState({ btnCanClick: true });
-                          }
+                          },
+                          this.props.appid,
+                          this.props.extraProp,
                         );
                       } else {
                         this.props.setErrorComponentIndex(checkRes.componentsIndex);
@@ -202,7 +204,9 @@ class ForBuilderHeader extends React.Component {
                           "save",
                           () => {
                             this.setState({ btnCanClick: true });
-                          }
+                          },
+                          this.props.appid,
+                          this.props.extraProp,
                         );
                       } else {
                         this.setState({ btnCanClick: true });

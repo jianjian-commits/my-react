@@ -226,21 +226,18 @@ export const saveForm = (
       "Content-Type": "application/json",
       appid: appId
     }
-  })
-    .then(response => {
-      let id = response.data.id;
-      let path = response.data.path;
-      console.log(id);
-      callback(`${url}${id}/edit?formId=${id}`);
-    })
-    .catch(err => {
-      console.info(err);
-      if ((err.response.data.code = "1002")) {
-        message.error("该api已存在");
-      }
+  }).then(response => {
+    let id = response.data.id;
+    console.log(id);
+    callback(`${url}${id}/edit?formId=${id}`);
+  }).catch(err => {
+    console.info(err);
+    if ((err.response.data.code = "1002")) {
+      message.error("该api已存在");
+    }
 
-      // }
-    });
+    // }
+  });
 };
 
 export const updateForm = (
@@ -251,7 +248,9 @@ export const updateForm = (
   localForm,
   errMessage,
   type,
-  callback
+  callback,
+  appid,
+  extraProp
 ) => dispatch => {
   _calcFormComponentLayout(formDataArray);
 
@@ -296,7 +295,8 @@ export const updateForm = (
       validate: verificationList
     },
     currentLayoutId, //默认布局ID
-    layoutArray //布局
+    layoutArray,//布局
+    extraProp
   };
 
 
@@ -306,7 +306,8 @@ export const updateForm = (
     method: "PUT",
     data: formData,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      appid: appid
     }
   })
     .then(response => {
@@ -359,7 +360,7 @@ export const initForm = id => dispatch => {
   instanceAxios
     .get(config.apiUrl + "/form/" + id)
     .then(res => {
-      console.log(1);
+      // console.log(1);
       let { components, name, formValidation } = res.data;
       let localForm = res.data;
       dispatch({
@@ -386,8 +387,8 @@ export const getAllForms = () => dispatch => {
     url: config.apiUrl + "/form"
   })
     .then(response => {
-      console.log(1);
-      console.log(response);
+      // console.log(1);
+      // console.log(response);
       dispatch({
         type: GET_ALL_FORMS,
         formArray: response.data
