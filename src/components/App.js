@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "antd";
 import { ConnectedRouter, routerActions } from "connected-react-router";
@@ -30,17 +30,24 @@ export const getRoutes = routes =>
   );
 
 const AppInsideRouter = () => {
+  const { appId } = useParams();
+
+  const authOptions = {
+    type: "redirect"
+  };
   return (
     <Switch>
       {appPaths.map(p => (
         <PrivateRoute
-          auth={p.auth}
+          auth={p.auth && p.auth(appId)}
+          authOptions={authOptions}
           exact={!p.rough}
           key={p.key}
           path={p.path}
           component={p.component}
         />
       ))}
+      )}
       <Route render={() => <Redirect to="/app/list" />} />
     </Switch>
   );
