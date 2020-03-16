@@ -57,7 +57,7 @@ const AppDetail = props => {
 
     setUser(JSON.parse(localStorage.getItem("userDetail")))
 
-    let extraProp = { user: { id: (JSON.parse(localStorage.getItem("userDetail"))).id , name:  (JSON.parse(localStorage.getItem("userDetail"))).name} }
+    // let extraProp = { user: { id: (JSON.parse(localStorage.getItem("userDetail"))).id , name:  (JSON.parse(localStorage.getItem("userDetail"))).name} }
 
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
@@ -153,7 +153,8 @@ const AppDetail = props => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {selectedForm != void 0 ? (
+          { // eslint-disable-next-line
+          selectedForm != void 0 ? (
             <>
               {!submit ? (
                 <Button
@@ -192,7 +193,7 @@ const AppDetail = props => {
                   key={Math.random()}
                   formId={selectedForm}
                   actionFun={(submission_id)=>{
-                    console.log("actionFun",submission_id)
+                    // console.log("actionFun",submission_id)
                     setSubmit(true);
                     setSubmissionId(submission_id)
                   }}

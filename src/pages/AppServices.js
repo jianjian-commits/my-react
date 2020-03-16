@@ -50,7 +50,7 @@ const AppServices = props => {
     getFormsByFormId(formId).then(res => {
       setFormName(res.name);
     });
-  }, []);
+  }, [formId]);
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";

@@ -227,7 +227,7 @@ class GroupDetail extends Component {
         )}
         {getBasicInfo(action, baseInfoBo, this.onChange, edit, this.inputEdit)}
         {getAppManage(action, appManagerBos, this.onChange, enterPermission)}
-        <div className={classes.switch}>
+        <div>
           <span className={classes.moduleTitle}>
             {this.state.teamVisible.label}
           </span>

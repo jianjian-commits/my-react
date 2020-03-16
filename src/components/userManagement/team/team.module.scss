@@ -1,5 +1,5 @@
 .container {
-  padding: 39px 31px 0px;
+  padding: 29px 21px 0px;
 }
 
 .title {
@@ -17,6 +17,18 @@
 .infoInput {
   width: auto !important;
   padding: 0 11px;
+}
+
+.edit {
+  position: relative;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 14px;
+
+  & svg {
+    position: absolute;
+    margin-top: 2px;
+  }
 }
 
 //teamMember
@@ -40,7 +52,9 @@
 .filterBtn {
   background: #ffffff !important;
   margin-left: 20px;
-  line-height: 32px;
+  height: 36px !important;
+  border-radius: 3px !important;
+  width: 104px;
 }
 
 .changeGroup {
@@ -51,6 +65,14 @@
   & th {
     padding: 14px !important;
     background: #fff !important;
+  }
+  :global(.ant-table-column-title) {
+    color: #777f97;
+  }
+  :global(.ant-table) {
+    td {
+      color: #000;
+    }
   }
   .rowKey {
     height: 50px;

@@ -28,19 +28,18 @@ export const getBasicInfo = (a, baseInfoBo, onChange, edit, inputEdit) => {
 
   return (
     <div className={classes.groupBasic}>
-      <div className={classes.moduleTitle}>基本信息</div>
+      <div style={{ fontSize: "15px" }}>基本信息</div>
       <table>
         <tbody>
           {basicInfo.map(i => {
             return (
               <tr key={i.title}>
                 <td>{i.title}</td>
-                <td width="150px">
+                <td>
                   {edit && i.title === "分组名" ? (
                     <Input
                       disabled={a === "view" || i.title !== "分组名"}
                       value={i.value}
-                      // className={classes.inputStyle}
                       onChange={e => onChange(e.target.value, "getBasicInfo")}
                       onBlur={() => inputEdit(false)}
                     ></Input>
@@ -57,7 +56,6 @@ export const getBasicInfo = (a, baseInfoBo, onChange, edit, inputEdit) => {
                     </>
                   )}
                 </td>
-                <td></td>
               </tr>
             );
           })}

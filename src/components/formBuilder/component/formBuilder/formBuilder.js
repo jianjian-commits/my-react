@@ -32,8 +32,8 @@ class ReactFormBuilder extends React.Component {
       editElement: null,
       editElementParent: null,
       formId: locationUtils.getUrlParamObj().formId,
-      appid:window.location.pathname.split("/")[2],
-      extraProp:{user:{name:(JSON.parse(localStorage.getItem('userDetail'))).name,id:(JSON.parse(localStorage.getItem('userDetail'))).id}}
+      appid: window.location.pathname.split("/")[2],
+      extraProp: { user: { name: (JSON.parse(localStorage.getItem('userDetail'))).name, id: (JSON.parse(localStorage.getItem('userDetail'))).id } }
     };
 
     this.editModeOn = this.editModeOn.bind(this);
@@ -101,7 +101,7 @@ class ReactFormBuilder extends React.Component {
       toolbarProps.items = this.props.toolbarItems;
     }
     return (
-      <div className={"formBuilder"} key={Math.random()}>
+      <div className={"formBuilder"} >
         <Spin spinning={this.props.isInitForming} >
           <FormBuilderHeader appid={this.state.appid} extraProp={this.state.extraProp} editForm={this.props.localForm} />
           <DndProvider backend={HTML5Backend}>

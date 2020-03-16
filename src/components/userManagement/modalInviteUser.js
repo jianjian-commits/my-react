@@ -33,7 +33,13 @@ export default function InviteUser(props) {
   const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;
   return (
     <>
-      <Button icon="plus" type="primary" onClick={() => handleInviteUserBtn()}>
+      <Button
+        className={classes.btn}
+        // icon="plus"
+        type="primary"
+        onClick={() => handleInviteUserBtn()}
+      >
+        <img src="/image/davinci/create-white.png" alt="" />
         邀请
       </Button>
       <Modal
