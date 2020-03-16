@@ -561,7 +561,6 @@ class FormSubmitData extends PureComponent {
   };
 
   handleDeleteSubmisson = submissionId => {
-    console.log(1, this.props);
     this.props
       .deleteFormData(this.state.formId, submissionId)
       .then(response => {
@@ -579,6 +578,7 @@ class FormSubmitData extends PureComponent {
             this.onChangePages(this.state.currentPage, this.state.pageSize);
           }
         }
+        this.props.actionFun(true)
       })
       .catch(err => {
         message.error("删除失败！", 2);
@@ -831,6 +831,8 @@ class FormSubmitData extends PureComponent {
             dataId={this.state.formDataDetailId}
             appId={this.props.appId}
             showformDataDetail={this.showformDataDetail}
+            actionFun={this.props.actionFun}
+            handleDeleteSubmisson={this.handleDeleteSubmisson}
           />
         ) : (
           <>

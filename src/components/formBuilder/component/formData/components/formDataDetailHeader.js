@@ -3,14 +3,22 @@ import { Button, Row, Col, List, Table, Tabs , Icon, Typography } from "antd";
 import { useHistory } from "react-router-dom";
 const { Title } = Typography;
 const StartApprovalButton = (props) =>{
-  const {isAssociateApprovalFlow = true , isOwnRecord = true, isStartApproval = false} = props;
+  const {isAssociateApprovalFlow , isOwnRecord, isStartApproval, startApprovelBtnClick} = props;
   let isShow = false;
+
   if(isAssociateApprovalFlow && isOwnRecord && !isStartApproval){
     isShow = true;
+  } else{
+    isShow = false;
   }
+  console.log("sssss",isShow)
   return (
     isShow ?
-      (<Button type="primary" style={{display: isShow ? "block" : "none"}}>提交审批</Button>)
+      (<Button 
+        type="primary" 
+        onClick={()=>{
+          startApprovelBtnClick()
+        }}>提交审批</Button>)
       :(<></>)
   )
 }
@@ -20,10 +28,9 @@ const StartApprovalButton = (props) =>{
 const FormDataDetailHeader = (props) =>{
   const history = useHistory();
   const onClickBack = () => {
-    console.log(history);
     history.goBack();
   };
-  const { title, startApprovelBtnOptions } = props; 
+  const { title } = props; 
   return (
     <div className="FormDataDetailHeader">
       <Row type="flex" justify="space-between">
@@ -40,7 +47,7 @@ const FormDataDetailHeader = (props) =>{
           </Row>
         </Col>
         <Col>
-          <StartApprovalButton {...startApprovelBtnOptions}/>
+          <StartApprovalButton {...props}/>
         </Col>
       </Row>
     </div>

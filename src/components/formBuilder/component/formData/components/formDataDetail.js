@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Form, Table, Button, Row, Col, Icon } from "antd";
 import { connect } from "react-redux";
 import locationUtils from "../../../utils/locationUtils";
-import { getSubmissionDetail } from "../redux/utils/getDataUtils";
+import { getSubmissionDetail, handleStartFlowDefinition } from "../redux/utils/getDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import HeaderBar from "../../base/NavBar";
 import FormDataDetailHeader from "./formDataDetailHeader"
@@ -10,17 +10,23 @@ import FormDataDetailHeader from "./formDataDetailHeader"
 const EditApprovalButton = (props) =>{
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
-  const { detailAuthority = true, dataId="" } = props;
+  const { detailAuthority , dataId, actionFun, handleDeleteSubmisson, ...rest} = props;
   return (
-    detailAuthority ? 
+    true ? 
     (
       <div className="toolbarBox">
-      <span 
+        <span 
           onClick={() => {
-          props.actionFun(true, dataId)
-        }
-      }><Icon component={editIconSvg} {...props} />编辑</span> 
-      <span><Icon component={deleteIconSvg} {...props} />删除</span> 
+          actionFun(dataId, true)
+           }
+        }><Icon component={editIconSvg} />编辑</span> 
+        <span
+            onClick={
+              ()=>{
+                handleDeleteSubmisson(dataId);
+              }
+            }
+      ><Icon component={deleteIconSvg} />删除</span> 
       </div>
     ):(
       <></>
@@ -42,7 +48,7 @@ const deleteIconSvg = (props) =>{
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M5.4375 10.625C5.12813 10.625 4.875 10.3719 4.875 10.0625V6.8125C4.875 6.50313 5.12813 6.25 5.4375 6.25C5.74687 6.25 6 6.50313 6 6.8125V10.0625C6 10.3719 5.74687 10.625 5.4375 10.625ZM8.5625 10.625C8.25312 10.625 8 10.3719 8 10.0625V6.8125C8 6.50313 8.25312 6.25 8.5625 6.25C8.87188 6.25 9.125 6.50313 9.125 6.8125V10.0625C9.125 10.3719 8.87188 10.625 8.5625 10.625Z" fill="#2A7FFF"/>
       <path d="M13.4344 2.875H10.5V1.59375C10.5 0.715625 9.78438 0 8.90625 0H5.09375C4.21562 0 3.5 0.715625 3.5 1.59375V2.875H0.565625C0.254687 2.875 0 3.12812 0 3.4375C0 3.74688 0.254687 4 0.565625 4H2V12.0938C2 12.35 2.05 12.6 2.15 12.8359C2.24531 13.0625 2.38281 13.2672 2.55781 13.4422C2.73281 13.6172 2.93594 13.7547 3.16406 13.85C3.4 13.95 3.65 14 3.90625 14H10.0938C10.35 14 10.6 13.95 10.8359 13.85C11.0625 13.7547 11.2672 13.6172 11.4422 13.4422C11.6172 13.2672 11.7547 13.0641 11.85 12.8359C11.95 12.6 12 12.35 12 12.0938V4H13.4344C13.7453 4 14 3.74688 14 3.4375C14 3.12812 13.7453 2.875 13.4344 2.875ZM4.625 1.59375C4.625 1.33438 4.83437 1.125 5.09375 1.125H8.90625C9.16562 1.125 9.375 1.33438 9.375 1.59375V2.875H4.625V1.59375ZM10.875 12.0938C10.875 12.525 10.525 12.875 10.0938 12.875H3.90625C3.475 12.875 3.125 12.525 3.125 12.0938V4H10.875V12.0938Z" fill="#2A7FFF"/>
-  </svg>)
+    </svg>)
 }
 
 class FormDataDetail extends PureComponent {
@@ -51,7 +57,8 @@ class FormDataDetail extends PureComponent {
     this.state = {
       tipVisibility: false,
       formId: this.props.id,
-      submissionId: this.props.dataId
+      submissionId: this.props.dataId,
+      userId: JSON.parse(localStorage.getItem("userDetail")).id
     };
   }
 
@@ -70,9 +77,27 @@ class FormDataDetail extends PureComponent {
         console.error(err);
       });
   }
+
+  startApprovelBtnClick = () =>{
+    const { formDetail, currentForm, appId } = this.props;
+    const { userId, formId } = this.state
+    let fieldInfos = currentForm.components.map((component =>{
+      if(formDetail[component.id]){
+        return ({
+          name: component.label,
+          value: formDetail[component.id]
+        })
+      }
+    }))
+    let data = {
+      metadataId: formId,
+      appId: appId,
+      fieldInfos: fieldInfos
+    }
+    this.props.handleStartFlowDefinition(userId, appId, data)
+  }
+
   _renderFileData = fileData => {
-    // console.log(fileData, typeof fileData);
-    // if (fileData && fileData.name) {
     if (fileData.length > 0) {
       return fileData.map((item, index) => (
         <p key={index} style={{ marginBottom: 0 }}>
@@ -337,11 +362,12 @@ class FormDataDetail extends PureComponent {
   }
 
   render() {
-    const { formDetail, currentForm, mobile = {} } = this.props;
+    const { formDetail, currentForm, mobile = {}, extraProp } = this.props;
+    const { userId } = this.state;
+    console.log("extraProp", extraProp)
     const editButtonOptions={detailAuthority: true};
     const startApprovelBtnOptions={
       isAssociateApprovalFlow: true,
-      isOwnRecord: true,
       isStartApproval: false
     }
 
@@ -357,8 +383,10 @@ class FormDataDetail extends PureComponent {
           // name={formComponent.name}
           isShowBtn={false}
         /> */}
-        <FormDataDetailHeader 
+        <FormDataDetailHeader
+          isOwnRecord={extraProp !== null ? extraProp.user.id === userId : false}
           title={currentForm.name}
+          startApprovelBtnClick = {this.startApprovelBtnClick}
           {...startApprovelBtnOptions} />
         <div className="formDataDetailContainer">
           <div className="formDataDetailTitle">
@@ -384,9 +412,11 @@ export default connect(
   store => ({
     formDetail: store.formSubmitData.formDetail,
     currentForm: store.formSubmitData.forms,
-    token: store.rootData.token
+    token: store.rootData.token,
+    extraProp: store.formSubmitData.extraProp
   }),
   {
-    getSubmissionDetail
+    getSubmissionDetail,
+    handleStartFlowDefinition
   }
 )(DataDetail);

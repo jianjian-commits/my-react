@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Row, Col, List, Table, Tabs , Icon, Typography } from "antd";
+import { Button, Row, Col, List, Table, Tabs , Modal, Icon, Typography, Input } from "antd";
 import { useHistory } from "react-router-dom";
 
 import clasess from "./transactionDetail.module.scss";
@@ -125,10 +125,11 @@ const ApprovalProcessButtons = (props) =>{
   // 当前节点处理人
   // 特殊情况 多人审批 是否有人审批过？
   // 审批流程中的按钮(通过或者拒绝)
-  const { isApprovalProcessor = false, isMultiPersonApproval = false, isApproved = false } = props;
+  const { isApprovalProcessor, isMultiPersonApproval, isApproved } = props;
   const [currentApproved, setCurrentApproved] = React.useState(false);
-  const [visible, setvisible] = React.useState(false);
-  const [confirmLoading, setconfirmLoading] = React.useState(false);
+  const [approveMsg, setApproveMsg] = React.useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [confirmLoading, setConfirmLoading] = React.useState(false);
   const handleApproval = () =>{
     // 显示弹窗填意见
   }
@@ -137,32 +138,27 @@ const ApprovalProcessButtons = (props) =>{
 
   const handlePass = () =>{
     setCurrentApproved(true);
-    setvisible(true)
+    setVisible(true);
+    console.log("visible", visible)
   }
 
-  const handleRefused = () =>{
-    setCurrentApproved(false)
-    setvisible(true)
+  const handleRefused = (e) =>{
+    setCurrentApproved(false);
+    setVisible(true);
   }
 
   const handleOk = () => {
-    // 这里调用提交审批意见的接口
-    // this.setState({
-    //   ModalText: 'The modal will be closed after two seconds',
-    //   confirmLoading: true,
-    // });
-    // setconfirmLoading
-    // setTimeout(() => {
-    //   this.setState({
-    //     visible: false,
-    //     confirmLoading: false,
-    //   });
-    // }, 2000);
+    // 这里调用审批意见的接口
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setVisible(false);
+      setConfirmLoading(false);
+    }, 2000);
   };
 
   const handleCancel = () => {
     console.log('Clicked cancel button');
-    setvisible(false)
+    setVisible(false)
   };
 
   console.log("isApprovalProcessor",isApprovalProcessor)
@@ -170,8 +166,20 @@ const ApprovalProcessButtons = (props) =>{
     isApprovalProcessor ?
     (
       <>
-      <Button onClick ={handlePass}>通过</Button>
-      <Button onClick ={handleRefused}>拒绝</Button>
+      <Button type="danger" onClick={handleRefused} style={{ marginRight: "20px" }}>拒绝</Button>
+      <Button type="primary" onClick={handlePass}>通过</Button>
+      <Modal
+          title="审批意见"
+          visible={visible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <Input.TextArea
+            allowClear
+            style={{resize:"none"}}
+            onChange={(e)=>{setApproveMsg(e.target.value)}}
+          />
+      </Modal>
     </>
     ):(<></>)
   )
@@ -226,6 +234,8 @@ const TransactionDetail = () => {
       break;
   }
 
+  const ApprovalProcessButtonsOptions = {isApprovalProcessor: true, isMultiPersonApproval: false, isApproved: false}
+
   return (
     <div className={clasess.box}>
       <Row type="flex" justify="space-between" className={clasess.title}>
@@ -242,10 +252,7 @@ const TransactionDetail = () => {
           </Row>
         </Col>
         <Col>
-         <Button type="danger" style={{ marginRight: "20px" }}>
-           拒绝
-         </Button>
-          <Button type="primary">通过</Button>
+          <ApprovalProcessButtons {...ApprovalProcessButtonsOptions}/>
         </Col>
       </Row>
       <Tabs className={clasess.tabsBackground} defaultActiveKey="detail" onChange={ callback } tabBarExtraContent={operations}>
