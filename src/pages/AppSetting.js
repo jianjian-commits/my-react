@@ -47,7 +47,8 @@ const AppSetting = props => {
       console.log(1)
       newList = res.map(item => ({
         key: item.id,
-        name: item.name
+        name: item.name,
+        path: item.path
       }));
 
       setMockForms({
@@ -132,6 +133,7 @@ const AppSetting = props => {
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
+        pathArray={mockForms.list}
         extraProp={{ user: { id: user.id, name: user.name } }}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
