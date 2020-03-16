@@ -64,7 +64,7 @@ class FormInforModal extends React.Component {
     }
     return defaultApiName;
   }
-  
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -86,10 +86,10 @@ class FormInforModal extends React.Component {
     });
   };
   apiUniqueCheck = (rule, value, callback) => {
-    //检测api中是否包含汉字
-    var regChinese = new RegExp("[\\u4E00-\\u9FFF]+", "g");
-    if (regChinese.test(value)) {
-      callback("api中不能包含汉字");
+    //检测apiName只能由字母数字及下划线构成
+    var reg = /^\w+$/
+    if (!reg.test(value)) {
+      callback("apiName只能有字母数字及下划线构成");
     } else {
       callback();
     }
