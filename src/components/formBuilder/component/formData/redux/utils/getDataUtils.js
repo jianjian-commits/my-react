@@ -9,8 +9,12 @@ import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA } from "../a
 // 获取提交数据总数
 var getSubmissionDataTotal = resp => {
   let contentRangeValue = resp.headers["content-range"];
-  const index = contentRangeValue.indexOf("/");
-  return Number(contentRangeValue.substr(index + 1));
+  if(contentRangeValue){
+    const index = contentRangeValue.indexOf("/");
+    return Number(contentRangeValue.substr(index + 1));
+  }else{
+    return 0;
+  }
 };
 
 
