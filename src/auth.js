@@ -12,9 +12,11 @@
     GROUP_TEAM_DROPUSER("踢人","?:class#com.wctsoft.davinci.entity.SysUser:?:?:TU"),
     APP_SETTING("displayApplySettingButton","?:?:?:AMV"),
     APP_CREATEFORM("allowCreateNewForm","?:?:?:MC"),
+
     FORM_VISIBLE("DISPLAY","?:?:FV"),
     FORM_DATAEDIT("FORM_REDIT","?:?:MU"),
     FORM_DATADEL("FORM_DELETE","?:?:MD"),
+
     FORM_APPROVEADD("AP_ADD","?:?:?:AFC"),
     FORM_APPROVEEDIT("AP_REDIT","?:?:?:AFU"),
     FORM_APPROVEDEL("AP_DELETE","?:?:?:AFD"),
@@ -23,6 +25,7 @@
     FORM_AUTOEDIT("PB_REDIT","?:?:?:DFU"),
     FORM_AUTODEL("PB_DELETE","?:?:?:DFD"),
     FORM_AUTOENABLE("PB_ENABLE","?:?:?:DFE"),
+    
     FORMDATA_VISIBLE("DISPLAY","?:?:DV"),
     FORMDATA_CHECK("FORM_SEARCHOWNER","extraProp.id#owner:?:DR"),
     FORMDATA_ADD("FORM_ADD","?:?:DC"),
@@ -58,25 +61,28 @@ export const APP_SETTING_ABLED = appId => `${appId}:?:?:?:AMV`;
 export const APP_VISIABLED = appId => `${appId}:?:?:?:CAV`;
 export const APP_NEW_FORM = appId => `${appId}:?:?:?:MC`;
 
-export const APP_FORM_EDIT = (appId, formId) => `${appId}:${formId}:?:?:?:MU`;
-export const APP_FORM_DELETE = (appId, formId) => `${appId}:${formId}:?:?:?:MD`;
+const formIdPrefix = "id#";
+
+export const APP_FORM_VISIABLED = (appId, formId) => `${appId}:${formIdPrefix}${formId}:?:?:FV`;
+export const APP_FORM_EDIT = (appId, formId) => `${appId}:${formIdPrefix}${formId}:?:?:MU`;
+export const APP_FORM_DELETE = (appId, formId) => `${appId}:$${formIdPrefix}${formId}:?:?:MD`;
 
 export const APP_FORM_PROCESS_NEW = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:DFC`;
+  `${appId}:${formIdPrefix}${formId}:?:?:DFC`;
 export const APP_FORM_PROCESS_DEIT = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:DFU`;
+  `${appId}:${formIdPrefix}${formId}:?:?:DFU`;
 export const APP_FORM_PROCESS_DELETE = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:DFD`;
+  `${appId}:${formIdPrefix}${formId}:?:?:DFD`;
 export const APP_FORM_PROCESS_ENABLE = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:DFE`;
+  `${appId}:${formIdPrefix}${formId}:?:?:DFE`;
 
 export const APP_FORM_APPROVAL_NEW = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:AFC`;
+  `${appId}:${formIdPrefix}${formId}:?:?:AFC`;
 export const APP_FORM_APPROVAL_DEIT = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:AFU`;
+  `${appId}:${formIdPrefix}${formId}:?:?:AFU`;
 export const APP_FORM_APPROVAL_DELETE = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:AFD`;
+  `${appId}:${formIdPrefix}${formId}:?:?:AFD`;
 export const APP_FORM_APPROVAL_ENABLE = (appId, formId) =>
-  `${appId}:${formId}:?:?:?:AFE`;
+  `${appId}:${formIdPrefix}${formId}:?:?:AFE`;
 
 export default {};
