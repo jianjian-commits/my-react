@@ -65,6 +65,13 @@ class TeamManagement extends React.Component {
           key={w.key}
           onClick={() => this.setSelectedKey(w.key, w.path)}
           className={commonClasses.menu}
+          style={
+            this.state.selectedKey === w.key
+              ? {
+                  backgroundColor: "rgba(42, 127, 255, 0.2)"
+                }
+              : {}
+          }
         >
           <span>
             <img src={`/image/davinci/${w.icon}.png`} alt="" />

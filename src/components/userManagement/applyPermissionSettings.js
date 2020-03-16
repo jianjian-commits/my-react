@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Icon, Button, Checkbox, message } from "antd";
+import { Icon, Button, Checkbox, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
 
@@ -30,235 +30,15 @@ const Mete = {
     { key: "PB", value: "自动化流程元数据" }
   ],
   displayApplySettingButton: "是否显示应用设置按钮",
-  allowCreateNewForm: "允许新建列表"
+  allowCreateNewForm: "允许新建列表",
+  appSetting: "可见",
+  createForm: "允许"
 };
 
-const states = {
-  appSetting: {
-    label: "displayApplySettingButton",
-    value: "APP_SETTING",
-    checked: false
-  },
-  createForm: {
-    label: "allowCreateNewForm",
-    value: "APP_CREATEFORM",
-    checked: false
-  },
-  formPermissions: [
-    {
-      formId: "form01",
-      formDetailPermissions: [
-        {
-          label: "DISPLAY",
-          value: "FORM_VISIBLE",
-          checked: false
-        },
-        {
-          label: "FORM_REDIT",
-          value: "FORM_DATAEDIT",
-          checked: false
-        },
-        {
-          label: "FORM_DELETE",
-          value: "FORM_DATADEL",
-          checked: false
-        },
-        {
-          label: "AP_ADD",
-          value: "FORM_APPROVEADD",
-          checked: false
-        },
-        {
-          label: "AP_DELETE",
-          value: "FORM_APPROVEDEL",
-          checked: false
-        },
-        {
-          label: "AP_REDIT",
-          value: "FORM_APPROVEEDIT",
-          checked: false
-        },
-        {
-          label: "AP_ENABLE",
-          value: "FORM_APPROVEENABLE",
-          checked: false
-        },
-        {
-          label: "PB_ADD",
-          value: "FORM_AUTOADD",
-          checked: false
-        },
-        {
-          label: "PB_DELETE",
-          value: "FORM_AUTODEL",
-          checked: false
-        },
-        {
-          label: "PB_REDIT",
-          value: "FORM_AUTOEDIT",
-          checked: false
-        },
-        {
-          label: "PB_ENABLE",
-          value: "FORM_AUTOENABLE",
-          checked: false
-        }
-      ]
-    },
-    {
-      formId: "form02",
-      formDetailPermissions: [
-        {
-          label: "DISPLAY",
-          value: "FORM_VISIBLE",
-          checked: false
-        },
-        {
-          label: "FORM_REDIT",
-          value: "FORM_DATAEDIT",
-          checked: false
-        },
-        {
-          label: "FORM_DELETE",
-          value: "FORM_DATADEL",
-          checked: false
-        },
-        {
-          label: "AP_ADD",
-          value: "FORM_APPROVEADD",
-          checked: false
-        },
-        {
-          label: "AP_DELETE",
-          value: "FORM_APPROVEDEL",
-          checked: false
-        },
-        {
-          label: "AP_REDIT",
-          value: "FORM_APPROVEEDIT",
-          checked: false
-        },
-        {
-          label: "AP_ENABLE",
-          value: "FORM_APPROVEENABLE",
-          checked: false
-        },
-        {
-          label: "PB_ADD",
-          value: "FORM_AUTOADD",
-          checked: false
-        },
-        {
-          label: "PB_DELETE",
-          value: "FORM_AUTODEL",
-          checked: false
-        },
-        {
-          label: "PB_REDIT",
-          value: "FORM_AUTOEDIT",
-          checked: false
-        },
-        {
-          label: "PB_ENABLE",
-          value: "FORM_AUTOENABLE",
-          checked: false
-        }
-      ]
-    }
-  ],
-  dataPermissions: [
-    {
-      formId: "form01",
-      dataPermissions: [
-        {
-          label: "DISPLAY",
-          value: "FORMDATA_VISIBLE",
-          checked: false
-        },
-        {
-          label: "FORM_ADD",
-          value: "FORMDATA_ADD",
-          checked: false
-        },
-        {
-          label: "FORM_SEARCHOWNER",
-          value: "FORMDATA_CHECK",
-          checked: false
-        },
-        {
-          label: "FORM_DELETE",
-          value: "FORMDATA_DEL",
-          checked: false
-        },
-        {
-          label: "FORM_DELETEALL",
-          value: "FORMDATA_DELALL",
-          checked: false
-        },
-        {
-          label: "FORM_REDITOWNER",
-          value: "FORMDATA_EDIT",
-          checked: false
-        },
-        {
-          label: "FORM_REDITALL",
-          value: "FORMDATA_EDITALL",
-          checked: false
-        },
-        {
-          label: "FORM_SEARCHALL",
-          value: "FORMDATA_LIST",
-          checked: false
-        }
-      ]
-    },
-    {
-      formId: "form02",
-      dataPermissions: [
-        {
-          label: "DISPLAY",
-          value: "FORMDATA_VISIBLE",
-          checked: false
-        },
-        {
-          label: "FORM_ADD",
-          value: "FORMDATA_ADD",
-          checked: false
-        },
-        {
-          label: "FORM_SEARCHOWNER",
-          value: "FORMDATA_CHECK",
-          checked: false
-        },
-        {
-          label: "FORM_DELETE",
-          value: "FORMDATA_DEL",
-          checked: false
-        },
-        {
-          label: "FORM_DELETEALL",
-          value: "FORMDATA_DELALL",
-          checked: false
-        },
-        {
-          label: "FORM_REDITOWNER",
-          value: "FORMDATA_EDIT",
-          checked: false
-        },
-        {
-          label: "FORM_REDITALL",
-          value: "FORMDATA_EDITALL",
-          checked: false
-        },
-        {
-          label: "FORM_SEARCHALL",
-          value: "FORMDATA_LIST",
-          checked: false
-        }
-      ]
-    }
-  ]
-};
+const blackSpan = value => (
+  <span style={{ color: "#333333", fontSize: "14px" }}>{value}</span>
+);
+
 const Tr = ({
   dat,
   table,
@@ -387,47 +167,56 @@ const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
       {dat.map((form, index) => {
         const filters = form.formDetailPermissions || form.dataPermissions;
         const display = filters.filter(f => f.label === "DISPLAY");
+        const onChange = e => {
+          dat[index][fp] = filters.map(f => {
+            if (f.label === "DISPLAY") {
+              return {
+                ...f,
+                checked: e.target.value
+              };
+            }
+            return f;
+          });
+          setState({
+            ...state,
+            state: {
+              ...state["state"],
+              [permissionsValue]: dat
+            },
+            data: radioData({
+              state,
+              dat: display[0],
+              formId: form.formId,
+              value: e.target.value
+            })
+          });
+        };
         return (
           <div key={form.formId} className={Styles.form}>
             <div>
-              <span>表单:&nbsp;&nbsp;&nbsp;&nbsp;{form.formName}</span>
+              <div>
+                <span>表单</span>
+              </div>
+              <span>{form.formName}</span>
             </div>
-            <div>
-              <span>
-                {display && display[0] && Mete[display[0].label]}
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <CheckBox
-                  defaultChecked={
-                    display[0].defaultChecked || display[0].checked
-                  }
-                  checked={display[0].checked}
-                  onChange={e => {
-                    dat[index][fp] = filters.map(f => {
-                      if (f.label === "DISPLAY")
-                        return {
-                          ...f,
-                          checked: !f.checked,
-                          defaultChecked: f.defaultChecked || f.checked
-                        };
-                      return f;
-                    });
-                    setState({
-                      ...state,
-                      state: {
-                        ...state["state"],
-                        [permissionsValue]: dat
-                      },
-                      data: crreteData({
-                        defaultChecked: e.target.defaultChecked,
-                        checked: e.target.checked,
-                        state,
-                        dat: display[0],
-                        formId: form.formId
-                      })
-                    });
-                  }}
-                />
-              </span>
+            <div className={Styles.radioThunk}>
+              <div>
+                <span>
+                  {display && display[0] && blackSpan(Mete[display[0].label])}
+                </span>
+                <Radio.Group
+                  onChange={onChange}
+                  value={display[0].checked}
+                  style={{ color: "#333333", fontSize: "14px" }}
+                >
+                  <Radio defaultChecked={display[0].checked} value={true}>
+                    {blackSpan("可见")}
+                  </Radio>
+                  <Radio defaultChecked={display[0].checked} value={false}>
+                    {blackSpan("不可见")}
+                  </Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div>
               {display[0].checked && (
@@ -445,7 +234,6 @@ const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
                 />
               )}
             </div>
-            <hr />
           </div>
         );
       })}
@@ -453,58 +241,88 @@ const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
   );
 };
 
-const thunkSetting = (state, settingValue, setState, CheckBox) => {
+const thunkSetting = (state, settingValue, setState) => {
   const dat = state["state"][settingValue];
+  const onChange = e => {
+    const { value } = e.target;
+    setState({
+      ...state,
+      state: {
+        ...state["state"],
+        [settingValue]: Object.assign({
+          ...dat,
+          checked: value
+        })
+      },
+      permissionAllTrue: value
+        ? [...state.permissionAllTrue.filter(f => f !== dat.value), dat.value]
+        : state.permissionAllTrue.filter(f => f !== dat.value),
+      permissionTrueToFalse: value
+        ? state.permissionTrueToFalse.filter(f => f !== dat.value)
+        : [
+            ...state.permissionTrueToFalse.filter(f => f !== dat.value),
+            dat.value
+          ]
+    });
+  };
+  const radioValue = Mete[settingValue];
   return (
     <>
-      <div>
-        <span>
-          {Mete[dat.label]}&nbsp;&nbsp;&nbsp;&nbsp;
-          <CheckBox
-            defaultChecked={dat.defaultChecked || dat.checked}
-            checked={dat.checked}
-            onChange={e => {
-              const { defaultChecked, checked } = e.target;
-              setState({
-                ...state,
-                state: {
-                  ...state["state"],
-                  [settingValue]: Object.assign({
-                    ...dat,
-                    checked: !dat.checked,
-                    defaultChecked: dat.defaultChecked || dat.checked
-                  })
-                },
-                permissionAllTrue:
-                  defaultChecked === checked
-                    ? state.permissionAllTrue.filter(f => f !== dat.value)
-                    : checked
-                    ? [
-                        ...state.permissionAllTrue.filter(f => f !== dat.value),
-                        dat.value
-                      ]
-                    : state.permissionAllTrue.filter(f => f !== dat.value),
-                permissionTrueToFalse:
-                  defaultChecked === checked
-                    ? state.permissionTrueToFalse.filter(f => f !== dat.value)
-                    : checked
-                    ? state.permissionTrueToFalse.filter(f => f !== dat.value)
-                    : [
-                        ...state.permissionTrueToFalse.filter(
-                          f => f !== dat.value
-                        ),
-                        dat.value
-                      ]
-              });
-            }}
-          />
-        </span>
+      <div className={Styles.radioThunk}>
+        <div>
+          <span>{blackSpan(Mete[dat.label])}</span>
+          <Radio.Group
+            onChange={onChange}
+            value={dat.checked}
+            style={{ color: "#333333", fontSize: "14px" }}
+          >
+            <Radio defaultChecked={dat.checked} value={true}>
+              {blackSpan(`${radioValue}`)}
+            </Radio>
+            <Radio defaultChecked={dat.checked} value={false}>
+              {blackSpan(`不${radioValue}`)}
+            </Radio>
+          </Radio.Group>
+        </div>
       </div>
-      <hr />
     </>
   );
 };
 
+const radioData = ({ state, dat, formId, value }) => {
+  const fi = state.data.filter(f => f.formId === formId);
+  const fil = item => {
+    return item.filter(f => f !== dat.value);
+  };
+  if (!fi[0])
+    state.data = [
+      ...state.data,
+      {
+        formId,
+        permissionAllTrue: [],
+        permissionTrueToFalse: []
+      }
+    ];
+  return state.data.map(d => {
+    const values = () => [dat.value];
+    if (d.formId === formId) {
+      if (value) {
+        return {
+          ...d,
+          permissionAllTrue: [...fil(d.permissionAllTrue), ...values()],
+          permissionTrueToFalse: fil(d.permissionTrueToFalse)
+        };
+      } else {
+        return {
+          ...d,
+          permissionAllTrue: fil(d.permissionAllTrue),
+          permissionTrueToFalse: [...fil(d.permissionTrueToFalse), ...values()]
+        };
+      }
+    }
+    return d;
+  });
+};
 const crreteData = ({ defaultChecked, checked, state, dat, formId }) => {
   const fi = state.data.filter(f => f.formId === formId);
   const fil = item => {
@@ -566,7 +384,7 @@ const Permission = ({
   return (
     <div className={Styles.meteData}>
       <div>
-        <h5>{title}</h5>
+        <span>{title}</span>
       </div>
       {state["state"].appSetting &&
         settingDisplay &&
@@ -580,16 +398,7 @@ const Permission = ({
   );
 };
 
-const Top = ({
-  appId,
-  roleId,
-  setState,
-  state,
-  action,
-  disabled,
-  initialData,
-  enterPermission
-}) => {
+const Top = ({ state, disabled, initialData, enterPermission }) => {
   return (
     <div className={Styles.top}>
       <div className={Styles.back} onClick={enterPermission}>
@@ -668,7 +477,7 @@ export default function ApplyPermissionSetting(props) {
     appPermissionUpdateDetailBos: []
   };
   const [state, setState] = useState({
-    state: states,
+    state: null,
     data: [],
     permissionAllTrue: [],
     permissionTrueToFalse: []
@@ -682,6 +491,7 @@ export default function ApplyPermissionSetting(props) {
         checked={checked}
         onChange={onChange}
         disabled={disabled}
+        className={Styles.checkBox}
       />
     );
   };
@@ -694,16 +504,13 @@ export default function ApplyPermissionSetting(props) {
     });
     return setInit(true);
   }
+  if(!state.state) return null
   return (
     <>
       <div className={Styles.apsLayout}>
         <div className={Styles.aps}>
           <Top
-            appId={appId}
-            roleId={roleId}
             state={state}
-            action={action}
-            setState={setState}
             disabled={disabled}
             initialData={initialData}
             enterPermission={enterPermission}

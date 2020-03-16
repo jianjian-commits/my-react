@@ -14,8 +14,6 @@ export default connect()(function Register({
   query
 }) {
   const { token } = params;
-  // if (!history.location.query && history.location.pathname !== "/register")
-  //   history.push("/register");
   const { inviter, invitedTeam } = history.location.query || query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
@@ -74,7 +72,6 @@ export default connect()(function Register({
           func={registerUser}
           params={params}
           setActiveKey={setActiveKey}
-          history={history}
         />
       </div>
     </>
