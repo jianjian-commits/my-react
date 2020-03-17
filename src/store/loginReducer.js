@@ -156,7 +156,7 @@ export const initAllDetail = () => async dispatch => {
 };
 
 //登录用户
-export const loginUser = ({ token, rest }) => async dispatch => {
+export const loginUser = ({ token, rest, history }) => async dispatch => {
   await dispatch(startLogin());
   try {
     const res = await request(token ? `/login?token=${token}` : "/login", {
@@ -166,6 +166,7 @@ export const loginUser = ({ token, rest }) => async dispatch => {
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("id_token", 1);
       dispatch(loginSuccess());
+      history.push("/");
     } else {
       dispatch(loginFailure());
       message.error("账号密码信息不匹配,请重试");

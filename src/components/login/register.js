@@ -72,6 +72,7 @@ export default connect()(function Register({
           func={registerUser}
           params={params}
           setActiveKey={setActiveKey}
+          history={history}
         />
       </div>
     </>
