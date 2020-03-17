@@ -8,6 +8,29 @@
   margin-bottom: 41px;
 }
 
+.lable {
+  color: #777f97;
+}
+
+.text {
+  color: #333;
+}
+
+// .text::after{
+//   content: '';
+//   display: block;
+//   clear: both;
+// }
+
+// .overInfo {
+//   float: left;
+//   display: block;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+//   max-width: 60%;
+// }
+
 .listBox {
   padding: 5px 30px;
   background-color: #fff;
@@ -20,14 +43,10 @@
 }
 
 .edit {
-  position: relative;
-  padding: 0 !important;
-  margin: 0 !important;
-  font-size: 14px;
-
   & svg {
-    position: absolute;
-    margin-top: 2px;
+    margin-left: -2px;
+    font-size: 12px;
+    transform: translateY(3px);
   }
 }
 
@@ -65,6 +84,7 @@
   & th {
     padding: 14px !important;
     background: #fff !important;
+    color: #333 !important;
   }
   :global(.ant-table-column-title) {
     color: #777f97;
@@ -77,17 +97,19 @@
   .rowKey {
     height: 50px;
     box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
 
     & td {
       padding: 0 16px;
     }
   }
 
-  & .rowKey:nth-of-type(2n) {
-    background-color: #fff;
-  }
+  // & .rowKey:nth-of-type(2n) {
+  //   background-color: #fff;
+  // }
 
-  & .rowKey:nth-of-type(2n + 1) {
-    background-color: #edf2fd;
-  }
+  // & .rowKey:nth-of-type(2n + 1) {
+  //   background-color: #edf2fd;
+  // }
 }
