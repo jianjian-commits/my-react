@@ -100,7 +100,12 @@ class GroupDetail1 extends Component {
         state.filter(item => item.checked).map(v => result.push(v.value));
         return result;
       case "permissions":
-        const { appVisible, teamVisible, teamPermission, ...rest } = state;
+        const {
+          appVisible = {},
+          teamVisible = {},
+          teamPermission = {},
+          ...rest
+        } = state;
         teamVisible.checked && result.push(teamVisible.value);
         teamPermission.checked && result.push(teamPermission.value);
         appVisible.checked && result.push(appVisible.value);

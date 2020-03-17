@@ -181,7 +181,6 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
       {radioList.map(i => {
         return (
           <div key={i.key}>
-            {console.log("teamVisible.checked", i.key)}
             {(i.key === "teamVisible" || teamVisible.checked !== false) && (
               <>
                 <span className={classes.moduleTitle}>{i.label}</span>
