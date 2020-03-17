@@ -21,7 +21,7 @@ function ControlBtn(props) {
         查看
       </Button>
       <Button type="link" onClick={() => {
-          props.setSubmissionId(props.submissionId)
+          props.setSubmissionId(props.submissionId, true)
         }
       }>编辑</Button>
       <Popconfirm

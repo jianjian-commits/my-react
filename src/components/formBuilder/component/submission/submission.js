@@ -490,8 +490,6 @@ class Submission extends Component {
         //     return false;
         // }
 
-        if (true) {
-          if (true) {
             this.setState({ isSubmitted: true,errorResponseMsg:{} });
             this.props
               .submitSubmission(this.state.formId, values,this.props.appid,this.props.extraProp)
@@ -510,28 +508,16 @@ class Submission extends Component {
                 if (error.response && error.response.data.code === 9998) {
                   this._setErrorResponseData(error.response.data);
                   isMobile ? Toast.fail("提交失败") : message.error("提交失败");
+                }else if(error.response && error.response.data.code == 2003){
+                  // this.setState({
+                  //   isSubmitted: false
+                  // })
+                  isMobile
+                  ? Toast.fail(error.response.data.msg)
+                  : message.error(error.response.data.msg);
                 }
               });
-          } else {
-            customValicate.errMessage == void 0 ||
-            customValicate.errMessage === ""
-              ? isMobile
-                ? Toast.fail("校验不通过，请检查输入!")
-                : message.error("校验不通过，请检查输入!")
-              : isMobile
-              ? Toast.fail(customValicate.errMessage)
-              : message.error(customValicate.errMessage);
-          }
-        } else {
-          customValicate.errMessage == void 0 ||
-          customValicate.errMessage === ""
-            ? isMobile
-              ? Toast.fail("校验不通过，请检查输入!")
-              : message.error("校验不通过，请检查输入!")
-            : isMobile
-            ? Toast.fail(customValicate.errMessage)
-            : message.error(customValicate.errMessage);
-        }
+      
       });
     }
   };
