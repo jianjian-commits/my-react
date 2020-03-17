@@ -14,6 +14,7 @@ import {
   filterLinkedFormChildItem
 } from "../utils/filterData";
 import { setErrorComponentIndex } from "../../redux/utils/operateFormComponent";
+import { getDataFromUrl } from "../../../../utils/locationUtils";
 const { Option } = Select;
 
 const defaultStyle = {
@@ -39,7 +40,8 @@ class DataLinkageModal extends React.Component {
       isError: false,
       linkFormClass: "data-link-form", //关联表单的class
       isLinkFormError: false, //关联表单的状态
-      formChildData: [] // 子表单关联对象
+      formChildData: [], // 子表单关联对象
+      formId: getDataFromUrl("formId")
     };
   }
 
@@ -148,7 +150,7 @@ class DataLinkageModal extends React.Component {
         conditionId &&
         linkDataId &&
         linkComponentType &&
-        element.type === "FormChildTest" &&
+        element.type == "FormChildTest" &&
         formChildData.length > 0) ||
       (linkFormId &&
         linkComponentId &&
@@ -204,13 +206,13 @@ class DataLinkageModal extends React.Component {
     let allComponentsId = [];
     data.forEach(item => {
       allComponentsId.push(item.id);
-      if (item.type === "FormChildTest" && Array.isArray(item.values)) {
+      if (item.type == "FormChildTest" && Array.isArray(item.values)) {
         item.values.forEach(child => {
           allComponentsId.push(child.id);
         });
       }
     });
-    if (this.state.conditionId === undefined) {
+    if (this.state.conditionId == undefined) {
       return true;
     }
     if (allComponentsId.includes(this.state.conditionId)) {
@@ -239,7 +241,7 @@ class DataLinkageModal extends React.Component {
           ...this.state.formChildData,
           {
             label: childData.label,
-            id: childData.id,
+            id: childData.key,
             type: childData.element
           }
         ]
@@ -274,11 +276,12 @@ class DataLinkageModal extends React.Component {
     const {
       showOrHideModal,
       forms,
-      formId,
       element,
       data,
       elementParent
     } = this.props;
+    const { formId } = this.state;
+
     const {
       linkFormId,
       linkComponentId,
@@ -323,11 +326,12 @@ class DataLinkageModal extends React.Component {
             onChange={this.handleSelectLinkForm}
             defaultValue={isLinkFormError ? "字段失效，请重新选择" : linkFormId}
           >
-            {filterFormExceptSelf(forms, formId).reverse().map(form => (
-              <Option value={form.id} key={form.id}>
-                {form.name}
-              </Option>
-            ))}
+            {filterFormExceptSelf(forms, formId)
+              .map(form => (
+                <Option value={form.id} key={form.id}>
+                  {form.name}
+                </Option>
+              ))}
           </Select>
 
           <p className="sencond-title">数据联动</p>
@@ -357,7 +361,7 @@ class DataLinkageModal extends React.Component {
                 linkFormId,
                 linkComponentType
               ).map(item => (
-                <Option value={item.id} key={item.id}>
+                <Option value={item.key} key={item.key}>
                   {item.label}
                 </Option>
               ))}
@@ -384,7 +388,7 @@ class DataLinkageModal extends React.Component {
                 linkFormId,
                 element.element
               ).map(item => (
-                <Option value={item.id} key={item.id}>
+                <Option value={item.key} key={item.key}>
                   {item.label}
                 </Option>
               ))}
@@ -451,8 +455,8 @@ class DataLinkageModal extends React.Component {
                         item.type
                       ).map(item => (
                         <Option
-                          value={item.id + "|" + item.label}
-                          key={item.id}
+                          value={item.key + "|" + item.label}
+                          key={item.key}
                         >
                           {item.label}
                         </Option>
@@ -482,7 +486,9 @@ class DataLinkageModal extends React.Component {
 
 export default connect(
   store => ({
-    data: store.formBuilder.data
+    data: store.formBuilder.data,
+    // forms: store.formBuilder.formArray,
+    formId: store.formBuilder.formId
   }),
   {
     setItemValues,

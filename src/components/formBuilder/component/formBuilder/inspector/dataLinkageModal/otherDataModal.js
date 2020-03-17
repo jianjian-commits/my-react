@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Modal, Select, Icon, Input, message } from "antd";
 import { connect } from "react-redux";
 import { setErrorComponentIndex } from "../../redux/utils/operateFormComponent";
+import { getDataFromUrl } from "../../../../utils/locationUtils";
 const Option = Select.Option;
 
 const LinkComponentType = [
@@ -9,7 +10,7 @@ const LinkComponentType = [
   "RadioButtons",
   "CheckboxInput",
   "MultiDropDown",
-  "NumberInput",
+  "number",
   "DateInput",
   "DropDown"
 ];
@@ -20,13 +21,14 @@ class OtherDataModal extends Component {
 
     this.state = {
       formIndex: -1,
-      selectedFormId: undefined,//关联表单id
+      selectedFormId: undefined, //关联表单id
       selectedOptionId: undefined, //关联表单字段id
       linkComponentType: "other", //关联组件类型
       optionLabel: undefined,
       isOpenList: false,
       hasError: false,
-      forms: []
+      forms: [],
+      formId: getDataFromUrl("formId")
     };
   }
 
@@ -34,9 +36,8 @@ class OtherDataModal extends Component {
     let { formId, optionId, optionLabel, hasError } = this.props.data;
     // 过滤自身表单
     const forms = this.props.forms.filter(
-      form => form.id != this.props.formId
+      form => form.id !== this.state.formId
     );
-    forms.reverse();
     let hasform = forms.some(form => form.id === formId);
     let formIndex = -1;
     if (hasform && formId) {
@@ -71,7 +72,7 @@ class OtherDataModal extends Component {
   };
 
   handleOptionSelected = ev => {
-    if (ev.target.tagName === "LI") {
+    if (ev.target.tagName == "LI") {
       let value = ev.target.getAttribute("data-value");
       let type = ev.target.getAttribute("data-type");
       let label = ev.target.innerText;
@@ -155,7 +156,6 @@ class OtherDataModal extends Component {
       classess += " open";
       arrowIconClass += " open";
     }
-
     return (
       <Modal
         title={title}
@@ -206,12 +206,12 @@ class OtherDataModal extends Component {
               ? this.filterFormComponents(forms[formIndex]).map(component => (
                   <li
                     key={component.id}
-                    data-value={component.id}
+                    data-value={component.key}
                     data-type={component.type}
                     className="select-option-item"
                   >
                     {component.label}
-                    {selectedOptionId === component.id ? (
+                    {selectedOptionId == component.id ? (
                       <Icon
                         style={{ color: "#09BB07" }}
                         className="dropDown-check-icon"
@@ -228,6 +228,11 @@ class OtherDataModal extends Component {
   }
 }
 
-export default connect(store => {}, {
-  setErrorComponentIndex
-})(OtherDataModal);
+export default connect(
+  store => ({
+    formId: store.formBuilder.formId
+  }),
+  {
+    setErrorComponentIndex
+  }
+)(OtherDataModal);

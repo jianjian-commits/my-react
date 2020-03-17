@@ -7,6 +7,7 @@ import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
   DropableWrapper
 } from "../components/shared/DraggableList";
+import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
@@ -47,10 +48,13 @@ const AppSetting = props => {
       console.log(1)
       newList = res.map(item => ({
         key: item.id,
-        name: item.name
+        name: item.name,
+        path: item.path
       }));
 
-      setMockForms({
+      props.setAllForms(res);
+
+       setMockForms({
         groups: [
           // {key:'',name:'',list:[]}
         ],
@@ -132,6 +136,7 @@ const AppSetting = props => {
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
+        pathArray={mockForms.list}
         extraProp={{ user: { id: user.id, name: user.name } }}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
@@ -197,4 +202,6 @@ const AppSetting = props => {
 };
 export default connect(({ app }) => ({
   appList: app.appList
-}))(AppSetting);
+}), {
+  setAllForms
+})(AppSetting);

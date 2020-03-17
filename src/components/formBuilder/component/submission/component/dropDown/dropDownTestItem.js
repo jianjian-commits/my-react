@@ -11,14 +11,14 @@ export default class DropDownTestItem extends React.Component {
     };
   }
 
-  componentWillReceiveProps(newProps){
-    if(newProps.selections.length == 0){
-      this.setState({selectIndex:-1})
-    }else{
-      let selectIndex = newProps.item.data.values.map(item =>item.value).indexOf(newProps.value)
-      this.setState({selectIndex})
-    }
-  }
+  // componentWillReceiveProps(newProps){
+  //   if(newProps.selections.length == 0){
+  //     this.setState({selectIndex:-1})
+  //   }else{
+  //     let selectIndex = newProps.item.data.values.map(item =>item.value).indexOf(newProps.value)
+  //     this.setState({selectIndex})
+  //   }
+  // }
 
   componentDidMount(){
     const {onChange,item} = this.props;

@@ -14,7 +14,8 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import { filterFormsForRelation } from "../utils/filterData";
 import config from "../../../../config/config";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
-import isInFormChild from "../utils/isInFormChild"
+import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class DropdownInspector extends React.Component {
@@ -25,7 +26,7 @@ class DropdownInspector extends React.Component {
         props.element.data.type ||
         (props.element.data.values && props.element.data.values.type) ||
         "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isShowOtherDataModal: false
     };
@@ -41,6 +42,13 @@ class DropdownInspector extends React.Component {
         isLinked: true
       });
     }
+
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr(ev) {
@@ -96,7 +104,7 @@ class DropdownInspector extends React.Component {
     }
   };
   deleteChooseItem(item, index) {
-    if(this.props.element.data.values.length === 1) return null;
+    if (this.props.element.data.values.length === 1) return null;
     let newValuesList = this.props.element.data.values.filter(
       (item, i) => i !== index
     );
@@ -172,7 +180,12 @@ class DropdownInspector extends React.Component {
   };
 
   handleOtherFormDataChange = data => {
-    const { selectedFormId, selectedOptionId, optionLabel, linkComponentType } = data;
+    const {
+      selectedFormId,
+      selectedOptionId,
+      optionLabel,
+      linkComponentType
+    } = data;
     let values = {
       formId: selectedFormId,
       optionId: selectedOptionId,
@@ -216,7 +229,7 @@ class DropdownInspector extends React.Component {
     const { forms, element, elementParent } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
-    if(errorComponentIndex > -1) {
+    if (errorComponentIndex > -1) {
       let currentIndex = data.indexOf(element);
       currentIndex === errorComponentIndex && (isLinkError = true);
     }
@@ -259,13 +272,17 @@ class DropdownInspector extends React.Component {
         return (
           <>
             <Button
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetOtherDataModal(true);
               }}
             >
-              {element.data.type === "otherFormData"
-                ? (isLinkError ? "数据关联失效" : "已设置数据关联")
+              {element.data.type == "otherFormData"
+                ? isLinkError
+                  ? "数据关联失效"
+                  : "已设置数据关联"
                 : "关联表单数据设置"}
             </Button>
             <OtherDataModal
@@ -286,13 +303,17 @@ class DropdownInspector extends React.Component {
         return (
           <>
             <Button
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -328,27 +349,58 @@ class DropdownInspector extends React.Component {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { optionType, isLinked } = this.state;
-    const { elementParent, element} = this.props;
-    const { label, validate, tooltip } = this.props.element;
-    
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
+    const { elementParent, element, data, errorComponentIndex } = this.props;
+    const { label, validate, tooltip, isSetAPIName } = this.props.element;
+
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
-        <p htmlFor="checkbox-title">标题</p>
-        <Input
-          id="checkbox-title"
-          name="label"
-          placeholder="多选框"
-          value={label}
-          onChange={this.handleChangeAttr}
-          autoComplete="off"
-        />
-        {
-          isInFormChild(this.props.elementParent)
-            ? null 
-            :<>
+          <p htmlFor="checkbox-title">标题</p>
+          <Input
+            id="checkbox-title"
+            name="label"
+            placeholder="多选框"
+            value={label}
+            onChange={this.handleChangeAttr}
+            autoComplete="off"
+          />
+
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            disabled={isSetAPIName ? true : false}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
               <p htmlFor="email-tip">提示信息</p>
               <Input
                 id="email-tip"
@@ -358,39 +410,39 @@ class DropdownInspector extends React.Component {
                 onChange={this.handleChangeAttr}
                 autoComplete="off"
               />
-             </>
-        }
-        <p>选项</p>
-        {isLinked ? (
-          <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
-        ) : (
-          <>
-            <Select
-              value={optionType}
-              style={{ width: "100%" }}
-              onChange={this.handleSelectChange}
-              className="data-source-select"
-            >
-              <Option value="custom">自定义</Option>
-              <Option value="otherFormData">关联其他表单数据</Option>
-              <Option value="DataLinkage">数据联动</Option>
-            </Select>
-            {this.renderOptionDataFrom(optionType)}
-          </>
-        )}
+            </>
+          )}
+          <p>选项</p>
+          {isLinked ? (
+            <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
+          ) : (
+            <>
+              <Select
+                value={optionType}
+                style={{ width: "100%" }}
+                onChange={this.handleSelectChange}
+                className="data-source-select"
+              >
+                <Option value="custom">自定义</Option>
+                <Option value="otherFormData">关联其他表单数据</Option>
+                <Option value="DataLinkage">数据联动</Option>
+              </Select>
+              {this.renderOptionDataFrom(optionType)}
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
-            <p htmlFor="email-tip">校验</p>
-            <div className="checkbox-wrapper">
-              <Checkbox
-                name="required"
-                checked={validate.required}
-                onChange={this.handleChangeAttr}
-              >
-                必选
-              </Checkbox>
-            </div>
+          <p htmlFor="email-tip">校验</p>
+          <div className="checkbox-wrapper">
+            <Checkbox
+              name="required"
+              checked={validate.required}
+              onChange={this.handleChangeAttr}
+            >
+              必选
+            </Checkbox>
+          </div>
         </div>
       </div>
     );

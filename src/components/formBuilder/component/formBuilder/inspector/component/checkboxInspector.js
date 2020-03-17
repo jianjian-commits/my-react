@@ -15,13 +15,28 @@ import {
   setFormChildItemAttr,
   setCalcLayout
 } from "../../redux/utils/operateFormComponent";
+
+import locationUtils from "../../../../utils/locationUtils";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class CheckboxInspector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      formPath: locationUtils.getUrlParamObj().path
+    };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
   }
+
+  componentDidMount() {
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
+  }
+
   handleChangeAttr(ev) {
     let { name, value, checked } = ev.target;
     let { validate } = this.props.element;
@@ -51,14 +66,14 @@ class CheckboxInspector extends React.Component {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
         name,
-        value !== undefined ? value : checked,
+        value != undefined ? value : checked,
         this.props.element
       );
     } else {
       this.props.setItemAttr(
         this.props.element,
         name,
-        value !== undefined ? value : checked
+        value != undefined ? value : checked
       );
     }
   }
@@ -140,7 +155,7 @@ class CheckboxInspector extends React.Component {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate,
-      maxOptionNumber: value == void 0 ? Number.MAX_SAFE_INTEGER : value
+      maxOptionNumber: value
     };
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -154,8 +169,31 @@ class CheckboxInspector extends React.Component {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { label, validate, values, inline, tooltip } = this.props.element;
+    const {
+      label,
+      validate,
+      values,
+      inline,
+      tooltip,
+      isSetAPIName
+    } = this.props.element;
+    const { apiNameTemp, isUniqueApi = true } = this.state;
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
@@ -168,6 +206,19 @@ class CheckboxInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
+
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            disabled={isSetAPIName ? true : false}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
           {isInFormChild(this.props.elementParent) ? null : (
             <>
               <p htmlFor="radio-text-tip">提示信息</p>

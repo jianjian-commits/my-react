@@ -14,6 +14,7 @@ const initState = {
   formDataLoading: false,
   formDetailLoading: false,
   submissionDataTotal: -1,
+  extraProp: null,
 };
 
 const formSubmitDataReducer = (state = initState, action) => {
@@ -49,6 +50,7 @@ const formSubmitDataReducer = (state = initState, action) => {
         ...state,
         formDetail: action.formDetail,
         forms: action.forms,
+        extraProp: action.extraProp
       };
     }
 

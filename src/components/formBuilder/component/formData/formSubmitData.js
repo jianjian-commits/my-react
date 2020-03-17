@@ -405,6 +405,7 @@ class FormSubmitData extends PureComponent {
           return <></>;
         }
         return this._renderSignatureData(submitData);
+      case "founder":
       case "created":
       case "modified":
         if (submitData == void 0) {
@@ -561,7 +562,6 @@ class FormSubmitData extends PureComponent {
   };
 
   handleDeleteSubmisson = submissionId => {
-    console.log(1, this.props);
     this.props
       .deleteFormData(this.state.formId, submissionId)
       .then(response => {
@@ -579,6 +579,7 @@ class FormSubmitData extends PureComponent {
             this.onChangePages(this.state.currentPage, this.state.pageSize);
           }
         }
+        this.props.actionFun(true)
       })
       .catch(err => {
         message.error("删除失败！", 2);
@@ -632,7 +633,7 @@ class FormSubmitData extends PureComponent {
         let sorter = {};
 
         if (item.type === "FormChildTest") {
-          // 子表单的排序还没有做。。。。
+          //? 子表单的排序还没有做。。。。
           resultObj = {
             title: item.label,
             key: item.length === 0 ? item.key : null,
@@ -705,6 +706,13 @@ class FormSubmitData extends PureComponent {
         }
         return resultObj;
       });
+      columns.push({
+        title: "创建人",
+        dataIndex: "founder",
+        key: "founder",
+        sorter: (a, b) => new Date(a.created) - new Date(b.created),
+        sortOrder: sortedInfo.columnKey === "founder" && sortedInfo.order,
+      });
     columns.push({
       title: "创建时间",
       dataIndex: "created",
@@ -734,10 +742,11 @@ class FormSubmitData extends PureComponent {
       let obj = {
         id: dataObj.id,
         created: dataObj.created,
-        modified: dataObj.modified
+        modified: dataObj.modified,
+        founder: dataObj.extraProp["name"]
       };
       let dataItem = dataObj.data;
-
+      console.log(obj)
       for (let n in dataItem) {
         if (formChildIdArray.includes(n)) {
           dataItem[n].forEach(submitDataObj => {
@@ -757,6 +766,7 @@ class FormSubmitData extends PureComponent {
           obj[n] = this.filterSubmitDataToString(dataItem[n]);
         }
       }
+      console.log(obj)
       formDataShowArray.push(obj);
     });
 
@@ -831,6 +841,8 @@ class FormSubmitData extends PureComponent {
             dataId={this.state.formDataDetailId}
             appId={this.props.appId}
             showformDataDetail={this.showformDataDetail}
+            actionFun={this.props.actionFun}
+            handleDeleteSubmisson={this.handleDeleteSubmisson}
           />
         ) : (
           <>

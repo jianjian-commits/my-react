@@ -1,14 +1,30 @@
 import React from "react";
 import { Input, Radio, Checkbox, Button, Tooltip, Divider } from "antd";
 import { connect } from "react-redux";
-import { setItemAttr, setCalcLayout, setFormChildItemAttr, } from "../../redux/utils/operateFormComponent";
-import isInFormChild from "../utils/isInFormChild"
+import {
+  setItemAttr,
+  setCalcLayout,
+  setFormChildItemAttr
+} from "../../redux/utils/operateFormComponent";
+import isInFormChild from "../utils/isInFormChild";
+import locationUtils from "../../../../utils/locationUtils";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class RadioInputInspector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.addChooseItem = this.addChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
+  }
+
+  componentDidMount() {
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi,
+      formPath: locationUtils.getUrlParamObj().path
+    });
   }
 
   handleChangeAttr(ev) {
@@ -67,8 +83,10 @@ class RadioInputInspector extends React.Component {
   }
 
   deleteChooseItem(item, index) {
-    if(this.props.element.values.length === 1) return null;
-    let newValuesList = this.props.element.values.filter((item, i) => i !== index)
+    if (this.props.element.values.length === 1) return null;
+    let newValuesList = this.props.element.values.filter(
+      (item, i) => i !== index
+    );
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
@@ -118,8 +136,31 @@ class RadioInputInspector extends React.Component {
 
   // }
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { label, validate, values, inline, tooltip } = this.props.element;
+    const {
+      label,
+      validate,
+      values,
+      inline,
+      tooltip,
+      isSetAPIName
+    } = this.props.element;
+    const { apiNameTemp, isUniqueApi = true } = this.state;
     return (
       <div className="radio-input-inspactor">
         <div className="costom-info-card">
@@ -132,55 +173,65 @@ class RadioInputInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
-          {
-            isInFormChild(this.props.elementParent)
-              ? null
-              : <>
-                <p htmlFor="radio-text-tip">提示信息</p>
-                <Input
-                  id="radio-text-tip"
-                  name="tooltip"
-                  placeholder="请输入提示信息"
-                  defaultValue={tooltip}
-                  onChange={this.handleChangeAttr}
-                  autoComplete="off"
-                />
-              </>
-          }
+
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            disabled={isSetAPIName ? true : false}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p htmlFor="radio-text-tip">提示信息</p>
+              <Input
+                id="radio-text-tip"
+                name="tooltip"
+                placeholder="请输入提示信息"
+                defaultValue={tooltip}
+                onChange={this.handleChangeAttr}
+                autoComplete="off"
+              />
+            </>
+          )}
           <p>选项</p>
           <div className="chooseitems" key={"chooseRadioItem"}>
             {values.map((item, index) => {
-
-              return <div className="ChooseItemWarp" key={index}>
-                <img src="/image/dragIcon.png" />
-                <Input
-                  key={`chooseItem${index}`}
-                  type="text"
-                  onChange={ev => {
-                    this.changeChooseItem(item, ev);
-                  }}
-                  value={item.value}
-                  placeholder="选项"
-                  autoComplete="off"
-                />
-                <Tooltip title="删除">
-                  <img
-                    src="/image/deleteIcon.png"
-                    onClick={() => {
-                      this.deleteChooseItem(item, index);
+              return (
+                <div className="ChooseItemWarp" key={index}>
+                  <img src="/image/dragIcon.png" />
+                  <Input
+                    key={`chooseItem${index}`}
+                    type="text"
+                    onChange={ev => {
+                      this.changeChooseItem(item, ev);
                     }}
+                    value={item.value}
+                    placeholder="选项"
+                    autoComplete="off"
                   />
-                </Tooltip>
-              </div>
+                  <Tooltip title="删除">
+                    <img
+                      src="/image/deleteIcon.png"
+                      onClick={() => {
+                        this.deleteChooseItem(item, index);
+                      }}
+                    />
+                  </Tooltip>
+                </div>
+              );
             })}
             <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
               增加选项
             </Button>
           </div>
-          {
-            isInFormChild(this.props.elementParent)
-            ? null
-            :<>
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
               <p>排序方式</p>
               <div className="RadioWapper">
                 <Radio.Group
@@ -189,16 +240,12 @@ class RadioInputInspector extends React.Component {
                   defaultValue={inline}
                   onChange={this.handleChangeAttr}
                 >
-                  <Radio value={true} >
-                    横向
-                  </Radio>
-                  <Radio value={false} >
-                    纵向
-                  </Radio>
+                  <Radio value={true}>横向</Radio>
+                  <Radio value={false}>纵向</Radio>
                 </Radio.Group>
               </div>
             </>
-          }
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
@@ -213,8 +260,6 @@ class RadioInputInspector extends React.Component {
             </Checkbox>
           </div>
         </div>
-
-
       </div>
     );
   }
@@ -228,7 +273,6 @@ export default connect(
   {
     setItemAttr,
     setCalcLayout,
-    setFormChildItemAttr,
+    setFormChildItemAttr
   }
 )(RadioInputInspector);
-

@@ -10,6 +10,7 @@ import {
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class DateInputInspector extends React.PureComponent {
@@ -17,9 +18,10 @@ class DateInputInspector extends React.PureComponent {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isLinked: false,
+      apiNameTemp: undefined //api name 临时值
     };
   }
 
@@ -31,6 +33,13 @@ class DateInputInspector extends React.PureComponent {
         isLinked: true
       });
     }
+
+    const { key } = element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr = ev => {
@@ -54,7 +63,8 @@ class DateInputInspector extends React.PureComponent {
         checked = checked ? "true" : "";
         break;
       }
-      default: break;
+      default:
+        break;
     }
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
@@ -78,7 +88,7 @@ class DateInputInspector extends React.PureComponent {
     const { forms, element, elementParent } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
-    if(errorComponentIndex > -1) {
+    if (errorComponentIndex > -1) {
       let currentIndex = data.indexOf(element);
       currentIndex === errorComponentIndex && (isLinkError = true);
     }
@@ -92,10 +102,14 @@ class DateInputInspector extends React.PureComponent {
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
             >
-              {element.data.type === "DataLinkage"
-                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -137,11 +151,16 @@ class DateInputInspector extends React.PureComponent {
   handleSelectChange = value => {
     switch (value) {
       case "custom": {
-        const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
-        if(elementParent) {
+        const {
+          elementParent,
+          element,
+          setItemValues,
+          setFormChildItemValues
+        } = this.props;
+        if (elementParent) {
           setFormChildItemValues(elementParent, "data", {}, element);
         } else {
-          setItemValues(this.props.element, "data",{});
+          setItemValues(this.props.element, "data", {});
         }
         this.setState({
           optionType: "custom"
@@ -160,6 +179,21 @@ class DateInputInspector extends React.PureComponent {
     }
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
     const {
       label,
@@ -167,10 +201,16 @@ class DateInputInspector extends React.PureComponent {
       defaultValue,
       validate,
       unique = false,
-      inputMask
+      inputMask,
+      isSetAPIName
     } = this.props.element;
     const formatChecks = inputMask ? true : false;
-    const { optionType, isLinked } = this.state;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
 
     return (
       <div className="base-form-tool">
@@ -184,23 +224,35 @@ class DateInputInspector extends React.PureComponent {
             autoComplete="off"
           />
 
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            disabled={isSetAPIName ? true : false}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
           <p htmlFor="email-title">默认值</p>
           {isLinked ? (
-              <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
-            ) : (
-              <>
-                <Select
-                  value={optionType}
-                  style={{ width: "100%" }}
-                  onChange={this.handleSelectChange}
-                  className="data-source-select"
-                >
-                  <Option value="custom">无</Option>
-                  <Option value="DataLinkage">数据联动</Option>
-                </Select>
-                {this.renderOptionDataFrom(optionType)}
-              </>
-            )}
+            <Input defaultValue="以子表单联动为准，不支持设置默认值" disabled />
+          ) : (
+            <>
+              <Select
+                value={optionType}
+                style={{ width: "100%" }}
+                onChange={this.handleSelectChange}
+                className="data-source-select"
+              >
+                <Option value="custom">无</Option>
+                <Option value="DataLinkage">数据联动</Option>
+              </Select>
+              {this.renderOptionDataFrom(optionType)}
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
