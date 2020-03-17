@@ -8,7 +8,8 @@ export default Form.create({ name: "login-form" })(function PublicForm({
   func,
   params = {},
   marginBottom,
-  setActiveKey
+  setActiveKey,
+  history
 }) {
   const { getFieldDecorator, validateFields, getFieldError } = form;
   const handleSubmit = e => {
@@ -18,7 +19,8 @@ export default Form.create({ name: "login-form" })(function PublicForm({
         console.log("Received values of form: ", actionType, rest);
         func({
           token: params.token ? params.token : null,
-          rest
+          rest,
+          history
         });
       }
     });
