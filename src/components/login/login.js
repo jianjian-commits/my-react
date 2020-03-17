@@ -30,7 +30,7 @@ function Registe({ params, history, setActiveKey, query }) {
   );
 }
 
-function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
+function Signin({ setActiveKey, activeKey, params, loginUser }) {
   return (
     <>
       <div>
@@ -60,7 +60,6 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
               params={params}
               marginBottom={20}
               setActiveKey={setActiveKey}
-              history={history}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -81,7 +80,6 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
               params={params}
               marginBottom={20}
               setActiveKey={setActiveKey}
-              history={history}
             />
           </Tabs.TabPane>
         </Tabs>
@@ -99,9 +97,6 @@ export default connect(
     loginUser
   }
 )(function Login({ loginUser, isLoading, history, isAuthenticated }) {
-  // if (isAuthenticated && history.location.query ) history.push("/");
-  // if (!history.location.query && history.location.pathname !== "/login")
-  //   history.push("/login");
   const { userId, teamId, token, active, inviter, invitedTeam } =
     history.location.query || {};
   const params = userId && teamId && token ? { userId, teamId, token } : {};
@@ -130,7 +125,6 @@ export default connect(
                   setActiveKey={setActiveKey}
                   params={params}
                   loginUser={loginUser}
-                  history={history}
                 />
                 // )
               }
