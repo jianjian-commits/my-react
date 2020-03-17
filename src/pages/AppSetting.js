@@ -12,7 +12,6 @@ import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
 import { APP_SETTING_ABLED } from "../auth";
-import{ initialState } from "../store/loginReducer";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -34,18 +33,19 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
+  // console.log( props )
   const [user, setUser] = React.useState({})
 
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
     let newList = [];
+    let { id , name } = props.userDetail;
 
-    setUser(initialState)
+    setUser({user:{ id, name }})
     // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {
-      console.log(1)
       newList = res.map(item => ({
         key: item.id,
         name: item.name
@@ -133,7 +133,7 @@ const AppSetting = props => {
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
-        extraProp={{ user: { id: user.id, name: user.name } }}
+        extraProp={user}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
@@ -196,6 +196,7 @@ const AppSetting = props => {
     </Authenticate>
   );
 };
-export default connect(({ app }) => ({
-  appList: app.appList
+export default connect(({ app, login }) => ({
+  appList: app.appList,
+  userDetail: login.userDetail
 }))(AppSetting);

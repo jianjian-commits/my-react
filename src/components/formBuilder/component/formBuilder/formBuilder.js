@@ -18,7 +18,6 @@ import Toolbar from "./toolbar/toolbar";
 import Inspector from "./inspector/inspector";
 import locationUtils from "../../utils/locationUtils";
 import FormBuilderHeader from "./formBuilderHeader/formBuilderHeader";
-import{ initialState } from "../../../../store/loginReducer";
 import "../../scss/index.scss";
 
 class ReactFormBuilder extends React.Component {
@@ -31,7 +30,7 @@ class ReactFormBuilder extends React.Component {
       editElementParent: null,
       formId: locationUtils.getUrlParamObj().formId,
       appid:window.location.pathname.split("/")[2],
-      extraProp:{user:{name:initialState.name,id:initialState.id}}
+      extraProp:{user:{name:this.props.userDetail.name,id:this.props.userDetail.id}}
     };
 
     this.editModeOn = this.editModeOn.bind(this);
@@ -39,7 +38,8 @@ class ReactFormBuilder extends React.Component {
 
   componentDidMount() {
     let { formId } = this.state;
-    
+
+    // console.log(this.props)
     const { initForm } = this.props;
     if (formId) {
       initForm(formId);
@@ -146,7 +146,8 @@ export default connect(
     verificationList: store.formBuilder.verificationList,
     errMessage: store.formBuilder.errMessage,
     localForm: store.formBuilder.localForm,
-    isInitForming: store.formBuilder.isInitForming
+    isInitForming: store.formBuilder.isInitForming,
+    userDetail: store.login.userDetail
   }),
   {
     saveForm,

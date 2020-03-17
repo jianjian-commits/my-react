@@ -84,9 +84,7 @@ export const getFormComponent = id => dispatch => {
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => dispatch => {
-  instanceAxios.get(config.apiUrl + "/form");
-  console
-    .log(1)
+  instanceAxios.get(config.apiUrl + "/form")
     .then(response => {
       dispatch({
         type: GET_ALL_FORMS,

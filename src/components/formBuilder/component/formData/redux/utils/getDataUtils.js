@@ -44,10 +44,12 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         type: Filter_FORM_DATA,
         submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
+          let extraProp = item.extraProp
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
+            extraProp: extraProp.user,
             id: item.id
           }
         })
@@ -75,10 +77,12 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         type: Filter_FORM_DATA,
         submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
         formData: filterSubmisstion.map(item => {
+          let extraProp = item.extraProp
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
+            extraProp: extraProp.user,
             id: item.id
           }
         })

@@ -55,6 +55,7 @@ class FormSubmitData extends PureComponent {
       filterArray: [],
       connectCondition: "&",
       formDataDetailId: "",
+      // 是否展示筛选界面,默认为false(不展示)
       showFilterBoard: false
     };
   }
