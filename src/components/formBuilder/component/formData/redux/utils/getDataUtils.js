@@ -8,7 +8,7 @@ import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA } from "../a
 
 // 获取提交数据总数
 var getSubmissionDataTotal = resp => {
-  let contentRangeValue = resp.headers["content-range"];
+  let contentRangeValue = resp.headers["content-range"] || "";
   const index = contentRangeValue.indexOf("/");
   return Number(contentRangeValue.substr(index + 1));
 };
@@ -38,7 +38,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
     filterData(formPath, filterStr, pageSize, currentPage).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
+        submissionDataTotal: 10, //(totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
           return {
             data: item.data,
@@ -112,7 +112,7 @@ export const getSubmissionData = (
         dispatch({
           type: RECEIVED_FORM_DATA,
           forms,
-          submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
+          submissionDataTotal: 10, //total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
 
             return {
@@ -143,24 +143,50 @@ export const getSubmissionDetail = (formId, submissionId) => dispatch => {
         }
       )
       .then(res => {
+        console.log("res.data", res.data)
         dispatch({
           type: RECEIVED_FORM_DETAIL,
           forms: currentForm,
-          formDetail: res.data.data
+          formDetail: res.data.data,
+          extraProp: res.data.extraProp
         });
       });
   });
 };
 
 // 修改表单数据详情
-export const modifySubmissionDetail = (formId, submissionId, formData) => dispatch => {
-  return instanceAxios
-    .put(
-      config.apiUrl + `/submission/${submissionId}`,
-      {
-        data: formData,
-        formId: formId
-      
-      }
-    )
+export const modifySubmissionDetail = (formId, submissionId, formData, appid, extraProp) => dispatch => {
+  return instanceAxios({
+    url: config.apiUrl + `/submission/${submissionId}`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      appid:appid
+    },
+    data: {
+      data: formData,
+      formId: formId,
+      extraProp
+    }
+  });
 };
+
+export const handleStartFlowDefinition = (userId, appId, data) => dispatch =>{
+  console.log("handleStartFlowDefinition")
+  instanceAxios({
+    url: config.apiUrl + `/flow/approval/start`,
+    method: "POST",
+    data: data,
+    headers: {
+      "Content-Type": "application/json",
+      appid: appId
+    }
+  })
+    .then(response => {
+  
+      console.log(response);
+    })
+    .catch(err => {
+      console.log(err)
+    });
+}

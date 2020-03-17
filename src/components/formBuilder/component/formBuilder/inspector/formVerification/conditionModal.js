@@ -24,22 +24,26 @@ class ConditionModal extends React.Component {
       searchFieldArray: [], //搜索字段数组
       searchFormulaArray: [], //搜索公式数组
       fieldInputValue: "",
-      formulaInputValue: ""
+      formulaInputValue: "",
+      selectedComponent: []
     };
   }
 
   componentWillMount() {
     let resultArray = [];
+    let excludeComponentType = ["RadioButtons","CheckboxInput","DropDown","MultiDropDown","DateInput","GetLocalPosition","ImageUpload","FileUpload","HandWrittenSignature","Address","ComponentTemplate","Button"]
 
     this.props.data.forEach(item => {
-      if (item.type === "FormChildTest") {
+      if (item.type == "FormChildTest") {
         item.values.forEach(childItem => {
-          resultArray.push({
-            label: item.label + "." + childItem.label,
-            id: childItem.id
-          });
+          if(excludeComponentType.indexOf(childItem.type) === -1){
+            resultArray.push({
+              label: item.label + "." + childItem.label,
+              id: item.id + "_"+ childItem.id
+            });
+          }
         });
-      } else {
+      } else if(excludeComponentType.indexOf(item.type) === -1){
         resultArray.push({
           label: item.label,
           id: item.id
@@ -71,35 +75,14 @@ class ConditionModal extends React.Component {
     var newStr = e.target.value;
     if(newStr === ""){
       this.setState({
-        verificationValue : ""
+        verificationValue : "",
+        selectedComponent : []
       })
     }
-    let cursorIndex = this.getCursortPosition(
-      document.querySelector(".custom")
-    );
     this.setState(state => {
-      let resultValue = "";
-      if(newStr.length >= state.verificationStr.length){
-        // 增加文字的时候
-        if(newStr.length > cursorIndex){
-          // 光标不在最末尾的位置
-          let valueCursorIndex = this.calculateKeyCursor(state.verificationStr, cursorIndex, 26);
-          console.log("valueCursorIndex",valueCursorIndex)
-            resultValue = this.insertStr(state.verificationValue, newStr[cursorIndex-1], valueCursorIndex-1)
-        }else if(newStr !==""){
-           // 光标在最末尾的位置
-          resultValue = state.verificationValue + newStr[cursorIndex-1];
-        }
-      } else {
-        // 删除文字的时候。。先考虑
-        let valueCursorIndex = this.calculateKeyCursor(state.verificationStr, cursorIndex, 26);
-        resultValue = state.verificationValue.substring(0,valueCursorIndex) + state.verificationValue.substring(valueCursorIndex+1,state.verificationValue.length);
-                                            
-      }
       return ({
         ...state,
         verificationStr: newStr,
-        verificationValue: resultValue
       })
     });
   }
@@ -117,32 +100,31 @@ class ConditionModal extends React.Component {
     return result;
   }
 
-  // 计算value的cursor 
-  /**
-   * 计算当前光标之前有几个字段  -->只能使用字符串的匹配。。
-   * 字段*id.length+光标的当前位置等于value的cursor值
-   */
-  calculateKeyCursor(verificationStr, cursorIndex, idLength) {
-    // this.state.componentLabelArray 代表所有的组件 (label,value)
-    let {componentLabelArray} = this.state;
-    let LabelArray = componentLabelArray.map( item => item.label);
-    // label去重，方便计算有几个字符
-    LabelArray = [...new Set(LabelArray)];
-    // 当前光标前的字符串
-    let suffixStr = verificationStr.substring(0,cursorIndex);
-    let count = LabelArray.reduce( (total, lable, currentIndex, arr) => {
-      return total + suffixStr.split(lable).length -1
-    },0);
 
-    let FieldStrLength = LabelArray.reduce( (total, lable, currentIndex, arr) => {
-      return total + (suffixStr.split(lable).length -1) * lable.length
-    },0);
-    return suffixStr.length - FieldStrLength + count * idLength ;
+  buildVerificationValue() {
+    let {verificationStr, selectedComponent } = this.state;
+    let valueStr = "";
+    let startIndex = 0;
+    let endIndex = 0;
+    selectedComponent.map(field =>{
+      endIndex = verificationStr.indexOf(field.label, startIndex);
+        if(endIndex !== -1){
+          if(startIndex < endIndex){
+            valueStr += verificationStr.substring(startIndex, endIndex)
+          }
+            valueStr += field.id;
+            verificationStr = verificationStr.slice(endIndex + field.label.length)
+        }
+    })
+    if(verificationStr.length !== 0){
+      valueStr += verificationStr
+    }
+    return valueStr
   }
 
-  addFromData(filed) {
-    let value = filed.label;
-    let id = filed.id;
+  addFromData(field) {
+    let value = field.label;
+    let id = field.id;
     let textAreaInput = this.textAreaInput;
     let cursorIndex = this.getCursortPosition(
       document.querySelector(".custom")
@@ -152,18 +134,16 @@ class ConditionModal extends React.Component {
     this.setState(
       state => {
         let result = this.insertStr(state.verificationStr, value, cursorIndex);
-        let valueCursorIndex = this.calculateKeyCursor(result, cursorIndex,id.length);
-        let resultValue = this.insertStr(state.verificationValue,id, valueCursorIndex);
+        let selectedComponent = [...state.selectedComponent,field]
         return {
           ...state,
           verificationStr: result,
-          verificationValue: resultValue,
-          cursorIndex: newCursor
+          cursorIndex: newCursor,
+          selectedComponent
         };
       },
       () => {
         textAreaInput.focus();
-
         const dom = document.querySelector(".custom");
         dom.selectionStart = dom.selectionEnd = newCursor;
       }
@@ -193,20 +173,14 @@ class ConditionModal extends React.Component {
     value = `${value}()`;
     let newCursor = cursorIndex + value.length - 1;
 
-    // console.log(cursorIndex)
-
     this.setState(
       state => {
         let result = this.insertStr(state.verificationStr, value, cursorIndex);
-        let valueCursorIndex = this.calculateKeyCursor(result, cursorIndex, 26);
-
-        let resultValue = this.insertStr(state.verificationValue,value, valueCursorIndex);
 
         return {
           ...state,
           verificationStr: result,
-          cursorIndex: newCursor,
-          verificationValue: resultValue
+          cursorIndex: newCursor
         };
       },
       () => {
@@ -286,9 +260,10 @@ class ConditionModal extends React.Component {
         visible={this.props.visible}
         onOk={() => {
           this.props.handleOk();
+          let verificationValue = this.buildVerificationValue();
           if (this.state.verificationStr) {
-            this.props.index === -1
-              ? this.props.addVerification(this.state.verificationStr,this.state.verificationValue)
+            this.props.index == -1
+              ? this.props.addVerification(this.state.verificationStr, verificationValue)
               : this.props.editVerification(
                 this.state.verificationStr,
                 this.state.verificationValue,
@@ -297,7 +272,8 @@ class ConditionModal extends React.Component {
             this.setState(state => ({
               ...state,
               verificationStr: "",
-              verificationValue: ""
+              verificationValue: "",
+              selectedComponent:[]
             }));
           }
 

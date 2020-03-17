@@ -173,6 +173,7 @@ const AppDetail = props => {
                     key={Math.random()}
                     formId={selectedForm}
                     submissionId={submissionId}
+                    extraProp={{ user: { id: user.id, name: user.name } }}
                     actionFun={(submission_id, submitFlag = false) => {
                       setSubmissionId(submission_id)
                       setSubmit(submitFlag);
@@ -192,9 +193,8 @@ const AppDetail = props => {
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
-                  actionFun={(submission_id)=>{
-                    // console.log("actionFun",submission_id)
-                    setSubmit(true);
+                  actionFun={(submission_id, submitFlag = false)=>{
+                    setSubmit(submitFlag);
                     setSubmissionId(submission_id)
                   }}
                   appId={appId}

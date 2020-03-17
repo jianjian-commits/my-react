@@ -1,6 +1,7 @@
 import axios from "axios";
 import { HOST_IP } from "../config";
-import { history } from "../store";
+import store from "../store";
+import { signOut } from "../store/loginReducer";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = `${HOST_IP}`;
@@ -14,8 +15,7 @@ axios.interceptors.response.use(
       error.response.status === 401 &&
       error.response.data.status === "UNAUTHENTICATED"
     ) {
-      localStorage.removeItem("id_token");
-      history.push("/login");
+      store.dispatch(signOut());
     }
     return Promise.reject(error);
   }
