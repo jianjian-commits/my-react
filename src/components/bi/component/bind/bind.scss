@@ -1,0 +1,103 @@
+.bind-pane {
+  border: 10px solid #adb5bd;
+}
+
+.bind-line {
+  display: inline-flex;
+  align-items: center;
+  width:100%;
+  height:30px;
+  border-style: dotted;
+  border-color: #adb5bd;
+  // min-width: 900px;
+  margin-top: 5px;
+
+  .bind-label {
+    width: 40px;
+  }
+
+  .bind-child {
+    text-align: center;
+    border-radius: 10px;
+    width: 80px;
+    margin-left: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .bind-child-dim {
+    @extend .bind-child;
+    background-color: lightblue;
+  }
+
+  .bind-child-mea {
+    @extend .bind-child;
+    background-color: orange;
+  }
+}
+
+
+.left-pane {
+   display: flex;
+  //  width: 240px;
+   height:100%;
+   flex-direction: column;
+   border: 1px solid #adb5bd;
+
+  .left-pane-data {
+    height: 20%;
+    border: 1px solid #adb5bd;
+   }
+
+  .left-pane-dimension {
+    height: 40%;
+    border: 1px solid #adb5bd;
+  }
+
+  .left-pane-measure {
+    height: 40%;
+    border: 1px solid #adb5bd;
+  }
+
+  .data-source-name {
+    font-size: 15px;
+  }
+
+  .data-source-name:hover {
+    background-color: lightblue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.right-pane {
+  display: flex;
+  height:100%;
+  flex-direction: column;
+  border: 1px solid #adb5bd;
+
+  .right-pane-chart {
+    height: 30%;
+    border: 1px solid #adb5bd;
+   }
+
+  .right-pane-tools {
+    height: 30%;
+    border: 1px solid #adb5bd;
+  }
+}
+
+.col-title {
+  text-align: center;
+}
+
+.bind-item {
+  height: 20px;
+  margin: 3px;
+  overflow: hidden;
+}
+
+.bind-item:hover {
+  background-color: lightgreen;
+}

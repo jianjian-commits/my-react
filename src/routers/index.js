@@ -10,6 +10,8 @@ import AppServices from "../pages/AppServices";
 // import AppServicesEdit from "../pages/AppServicesEdit";
 import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
+import BI from "../pages/BI";
+import ElementEditor from "../pages/ElementEditor";
 
 export const main = [
   {
@@ -69,6 +71,20 @@ export const appPaths = [
     path: `/app/:appId/setting/form/:formId/:serviceId`,
     rough: true,
     component: AppServices
+  },
+  {
+    key: "element",
+    label: "图表",
+    path: `/app/:appId/setting/bi/:dashboardId/:elementId`,
+    rough: true,
+    component: ElementEditor
+  },
+  {
+    key: "bi",
+    label: "报表",
+    path: `/app/:appId/setting/bi/:dashboardId`,
+    rough: true,
+    component: BI
   },
   // {
   //   key: "formEdit",

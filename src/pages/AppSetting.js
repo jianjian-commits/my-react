@@ -146,7 +146,7 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                modalProps.showModal();
+                history.push(`/app/${appId}/setting/bi/weichuangtong`)
               }}
             >
               新建仪表盘
