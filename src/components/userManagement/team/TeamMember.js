@@ -66,31 +66,31 @@ export default connect(
           currentTeam.groups.filter(item => {
             return item.name === "超级管理员";
           })[0].peopleNumber === 1 ? (
-          true
-        ) : false ? null : (
-          <span>
-            <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
-              <Button
-                type="link"
-                onClick={handleChange.bind(this, text)}
-                className={classes.changeGroup}
-              >
-                变更分组
+            true
+          ) : false ? null : (
+            <span>
+              <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
+                <Button
+                  type="link"
+                  onClick={handleChange.bind(this, text)}
+                  className={classes.changeGroup}
+                >
+                  变更分组
               </Button>
-            </Authenticate>
-            <Authenticate auth={TEAM_MANAGEMENT_DROP}>
-              <Popconfirm
-                title="把该成员从团队中踢出?"
-                onConfirm={confirm.bind(this, text.id)}
-                okText="确认"
-                cancelText="取消"
-                placement="bottom"
-              >
-                <Button type="link">踢出</Button>
-              </Popconfirm>
-            </Authenticate>
-          </span>
-        );
+              </Authenticate>
+              <Authenticate auth={TEAM_MANAGEMENT_DROP}>
+                <Popconfirm
+                  title="把该成员从团队中踢出?"
+                  onConfirm={confirm.bind(this, text.id)}
+                  okText="确认"
+                  cancelText="取消"
+                  placement="bottom"
+                >
+                  <Button type="link">踢出</Button>
+                </Popconfirm>
+              </Authenticate>
+            </span>
+          );
       }
     }
   ];
@@ -112,7 +112,7 @@ export default connect(
         setTotal(res.data.total);
       })
       .catch(err => {
-        message.error("成员获取失败");
+        message.error(err.response.data.msg || "成员获取失败");
         return currentTeam.id;
       });
   }, [pageConfig, currentTeam.id]);
@@ -140,7 +140,8 @@ export default connect(
         getCurrentTeam();
       })
       .catch(err => {
-        message.error("踢出失败");
+        console.log(err.response)
+        message.error(err.response.data.msg || "踢出失败");
       });
   };
   // 过滤
@@ -177,7 +178,7 @@ export default connect(
           getCurrentTeam();
         })
         .catch(err => {
-          message.error("变更失败");
+          message.error(err.response.data.msg || "变更失败");
         });
     }
     setOnOff({
@@ -246,6 +247,6 @@ export default connect(
       ) : null}
     </div>
   ) : (
-    <Spin size="large" />
-  );
+      <Spin size="large" />
+    );
 });

@@ -45,20 +45,20 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
             </Button>
           </Col>
         ) : (
-          <Col span={16} className={classes.text}>
-            <span> {defaultValue}</span>
-            <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
-              <Button
-                size="small"
-                type="link"
-                className={classes.edit}
-                onClick={switchRedact}
-              >
-                <Edit />
-              </Button>
-            </Authenticate>
-          </Col>
-        )}
+            <Col span={16} className={classes.text}>
+              <span> {defaultValue}</span>
+              <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
+                <Button
+                  size="small"
+                  type="link"
+                  className={classes.edit}
+                  onClick={switchRedact}
+                >
+                  <Edit />
+                </Button>
+              </Authenticate>
+            </Col>
+          )}
       </Row>
     </div>
   );
@@ -87,7 +87,7 @@ export default connect(
         });
       })
       .catch(err => {
-        message.error("修改失败");
+        message.error(err.response.data.msg || "修改失败");
       });
   };
 
@@ -140,6 +140,6 @@ export default connect(
       </div>
     </div>
   ) : (
-    <Spin size="large" />
-  );
+      <Spin size="large" />
+    );
 });
