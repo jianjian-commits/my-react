@@ -106,7 +106,6 @@ export const getSubmissionData = (
 ) => dispatch => {
   axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
     let forms = res.data;
-    let extraProp = forms.extraProp
     instanceAxios
       .get(
         config.apiUrl +
@@ -125,13 +124,13 @@ export const getSubmissionData = (
           forms,
           submissionDataTotal: 10, //total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-
+            let{ user } = item.extraProp
             return {
               data: item.data,
               id: item.id,
               created: item.createdTime,
               modified: item.updateTime,
-              extraProp: extraProp.user
+              extraProp: user
             }
           })
         });

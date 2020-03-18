@@ -758,6 +758,7 @@ class FormSubmitData extends PureComponent {
     let formDataShowArray = [];
 
     formData.forEach((dataObj, i) => {
+      console.log(dataObj)
       let obj = {
         id: dataObj.id,
         created: dataObj.created,
