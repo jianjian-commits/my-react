@@ -164,11 +164,11 @@ class Submission extends Component {
   }
   _setNumberValue(values) {
     this.props.formComponent.components.map(component => {
-      if (values[component.id] === "") {
-        delete values[component.id];
+      if (values[component.key] === "") {
+        delete values[component.key];
       }
-      if (component.type === "NumberInput" && values.hasOwnProperty(component.id)) {
-        values[component.id] = Number(values[component.id])
+      if (component.type === "NumberInput" && values.hasOwnProperty(component.key)) {
+        values[component.key] = Number(values[component.key])
       }
     });
     return values;
@@ -179,13 +179,13 @@ class Submission extends Component {
       if (
         component.type === "DateInput" &&
         values.hasOwnProperty(component.id) &&
-        values[component.id] != void 0
+        values[component.key] != void 0
       ) {
         // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
-        if (values[component.id].constructor === Date) {
-          values[component.id].setUTCMilliseconds(0);
+        if (values[component.key].constructor === Date) {
+          values[component.key].setUTCMilliseconds(0);
         } else {
-          values[component.id]._d.setUTCMilliseconds(0);
+          values[component.key]._d.setUTCMilliseconds(0);
         }
       }
     });
@@ -197,17 +197,17 @@ class Submission extends Component {
       if (
         component.type === "Address" &&
         values.hasOwnProperty(component.id) &&
-        values[component.id] != void 0
+        values[component.key] != void 0
       ) {
         // 如果地址字段为空 就不提交地址字段
-        let { province, county, city, detail } = values[component.id];
+        let { province, county, city, detail } = values[component.key];
         let address = [province, city, county, detail]
           .filter(item => item)
           .join("");
         if (address.trim() === "") {
-          delete values[component.id];
+          delete values[component.key];
         } else {
-          values[component.id].xx = address;
+          values[component.key].xx = address;
         }
       }
     });
@@ -240,7 +240,7 @@ class Submission extends Component {
         component.type !== "CustomValue" &&
         component.validate &&
         component.validate.required &&
-        !values[component.id]
+        !values[component.key]
       ) {
         return true;
       }
@@ -392,11 +392,6 @@ class Submission extends Component {
     });
   };
 
-  _getComponentLabelByID = componentId => {
-    return this.state.pureFormComponents.filter(
-      component => component.id === componentId
-    )[0].label;
-  };
 
   // 设置正确的子表单数据
   setCorrectFormChildData = (values, formChildDataObj) => {
