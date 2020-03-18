@@ -9,6 +9,7 @@ export default class NavBar extends PureComponent {
             isShowBtn,
             btnValue = "创建表单",
             isShowBackBtn = true,
+            isShowExtraTitle = true,
             clickCallback = (() => { return 0; }),
             clickExtendCallBack
         } = this.props;
@@ -28,10 +29,10 @@ export default class NavBar extends PureComponent {
                 <div className="headerBarTitle">
                     <span>{name}</span>
                 </div>
-                <div className="headerBarExtraTitle">
+                {isShowExtraTitle? <div className="headerBarExtraTitle">
                     <span> 显示字段 </span>
                     <span onClick ={ clickExtendCallBack } > 筛选条件 </span>
-                </div>
+                </div>:<></>}
                 <div className="headerBarButton">
                     {isShowBtn === true ?
                         <Button type="primary" onClick={() => clickCallback()}>
