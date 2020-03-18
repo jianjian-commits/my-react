@@ -124,7 +124,8 @@ class FormDataDetail extends PureComponent {
       .then(() => {
         this.props.getSubmissionDetail(
           this.state.formId,
-          this.state.submissionId
+          this.state.submissionId,
+          this.props.appId
         );
       })
       .catch(err => {

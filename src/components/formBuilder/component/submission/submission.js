@@ -1123,6 +1123,7 @@ class Submission extends Component {
               }}
               name={formComponent.name}
               isShowBtn={false}
+              isShowExtraTitle={false}
             />
           )}
           <div className={"formBuilder-Submission"}>

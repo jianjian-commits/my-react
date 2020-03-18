@@ -46,7 +46,7 @@ const AppSetting = props => {
     setUser({ user: { id, name } })
     // let extraProp = { user: { id: user.id, name: user.name } }
 
-    getFormsAll(appId, true).then(res => {
+    getFormsAll(appId, false).then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name,

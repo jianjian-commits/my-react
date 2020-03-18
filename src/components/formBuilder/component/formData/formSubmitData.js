@@ -98,14 +98,16 @@ class FormSubmitData extends PureComponent {
             this.state.connectCondition,
             this.state.showNumber,
             1,
-            this.state.showNumber
+            this.state.showNumber,
+            this.props.appId
           );
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData(
             this.state.formId,
             this.state.showNumber,
             1,
-            this.state.showNumber
+            this.state.showNumber,
+            this.props.appId
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
@@ -113,13 +115,15 @@ class FormSubmitData extends PureComponent {
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,
+            this.props.appId
           );
         } else {
           this.props.getSubmissionData(
             this.state.formId,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,1,
+            this.props.appId
           );
         }
       }
@@ -128,13 +132,14 @@ class FormSubmitData extends PureComponent {
 
   componentDidMount() {
     let { formId } = this.props;
-
+    console.log(this.props)
     initToken()
       .then(() => {
         this.props.getSubmissionData(
           this.props.formId,
           this.state.pageSize,
-          this.state.currentPage
+          this.state.currentPage,1,
+          this.props.appId
         );
       })
       .catch(err => {
@@ -487,14 +492,16 @@ class FormSubmitData extends PureComponent {
             this.state.connectCondition,
             this.state.showNumber,
             1,
-            this.state.showNumber
+            this.state.showNumber,
+            this.props.appId
           );
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData(
             this.state.formId,
             this.state.showNumber,
             1,
-            this.state.showNumber
+            this.state.showNumber,
+            this.props.appId
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
@@ -502,13 +509,15 @@ class FormSubmitData extends PureComponent {
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,
+            this.props.appId
           );
         } else {
           this.props.getSubmissionData(
             this.state.formId,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,1,
+            this.props.appId
           );
         }
       }
@@ -617,6 +626,7 @@ class FormSubmitData extends PureComponent {
               getSubmissionDetail={this.props.getSubmissionDetail}
               setSubmissionId={this.props.actionFun}
               showformDataDetail={this.showformDataDetail}
+              appId = { this.props.appId}
             />
           );
         }
