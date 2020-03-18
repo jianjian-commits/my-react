@@ -450,6 +450,9 @@ class FormDataDetail extends PureComponent {
     return (
       <div style={{ width: "100%", height: "100%", paddingBottom: 100 }}>
         <FormDataDetailHeader
+          formId={this.state.formId}
+          submissionId={this.state.submissionId}
+          actionFun={this.props.actionFun}
           isOwnRecord={extraProp !== null ? extraProp.user.id === userId : false}
           title={currentForm.name}
           startApprovelBtnClick = {this.startApprovelBtnClick}

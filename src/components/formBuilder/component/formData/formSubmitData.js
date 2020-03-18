@@ -18,8 +18,6 @@ import zhCN from "antd/es/locale/zh_CN";
 import { initToken } from "../../utils/tokenUtils";
 import ControlBtn from "./components/controlBtn";
 import FormDataDetail from "./components/formDataDetail";
-import locationUtils from "../../utils/locationUtils";
-import config from "../../config/config";
 import HeaderBar from "../../component/base/NavBar";
 import {
   getSubmissionData,
@@ -30,7 +28,6 @@ import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
 import FilterComponent from "./components/filterComponent/filterComponent";
 import coverTimeUtils from "../../utils/coverTimeUtils";
-const { Option } = Select;
 
 // 加载数据时重写表格为空状态
 const noRenderEmpty = () => <div style={{ height: "20vh" }}></div>;
@@ -93,7 +90,7 @@ class FormSubmitData extends PureComponent {
       () => {
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -109,7 +106,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -482,7 +479,7 @@ class FormSubmitData extends PureComponent {
         this.onChangePages(this.state.currentPage, this.state.pageSize);
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -498,7 +495,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -617,6 +614,7 @@ class FormSubmitData extends PureComponent {
               getSubmissionDetail={this.props.getSubmissionDetail}
               setSubmissionId={this.props.actionFun}
               showformDataDetail={this.showformDataDetail}
+              actionFun2={this.props.actionFun2}
             />
           );
         }
@@ -859,8 +857,10 @@ class FormSubmitData extends PureComponent {
                   this.props.history.go(-1);
                 }}
                 name={this.props.forms.name}
-                isShowBtn={false}
-                isShowBackBtn={false}
+                isShowBtn={true}
+                isShowBackBtn={true}
+                btnValue="提交数据"
+                clickCallback={()=>{this.props.actionFun(null ,true)}}
                 clickExtendCallBack = {this.showFilterComponent}
               />
             )}

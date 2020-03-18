@@ -25,9 +25,9 @@ const StartApprovalButton = (props) =>{
 
 
 const FormDataDetailHeader = (props) =>{
-  const history = useHistory();
   const onClickBack = () => {
-    history.goBack();
+    props.actionFun(props.submissionId, false, props.formId)
+
   };
   const { title } = props; 
   return (
