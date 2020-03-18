@@ -42,6 +42,7 @@ const AppDetail = props => {
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
+  const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false)
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -115,6 +116,7 @@ const AppDetail = props => {
   const onClickMenu = (key, e) => {
     setApprovalKey(key);
     setSelectedForm(null);
+    setEnterApprovalDetail(false)
   };
 
   // 父传子的方法
@@ -202,7 +204,7 @@ const AppDetail = props => {
               )}
             </>
           ) : approvalKey !== null ? (
-            <TransactList fn={onClickMenu} approvalKey={approvalKey} />
+            <TransactList fn={onClickMenu} approvalKey={approvalKey} enterApprovalDetail={enterApprovalDetail} setEnterApprovalDetail={setEnterApprovalDetail}/>
           ) : null}
         </Content>
       </Layout>

@@ -1,11 +1,64 @@
 import React, { PureComponent } from "react";
-import { Form, Table, Button, Row, Col, Icon } from "antd";
+import { Form, Table, Button, Row, Col, Icon, Tabs } from "antd";
 import { connect } from "react-redux";
 import locationUtils from "../../../utils/locationUtils";
 import { getSubmissionDetail, handleStartFlowDefinition } from "../redux/utils/getDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import HeaderBar from "../../base/NavBar";
 import FormDataDetailHeader from "./formDataDetailHeader"
+const { TabPane } = Tabs;
+const columns = [
+  {
+    title: "审批ID",
+    dataIndex: "id"
+  },
+  {
+    title: "环节名称",
+    dataIndex: "name"
+  },
+  {
+    title: "操作人",
+    dataIndex: "operator"
+  },
+  {
+    title: "状态",
+    dataIndex: "status"
+  },
+  {
+    title: "审批意见",
+    dataIndex: "opinion"
+  },
+  {
+    title: "日期",
+    dataIndex: "dateTime"
+  }
+];
+const data = [
+  {
+    key: "1",
+    id: "101",
+    name: "高风险客户",
+    operator: "李XX",
+    status: "通过",
+    opinion: "风险可控",
+    dateTime: new Date().toLocaleString("chinese", { hour12: false })
+  }
+];
+const ApprovalStatus = (props) =>{
+  const { approveStatus = "going" } = props;
+  switch (approveStatus) {
+    case "approved":
+      return (<span style={{color : "#00c39c"}}>通过</span>)
+      break;
+    case "refused":
+      return (<span style={{color: "red"}}>已拒绝</span>)
+    case "going":
+        return (<span style={{color: "#ffa439"}}>进行中</span>)
+    default:
+      return <></>
+      break;
+  }
+}
 
 const EditApprovalButton = (props) =>{
   // 删除和编辑按钮
@@ -19,14 +72,14 @@ const EditApprovalButton = (props) =>{
           onClick={() => {
           actionFun(dataId, true)
            }
-        }><Icon component={editIconSvg} />编辑</span> 
+        }><Icon component={editIconSvg} style={{marginRight: 5}}/>编辑</span> 
         <span
             onClick={
               ()=>{
                 handleDeleteSubmisson(dataId);
               }
             }
-      ><Icon component={deleteIconSvg} />删除</span> 
+      ><Icon component={deleteIconSvg} style={{marginRight: 5}}/>删除</span> 
       </div>
     ):(
       <></>
@@ -58,7 +111,8 @@ class FormDataDetail extends PureComponent {
       tipVisibility: false,
       formId: this.props.id,
       submissionId: this.props.dataId,
-      userId: JSON.parse(localStorage.getItem("userDetail")).id
+      userId: JSON.parse(localStorage.getItem("userDetail")).id,
+      tabKey: "formDetail"
     };
   }
 
@@ -361,10 +415,15 @@ class FormDataDetail extends PureComponent {
       });
   }
 
+  onChangeTab = (key) => {
+    this.setState({
+      tabKey: key
+    })
+  }
+
   render() {
     const { formDetail, currentForm, mobile = {}, extraProp } = this.props;
-    const { userId } = this.state;
-    console.log("extraProp", extraProp)
+    const { userId, tabKey } = this.state;
     const editButtonOptions={detailAuthority: true};
     const startApprovelBtnOptions={
       isAssociateApprovalFlow: true,
@@ -374,32 +433,51 @@ class FormDataDetail extends PureComponent {
     let newCurrentComponents = currentForm.components.filter(
       item => item.type != "CustomValue"
     );
+    let operations = {}
+    switch (tabKey) {
+      case "formDetail":
+        operations = <EditApprovalButton {...this.props}/>
+        break;
+      case "approvelFlow":
+        {
+          operations = <div className="approvalbox">审批状态：<ApprovalStatus approveStatus={"going"}/></div>
+        }
+          break;
+      default:
+        operations = (<></>)
+        break;
+    }
     return (
       <div style={{ width: "100%", height: "100%", paddingBottom: 100 }}>
-        {/* <HeaderBar
-          backCallback={() => {
-            this.props.showformDataDetail("");
-          }}
-          // name={formComponent.name}
-          isShowBtn={false}
-        /> */}
         <FormDataDetailHeader
           isOwnRecord={extraProp !== null ? extraProp.user.id === userId : false}
           title={currentForm.name}
           startApprovelBtnClick = {this.startApprovelBtnClick}
           {...startApprovelBtnOptions} />
         <div className="formDataDetailContainer">
-          <div className="formDataDetailTitle">
-          <Row type="flex" justify="space-between">
-            <Col>
-              <p className="dataTitle">详情</p>
-            </Col>
-            <Col>
-              <EditApprovalButton {...this.props}/>
-            </Col>
-          </Row> 
-          </div>
-          {this._renderDataByType(this.props.formDetail, newCurrentComponents)}
+        <Tabs defaultActiveKey="detail" 
+          className="tabsBackground"
+          onChange={this.onChangeTab} 
+          tabBarExtraContent={operations}
+        >
+          <TabPane tab="表单详情" key="formDetail">
+            {this._renderDataByType(formDetail, newCurrentComponents)}
+          </TabPane>
+          {
+            // 关联审批的才展示审批
+          data.length > 0 ? (
+            <TabPane tab="审批流水" key="approvelFlow">
+              <Table
+                className="approveTable"
+                pagination={false}
+                columns={columns}
+                dataSource={data}
+                size="middle"
+              />
+            </TabPane>
+          ):<></>
+          }
+        </Tabs>
         </div>
       </div>
     );
