@@ -65,7 +65,7 @@ const AppSetting = props => {
       });
 
     });
-  }, [appId]);
+  }, [props, appId]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
