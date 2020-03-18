@@ -1121,6 +1121,7 @@ class Submission extends Component {
                 let skipToSubmissionDataFlag = true;
                 this.props.actionFun(skipToSubmissionDataFlag);
               }}
+              isShowExtraTitle = {false}
               name={formComponent.name}
               isShowBtn={false}
             />

@@ -766,6 +766,7 @@ class Layout extends PureComponent {
             window.location.href = config.hostUrl;
           }}
           title={formComponent.name}
+          isShowExtraTitle={false}
           isShowBtn={true}
           btnValue="保存"
           clickCallback={this.handleSaveLayout}

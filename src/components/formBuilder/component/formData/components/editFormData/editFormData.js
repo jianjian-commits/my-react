@@ -917,6 +917,7 @@ class EditFormData extends Component {
               }}
               name={currentForm.name}
               isShowBtn={false}
+              isShowExtraTitle={false}
             />
           )}
           <div className={"formBuilder-Submission"}>
