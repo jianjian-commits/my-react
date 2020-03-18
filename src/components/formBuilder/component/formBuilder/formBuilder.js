@@ -32,8 +32,8 @@ class ReactFormBuilder extends React.Component {
       editElement: null,
       editElementParent: null,
       formId: locationUtils.getUrlParamObj().formId,
-      appid: window.location.pathname.split("/")[2],
-      extraProp: { user: { name: (JSON.parse(localStorage.getItem('userDetail'))).name, id: (JSON.parse(localStorage.getItem('userDetail'))).id } }
+      appid:window.location.pathname.split("/")[2],
+      extraProp:{user:{name:this.props.userDetail.name,id:this.props.userDetail.id}}
     };
 
     this.editModeOn = this.editModeOn.bind(this);
@@ -152,7 +152,8 @@ export default connect(
     verificationList: store.formBuilder.verificationList,
     errMessage: store.formBuilder.errMessage,
     localForm: store.formBuilder.localForm,
-    isInitForming: store.formBuilder.isInitForming
+    isInitForming: store.formBuilder.isInitForming,
+    userDetail: store.login.userDetail
   }),
   {
     saveForm,

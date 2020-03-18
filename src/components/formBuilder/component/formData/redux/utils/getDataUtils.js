@@ -8,16 +8,20 @@ import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA } from "../a
 
 // 获取提交数据总数
 var getSubmissionDataTotal = resp => {
-  let contentRangeValue = resp.headers["content-range"] || "";
-  const index = contentRangeValue.indexOf("/");
-  return Number(contentRangeValue.substr(index + 1));
+  let contentRangeValue = resp.headers["content-range"];
+  if(contentRangeValue){
+    const index = contentRangeValue.indexOf("/");
+    return Number(contentRangeValue.substr(index + 1));
+  }else{
+    return 0;
+  }
 };
 
 
-const filterData = (formPath, filterStr, pageSize, currentPage) => {
+const filterData = (formId, filterStr, pageSize, currentPage) => {
   let queryData = pageSize === -1 ?
-   `/${formPath}/submission?${filterStr}` 
-   :`/${formPath}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
+   `/form/${formId}/submission?${filterStr}` 
+   :`/form/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
   return instanceAxios
     .get(
       encodeURI( config.apiUrl + queryData),
@@ -31,19 +35,21 @@ const filterData = (formPath, filterStr, pageSize, currentPage) => {
 }
 
 
-export const getFilterSubmissionData = (formPath, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber= -1) => dispatch => {
+export const getFilterSubmissionData = (formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber= -1) => dispatch => {
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formPath, filterStr, pageSize, currentPage).then(res => {
+    filterData(formId, filterStr, pageSize, currentPage).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
         submissionDataTotal: 10, //(totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
+          let extraProp = item.extraProp
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
+            extraProp: extraProp.user,
             id: item.id
           }
         })
@@ -55,7 +61,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
     });
   } else {
     axios.all(filterArray.map(filter => {
-      return filterData(formPath, filter, -1, 1)
+      return filterData(formId, filter, -1, 1)
     })).then(axios.spread((...data) => {
       const filterdata = data.map(data => data.data);
       const allSubmission = filterdata.flat();
@@ -71,10 +77,12 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         type: Filter_FORM_DATA,
         submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
         formData: filterSubmisstion.map(item => {
+          let extraProp = item.extraProp
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
+            extraProp: extraProp.user,
             id: item.id
           }
         })
@@ -100,7 +108,7 @@ export const getSubmissionData = (
     instanceAxios
       .get(
         config.apiUrl +
-        `/${forms.path}/submission?limit=${pageSize}&skip=${(currentPage - 1) * pageSize}&desc=createdTime`,
+        `/form/${formId}/submission?limit=${pageSize}&skip=${(currentPage - 1) * pageSize}&desc=createdTime`,
         {
           headers: {
             "Content-Type": "application/json"

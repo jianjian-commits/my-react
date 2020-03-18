@@ -20,7 +20,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   .headerBarTitle {
     text-align: center;
     height: 60px;
-    width: 84%;
+    width: 75%;
     line-height: 60px;
     font-size: 14px;
     font-family: $font-Family;
@@ -43,6 +43,17 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
         margin-left: 1px;
       }
     }
+  }
+  .headerBarExtraTitle{
+    width:9%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color:  #2A7FFF;
+   span{
+    cursor: pointer;
+    user-select: none;
+   }
   }
   .headerBarButton {
     display: flex;
