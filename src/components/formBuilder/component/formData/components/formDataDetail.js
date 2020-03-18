@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { Form, Table, Button, Row, Col, Icon, Tabs } from "antd";
 import { connect } from "react-redux";
 import locationUtils from "../../../utils/locationUtils";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
 import { getSubmissionDetail, handleStartFlowDefinition } from "../redux/utils/getDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import HeaderBar from "../../base/NavBar";
@@ -180,7 +181,7 @@ class FormDataDetail extends PureComponent {
       case "DateInput":
         return (
           <div className="formChildData">
-            {submitData.time ? submitData.time : ""}
+            {submitData.time ? coverTimeUtils.localTime(submitData.time, "yyyy-MM-dd hh:mm:ss") : ""}
           </div>
         );
       case "FileUpload":
@@ -275,13 +276,19 @@ class FormDataDetail extends PureComponent {
           case "EmailInput":
           case "PhoneInput":
           case "IdCardInput":
-          case "DateInput":
             return (
               <div key={item.key} className="dataDteailText">
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">{formDetail[item.key]}</p>
               </div>
             );
+          case "DateInput":
+            return (
+              <div key={item.key} className="dataDteailText">
+              <p className="dataTitle">{item.label}</p>
+              <p className="dataContent">{ formDetail[item.key] ? coverTimeUtils.localTime(formDetail[item.key]) : ""}</p>
+            </div>
+            )
           case "MultiDropDown":
           case "CheckboxInput":
             return (
