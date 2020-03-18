@@ -126,6 +126,8 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
+  console.log("submit", submit);
+  console.log("selectedForm", selectedForm);
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
@@ -160,24 +162,14 @@ const AppDetail = props => {
           { // eslint-disable-next-line
           selectedForm != void 0 ? (
             <>
-              {!submit ? (
-                <Button
-                  type="primary"
-                  className="form-submit-data-button"
-                  onClick={_e => {
-                    setSubmit(!submit);
-                  }}
-                >
-                  提交数据
-                </Button>
-              ) : null}
               {submit ? (
                 submissionId ? (
                   <FormBuilderEditFormData
                     key={Math.random()}
                     formId={selectedForm}
                     submissionId={submissionId}
-                    extraProp={{ user: { id: user.id, name: user.name } }}
+                    appId={appId}
+                    extraProp={user}
                     actionFun={(submission_id, submitFlag = false) => {
                       setSubmissionId(submission_id)
                       setSubmit(submitFlag);
@@ -197,9 +189,12 @@ const AppDetail = props => {
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
-                  actionFun={(submission_id, submitFlag = false)=>{
+                  actionFun={(submission_id, submitFlag = false, formId)=>{
                     setSubmit(submitFlag);
                     setSubmissionId(submission_id)
+                    if(formId){
+                      setSelectedForm(formId)
+                    }
                   }}
                   appId={appId}
                 ></FormBuilderSubmitData>
