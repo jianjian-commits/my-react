@@ -8,9 +8,13 @@ import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA } from "../a
 
 // 获取提交数据总数
 var getSubmissionDataTotal = resp => {
-  let contentRangeValue = resp.headers["content-range"] || "";
-  const index = contentRangeValue.indexOf("/");
-  return Number(contentRangeValue.substr(index + 1));
+  let contentRangeValue = resp.headers["content-range"];
+  if(contentRangeValue){
+    const index = contentRangeValue.indexOf("/");
+    return Number(contentRangeValue.substr(index + 1));
+  }else{
+    return 0;
+  }
 };
 
 
@@ -40,10 +44,12 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         type: Filter_FORM_DATA,
         submissionDataTotal: 10, //(totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
+          let extraProp = item.extraProp
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
+            extraProp: extraProp.user,
             id: item.id
           }
         })
@@ -71,10 +77,12 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         type: Filter_FORM_DATA,
         submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
         formData: filterSubmisstion.map(item => {
+          let extraProp = item.extraProp
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
+            extraProp: extraProp.user,
             id: item.id
           }
         })
