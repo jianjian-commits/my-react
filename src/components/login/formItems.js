@@ -18,9 +18,10 @@ class Input extends React.Component {
     this.state = {};
   }
   render() {
-    const { src, classes, icon, ...rest } = this.props;
+    const { src, classes, icon, placeholder, ...rest } = this.props;
     return (
       <Inp
+        {...rest}
         className={clx(itemsStyles.input, classes)}
         prefix={
           icon ? null : (
@@ -31,7 +32,7 @@ class Input extends React.Component {
             />
           )
         }
-        {...rest}
+        placeholder={icon ? null : placeholder}
       />
     );
   }
@@ -41,9 +42,16 @@ class Input extends React.Component {
 async function sendVerificationCode(mobilePhone) {
   if (!mobilePhone) return false;
   try {
-    const result = await request("http://www.baidu.com");
-    if (result && result.status) return true;
-  } catch (res) {
+    const res = await request(`/yanzhengma${mobilePhone}`);
+    if (res && res.status === "SUCCESS") {
+      return true;
+    } else {
+      message.error(res.status || "验证码获取失败");
+    }
+  } catch (err) {
+    message.error(
+      (err.response && err.response.data && err.response.data.msg) || "系统错误"
+    );
     return false;
   }
 }
@@ -73,10 +81,13 @@ const checkphone = actionType => {
   const phone = async (rule, value, callback) => {
     if (!value) return callback();
     try {
-      const result = await request(`/sysUser/mobilePhone/${value}/check`);
-      if (result && result.data === bol) return callback(context);
+      const res = await request(`/sysUser/mobilePhone/${value}/check`);
+      if (res && res.data === bol) return callback(context);
     } catch (err) {
-      message.error("校验失败");
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "系统错误"
+      );
     }
     callback();
   };
@@ -85,10 +96,12 @@ const checkphone = actionType => {
 const checkEmail = async (rule, value, callback) => {
   if (!value) return callback();
   try {
-    const result = await request(`/sysUser/email/${value}/check`);
-    if (result && result.data === false) return callback("该电子邮箱已被注册");
+    const res = await request(`/sysUser/email/${value}/check`);
+    if (res && res.data === false) return callback("该电子邮箱已被注册");
   } catch (err) {
-    message.error("校验失败");
+    message.error(
+      (err.response && err.response.data && err.response.data.msg) || "系统错误"
+    );
   }
   callback();
 };
@@ -98,7 +111,7 @@ const checkEmail = async (rule, value, callback) => {
 //     const result = await request(`/company/name/${value}/check`);
 //     if (result && result.data === true) return callback("该公司未被创建");
 //   } catch (err) {
-//     message.error("校验失败");
+//     message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
 //   }
 //   callback();
 // };
@@ -110,7 +123,7 @@ const checkEmail = async (rule, value, callback) => {
 // }
 
 // formItems表单项
-const username = ({ form, payload }) => {
+const username = ({ form, payload, icon }) => {
   return {
     itemName: "username",
     options: {
@@ -126,6 +139,7 @@ const username = ({ form, payload }) => {
         type={"username"}
         placeholder={"请输入注册时绑定的邮箱/手机号"}
         onChange={() => form.setFields({ username: { errors: null } })}
+        icon={icon}
       />
     ),
     additionComponent: null
@@ -145,13 +159,10 @@ const name = ({ form, payload, icon }) => {
     },
     component: (
       <Input
-        prefix={
-          icon ? null : (
-            <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-          )
-        }
+        prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
         placeholder={"请输入用户昵称"}
         onChange={() => form.setFields({ name: { errors: null } })}
+        icon={icon}
       />
     ),
     additionComponent: null
@@ -188,12 +199,11 @@ const oldPassWord = ({ form, payload, icon }) => ({
   },
   component: (
     <Input
-      prefix={
-        icon ? null : <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-      }
+      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       onChange={() => form.setFields({ oldPassWord: { errors: null } })}
-      placeholder={icon ? null : "当前密码"}
+      placeholder={"当前密码"}
+      icon={icon}
     />
   ),
   additionComponent: null
@@ -206,12 +216,11 @@ const newPassWord = ({ form, payload, icon }) => ({
   },
   component: (
     <Input
-      prefix={
-        icon ? null : <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-      }
+      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       onChange={() => form.setFields({ newPassWord: { errors: null } })}
-      placeholder={icon ? null : "新密码"}
+      placeholder={"新密码"}
+      icon={icon}
     />
   ),
   additionComponent: null
@@ -236,14 +245,11 @@ const confirmPassWord = ({ form, payload, newPassWord, icon }) => {
     },
     component: (
       <Input
-        prefix={
-          icon ? null : (
-            <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-          )
-        }
+        prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
         type="password"
         onChange={() => form.setFields({ confirmPassWord: { errors: null } })}
-        placeholder={icon ? null : "确认密码"}
+        placeholder={"确认密码"}
+        icon={icon}
       />
     ),
     additionComponent: null
@@ -254,27 +260,33 @@ const verificationCode = ({ form, payload, icon }) => {
   const { getFieldValue } = form;
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
+  const phone = getFieldValue("mobilePhone");
   const buttonConfirm = () => {
     const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
-      verificationCodeButtonRef.current.buttonNode.disabled = true;
-      verificationCodeSpanRef.current.innerHTML = sended
-        ? `验证码已发送,如未收到请在${initNum}s后重试`
-        : `验证码发送失败,请在${initNum}s后重试`;
+      if (verificationCodeButtonRef.current)
+        verificationCodeButtonRef.current.buttonNode.disabled = true;
+      if (verificationCodeSpanRef.current)
+        verificationCodeSpanRef.current.innerHTML = sended
+          ? `验证码已发送,如未收到请在${initNum}s后重试`
+          : `验证码发送失败,请在${initNum}s后重试`;
       let num = initNum - 1;
       const int = setInterval(() => {
-        verificationCodeSpanRef.current.innerHTML = sended
-          ? `验证码已发送,如未收到请在${num}s后重试`
-          : `验证码发送失败,请在${num}s后重试`;
+        if (verificationCodeSpanRef.current)
+          verificationCodeSpanRef.current.innerHTML = sended
+            ? `验证码已发送,如未收到请在${num}s后重试`
+            : `验证码发送失败,请在${num}s后重试`;
         num = num - 1;
       }, timeTerval);
       setTimeout(() => {
         window.clearInterval(int);
-        verificationCodeButtonRef.current.buttonNode.disabled = false;
-        verificationCodeSpanRef.current.innerHTML = "";
+        if (verificationCodeButtonRef.current)
+          verificationCodeButtonRef.current.buttonNode.disabled = false;
+        if (verificationCodeSpanRef.current)
+          verificationCodeSpanRef.current.innerHTML = "";
         num = initNum - 1;
       }, timeOut);
     };
-    sendVerificationCode(getFieldValue("mobilePhone")).then(res => {
+    sendVerificationCode(phone).then(res => {
       if (res) {
         setTime({
           sended: true,
@@ -297,20 +309,24 @@ const verificationCode = ({ form, payload, icon }) => {
         classes={itemsStyles.loginPhoneCard}
         onChange={() => form.setFields({ verificationCode: { errors: null } })}
         prefix={
-          icon ? null : (
-            <Icon
-              type="safety-certificate"
-              style={{ color: "rgba(0,0,0,.25)" }}
-            />
-          )
+          <Icon
+            type="safety-certificate"
+            style={{ color: "rgba(0,0,0,.25)" }}
+          />
         }
         placeholder={"请输入验证码"}
+        icon={icon}
         addonAfter={
           <Button
             ref={verificationCodeButtonRef}
             disabled={null}
-            onClick={buttonConfirm}
-            style={{ height: "42px", background: "#2A7FFF", color: "#ffffff" }}
+            onClick={phone ? buttonConfirm : null}
+            style={{
+              height: "42px",
+              background: "#2A7FFF",
+              color: "#ffffff",
+              opacity: phone ? 1 : 0.5
+            }}
           >
             发送验证码
           </Button>
@@ -320,13 +336,14 @@ const verificationCode = ({ form, payload, icon }) => {
     additionComponent: (
       <span
         ref={verificationCodeSpanRef}
-        style={{ position: "absolute", right: 0, top: "24px" }}
+        style={{ position: "absolute", right: 0, top: "30px" }}
       ></span>
     )
   };
 };
 
 const mobilePhone = ({ form, payload, icon }) => {
+  console.log(payload);
   return {
     itemName: "mobilePhone",
     options: {
@@ -343,12 +360,9 @@ const mobilePhone = ({ form, payload, icon }) => {
       <Input
         placeholder={"请输入绑定的手机号"}
         addonBefore={<span>+86</span>}
-        prefix={
-          icon ? null : (
-            <Icon type="phone" style={{ color: "rgba(0,0,0,0.25)" }} />
-          )
-        }
+        prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,0.25)" }} />}
         onChange={() => form.setFields({ mobilePhone: { errors: null } })}
+        icon={icon}
       />
     ),
     additionComponent: null
@@ -370,13 +384,10 @@ const companyName = ({ form, payload, icon }) => {
     },
     component: (
       <Input
-        prefix={
-          icon ? null : (
-            <Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />
-          )
-        }
+        prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
         onChange={() => form.setFields({ companyName: { errors: null } })}
         placeholder={"请输入公司名"}
+        icon={icon}
       />
     ),
     additionComponent: null
@@ -397,13 +408,10 @@ const userEmail = ({ form, payload, icon }) => {
     },
     component: (
       <Input
-        prefix={
-          icon ? null : (
-            <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
-          )
-        }
+        prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
         placeholder={"请输入绑定的电子邮箱"}
         onChange={() => form.setFields({ userEmail: { errors: null } })}
+        icon={icon}
       />
     ),
     additionComponent: null
@@ -418,71 +426,108 @@ const submit = ({
   token,
   itemName,
   setActiveKey
-}) => ({
-  itemName: itemName,
-  options: {
-    initialValue: payload
-  },
-  component: (
-    <Button type="primary" htmlType="submit" className={itemsStyles.button}>
-      {payload === "login" && "登录"}
-      {payload === "register" && "注册"}
-      {payload === "resetPassword" && "重置密码"}
-      {payload === "submit" && "提交"}
-      {payload === "addTeam" && "加入团队"}
-    </Button>
-  ),
-  additionComponent: (
-    <>
-      {payload === "login" && (
-        <div
-          className={itemsStyles.buttonSuffix}
-          style={{ width: "100%", marginLeft: "0px" }}
-        >
-          <Link to="/forgetPassword">忘记密码</Link>&nbsp;&nbsp;|&nbsp;&nbsp;
-          <span onClick={() => setActiveKey("register")}>注册</span>
-        </div>
-      )}
-      {payload === "register" && (
-        <div className={itemsStyles.buttonSuffix}>
-          已有账号?直接
-          <span
-            style={{ color: "#096dd9", cursor: "pointer" }}
-            onClick={() => setActiveKey("signin")}
+}) => {
+  const { getFieldsValue, isFieldsTouched } = form;
+  const touched = isFieldsTouched();
+  const values = Object.values(getFieldsValue());
+  const filled = values.filter(f => f);
+  const allowClickButton =
+    values.length === filled.length && touched ? true : false;
+  return {
+    itemName: itemName,
+    options: {
+      initialValue: payload
+    },
+    component: (
+      <Button
+        type="primary"
+        htmlType="submit"
+        className={itemsStyles.button}
+        style={{ opacity: allowClickButton ? 1 : 0.5 }}
+      >
+        {payload === "login" && "登录"}
+        {payload === "register" && "注册"}
+        {payload === "resetPassword" && "重置密码"}
+        {payload === "submit" && "提交"}
+        {payload === "addTeam" && "加入团队"}
+      </Button>
+    ),
+    additionComponent: (
+      <>
+        {payload === "login" && (
+          <div
+            className={itemsStyles.buttonSuffix}
+            style={{ width: "100%", marginLeft: "0px" }}
           >
-            登录
-          </span>
-        </div>
-      )}
-      {payload === "resetPassword" && (
-        <div className={itemsStyles.buttonSuffix}>
-          <Link to="/login">返回登录</Link>
-        </div>
-      )}
-      {payload === "addTeam" && (
-        <div className={itemsStyles.buttonSuffix}>
-          <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
-          <span></span>
-        </div>
-      )}
-    </>
-  )
-});
-const userDetailModalSubmit = ({ payload, modalMeter, setModalMeter }) => ({
-  itemName: "userDetailModalSubmit",
-  options: {},
-  component: (
-    <div className={itemsStyles.userDetailModalButton}>
-      <Button type="primary" onClick={() => setModalMeter({...modalMeter, meter: false})}>
-        取消
-      </Button>
-      <Button type="primary" htmlType="submit">
-        完成
-      </Button>
-    </div>
-  ),
-  additionComponent: null
-});
+            <Link to="/forgetPassword">忘记密码</Link>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <span onClick={() => setActiveKey("register")}>注册</span>
+          </div>
+        )}
+        {payload === "register" && (
+          <div className={itemsStyles.buttonSuffix}>
+            已有账号?直接
+            <span
+              style={{ color: "#096dd9", cursor: "pointer" }}
+              onClick={() => setActiveKey("signin")}
+            >
+              登录
+            </span>
+          </div>
+        )}
+        {payload === "resetPassword" && (
+          <div className={itemsStyles.buttonSuffix}>
+            <Link to="/login">返回登录</Link>
+          </div>
+        )}
+        {payload === "addTeam" && (
+          <div className={itemsStyles.buttonSuffix}>
+            <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
+            <span></span>
+          </div>
+        )}
+      </>
+    )
+  };
+};
+const userDetailModalSubmit = ({
+  form,
+  payload,
+  modalMeter,
+  setModalMeter
+}) => {
+  const { getFieldsValue, isFieldsTouched } = form;
+  const touched = isFieldsTouched();
+  const values = Object.values(getFieldsValue());
+  const filled = values.filter(f => f);
+  const allowClickButton =
+    values.length === filled.length && touched ? true : false;
+  console.log(values, filled, allowClickButton, isFieldsTouched());
+  return {
+    itemName: "userDetailModalSubmit",
+    options: {
+      initialValue: "userDetailModalSubmit"
+    },
+    component: (
+      <div className={itemsStyles.userDetailModalButton}>
+        <Button
+          type="primary"
+          onClick={() => setModalMeter({ ...modalMeter, meter: false })}
+          style={{ opacity: allowClickButton ? 1 : 0.5 }}
+        >
+          取消
+        </Button>
+        <Button
+          type="primary"
+          htmlType="submit"
+          style={{ opacity: allowClickButton ? 1 : 0.5 }}
+        >
+          完成
+        </Button>
+      </div>
+    ),
+    additionComponent: null
+  };
+};
 
 // 表单组件参数
 export const loginPasswordParameter = [

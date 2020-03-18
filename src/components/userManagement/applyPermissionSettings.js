@@ -455,10 +455,14 @@ function handleSaveButton({ state, initialData, enterPermission }) {
         message.success("保存成功");
         enterPermission();
       } else {
-        message.error("保存应用权限失败");
+        message.error(res.status || "保存应用权限失败");
       }
     },
-    () => message.error("保存应用权限失败")
+    err =>
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "系统错误"
+      )
   );
 }
 
@@ -475,10 +479,14 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
           data: []
         });
       } else {
-        message.error("获取应用权限失败");
+        message.error(res.status || "获取应用权限失败");
       }
     },
-    () => message.error("获取应用权限失败")
+    err =>
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "系统错误"
+      )
   );
 }
 

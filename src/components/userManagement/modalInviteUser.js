@@ -24,10 +24,13 @@ export default function InviteUser(props) {
         setToken(res.data);
         setVisible(true);
       } else {
-        message.error("invitedToken获取失败");
+        message.error(res.status || "invitedToken获取失败");
       }
     } catch (err) {
-      message.error("invitedToken获取失败");
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "系统错误"
+      );
     }
   }
   const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;
