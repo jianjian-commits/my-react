@@ -1,17 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 import { DndProvider } from "react-dnd";
+import { withRouter } from "react-router-dom";
 import { Spin } from "antd";
 import {
   setActiveIndex,
   setActiveInnerIndex
 } from "./redux/utils/operateFormComponent";
+import { getFormsAll } from "../homePage/redux/utils/operateFormUtils";
 import {
   saveForm,
   updateForm,
   initForm,
   getAllForms
 } from "./redux/utils/operateForm";
+import { setAllForms } from "./redux/utils/operateFormComponent";
 import HTML5Backend from "react-dnd-html5-backend";
 import Preview from "./preview/preview";
 import Toolbar from "./toolbar/toolbar";
@@ -29,8 +32,8 @@ class ReactFormBuilder extends React.Component {
       editElement: null,
       editElementParent: null,
       formId: locationUtils.getUrlParamObj().formId,
-      appid:window.location.pathname.split("/")[2],
-      extraProp:{user:{name:(JSON.parse(localStorage.getItem('userDetail'))).name,id:(JSON.parse(localStorage.getItem('userDetail'))).id}}
+      appid: window.location.pathname.split("/")[2],
+      extraProp: { user: { name: (JSON.parse(localStorage.getItem('userDetail'))).name, id: (JSON.parse(localStorage.getItem('userDetail'))).id } }
     };
 
     this.editModeOn = this.editModeOn.bind(this);
@@ -38,13 +41,17 @@ class ReactFormBuilder extends React.Component {
 
   componentDidMount() {
     let { formId } = this.state;
-    
-    const { initForm } = this.props;
+    const { initForm, setAllForms, formArray, match } = this.props;
+    const { appId } = match.params;
     if (formId) {
       initForm(formId);
     }
-    this.props.getAllForms();
-    // console.log(this.props);
+    if(formArray.length === 0) {
+      getFormsAll(appId).then(res => {
+        setAllForms(res);
+      });
+    }
+    // this.props.getAllForms();
   }
   //增加一个形参判断是否点击的是子组件里面的元素
   editModeOn(editElement, e, formChildInnerElement) {
@@ -94,7 +101,7 @@ class ReactFormBuilder extends React.Component {
       toolbarProps.items = this.props.toolbarItems;
     }
     return (
-      <div className={"formBuilder"} key={Math.random()}>
+      <div className={"formBuilder"} >
         <Spin spinning={this.props.isInitForming} >
           <FormBuilderHeader appid={this.state.appid} extraProp={this.state.extraProp} editForm={this.props.localForm} />
           <DndProvider backend={HTML5Backend}>
@@ -153,6 +160,7 @@ export default connect(
     initForm,
     getAllForms,
     setActiveIndex,
-    setActiveInnerIndex
+    setActiveInnerIndex,
+    setAllForms
   }
-)(ReactFormBuilder);
+)(withRouter(ReactFormBuilder));

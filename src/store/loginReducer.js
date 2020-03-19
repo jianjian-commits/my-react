@@ -166,6 +166,7 @@ export const loginUser = ({ token, rest, history }) => async dispatch => {
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("id_token", 1);
       dispatch(loginSuccess());
+      history.push("/");
     } else {
       dispatch(loginFailure());
       message.error("账号密码信息不匹配,请重试");

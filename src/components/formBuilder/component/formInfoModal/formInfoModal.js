@@ -17,8 +17,54 @@ class FormInforModalTitle extends React.Component {
 class FormInforModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      defaultApiName: "",
+    };
   }
+
+  componentDidMount() {
+    // 初始化表单的apiName
+      let defaultApiName = this._initDefaultPath(this.props.pathArray);
+      this.setState({
+        defaultApiName
+      })
+  }
+
+  _initDefaultPath(pathArray) {
+    // 已经有apiName 再次编辑的时候
+    let startWithForm = /^form/;
+    let endWithNumber = /(\d+)$/;
+    let defaultApiName = "";
+    var formNumerArray = [];
+    pathArray.map(item => {
+      if (startWithForm.test(item.path) && endWithNumber.test(item.path)) {
+        if (!Number.isNaN(Number(item.path.slice(4)))) {
+          formNumerArray.push({
+            number: Number(item.path.slice(4))
+          });
+        }
+      }
+    });
+
+    formNumerArray.sort((a, b) => {
+      var numberA = a.number;
+      var numberB = b.number;
+      if (numberA < numberB) {
+        return 1;
+      }
+      if (numberA > numberB) {
+        return -1;
+      }
+      return 0;
+    });
+    if (formNumerArray.length > 0) {
+      defaultApiName = `form${formNumerArray[0].number + 1}`;
+    } else if (formNumerArray.length === 0) {
+      defaultApiName = "form1";
+    }
+    return defaultApiName;
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -40,10 +86,10 @@ class FormInforModal extends React.Component {
     });
   };
   apiUniqueCheck = (rule, value, callback) => {
-    //检测api中是否包含汉字
-    var regChinese = new RegExp("[\\u4E00-\\u9FFF]+", "g");
-    if (regChinese.test(value)) {
-      callback("api中不能包含汉字");
+    //检测apiName只能由字母数字及下划线构成
+    var reg = /^\w+$/
+    if (!reg.test(value)) {
+      callback("apiName只能有字母数字及下划线构成");
     } else {
       callback();
     }
@@ -69,6 +115,7 @@ class FormInforModal extends React.Component {
               </Form.Item>
               <Form.Item label={"Api名称"}>
                 {getFieldDecorator("formPath", {
+                  initialValue: this.state.defaultApiName,
                   rules: [
                     { required: true, message: "请输入表单api" },
                     {

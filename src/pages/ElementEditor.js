@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import Chart from '../components/bi/component/elements/chart/Chart';
+import ChartContainer from '../components/bi/component/elements/chart/ChartContainer';
 import EditorHeader from '../components/bi/component/elements/EditorHeader';
 import { Layout } from "antd";
 import { ChartBindPane, LeftPane, RightPane, DragAndDrop } from '../components/bi/component/bind';
@@ -23,7 +23,7 @@ class ElementEditor extends React.PureComponent {
             </Sider>
             <Content className={classes.container}>
               <ChartBindPane/>
-              <Chart/>
+              <ChartContainer />
             </Content>
             <Sider style={{ background: "#fff" }}>
               <RightPane/>
@@ -35,4 +35,6 @@ class ElementEditor extends React.PureComponent {
   }
 }
 
-export default connect(store => ({}),{})(ElementEditor);
+export default connect(store => ({
+  dataSource: store.bi.dataSource
+}),{})(ElementEditor);

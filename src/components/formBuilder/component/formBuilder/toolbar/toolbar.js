@@ -339,14 +339,16 @@ class Toolbar extends React.Component {
   }
 
   create(item) {
-    let key = ID.uuid();
+    let key = ID.oldUuid();
+    let newKey = ID.uuid(item.type, this.props.data.data);
 
     let elementOptions = {
       ...item,
       id: key,
-      key: key,
+      key: newKey,
+      isSetAPIName: false, // 判断APiName是否可以编辑
       isShow: true,
-      layout: { i: key, x: 0, y: 0, w: 10, h: 3, minH: 2, minW: 2 },
+      layout: { i: newKey, x: 0, y: 0, w: 10, h: 3, minH: 2, minW: 2 },
       element: item.type
     };
 
@@ -385,7 +387,5 @@ class Toolbar extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder
-  }),
-  {
-  }
+  })
 )(Toolbar);

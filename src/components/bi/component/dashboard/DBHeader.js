@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { Icon, Button } from "antd";
 import { renameDashboard } from '../../redux/action';
 import "../../scss/dashboard.scss";
+import request from '../../utils/request';
 import { useParams, useHistory } from "react-router-dom";
 
     
 const DBHeader = props => {
   const history = useHistory();
-  const { appId } = useParams();
+  const { appId, dashboardId } = useParams();
   const { renameDashboard, dbName } = props;
 
   const handleBack = () => {
@@ -21,6 +22,13 @@ const DBHeader = props => {
 
   const saveDB = () => {
     history.push(`/app/${appId}/setting`);
+
+    const res = request(`/bi/dashboards/${dashboardId}`, {
+      method: "POST",
+      data: {
+        dashboardId,
+      }
+    });
   }
 
   return (

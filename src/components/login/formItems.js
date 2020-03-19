@@ -180,7 +180,7 @@ const password = ({ form, payload, itemName, icon }) => ({
   ),
   additionComponent: null
 });
-const oldPassWord = ({ form, payload }) => ({
+const oldPassWord = ({ form, payload, icon }) => ({
   itemName: "oldPassWord",
   options: {
     validateTrigger: "onBlur",
@@ -188,15 +188,17 @@ const oldPassWord = ({ form, payload }) => ({
   },
   component: (
     <Input
-      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+      prefix={
+        icon ? null : <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+      }
       type="password"
       onChange={() => form.setFields({ oldPassWord: { errors: null } })}
-      placeholder={"当前密码"}
+      placeholder={icon ? null : "当前密码"}
     />
   ),
   additionComponent: null
 });
-const newPassWord = ({ form, payload }) => ({
+const newPassWord = ({ form, payload, icon }) => ({
   itemName: "newPassWord",
   options: {
     validateTrigger: "onBlur",
@@ -204,15 +206,17 @@ const newPassWord = ({ form, payload }) => ({
   },
   component: (
     <Input
-      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+      prefix={
+        icon ? null : <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+      }
       type="password"
       onChange={() => form.setFields({ newPassWord: { errors: null } })}
-      placeholder={"新密码"}
+      placeholder={icon ? null : "新密码"}
     />
   ),
   additionComponent: null
 });
-const confirmPassWord = ({ form, payload, newPassWord }) => {
+const confirmPassWord = ({ form, payload, newPassWord, icon }) => {
   return {
     itemName: "confirmPassWord",
     options: {
@@ -232,10 +236,14 @@ const confirmPassWord = ({ form, payload, newPassWord }) => {
     },
     component: (
       <Input
-        prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+        prefix={
+          icon ? null : (
+            <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+          )
+        }
         type="password"
         onChange={() => form.setFields({ confirmPassWord: { errors: null } })}
-        placeholder={"确认密码"}
+        placeholder={icon ? null : "确认密码"}
       />
     ),
     additionComponent: null
@@ -460,6 +468,21 @@ const submit = ({
     </>
   )
 });
+const userDetailModalSubmit = ({ payload, modalMeter, setModalMeter }) => ({
+  itemName: "userDetailModalSubmit",
+  options: {},
+  component: (
+    <div className={itemsStyles.userDetailModalButton}>
+      <Button type="primary" onClick={() => setModalMeter({...modalMeter, meter: false})}>
+        取消
+      </Button>
+      <Button type="primary" htmlType="submit">
+        完成
+      </Button>
+    </div>
+  ),
+  additionComponent: null
+});
 
 // 表单组件参数
 export const loginPasswordParameter = [
@@ -565,23 +588,29 @@ export const registerParameter = [
 ];
 export const userDetailParameter = {
   resetCompanyName: [
-    { key: "companyName", value: "redit" },
-    { key: "submit", value: "submit", itemName: "resetSubmit" }
+    { key: "companyName", value: "redit", icon: true },
+    { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ],
   resetName: [
-    { key: "name", value: null },
-    { key: "submit", value: "submit", itemName: "resetSubmit" }
+    { key: "name", value: null, icon: true },
+    { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ],
   resetMobilePhone: [
-    { key: "mobilePhone", value: null },
-    { key: "verificationCode", value: null },
-    { key: "submit", value: "submit", itemName: "resetSubmit" }
+    { key: "mobilePhone", value: null, icon: true },
+    { key: "verificationCode", value: null, icon: true },
+    { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ],
   resetPassword: [
-    { key: "oldPassWord", value: null },
-    { key: "newPassWord", value: null },
-    { key: "confirmPassWord", value: null },
-    { key: "submit", value: "submit", itemName: "resetSubmit" }
+    {
+      key: "oldPassWord",
+      value: null,
+      label: "当前密码",
+      icon: true,
+      corn: false
+    },
+    { key: "newPassWord", value: null, label: "新密码", icon: true },
+    { key: "confirmPassWord", value: null, label: "确认密码", icon: true },
+    { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ]
 };
 
@@ -597,5 +626,6 @@ export const formItems = {
   submit,
   oldPassWord,
   newPassWord,
-  confirmPassWord
+  confirmPassWord,
+  userDetailModalSubmit
 };

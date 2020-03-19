@@ -26,7 +26,7 @@ class DragItem extends PureComponent {
     const { isDragging, connectDragSource, item } = this.props;
 
     return connectDragSource(
-      <li className="bind-item">{item ? item.text : ""}</li>
+      <li className="bind-item">{item ? item.label : ""}</li>
     )
   }
 }

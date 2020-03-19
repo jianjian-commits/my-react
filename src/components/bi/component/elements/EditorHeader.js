@@ -2,26 +2,39 @@ import React, {Fragment} from "react";
 import { connect } from "react-redux";
 import { Button, Icon, Modal, Tooltip, Spin } from "antd";
 import { renameElement } from '../../redux/action';
+import request from '../../utils/request';
+import { ChartType } from '../elements/Constant';
 import "./element.scss";
 import { useParams, useHistory } from "react-router-dom";
 
 const EditorHeader = props => {
   const history = useHistory();
-  const { appId } = useParams();
+  const { appId, dashboardId, elementId } = useParams();
   const { elemName, renameElement } = props;
 
   const handleBack = () => {
     const { dbChanged } = props;
 
     if (!dbChanged) {
-      history.push(`/app/${appId}/setting/bi/weichuangtong`);
+      history.push(`/app/${appId}/setting/bi/${dashboardId}`);
     } else {
       // @temp len, show modal dialog
     }
   }
 
   const handleSave = () => {
-    history.push(`/app/${appId}/setting/bi/weichuangtong`);
+    const res = request(`/bi/charts/${elementId}`, {
+      method: "POST",
+      data: {
+        dashboardId,
+        elementId,
+        chartType: ChartType.Bar,
+        // data,
+      }
+    });
+
+    history.push(`/app/${appId}/setting/bi/${dashboardId}`);
+    // history.push(`/app/${appId}/setting/bi/weichuangtong`);
 
     // request post.
   }

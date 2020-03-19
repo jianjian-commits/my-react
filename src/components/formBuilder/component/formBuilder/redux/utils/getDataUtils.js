@@ -2,15 +2,16 @@
  * @Author: your name
  * @Date: 2019-12-20 14:23:09
  * @LastEditors: komons
- * @LastEditTime: 2020-02-21 10:58:14
+ * @LastEditTime: 2020-03-13 16:59:10
  * @Description: 
- * @FilePath: \form-builder\src\component\formBuilder\redux\utils\getDataUtils.js
+ * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formBuilder\redux\utils\getDataUtils.js
  */
 
-import axios from "axios";
-import config from "../../../../config/config";
+// import axios from "axios";
+// import config from "../../../../config/config";
+// import { GET_ALL_FORMS } from "../action";
 
-let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
+// let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => {
   axios.get(config.apiUrl + "/form")

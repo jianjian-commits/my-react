@@ -2,7 +2,10 @@ import React, {PureComponent} from "react";
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
+import { ChartType } from '../elements/Constant';
 import { changeBind } from '../../redux/action';
+import { useParams } from "react-router-dom";
+import request from '../../utils/request';
 import './bind.scss';
 
 /**
@@ -31,16 +34,27 @@ const spec = {
       return;
     }
 
-    const { dim, mea, changeBind } = props;
+    const { dim, mea, changeBind, dashboardId, elementId } = props;
     const dropDim = component.getType() == Types.DIMENSION;
-
-    if(dropDim && (item.type == Types.DIMENSION) && !dim.includes(item.text) && dim.length < 1) {
-      dim.push(item.text);
-    } else if(!dropDim && (item.type == Types.MEASURE) && !mea.includes(item.text)) {
-      mea.push(item.text);
+// console.log("=======component=======", component, dashboardId, elementId);
+    if(dropDim && (item.type == Types.DIMENSION) && !dim.includes(item.label) && dim.length < 1) {
+      dim.push(item.label);
+    } else if(!dropDim && (item.type == Types.MEASURE) && !mea.includes(item.label)) {
+      mea.push(item.label);
     } else {
       return;
     }
+
+    const res = request(`/bi/charts/data`, {
+      method: "POST",
+      data: {
+        chartType: ChartType.Bar,
+        // dimensions,
+        // condations,
+        // indexes,
+        // sort
+      }
+    });
 
     changeBind(mea, dim);
   }
@@ -65,8 +79,8 @@ const getItems = (arr, type) => {
   let cls = "bind-child-" + type;
 
   return arr.map(
-    (text) => {
-      return <div className={cls} key={text}>{text}</div>
+    (label) => {
+      return <div className={cls} key={label}>{label}</div>
     }
   )
 }
@@ -98,20 +112,15 @@ const DropBindPane = DropTarget(
   collect,
 )(BindPane)
 
-class ChartBindPane extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { dim, mea } = this.props;
+const ChartBindPane = (props)=> {
+  const { dim, mea } = props;
+  const { dashboardId, elementId } = useParams();
     return (
       <div className="bind-pane">
-        <DropBindPane {...this.props} col={dim} type={Types.DIMENSION} label="维度"/>
-        <DropBindPane {...this.props} col={mea} type={Types.MEASURE} label="指标"/>
+        <DropBindPane {...props} col={dim} type={Types.DIMENSION} dashboardId={dashboardId} elementId={elementId} label="维度" />
+        <DropBindPane {...props} col={mea} type={Types.MEASURE} dashboardId={dashboardId} elementId={elementId} label="指标"/>
       </div>
     )
-  }
 }
 
 export default connect(store => ({

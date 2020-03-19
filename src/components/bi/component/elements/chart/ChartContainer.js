@@ -1,21 +1,19 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from "react-router-dom";
 import Chart from './Chart';
 import './chart.scss';
 
-export default class ChartContainer extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
+const ChartContainer = () => {
+  const { elementId } = useParams();
 
-  render() {
-    return (
-      <div className="chart-container">
-        <Chart />
-      </div>
-    )
-  }
+  let chart = elementId ? <Chart /> : <div/>
+
+  return (
+    <div className="chart-container">
+      { chart }
+    </div>
+  )
 }
 
-
-connect((store) => ({}), {})(ChartContainer)
+export default connect((store) => ({}), {})(ChartContainer)

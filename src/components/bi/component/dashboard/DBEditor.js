@@ -17,7 +17,7 @@ class DBEditor extends React.PureComponent {
   }
 
   getElements = (dataArr) => {
-    dataArr = dataArr ? dataArr : ['a', 'b','c', 'd', 'e'];
+    dataArr = dataArr ? dataArr : ['a', 'b','c', 'd', 'e', 'f', 'g'];
     const len = dataArr.length;
     let elems = [];
     const rows = [];
@@ -40,17 +40,17 @@ class DBEditor extends React.PureComponent {
   }
 
   render() {
-    const { dashboardId, dataArr } = this.props;
+    const { dashboardId, dataArr, height } = this.props;
 
-    // if(!dashboardId) {
-    //   return (
-    //     <Fragment>
-    //       <div className="db-placeholder">
-    //         <div>点击新建图表创建仪表盘</div>
-    //       </div>
-    //     </Fragment>
-    //   )
-    // }
+    if(!dashboardId) {
+      return (
+        <Fragment>
+          <div className="db-placeholder" style={{height}}>
+            <div>点击新建图表创建仪表盘</div>
+          </div>
+        </Fragment>
+      )
+    }
 
     return (
       <Fragment>
