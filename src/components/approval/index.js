@@ -78,6 +78,7 @@ export const ApprovalSection = props => {
     <div className={classes.sectionWrapper}>
       <div className={classes.sectionContent}>
         <List
+          split={false}
           itemLayout="vertical"
           size="small"
           dataSource={items(history)}
