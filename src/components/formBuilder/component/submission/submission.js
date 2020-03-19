@@ -197,7 +197,7 @@ class Submission extends Component {
     this.props.formComponent.components.map(component => {
       if (
         component.type === "Address" &&
-        values.hasOwnProperty(component.id) &&
+        values.hasOwnProperty(component.key) &&
         values[component.key] != void 0
       ) {
         // 如果地址字段为空 就不提交地址字段
