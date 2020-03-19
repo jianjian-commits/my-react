@@ -166,7 +166,7 @@ class EditFormData extends Component {
     }
   }
   _setNumberValue(values) {
-    this.props.formComponent.components.map(component => {
+    this.state.pureFormComponents.map(component => {
       if (values[component.key] === "") {
         delete values[component.key];
       }
@@ -178,7 +178,7 @@ class EditFormData extends Component {
   }
 
   _setDateTimeVaule(values) {
-    this.props.formComponent.components.map(component => {
+    this.state.pureFormComponents.map(component => {
       if (
         component.type === "DateInput" &&
         values.hasOwnProperty(component.key) &&
@@ -196,7 +196,7 @@ class EditFormData extends Component {
   }
 
   _setAddressValue(values) {
-    this.props.formComponent.components.map(component => {
+    this.state.pureFormComponents.map(component => {
       if (
         component.type === "Address" &&
         values.hasOwnProperty(component.key) &&
@@ -411,7 +411,7 @@ class EditFormData extends Component {
              if (error.response && error.response.data.code === 9998) {
              this._setErrorResponseData(error.response.data);
             }
-            isMobile ? Toast.fail(`${error.response.data.message}`) : message.error(`${error.response.data.message}`);
+            isMobile ? Toast.fail(`${error.response.data.msg}`) : message.error(`${error.response.data.msg}`);
           });
       });
     }
@@ -483,7 +483,7 @@ class EditFormData extends Component {
                 />
               </div>
             );
-          case "number":
+          case "NumberInput":
             return (
               <div
                 {...componentDIVOptions}

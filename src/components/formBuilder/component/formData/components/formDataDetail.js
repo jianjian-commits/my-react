@@ -272,7 +272,7 @@ class FormDataDetail extends PureComponent {
           case "TextArea":
           case "RadioButtons":
           case "DropDown":
-          case "number":
+          case "NumberInput":
           case "EmailInput":
           case "PhoneInput":
           case "IdCardInput":
