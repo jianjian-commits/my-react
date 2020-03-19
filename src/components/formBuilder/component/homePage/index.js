@@ -117,6 +117,7 @@ class Home extends Component {
             return 0;
           }}
           name="已创建的表单"
+          isShowExtraTitle={false}
           isShowBtn={true}
           btnValue="创建表单"
           isShowBackBtn={false}
