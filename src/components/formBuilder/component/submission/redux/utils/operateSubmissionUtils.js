@@ -7,7 +7,6 @@ import {
   GET_ALL_FORMS
 } from "../action";
 export const submitSubmission = (formId, values, appid, extraProp) => dispatch => {
-  const date = new Date();
   return instanceAxios({
     url: config.apiUrl + `/submission`,
     method: "POST",
@@ -19,8 +18,6 @@ export const submitSubmission = (formId, values, appid, extraProp) => dispatch =
     data: {
       data: values,
       formId: formId,
-      createdTime: date,
-      updateTime: date,
       extraProp
     }
   });
