@@ -30,7 +30,7 @@ export default connect()(function Register({
         setVisible(false);
       } else {
         setStatus(false);
-        message.error(res.status || "注册失败");
+        message.error(res.msg || "注册失败");
       }
     } catch (err) {
       setStatus(false);

@@ -68,7 +68,7 @@ export const switchCurrentTeam = teamId => async dispatch => {
       dispatch(getUserDetail());
       dispatch(getAppList());
     } else {
-      message.error(res.status || "团队转换失败");
+      message.error(res.msg || "团队转换失败");
     }
   } catch (err) {
     message.error(
@@ -88,7 +88,7 @@ export const updateUserDetail = payload => async dispatch => {
       message.success("修改成功");
       await getUserDetail()(dispatch);
     } else {
-      message.error(res.status || "个人信息修改失败");
+      message.error(res.msg || "个人信息修改失败");
     }
   } catch (err) {
     message.error(
@@ -105,7 +105,7 @@ export const getUserDetail = () => async dispatch => {
       localStorage.setItem("userDetail", JSON.stringify(res.data));
       dispatch(fetchUserDetail(res.data));
     } else {
-      message.error(res.status || "个人信息获取失败");
+      message.error(res.msg || "个人信息获取失败");
     }
   } catch (err) {
     message.error(
@@ -122,7 +122,7 @@ export const getCurrentTeam = () => async dispatch => {
       localStorage.setItem("currentTeam", JSON.stringify(res.data));
       dispatch(fetchCurrentTeam(res.data));
     } else {
-      message.error(res.status || "团队信息获取失败");
+      message.error(res.msg || "团队信息获取失败");
     }
   } catch (err) {
     message.error(
@@ -139,7 +139,7 @@ export const getAllTeam = () => async dispatch => {
       localStorage.setItem("allTeam", JSON.stringify(res.data));
       dispatch(fetchAllTeam(res.data));
     } else {
-      message.error(res.status || "获取全部团队信息失败");
+      message.error(res.msg || "获取全部团队信息失败");
     }
   } catch (err) {
     message.error(
@@ -158,7 +158,7 @@ export const initAllDetail = () => async dispatch => {
       getCurrentTeam()(dispatch);
       dispatch(fetchUserDetail(res.data));
     } else {
-      message.error(res.status || "获取当前用户信息失败");
+      message.error(res.msg || "获取当前用户信息失败");
     }
   } catch (err) {
     message.error(
@@ -181,7 +181,7 @@ export const loginUser = ({ token, rest, history }) => async dispatch => {
       history.push("/");
     } else {
       dispatch(loginFailure());
-      message.error(res.status || "账号密码信息不匹配,请重试");
+      message.error(res.msg || "账号密码信息不匹配,请重试");
     }
   } catch (err) {
     dispatch(loginFailure());
@@ -202,7 +202,7 @@ export const signOut = () => async dispatch => {
       localStorage.removeItem("id_token");
       dispatch(signOutSuccess());
     } else {
-      message.error(res.status || "退出失败");
+      message.error(res.msg || "退出失败");
     }
   } catch (err) {
     message.error(

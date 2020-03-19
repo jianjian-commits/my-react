@@ -46,7 +46,7 @@ async function sendVerificationCode(mobilePhone) {
     if (res && res.status === "SUCCESS") {
       return true;
     } else {
-      message.error(res.status || "验证码获取失败");
+      message.error(res.msg || "验证码获取失败");
     }
   } catch (err) {
     message.error(

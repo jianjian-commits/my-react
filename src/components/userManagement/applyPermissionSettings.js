@@ -455,7 +455,7 @@ function handleSaveButton({ state, initialData, enterPermission }) {
         message.success("保存成功");
         enterPermission();
       } else {
-        message.error(res.status || "保存应用权限失败");
+        message.error(res.msg || "保存应用权限失败");
       }
     },
     err =>
@@ -479,7 +479,7 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
           data: []
         });
       } else {
-        message.error(res.status || "获取应用权限失败");
+        message.error(res.msg || "获取应用权限失败");
       }
     },
     err =>

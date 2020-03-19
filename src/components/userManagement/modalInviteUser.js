@@ -24,7 +24,7 @@ export default function InviteUser(props) {
         setToken(res.data);
         setVisible(true);
       } else {
-        message.error(res.status || "invitedToken获取失败");
+        message.error(res.msg || "invitedToken获取失败");
       }
     } catch (err) {
       message.error(
