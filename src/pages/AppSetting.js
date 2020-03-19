@@ -10,6 +10,7 @@ import DraggableList, {
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
+import ChartCreatModal from "../components/bi/component/elements/modal/chartCreatModal";
 import Authenticate from "../components/shared/Authenticate";
 import { APP_SETTING_ABLED } from "../auth";
 const { Content, Sider } = Layout;
@@ -111,30 +112,39 @@ const AppSetting = props => {
     }
   };
 
-  const [visible, setVisible] = useState(false);
-  const modalProps = {
-    visible,
-    showModal: () => {
-      setVisible(true);
-    },
-
-    handleCancel: e => {
-      setVisible(false);
-    },
-
-    handleOK: e => {
-      setVisible(false);
+  const [formModalvisible, setFormModalVisible] = useState(false);
+  const [chartModalvisible, setChartModalVisible] = useState(false);
+  const ModalPropsCreat = (visible,setVisible) => {
+    return {
+      visible,
+      showModal: () => {
+        setVisible(true);
+      },
+      handleCancel: e => {
+        setVisible(false);
+      },
+      handleOK: e => {
+        setVisible(false);
+      }
     }
   };
+
+  const formModalProps = ModalPropsCreat(formModalvisible, setFormModalVisible);
+  const chartModalProps = ModalPropsCreat(chartModalvisible, setChartModalVisible);
 
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <ForInfoModal
         key={Math.random()}
-        {...modalProps}
+        {...formModalProps}
         extraProp={{ user: { id: user.id, name: user.name } }}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
+      />
+      <ChartCreatModal
+        key={Math.random()}
+        {...chartModalProps}
+        url={`/app/${appId}/setting/bi/weichuangtong`}
       />
       <CommonHeader
         navigationList={navigationList(history, appId, appName)}
@@ -146,7 +156,8 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                history.push(`/app/${appId}/setting/bi/weichuangtong`)
+                // history.push(`/app/${appId}/setting/bi/weichuangtong`)
+                chartModalProps.showModal();
               }}
             >
               新建仪表盘
@@ -155,7 +166,7 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                modalProps.showModal();
+                formModalProps.showModal();
               }}
             >
               新建表单

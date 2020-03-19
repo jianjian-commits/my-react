@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
 import { changeBind } from '../../redux/action';
+import FieldTargetSelect from "./FieldTargetSelect";
 import './bind.scss';
 
 /**
@@ -66,7 +67,9 @@ const getItems = (arr, type) => {
 
   return arr.map(
     (text) => {
-      return <div className={cls} key={text}>{text}</div>
+      return type == "dim" ?
+      <div className={cls} key={text}>{text}</div>:
+      <FieldTargetSelect label = {text} className={cls} key={text}/> 
     }
   )
 }
@@ -78,7 +81,7 @@ class BindPane extends PureComponent {
 
   render() {
     const { col, label, type, connectDropTarget } = this.props;
-
+    
     return connectDropTarget(
       <div className="bind-line" key={label}>
         <div className="bind-label">{label}</div>

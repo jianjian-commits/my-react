@@ -18,22 +18,55 @@
 
   .bind-child {
     text-align: center;
-    border-radius: 10px;
+    // border-radius: 10px;
     width: 80px;
+
+    height: 26px;
+    line-height: 26px;
+    font-family: Microsoft YaHei;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    color: #FFFFFF;
+
     margin-left: 10px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-
+  .ant-select {
+    .ant-select-selection {
+      width: 100%;
+      height: 26px;
+      display: flex;
+      border-radius: 0px;
+      align-items: center;
+      font-family: Microsoft YaHei;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #FFFFFF;
+      .ant-select-arrow {
+        color: rgba(255, 255, 255, 1);
+      }
+      .ant-select-selection-selected-value{
+        max-width: 120px;
+      }
+    }
+  }
   .bind-child-dim {
     @extend .bind-child;
-    background-color: lightblue;
+    background-color: #2B81FF;
   }
 
   .bind-child-mea {
     @extend .bind-child;
-    background-color: orange;
+    width: auto;
+    .ant-select{
+      .ant-select-selection{
+        background-color: #00C59F;
+      }
+    }
   }
 }
 
