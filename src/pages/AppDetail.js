@@ -64,6 +64,7 @@ const AppDetail = props => {
         key: item.id,
         name: item.name
       }));
+      console.log(res)
       setMockForms({
         groups: [
         ],

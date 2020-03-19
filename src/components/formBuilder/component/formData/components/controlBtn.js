@@ -1,7 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
 import { withRouter, useParams } from "react-router-dom";
 import { Button, Popconfirm } from "antd";
 function ControlBtn(props) {
+  console.log(props.permissions);
   const handleSeeDetail = () => {
     props.showModal(props.submissionId);
     props.getSubmissionDetail(props.formId, props.submissionId);
@@ -37,4 +39,6 @@ function ControlBtn(props) {
   );
 }
 
-export default withRouter(ControlBtn);
+export default connect(({login})=>({
+  permissions: (login.userDetail && login.userDetail.permissions) || [],
+}))(withRouter(ControlBtn));
