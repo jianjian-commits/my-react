@@ -90,7 +90,7 @@ class GroupDetail1 extends Component {
           "permissions"
         );
       } else {
-        message.error(res.status || "获取详情失败");
+        message.error(res.msg || "获取详情失败");
       }
     } catch (err) {
       message.error(
@@ -160,7 +160,7 @@ class GroupDetail1 extends Component {
       if (res && res.status === "SUCCESS") {
         message.success("保存成功！");
       } else {
-        message.error(res.status || "保存失败！");
+        message.error(res.msg || "保存失败！");
       }
     } catch (err) {
       message.error(

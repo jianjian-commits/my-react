@@ -80,7 +80,7 @@ class ProfileManagement extends React.Component {
           roleList: res.data
         });
       } else {
-        message.error(res.status || "获取分组列表失败");
+        message.error(res.msg || "获取分组列表失败");
       }
     } catch (err) {
       message.error(
@@ -109,7 +109,7 @@ class ProfileManagement extends React.Component {
         message.success(`${title}成功!`);
         this.getGroupList();
       } else {
-        message.error(res.status || `${title}失败`);
+        message.error(res.msg || `${title}失败`);
       }
     } catch (err) {
       message.error(
@@ -131,7 +131,7 @@ class ProfileManagement extends React.Component {
         message.success("删除成功！");
         this.getGroupList();
       } else {
-        message.error(res.status || "删除失败！");
+        message.error(res.msg || "删除失败！");
       }
     } catch (err) {
       message.error(
