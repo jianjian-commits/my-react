@@ -37,9 +37,12 @@ export const getAppList = () => async dispatch => {
     if (res && res.status === "SUCCESS") {
       dispatch(saveAppList(res.data));
     } else {
-      message.error("获取应用列表失败");
+      message.error(res.status || "获取应用列表失败");
     }
   } catch (err) {
-    message.error("获取应用列表失败");
+    message.error(
+      (err.response && err.response.data && err.response.data.msg) ||
+        "获取应用列表失败"
+    );
   }
 };

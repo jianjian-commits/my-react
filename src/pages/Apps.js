@@ -57,10 +57,13 @@ class Apps extends React.Component {
         this.props.getAppList();
         this.handleCancel();
       } else {
-        message.error("创建应用失败");
+        message.error(res.status || "创建应用失败");
       }
     } catch (err) {
-      message.error("创建应用失败");
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "创建应用失败"
+      );
     }
   }
 

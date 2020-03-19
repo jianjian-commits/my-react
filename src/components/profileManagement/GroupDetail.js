@@ -11,7 +11,11 @@ import {
 
 const Top = ({ disabled, enterDetail, handleDetail }) => (
   <>
-    <Icon type="arrow-left" onClick={() => enterDetail()} />
+    <Icon
+      type="arrow-left"
+      style={{ fontSize: "18px" }}
+      onClick={() => enterDetail()}
+    />
     <span style={{ textIndent: "10px" }}>分组</span>
     {!disabled && (
       <>
@@ -86,10 +90,13 @@ class GroupDetail1 extends Component {
           "permissions"
         );
       } else {
-        message.error("获取详情失败");
+        message.error(res.status || "获取详情失败");
       }
     } catch (err) {
-      message.error("获取详情失败");
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "获取详情失败"
+      );
     }
   }
 
@@ -153,10 +160,13 @@ class GroupDetail1 extends Component {
       if (res && res.status === "SUCCESS") {
         message.success("保存成功！");
       } else {
-        message.error("保存失败！");
+        message.error(res.status || "保存失败！");
       }
     } catch (err) {
-      message.error("保存失败！");
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "保存失败！"
+      );
     } finally {
       this.props.enterDetail(false);
     }
