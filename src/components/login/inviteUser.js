@@ -78,7 +78,11 @@ export default connect()(function InviteUser({ match, history }) {
           });
         }
       },
-      () => message.error("邀请信息获取失败")
+      err =>
+        message.error(
+          (err.response && err.response.data && err.response.data.msg) ||
+            "系统错误"
+        )
     );
   }
   const {
@@ -106,7 +110,14 @@ export default connect()(function InviteUser({ match, history }) {
           setState({ ...state, alreadyAddTeam: true });
         }
       },
-      () => setState({ ...state, alreadyAddTeam: true })
+      err => {
+        if (err.response && err.response.data && err.response.data.msg)
+          setState({ ...state, alreadyAddTeam: true });
+        message.error(
+          (err.response && err.response.data && err.response.data.msg) ||
+            "系统错误"
+        );
+      }
     );
   };
 

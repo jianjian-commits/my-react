@@ -185,6 +185,7 @@ export default Form.create({ name: "reset-form" })(
                   label={Mete[o.itemName]}
                   hasFeedback={false}
                   colon={false}
+                  labelAlign={"right"}
                   // help={
                   //   helpText && (
                   //     <div
@@ -203,12 +204,12 @@ export default Form.create({ name: "reset-form" })(
                 >
                   {getFieldDecorator(parameters[index]["key"], {
                     ...o.options,
-                    initialValue:
-                      o.itemName === "oldPassWord"
-                        ? null
-                        : o.itemName === "verificationCode"
-                        ? null
-                        : userDetail[o.itemName]
+                    // initialValue:
+                    //   o.itemName === "oldPassWord"
+                    //     ? null
+                    //     : o.itemName === "verificationCode"
+                    //     ? null
+                    //     : userDetail[o.itemName]
                   })(o.component)}
                   {o.additionComponent}
                 </Form.Item>
