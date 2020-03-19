@@ -398,8 +398,9 @@ class FilterItem extends Component {
 
     return (
       <div className="filter-item">
-        <Row type="flex" justify="start" gutter={19}>
-          <Col span={8}>
+        <Row type="flex" justify="start" gutter = { [ 0, 19]}>
+          <Col span={24}>字段</Col>
+          <Col span={24}>
             <Select style={{ width: "100%" }}
               placeholder="选择字段"
               onChange={this.onSelectField}
@@ -413,7 +414,8 @@ class FilterItem extends Component {
               ))}
             </Select>
           </Col>
-          <Col span={7}>
+          <Col span={7}>类型</Col>
+          <Col span={24}>
             <Select style={{ width: "100%" }}
               key={this.state.filed.key}
               placeholder="选择逻辑运算符"
@@ -428,12 +430,13 @@ class FilterItem extends Component {
               ))}
             </Select>
           </Col>
-          <Col span={7}>
+          <Col span={7}>值</Col>
+          <Col span={24}>
             {
               this.renderInputByFiledType(this.state.filed)
             }
           </Col>
-          <Col span={2} >
+          <Col span={24} >
             <div className="filter-action">
               <Icon type="plus-circle" onClick={this.handleAddFilter} style={{ marginRight: "16px" }} />
               <Icon type="minus-circle" onClick={this.handleDeleteFilter} />
@@ -601,7 +604,6 @@ export default class FilterComponent extends Component {
       <>
         <div className="filter-container">
           <div className="filter-condition">
-            <p>筛选条件设置</p>
             <Select
               style={{ width: "150px", height: "32px" }}
               placeholder="满足所有条件"
@@ -620,11 +622,11 @@ export default class FilterComponent extends Component {
             </Select>
           </div>
 
-          <Row type="flex" justify="start" gutter={19}>
+          {/* <Row type="flex" justify="center" gutter={19}>
             <Col span={8}>字段</Col>
             <Col span={7}>类型</Col>
             <Col span={7}>值</Col>
-          </Row>
+          </Row> */}
           <div className="filter-item-container">
             {this.state.filterArray.map(((filter, index) => {
               return <FilterItem
@@ -643,7 +645,12 @@ export default class FilterComponent extends Component {
             <Button
               type="primary"
               onClick={this.filterSubmitData}>
-              筛选
+              确定
+            </Button>
+            <Button
+              type="default"
+              onClick={()=>{this.props.clickExtendCallBack()}}>
+              取消
             </Button>
           </div>
         </div>

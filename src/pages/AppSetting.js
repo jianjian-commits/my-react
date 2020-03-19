@@ -34,18 +34,19 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
+  // console.log( props )
   const [user, setUser] = React.useState({})
 
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
     let newList = [];
+    let { id, name } = props.userDetail;
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")))
+    setUser({ user: { id, name } })
     // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {
-      console.log(1)
       newList = res.map(item => ({
         key: item.id,
         name: item.name,
@@ -54,7 +55,7 @@ const AppSetting = props => {
 
       props.setAllForms(res);
 
-       setMockForms({
+      setMockForms({
         groups: [
           // {key:'',name:'',list:[]}
         ],
@@ -64,7 +65,7 @@ const AppSetting = props => {
       });
 
     });
-  }, [appId]);
+  }, [props, appId]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
@@ -137,7 +138,7 @@ const AppSetting = props => {
         key={Math.random()}
         {...modalProps}
         pathArray={mockForms.list}
-        extraProp={{ user: { id: user.id, name: user.name } }}
+        extraProp={user}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
@@ -200,8 +201,9 @@ const AppSetting = props => {
     </Authenticate>
   );
 };
-export default connect(({ app }) => ({
-  appList: app.appList
+export default connect(({login, app }) => ({
+  appList: app.appList,
+  userDetail: login.userDetail
 }), {
   setAllForms
 })(AppSetting);

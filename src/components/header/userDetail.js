@@ -5,6 +5,18 @@ import { updateUserDetail } from "../../store/loginReducer";
 import HomeHeader from "./HomeHeader";
 import { userDetailParameter, formItems } from "../login/formItems";
 import userDetailStyles from "./header.module.scss";
+import closeIcon from "../login/style/close.png";
+import clx from "classnames";
+
+const Mete = {
+  companyName: "企业名称",
+  name: "昵称",
+  mobilePhone: "当前手机号",
+  verificationCode: "验证码",
+  oldPassWord: "当前密码",
+  newPassWord: "新密码",
+  confirmPassWord: "确认密码"
+};
 
 export default Form.create({ name: "reset-form" })(
   connect(
@@ -16,7 +28,12 @@ export default Form.create({ name: "reset-form" })(
     }
   )(function UserDetail(props) {
     const { userDetail, updateUserDetail, form } = props;
-    const { validateFields, getFieldDecorator, getFieldValue } = form;
+    const {
+      validateFields,
+      getFieldDecorator,
+      getFieldValue
+      // getFieldError
+    } = form;
     const initModalMeter = {
       key: null,
       value: null,
@@ -31,10 +48,20 @@ export default Form.create({ name: "reset-form" })(
           form,
           payload: m.value,
           newPassWord: getFieldValue("newPassWord"),
-          itemName: m.itemName
+          itemName: m.itemName,
+          icon: m.icon,
+          modalMeter,
+          setModalMeter
         });
       }
-      return formItems[m.key]({ form, payload: m.value, itemName: m.itemName });
+      return formItems[m.key]({
+        form,
+        payload: m.value,
+        itemName: m.itemName,
+        icon: m.icon,
+        modalMeter,
+        setModalMeter
+      });
     });
     const render = meter => {
       return <>{meter === "resetPassword" ? "修改密码" : "修改"}</>;
@@ -115,75 +142,78 @@ export default Form.create({ name: "reset-form" })(
                         {r.render(r.meter)}
                       </span>
                     </span>
-
-                    {/* <hr /> */}
                   </li>
                 );
               })}
             </ul>
-            {/* <table className={userDetailStyles.table}>
-              <thead>
-                <tr>
-                  <th>{rest0.key}</th>
-                  <th>{userDetail[rest0.value]}</th>
-                  <th>
-                    <span
-                      onClick={() => setModalMeter(rest0)}
-                      style={{ color: "#1890ff", cursor: "pointer" }}
-                    >
-                      {rest0.render(rest0.meter)}
-                    </span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rest.map(r => {
-                  return (
-                    <tr key={r.value}>
-                      <td>{r.key}</td>
-                      <td>
-                        {r.value === "oldPassWord"
-                          ? "********"
-                          : userDetail[r.value]}
-                      </td>
-                      <td>
-                        <span
-                          onClick={() => setModalMeter(r)}
-                          style={{ color: "#1890ff", cursor: "pointer" }}
-                        >
-                          {r.render(r.meter)}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table> */}
           </div>
         </div>
         <Modal
-          title={`修改${modalMeter.key}`}
+          title={
+            <span
+              style={{
+                fontSize: "16px",
+                color: "#333333"
+              }}
+            >{`修改${modalMeter.key}`}</span>
+          }
           visible={!!modalMeter.meter}
           footer={null}
-          width="419px"
+          width={"484px"}
           onCancel={() => setModalMeter({ ...modalMeter, meter: false })}
           className={userDetailStyles.detailUpdateModal}
+          closeIcon={
+            <img
+              style={{ width: "14px", height: "14px" }}
+              src={closeIcon}
+              alt=""
+            />
+          }
         >
-          <Form onSubmit={e => handleSubmit(e)}>
-            {items.map((o, index) => (
-              <Form.Item key={o.itemName}>
-                {getFieldDecorator(parameters[index]["key"], {
-                  ...o.options,
-                  initialValue:
-                    o.itemName === "oldPassWord"
-                      ? null
-                      : o.itemName === "verificationCode"
-                      ? null
-                      : userDetail[o.itemName]
-                })(o.component)}
-                {o.additionComponent}
-              </Form.Item>
-            ))}
+          <Form
+            onSubmit={e => handleSubmit(e)}
+            className={clx(userDetailStyles.modalForm, {
+              [userDetailStyles.detailUpdateModalPhone]:
+                modalMeter.value === "mobilePhone"
+            })}
+          >
+            {items.map((o, index) => {
+              // const helpText = getFieldError(o.itemName);
+              return (
+                <Form.Item
+                  key={o.itemName}
+                  label={Mete[o.itemName]}
+                  hasFeedback={false}
+                  colon={false}
+                  // help={
+                  //   helpText && (
+                  //     <div
+                  //       style={{
+                  //         position: "absolute",
+                  //         left: "340px",
+                  //         width: "224px",
+                  //         height: "42px",
+                  //         lineHeight: "45px"
+                  //       }}
+                  //     >
+                  //       {helpText}
+                  //     </div>
+                  //   )
+                  // }
+                >
+                  {getFieldDecorator(parameters[index]["key"], {
+                    ...o.options,
+                    initialValue:
+                      o.itemName === "oldPassWord"
+                        ? null
+                        : o.itemName === "verificationCode"
+                        ? null
+                        : userDetail[o.itemName]
+                  })(o.component)}
+                  {o.additionComponent}
+                </Form.Item>
+              );
+            })}
           </Form>
         </Modal>
       </>

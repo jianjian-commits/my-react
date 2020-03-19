@@ -156,7 +156,14 @@ const Table = ({
     </table>
   );
 };
-const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
+const thunkForm = (
+  state,
+  permissionsValue,
+  headers,
+  setState,
+  CheckBox,
+  disabled
+) => {
   const dat = state["state"][permissionsValue];
   const fp =
     permissionsValue === "formPermissions"
@@ -208,6 +215,7 @@ const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
                   onChange={onChange}
                   value={display[0].checked}
                   style={{ color: "#333333", fontSize: "14px" }}
+                  disabled={disabled}
                 >
                   <Radio defaultChecked={display[0].checked} value={true}>
                     {blackSpan("可见")}
@@ -241,7 +249,7 @@ const thunkForm = (state, permissionsValue, headers, setState, CheckBox) => {
   );
 };
 
-const thunkSetting = (state, settingValue, setState) => {
+const thunkSetting = (state, settingValue, setState, disabled) => {
   const dat = state["state"][settingValue];
   const onChange = e => {
     const { value } = e.target;
@@ -275,6 +283,7 @@ const thunkSetting = (state, settingValue, setState) => {
             onChange={onChange}
             value={dat.checked}
             style={{ color: "#333333", fontSize: "14px" }}
+            disabled={disabled}
           >
             <Radio defaultChecked={dat.checked} value={true}>
               {blackSpan(`${radioValue}`)}
@@ -378,7 +387,8 @@ const Permission = ({
   state,
   CheckBox,
   settingDisplay,
-  title
+  title,
+  disabled
 }) => {
   const permissionsValue = value + "Permissions";
   return (
@@ -388,12 +398,19 @@ const Permission = ({
       </div>
       {state["state"].appSetting &&
         settingDisplay &&
-        thunkSetting(state, "appSetting", setState, CheckBox)}
+        thunkSetting(state, "appSetting", setState, disabled)}
       {state["state"].createForm &&
         settingDisplay &&
-        thunkSetting(state, "createForm", setState, CheckBox)}
+        thunkSetting(state, "createForm", setState, disabled)}
       {state["state"][permissionsValue] &&
-        thunkForm(state, permissionsValue, headers, setState, CheckBox)}
+        thunkForm(
+          state,
+          permissionsValue,
+          headers,
+          setState,
+          CheckBox,
+          disabled
+        )}
     </div>
   );
 };
@@ -409,9 +426,7 @@ const Top = ({ state, disabled, initialData, enterPermission }) => {
         <span>应用权限设置</span>
       </div>
       <div className={Styles.btn}>
-        <Button onClick={enterPermission} disabled={disabled}>
-          取消
-        </Button>
+        <Button onClick={enterPermission}>取消</Button>
         <Button
           onClick={() =>
             handleSaveButton({ state, initialData, enterPermission })
@@ -504,7 +519,7 @@ export default function ApplyPermissionSetting(props) {
     });
     return setInit(true);
   }
-  if(!state.state) return null
+  if (!state.state) return null;
   return (
     <>
       <div className={Styles.apsLayout}>
@@ -523,6 +538,7 @@ export default function ApplyPermissionSetting(props) {
             CheckBox={CheckBox}
             settingDisplay={true}
             title={"元数据权限"}
+            disabled={disabled}
           />
           <Permission
             value={"data"}
@@ -532,6 +548,7 @@ export default function ApplyPermissionSetting(props) {
             CheckBox={CheckBox}
             settingDisplay={false}
             title={"数据权限"}
+            disabled={disabled}
           />
         </div>
       </div>
