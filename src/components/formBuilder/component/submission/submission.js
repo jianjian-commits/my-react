@@ -437,7 +437,7 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
-        console.log(values, formComponentArray);
+
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;

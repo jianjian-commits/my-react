@@ -24,7 +24,8 @@ import HeaderBar from "../../component/base/NavBar";
 import {
   getSubmissionData,
   getSubmissionDetail,
-  getFilterSubmissionData
+  getFilterSubmissionData,
+  
 } from "./redux/utils/getDataUtils";
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
@@ -103,11 +104,12 @@ class FormSubmitData extends PureComponent {
           );
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData(
+            this.props.appId,
             this.state.formId,
             this.state.showNumber,
             1,
             this.state.showNumber,
-            this.props.appId
+            
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
@@ -120,10 +122,10 @@ class FormSubmitData extends PureComponent {
           );
         } else {
           this.props.getSubmissionData(
+            this.props.appId,
             this.state.formId,
             this.state.pageSize,
-            this.state.currentPage,1,
-            this.props.appId
+            this.state.currentPage,
           );
         }
       }
@@ -132,14 +134,13 @@ class FormSubmitData extends PureComponent {
 
   componentDidMount() {
     let { formId } = this.props;
-    console.log(this.props)
     initToken()
       .then(() => {
         this.props.getSubmissionData(
+          this.props.appId,
           this.props.formId,
           this.state.pageSize,
-          this.state.currentPage,1,
-          this.props.appId
+          this.state.currentPage,
         );
       })
       .catch(err => {
@@ -500,8 +501,7 @@ class FormSubmitData extends PureComponent {
             this.state.formId,
             this.state.showNumber,
             1,
-            this.state.showNumber,
-            this.props.appId
+            this.state.showNumber
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
@@ -514,10 +514,10 @@ class FormSubmitData extends PureComponent {
           );
         } else {
           this.props.getSubmissionData(
+            this.props.appId,
             this.state.formId,
             this.state.pageSize,
-            this.state.currentPage,1,
-            this.props.appId
+            this.state.currentPage,
           );
         }
       }
@@ -758,7 +758,6 @@ class FormSubmitData extends PureComponent {
     let formDataShowArray = [];
 
     formData.forEach((dataObj, i) => {
-      console.log(dataObj)
       let obj = {
         id: dataObj.id,
         created: dataObj.created,

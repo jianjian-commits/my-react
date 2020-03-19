@@ -13,7 +13,7 @@ var getSubmissionDataTotal = resp => {
     const index = contentRangeValue.indexOf("/");
     return Number(contentRangeValue.substr(index + 1));
   }else{
-    return 0;
+    return 20;
   }
 };
 
@@ -43,7 +43,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
     filterData(formPath, filterStr, pageSize, currentPage,appId).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal: 10, //(totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
+        submissionDataTotal:(totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
           let extraProp = item.extraProp
           return {
@@ -98,14 +98,15 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
 }
 //获取提交的数据
 export const getSubmissionData = (
+  appId,
   formId,
   pageSize,
   currentPage,
-  total = -1,
-  appId
+  total = -1
 ) => dispatch => {
   axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
     let forms = res.data;
+    
     instanceAxios
       .get(
         config.apiUrl +
@@ -118,11 +119,10 @@ export const getSubmissionData = (
         }
       )
       .then(res => {
-
         dispatch({
           type: RECEIVED_FORM_DATA,
           forms,
-          submissionDataTotal: 10, //total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
+          submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
             let{ user } = item.extraProp
             return {
@@ -159,7 +159,7 @@ export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
         }
       )
       .then(res => {
-        console.log("res.data", res.data)
+        // console.log("res.data", res.data)
         dispatch({
           type: RECEIVED_FORM_DETAIL,
           forms: currentForm,
@@ -188,7 +188,7 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
 };
 
 export const handleStartFlowDefinition = (userId, appId, data) => dispatch =>{
-  console.log("handleStartFlowDefinition")
+  // console.log("handleStartFlowDefinition")
   instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
