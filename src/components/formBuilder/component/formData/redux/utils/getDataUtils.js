@@ -18,10 +18,10 @@ var getSubmissionDataTotal = resp => {
 };
 
 
-const filterData = (formPath, filterStr, pageSize, currentPage,appId) => {
+const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
   let queryData = pageSize === -1 ?
-   `/form/${formId}/submission?${filterStr}` 
-   :`/form/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
+   `/${formId}/submission?${filterStr}` 
+   :`/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
   return instanceAxios
     .get(
       encodeURI( config.apiUrl + queryData),
@@ -36,14 +36,14 @@ const filterData = (formPath, filterStr, pageSize, currentPage,appId) => {
 }
 
 
-export const getFilterSubmissionData = (formPath, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber= -1,appId) => dispatch => {
+export const getFilterSubmissionData = (formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId) => dispatch => {
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formPath, filterStr, pageSize, currentPage,appId).then(res => {
+    filterData(formId, filterStr, pageSize, currentPage,appId).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal:(totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
+        submissionDataTotal: getSubmissionDataTotal(res) ,
         formData: res.data.map(item => {
           let extraProp = item.extraProp
           return {
