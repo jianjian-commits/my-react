@@ -7,11 +7,9 @@
   z-index: 1 !important;
 }
 .form-submit-data-table {
-  padding-top: 60px;
+  width: calc(100vw - 220px);
+  padding: 29px 21px;
   box-sizing: border-box;
-  width: 86.041%;
-  margin: 0 auto;
-  padding-bottom: 56px;
   overflow: hidden;
   position: relative;
   .filter-container {

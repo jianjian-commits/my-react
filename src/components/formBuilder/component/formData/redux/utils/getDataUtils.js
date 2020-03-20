@@ -43,7 +43,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
     filterData(formPath, filterStr, pageSize, currentPage,appId).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal: getSubmissionDataTotal(res) ,
+        submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
           let extraProp = item.extraProp
           return {
@@ -187,15 +187,15 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
   });
 };
 
-export const handleStartFlowDefinition = (userId, appId, data) => dispatch =>{
-  // console.log("handleStartFlowDefinition")
+export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
   instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
     data: data,
     headers: {
       "Content-Type": "application/json",
-      appid: appId
+      appid: appId,
+      formid: formId
     }
   })
     .then(response => {
