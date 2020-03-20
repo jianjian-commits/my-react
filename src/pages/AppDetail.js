@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout, Input, Button } from "antd";
+import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
@@ -42,23 +42,23 @@ const AppDetail = props => {
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
-  const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false)
+  const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false);
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
     list: [],
     searchList: []
   });
-  const [user,setUser] = React.useState({})
+  const [user, setUser] = React.useState({});
 
   //zxx groups目录结构 list无目录结构的表单
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
     let newList = [];
-    let { id , name } = props.userDetail;
+    let { id, name } = props.userDetail;
 
-    setUser( { user: { id, name }} );
+    setUser({ user: { id, name } });
 
     // let extraProp = { user: { id, name} }
 
@@ -68,14 +68,12 @@ const AppDetail = props => {
         name: item.name
       }));
       setMockForms({
-        groups: [
-        ],
-        searchList: [
-        ],
+        groups: [],
+        searchList: [],
         list: newList
       });
     });
-  }, [appId]);
+  }, [appId, props.userDetail]);
 
   const [approvalKey, setApprovalKey] = React.useState(null);
   const currentApp =
@@ -118,7 +116,7 @@ const AppDetail = props => {
   const onClickMenu = (key, e) => {
     setApprovalKey(key);
     setSelectedForm(null);
-    setEnterApprovalDetail(false)
+    setEnterApprovalDetail(false);
   };
 
   // 父传子的方法
@@ -151,7 +149,7 @@ const AppDetail = props => {
               onClick={e => {
                 setSelectedForm(e.key);
                 setSubmit(false);
-                setSubmissionId(null)
+                setSubmissionId(null);
               }}
               groups={groups}
               list={list}
@@ -159,7 +157,7 @@ const AppDetail = props => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          { // eslint-disable-next-line
+          {// eslint-disable-next-line
           selectedForm != void 0 ? (
             <>
               {submit ? (
@@ -171,29 +169,28 @@ const AppDetail = props => {
                     appId={appId}
                     extraProp={user}
                     actionFun={(submission_id, submitFlag = false) => {
-                      setSubmissionId(submission_id)
+                      setSubmissionId(submission_id);
                       setSubmit(submitFlag);
                     }}
                   ></FormBuilderEditFormData>
-                )
-                :(
+                ) : (
                   <FormBuilderSubmission
-                  key={Math.random()}
-                  formId={selectedForm}
-                  extraProp={ user }
-                  appid = { appId }
-                  actionFun={skipToSubmissionData}
-                ></FormBuilderSubmission>
+                    key={Math.random()}
+                    formId={selectedForm}
+                    extraProp={user}
+                    appid={appId}
+                    actionFun={skipToSubmissionData}
+                  ></FormBuilderSubmission>
                 )
               ) : (
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
-                  actionFun={(submission_id, submitFlag = false, formId)=>{
+                  actionFun={(submission_id, submitFlag = false, formId) => {
                     setSubmit(submitFlag);
-                    setSubmissionId(submission_id)
-                    if(formId){
-                      setSelectedForm(formId)
+                    setSubmissionId(submission_id);
+                    if (formId) {
+                      setSelectedForm(formId);
                     }
                   }}
                   appId={appId}
@@ -201,7 +198,12 @@ const AppDetail = props => {
               )}
             </>
           ) : approvalKey !== null ? (
-            <TransactList fn={onClickMenu} approvalKey={approvalKey} enterApprovalDetail={enterApprovalDetail} setEnterApprovalDetail={setEnterApprovalDetail}/>
+            <TransactList
+              fn={onClickMenu}
+              approvalKey={approvalKey}
+              enterApprovalDetail={enterApprovalDetail}
+              setEnterApprovalDetail={setEnterApprovalDetail}
+            />
           ) : null}
         </Content>
       </Layout>
