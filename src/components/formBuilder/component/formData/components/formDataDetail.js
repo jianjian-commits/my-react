@@ -137,19 +137,18 @@ class FormDataDetail extends PureComponent {
     const { formDetail, currentForm, appId } = this.props;
     const { userId, formId } = this.state
     let fieldInfos = currentForm.components.map((component =>{
-      if(formDetail[component.id]){
+      if(formDetail[component.key]){
         return ({
-          name: component.label,
-          value: formDetail[component.id]
+          name: component.key,
+          value: formDetail[component.key]
         })
       }
-    }))
+    })).filter(item => item !== undefined)
     let data = {
-      metadataId: formId,
-      appId: appId,
+      dataId: this.state.submissionId,
       fieldInfos: fieldInfos
     }
-    this.props.handleStartFlowDefinition(userId, appId, data)
+    this.props.handleStartFlowDefinition(formId, appId, data)
   }
 
   _renderFileData = fileData => {
@@ -455,7 +454,7 @@ class FormDataDetail extends PureComponent {
         break;
     }
     return (
-      <div style={{ width: "100%", height: "100%", paddingBottom: 100 }}>
+      <div className="formDetailBox" >
         <FormDataDetailHeader
           formId={this.state.formId}
           submissionId={this.state.submissionId}

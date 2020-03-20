@@ -179,14 +179,15 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
   });
 };
 
-export const handleStartFlowDefinition = (userId, appId, data) => dispatch =>{
+export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
   instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
     data: data,
     headers: {
       "Content-Type": "application/json",
-      appid: appId
+      appid: appId,
+      formid: formId
     }
   })
     .then(response => {
