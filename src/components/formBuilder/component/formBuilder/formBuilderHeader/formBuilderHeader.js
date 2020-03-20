@@ -4,7 +4,8 @@ import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
 import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
 import { connect } from "react-redux";
 import checkAndSaveForm from "../utils/checkSaveFormUtils";
-import { withRouter } from "react-router-dom";
+import { withRouter, params } from "react-router-dom";
+import { editFormAuth } from "../../../utils/permissionUtils";
 class ForBuilderHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,8 @@ class ForBuilderHeader extends React.Component {
       visible: false,
       isTitleCanEdit: true,
       formTitleClass: "showFormTitle",
-      btnCanClick: true
+      btnCanClick: true,
+      isEditAuth: false,
     };
     this.handleTitleEdit = this.handleTitleEdit.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
@@ -20,6 +22,17 @@ class ForBuilderHeader extends React.Component {
     this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
+
+  // 判断是否有编辑表单的权限
+  componentDidMount() {
+    const { match, permissions, teamId } = this.props;
+    const { appId, formId } = match.params;
+    let isEditAuth = editFormAuth(permissions, teamId, appId, formId);
+    this.setState({
+      isEditAuth
+    });
+  }
+
   handleTitleEdit() {
     this.setState(state => ({
       ...state,
@@ -36,6 +49,12 @@ class ForBuilderHeader extends React.Component {
     this.props.setFormName(value);
   };
   showModal = () => {
+    //如果没有表单编辑权限，则直接返回，不弹模态框
+    if(!this.state.isEditAuth) {
+      this.handleCancel()
+      return;
+    }
+
     if (!this.props.isFormChanged) {
       let appId = this.props.match.params.appId;
       this.props.history.push(`/app/${appId}/setting`);
@@ -163,7 +182,7 @@ class ForBuilderHeader extends React.Component {
         <div className="CreateFormStep" />
         <div className="CreateFormOperations">
           <Button
-            disabled={!this.state.btnCanClick}
+            disabled={!this.state.btnCanClick || !this.state.isEditAuth}
             onClick={e => {
               const checkRes = checkAndSaveForm(this.props);
               if (!checkRes.res) {
@@ -232,7 +251,9 @@ export default connect(
     formArray: store.formBuilder.formArray,
     errMessage: store.formBuilder.errMessage,
     isFormChanged: store.formBuilder.isFormChanged,
-    localForm: store.formBuilder.localForm
+    localForm: store.formBuilder.localForm,
+    teamId: store.login.currentTeam && store.login.currentTeam.id,
+    permissions: (store.login.userDetail && store.login.userDetail.permissions) || []
   }),
   {
     setFormName,

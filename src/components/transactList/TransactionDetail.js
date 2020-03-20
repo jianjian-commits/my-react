@@ -1,11 +1,10 @@
 import React from "react";
-import { Button, Row, Col, List, Table, Tabs , Modal, Icon, Typography, Input } from "antd";
+import { Button, Row, Col, List, Table, Tabs , Modal, Icon, Input } from "antd";
 import { useHistory } from "react-router-dom";
 
 import clasess from "./transactionDetail.module.scss";
 const { TabPane } = Tabs;
 
-const { Title } = Typography;
 const fields = [
   {
     key: "name",
@@ -78,11 +77,12 @@ const data = [
 ];
 
 
-const WithdrawApprovalButton = (isAllowedWithDraw) =>{
+const WithdrawApprovalButton = (props) =>{
 // 撤回审批按钮
+  const { isAllowedWithDraw, withdraw } = props;
   return (
     isAllowedWithDraw ?
-    (<Button style={{display: isAllowedWithDraw ? "block" : "none"}}>撤回</Button>)
+    (<Button type="primary" className={clasess.btn} onClick={withdraw}>撤回</Button>)
     :<></>
   )
 }
@@ -90,13 +90,13 @@ const WithdrawApprovalButton = (isAllowedWithDraw) =>{
 const EditApprovalButton = (props) =>{
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
-  const { detailAuthority } = props;
+  const { detailAuthority, ...rest } = props;
   return (
     detailAuthority ? 
     (
       <div className={clasess.toolbarBox}>
-      <span><Icon component={editIconSvg} {...props} style={{marginRight:5}}/>编辑</span> 
-      <span><Icon component={deleteIconSvg} {...props} style={{marginRight:5}}/>删除</span> 
+        <span><Icon component={editIconSvg} {...props} style={{marginRight:5}}/>编辑</span> 
+        <span><Icon component={deleteIconSvg} {...props} style={{marginRight:5}}/>删除</span> 
       </div>
     ):(
       <></>
@@ -248,6 +248,7 @@ const TransactionDetail = (props) => {
         <Col>
           <div className={clasess.title}>
            <ApprovalProcessButtons {...ApprovalProcessButtonsOptions}/>
+           <WithdrawApprovalButton  isAllowedWithDraw = {true} />
           </div>
         </Col>
       </Row>
@@ -259,7 +260,7 @@ const TransactionDetail = (props) => {
             itemLayout="vertical"
             dataSource={fields}
             renderItem={item => (
-              <List.Item>
+              <List.Item className={clasess.ListItem}>
                 <Row type="flex" gutter={16}>
                   <Col className={clasess.detailTitle}>{item.lable}</Col>
                 </Row>

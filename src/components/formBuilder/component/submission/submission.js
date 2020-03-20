@@ -53,6 +53,7 @@ import RadioButtonsMobile from "./component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
+import moment from 'moment'
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -178,14 +179,14 @@ class Submission extends Component {
     this.props.formComponent.components.map(component => {
       if (
         component.type === "DateInput" &&
-        values.hasOwnProperty(component.id) &&
+        values.hasOwnProperty(component.key) &&
         values[component.key] != void 0
       ) {
         // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
         if (values[component.key].constructor === Date) {
-          values[component.key].setUTCMilliseconds(0);
+          values[component.key] = new Date(values[component.key].setUTCMilliseconds(0)).toJSON().replace("Z","");
         } else {
-          values[component.key]._d.setUTCMilliseconds(0);
+          values[component.key] = new Date(values[component.key]._d.setUTCMilliseconds(0)).toJSON().toString().replace("Z","")
         }
       }
     });
@@ -196,7 +197,7 @@ class Submission extends Component {
     this.props.formComponent.components.map(component => {
       if (
         component.type === "Address" &&
-        values.hasOwnProperty(component.id) &&
+        values.hasOwnProperty(component.key) &&
         values[component.key] != void 0
       ) {
         // 如果地址字段为空 就不提交地址字段
@@ -437,7 +438,7 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
-        console.log(values, formComponentArray);
+
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
@@ -1121,8 +1122,10 @@ class Submission extends Component {
                 let skipToSubmissionDataFlag = true;
                 this.props.actionFun(skipToSubmissionDataFlag);
               }}
-              name={formComponent.name}
+              isShowExtraTitle = {false}
+              // name={formComponent.name}
               isShowBtn={false}
+              isShowExtraTitle={false}
             />
           )}
           <div className={"formBuilder-Submission"}>
