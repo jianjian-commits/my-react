@@ -17,6 +17,8 @@ const Authenticate = props => {
     children,
     hide = false
   } = props;
+
+
   if (debug) return children;
   if (!permissions || state === "pending" || hide) return null;
   if (!authorityIsValid({ debug, permissions, teamId, auth })) {
