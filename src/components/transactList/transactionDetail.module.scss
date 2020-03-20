@@ -1,47 +1,74 @@
 .box {
-  padding: 50px 300px;
-}
-.title {
-  padding: 10px 0;
-}
-.tabsBackground {
+  width: calc(100vw - 220px);
+  padding: 29px 21px;
+  :global(.ant-table-thead > tr > th) {
+    padding: 14px;
+    background: #fff;
+  }
+  :global(.ant-table-tbody > tr > td) {
+    padding: 9px 16px;
+  }
+  :global(.ant-table-column-title) {
+    font-family: "Microsoft YaHei";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 20px;
+    color: #333333;
+  }
+  .title {
+    font-family: "Microsoft YaHei";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    color: #333333;
+    padding: 10px 0;
+    }
+    .btn {
+      width: 104px;
+      margin-left: 20px;
+    }
+  .ListItem {
+    font-family: "Microsoft YaHei";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    .detailTitle {
+      color: #777F97;
+      padding: 7px 0;
+    }
+    .detailValue {
+      color: #333333;
+      padding: 7px 0;
+    }
+  }
+  .tabsBackground {
     background-color: #FFFFFF;
 }
-.agree {
-  border: none;
-  &:hover {
-    background: #aaa;
-    color: #fff;
+  .agree {
+    border: none;
+    &:hover {
+      background: #aaa;
+      color: #fff;
+    }
+  }
+  .approvalbox{
+    padding-right:30px;
+  }
+  .toolbarBox{
+    color: #2A7FFF;
+    span{
+      margin-right: 30px
+    }
   }
 }
-.approvalbox{
-  padding-right:30px;
-}
-.toolbarBox{
-  color: #2A7FFF;
-  span:first-child {
-    margin-right: 30px
-  }
-}
-.detailList{
-  border: 1px solid red;
-}
-.detailTitle {
-  font-family: Microsoft YaHei;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  color: #777F97;
-  padding-bottom: 5px;
-}
-.detailValue {
-  font-family: Microsoft YaHei;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  color: #333333;
-  padding-top: 5px;
-}
+
+
+
+
+
+
+
+
 

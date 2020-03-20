@@ -41,12 +41,12 @@ const AppSetting = props => {
 
   useEffect(() => {
     let newList = [];
+    let { id, name } = props.userDetail;
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")));
+    setUser({ user: { id, name } })
     // let extraProp = { user: { id: user.id, name: user.name } }
 
-    getFormsAll(appId, true).then(res => {
-      console.log(1);
+    getFormsAll(appId, false).then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name,
@@ -63,7 +63,7 @@ const AppSetting = props => {
         list: newList
       });
     });
-  }, [appId]);
+  }, [props, appId]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
@@ -139,7 +139,7 @@ const AppSetting = props => {
         key={Math.random()}
         {...modalProps}
         pathArray={mockForms.list}
-        extraProp={{ user: { id: user.id, name: user.name } }}
+        extraProp={user}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
@@ -206,7 +206,8 @@ export default connect(
   ({ app, login }) => ({
     appList: app.appList,
     teamId: login.currentTeam && login.currentTeam.id,
-    permissions: (login.userDetail && login.userDetail.permissions) || []
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    userDetail: login.userDetail
   }),
   {
     setAllForms

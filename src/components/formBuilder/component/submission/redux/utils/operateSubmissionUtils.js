@@ -7,7 +7,6 @@ import {
   GET_ALL_FORMS
 } from "../action";
 export const submitSubmission = (formId, values, appid, extraProp) => dispatch => {
-  const date = new Date();
   return instanceAxios({
     url: config.apiUrl + `/submission`,
     method: "POST",
@@ -19,8 +18,6 @@ export const submitSubmission = (formId, values, appid, extraProp) => dispatch =
     data: {
       data: values,
       formId: formId,
-      createdTime: date,
-      updateTime: date,
       extraProp
     }
   });
@@ -100,9 +97,7 @@ export const getFormComponentByPath = path => dispatch => {
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
 
 export const getAllForms = () => dispatch => {
-  instanceAxios.get(config.apiUrl + "/form");
-  console
-    .log(1)
+  instanceAxios.get(config.apiUrl + "/form")
     .then(response => {
       dispatch({
         type: GET_ALL_FORMS,

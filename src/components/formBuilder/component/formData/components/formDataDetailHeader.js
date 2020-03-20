@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, Row, Col, List, Table, Tabs , Icon, Typography } from "antd";
+import { Button, Row, Col, List, Table, Tabs , Icon } from "antd";
 import { useHistory } from "react-router-dom";
-const { Title } = Typography;
+
 const StartApprovalButton = (props) =>{
   const {isAssociateApprovalFlow , isOwnRecord, isStartApproval, startApprovelBtnClick} = props;
   let isShow = false;
@@ -11,7 +11,6 @@ const StartApprovalButton = (props) =>{
   } else{
     isShow = false;
   }
-  console.log("sssss",isShow)
   return (
     isShow ?
       (<Button 
@@ -26,9 +25,9 @@ const StartApprovalButton = (props) =>{
 
 
 const FormDataDetailHeader = (props) =>{
-  const history = useHistory();
   const onClickBack = () => {
-    history.goBack();
+    props.actionFun(props.submissionId, false, props.formId)
+
   };
   const { title } = props; 
   return (
@@ -37,17 +36,19 @@ const FormDataDetailHeader = (props) =>{
         <Col>
           <Row type="flex" align="middle" gutter={10}>
             <Col>
-              <Title level={3}>
+              <div className="title">
                 <Icon type="arrow-left" onClick={onClickBack}></Icon>
-              </Title>
+              </div>
             </Col>
             <Col>
-              <Title level={3}>{title}</Title>
+              <div className="title">{title}</div>
             </Col>
           </Row>
         </Col>
         <Col>
-          <StartApprovalButton {...props}/>
+          <div className="title">
+            <StartApprovalButton {...props}/>
+          </div>
         </Col>
       </Row>
     </div>

@@ -6,7 +6,7 @@ import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionU
 function ControlBtn(props) {
   const handleSeeDetail = () => {
     props.showModal(props.submissionId);
-    props.getSubmissionDetail(props.formId, props.submissionId);
+    props.getSubmissionDetail(props.formId, props.submissionId,props.appId);
   };
 
   const handleConfirmDelete = () => {

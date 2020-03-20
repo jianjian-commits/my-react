@@ -18,19 +18,17 @@ import zhCN from "antd/es/locale/zh_CN";
 import { initToken } from "../../utils/tokenUtils";
 import ControlBtn from "./components/controlBtn";
 import FormDataDetail from "./components/formDataDetail";
-import locationUtils from "../../utils/locationUtils";
-import config from "../../config/config";
 import HeaderBar from "../../component/base/NavBar";
 import {
   getSubmissionData,
   getSubmissionDetail,
-  getFilterSubmissionData
+  getFilterSubmissionData,
+  
 } from "./redux/utils/getDataUtils";
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
 import FilterComponent from "./components/filterComponent/filterComponent";
 import coverTimeUtils from "../../utils/coverTimeUtils";
-const { Option } = Select;
 
 // 加载数据时重写表格为空状态
 const noRenderEmpty = () => <div style={{ height: "20vh" }}></div>;
@@ -54,7 +52,9 @@ class FormSubmitData extends PureComponent {
       isFilterMode: false,
       filterArray: [],
       connectCondition: "&",
-      formDataDetailId: ""
+      formDataDetailId: "",
+      // 是否展示筛选界面,默认为false(不展示)
+      showFilterBoard: false
     };
   }
   showformDataDetail = id => {
@@ -91,33 +91,38 @@ class FormSubmitData extends PureComponent {
       () => {
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
             1,
-            this.state.showNumber
+            this.state.showNumber,
+            this.props.appId
           );
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData(
+            this.props.appId,
             this.state.formId,
             this.state.showNumber,
             1,
-            this.state.showNumber
+            this.state.showNumber,
+            
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,
+            this.props.appId
           );
         } else {
           this.props.getSubmissionData(
+            this.props.appId,
             this.state.formId,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,
           );
         }
       }
@@ -126,13 +131,13 @@ class FormSubmitData extends PureComponent {
 
   componentDidMount() {
     let { formId } = this.props;
-
     initToken()
       .then(() => {
         this.props.getSubmissionData(
+          this.props.appId,
           this.props.formId,
           this.state.pageSize,
-          this.state.currentPage
+          this.state.currentPage,
         );
       })
       .catch(err => {
@@ -480,12 +485,13 @@ class FormSubmitData extends PureComponent {
         this.onChangePages(this.state.currentPage, this.state.pageSize);
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
             1,
-            this.state.showNumber
+            this.state.showNumber,
+            this.props.appId
           );
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData(
@@ -496,17 +502,19 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.props.forms.path,
+            this.state.formId,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,
+            this.props.appId
           );
         } else {
           this.props.getSubmissionData(
+            this.props.appId,
             this.state.formId,
             this.state.pageSize,
-            this.state.currentPage
+            this.state.currentPage,
           );
         }
       }
@@ -587,9 +595,16 @@ class FormSubmitData extends PureComponent {
       });
   };
 
+  // 点击按钮显示筛选界面
+  showFilterComponent = (e)=>{
+      let hiddenFilterBoard = !this.state.showFilterBoard
+
+      this.setState({
+        showFilterBoard:  hiddenFilterBoard
+      })
+  }
   render() {
     const { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
-
     const controlCol = [
       {
         title: "操作",
@@ -609,6 +624,8 @@ class FormSubmitData extends PureComponent {
               getSubmissionDetail={this.props.getSubmissionDetail}
               setSubmissionId={this.props.actionFun}
               showformDataDetail={this.showformDataDetail}
+              // actionFun2={this.props.actionFun2}
+              appId = { this.props.appId}
             />
           );
         }
@@ -852,8 +869,11 @@ class FormSubmitData extends PureComponent {
                   this.props.history.go(-1);
                 }}
                 name={this.props.forms.name}
-                isShowBtn={false}
-                isShowBackBtn={false}
+                isShowBtn={true}
+                isShowBackBtn={true}
+                btnValue="提交数据"
+                clickCallback={()=>{this.props.actionFun(null ,true)}}
+                clickExtendCallBack = {this.showFilterComponent}
               />
             )}
             <div
@@ -868,14 +888,16 @@ class FormSubmitData extends PureComponent {
                 formId={this.state.formId}
                 components={this.props.forms.components}
               />
-              <FilterComponent
+              {this.state.showFilterBoard? <FilterComponent
                 fileds={fileds}
                 filterData={this.props.getFilterSubmissionData}
                 setFilterMode={this.setFilterMode}
                 formId={this.state.formId}
                 currentPage={this.state.currentPage}
                 pageSize={this.state.pageSize}
-              />
+                clickExtendCallBack = {this.showFilterComponent}
+              />:<></>}
+              
 
               <div className="limit-data-number-container">
                 <Dropdown

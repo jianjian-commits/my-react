@@ -43,6 +43,7 @@ const AppDetail = props => {
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
+  const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false)
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -53,12 +54,14 @@ const AppDetail = props => {
 
   //zxx groups目录结构 list无目录结构的表单
   let { groups, list, searchList } = mockForms;
+
   useEffect(() => {
     let newList = [];
+    let { id , name } = props.userDetail;
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")))
+    setUser( { user: { id, name }} );
 
-    // let extraProp = { user: { id: (JSON.parse(localStorage.getItem("userDetail"))).id , name:  (JSON.parse(localStorage.getItem("userDetail"))).name} }
+    // let extraProp = { user: { id, name} }
 
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
@@ -117,13 +120,13 @@ const AppDetail = props => {
   const onClickMenu = (key, e) => {
     setApprovalKey(key);
     setSelectedForm(null);
+    setEnterApprovalDetail(false)
   };
 
   // 父传子的方法
   const skipToSubmissionData = val => {
     setSubmit(!val);
   };
-
   // 提交权限
   const isSubmitAuth = submitFormDataAuth(props.permissions, props.teamId, appId, selectedForm);
 
@@ -178,7 +181,8 @@ const AppDetail = props => {
                     key={Math.random()}
                     formId={selectedForm}
                     submissionId={submissionId}
-                    extraProp={{ user: { id: user.id, name: user.name } }}
+                    appId={appId}
+                    extraProp={user}
                     actionFun={(submission_id, submitFlag = false) => {
                       setSubmissionId(submission_id)
                       setSubmit(submitFlag);
@@ -189,7 +193,7 @@ const AppDetail = props => {
                   <FormBuilderSubmission
                   key={Math.random()}
                   formId={selectedForm}
-                  extraProp={{ user: { id: user.id, name: user.name } }}
+                  extraProp={ user }
                   appid = { appId }
                   actionFun={skipToSubmissionData}
                 ></FormBuilderSubmission>
@@ -198,16 +202,19 @@ const AppDetail = props => {
                 <FormBuilderSubmitData
                   key={Math.random()}
                   formId={selectedForm}
-                  actionFun={(submission_id, submitFlag = false)=>{
+                  actionFun={(submission_id, submitFlag = false, formId)=>{
                     setSubmit(submitFlag);
                     setSubmissionId(submission_id)
+                    if(formId){
+                      setSelectedForm(formId)
+                    }
                   }}
                   appId={appId}
                 ></FormBuilderSubmitData>
               )}
             </>
           ) : approvalKey !== null ? (
-            <TransactList fn={onClickMenu} approvalKey={approvalKey} />
+            <TransactList fn={onClickMenu} approvalKey={approvalKey} enterApprovalDetail={enterApprovalDetail} setEnterApprovalDetail={setEnterApprovalDetail}/>
           ) : null}
         </Content>
       </Layout>
@@ -217,5 +224,6 @@ const AppDetail = props => {
 export default connect(({ app, login }) => ({
   appList: app.appList,
   teamId: login.currentTeam && login.currentTeam.id,
-  permissions: (login.userDetail && login.userDetail.permissions) || []
+  permissions: (login.userDetail && login.userDetail.permissions) || [],
+  userDetail: login.userDetail
 }))(AppDetail);
