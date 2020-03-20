@@ -39,7 +39,7 @@ class FormSubmitData extends PureComponent {
       openDataIdList: [],
       submissionArray: [],
       sortedInfo: null,
-      formId: "sWw",
+      formId: props.formId,
       submissionId: null,
       currentPage: 1,
       pageSize: 10,
