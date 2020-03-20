@@ -42,7 +42,7 @@ export default function InviteUser(props) {
         type="primary"
         onClick={() => handleInviteUserBtn()}
       >
-        <img src="/image/davinci/create-white.png" alt="" />
+        <img src="/image/davinci/create.svg" alt="" />
         邀请
       </Button>
       <Modal

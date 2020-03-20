@@ -127,4 +127,16 @@
     top: 50%;
     transform: translate(-50%, -40%);
   }
+  > p {
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -40%);
+    color: #777f97;
+    span {
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
+  }
 }

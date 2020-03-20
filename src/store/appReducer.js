@@ -41,8 +41,7 @@ export const getAppList = () => async dispatch => {
     }
   } catch (err) {
     message.error(
-      (err.response && err.response.data && err.response.data.msg) ||
-        "获取应用列表失败"
+      (err.response && err.response.data && err.response.data.msg) || "系统错误"
     );
   }
 };
