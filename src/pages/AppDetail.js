@@ -165,7 +165,7 @@ const AppDetail = props => {
           { // eslint-disable-next-line
             selectedForm != void 0 ? (
               <>
-                {(!submit && isSubmitAuth) ? (
+                {/* {(!submit && isSubmitAuth) ? (
                   <Button
                     type="primary"
                     className="form-submit-data-button"
@@ -175,7 +175,7 @@ const AppDetail = props => {
                   >
                     提交数据
                 </Button>
-                ) : null}
+                ) : null} */}
                 {submit ? (
                   submissionId ? (
                     <FormBuilderEditFormData
