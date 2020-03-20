@@ -602,6 +602,7 @@ class FormSubmitData extends PureComponent {
             <ControlBtn
               formId={this.state.formId}
               submissionId={record.id}
+              userId={record.userId}
               data={record}
               handleDeleteSubmisson={this.handleDeleteSubmisson}
               showModal={this.showModal}
@@ -743,10 +744,10 @@ class FormSubmitData extends PureComponent {
         id: dataObj.id,
         created: dataObj.created,
         modified: dataObj.modified,
-        founder: dataObj.extraProp["name"]
+        founder: dataObj.extraProp["name"],
+        userId: dataObj.extraProp["id"]
       };
       let dataItem = dataObj.data;
-      console.log(obj)
       for (let n in dataItem) {
         if (formChildIdArray.includes(n)) {
           dataItem[n].forEach(submitDataObj => {
@@ -766,7 +767,6 @@ class FormSubmitData extends PureComponent {
           obj[n] = this.filterSubmitDataToString(dataItem[n]);
         }
       }
-      console.log(obj)
       formDataShowArray.push(obj);
     });
 

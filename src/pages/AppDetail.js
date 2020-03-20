@@ -15,6 +15,7 @@ import { getFormsAll } from "../components/formBuilder/component/homePage/redux/
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
 import TransactList from "../components/transactList/TransactList";
+import { submitFormDataAuth } from "../components/formBuilder/utils/permissionUtils";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -123,6 +124,9 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
+  // 提交权限
+  const isSubmitAuth = submitFormDataAuth(props.permissions, props.teamId, appId, selectedForm);
+
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
@@ -157,7 +161,7 @@ const AppDetail = props => {
           { // eslint-disable-next-line
           selectedForm != void 0 ? (
             <>
-              {!submit ? (
+              {(!submit && isSubmitAuth) ? (
                 <Button
                   type="primary"
                   className="form-submit-data-button"
@@ -210,6 +214,8 @@ const AppDetail = props => {
     </Authenticate>
   );
 };
-export default connect(({ app }) => ({
-  appList: app.appList
+export default connect(({ app, login }) => ({
+  appList: app.appList,
+  teamId: login.currentTeam && login.currentTeam.id,
+  permissions: (login.userDetail && login.userDetail.permissions) || []
 }))(AppDetail);
