@@ -6,6 +6,7 @@ import { ChartType } from '../elements/Constant';
 import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
+import FieldTargetSelect from "./FieldTargetSelect";
 import './bind.scss';
 
 /**
@@ -129,7 +130,7 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (item) => {
         if(item.bindType == bindType) {
-          components.push(<div className={cls} key={item.id}>{item.label}</div>)
+          components.push(<FieldTargetSelect label = {item.label} className={cls} key={item.id}/> )
         }
       }
     )

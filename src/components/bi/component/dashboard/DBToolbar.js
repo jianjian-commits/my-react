@@ -1,10 +1,10 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import { connect } from "react-redux";
 import { Button, Icon, Modal, Tooltip, Spin, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from '../../utils/request';
 import { setFormData, setDataSource } from '../../redux/action';
-import { ChartType } from '../elements/Constant';
+import DataListModal from "../elements/modal/dataListModal";
 import "../../scss/dashboard.scss";
 
 const DBToolbar = props => {
@@ -48,14 +48,29 @@ const DBToolbar = props => {
     })
   }
 
+  const [visible, setVisible] = useState(false);
+  const modalProps = {
+    visible,
+    showModal: () => {
+      setVisible(true);
+    },
+    handleCancel: e => {
+      setVisible(false);
+    },
+    handleOK: e => {
+      setVisible(false);
+    }
+  };
+
   return (
     <div className="db-toolbar">
+      <DataListModal key={Math.random()} {...modalProps} url={`/app/${appId}/setting/bi/${dashboardId}/chart`}/>
       <Icon
         type="plus-circle"
         className="new-chart-icon"
         onClick={newChart}
       />
-      <div className="new-chart" onClick={newChart}>新建图表</div>
+      <div className="new-chart" onClick={modalProps.showModal}>新建图表</div>
     </div>
   )
 }

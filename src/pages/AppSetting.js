@@ -36,19 +36,18 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  // console.log( props )
-  const [user, setUser] = React.useState({})
-
+  const [user, setUser] = React.useState({});
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
     let newList = [];
     let { id, name } = props.userDetail;
 
-    setUser({ user: { id, name } })
+    setUser(JSON.parse(localStorage.getItem("userDetail")));
     // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {
+
       newList = res.map(item => ({
         key: item.id,
         name: item.name,
@@ -61,11 +60,9 @@ const AppSetting = props => {
         groups: [
           // {key:'',name:'',list:[]}
         ],
-        searchList: [
-        ],
+        searchList: [],
         list: newList
       });
-
     });
   }, [props, appId]);
 
@@ -144,11 +141,9 @@ const AppSetting = props => {
     showModal: () => {
       setVisible(true);
     },
-
     handleCancel: e => {
       setVisible(false);
     },
-
     handleOK: e => {
       setVisible(false);
     }
@@ -164,9 +159,7 @@ const AppSetting = props => {
         appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
-      <CommonHeader
-        navigationList={navigationList(history, appId, appName)}
-      />
+      <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
