@@ -113,6 +113,28 @@
   .right-pane-chart {
     height: 30%;
     border: 1px solid #adb5bd;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    .IconBox{
+      width: 54px;
+      height: 54px;
+      margin: 5px;
+      box-sizing: border-box;
+      position: relative;
+      border: 2px solid transparent;
+      i{
+        right: 0;
+        top: 0;
+        position: absolute;
+        font-size: 50px;
+        color:lightgreen;
+      }
+    }
+    .activeIcon{
+      border: 2px solid #169bd5;
+    }
    }
 
   .right-pane-tools {

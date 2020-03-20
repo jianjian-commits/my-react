@@ -77,7 +77,7 @@ function ModalTitle() {
   );
 }
 
-function CreatChartModal(props) {
+function DataListModal(props) {
 
   const [choiceFormId,setChoiceFormId] = useState("");
 
@@ -95,6 +95,7 @@ function CreatChartModal(props) {
       width={500}
       bodyStyle={{padding:0}}
       wrapClassName="BImodal"
+      handleCancel={props.handleCancel}
     >
       <div className="formChoiceModalContainer">
         <div className="formGroups">
@@ -138,4 +139,4 @@ function CreatChartModal(props) {
 }
 
 export default connect(store => ({
-}),{push})(CreatChartModal);
+}),{push})(DataListModal);

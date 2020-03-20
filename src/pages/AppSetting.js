@@ -10,7 +10,6 @@ import DraggableList, {
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
-import ChartCreatModal from "../components/bi/component/elements/modal/chartCreatModal";
 import Authenticate from "../components/shared/Authenticate";
 import { APP_SETTING_ABLED } from "../auth";
 const { Content, Sider } = Layout;
@@ -34,18 +33,18 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  const [user, setUser] = React.useState({})
+  const [user, setUser] = React.useState({});
 
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
     let newList = [];
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")))
+    setUser(JSON.parse(localStorage.getItem("userDetail")));
     // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {
-      console.log(1)
+      console.log(1);
       newList = res.map(item => ({
         key: item.id,
         name: item.name
@@ -55,11 +54,9 @@ const AppSetting = props => {
         groups: [
           // {key:'',name:'',list:[]}
         ],
-        searchList: [
-        ],
+        searchList: [],
         list: newList
       });
-
     });
   }, [appId]);
 
@@ -112,43 +109,30 @@ const AppSetting = props => {
     }
   };
 
-  const [formModalvisible, setFormModalVisible] = useState(false);
-  const [chartModalvisible, setChartModalVisible] = useState(false);
-  const ModalPropsCreat = (visible,setVisible) => {
-    return {
-      visible,
-      showModal: () => {
-        setVisible(true);
-      },
-      handleCancel: e => {
-        setVisible(false);
-      },
-      handleOK: e => {
-        setVisible(false);
-      }
+  const [visible, setVisible] = useState(false);
+  const modalProps = {
+    visible,
+    showModal: () => {
+      setVisible(true);
+    },
+    handleCancel: e => {
+      setVisible(false);
+    },
+    handleOK: e => {
+      setVisible(false);
     }
   };
-
-  const formModalProps = ModalPropsCreat(formModalvisible, setFormModalVisible);
-  const chartModalProps = ModalPropsCreat(chartModalvisible, setChartModalVisible);
 
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <ForInfoModal
         key={Math.random()}
-        {...formModalProps}
+        {...modalProps}
         extraProp={{ user: { id: user.id, name: user.name } }}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
-      <ChartCreatModal
-        key={Math.random()}
-        {...chartModalProps}
-        url={`/app/${appId}/setting/bi/weichuangtong`}
-      />
-      <CommonHeader
-        navigationList={navigationList(history, appId, appName)}
-      />
+      <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
@@ -156,8 +140,7 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                // history.push(`/app/${appId}/setting/bi/weichuangtong`)
-                chartModalProps.showModal();
+                history.push(`/app/${appId}/setting/bi/weichuangtong`)
               }}
             >
               新建仪表盘
@@ -166,7 +149,7 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                formModalProps.showModal();
+                modalProps.showModal();
               }}
             >
               新建表单
