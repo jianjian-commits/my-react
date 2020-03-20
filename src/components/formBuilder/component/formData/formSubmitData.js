@@ -91,7 +91,7 @@ class FormSubmitData extends PureComponent {
       () => {
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -110,7 +110,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -485,7 +485,7 @@ class FormSubmitData extends PureComponent {
         this.onChangePages(this.state.currentPage, this.state.pageSize);
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -502,7 +502,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,

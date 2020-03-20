@@ -18,10 +18,10 @@ var getSubmissionDataTotal = resp => {
 };
 
 
-const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
+const filterData = (formPath, filterStr, pageSize, currentPage,appId) => {
   let queryData = pageSize === -1 ?
-   `/${formId}/submission?${filterStr}` 
-   :`/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
+   `/${formPath}/submission?${filterStr}` 
+   :`/${formPath}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
   return instanceAxios
     .get(
       encodeURI( config.apiUrl + queryData),
@@ -36,11 +36,11 @@ const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
 }
 
 
-export const getFilterSubmissionData = (formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId) => dispatch => {
+export const getFilterSubmissionData = (formPath, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId) => dispatch => {
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formId, filterStr, pageSize, currentPage,appId).then(res => {
+    filterData(formPath, filterStr, pageSize, currentPage,appId).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
         submissionDataTotal: getSubmissionDataTotal(res) ,
@@ -62,7 +62,7 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
     });
   } else {
     axios.all(filterArray.map(filter => {
-      return filterData(formId, filter, -1, 1)
+      return filterData(formPath, filter, -1, 1)
     })).then(axios.spread((...data) => {
       const filterdata = data.map(data => data.data);
       const allSubmission = filterdata.flat();
