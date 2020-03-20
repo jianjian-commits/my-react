@@ -101,18 +101,22 @@ export default connect(
       data: { page: pageConfig.currentPage, size: pageConfig.pageSize }
     })
       .then(res => {
-        res.data.datas.forEach(item => {
-          item.key = item.id;
-          item.lastModifiedDate = new Date().toLocaleString(
-            item.lastModifiedDate
-          );
-          item.groupName = item.group.name;
-        });
-        setData(res.data.datas);
-        setTotal(res.data.total);
+        if (res && res.status === "SUCCESS") {
+          res.data.datas.forEach(item => {
+            item.key = item.id;
+            item.lastModifiedDate = new Date().toLocaleString(
+              item.lastModifiedDate
+            );
+            item.groupName = item.group.name;
+          });
+          setData(res.data.datas);
+          setTotal(res.data.total);
+        } else {
+          message.error(res.msg || "成员获取失败！");
+        }
       })
       .catch(err => {
-        message.error(err.response.data.msg || "成员获取失败");
+        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
         return currentTeam.id;
       });
   }, [pageConfig, currentTeam.id]);
@@ -123,25 +127,28 @@ export default connect(
       data: { oldTeamId: currentTeam.id }
     })
       .then(res => {
-        if (
-          pageConfig.currentPage >
-          Math.ceil(
-            (total - 1) / pageConfig.pageSize && pageConfig.currentPage !== 0
-          )
-        ) {
-          setPageConfig({
-            ...pageConfig,
-            currentPage: pageConfig.currentPage - 1
-          });
+        if (res && res.status === "SUCCESS") {
+          if (
+            pageConfig.currentPage >
+            Math.ceil(
+              (total - 1) / pageConfig.pageSize && pageConfig.currentPage !== 0
+            )
+          ) {
+            setPageConfig({
+              ...pageConfig,
+              currentPage: pageConfig.currentPage - 1
+            });
+          } else {
+            gainData();
+          }
+          getCurrentTeam();
+          message.success("踢出成功");
         } else {
-          gainData();
+          message.error(res.msg || "踢出失败");
         }
-        message.success("成功");
-        getCurrentTeam();
       })
       .catch(err => {
-        console.log(err.response)
-        message.error(err.response.data.msg || "踢出失败");
+        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
       });
   };
   // 过滤
@@ -173,12 +180,17 @@ export default connect(
         data: { oldGroupId: key.groupKey, newGroupId: groupKey }
       })
         .then(res => {
-          gainData();
-          message.success("成功");
-          getCurrentTeam();
+          if (res && res.status === "SUCCESS") {
+            gainData();
+            getCurrentTeam();
+            message.success("变更成功");
+          } else {
+            message.error(res.msg || "变更失败");
+          }
+
         })
         .catch(err => {
-          message.error(err.response.data.msg || "变更失败");
+          message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
         });
     }
     setOnOff({

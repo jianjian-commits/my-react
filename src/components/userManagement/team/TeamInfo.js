@@ -87,15 +87,19 @@ export default connect(
     params.data[key] = changeStr;
     request(`/team`, params)
       .then(res => {
-        message.success("修改成功");
-        getCurrentTeam().then(res => {
-          if (key === "name") {
-            getAllTeam();
-          }
-        });
+        if (res && res.status === "SUCCESS") {
+          getCurrentTeam().then(res => {
+            if (key === "name") {
+              getAllTeam();
+            }
+          });
+          message.success("修改成功");
+        } else {
+          message.error(res.msg || "修改失败！");
+        }
       })
       .catch(err => {
-        message.error(err.response.data.msg || "修改失败");
+        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
       });
   };
 
