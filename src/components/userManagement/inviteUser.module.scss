@@ -18,6 +18,9 @@
   img {
     margin-bottom: 3px;
     margin-right: 5px;
+    position: relative;
+    left: -20px;
+    filter: drop-shadow(#fff 20px 0);
   }
 }
 
