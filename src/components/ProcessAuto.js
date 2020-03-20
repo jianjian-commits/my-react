@@ -72,12 +72,20 @@ export default connect(({ login, debug }) => ({
         options={{ config }}
       />
       <PrivateRoute
-        path={`${url}/log`}
+        path={`${url}/instance`}
         auth={auth}
         authOptions={authOptions}
         component={Process.Log}
-        key={"process/log"}
-        options={{ config }}
+        key={"process/instance"}
+        options={{ config, type: "instance" }}
+      />
+      <PrivateRoute
+        path={`${url}/schedule`}
+        auth={auth}
+        authOptions={authOptions}
+        component={Process.Log}
+        key={"process/schedule"}
+        options={{ config, type: "instance" }}
       />
     </Switch>
   );

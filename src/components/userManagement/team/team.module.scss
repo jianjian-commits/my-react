@@ -16,20 +16,21 @@
   color: #333;
 }
 
-// .text::after{
-//   content: '';
-//   display: block;
-//   clear: both;
-// }
+.text::after{
+  content: '';
+  display: block;
+  clear: both;
+}
 
-// .overInfo {
-//   float: left;
-//   display: block;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-//   white-space: nowrap;
-//   max-width: 60%;
-// }
+.overInfo {
+  cursor: pointer;
+  float: left;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+}
 
 .listBox {
   padding: 5px 30px;

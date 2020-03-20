@@ -157,27 +157,6 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
   ];
   return (
     <div className={classes.groupManage}>
-      {/* {radioList.map(i => (
-        <div key={i.key}>
-          <span className={classes.moduleTitle}>{i.label}</span>
-          <Radio.Group
-            disabled={disabled}
-            value={i.checked}
-            onChange={e =>
-              onChange(
-                {
-                  checkedValue: e.target.value,
-                  arrayItem: i.key
-                },
-                "permissions_radio"
-              )
-            }
-          >
-            <Radio value={true}>{i.option}</Radio>
-            <Radio value={false}>不{i.option}</Radio>
-          </Radio.Group>
-        </div>
-      ))} */}
       {radioList.map(i => {
         return (
           <div key={i.key}>
