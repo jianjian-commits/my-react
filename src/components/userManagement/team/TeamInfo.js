@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Input, Row, Col, List, Button, Spin, message } from "antd";
+import { Input, Row, Col, List, Button, Spin, message, Popover } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
@@ -24,6 +24,12 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
     setDataStr(e.target.value);
   };
 
+  const content = (
+    <div>
+      {dataStr}
+    </div>
+  );
+
   return (
     <div className={classes.rowBox}>
       <Row type="flex" align="middle">
@@ -46,7 +52,9 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
           </Col>
         ) : (
             <Col span={16} className={classes.text}>
-              <span> {defaultValue}</span>
+              <Popover placement="bottom" content={content}>
+                <span className={classes.overInfo}> {defaultValue}</span>
+              </Popover>
               <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
                 <Button
                   size="small"
