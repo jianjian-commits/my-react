@@ -13,6 +13,7 @@ import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
 import { APP_SETTING_ABLED } from "../auth";
+import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -34,8 +35,7 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  // console.log( props )
-  const [user, setUser] = React.useState({})
+  const [user, setUser] = React.useState({});
 
   let { groups, list, searchList } = mockForms;
 
@@ -46,7 +46,7 @@ const AppSetting = props => {
     setUser({ user: { id, name } })
     // let extraProp = { user: { id: user.id, name: user.name } }
 
-    getFormsAll(appId, true).then(res => {
+    getFormsAll(appId, false).then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name,
@@ -59,11 +59,9 @@ const AppSetting = props => {
         groups: [
           // {key:'',name:'',list:[]}
         ],
-        searchList: [
-        ],
+        searchList: [],
         list: newList
       });
-
     });
   }, [props, appId]);
 
@@ -132,6 +130,9 @@ const AppSetting = props => {
     }
   };
 
+  const { permissions, teamId } = props;
+  const isShowNewFormBtn = newFormAuth(permissions, teamId, appId);
+
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <ForInfoModal
@@ -142,9 +143,7 @@ const AppSetting = props => {
         appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
-      <CommonHeader
-        navigationList={navigationList(history, appId, appName)}
-      />
+      <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
         <Sider className={classes.appSider} theme="light">
           <div className={classes.newForm}>
@@ -157,15 +156,17 @@ const AppSetting = props => {
             >
               新建仪表盘
             </Button>
-            <Button
-              type="primary"
-              block
-              onClick={e => {
-                modalProps.showModal();
-              }}
-            >
-              新建表单
-            </Button>
+            {isShowNewFormBtn ? (
+              <Button
+                type="primary"
+                block
+                onClick={e => {
+                  modalProps.showModal();
+                }}
+              >
+                新建表单
+              </Button>
+            ) : null}
           </div>
           <div className={classes.searchBox}>
             <Input
@@ -201,9 +202,14 @@ const AppSetting = props => {
     </Authenticate>
   );
 };
-export default connect(({login, app }) => ({
-  appList: app.appList,
-  userDetail: login.userDetail
-}), {
-  setAllForms
-})(AppSetting);
+export default connect(
+  ({ app, login }) => ({
+    appList: app.appList,
+    teamId: login.currentTeam && login.currentTeam.id,
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    userDetail: login.userDetail
+  }),
+  {
+    setAllForms
+  }
+)(AppSetting);

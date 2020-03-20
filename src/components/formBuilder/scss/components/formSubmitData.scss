@@ -7,29 +7,52 @@
   z-index: 1 !important;
 }
 .form-submit-data-table {
-  padding-top: 60px;
+  width: calc(100vw - 220px);
+  padding: 29px 21px;
   box-sizing: border-box;
-  width: 86.041%;
-  margin: 0 auto;
-  padding-bottom: 56px;
   overflow: hidden;
   position: relative;
   .filter-container {
     width: 364px;
     height: 385px;
     background-color: #ffffff;
-    margin-bottom: 20px;
-    padding: 22px;
     position: absolute;
+    padding: 20px;
     z-index: 10;
     right: -38px;
     top: 0;
     .filter-item-container {
-      max-height: 265px;
+      width: 324px;
+      height: 217px;
       overflow-y: auto;
       overflow-x: hidden;
       .filter-item {
         margin-bottom: 10px;
+        width: 304px;
+        .ant-select-selection{
+          width: 149px;
+          height: 36px;
+        }
+        .logicSymbol{
+          .ant-select-selection{
+          width: 96px;
+          height: 36px;
+        }
+        }
+        .descBox{
+          display: inline-block;
+          height: 36px;
+          line-height: 36px;
+          text-align: center;
+        }
+        .valueBox{
+          height:36px;
+        }
+        .filter-action{
+          .reduceBtn svg{
+            color:#E71010;
+          }
+        }
       }
     }
     .option-style {
@@ -46,14 +69,23 @@
           height: 32px;
         }
       }
+      
     }
     .filter-condition {
+      .filter-condition-option{
+        width: 281px;
+        height: 36px;
+        border-radius: 3px;
+        margin-bottom: 20px;
+        box-shadow: 0px 2px 8px rgba(106,116,140,0.25);
+      }
       .ant-select-selection-selected-value {
         font-size: 14px;
         color: #565c6e;
         font-weight: 500;
       }
       .ant-select-selection__placeholder {
+        width:96px;
         font-size: 14px;
         color: #565c6e;
         font-weight: 500;
@@ -68,12 +100,16 @@
     }
     .filter-submit-container {
       display: flex;
-      justify-content: space-around;
+      justify-content: flex-start;
+      border-top: 1px solid #D6D8DE;;
+      align-items: center;
+      height: 76px;
       button{
-        width: 125px;
+        width: 140px;
         height: 36px;
       }
       button:nth-of-type(2){
+        margin-left: 20px;
         color: #B6B6BA;
       }
     }

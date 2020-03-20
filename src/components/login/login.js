@@ -7,8 +7,8 @@ import PublicForm from "./publicForm";
 import Loading from "../../pages/Loading";
 import { loginPasswordParameter, loginPhoneParameter } from "./formItems";
 import clx from "classnames";
-import signinImg from "./style/signin.png";
-import registerImg from "./style/register.png";
+import signinImg from "./style/signin.svg";
+import registerImg from "./style/register.svg";
 import Register from "./register";
 import { Redirect } from "react-router";
 
