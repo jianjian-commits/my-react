@@ -15,7 +15,6 @@ import { getFormsAll } from "../components/formBuilder/component/homePage/redux/
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
 import TransactList from "../components/transactList/TransactList";
-import { submitFormDataAuth } from "../components/formBuilder/utils/permissionUtils";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -126,9 +125,6 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
-  // 提交权限
-  const isSubmitAuth = submitFormDataAuth(props.permissions, props.teamId, appId, selectedForm);
-
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
@@ -164,16 +160,16 @@ const AppDetail = props => {
             selectedForm != void 0 ? (
               <>
                 {/* {(!submit && isSubmitAuth) ? (
-                  <Button
-                    type="primary"
-                    className="form-submit-data-button"
-                    onClick={_e => {
-                      setSubmit(!submit);
-                    }}
-                  >
-                    提交数据
+                <Button
+                  type="primary"
+                  className="form-submit-data-button"
+                  onClick={_e => {
+                    setSubmit(!submit);
+                  }}
+                >
+                  提交数据
                 </Button>
-                ) : null} */}
+              ) : null} */}
                 {submit ? (
                   submissionId ? (
                     <FormBuilderEditFormData
@@ -222,7 +218,7 @@ const AppDetail = props => {
 };
 export default connect(({ app, login }) => ({
   appList: app.appList,
-  userDetail: login.userDetail,
   teamId: login.currentTeam && login.currentTeam.id,
-  permissions: (login.userDetail && login.userDetail.permissions) || []
+  permissions: (login.userDetail && login.userDetail.permissions) || [],
+  userDetail: login.userDetail
 }))(AppDetail);

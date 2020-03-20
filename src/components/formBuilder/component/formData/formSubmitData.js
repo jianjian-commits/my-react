@@ -871,6 +871,7 @@ class FormSubmitData extends PureComponent {
                 isShowBtn={true}
                 isShowBackBtn={false}
                 btnValue="提交数据"
+                formId={this.props.formId}
                 clickCallback={()=>{this.props.actionFun(null ,true)}}
                 clickExtendCallBack = {this.showFilterComponent}
               />
