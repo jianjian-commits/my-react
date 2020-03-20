@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 import { connect } from "react-redux";
 import { Button, Icon, Modal, Tooltip, Spin } from "antd";
-import { renameElement } from '../../redux/action';
+import { renameElement, changeBind } from '../../redux/action';
 import request from '../../utils/request';
 import { ChartType } from '../elements/Constant';
 import "./element.scss";
@@ -13,9 +13,10 @@ const EditorHeader = props => {
   const { elemName, renameElement } = props;
 
   const handleBack = () => {
-    const { dbChanged } = props;
+    const { dbChanged, changeBind } = props;
 
     if (!dbChanged) {
+      changeBind([]);
       history.push(`/app/${appId}/setting/bi/${dashboardId}`);
     } else {
       // @temp len, show modal dialog
@@ -60,5 +61,5 @@ const EditorHeader = props => {
 
 export default connect(
   store => ({ elemName: store.bi.elemName }),
-  { renameElement }
+  { renameElement, changeBind }
 )(EditorHeader);

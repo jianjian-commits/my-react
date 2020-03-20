@@ -7,9 +7,9 @@ import {
   SAVE_ELEMENT,
   RENAME_DASHBOARD,
   RENAME_ELEMENT,
-  CHANGE_DATA,
   SET_FORM_DATA,
-  SET_DATA_SOURCE
+  SET_DATA_SOURCE,
+  CHANGE_CHART_DATA,
 } from "./action";
 
 const initState = {
@@ -20,7 +20,9 @@ const initState = {
   elemName: "",
   dataName: "",
   formDataArr: [],
-  dataSource: {}
+  dataSource: {},
+  bindDataArr: [],
+  chartData: {}
 };
 
 export default function biReducer(state = initState, action) {
@@ -40,8 +42,7 @@ export default function biReducer(state = initState, action) {
     case CHANGE_BIND: {
       return {
         ...state,
-        dim: action.dim,
-        mea: action.mea
+        bindDataArr: action.bindDataArr
       };
     }
     case RENAME_DASHBOARD: {
@@ -69,17 +70,15 @@ export default function biReducer(state = initState, action) {
       };
     }
     case SET_DATA_SOURCE: {
-      console.log("=======action.dataSource=======", action.dataSource);
       return {
         ...state,
         dataSource: action.dataSource
       };
     }
-    case CHANGE_DATA: {
+    case CHANGE_CHART_DATA: {
       return {
         ...state,
-        dataName: action.dataName,
-        data: action.data
+        chartData: action.chartData
       };
     }
     case SAVE_ELEMENT: {

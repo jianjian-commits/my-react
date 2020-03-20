@@ -7,7 +7,6 @@ import { setFormData, setDataSource } from '../../redux/action';
 import { ChartType } from '../elements/Constant';
 import "../../scss/dashboard.scss";
 
-    
 const DBToolbar = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
@@ -44,7 +43,6 @@ const DBToolbar = props => {
           const elementId = view.id;
           setDataSource({id: form.formId, name: form.formName, data: view.formFields});
           history.push(`/app/${form.formId}/setting/bi/${dashboardId}/${elementId}`);
-          // console.log("==========setDataSource========", {id: formId, data: view.formFields});
         }
       }, () => {message.error("创建图标失败")})
     })

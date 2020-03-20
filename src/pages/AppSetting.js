@@ -118,7 +118,7 @@ const AppSetting = props => {
     }
   };
 
-  const newDashboard = () => {
+  const createDashboard = () => {
     const res = request("/bi/dashboards", {
       method: "POST",
       data: {name: "新建仪表盘", appId}, 
@@ -174,7 +174,7 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                newDashboard();
+                createDashboard();
               }}
             >
               新建仪表盘

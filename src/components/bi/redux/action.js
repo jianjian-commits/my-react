@@ -6,9 +6,9 @@ export const SAVE_ELEMENT = "SAVE_ELEMENT";
 export const SET_TYPE = "SET_TYPE";
 export const RENAME_DASHBOARD = "RENAME_DASHBOARD";
 export const RENAME_ELEMENT = "RENAME_ELEMENT";
-export const CHANGE_DATA = "CHANGE_DATA";
 export const SET_FORM_DATA = "SET_FORM_DATA";
 export const SET_DATA_SOURCE = "SET_DATA_SOURCE";
+export const CHANGE_CHART_DATA = "CHANGE_CHART_DATA";
 
 export const newDashboard = (dashboardId, dbName) => dispatch => {
   dispatch({
@@ -26,11 +26,10 @@ export const newElement = (dashboardId, dbName) => dispatch => {
   })
 }
 
-export const changeBind = (mea, dim) => dispatch => {
+export const changeBind = (bindDataArr) => dispatch => {
   dispatch({
       type: CHANGE_BIND,
-      mea,
-      dim
+      bindDataArr
   })
 }
 
@@ -48,13 +47,6 @@ export const renameElement = (elemName) => dispatch => {
   })
 }
 
-export const changeData = (dataName) => dispatch => {
-  dispatch({
-      type: CHANGE_DATA,
-      dataName
-  })
-}
-
 export const setFormData = (formDataArr) => dispatch => {
   dispatch({
     type: SET_FORM_DATA,
@@ -62,8 +54,14 @@ export const setFormData = (formDataArr) => dispatch => {
   })
 }
 
+export const changeChartData = (chartData) => dispatch => {
+  dispatch({
+    type: CHANGE_CHART_DATA,
+    chartData
+  })
+}
+
 export const setDataSource = (dataSource) => dispatch => {
-  console.log("======setDataSource====", dataSource);
   dispatch({
     type: SET_DATA_SOURCE,
     dataSource

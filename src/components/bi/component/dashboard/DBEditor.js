@@ -42,15 +42,15 @@ class DBEditor extends React.PureComponent {
   render() {
     const { dashboardId, dataArr, height } = this.props;
 
-    if(!dashboardId) {
-      return (
-        <Fragment>
-          <div className="db-placeholder" style={{height}}>
-            <div>点击新建图表创建仪表盘</div>
-          </div>
-        </Fragment>
-      )
-    }
+    // if(!dashboardId) {
+    //   return (
+    //     <Fragment>
+    //       <div className="db-placeholder" style={{height}}>
+    //         <div>点击新建图表创建仪表盘</div>
+    //       </div>
+    //     </Fragment>
+    //   )
+    // }
 
     return (
       <Fragment>

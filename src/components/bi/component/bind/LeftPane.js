@@ -1,7 +1,7 @@
 import React, {PureComponent, useState} from "react";
 import DragItem from './DragItem';
 import { connect } from "react-redux";
-import { changeData } from '../../redux/action';
+import { setDataSource } from '../../redux/action';
 import './bind.scss';
 
 class LeftPane extends PureComponent {
@@ -21,10 +21,10 @@ class LeftPane extends PureComponent {
     dataArr.forEach((each, idx) => {
       if(each) {
         if(each.type === "NUMBER") {
-          const item = {label: each.label, type: 'mea'}
+          const item = {...each, bindType: "mea"}
           meaArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
         } else {
-          const item = {label: each.label, type: 'dim'}
+          const item = {...each,  bindType: 'dim'}
           dimArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
         }
       }
@@ -35,16 +35,16 @@ class LeftPane extends PureComponent {
 
   onClick = () => {
     // show modal.
+    // this.props.setDataSource();
   }
 
   render() {
-    const { dataName, dataSource } = this.props;
-
+    const { dataSource } = this.props;
     return (
       <div className="left-pane">
         <div className="left-pane-data">
           <span className="data-source-name" onClick={this.onClick}>
-            {dataName ? dataName : "选择数据源"}
+            {dataSource.name || "选择数据源"}
           </span>
         </div>
         <div className="left-pane-dimension">
@@ -71,6 +71,5 @@ export default connect((store) => {
     dataName: state.dataName,
     dataArr: state.dataArr,
     dataSource: state.dataSource,
-    ddd: store
   }
-}, { changeData })(LeftPane)
+}, { setDataSource })(LeftPane)
