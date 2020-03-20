@@ -623,7 +623,6 @@ class FormSubmitData extends PureComponent {
               getSubmissionDetail={this.props.getSubmissionDetail}
               setSubmissionId={this.props.actionFun}
               showformDataDetail={this.showformDataDetail}
-              // actionFun2={this.props.actionFun2}
               appId = { this.props.appId}
             />
           );
@@ -868,7 +867,7 @@ class FormSubmitData extends PureComponent {
                 }}
                 name={this.props.forms.name}
                 isShowBtn={true}
-                isShowBackBtn={true}
+                isShowBackBtn={false}
                 btnValue="提交数据"
                 clickCallback={()=>{this.props.actionFun(null ,true)}}
                 clickExtendCallBack = {this.showFilterComponent}
