@@ -1123,7 +1123,7 @@ class Submission extends Component {
                 this.props.actionFun(skipToSubmissionDataFlag);
               }}
               isShowExtraTitle = {false}
-              name={formComponent.name}
+              // name={formComponent.name}
               isShowBtn={false}
               isShowExtraTitle={false}
             />

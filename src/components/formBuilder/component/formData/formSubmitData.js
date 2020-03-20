@@ -91,7 +91,7 @@ class FormSubmitData extends PureComponent {
       () => {
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -110,7 +110,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -485,7 +485,7 @@ class FormSubmitData extends PureComponent {
         this.onChangePages(this.state.currentPage, this.state.pageSize);
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -502,7 +502,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -624,7 +624,6 @@ class FormSubmitData extends PureComponent {
               getSubmissionDetail={this.props.getSubmissionDetail}
               setSubmissionId={this.props.actionFun}
               showformDataDetail={this.showformDataDetail}
-              // actionFun2={this.props.actionFun2}
               appId = { this.props.appId}
             />
           );
@@ -870,7 +869,7 @@ class FormSubmitData extends PureComponent {
                 }}
                 name={this.props.forms.name}
                 isShowBtn={true}
-                isShowBackBtn={true}
+                isShowBackBtn={false}
                 btnValue="提交数据"
                 clickCallback={()=>{this.props.actionFun(null ,true)}}
                 clickExtendCallBack = {this.showFilterComponent}
