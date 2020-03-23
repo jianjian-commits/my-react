@@ -14,7 +14,10 @@ import { getFormsAll } from "../components/formBuilder/component/homePage/redux/
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
-import TransactList from "../components/transactList/TransactList";
+// import TransactList from "../components/transactList/TransactList";
+import TodoTransctionList from "../components/transactList/TodoTransctionList";
+import SubmitTransctionList from "../components/transactList/SubmitTransctionList";
+import HandleTranscationList from "../components/transactList/HandleTranscationList";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -128,6 +131,33 @@ const AppDetail = props => {
 
   console.log("submit", submit);
   console.log("selectedForm", selectedForm);
+  let TransactList = <></> ;
+  let transctionListOptions = {
+    actionFun: (submission_id, submitFlag = false, formId)=>{
+      setSubmit(submitFlag);
+      setSubmissionId(submission_id)
+      if(formId){
+        setSelectedForm(formId)
+      }
+    },
+    fn: onClickMenu, 
+    approvalKey: approvalKey, 
+    enterApprovalDetail: enterApprovalDetail, 
+    setEnterApprovalDetail: setEnterApprovalDetail
+  }
+  switch (approvalKey) {
+    case "myPending":
+      TransactList = <TodoTransctionList {...transctionListOptions}/> ;
+      break;
+    case "mySubmitted":
+      TransactList = <SubmitTransctionList {...transctionListOptions}/> ;
+      break;
+    case "myHandled":
+      TransactList = <HandleTranscationList {...transctionListOptions}/> ;
+      break;
+    default:break;
+      // return <></>;
+  }
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
@@ -201,11 +231,7 @@ const AppDetail = props => {
               )}
             </>
           ) : approvalKey !== null ? (
-            <TransactList
-              fn={onClickMenu} 
-              approvalKey={approvalKey} 
-              enterApprovalDetail={enterApprovalDetail} 
-              setEnterApprovalDetail={setEnterApprovalDetail}/>
+            TransactList
           ) : null}
         </Content>
       </Layout>
