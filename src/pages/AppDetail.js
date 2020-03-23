@@ -15,7 +15,7 @@ import { getFormsAll } from "../components/formBuilder/component/homePage/redux/
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
 import TransactList from "../components/transactList/TransactList";
-import { submitFormDataAuth } from "../components/formBuilder/utils/permissionUtils";
+// import { submitFormDataAuth } from "../components/formBuilder/utils/permissionUtils";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -127,7 +127,7 @@ const AppDetail = props => {
   };
 
   // 提交权限
-  const isSubmitAuth = submitFormDataAuth(props.permissions, props.teamId, appId, selectedForm);
+  // const isSubmitAuth = submitFormDataAuth(props.permissions, props.teamId, appId, selectedForm);
 
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
