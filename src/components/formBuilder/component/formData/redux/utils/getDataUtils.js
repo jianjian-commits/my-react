@@ -124,7 +124,7 @@ export const getSubmissionData = (
           forms,
           submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-            let{ user } = item.extraProp
+            let{ user } = item.extraProp? item.extraProp: { user :{id:"",name:""}}
             return {
               data: item.data,
               id: item.id,
