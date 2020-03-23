@@ -201,7 +201,11 @@ const AppDetail = props => {
               )}
             </>
           ) : approvalKey !== null ? (
-            <TransactList fn={onClickMenu} approvalKey={approvalKey} enterApprovalDetail={enterApprovalDetail} setEnterApprovalDetail={setEnterApprovalDetail}/>
+            <TransactList
+              fn={onClickMenu} 
+              approvalKey={approvalKey} 
+              enterApprovalDetail={enterApprovalDetail} 
+              setEnterApprovalDetail={setEnterApprovalDetail}/>
           ) : null}
         </Content>
       </Layout>
