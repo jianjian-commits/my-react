@@ -2,13 +2,14 @@ import React from "react";
 import { Form, Icon, Checkbox, Tooltip } from "antd";
 import { isValueValid } from "../../../../utils/valueUtils";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray
 } from "../../utils/dataLinkUtils";
 import RadioTestItem from "./radioTestItem";
-export default class RadioInput extends React.Component {
+class RadioInput extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +29,8 @@ export default class RadioInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let index = -1;
@@ -81,3 +83,4 @@ export default class RadioInput extends React.Component {
     );
   }
 }
+export default withRouter(RadioInput)

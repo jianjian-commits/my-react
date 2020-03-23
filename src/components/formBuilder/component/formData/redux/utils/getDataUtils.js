@@ -106,7 +106,6 @@ export const getSubmissionData = (
 ) => dispatch => {
   axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
     let forms = res.data;
-    
     instanceAxios
       .get(
         config.apiUrl +

@@ -28,22 +28,22 @@ export const filterDropDownSelection = (dataList, optionId) => {
   return newValuesList;
 };
 
-export const getSelection = (formId, optionId) => {
+export const getSelection = (appId, formId, optionId) => {
   // 这里暂时获取9999条数据
   return new Promise((resolve, reject) => {
-    instanceAxios.get(
-        config.apiUrl +
-        `/form/${formId}/submissions`,
-        {
-          headers: {
-            // "X-Custom-Header": "ProcessThisImmediately",
-            "Content-Type": "application/json"
-          }
+    instanceAxios
+      .get(config.apiUrl + `/form/${formId}/submission?skip=0`, {
+        headers: {
+          // "X-Custom-Header": "ProcessThisImmediately",
+          "Content-Type": "application/json",
+          appid: appId
         }
-      ).then(res => {
-          resolve(filterDropDownSelection(res.data, optionId))
-      }).catch(err => {
-          reject(err);
       })
-  })
+      .then(res => {
+        resolve(filterDropDownSelection(res.data, optionId));
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 };

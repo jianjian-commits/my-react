@@ -40,16 +40,20 @@ class OtherDataModal extends Component {
     );
     let hasform = forms.some(form => form.id === formId);
     let formIndex = -1;
-    if (hasform && formId) {
-      forms.forEach((form, index) => {
-        if (form.id === formId) {
-          formIndex = index;
-        }
-      });
-    } else if (formId) {
-      formId = "关联条件失效，请重新设置";
-      optionLabel = "";
-      hasError = true;
+    if (optionId) {
+      if (hasform && formId) {
+        forms.forEach((form, index) => {
+          if (form.id === formId) {
+            formIndex = index;
+          }
+        });
+      } else {
+        formId = "关联条件失效，请重新设置";
+        optionLabel = "";
+        hasError = true;
+      }
+    } else {
+      formId= null;
     }
     this.setState({
       selectedFormId: formId,
@@ -211,7 +215,7 @@ class OtherDataModal extends Component {
                     className="select-option-item"
                   >
                     {component.label}
-                    {selectedOptionId == component.id ? (
+                    {selectedOptionId == component.key ? (
                       <Icon
                         style={{ color: "#09BB07" }}
                         className="dropDown-check-icon"
