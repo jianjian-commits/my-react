@@ -21,7 +21,7 @@ export const getFormAllSubmission = (appId, formId) => {
   // 这里暂时获取9999条数据
   return new Promise((resolve, reject) => {
     instanceAxios
-      .get(config.apiUrl + `/form/${formId}/submission?limit=10`, {
+      .get(config.apiUrl + `/form/${formId}/submission`, {
         headers: {
           // "X-Custom-Header": "ProcessThisImmediately",
           "Content-Type": "application/json",
