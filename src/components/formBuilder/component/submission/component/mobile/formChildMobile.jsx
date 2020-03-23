@@ -1,5 +1,6 @@
 import React from "react";
 import { Input, Form } from "antd";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -25,7 +26,7 @@ import { getSelection } from "../../utils/filterData";
 
 import CheckboxInput from "../checkboxInput/checkboxTestItem";
 import RadioButtons from "../radioInput/radioTestItem";
-export default class FormChildTest extends React.Component {
+class FormChildTest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -178,7 +179,8 @@ export default class FormChildTest extends React.Component {
         linkFormId //联动表单 id
       } = item.data.values;
       // 得到id表单的所有提交数据
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         if (item.type === "DropDown" || item.type === "MultiDropDown") {
@@ -236,6 +238,7 @@ export default class FormChildTest extends React.Component {
     let { item, handleSetComponentEvent, submitDataArray } = this.props;
     let values = item.values;
     let newArray = [];
+    const {appId} = this.props.match.params;
 
     submitDataArray.forEach((child, index) => {
       let result = {};
@@ -334,7 +337,7 @@ export default class FormChildTest extends React.Component {
             linkFormId //联动表单 id
           } = item.data.values;
           // 得到id表单的所有提交数据
-          getFormAllSubmission(linkFormId).then(submissions => {
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
             // 根据联动表单的组件id 得到对应所有数据
             let dataArr = filterSubmissionData(submissions, linkComponentId);
             if (item.type === "DropDown" || item.type === "MultiDropDown") {
@@ -397,6 +400,7 @@ export default class FormChildTest extends React.Component {
     let values = item.values;
     let result = {};
     let newArray = this.props.submitDataArray;
+    const {appId} = this.props.match.params;
 
     values.forEach(item => {
       switch (item.type) {
@@ -491,7 +495,7 @@ export default class FormChildTest extends React.Component {
           linkFormId //联动表单 id
         } = item.data.values;
         // 得到id表单的所有提交数据
-        getFormAllSubmission(linkFormId).then(submissions => {
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
           // 根据联动表单的组件id 得到对应所有数据
           let dataArr = filterSubmissionData(submissions, linkComponentId);
           if (item.type === "DropDown" || item.type === "MultiDropDown") {
@@ -606,7 +610,8 @@ export default class FormChildTest extends React.Component {
         formChildData //子表单联动数据
       } = data.values;
       // 得到id表单的所有提交数据
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         // 为需要联动的表单添加 change事件
@@ -1258,3 +1263,4 @@ export default class FormChildTest extends React.Component {
     );
   }
 }
+export default withRouter(FormChildTest)

@@ -4,13 +4,14 @@ import { Form, Select, Tooltip, Icon } from "antd";
 import { getSelection } from "../../utils/filterData";
 import DropDownTestItem from "./dropDownTestItem";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   getResIndexArray
 } from "../../utils/dataLinkUtils";
 
-export default class DropDown extends React.Component {
+class DropDown extends React.Component {
   constructor(props) {
     super(props);
 
@@ -32,7 +33,8 @@ export default class DropDown extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let indexArr = getResIndexArray(value, dataArr);
@@ -146,3 +148,4 @@ export default class DropDown extends React.Component {
     );
   }
 }
+export default withRouter(DropDown)

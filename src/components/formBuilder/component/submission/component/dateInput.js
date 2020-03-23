@@ -4,6 +4,7 @@ import { isValueValid, isStringValid } from "../../../utils/valueUtils";
 import { Form, Tooltip, Icon } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -11,7 +12,7 @@ import {
 } from "../utils/dataLinkUtils";
 import moment from "moment";
 
-export default class DateInput extends React.Component {
+class DateInput extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
@@ -22,7 +23,8 @@ export default class DateInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let index = -1;
@@ -124,3 +126,5 @@ export default class DateInput extends React.Component {
     );
   }
 }
+
+export default withRouter(DateInput)
