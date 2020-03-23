@@ -1,12 +1,11 @@
 import React, { PureComponent } from "react";
-import { Form, Table, Button, Row, Col, Icon, Tabs } from "antd";
+import { Form, Table, Icon, Tabs, message } from "antd";
 import { connect } from "react-redux";
-import locationUtils from "../../../utils/locationUtils";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
 import { getSubmissionDetail, handleStartFlowDefinition } from "../redux/utils/getDataUtils";
+import { deleteFormData } from "../redux/utils/deleteDataUtils"
 import { initToken } from "../../../utils/tokenUtils";
 import { DeleteIcon, EditIcon } from './svgIcon/index'
-import HeaderBar from "../../base/NavBar";
 import FormDataDetailHeader from "./formDataDetailHeader"
 const { TabPane } = Tabs;
 const columns = [
@@ -20,7 +19,7 @@ const columns = [
   },
   {
     title: "操作人",
-    dataIndex: "operator"
+    dataIndex: "assignee"
   },
   {
     title: "状态",
@@ -28,36 +27,26 @@ const columns = [
   },
   {
     title: "审批意见",
-    dataIndex: "opinion"
+    dataIndex: "comment"
   },
   {
     title: "日期",
-    dataIndex: "dateTime"
+    dataIndex: "approveDate"
   }
 ];
-const data = [
-  {
-    key: "1",
-    id: "101",
-    name: "高风险客户",
-    operator: "李XX",
-    status: "通过",
-    opinion: "风险可控",
-    dateTime: new Date().toLocaleString("chinese", { hour12: false })
-  }
-];
+
 const ApprovalStatus = (props) =>{
-  const { approveStatus = "going" } = props;
+  const { approveStatus  } = props;
   switch (approveStatus) {
-    case "approved":
+    case "通过":
       return (<span style={{color : "#00c39c"}}>通过</span>)
       break;
-    case "refused":
+    case "已拒绝":
       return (<span style={{color: "red"}}>已拒绝</span>)
-    case "going":
-        return (<span style={{color: "#ffa439"}}>进行中</span>)
+    case "审批中":
+        return (<span style={{color: "#ffa439"}}>审批中</span>)
     default:
-      return <></>
+      return (<span >approveStatus</span>)
       break;
   }
 }
@@ -65,7 +54,17 @@ const ApprovalStatus = (props) =>{
 const EditApprovalButton = (props) =>{
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
-  const { detailAuthority , dataId, actionFun, handleDeleteSubmisson, ...rest} = props;
+  const { detailAuthority , dataId, actionFun, deleteFormData, ...rest} = props;
+  const handleDeleteSubmisson = submissionId => {
+      deleteFormData( "", submissionId)
+      .then(response => {
+        props.actionFun(true)
+      })
+      .catch(err => {
+        message.error("删除失败！", 2);
+        console.log(err);
+      });
+  };
   return (
     true ? 
     (
@@ -110,7 +109,8 @@ class FormDataDetail extends PureComponent {
       .then(() => {
         this.props.getSubmissionDetail(
           this.state.formId,
-          this.state.submissionId
+          this.state.submissionId,
+          this.props.appId
         );
       })
       .catch(err => {
@@ -413,7 +413,7 @@ class FormDataDetail extends PureComponent {
   }
 
   render() {
-    const { formDetail, currentForm, mobile = {}, extraProp } = this.props;
+    const { formDetail, currentForm, mobile = {}, extraProp, taskData } = this.props;
     const { userId, tabKey } = this.state;
     const editButtonOptions={detailAuthority: true};
     const startApprovelBtnOptions={
@@ -427,11 +427,11 @@ class FormDataDetail extends PureComponent {
     let operations = {}
     switch (tabKey) {
       case "formDetail":
-        operations = <EditApprovalButton {...this.props}/>
+        operations = <EditApprovalButton {...this.props} />
         break;
       case "approvelFlow":
         {
-          operations = <div className="approvalbox">审批状态：<ApprovalStatus approveStatus={"going"}/></div>
+          operations = <div className="approvalbox">审批状态：<ApprovalStatus approveStatus={taskData.status}/></div>
         }
           break;
       default:
@@ -447,6 +447,7 @@ class FormDataDetail extends PureComponent {
           isOwnRecord={extraProp !== null ? extraProp.user.id === userId : false}
           title={currentForm.name}
           startApprovelBtnClick = {this.startApprovelBtnClick}
+          taskData={taskData}
           {...startApprovelBtnOptions} />
         <div className="formDataDetailContainer">
         <Tabs defaultActiveKey="detail" 
@@ -458,14 +459,14 @@ class FormDataDetail extends PureComponent {
             {this._renderDataByType(formDetail, newCurrentComponents)}
           </TabPane>
           {
-            // 关联审批的才展示审批
-          data.length > 0 ? (
+            // 关联审批的才展示审批  taskData.tasks
+            taskData.tasks  ? (
             <TabPane tab="审批流水" key="approvelFlow">
               <Table
                 className="approveTable"
                 pagination={false}
                 columns={columns}
-                dataSource={data}
+                dataSource={taskData.tasks}
                 size="middle"
               />
             </TabPane>
@@ -485,10 +486,12 @@ export default connect(
     formDetail: store.formSubmitData.formDetail,
     currentForm: store.formSubmitData.forms,
     token: store.rootData.token,
-    extraProp: store.formSubmitData.extraProp
+    extraProp: store.formSubmitData.extraProp,
+    taskData: store.formSubmitData.taskData
   }),
   {
     getSubmissionDetail,
-    handleStartFlowDefinition
+    handleStartFlowDefinition,
+    deleteFormData,
   }
 )(DataDetail);

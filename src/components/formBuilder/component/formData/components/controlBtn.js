@@ -4,7 +4,7 @@ import { Button, Popconfirm } from "antd";
 function ControlBtn(props) {
   const handleSeeDetail = () => {
     props.showModal(props.submissionId);
-    props.getSubmissionDetail(props.formId, props.submissionId);
+    props.getSubmissionDetail(props.formId, props.submissionId, props.appId);
   };
 
   const handleConfirmDelete = () => {

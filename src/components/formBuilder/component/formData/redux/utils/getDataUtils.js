@@ -137,7 +137,7 @@ export const getSubmissionData = (
 };
 
 // 获得表单数据详情
-export const getSubmissionDetail = (formId, submissionId) => dispatch => {
+export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => {
   axios.get(config.apiUrl + `/form/${formId}`).then(res => {
     let currentForm = res.data;
 
@@ -152,12 +152,21 @@ export const getSubmissionDetail = (formId, submissionId) => dispatch => {
       )
       .then(res => {
         console.log("res.data", res.data)
-        dispatch({
-          type: RECEIVED_FORM_DETAIL,
-          forms: currentForm,
-          formDetail: res.data.data,
-          extraProp: res.data.extraProp
-        });
+        instanceAxios.get(
+          config.apiUrl + `/flow/history/approval/${submissionId}`,{
+            headers:{
+              appid:appId
+            }
+          }
+        ).then(response =>{
+            dispatch({
+              type: RECEIVED_FORM_DETAIL,
+              forms: currentForm,
+              formDetail: res.data.data,
+              extraProp: res.data.extraProp,
+              taskData: response.data.data
+            });
+        })
       });
   });
 };

@@ -4,11 +4,8 @@ import { connect } from "react-redux";
 import {
   ConfigProvider,
   Table,
-  Divider,
-  Select,
   Input,
   Button,
-  InputNumber,
   Menu,
   Dropdown,
   Icon,
@@ -606,6 +603,7 @@ class FormSubmitData extends PureComponent {
         render: (id, record) => {
           return (
             <ControlBtn
+              appId={this.props.appId}
               formId={this.state.formId}
               submissionId={record.id}
               data={record}
@@ -845,9 +843,7 @@ class FormSubmitData extends PureComponent {
             id={this.props.formId}
             dataId={this.state.formDataDetailId}
             appId={this.props.appId}
-            showformDataDetail={this.showformDataDetail}
             actionFun={this.props.actionFun}
-            handleDeleteSubmisson={this.handleDeleteSubmisson}
           />
         ) : (
           <>
