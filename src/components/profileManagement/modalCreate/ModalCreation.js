@@ -47,7 +47,7 @@ class ModalCreation extends Component {
         options: { rules: [{ required: true, message: "描述不能为空" }] },
         component: (
           <MyTextArea
-            rows={5}
+            rows={4}
             maxLength={30}
             className={classes.stretch}
             placeholder="简单描述一下你的应用吧"
