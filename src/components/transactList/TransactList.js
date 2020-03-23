@@ -74,7 +74,7 @@ const TransactList = props => {
       key: "action",
       render: (text, record) => {
         return (
-          <span onClick={(e)=>{props.setEnterApprovalDetail(true);}}>查看</span>
+          <span style={{cursor:"pointer"}} onClick={(e)=>{props.setEnterApprovalDetail(true);}}>查看</span>
         );
       }
     }
@@ -98,7 +98,7 @@ const TransactList = props => {
       <div className={classes.tableTitle}>
         {_title} <span className={classes.totalNumber}>（共{data.length}条）</span>
       </div>
-      <Table columns={columns} dataSource={data}></Table>
+      <Table columns={columns} dataSource={data} className={classes.tableContent}></Table>
     </div>
     ):(
       <TransactionDetail fn = {props.fn} approvalKey={props.approvalKey}/>
