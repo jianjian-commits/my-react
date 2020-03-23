@@ -21,9 +21,10 @@
       left: 0;
       height: 100%;
     }
-    svg {
-      left: -80px;
-      filter: drop-shadow(#1890ff 80px 0);
+    svg  {
+      g, polyline, path {
+        fill: #1890ff;
+      }
     }
   }
   span {

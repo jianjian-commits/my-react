@@ -93,10 +93,10 @@
   }
   :global(.ant-menu-item-selected) {
     border-left: 4px solid #1890ff;
-    svg {
-      position: relative;
-      left: -80px;
-      filter: drop-shadow(#1890ff 80px 0);
+    svg  {
+      g, polyline, path {
+        fill: #1890ff;
+      }
     }
   }
 }

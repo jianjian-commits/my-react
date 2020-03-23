@@ -10,7 +10,7 @@ import CreateForm from "../components/formBuilder/component/formBuilder/formBuil
 import Approval from "../components/ApprovalProcess";
 import Process from "../components/ProcessAuto";
 import classes from "../styles/apps.module.scss";
-import { ApIcon, FbIcon, PbIcon } from "../assets/icons/apps/index";
+import { ApIcon, FbIcon, PbIcon } from "../assets/icons/apps";
 
 const { Content, Sider } = Layout;
 
@@ -84,8 +84,6 @@ const AppServices = props => {
               .map(s => (
                 <Menu.Item key={s.key} onClick={clickHandle}>
                   <Tooltip placement="right" title={s.name}>
-                    {/* <Icon component={s.icon} style={{ fontSize: 22 }} /> */}
-                    {/* <img src={`/image/davinci/${s.icon}.svg`} alt="" /> */}
                     <s.icon />
                   </Tooltip>
                 </Menu.Item>
