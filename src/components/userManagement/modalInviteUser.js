@@ -3,7 +3,7 @@ import { Input, Button, Modal, message } from "antd";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 import classes from "./inviteUser.module.scss";
-
+import { CreateIcon } from "../../assets/icons/teams"
 const customCss = {
   bodyStyle: {
     padding: "46px 30px 182px",
@@ -42,7 +42,7 @@ export default function InviteUser(props) {
         type="primary"
         onClick={() => handleInviteUserBtn()}
       >
-        <img src="/image/davinci/create.svg" alt="" />
+        <CreateIcon />
         邀请
       </Button>
       <Modal

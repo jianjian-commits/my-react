@@ -10,6 +10,8 @@ import Authenticate from "../components/shared/Authenticate";
 import { SUPER_ADMINISTRATOR, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import classes from "../styles/apps.module.scss";
+import { NoAppImg } from "../assets/images";
+
 const { Content } = Layout;
 const { Meta } = Card;
 
@@ -95,7 +97,7 @@ class Apps extends React.Component {
               </Button>
               {appList.length < 2 && (
                 <>
-                  <img src="/image/davinci/noapps.svg" alt="" />
+                  <NoAppImg />
                   <p>
                     <span>您还没有添加应用</span>
                     <br />
@@ -106,7 +108,7 @@ class Apps extends React.Component {
             </Authenticate>
             {appList.length < 1 && sysUserName !== name && (
               <>
-                <img src="/image/davinci/noapps.svg" alt="" />
+                <NoAppImg />
                 <p>您的团队还没创建应用</p>
               </>
             )}

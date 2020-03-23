@@ -10,6 +10,7 @@ import {
   PROFILE_MANAGEMENT_UPDATE,
   PROFILE_MANAGEMENT_DELETE
 } from "../../auth";
+import { CreateIcon } from "../../assets/icons/teams";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 
@@ -28,7 +29,7 @@ function GroupList(props) {
       <span>分组</span>
       <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
         <Button onClick={handleClick}>
-          <img src="/image/davinci/create.svg" alt="" />
+          <CreateIcon />
           添加分组
         </Button>
       </Authenticate>
