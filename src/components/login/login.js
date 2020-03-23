@@ -99,17 +99,13 @@ export default connect(
     loginUser
   }
 )(function Login({ loginUser, isLoading, history, isAuthenticated }) {
-  // if (isAuthenticated && history.location.query ) history.push("/");
-  // if (!history.location.query && history.location.pathname !== "/login")
-  //   history.push("/login");
   const { userId, teamId, token, active, inviter, invitedTeam } =
     history.location.query || {};
   const params = userId && teamId && token ? { userId, teamId, token } : {};
   const query = inviter && invitedTeam ? { inviter, invitedTeam } : {};
   const [activeKey, setActiveKey] = useState(active || "initSignin");
-  if (!history.location.query && isAuthenticated) {
-    return <Redirect to="/" />;
-  }
+  if (!history.location.query && isAuthenticated) return <Redirect to="/" />;
+
   return (
     <Loading spinning={isLoading}>
       <div className={Styles.background}>

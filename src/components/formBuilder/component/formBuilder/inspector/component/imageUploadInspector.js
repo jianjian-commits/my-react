@@ -1,12 +1,27 @@
 import React from "react";
 import { Checkbox, Input, Select, InputNumber, Divider } from "antd";
 import { connect } from "react-redux";
-import { setItemAttr ,setFormChildItemAttr} from "../../redux/utils/operateFormComponent";
-import isInFormChild from "../utils/isInFormChild"
+import {
+  setItemAttr,
+  setFormChildItemAttr
+} from "../../redux/utils/operateFormComponent";
+import isInFormChild from "../utils/isInFormChild";
+import locationUtils from "../../../../utils/locationUtils";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 class ImageUploadInspector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi,
+      formPath: locationUtils.getUrlParamObj().path
+    });
   }
   handleChangeAttr = ev => {
     let { name = "fileUnit", value, checked } = ev.target;
@@ -43,7 +58,7 @@ class ImageUploadInspector extends React.Component {
       );
     }
   };
-  
+
   handleChangeSelect = value => {
     const { validate } = this.props.element;
     var newValidate = {
@@ -62,8 +77,7 @@ class ImageUploadInspector extends React.Component {
     }
   };
 
-
-   handleChangeAttrMax = (value,type,min) =>{
+  handleChangeAttrMax = (value, type, min) => {
     const { validate } = this.props.element;
     var newValidate = {
       ...validate
@@ -79,8 +93,22 @@ class ImageUploadInspector extends React.Component {
     } else {
       this.props.setItemAttr(this.props.element, "validate", newValidate);
     }
-  }
+  };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
 
   render() {
     const {
@@ -89,13 +117,11 @@ class ImageUploadInspector extends React.Component {
       defaultValue,
       validate,
       unique = false,
-      inputMask
+      inputMask,
+      isSetAPIName
     } = this.props.element;
-    const {
-      fileSize,
-      fileUnit,
-      fileCount,
-    } = validate
+    const { fileSize, fileUnit, fileCount } = validate;
+    const { apiNameTemp, isUniqueApi = true } = this.state;
     const formatChecks = inputMask ? true : false;
 
     return (
@@ -111,10 +137,20 @@ class ImageUploadInspector extends React.Component {
             autoComplete="off"
           />
 
-          {
-            isInFormChild(this.props.elementParent)
-            ? null
-            :<>
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            disabled={isSetAPIName ? true : false}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
               <p htmlFor="email-tip">错误提示</p>
               <Input
                 name="customMessage"
@@ -124,7 +160,7 @@ class ImageUploadInspector extends React.Component {
                 autoComplete="off"
               />
             </>
-          }
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
@@ -140,15 +176,17 @@ class ImageUploadInspector extends React.Component {
           </div>
           <p htmlFor="email-tip">最多上传个数</p>
           <InputNumber
-              value={fileCount}
-              min={1}
-              type="number"
-              // name="fileSize"
-              onChange={(value)=>{this.handleChangeAttrMax(value,"fileCount",1)}}
-              autoComplete="off"
-              precision={0}
-              style={{width:'100%',marginBottom:16}}
-            />
+            value={fileCount}
+            min={1}
+            type="number"
+            // name="fileSize"
+            onChange={value => {
+              this.handleChangeAttrMax(value, "fileCount", 1);
+            }}
+            autoComplete="off"
+            precision={0}
+            style={{ width: "100%", marginBottom: 16 }}
+          />
           <p htmlFor="email-tip">单个文件最大体积</p>
           <div className="fileSizeInput">
             <InputNumber
@@ -156,7 +194,9 @@ class ImageUploadInspector extends React.Component {
               min={1}
               type="number"
               // name="fileSize"
-              onChange={(value)=>{this.handleChangeAttrMax(value,"fileSize",2)}}
+              onChange={value => {
+                this.handleChangeAttrMax(value, "fileSize", 2);
+              }}
               autoComplete="off"
               precision={0}
             />

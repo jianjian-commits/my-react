@@ -8,20 +8,22 @@ const BI = props => {
   const HEADER_HEIGHT = 30;
   const TOOLBAR_HEIGHT = 30;
 
+  const { dashboardId } = props;
+
   return (
-    <div className={classes.biContainer} style={{height: document.body.scrollHeight}}>
+    <div className={classes.biContainer}>
       <DBHeader/>
       <DBToolbar/>
-      <div className={classes.biBody} style={{ height: document.body.scrollHeight - HEADER_HEIGHT - TOOLBAR_HEIGHT }}>
-        <DBEditor/>
+      <div className={classes.biBody}>
+        <DBEditor height={document.body.scrollHeight - HEADER_HEIGHT - TOOLBAR_HEIGHT} />
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (store) => {
   return {
-    dashboardId: state.dashboardId,
+    dashboardId: store.bi.dashboardId,
   }
 }
 

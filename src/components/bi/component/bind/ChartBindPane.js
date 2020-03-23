@@ -2,8 +2,11 @@ import React, {PureComponent} from "react";
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
-import { changeBind } from '../../redux/action';
 import FieldTargetSelect from "./FieldTargetSelect";
+import { ChartType } from '../elements/Constant';
+import { changeBind, changeChartData } from '../../redux/action';
+import { useParams } from "react-router-dom";
+import request from '../../utils/request';
 import './bind.scss';
 
 /**
@@ -32,18 +35,55 @@ const spec = {
       return;
     }
 
-    const { dim, mea, changeBind } = props;
+    const { bindDataArr, dataSource, changeBind, changeChartData, dashboardId, elementId } = props;
     const dropDim = component.getType() == Types.DIMENSION;
+    let dimensions = [], indexes = [];
 
-    if(dropDim && (item.type == Types.DIMENSION) && !dim.includes(item.text) && dim.length < 1) {
-      dim.push(item.text);
-    } else if(!dropDim && (item.type == Types.MEASURE) && !mea.includes(item.text)) {
-      mea.push(item.text);
-    } else {
-      return;
+    if(dropDim && (item.bindType == Types.DIMENSION) || (!dropDim && (item.bindType == Types.MEASURE))) {
+      bindDataArr.push(item);
     }
 
-    changeBind(mea, dim);
+    const currentGroup = { name: "", value: "COUNT" };
+    const groups = [{ name: "", value: "COUNT" }];
+    const sort = { id: "", value: "DEFAULT" };
+    const conditions = [];
+
+    bindDataArr.forEach((each) => {
+      const field = Object.assign({}, each);
+      delete field.bindType;
+
+      switch(each.bindType) {
+        case Types.DIMENSION:
+          dimensions.push({field, currentGroup, groups, sort});
+          break;
+        case Types.MEASURE:
+          indexes.push({currentGroup: {name: "求和", value: "SUM"}, field, groups, sort});
+          break;
+        default:
+          console.log("wrong type!")
+      }
+    })
+    const res = request(`/bi/charts/data`, {
+      method: "POST",
+      data: {
+        formId: dataSource.id,
+        dimensions,
+        indexes,
+        conditions
+}
+    }).then((res) => {
+      if(res && res.msg === "success") {
+        const dataObj = res.data;
+        const data = dataObj.data;
+
+        if(data) {
+          const xaxisList = data.xaxisList;
+          changeChartData(xaxisList);
+        }
+      }
+    })
+
+    changeBind(bindDataArr);
   }
 }
 
@@ -80,18 +120,35 @@ class BindPane extends PureComponent {
   }
 
   render() {
-    const { col, label, type, connectDropTarget } = this.props;
-    
+    const { col, label, bindType, connectDropTarget } = this.props;
+
     return connectDropTarget(
       <div className="bind-line" key={label}>
         <div className="bind-label">{label}</div>
-        {getItems(col, type)}
+        {this.getItems(bindType)}
       </div>
     )
   }
 
   getType() {
-    return this.props.type;
+    return this.props.bindType;
+  }
+
+  getItems = (bindType) => {
+    let { bindDataArr } = this.props;
+    bindDataArr = bindDataArr || [];
+    let cls = "bind-child-" + bindType;
+    const components = [];
+
+    bindDataArr.forEach(
+      (item) => {
+        if(item.bindType == bindType) {
+          components.push(<div className={cls} key={item.id}>{item.label}</div>)
+        }
+      }
+    )
+
+    return components;
   }
 }
 
@@ -101,24 +158,20 @@ const DropBindPane = DropTarget(
   collect,
 )(BindPane)
 
-class ChartBindPane extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
+const ChartBindPane = (props)=> {
+  const { dashboardId, elementId } = useParams();
 
-  render() {
-    const { dim, mea } = this.props;
     return (
       <div className="bind-pane">
-        <DropBindPane {...this.props} col={dim} type={Types.DIMENSION} label="维度"/>
-        <DropBindPane {...this.props} col={mea} type={Types.MEASURE} label="指标"/>
+        <DropBindPane {...props} bindType={Types.DIMENSION} dashboardId={dashboardId} elementId={elementId} label="维度" />
+        <DropBindPane {...props} bindType={Types.MEASURE} dashboardId={dashboardId} elementId={elementId} label="指标"/>
       </div>
     )
-  }
 }
 
 export default connect(store => ({
-  dim: store.bi.dim,
-  mea: store.bi.mea}),{
-  changeBind
+  bindDataArr: store.bi.bindDataArr,
+  dataSource: store.bi.dataSource}), {
+  changeBind,
+  changeChartData
 })(ChartBindPane);

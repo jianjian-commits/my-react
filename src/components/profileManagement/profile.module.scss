@@ -17,7 +17,6 @@
     height: 36px;
     padding: 0;
     margin-left: 20px;
-    border: 0;
   }
   :global(.ant-table) {
     tr {
@@ -60,7 +59,7 @@
 .groupBasic {
   tbody {
     background: #fff;
-    width: calc(100vw - 260px);
+    width: calc(100vw - 263px);
     margin-top: 10px;
     padding: 10px;
     display: inline-block;
@@ -75,19 +74,20 @@
       }
       td:nth-child(2) {
         display: block;
-        max-width: 600px;
-        min-width: 500px;
-        max-height: 50px;
+        width: 250px;
+        height: 50px;
         color: #333;
         overflow-y: hidden;
+        overflow-x: hidden;
         span {
-          max-width: 500px;
+          max-width: 190px;
           display: inline-block;
           overflow: hidden;
           white-space: nowrap;
         }
         img {
-          margin: 0 0 30px 4px;
+          float: absolute;
+          margin: 5px 0 35px 4px;
           cursor: pointer;
         }
       }
@@ -97,6 +97,9 @@
 
 // 应用管理
 .groupApp {
+  table {
+    border-top: 1px solid #e8e8e8;
+  }
   :global(td:nth-child(2) label) {
     margin-left: 20px;
   }
@@ -105,6 +108,13 @@
   }
   :global(.ant-table-tbody > tr > td) {
     padding: 9px 16px 9px 30px;
+  }
+  .radioStyle {
+    background-color: #fff;
+    padding: 12px 12px 12px 30px;
+    label {
+      margin: 0 0 0 20px;
+    }
   }
 }
 
@@ -117,6 +127,21 @@
   :global(.ant-checkbox-group-item) {
     margin: 0 60px 0 10px;
     color: #333;
+  }
+  :global(.ant-radio-group) {
+    display: block;
+    background: #fff;
+    padding: 14px 30px;
+    label {
+      margin-right: 20px;
+    }
+  }
+  .checkboxStyle {
+    background: #fff;
+    padding: 14px 30px;
+    label {
+      margin: 0 60px 0 10px;
+    }
   }
 }
 

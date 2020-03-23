@@ -21,6 +21,7 @@ import {
   setFormChildItemValues
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
+import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
 
 class MultiDropDownInspector extends React.Component {
@@ -28,7 +29,7 @@ class MultiDropDownInspector extends React.Component {
     super(props);
     this.state = {
       optionType: this.props.element.data.type || "custom",
-      formId: locationUtils.getUrlParamObj().id,
+      formPath: locationUtils.getUrlParamObj().path,
       isLinked: false,
       isShowDataLinkageModal: false,
       isShowOtherDataModal: false
@@ -45,6 +46,13 @@ class MultiDropDownInspector extends React.Component {
         isLinked: true
       });
     }
+
+    const { key } = this.props.element;
+    const isUniqueApi = checkUniqueApi(key, this.props);
+    this.setState({
+      apiNameTemp: key,
+      isUniqueApi: isUniqueApi
+    });
   }
 
   handleChangeAttr(ev) {
@@ -183,7 +191,12 @@ class MultiDropDownInspector extends React.Component {
   };
 
   handleOtherFormDataChange = data => {
-    const { selectedFormId, selectedOptionId, optionLabel, linkComponentType } = data;
+    const {
+      selectedFormId,
+      selectedOptionId,
+      optionLabel,
+      linkComponentType
+    } = data;
     let values = {
       formId: selectedFormId,
       optionId: selectedOptionId,
@@ -252,7 +265,7 @@ class MultiDropDownInspector extends React.Component {
     const { forms, element, elementParent } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
-    if(errorComponentIndex > -1) {
+    if (errorComponentIndex > -1) {
       let currentIndex = data.indexOf(element);
       currentIndex === errorComponentIndex && (isLinkError = true);
     }
@@ -295,13 +308,17 @@ class MultiDropDownInspector extends React.Component {
         return (
           <>
             <Button
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetOtherDataModal(true);
               }}
             >
-              {element.data.type === "otherFormData"
-                ? (isLinkError ? "数据关联失效" : "已设置数据关联")
+              {element.data.type == "otherFormData"
+                ? isLinkError
+                  ? "数据关联失效"
+                  : "已设置数据关联"
                 : "关联表单数据设置"}
             </Button>
             <OtherDataModal
@@ -322,13 +339,17 @@ class MultiDropDownInspector extends React.Component {
         return (
           <>
             <Button
-              className={isLinkError ? "data-link-set has-error" : "data-link-set"}
+              className={
+                isLinkError ? "data-link-set has-error" : "data-link-set"
+              }
               onClick={() => {
                 this.handleSetDataLinkage(true);
               }}
             >
-              {element.data.type === "DataLinkage"
-                ? (isLinkError ? "数据联动设置失效" : "已设置数据联动")
+              {element.data.type == "DataLinkage"
+                ? isLinkError
+                  ? "数据联动设置失效"
+                  : "已设置数据联动"
                 : "数据联动设置"}
             </Button>
             <DataLinkageModal
@@ -377,10 +398,30 @@ class MultiDropDownInspector extends React.Component {
     });
   };
 
+  // API change
+  handleChangeAPI = ev => {
+    const { value } = ev.target;
+    const isUnique = checkUniqueApi(value, this.props);
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
+    this.handleChangeAttr(ev);
+    this.setState({
+      apiNameTemp: value,
+      isUniqueApi
+    });
+  };
+
   render() {
-    const { optionType, isLinked } = this.state;
-    const { elementParent } = this.props;
-    const { label, validate, tooltip } = this.props.element;
+    const {
+      optionType,
+      isLinked,
+      apiNameTemp,
+      isUniqueApi = true
+    } = this.state;
+    const { elementParent, element, data, errorComponentIndex } = this.props;
+    const { label, validate, tooltip, isSetAPIName } = this.props.element;
     const { values } = this.props.element.data;
     return (
       <div className="multidropdown-inspector">
@@ -394,6 +435,19 @@ class MultiDropDownInspector extends React.Component {
             onChange={this.handleChangeAttr}
             autoComplete="off"
           />
+
+          <p htmlFor="url-name">API Name</p>
+          <Input
+            id="single-text-title"
+            className={isUniqueApi ? "" : "err-input"}
+            disabled={isSetAPIName ? true : false}
+            name="key"
+            placeholder="API Name"
+            value={apiNameTemp}
+            onChange={this.handleChangeAPI}
+            autoComplete="off"
+          />
+
           {isInFormChild(this.props.elementParent) ? null : (
             <>
               <p htmlFor="email-tip">提示信息</p>
@@ -478,7 +532,7 @@ export default connect(
   store => ({
     data: store.formBuilder.data,
     forms: store.formBuilder.formArray,
-    errorComponentIndex: store.formBuilder.errorComponentIndex,
+    errorComponentIndex: store.formBuilder.errorComponentIndex
   }),
   {
     setItemAttr,

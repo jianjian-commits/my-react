@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout, Input, Button, Icon } from "antd";
+import { Layout, Input, Button, Icon, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
   DropableWrapper
 } from "../components/shared/DraggableList";
+import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
+import request from '../components/bi/utils/request';
+import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 const { Content, Sider } = Layout;
 
@@ -33,22 +36,26 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  const [user, setUser] = React.useState({});
+  // console.log( props )
+  const [user, setUser] = React.useState({})
 
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
     let newList = [];
+    let { id, name } = props.userDetail;
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")));
+    setUser({ user: { id, name } })
     // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {
-      console.log(1);
       newList = res.map(item => ({
         key: item.id,
-        name: item.name
+        name: item.name,
+        path: item.path
       }));
+
+      props.setAllForms(res);
 
       setMockForms({
         groups: [
@@ -58,7 +65,7 @@ const AppSetting = props => {
         list: newList
       });
     });
-  }, [appId]);
+  }, [props, appId]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
@@ -109,6 +116,26 @@ const AppSetting = props => {
     }
   };
 
+  const createDashboard = () => {
+    const res = request("/bi/dashboards", {
+      method: "POST",
+      data: {name: "新建仪表盘", appId}, 
+      warning: "创建报表失败"
+    }).then(
+      (res) => {
+        if(res && res.msg === "success") {
+          const data = res.data;
+          props.newDashboard(data.id, data.name);
+          history.push(`/app/${appId}/setting/bi/${data.id}`)
+        } else {
+          message.error("创建报表失败");
+        }
+        
+      },
+      () => message.error("创建报表失败")
+    )
+  }
+
   const [visible, setVisible] = useState(false);
   const modalProps = {
     visible,
@@ -128,7 +155,8 @@ const AppSetting = props => {
       <ForInfoModal
         key={Math.random()}
         {...modalProps}
-        extraProp={{ user: { id: user.id, name: user.name } }}
+        pathArray={mockForms.list}
+        extraProp={user}
         appid={appId}
         url={`/app/${appId}/setting/form/`}
       />
@@ -140,7 +168,7 @@ const AppSetting = props => {
               type="primary"
               block
               onClick={e => {
-                history.push(`/app/${appId}/setting/bi/weichuangtong`)
+                createDashboard();
               }}
             >
               新建仪表盘
@@ -189,6 +217,10 @@ const AppSetting = props => {
     </Authenticate>
   );
 };
-export default connect(({ app }) => ({
-  appList: app.appList
-}))(AppSetting);
+export default connect(({login, app }) => ({
+  appList: app.appList,
+  userDetail: login.userDetail
+}), {
+  setAllForms,
+  newDashboard
+})(AppSetting);

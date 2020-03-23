@@ -252,10 +252,7 @@ export default class FormChildTest extends React.Component {
               formType: item.type,
               validate: item.validate,
               hasErr: false,
-              data: {
-                time: null,
-                moment: null
-              }
+              data: child[item.key].data
             };
             break;
           case "RadioButtons":

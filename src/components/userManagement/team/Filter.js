@@ -5,7 +5,6 @@ import classes from "./team.module.scss";
 
 const { Option } = Select;
 const Filter = props => {
-  const [data] = React.useState([]);
   const [inputStr, setInputStr] = React.useState(null); //输入框关键字
   // const [groupKey, setGroupKey] = React.useState(null); //分组关键字
   const onChangeInput = e => {
@@ -15,13 +14,6 @@ const Filter = props => {
   const onChange = value => {
     // setGroupKey(value);
   };
-  const groups = Array.from(
-    new Set(
-      data.map(item => {
-        return item.group;
-      })
-    )
-  );
 
   // 过滤
   return (
@@ -52,15 +44,14 @@ const Filter = props => {
             }
           >
             <Option value={null}>全部</Option>
-            {groups.map((item, index) => {
+            {props.groups.map((item, index) => {
               return (
-                <Option key={index} value={item}>
-                  {item}
+                <Option key={item.id} value={item.id}>
+                  {item.name}
                 </Option>
               );
             })}
           </Select>
-          {/* <Button onClick={onClickFilter}>筛选</Button> */}
           <Button>筛选</Button>
         </Col>
       </Row>

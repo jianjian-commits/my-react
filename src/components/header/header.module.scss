@@ -146,9 +146,6 @@
 
 .detailUpdateModal {
   & form {
-    & button {
-      opacity: 0.5;
-    }
     & input {
       width: 371px;
       height: 40px;
@@ -160,6 +157,54 @@
       & button {
         width: 371px;
       }
+    }
+  }
+}
+
+.modalForm {
+  & > div {
+    display: flex !important;
+    & input {
+      width: 308px !important;
+    }
+    & > div:first-child {
+      text-align: right;
+      width: 76px !important;
+      & > label {
+        font-size: 14px;
+        color: #333333;
+      }
+    }
+  }
+  & > div:last-child {
+    & > div {
+      width: 100% !important;
+      padding-left: 76px;
+      text-align: left;
+    }
+  }
+}
+
+.detailUpdateModalPhone {
+  & > div {
+    & input:nth-child(1) {
+      width: 195px !important;
+      border-top-right-radius: 6px !important;
+      border-bottom-right-radius: 6px !important;
+    }
+    & input:nth-child(2) {
+      width: 258px !important;
+    }
+    & > div:first-child {
+      text-align: right;
+      width: 96px !important;
+    }
+  }
+  & > div:last-child {
+    & > div {
+      width: 100% !important;
+      padding-left: 96px;
+      text-align: left;
     }
   }
 }

@@ -437,3 +437,21 @@ $unHoverGray: #b6b6ba;
     }
   }
 }
+
+.userDetailModalButton {
+  & > button {
+    width: 149px !important;
+    height: 40px;
+    border-radius: 6px;
+  }
+  & > button:first-child {
+    color: #b6b6ba;
+    background: #f2f2f2;
+    border-color: #f2f2f2;
+  }
+  & > button:last-child {
+    margin-left: 10px;
+    color: #ffffff;
+    background: #2a7fff;
+  }
+}

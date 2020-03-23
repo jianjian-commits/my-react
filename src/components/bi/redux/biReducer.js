@@ -7,7 +7,9 @@ import {
   SAVE_ELEMENT,
   RENAME_DASHBOARD,
   RENAME_ELEMENT,
-  CHANGE_DATA
+  SET_FORM_DATA,
+  SET_DATA_SOURCE,
+  CHANGE_CHART_DATA,
 } from "./action";
 
 const initState = {
@@ -16,14 +18,20 @@ const initState = {
   mea: [],
   dbName: "",
   elemName: "",
-  dataName: ""
+  dataName: "",
+  formDataArr: [],
+  dataSource: {},
+  bindDataArr: [],
+  chartData: {}
 };
 
 export default function biReducer(state = initState, action) {
   switch (action.type) {
     case NEW_DASHBOARD: {
       return {
-        ...state
+        ...state,
+        dashboardId: action.dashboardId,
+        dbName: action.dbName
       };
     }
     case NEW_ELEMENT: {
@@ -34,8 +42,7 @@ export default function biReducer(state = initState, action) {
     case CHANGE_BIND: {
       return {
         ...state,
-        dim: action.dim,
-        mea: action.mea
+        bindDataArr: action.bindDataArr
       };
     }
     case RENAME_DASHBOARD: {
@@ -44,21 +51,40 @@ export default function biReducer(state = initState, action) {
         dbName: action.dbName
       };
     }
+    case SAVE_DASHBOARD: {
+      return {
+        ...state,
+        dashboardId: null
+      };
+    }
     case RENAME_ELEMENT: {
       return {
         ...state,
         elemName: action.elemName
       };
     }
-    case CHANGE_DATA: {
+    case SET_FORM_DATA: {
       return {
         ...state,
-        dataName: action.dataName
+        formDataArr: action.formDataArr
+      };
+    }
+    case SET_DATA_SOURCE: {
+      return {
+        ...state,
+        dataSource: action.dataSource
+      };
+    }
+    case CHANGE_CHART_DATA: {
+      return {
+        ...state,
+        chartData: action.chartData
       };
     }
     case SAVE_ELEMENT: {
       return {
         ...state,
+        elementId: null
       };
     }
     case SET_TYPE: {

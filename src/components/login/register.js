@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, Result } from "antd";
+import { Button, Result, message } from "antd";
 import request from "../../utils/request";
 import PublicForm from "./publicForm";
 import { registerParameter } from "./formItems";
@@ -14,8 +14,6 @@ export default connect()(function Register({
   query
 }) {
   const { token } = params;
-  // if (!history.location.query && history.location.pathname !== "/register")
-  //   history.push("/register");
   const { inviter, invitedTeam } = history.location.query || query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
@@ -32,10 +30,15 @@ export default connect()(function Register({
         setVisible(false);
       } else {
         setStatus(false);
+        message.error(res.msg || "注册失败");
       }
     } catch (err) {
       setStatus(false);
       setVisible(false);
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "系统错误"
+      );
     }
     setSpinning(false);
   };

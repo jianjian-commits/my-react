@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Icon, Modal, Tooltip, Spin } from "antd";
 import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
-import { connect } from "react-redux";
 import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
+import { connect } from "react-redux";
 import checkAndSaveForm from "../utils/checkSaveFormUtils";
 import { withRouter } from "react-router-dom";
 class ForBuilderHeader extends React.Component {
@@ -165,6 +165,10 @@ class ForBuilderHeader extends React.Component {
           <Button
             disabled={!this.state.btnCanClick}
             onClick={e => {
+              const checkRes = checkAndSaveForm(this.props);
+              if (!checkRes.res) {
+                return;
+              }
               this.setState({ btnCanClick: false }, () => {
                 editForm || this.props.localForm !== null
                   ? (() => {
@@ -225,7 +229,7 @@ export default connect(
     submissionAccess: store.rootData.submissionAccess,
     verificationList: store.formBuilder.verificationList,
     name: store.formBuilder.name,
-    formArray: store.forms.formArray,
+    formArray: store.formBuilder.formArray,
     errMessage: store.formBuilder.errMessage,
     isFormChanged: store.formBuilder.isFormChanged,
     localForm: store.formBuilder.localForm

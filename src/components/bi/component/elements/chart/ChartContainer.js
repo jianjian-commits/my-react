@@ -1,21 +1,23 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from "react-router-dom";
 import Chart from './Chart';
+import { getOption, getOption2 } from '../../../utils/ChartUtil';
 import './chart.scss';
 
-export default class ChartContainer extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
+const ChartContainer = (props) => {
+  const { elementId } = useParams();
+  const { chartData } = props;
+  const chartOption = chartData ? getOption(chartData): getOption2();
+  const chart =  <Chart chartOption={chartOption}/>;
 
-  render() {
-    return (
-      <div className="chart-container">
-        <Chart />
-      </div>
-    )
-  }
+  return (
+    <div className="chart-container">
+      { chart }
+    </div>
+  )
 }
 
-
-connect((store) => ({}), {})(ChartContainer)
+export default connect((store) => ({
+  chartData: store.bi.chartData
+}), {})(ChartContainer)
