@@ -1,5 +1,5 @@
 import React from "react";
-import { Select } from "antd";
+import { Select,Icon } from "antd";
 const { Option } = Select;
 const operationArr = [
   {
@@ -32,17 +32,25 @@ export default function FieldTargetSelect(props) {
     fontSize: 12,
     lineHeight:32,
   }
+
   const getSelectOperation = value => {
     console.log("你选择了",value);
+  }
+
+  const handleDeleteTarget = () => {
+    console.log("你删除了这个指标");
   }
   
   return (
     <div className={props.className}>
-    <Select dropdownStyle={style} defaultValue={fieldOperationArr[0].value} onChange={getSelectOperation}>
-      {fieldOperationArr.map(option => (
-        <Option className="fieldOpertaion" key={option.value} value={option.value}>{option.label}</Option>
-      ))}
-    </Select>
+      <div className="cancelIcon">
+        <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />
+      </div>
+      <Select dropdownStyle={style} defaultValue={fieldOperationArr[0].value} onChange={getSelectOperation}>
+        {fieldOperationArr.map(option => (
+          <Option className="fieldOpertaion" key={option.value} value={option.value}>{option.label}</Option>
+        ))}
+      </Select>
     </div>
   );
 }
