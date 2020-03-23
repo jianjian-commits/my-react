@@ -95,8 +95,8 @@ const EditApprovalButton = (props) =>{
     detailAuthority ? 
     (
       <div className={clasess.toolbarBox}>
-        <span><Icon component={editIconSvg} {...props} style={{marginRight:5}}/>编辑</span> 
-        <span><Icon component={deleteIconSvg} {...props} style={{marginRight:5}}/>删除</span> 
+        <span style={{cursor:'pointer'}}><Icon component={editIconSvg} {...props} style={{marginRight:5}}/>编辑</span> 
+        <span style={{cursor:'pointer'}}><Icon component={deleteIconSvg} {...props} style={{marginRight:5}}/>删除</span> 
       </div>
     ):(
       <></>

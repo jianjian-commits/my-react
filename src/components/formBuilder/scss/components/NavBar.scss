@@ -5,12 +5,12 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   margin: 0px;
 }
 .formBuilder-NavBar {
-  // position: fixed;
   top: 60px;
   left: 0;
   z-index: 1000;
-  height: 60px;
+  height: 113px;
   width: 100%;
+  padding-top: 9px;
   background: transparent;
   min-width: 1000px;
   display: flex;
@@ -18,10 +18,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   border-bottom: 1px solid rgba(238, 238, 238, 1);
   box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
   .headerBarTitle {
-    // padding-left:30px;
-    height: 60px;
+    height: 104px;
     width: 75%;
-    line-height: 60px;
+    line-height: 104px;
     font-size: 18px;
     font-family: $font-Family;
     font-weight: 400;
@@ -29,14 +28,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   }
   .headerBarBack {
     line-height: 60px;
-    height: 60px;
+    height: 104px;
     width: 8%;
     display: flex;
     align-items: center;
     .ant-btn-link {
       margin-left: 10px;
       font-size: 14px;
-      font-family: $font-Family;
+      font-family: "Microsoft YaHei";
       font-weight: 500;
       color: rgba(86, 92, 110, 1);
       span {
@@ -45,7 +44,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     }
   }
   .headerBarExtraTitle{
-    width:9%;
+    width:12%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,8 +58,8 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px;
-    width: 8%;
+    height: 104px;
+    margin-left: 29px;
     .ant-btn {
       border-radius: 4px;
       background: rgba(0, 122, 255, 1);
@@ -69,6 +68,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       font-weight: 400;
       color: rgba(255, 255, 255, 1);
       height: 36px;
+      width: 104px;
     }
   }
 }

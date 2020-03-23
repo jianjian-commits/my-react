@@ -23,7 +23,7 @@ export default class NavBar extends PureComponent {
                                 <Icon type="left" />
                                 返回
                             </Button>
-                        </div> : <div style={{flexGrow:1}}/>
+                        </div> : <div style={{flexGrow:.4}}/>
                 }
 
                 <div className="headerBarTitle">
