@@ -2,7 +2,7 @@ import React, {PureComponent} from "react";
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
-import FieldTargetSelect from "../elements/FieldTargetSelect";
+import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
 import { ChartType } from '../elements/Constant';
 import { changeBind, changeChartData } from '../../redux/action';
@@ -116,7 +116,7 @@ class BindPane extends PureComponent {
           components.push(<FieldDimension label = {item.label} key={item.label} className={cls} />)
         }
         if(item.bindType == bindType && bindType == "mea") {
-          components.push(<FieldTargetSelect label = {item.label} key={item.label} className={cls} />)
+          components.push(<FieldMeasureSelect label = {item.label} key={item.label} className={cls} />)
         }
       }
     )

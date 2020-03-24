@@ -45,6 +45,7 @@
       color: #FFFFFF;
       border: none;
       background-color: #00C59F;
+      border-radius: 0px 15px 15px 0px;
       .ant-select-arrow {
         color: rgba(255, 255, 255, 1);
       }
@@ -58,6 +59,7 @@
     @extend .bind-child;
     background-color: #2B81FF;
     padding-left: 15px;
+    border-radius: 15px;
     i{
       position: absolute;
       left: 3px;
@@ -74,6 +76,7 @@
       width: 16px;
       background-color: #00C59F;
       margin-right: -1px;
+      border-radius: 15px 0px 0px 15px;
     }
   }
 }

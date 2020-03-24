@@ -15,7 +15,7 @@ const operationArr = [
     value: "最小",
   }
 ];
-export default function FieldTargetSelect(props) {
+export default function FieldMeasureSelect(props) {
   
   const creatFieldOperationArr = (componentLabel) => {
       return operationArr.map(operation => {
