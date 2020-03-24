@@ -80,10 +80,13 @@ class ProfileManagement extends React.Component {
           roleList: res.data
         });
       } else {
-        message.error("获取分组列表失败");
+        message.error(res.msg || "获取分组列表失败");
       }
     } catch (err) {
-      message.error("获取分组列表失败");
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "获取分组列表失败"
+      );
     }
   }
 
@@ -106,10 +109,13 @@ class ProfileManagement extends React.Component {
         message.success(`${title}成功!`);
         this.getGroupList();
       } else {
-        message.error(`${title}失败`);
+        message.error(res.msg || `${title}失败`);
       }
     } catch (err) {
-      message.error(`${title}失败`);
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          `${title}失败`
+      );
     } finally {
       this.setState({ open: false });
     }
@@ -125,10 +131,13 @@ class ProfileManagement extends React.Component {
         message.success("删除成功！");
         this.getGroupList();
       } else {
-        message.error("删除失败！");
+        message.error(res.msg || "删除失败！");
       }
     } catch (err) {
-      message.error("删除失败！");
+      message.error(
+        (err.response && err.response.data && err.response.data.msg) ||
+          "删除失败！"
+      );
     }
   }
 
@@ -153,11 +162,11 @@ class ProfileManagement extends React.Component {
   render() {
     const { open, title, roleList } = this.state;
     const columns = [
-      { title: "组名", dataIndex: "roleName", width: 1100 },
+      { title: "组名", dataIndex: "roleName", width: "70%" },
       {
         title: "操作",
         dataIndex: "action",
-        width: 520,
+        width: "30%",
         render: (text, record) => {
           const roleList = [
             {

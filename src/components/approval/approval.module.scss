@@ -1,11 +1,10 @@
 .sectionWrapper {
   padding: 10px;
   .sectionContent {
-    border: 1px solid #e8e8e8;
-    border-radius: 5px;
+    border-bottom: 1px solid #e8e8e8;
   }
   .item {
-    padding: 0 10px;
+    padding: 8px 10px;
     cursor: pointer;
     position: relative;
     &:hover {
@@ -16,12 +15,12 @@
       border-radius: 50%;
       text-align: center;
       font-size: 12px;
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       background: rgba($color: #2A7FFF, $alpha: 0.1);
       color: #2A7FFF;
       top: 11px;
-      right: 15px;
+      right: 70px;
     }
   }
 }

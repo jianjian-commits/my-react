@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Layout, Menu, Icon, Tooltip } from "antd";
+import { Layout, Menu, Tooltip } from "antd";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { APP_FORM_EDIT } from "../auth";
@@ -14,15 +14,15 @@ import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
 
 const services = [
-  { key: "edit", name: "表单编辑", icon: "table", component: CreateForm },
+  { key: "edit", name: "表单编辑", icon: "FB", component: CreateForm },
   {
     key: "process/list",
     name: "自动化",
-    icon: "cloud-sync",
+    icon: "PB",
     auth: APP_FORM_EDIT,
     component: Process
   },
-  { key: "approval/list", name: "审批流", icon: "audit", component: Approval }
+  { key: "approval/list", name: "审批流", icon: "AP", component: Approval }
 ];
 
 const navigationList = (history, appId, appName, formName) => [
@@ -76,14 +76,15 @@ const AppServices = props => {
         navigationList={navigationList(history, appId, appName, formName)}
       />
       <Layout>
-        <Sider className={classes.appSider} theme="light" width={64}>
+        <Sider className={classes.appSider} theme="light" width={80}>
           <Menu className={classes.menuBorderNone} selectedKeys={service.key}>
             {services
               .filter(w => w)
               .map(s => (
                 <Menu.Item key={s.key} onClick={clickHandle}>
                   <Tooltip placement="right" title={s.name}>
-                    <Icon type={s.icon} style={{ fontSize: 22 }} />
+                    {/* <Icon type={s.icon} style={{ fontSize: 22 }} /> */}
+                    <img src={`/image/davinci/${s.icon}.svg`} alt="" />
                   </Tooltip>
                 </Menu.Item>
               ))}
