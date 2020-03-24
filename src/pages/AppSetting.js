@@ -230,6 +230,7 @@ export default connect(
     userDetail: login.userDetail
   }),
   {
-    setAllForms
+    setAllForms,
+    newDashboard
   }
 )(AppSetting);
