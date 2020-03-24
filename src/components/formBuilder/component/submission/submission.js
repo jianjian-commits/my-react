@@ -438,7 +438,7 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
-        console.log(values, formComponentArray);
+
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
@@ -1123,8 +1123,9 @@ class Submission extends Component {
                 this.props.actionFun(skipToSubmissionDataFlag);
               }}
               isShowExtraTitle = {false}
-              name={formComponent.name}
+              // name={formComponent.name}
               isShowBtn={false}
+              isShowExtraTitle={false}
             />
           )}
           <div className={"formBuilder-Submission"}>

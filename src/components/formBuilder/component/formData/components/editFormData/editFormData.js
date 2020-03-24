@@ -917,9 +917,9 @@ class EditFormData extends Component {
                 let skipToSubmissionDataFlag = false;
                 this.props.actionFun(skipToSubmissionDataFlag);
               }}
-              name={currentForm.name}
-              isShowBtn={false}
-              isShowExtraTitle={false}
+              // name={currentForm.name}
+              isShowBtn={ false }
+              isShowExtraTitle ={ false }
             />
           )}
           <div className={"formBuilder-Submission"}>

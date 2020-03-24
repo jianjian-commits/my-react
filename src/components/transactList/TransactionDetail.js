@@ -94,8 +94,8 @@ const EditApprovalButton = (props) =>{
   // 根据页面详情页的权限展示
   return (
       <div className={clasess.toolbarBox}>
-        <span><Icon component={EditIcon} style={{marginRight:5}}/>编辑</span> 
-        <span><Icon component={DeleteIcon} style={{marginRight:5}}/>删除</span> 
+        <span><Icon component={EditIcon} style={{marginRight:5, cursor:'pointer'}}/>编辑</span> 
+        <span><Icon component={DeleteIcon} style={{marginRight:5, cursor:'pointer'}}/>删除</span> 
       </div>
   )
 }

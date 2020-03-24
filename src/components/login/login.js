@@ -7,8 +7,8 @@ import PublicForm from "./publicForm";
 import Loading from "../../pages/Loading";
 import { loginPasswordParameter, loginPhoneParameter } from "./formItems";
 import clx from "classnames";
-import signinImg from "./style/signin.png";
-import registerImg from "./style/register.png";
+import signinImg from "./style/signin.svg";
+import registerImg from "./style/register.svg";
 import Register from "./register";
 import { Redirect } from "react-router";
 
@@ -30,7 +30,7 @@ function Registe({ params, history, setActiveKey, query }) {
   );
 }
 
-function Signin({ setActiveKey, activeKey, params, loginUser }) {
+function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
   return (
     <>
       <div>
@@ -60,6 +60,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser }) {
               params={params}
               marginBottom={20}
               setActiveKey={setActiveKey}
+              history={history}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -80,6 +81,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser }) {
               params={params}
               marginBottom={20}
               setActiveKey={setActiveKey}
+              history={history}
             />
           </Tabs.TabPane>
         </Tabs>
@@ -102,9 +104,8 @@ export default connect(
   const params = userId && teamId && token ? { userId, teamId, token } : {};
   const query = inviter && invitedTeam ? { inviter, invitedTeam } : {};
   const [activeKey, setActiveKey] = useState(active || "initSignin");
-  if (!history.location.query && isAuthenticated) {
-    return <Redirect to="/" />;
-  }
+  if (!history.location.query && isAuthenticated) return <Redirect to="/" />;
+
   return (
     <Loading spinning={isLoading}>
       <div className={Styles.background}>
@@ -125,6 +126,7 @@ export default connect(
                   setActiveKey={setActiveKey}
                   params={params}
                   loginUser={loginUser}
+                  history={history}
                 />
                 // )
               }

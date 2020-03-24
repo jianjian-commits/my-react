@@ -399,8 +399,7 @@ class FilterItem extends Component {
     return (
       <div className="filter-item">
         <Row type="flex" justify="start" gutter = { [ 0, 19]}>
-          <Col span={24}>字段</Col>
-          <Col span={24}>
+          <Col span={12}>
             <Select style={{ width: "100%" }}
               placeholder="选择字段"
               onChange={this.onSelectField}
@@ -414,11 +413,13 @@ class FilterItem extends Component {
               ))}
             </Select>
           </Col>
-          <Col span={7}>类型</Col>
-          <Col span={24}>
+          <Col span={4} className="descBox">
+            的值
+            </Col>
+          <Col span={6} className="logicSymbol">
             <Select style={{ width: "100%" }}
               key={this.state.filed.key}
-              placeholder="选择逻辑运算符"
+              placeholder="运算符"
               onChange={this.onSelectOperator}
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
@@ -430,16 +431,15 @@ class FilterItem extends Component {
               ))}
             </Select>
           </Col>
-          <Col span={7}>值</Col>
-          <Col span={24}>
+          <Col span={24} className="valueBox">
             {
               this.renderInputByFiledType(this.state.filed)
             }
           </Col>
           <Col span={24} >
             <div className="filter-action">
-              <Icon type="plus-circle" onClick={this.handleAddFilter} style={{ marginRight: "16px" }} />
-              <Icon type="minus-circle" onClick={this.handleDeleteFilter} />
+              <Icon type="plus-circle" onClick={this.handleAddFilter} style={{ marginRight: "12px" }} />
+              <Icon className ="reduceBtn"type="minus-circle" onClick={this.handleDeleteFilter} />
             </div>
           </Col>
         </Row>
@@ -605,7 +605,7 @@ export default class FilterComponent extends Component {
         <div className="filter-container">
           <div className="filter-condition">
             <Select
-              style={{ width: "150px", height: "32px" }}
+              style={{ width: "281px", height: "36px" }}
               placeholder="满足所有条件"
               onChange={this.handleSelectCondition}
               className="filter-condition-option"

@@ -3,13 +3,14 @@ import { isValueValid } from "../../../../utils/valueUtils";
 import { Form, Input, Tooltip, Icon, Drawer } from "antd";
 import { getSelection } from "../../utils/filterData";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   getResIndexArray
 } from "../../utils/dataLinkUtils";
 
-export default class multiDropDown extends React.Component {
+class MultiDropDown extends React.Component {
   constructor(props) {
     // selections 是用来存储下来列表的
     super(props);
@@ -36,7 +37,8 @@ export default class multiDropDown extends React.Component {
           linkDataId,
           linkFormId
         } = data.values;
-        getFormAllSubmission(linkFormId).then(submissions => {
+        const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
           let dataArr = filterSubmissionData(submissions, linkComponentId);
           handleSetComponentEvent(conditionId, value => {
             let indexArr = getResIndexArray(value, dataArr);
@@ -505,3 +507,4 @@ export default class multiDropDown extends React.Component {
     );
   }
 }
+export default withRouter(MultiDropDown)

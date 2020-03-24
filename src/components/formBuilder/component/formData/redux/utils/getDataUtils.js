@@ -13,33 +13,34 @@ var getSubmissionDataTotal = resp => {
     const index = contentRangeValue.indexOf("/");
     return Number(contentRangeValue.substr(index + 1));
   }else{
-    return 0;
+    return 20;
   }
 };
 
 
-const filterData = (formId, filterStr, pageSize, currentPage) => {
+const filterData = (formPath, filterStr, pageSize, currentPage,appId) => {
   let queryData = pageSize === -1 ?
-   `/form/${formId}/submission?${filterStr}` 
-   :`/form/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
+   `/${formPath}/submission?${filterStr}` 
+   :`/${formPath}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
   return instanceAxios
     .get(
       encodeURI( config.apiUrl + queryData),
       {
         headers: {
           // "X-Custom-Header": "ProcessThisImmediately",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          appid:appId
         }
       }
     )
 }
 
 
-export const getFilterSubmissionData = (formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber= -1) => dispatch => {
+export const getFilterSubmissionData = (formPath, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId) => dispatch => {
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formId, filterStr, pageSize, currentPage).then(res => {
+    filterData(formPath, filterStr, pageSize, currentPage,appId).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
         submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
@@ -61,7 +62,7 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
     });
   } else {
     axios.all(filterArray.map(filter => {
-      return filterData(formId, filter, -1, 1)
+      return filterData(formPath, filter, -1, 1)
     })).then(axios.spread((...data) => {
       const filterdata = data.map(data => data.data);
       const allSubmission = filterdata.flat();
@@ -97,38 +98,38 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
 }
 //获取提交的数据
 export const getSubmissionData = (
+  appId,
   formId,
   pageSize,
   currentPage,
   total = -1
 ) => dispatch => {
-  axios.get(config.apiUrl + `/form/${formId}`).then(res => {
+  axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
     let forms = res.data;
-    let extraProp = forms.extraProp
     instanceAxios
       .get(
         config.apiUrl +
         `/form/${formId}/submission?limit=${pageSize}&skip=${(currentPage - 1) * pageSize}&desc=createdTime`,
         {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            appid:appId
           }
         }
       )
       .then(res => {
-
         dispatch({
           type: RECEIVED_FORM_DATA,
           forms,
           submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-
+            let{ user } = item.extraProp? item.extraProp: { user :{id:"",name:""}}
             return {
               data: item.data,
               id: item.id,
               created: item.createdTime,
               modified: item.updateTime,
-              extraProp: extraProp.user
+              extraProp: user
             }
           })
         });
@@ -138,7 +139,13 @@ export const getSubmissionData = (
 
 // 获得表单数据详情
 export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => {
-  axios.get(config.apiUrl + `/form/${formId}`).then(res => {
+  axios.get(config.apiUrl + `/form/${formId}`,
+  {   
+    headers:{
+      appid:appId
+    }
+  }
+  ).then(res => {
     let currentForm = res.data;
 
     instanceAxios
@@ -146,7 +153,8 @@ export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => 
         config.apiUrl + `/submission/${submissionId}`,
         {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            appid:appId
           }
         }
       )

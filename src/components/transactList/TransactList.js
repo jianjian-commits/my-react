@@ -153,7 +153,7 @@ const TransactList = props => {
       key: "action",
       render: (text, record) => {
         return (
-          <span onClick={(e)=>{props.setEnterApprovalDetail(true); setCurrentDetailId(record.key)}}>查看</span>
+          <span style={{cursor:"pointer"}} onClick={(e)=>{props.setEnterApprovalDetail(true); setCurrentDetailId(record.key)}}>查看</span>
         );
       }
     }
@@ -177,7 +177,7 @@ const TransactList = props => {
       <div className={classes.tableTitle}>
         {_title} <span className={classes.totalNumber}>（共{transactList.length}条）</span>
       </div>
-      <Table columns={columns} dataSource={transactList}></Table>
+      <Table columns={columns} dataSource={transactList} className={classes.tableContent}></Table>
     </div>
     ):(
       <TransactionDetail 

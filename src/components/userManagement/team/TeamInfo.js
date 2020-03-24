@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Input, Row, Col, List, Button, Spin, message } from "antd";
+import { Input, Row, Col, List, Button, Spin, message, Popover } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
@@ -24,6 +24,12 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
     setDataStr(e.target.value);
   };
 
+  const content = (
+    <div>
+      {dataStr}
+    </div>
+  );
+
   return (
     <div className={classes.rowBox}>
       <Row type="flex" align="middle">
@@ -45,20 +51,22 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
             </Button>
           </Col>
         ) : (
-          <Col span={16} className={classes.text}>
-            <span> {defaultValue}</span>
-            <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
-              <Button
-                size="small"
-                type="link"
-                className={classes.edit}
-                onClick={switchRedact}
-              >
-                <Edit />
-              </Button>
-            </Authenticate>
-          </Col>
-        )}
+            <Col span={16} className={classes.text}>
+              <Popover placement="bottom" content={content}>
+                <span className={classes.overInfo}> {defaultValue}</span>
+              </Popover>
+              <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
+                <Button
+                  size="small"
+                  type="link"
+                  className={classes.edit}
+                  onClick={switchRedact}
+                >
+                  <Edit />
+                </Button>
+              </Authenticate>
+            </Col>
+          )}
       </Row>
     </div>
   );
@@ -79,15 +87,19 @@ export default connect(
     params.data[key] = changeStr;
     request(`/team`, params)
       .then(res => {
-        message.success("修改成功");
-        getCurrentTeam().then(res => {
-          if (key === "name") {
-            getAllTeam();
-          }
-        });
+        if (res && res.status === "SUCCESS") {
+          getCurrentTeam().then(res => {
+            if (key === "name") {
+              getAllTeam();
+            }
+          });
+          message.success("修改成功");
+        } else {
+          message.error(res.msg || "修改失败！");
+        }
       })
       .catch(err => {
-        message.error("修改失败");
+        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
       });
   };
 
@@ -140,6 +152,6 @@ export default connect(
       </div>
     </div>
   ) : (
-    <Spin size="large" />
-  );
+      <Spin size="large" />
+    );
 });

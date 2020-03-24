@@ -74,7 +74,7 @@ class TeamManagement extends React.Component {
           }
         >
           <span>
-            <img src={`/image/davinci/${w.icon}.png`} alt="" />
+            <img src={`/image/davinci/${w.icon}.svg`} alt="" />
             {w.label}
           </span>
         </Menu.Item>
