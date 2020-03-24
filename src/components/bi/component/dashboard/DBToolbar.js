@@ -13,42 +13,6 @@ const DBToolbar = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
   const { setFormData, setDataSource } = props;
-  let form = {};
-
-  // const newChart = () => {
-  //   const dataRes = request(`/bi/forms?appId=`, {
-  //     method: "GET",
-  //     data: {
-  //       appId
-  //     }
-  //   })
-
-  //   dataRes.then((res) => {
-  //     if(res && res.msg === 'success') {
-  //       const items = res.data.items || [];
-  //       setFormData(items);
-  //       form = items[1];
-  //       console.log(form);
-  //     }
-  //   }, () => {message.error("获取数据失败")}).then(()=> {
-  //     const res = request(`/bi/charts`, {
-  //       method: "POST",
-  //       data: {
-  //         name: "新建图表",
-  //         dashboardId,
-  //         formId: form.formId
-  //       }
-  //     }).then((res) => {
-  //       if(res && res.msg === 'success') {
-  //         const data = res.data;
-  //         const view = data.view;
-  //         const elementId = view.id;
-  //         setDataSource({id: form.formId, name: form.formName, data: view.formFields});
-  //         history.push(`/app/${form.formId}/setting/bi/${dashboardId}/${elementId}`);
-  //       }
-  //     }, () => {message.error("创建图标失败")})
-  //   })
-  // }
 
   useEffect(() => {
     const dataRes = request(`/bi/forms?appId=`, {

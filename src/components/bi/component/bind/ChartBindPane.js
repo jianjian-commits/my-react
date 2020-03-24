@@ -2,7 +2,8 @@ import React, {PureComponent} from "react";
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
-import FieldTargetSelect from "./FieldTargetSelect";
+import FieldTargetSelect from "../elements/FieldTargetSelect";
+import FieldDimension from "../elements/FieldDimension";
 import { ChartType } from '../elements/Constant';
 import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
@@ -142,8 +143,11 @@ class BindPane extends PureComponent {
 
     bindDataArr.forEach(
       (item) => {
-        if(item.bindType == bindType) {
-          components.push(<div className={cls} key={item.id}>{item.label}</div>)
+        if(item.bindType == bindType && bindType == "dim") {
+          components.push(<FieldDimension label = {item.label} className={cls} />)
+        }
+        if(item.bindType == bindType && bindType == "mea") {
+          components.push(<FieldTargetSelect label = {item.label} className={cls} />)
         }
       }
     )
