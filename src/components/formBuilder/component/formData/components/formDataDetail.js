@@ -38,15 +38,15 @@ const columns = [
 const ApprovalStatus = (props) =>{
   const { approveStatus  } = props;
   switch (approveStatus) {
-    case "通过":
-      return (<span style={{color : "#00c39c"}}>通过</span>)
+    case "已同意":
+      return (<span style={{color : "#00c39c"}}>{approveStatus}</span>)
       break;
     case "已拒绝":
-      return (<span style={{color: "red"}}>已拒绝</span>)
+      return (<span style={{color: "red"}}>{approveStatus}</span>)
     case "审批中":
-        return (<span style={{color: "#ffa439"}}>审批中</span>)
+        return (<span style={{color: "#ffa439"}}>{approveStatus}</span>)
     default:
-      return (<span >approveStatus</span>)
+   return (<span >{approveStatus}</span>)
       break;
   }
 }
@@ -118,22 +118,12 @@ class FormDataDetail extends PureComponent {
       });
   }
 
-  startApprovelBtnClick = () =>{
-    const { formDetail, currentForm, appId } = this.props;
-    const { userId, formId } = this.state
-    let fieldInfos = currentForm.components.map((component =>{
-      if(formDetail[component.key]){
-        return ({
-          name: component.key,
-          value: formDetail[component.key]
-        })
-      }
-    })).filter(item => item !== undefined)
-    let data = {
-      dataId: this.state.submissionId,
-      fieldInfos: fieldInfos
-    }
-    this.props.handleStartFlowDefinition(formId, appId, data)
+  resetData = () => {
+    this.props.getSubmissionDetail(
+      this.state.formId,
+      this.state.submissionId,
+      this.props.appId
+    );
   }
 
   _renderFileData = fileData => {
@@ -416,10 +406,6 @@ class FormDataDetail extends PureComponent {
     const { formDetail, currentForm, mobile = {}, extraProp, taskData } = this.props;
     const { userId, tabKey } = this.state;
     const editButtonOptions={detailAuthority: true};
-    const startApprovelBtnOptions={
-      isAssociateApprovalFlow: true,
-      isStartApproval: false
-    }
 
     let newCurrentComponents = currentForm.components.filter(
       item => item.type != "CustomValue"
@@ -431,24 +417,29 @@ class FormDataDetail extends PureComponent {
         break;
       case "approvelFlow":
         {
-          operations = <div className="approvalbox">审批状态：<ApprovalStatus approveStatus={taskData.status}/></div>
+          operations = taskData.status? (<div className="approvalbox">审批状态：<ApprovalStatus approveStatus={taskData.status}/></div>):(<></>)
         }
           break;
       default:
         operations = (<></>)
         break;
     }
+    let list = [];
+    if(taskData.status){
+      list = taskData.tasks.map(item =>{
+        item.key= item.approveDate
+        item.approveDate = new Date(item.approveDate).toLocaleString("chinese", { hour12: false })
+        return item;
+      });
+    }
     return (
       <div className="formDetailBox" >
         <FormDataDetailHeader
-          formId={this.state.formId}
           submissionId={this.state.submissionId}
-          actionFun={this.props.actionFun}
-          isOwnRecord={extraProp !== null ? extraProp.user.id === userId : false}
-          title={currentForm.name}
-          startApprovelBtnClick = {this.startApprovelBtnClick}
           taskData={taskData}
-          {...startApprovelBtnOptions} />
+          resetData={this.resetData}
+          {...this.props}
+          />
         <div className="formDataDetailContainer">
         <Tabs defaultActiveKey="detail" 
           className="tabsBackground"
@@ -460,13 +451,13 @@ class FormDataDetail extends PureComponent {
           </TabPane>
           {
             // 关联审批的才展示审批  taskData.tasks
-            taskData.tasks  ? (
+            taskData.status  ? (
             <TabPane tab="审批流水" key="approvelFlow">
               <Table
                 className="approveTable"
                 pagination={false}
                 columns={columns}
-                dataSource={taskData.tasks}
+                dataSource={list}
                 size="middle"
               />
             </TabPane>

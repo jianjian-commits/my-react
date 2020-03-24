@@ -151,7 +151,6 @@ export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => 
         }
       )
       .then(res => {
-        console.log("res.data", res.data)
         instanceAxios.get(
           config.apiUrl + `/flow/history/approval/${submissionId}`,{
             headers:{
@@ -189,7 +188,7 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
 };
 
 export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
-  instanceAxios({
+  return instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
     data: data,
@@ -199,11 +198,4 @@ export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
       formid: formId
     }
   })
-    .then(response => {
-  
-      console.log(response);
-    })
-    .catch(err => {
-      console.log(err)
-    });
 }
