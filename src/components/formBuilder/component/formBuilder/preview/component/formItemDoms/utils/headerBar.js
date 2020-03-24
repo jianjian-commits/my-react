@@ -1,29 +1,31 @@
 import React from "react";
 import { Tooltip } from "antd";
+import { connect } from "react-redux";
 import LabelUtils from "./LabelUtils";
 import ID from "../../../../../../utils/UUID";
 
-export default class HeaderBar extends React.Component {
+class HeaderBar extends React.Component {
   handleDestoryComponent = e => {
     this.props.onDestroy(this.props.data);
     this.props.editModeOn({ element: "clearInspector" }, e);
   };
 
   handleCopyComponent = e => {
-    const { data, editModeOn, parent, insertCard, index } = this.props;
+    const { data, editModeOn, parent, insertCard, index, forms } = this.props;
     if ((data.type === "FormChildTest")) {
       let newData = JSON.parse(JSON.stringify(data)); // 深度克隆()
-      let key = ID.uuid();
+      let key = ID.oldUuid();
+      newData.isSetAPIName = false;
       newData.id = key;
-      newData.key = key;
+      newData.key = ID.uuid(newData.type, forms);
       newData.layout.i = key;
       newData.layout.y = 0;
       if (data.values) {
         let newValues = JSON.parse(JSON.stringify(data.values));
         newValues.forEach((element, index) => {
-          let newKey = ID.uuid();
+          let newKey = ID.oldUuid();
           newValues[index].id = newKey;
-          newValues[index].key = newKey;
+          newValues[index].key = ID.uuid(newData.type, forms);
         });
         newData.values = newValues;
       }
@@ -31,9 +33,10 @@ export default class HeaderBar extends React.Component {
       editModeOn(newData, e);
     } else {
       let newData = JSON.parse(JSON.stringify(data)); // 深度克隆()
-      let key = ID.uuid();
+      let key = ID.oldUuid();
+      newData.isSetAPIName = false;
       newData.id = key;
-      newData.key = key;
+      newData.key = ID.uuid(newData.type, forms);
       newData.layout.i = key;
       newData.layout.y = 0;
       insertCard(newData, index);
@@ -72,3 +75,10 @@ export default class HeaderBar extends React.Component {
     );
   }
 }
+
+export default connect(
+  store => ({
+    forms: store.formBuilder.data,
+  })
+)(HeaderBar);
+
