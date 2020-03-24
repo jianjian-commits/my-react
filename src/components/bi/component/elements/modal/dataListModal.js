@@ -25,7 +25,7 @@ function DataListModal(props) {
   const [choiceFormId,setChoiceFormId] = useState("");
   const [choiceFormName,setChoiceFormName] = useState("");
   const history = useHistory();
-  const { appId,dashboardId } = useParams();
+  const { appId, dashboardId } = useParams();
 
   const _getFormChoice = (id,name) => {
     setChoiceFormId(id);
@@ -46,7 +46,7 @@ function DataListModal(props) {
         const view = data.view;
         const elementId = view.id;
         props.setDataSource({id:choiceFormId,name:choiceFormName,data:view.formFields});
-        history.push(`/app/${choiceFormName}/setting/bi/${dashboardId}/${elementId}`);
+        history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
       }
     }, () => {message.error("创建图标失败")})
   }

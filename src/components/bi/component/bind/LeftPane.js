@@ -69,7 +69,6 @@ export default connect((store) => {
   const state = store.bi;
 
   return {
-    dataName: state.dataName,
     dataArr: state.dataArr,
     dataSource: state.dataSource,
   }

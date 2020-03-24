@@ -1,13 +1,14 @@
 export const NEW_DASHBOARD = "NEW_DASHBOARD";
 export const NEW_ELEMENT = "NEW_ELEMENT";
 export const CHANGE_BIND = "CHANGE_BIND";
-export const SAVE_DASHBOARDS = "SAVE_DASHBOARDS";
+export const SET_DASHBOARDS = "SET_DASHBOARDS";
 export const SET_TYPE = "SET_TYPE";
 export const RENAME_DASHBOARD = "RENAME_DASHBOARD";
 export const RENAME_ELEMENT = "RENAME_ELEMENT";
 export const SET_FORM_DATA = "SET_FORM_DATA";
 export const SET_DATA_SOURCE = "SET_DATA_SOURCE";
 export const CHANGE_CHART_DATA = "CHANGE_CHART_DATA";
+export const CLEAR_BIND = "CLEAR_BIND";
 
 export const newDashboard = (dashboardId, dbName) => dispatch => {
   dispatch({
@@ -67,9 +68,21 @@ export const setDataSource = (dataSource) => dispatch => {
   })
 }
 
-export const saveDashboards = (dashboards) => dispatch => {
+export const setDashboards = (dashboards) => dispatch => {
   dispatch({
-    type: SAVE_DASHBOARDS,
+    type: SET_DASHBOARDS,
     dashboards
   })
 } 
+
+export const clearBind = (params) => dispatch => {
+console.log("====clearBind===");
+  dispatch({
+    type: CLEAR_BIND,
+    dataSource: {},
+    bindDataArr: [],
+    chartData: {},
+    dim: [],
+    mea: [],
+  })
+}

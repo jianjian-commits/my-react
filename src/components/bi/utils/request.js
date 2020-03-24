@@ -11,7 +11,7 @@ async function request(url, params = {}) {
     params: params.params || {},
     method: params.method || "GET"
   });
-console.log("=======request=======", res.data);
+
   return res.data;
 }
 

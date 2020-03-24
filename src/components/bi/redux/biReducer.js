@@ -3,12 +3,13 @@ import {
   NEW_DASHBOARD,
   NEW_ELEMENT,
   CHANGE_BIND,
-  SAVE_DASHBOARDS,
+  SET_DASHBOARDS,
   RENAME_DASHBOARD,
   RENAME_ELEMENT,
   SET_FORM_DATA,
   SET_DATA_SOURCE,
-  CHANGE_CHART_DATA
+  CHANGE_CHART_DATA,
+  CLEAR_BIND,
 } from "./action";
 
 const initState = {
@@ -17,7 +18,6 @@ const initState = {
   mea: [],
   dbName: "",
   elemName: "",
-  dataName: "",
   formDataArr: [],
   dataSource: {},
   bindDataArr: [],
@@ -45,13 +45,24 @@ export default function biReducer(state = initState, action) {
         bindDataArr: action.bindDataArr
       };
     }
+    case CLEAR_BIND: {
+      return {
+        ...state,
+        dim: action.dim,
+        mea: action.mea, 
+        bindDataArr: action.bindDataArr, 
+        dataSource: action.dataSource,
+        chartData: action.chartData,
+
+      };
+    }
     case RENAME_DASHBOARD: {
       return {
         ...state,
         dbName: action.dbName
       };
     }
-    case SAVE_DASHBOARDS: {
+    case SET_DASHBOARDS: {
       return {
         ...state,
         dashboards: action.dashboards

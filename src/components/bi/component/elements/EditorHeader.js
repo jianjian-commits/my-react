@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 import { connect } from "react-redux";
 import { Button, Icon, Modal, Tooltip, Spin } from "antd";
-import { renameElement, changeBind, saveDashboards } from '../../redux/action';
+import { renameElement, changeBind, setDashboards, clearBind } from '../../redux/action';
 import request from '../../utils/request';
 import { ChartType } from '../elements/Constant';
 import { getChartAttrs } from '../../utils/ChartUtil';
@@ -11,17 +11,12 @@ import { useParams, useHistory } from "react-router-dom";
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, renameElement, bindDataArr, saveDashboards } = props;
+  const { elemName, renameElement, bindDataArr, setDashboards } = props;
 
   const handleBack = () => {
-    const { dbChanged, changeBind } = props;
-
-    if (!dbChanged) {
-      changeBind([]);
-      history.push(`/app/${appId}/setting/bi/${dashboardId}`);
-    } else {
-      // @temp len, show modal dialog
-    }
+    const { clearBind } = props;
+    clearBind();
+    history.push(`/app/${appId}/setting/bi/${dashboardId}`);
   }
 
   const handleSave = () => {
@@ -55,8 +50,8 @@ const EditorHeader = props => {
         request(`/bi/charts?dashboardId=${dashboardId}`).then((res) => {
           if(res && res.msg === "success") {
             const dataObj = res.data;
-            saveDashboards([{...dataObj.items}]);
-            history.push(`/app/${appId}/setting/bi/${dashboardId}`)
+            setDashboards([{...dataObj.items}]);
+            // history.push(`/app/${appId}/setting/bi/${dashboardId}`)
           }
         });
       }
@@ -87,5 +82,5 @@ export default connect(
     elemName: store.bi.elemName,
     bindDataArr: store.bi.bindDataArr
   }),
-  { renameElement, changeBind, saveDashboards }
+  { renameElement, changeBind, setDashboards, clearBind }
 )(EditorHeader);

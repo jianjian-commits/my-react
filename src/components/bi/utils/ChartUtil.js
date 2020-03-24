@@ -7,17 +7,29 @@ export const getOption = (xaxisList) => {
     return {};
   }
 
-  const xTitle = legend.dimensionName;
-  const yTitle = "COUNT";
   const source = [];
   const series = [];
-  const title = [xTitle, yTitle]
-  source.push(title);
-  const itemArr = legend.items;
 
-  itemArr.forEach((item) => {
-    series.push({type: 'bar'});
-    source.push([item.legend.legendName, item.count]);
+  xaxisList.forEach((each, idx) => {
+    let row = [];
+    let title = [];
+    const items = each.items;
+
+    if(idx == 0) {
+      title.push("名称");
+      items.forEach((item)=> {
+        title.push(item.legend.legendName);
+        series.push({type: 'bar'});
+      })
+      source.push(title);
+    }
+
+    row.push(each.dimensionName);
+    items.forEach((item)=> {
+      row.push(item.count);
+    })
+
+    source.push(row);
   });
 
   return  {
@@ -67,11 +79,11 @@ export const getOption2 = () => {
   return  {
     dataset: {
       source: [
-          ['product', '2015', '2016', '2017'],
-          ['Matcha Latte', 43.3, 85.8, 93.7],
-          ['Milk Tea', 83.1, 73.4, 55.1],
-          ['Cheese Cocoa', 86.4, 65.2, 82.5],
-          ['Walnut Brownie', 72.4, 53.9, 39.1]
+          ['product', '性别', '数量'],
+          ['Matcha Latte', "男", 85.8],
+          ['Milk Tea', "女", 73.4],
+          ['Cheese Cocoa', "男", 65.2],
+          ['Walnut Brownie', "女", 53.9]
       ]
     },
     legend: {},

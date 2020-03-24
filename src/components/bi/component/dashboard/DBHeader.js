@@ -1,18 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Icon, Button } from "antd";
-import { renameDashboard } from '../../redux/action';
+import { renameDashboard, setDashboards } from '../../redux/action';
 import "../../scss/dashboard.scss";
 import request from '../../utils/request';
 import { useParams, useHistory } from "react-router-dom";
 
-    
 const DBHeader = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
-  const { renameDashboard, dbName } = props;
+  const { renameDashboard, dbName, setDashboards } = props;
 
   const handleBack = () => {
+    setDashboards([]);
     history.push(`/app/${appId}/setting`);
   }
 
@@ -48,5 +48,5 @@ const DBHeader = props => {
 
 export default connect(
   store => ({ dbName: store.bi.dbName }),
-  { renameDashboard }
+  { renameDashboard, setDashboards }
 )(DBHeader);
