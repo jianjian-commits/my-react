@@ -24,7 +24,8 @@ class DropDown extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     let { values, type } = data;
-    console.log("values", values);
+    // console.log("values", values);
+    const {appId} = this.props.match.params;
     // 数据联动请看单行文本组件
     if (data && data.type === "DataLinkage") {
       const {
@@ -33,7 +34,6 @@ class DropDown extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -100,7 +100,7 @@ class DropDown extends React.Component {
       // 通过表单id和字段id过滤对应的提交数据
       // 将过滤的数据作为该表单的选项
       console.log("values", values);
-      getSelection(values.formId, values.optionId).then(res => {
+      getSelection(appId, values.formId, values.optionId).then(res => {
         this.setState({
           selections: res
         });

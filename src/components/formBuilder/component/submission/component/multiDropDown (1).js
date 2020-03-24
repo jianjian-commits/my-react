@@ -24,6 +24,7 @@ class MultiDropDown extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     let { values, type } = data;
+    const {appId} = this.props.match.params;
     if (data && data.type === "DataLinkage") {
       const {
         conditionId,
@@ -31,7 +32,6 @@ class MultiDropDown extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -87,7 +87,7 @@ class MultiDropDown extends React.Component {
         });
       });
     } else if (type === "otherFormData") {
-      getSelection(values.formId, values.optionId).then(res => {
+      getSelection(appId, values.formId, values.optionId).then(res => {
         this.setState({
           selections: res
         });

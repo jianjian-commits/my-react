@@ -27,6 +27,7 @@ class MultiDropDown extends React.Component {
     // 根据 type 决定渲染的数据来源
     const { form, item, handleSetComponentEvent, initData } = this.props;
     const { data } = item;
+    const {appId} = this.props.match.params;
     // 数据联动请看单行文本组件
     if (data && data.values) {
       let { values, type } = data;
@@ -37,7 +38,6 @@ class MultiDropDown extends React.Component {
           linkDataId,
           linkFormId
         } = data.values;
-        const {appId} = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
           let dataArr = filterSubmissionData(submissions, linkComponentId);
           handleSetComponentEvent(conditionId, value => {
@@ -101,7 +101,7 @@ class MultiDropDown extends React.Component {
         // 关联其他数据
         // 通过表单id和字段id过滤对应的提交数据
         // 将过滤的数据作为该表单的选项
-        getSelection(values.formId, values.optionId).then(res => {
+        getSelection(appId, values.formId, values.optionId).then(res => {
           this.setState({
             selections: this.filterUniqueSelections(res),
             setValue: [],
@@ -151,7 +151,7 @@ class MultiDropDown extends React.Component {
       let dropDownOptions = [];
       let values = item.values;
       if (values.type == "otherFormData") {
-        getSelection(values.formId, values.optionId).then(res => {
+        getSelection(appId, values.formId, values.optionId).then(res => {
           this.setState({
             selections: this.filterUniqueSelections(res),
           });
