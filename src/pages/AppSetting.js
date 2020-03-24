@@ -36,9 +36,7 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  // console.log( props )
   const [user, setUser] = React.useState({})
-
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {

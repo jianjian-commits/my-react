@@ -8,6 +8,7 @@ import { ChartType } from '../elements/Constant';
 import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
+import { getChartAttrs } from '../../utils/ChartUtil';
 import './bind.scss';
 
 /**
@@ -38,32 +39,13 @@ const spec = {
 
     const { bindDataArr, dataSource, changeBind, changeChartData, dashboardId, elementId } = props;
     const dropDim = component.getType() == Types.DIMENSION;
-    let dimensions = [], indexes = [];
 
     if(dropDim && (item.bindType == Types.DIMENSION) || (!dropDim && (item.bindType == Types.MEASURE))) {
       bindDataArr.push(item);
     }
 
-    const currentGroup = { name: "", value: "COUNT" };
-    const groups = [{ name: "", value: "COUNT" }];
-    const sort = { id: "", value: "DEFAULT" };
-    const conditions = [];
+    const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
 
-    bindDataArr.forEach((each) => {
-      const field = Object.assign({}, each);
-      delete field.bindType;
-
-      switch(each.bindType) {
-        case Types.DIMENSION:
-          dimensions.push({field, currentGroup, groups, sort});
-          break;
-        case Types.MEASURE:
-          indexes.push({currentGroup: {name: "求和", value: "SUM"}, field, groups, sort});
-          break;
-        default:
-          console.log("wrong type!")
-      }
-    })
     const res = request(`/bi/charts/data`, {
       method: "POST",
       data: {
@@ -100,19 +82,6 @@ function collect(connect, monitor) {
     itemType: monitor.getItemType(),
     item: monitor.getItem()
   }
-}
-
-const getItems = (arr, type) => {
-  arr = arr ? arr : [];
-  let cls = "bind-child-" + type;
-
-  return arr.map(
-    (text) => {
-      return type == "dim" ?
-      <div className={cls} key={text}>{text}</div>:
-      <FieldTargetSelect label = {text} className={cls} key={text}/> 
-    }
-  )
 }
 
 class BindPane extends PureComponent {

@@ -2,17 +2,16 @@ import React, {Fragment, useState,useEffect} from "react";
 import { connect } from "react-redux";
 import { Button, Icon, Modal, Tooltip, Spin, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
-import DataListModal from "../elements/modal/dataListModal";
-    
 import request from '../../utils/request';
 import { setFormData, setDataSource } from '../../redux/action';
-import { ChartType } from '../elements/Constant';
+import DataListModal from "../elements/modal/dataListModal";
 import "../../scss/dashboard.scss";
 
 const DBToolbar = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
   const { setFormData, setDataSource } = props;
+  let form = {};
 
   useEffect(() => {
     const dataRes = request(`/bi/forms?appId=`, {
@@ -21,6 +20,7 @@ const DBToolbar = props => {
         appId
       }
     })
+
     dataRes.then((res) => {
       if(res && res.msg === 'success') {
         const items = res.data.items || [];
@@ -45,7 +45,7 @@ const DBToolbar = props => {
 
   return (
     <div className="db-toolbar">
-      <DataListModal key={Math.random()} {...modalProps} url={`/app/${appId}/setting/bi/weichuangtong/chart`}/>
+      <DataListModal key={Math.random()} {...modalProps} url={`/app/${appId}/setting/bi/${dashboardId}/chart`}/>
       <Icon
         type="plus-circle"
         className="new-chart-icon"

@@ -1,16 +1,17 @@
 import React, {Fragment} from "react";
 import { connect } from "react-redux";
 import { Button, Icon, Modal, Tooltip, Spin } from "antd";
-import { renameElement, changeBind } from '../../redux/action';
+import { renameElement, changeBind, saveDashboards } from '../../redux/action';
 import request from '../../utils/request';
 import { ChartType } from '../elements/Constant';
+import { getChartAttrs } from '../../utils/ChartUtil';
 import "./element.scss";
 import { useParams, useHistory } from "react-router-dom";
 
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, renameElement } = props;
+  const { elemName, renameElement, bindDataArr, saveDashboards } = props;
 
   const handleBack = () => {
     const { dbChanged, changeBind } = props;
@@ -24,20 +25,42 @@ const EditorHeader = props => {
   }
 
   const handleSave = () => {
-    const res = request(`/bi/charts/${elementId}`, {
-      method: "POST",
+    const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+    request(`/bi/charts/${elementId}`, {
+      method: "PUT",
       data: {
-        dashboardId,
-        elementId,
-        chartType: ChartType.Bar,
-        // data,
+        view: {
+          conditions,
+          dimensions,
+          formFields: [
+            {
+              id: "string",
+              label: "string",
+              type: "string"
+            }
+          ],
+          indexes,
+          name: "sdsdds",
+          supportChartTypes: [
+            {
+              "metadataId": "string",
+              "status": "SUCCESS"
+            }
+          ],
+          type: ChartType.HISTOGRAM
+        }
       }
-    });
-
-    history.push(`/app/${appId}/setting/bi/${dashboardId}`);
-    // history.push(`/app/${appId}/setting/bi/weichuangtong`);
-
-    // request post.
+    }).then((res) => {
+      if(res && res.msg === "success") {
+        request(`/bi/charts?dashboardId=${dashboardId}`).then((res) => {
+          if(res && res.msg === "success") {
+            const dataObj = res.data;
+            saveDashboards([{...dataObj.items}]);
+            history.push(`/app/${appId}/setting/bi/${dashboardId}`)
+          }
+        });
+      }
+    })
   }
 
   const onBlur = (e) => {
@@ -60,6 +83,9 @@ const EditorHeader = props => {
 }
 
 export default connect(
-  store => ({ elemName: store.bi.elemName }),
-  { renameElement, changeBind }
+  store => ({
+    elemName: store.bi.elemName,
+    bindDataArr: store.bi.bindDataArr
+  }),
+  { renameElement, changeBind, saveDashboards }
 )(EditorHeader);
