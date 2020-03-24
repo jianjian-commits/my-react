@@ -16,21 +16,28 @@ class DBEditor extends React.PureComponent {
     super(props);
   }
 
-  getElements = (dataArr) => {
-    dataArr = dataArr ? dataArr : ['a', 'b','c', 'd', 'e', 'f', 'g'];
-    const len = dataArr.length;
+  getElements = (dashboards) => {
+    const elements = dashboards[0];
+    const keys = Object.keys(elements);
+    const len = keys.length;
+
+    if(len == 0) {
+      return null;
+    }
+
     let elems = [];
     const rows = [];
-
-    dataArr.forEach((item, idx) => {
+    keys.forEach((item, idx) => {
+      const chartData = elements[item].data.xaxisList;
+ 
       if(idx % 2 == 0) {
-        elems.push(<ChartContainer key={item}/>);
+        elems.push(<ChartContainer key={item} chartData={chartData}/>);
 
         if(idx == len - 1) {
           rows.push(<Column children={elems} key={item}/>);
         }
       } else {
-        elems.push(<ChartContainer key={item}/>);
+        elems.push(<ChartContainer key={item} chartData={chartData}/>);
         rows.push(<Column children={elems} key={item}/>);
         elems = [];
       }
@@ -40,33 +47,30 @@ class DBEditor extends React.PureComponent {
   }
 
   render() {
-    const { dashboardId, dataArr, height } = this.props;
+    const { dataArr, height, dashboards } = this.props;
 
-    // if(!dashboardId) {
-    //   return (
-    //     <Fragment>
-    //       <div className="db-placeholder" style={{height}}>
-    //         <div>点击新建图表创建仪表盘</div>
-    //       </div>
-    //     </Fragment>
-    //   )
-    // }
+    if(!dashboards || dashboards.length == 0) {
+      return (
+        <Fragment>
+          <div className="db-placeholder" style={{height}}>
+            <div>点击新建图表创建仪表盘</div>
+          </div>
+        </Fragment>
+      )
+    }
 
     return (
       <Fragment>
-        <div className="db-editor">
-          {this.getElements(dataArr)}
+        <div className="db-editor" style={{height}}>
+          {this.getElements(dashboards)}
         </div>
       </Fragment>
     )
-
-    return (<div/>);
   }
 }
 
 export default connect(
   store => ({
-  }),
-  {
-  }
-)(DBEditor);
+    dashboards: store.bi.dashboards}),
+    {}
+  )(DBEditor);

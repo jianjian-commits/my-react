@@ -1,3 +1,3 @@
 export const ChartType = {
-  Bar: "bar"
+  HISTOGRAM: "HISTOGRAM"
 }

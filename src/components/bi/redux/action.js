@@ -1,8 +1,7 @@
 export const NEW_DASHBOARD = "NEW_DASHBOARD";
 export const NEW_ELEMENT = "NEW_ELEMENT";
 export const CHANGE_BIND = "CHANGE_BIND";
-export const SAVE_DASHBOARD = "SAVE_DASHBOARD";
-export const SAVE_ELEMENT = "SAVE_ELEMENT";
+export const SAVE_DASHBOARDS = "SAVE_DASHBOARDS";
 export const SET_TYPE = "SET_TYPE";
 export const RENAME_DASHBOARD = "RENAME_DASHBOARD";
 export const RENAME_ELEMENT = "RENAME_ELEMENT";
@@ -67,3 +66,10 @@ export const setDataSource = (dataSource) => dispatch => {
     dataSource
   })
 }
+
+export const saveDashboards = (dashboards) => dispatch => {
+  dispatch({
+    type: SAVE_DASHBOARDS,
+    dashboards
+  })
+} 

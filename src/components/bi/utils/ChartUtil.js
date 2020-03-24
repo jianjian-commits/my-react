@@ -1,9 +1,12 @@
+import { Types } from '../component/bind/Types';
+
 export const getOption = (xaxisList) => {
   const legend = xaxisList[0];
 
   if(!legend) {
     return {};
   }
+
   const xTitle = legend.dimensionName;
   const yTitle = "COUNT";
   const source = [];
@@ -27,6 +30,37 @@ export const getOption = (xaxisList) => {
     yAxis: {},
     series
   } 
+}
+
+
+/**
+ * Get chart attributes for req.
+ */
+export const getChartAttrs = (bindDataArr) => {
+  bindDataArr = bindDataArr || [];
+  let dimensions = [], indexes = [];
+  const currentGroup = { name: "", value: "COUNT" };
+  const groups = [{ name: "", value: "COUNT" }];
+  const sort = { fieldId: "", value: "DEFAULT" };
+  const conditions = [];
+
+  bindDataArr.forEach((each) => {
+    const field = Object.assign({}, each);
+    delete field.bindType;
+
+    switch(each.bindType) {
+      case Types.DIMENSION:
+        dimensions.push({ field, currentGroup, groups, sort });
+        break;
+      case Types.MEASURE:
+        indexes.push({ currentGroup: {name: "求和", value: "SUM"}, field, groups, sort });
+        break;
+      default:
+        console.log("wrong type!");
+    }
+  })
+
+  return { dimensions, indexes, conditions };
 }
 
 export const getOption2 = () => {

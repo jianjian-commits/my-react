@@ -13,6 +13,7 @@ class ElementEditor extends React.PureComponent {
   }
 
   render() {
+    const { chartData } = this.props;
     return (
       <Layout>
         <EditorHeader/>
@@ -23,7 +24,7 @@ class ElementEditor extends React.PureComponent {
             </Sider>
             <Content className={classes.container}>
               <ChartBindPane/>
-              <ChartContainer />
+              <ChartContainer chartData={chartData}/>
             </Content>
             <Sider style={{ background: "#fff" }}>
               <RightPane/>
@@ -36,5 +37,6 @@ class ElementEditor extends React.PureComponent {
 }
 
 export default connect(store => ({
-  dataSource: store.bi.dataSource
+  dataSource: store.bi.dataSource,
+  chartData: store.bi.chartData
 }),{})(ElementEditor);

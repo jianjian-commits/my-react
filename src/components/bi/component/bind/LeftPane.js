@@ -40,6 +40,7 @@ class LeftPane extends PureComponent {
 
   render() {
     const { dataSource } = this.props;
+
     return (
       <div className="left-pane">
         <div className="left-pane-data">

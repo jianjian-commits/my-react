@@ -14,19 +14,13 @@ const DBToolbar = props => {
   let form = {};
 
   const newChart = () => {
-    const dataRes = request(`/bi/forms?appId=`, {
-      method: "GET",
-      data: {
-        appId
-      }
-    })
+    const dataRes = request(`/bi/forms?appId=${appId}`);
 
     dataRes.then((res) => {
       if(res && res.msg === 'success') {
         const items = res.data.items || [];
         setFormData(items);
         form = items[1];
-        console.log(form);
       }
     }, () => {message.error("获取数据失败")}).then(()=> {
       const res = request(`/bi/charts`, {
@@ -42,9 +36,9 @@ const DBToolbar = props => {
           const view = data.view;
           const elementId = view.id;
           setDataSource({id: form.formId, name: form.formName, data: view.formFields});
-          history.push(`/app/${form.formId}/setting/bi/${dashboardId}/${elementId}`);
+          history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
         }
-      }, () => {message.error("创建图标失败")})
+      }, () => {message.error("创建图表失败")})
     })
   }
 
@@ -70,7 +64,7 @@ const DBToolbar = props => {
         className="new-chart-icon"
         onClick={newChart}
       />
-      <div className="new-chart" onClick={modalProps.showModal}>新建图表</div>
+      {/* <div className="new-chart" onClick={modalProps.showModal}>新建图表</div> */}
     </div>
   )
 }
