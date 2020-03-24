@@ -33,10 +33,13 @@ const SubmitTransactList = props => {
         }
       });
       if (res && res.status === "SUCCESS") {
-        console.log("res.data", res.data)
           const { total, currentPage, pageSize, datas } = res.data;
-          // const list = datas.map(item => item.key=String(Math.random()));
-          setTransactList(datas);
+          const list = datas.map(item =>{
+            item.key= item.submitDate
+            item.submitDate = new Date(item.submitDate).toLocaleString("chinese", { hour12: false })
+            return item;
+          });
+          setTransactList(list);
           setApprovalKey(approvalKey);
           setTotal(total);
           setPageSize(pageSize);
@@ -108,8 +111,6 @@ const SubmitTransactList = props => {
     getTransactList(current, pageSize);
   };
 
-  console.log("transactList", transactList);
-  console.log("transactList.legnth", transactList.length);
   return (
     props.enterApprovalDetail === false ?(
       <div className={classes.tableBox}>
@@ -119,7 +120,6 @@ const SubmitTransactList = props => {
       <Table 
         columns={columns} 
         dataSource={transactList} 
-        // rowKey="dataId"
         pagination={paginationProps}
         ></Table>
     </div>
@@ -129,6 +129,9 @@ const SubmitTransactList = props => {
         dataId={currentDetailId}
         appId={appId}
         actionFun={props.actionFun}
+        fn = {props.fn}
+        approvalKey={props.approvalKey}
+        enterPort={"TransctionList"}
       />
     )
     

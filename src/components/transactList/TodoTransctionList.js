@@ -33,9 +33,13 @@ const TodoTransactList = props => {
         }
       });
       if (res && res.status === "SUCCESS") {
-        console.log("res.data", res.data)
           const { total, currentPage, pageSize, datas } = res.data;
-          setTransactList(datas);
+          const list = datas.map(item =>{
+            item.key= item.submitDate
+            item.submitDate = new Date(item.submitDate).toLocaleString("chinese", { hour12: false })
+            return item;
+          });
+          setTransactList(list);
           setApprovalKey(approvalKey);
           setTotal(total);
           setPageSize(pageSize);
@@ -126,6 +130,9 @@ const TodoTransactList = props => {
         dataId={currentDetailId}
         appId={appId}
         actionFun={props.actionFun}
+        fn = {props.fn}
+        approvalKey={props.approvalKey}
+        enterPort={"TransctionList"}
       />
     )
     
