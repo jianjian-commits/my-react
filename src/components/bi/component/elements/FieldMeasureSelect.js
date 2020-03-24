@@ -26,7 +26,7 @@ export default function FieldMeasureSelect(props) {
       })
   }
 
-  const fieldOperationArr = creatFieldOperationArr(props.label);
+  const fieldOperationArr = creatFieldOperationArr(props.item.label);
 
   const style = {
     fontSize: 12,
@@ -38,7 +38,7 @@ export default function FieldMeasureSelect(props) {
   }
 
   const handleDeleteTarget = () => {
-    console.log("你删除了这个指标");
+    props.removeField(props.item);
   }
   
   return (

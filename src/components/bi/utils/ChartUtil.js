@@ -51,9 +51,9 @@ export const getOption = (xaxisList) => {
 export const getChartAttrs = (bindDataArr) => {
   bindDataArr = bindDataArr || [];
   let dimensions = [], indexes = [];
-  const currentGroup = { name: "", value: "COUNT" };
+  const currentGroup = { name: "", value: "SUM" };
   const groups = [{ name: "", value: "COUNT" }];
-  const sort = { fieldId: "", value: "DEFAULT" };
+  const sort = { fieldId: "", value: "DESC" };
   const conditions = [];
 
   bindDataArr.forEach((each) => {

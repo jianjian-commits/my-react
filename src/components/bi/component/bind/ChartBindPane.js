@@ -44,30 +44,29 @@ const spec = {
       bindDataArr.push(item);
     }
 
-    const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+    processBind(bindDataArr, dataSource.id, changeBind, changeChartData);
+  }
+}
 
+function processBind(bindDataArr, formId, changeBind, changeChartData) {
+  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
     const res = request(`/bi/charts/data`, {
       method: "POST",
       data: {
-        formId: dataSource.id,
+        formId,
         dimensions,
         indexes,
         conditions
-}
+      }
     }).then((res) => {
       if(res && res.msg === "success") {
         const dataObj = res.data;
         const data = dataObj.data;
-
-        if(data) {
-          const xaxisList = data.xaxisList;
-          changeChartData(xaxisList);
-        }
+        changeChartData(data ? data.xaxisList: null);
       }
     })
 
     changeBind(bindDataArr);
-  }
 }
 
 /**
@@ -90,7 +89,7 @@ class BindPane extends PureComponent {
   }
 
   render() {
-    const { col, label, bindType, connectDropTarget } = this.props;
+    const { label, bindType, connectDropTarget } = this.props;
 
     return connectDropTarget(
       <div className="bind-line" key={label}>
@@ -104,6 +103,16 @@ class BindPane extends PureComponent {
     return this.props.bindType;
   }
 
+  removeField = (item) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+
+    const newArr = bindDataArr.filter((each)=>{
+      return item.id != each.id;
+    })
+
+    processBind(newArr, dataSource.id, changeBind, changeChartData);
+  }
+
   getItems = (bindType) => {
     let { bindDataArr } = this.props;
     bindDataArr = bindDataArr || [];
@@ -113,10 +122,10 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (item) => {
         if(item.bindType == bindType && bindType == "dim") {
-          components.push(<FieldDimension label = {item.label} key={item.label} className={cls} />)
+          components.push(<FieldDimension item = {item} removeField={this.removeField} key={item.label} className={cls} />)
         }
         if(item.bindType == bindType && bindType == "mea") {
-          components.push(<FieldMeasureSelect label = {item.label} key={item.label} className={cls} />)
+          components.push(<FieldMeasureSelect item = {item} removeField={this.removeField} key={item.label} className={cls} />)
         }
       }
     )

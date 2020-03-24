@@ -2,17 +2,15 @@ import React from "react";
 import { Icon } from "antd";
 
 export default function FieldDimension(props) {
-
-
   const handleDeleteDimension = () => {
-    console.log("你删除了这个维度");
+    props.removeField(props.item);
   };
 
-  const { className, label } = props;
+  const { className, item } = props;
   return(
   <div className={className}>
     <Icon type="close-circle" onClick={handleDeleteDimension} theme="filled" />
-    {label}
+    {item.label}
   </div>
   )
 }
