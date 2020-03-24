@@ -36,18 +36,17 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  const [user, setUser] = React.useState({});
+  const [user, setUser] = React.useState({})
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
     let newList = [];
     let { id, name } = props.userDetail;
 
-    setUser(JSON.parse(localStorage.getItem("userDetail")));
+    setUser({ user: { id, name } })
     // let extraProp = { user: { id: user.id, name: user.name } }
 
     getFormsAll(appId, true).then(res => {
-
       newList = res.map(item => ({
         key: item.id,
         name: item.name,

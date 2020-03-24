@@ -2,12 +2,12 @@ import React, {PureComponent} from "react";
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
+import FieldTargetSelect from "./FieldTargetSelect";
 import { ChartType } from '../elements/Constant';
 import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
-import FieldTargetSelect from "./FieldTargetSelect";
 import './bind.scss';
 
 /**
