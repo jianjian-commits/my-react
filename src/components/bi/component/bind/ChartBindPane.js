@@ -113,10 +113,10 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (item) => {
         if(item.bindType == bindType && bindType == "dim") {
-          components.push(<FieldDimension label = {item.label} className={cls} />)
+          components.push(<FieldDimension label = {item.label} key={item.label} className={cls} />)
         }
         if(item.bindType == bindType && bindType == "mea") {
-          components.push(<FieldTargetSelect label = {item.label} className={cls} />)
+          components.push(<FieldTargetSelect label = {item.label} key={item.label} className={cls} />)
         }
       }
     )
