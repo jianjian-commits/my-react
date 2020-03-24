@@ -22,12 +22,7 @@ class NavBar extends PureComponent {
     // 提交权限
     const { permissions, teamId, match, formId } = this.props;
     const { appId } = match.params;
-    const isSubmitAuth = submitFormDataAuth(
-      permissions,
-      teamId,
-      appId,
-      formId
-    );
+    const isSubmitAuth = submitFormDataAuth(permissions, teamId, appId, formId);
 
     return (
       <div className="formBuilder-NavBar">
@@ -49,11 +44,18 @@ class NavBar extends PureComponent {
           <div className="headerBarExtraTitle">
             <span> 显示字段 </span>
             <span onClick={clickExtendCallBack}> 筛选条件 </span>
+            {isShowBtn === true && isSubmitAuth ? (
+              <Button className="headerBarButton" type="primary" onClick={() => clickCallback()}>
+                {btnValue}
+              </Button>
+            ) : (
+              <></>
+            )}
           </div>
         ) : (
           <></>
         )}
-        <div className="headerBarButton">
+        {/* <div className="headerBarButton">
           {isShowBtn === true && isSubmitAuth ? (
             <Button type="primary" onClick={() => clickCallback()}>
               {btnValue}
@@ -61,7 +63,7 @@ class NavBar extends PureComponent {
           ) : (
             <></>
           )}
-        </div>
+        </div> */}
       </div>
     );
   }

@@ -4,11 +4,8 @@ import { connect } from "react-redux";
 import {
   ConfigProvider,
   Table,
-  Divider,
-  Select,
   Input,
   Button,
-  InputNumber,
   Menu,
   Dropdown,
   Icon,
@@ -40,7 +37,7 @@ class FormSubmitData extends PureComponent {
       openDataIdList: [],
       submissionArray: [],
       sortedInfo: null,
-      formId: "sWw",
+      formId: props.formId,
       submissionId: null,
       currentPage: 1,
       pageSize: 10,
@@ -91,7 +88,7 @@ class FormSubmitData extends PureComponent {
       () => {
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -110,7 +107,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -485,7 +482,7 @@ class FormSubmitData extends PureComponent {
         this.onChangePages(this.state.currentPage, this.state.pageSize);
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.showNumber,
@@ -502,7 +499,7 @@ class FormSubmitData extends PureComponent {
           );
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData(
-            this.state.formId,
+            this.props.forms.path,
             this.state.filterArray,
             this.state.connectCondition,
             this.state.pageSize,
@@ -615,6 +612,7 @@ class FormSubmitData extends PureComponent {
         render: (id, record) => {
           return (
             <ControlBtn
+              appId={this.props.appId}
               formId={this.state.formId}
               submissionId={record.id}
               userId={record.userId}
@@ -624,7 +622,6 @@ class FormSubmitData extends PureComponent {
               getSubmissionDetail={this.props.getSubmissionDetail}
               setSubmissionId={this.props.actionFun}
               showformDataDetail={this.showformDataDetail}
-              // actionFun2={this.props.actionFun2}
               appId = { this.props.appId}
             />
           );
@@ -857,9 +854,7 @@ class FormSubmitData extends PureComponent {
             id={this.props.formId}
             dataId={this.state.formDataDetailId}
             appId={this.props.appId}
-            showformDataDetail={this.showformDataDetail}
             actionFun={this.props.actionFun}
-            handleDeleteSubmisson={this.handleDeleteSubmisson}
           />
         ) : (
           <>
@@ -870,7 +865,7 @@ class FormSubmitData extends PureComponent {
                 }}
                 name={this.props.forms.name}
                 isShowBtn={true}
-                isShowBackBtn={true}
+                isShowBackBtn={false}
                 btnValue="提交数据"
                 formId={this.props.formId}
                 clickCallback={()=>{this.props.actionFun(null ,true)}}

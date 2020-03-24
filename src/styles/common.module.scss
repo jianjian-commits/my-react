@@ -20,6 +20,11 @@
       left: 0;
       height: 100%;
     }
+    img {
+      position: relative;
+      left: -80px;
+      filter: drop-shadow(#1890ff 80px 0);
+    }
   }
   span {
     color: #333;

@@ -18,10 +18,10 @@ var getSubmissionDataTotal = resp => {
 };
 
 
-const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
+const filterData = (formPath, filterStr, pageSize, currentPage,appId) => {
   let queryData = pageSize === -1 ?
-   `/${formId}/submission?${filterStr}` 
-   :`/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
+   `/${formPath}/submission?${filterStr}` 
+   :`/${formPath}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
   return instanceAxios
     .get(
       encodeURI( config.apiUrl + queryData),
@@ -36,14 +36,14 @@ const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
 }
 
 
-export const getFilterSubmissionData = (formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId) => dispatch => {
+export const getFilterSubmissionData = (formPath, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId) => dispatch => {
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formId, filterStr, pageSize, currentPage,appId).then(res => {
+    filterData(formPath, filterStr, pageSize, currentPage,appId).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal: getSubmissionDataTotal(res) ,
+        submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
           let extraProp = item.extraProp
           return {
@@ -62,7 +62,7 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
     });
   } else {
     axios.all(filterArray.map(filter => {
-      return filterData(formId, filter, -1, 1)
+      return filterData(formPath, filter, -1, 1)
     })).then(axios.spread((...data) => {
       const filterdata = data.map(data => data.data);
       const allSubmission = filterdata.flat();
@@ -123,7 +123,7 @@ export const getSubmissionData = (
           forms,
           submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-            let{ user } = item.extraProp
+            let{ user } = item.extraProp? item.extraProp: { user :{id:"",name:""}}
             return {
               data: item.data,
               id: item.id,
@@ -138,11 +138,12 @@ export const getSubmissionData = (
 };
 
 // 获得表单数据详情
-export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
+export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => {
   axios.get(config.apiUrl + `/form/${formId}`,
-  {   headers:{
+  {   
+    headers:{
       appid:appId
-  }
+    }
   }
   ).then(res => {
     let currentForm = res.data;
@@ -158,13 +159,21 @@ export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
         }
       )
       .then(res => {
-        // console.log("res.data", res.data)
-        dispatch({
-          type: RECEIVED_FORM_DETAIL,
-          forms: currentForm,
-          formDetail: res.data.data,
-          extraProp: res.data.extraProp
-        });
+        instanceAxios.get(
+          config.apiUrl + `/flow/history/approval/${submissionId}`,{
+            headers:{
+              appid:appId
+            }
+          }
+        ).then(response =>{
+            dispatch({
+              type: RECEIVED_FORM_DETAIL,
+              forms: currentForm,
+              formDetail: res.data.data,
+              extraProp: res.data.extraProp,
+              taskData: response.data.data
+            });
+        })
       });
   });
 };
@@ -186,22 +195,15 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
   });
 };
 
-export const handleStartFlowDefinition = (userId, appId, data) => dispatch =>{
-  // console.log("handleStartFlowDefinition")
-  instanceAxios({
+export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
+  return instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
     data: data,
     headers: {
       "Content-Type": "application/json",
-      appid: appId
+      appid: appId,
+      formid: formId
     }
   })
-    .then(response => {
-  
-      console.log(response);
-    })
-    .catch(err => {
-      console.log(err)
-    });
 }
