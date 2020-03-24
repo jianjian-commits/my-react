@@ -96,7 +96,7 @@ const TransactList = props => {
     props.enterApprovalDetail === false ?(
       <div className={classes.tableBox}>
       <div className={classes.tableTitle}>
-        {_title}（共{data.length}条）
+        {_title} <span className={classes.totalNumber}>（共{data.length}条）</span>
       </div>
       <Table columns={columns} dataSource={data}></Table>
     </div>

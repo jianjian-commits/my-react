@@ -36,7 +36,6 @@ export default class NavBar extends PureComponent {
                 <div className="headerBarButton">
                     {isShowBtn === true ?
                         <Button type="primary" onClick={() => clickCallback()}>
-                            <Icon type="plus"></Icon>
                             {btnValue}
                         </Button> :
                         <></>}

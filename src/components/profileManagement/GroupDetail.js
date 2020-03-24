@@ -95,7 +95,7 @@ class GroupDetail1 extends Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "获取详情失败"
+          "系统错误"
       );
     }
   }
@@ -165,7 +165,7 @@ class GroupDetail1 extends Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "保存失败！"
+          "系统错误"
       );
     } finally {
       this.props.enterDetail(false);

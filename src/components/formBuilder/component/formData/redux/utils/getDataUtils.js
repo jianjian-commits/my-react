@@ -28,7 +28,7 @@ const filterData = (formId, filterStr, pageSize, currentPage) => {
       {
         headers: {
           // "X-Custom-Header": "ProcessThisImmediately",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         }
       }
     )
@@ -42,7 +42,7 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
     filterData(formId, filterStr, pageSize, currentPage).then(res => {
       dispatch({
         type: Filter_FORM_DATA,
-        submissionDataTotal: 10, //(totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
+        submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
           let extraProp = item.extraProp
           return {
@@ -97,38 +97,39 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
 }
 //获取提交的数据
 export const getSubmissionData = (
+  appId,
   formId,
   pageSize,
   currentPage,
   total = -1
 ) => dispatch => {
-  axios.get(config.apiUrl + `/form/${formId}`).then(res => {
+  axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
     let forms = res.data;
-    let extraProp = forms.extraProp
+    
     instanceAxios
       .get(
         config.apiUrl +
         `/form/${formId}/submission?limit=${pageSize}&skip=${(currentPage - 1) * pageSize}&desc=createdTime`,
         {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            appid:appId
           }
         }
       )
       .then(res => {
-
         dispatch({
           type: RECEIVED_FORM_DATA,
           forms,
-          submissionDataTotal: 10, //total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
+          submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-
+            let{ user } = item.extraProp
             return {
               data: item.data,
               id: item.id,
               created: item.createdTime,
               modified: item.updateTime,
-              extraProp: extraProp.user
+              extraProp: user
             }
           })
         });
@@ -137,8 +138,13 @@ export const getSubmissionData = (
 };
 
 // 获得表单数据详情
-export const getSubmissionDetail = (formId, submissionId) => dispatch => {
-  axios.get(config.apiUrl + `/form/${formId}`).then(res => {
+export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
+  axios.get(config.apiUrl + `/form/${formId}`,
+  {   headers:{
+      appid:appId
+  }
+  }
+  ).then(res => {
     let currentForm = res.data;
 
     instanceAxios
@@ -146,12 +152,13 @@ export const getSubmissionDetail = (formId, submissionId) => dispatch => {
         config.apiUrl + `/submission/${submissionId}`,
         {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            appid:appId
           }
         }
       )
       .then(res => {
-        console.log("res.data", res.data)
+        // console.log("res.data", res.data)
         dispatch({
           type: RECEIVED_FORM_DETAIL,
           forms: currentForm,
@@ -179,15 +186,15 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
   });
 };
 
-export const handleStartFlowDefinition = (userId, appId, data) => dispatch =>{
-  console.log("handleStartFlowDefinition")
+export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
   instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
     data: data,
     headers: {
       "Content-Type": "application/json",
-      appid: appId
+      appid: appId,
+      formid: formId
     }
   })
     .then(response => {
