@@ -10,17 +10,15 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   z-index: 1000;
   height: 113px;
   width: 100%;
-  padding-top: 9px;
+  padding: 10px 30px 0 30px;
+  box-sizing: border-box;
   background: transparent;
   min-width: 1000px;
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   // border-bottom: 1px solid rgba(238, 238, 238, 1);
   // box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
   .headerBarTitle {
-    height: 104px;
-    width: 75%;
-    margin-left: 32px;
     line-height: 104px;
     font-size: 18px;
     font-family: $font-Family;
@@ -63,7 +61,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
    }
   }
   .headerBarButton {
-    margin-right: 20px;
     &.ant-btn {
       width: 104px;
       height: 36px;

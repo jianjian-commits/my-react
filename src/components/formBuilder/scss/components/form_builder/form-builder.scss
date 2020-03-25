@@ -1,18 +1,22 @@
 $font-Family: "PingFangSC-Regular", "PingFang SC";
 
+.formBuilder {
+  padding: 0 31px;
+}
 .react-form-builder-header {
   // position: fixed;
   top: 60px;
   left: 0;
   z-index: 99;
-  height: 60px;
+  height: 107px;
   width: 100%;
-  background: rgba(255, 255, 255, 1);
+  // background: rgba(255, 255, 255, 1);
   min-width: 1000px;
   display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid rgba(238, 238, 238, 1);
-  box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
+  padding-top: 10px;
+  // flex-direction: row;
+  // border-bottom: 1px solid rgba(238, 238, 238, 1);
+  // box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
   .headerBarBack {
     height: 60px;
     width: 2%;
@@ -31,7 +35,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     }
   }
   .FormTitle {
-    height: 60px;
+    // height: 60px;
     width: 33%;
     display: flex;
     flex-direction: row;
@@ -67,12 +71,19 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px;
-    width: 14%;
-    .ant-btn {
-      margin-left: 25px;
-      width: 80px;
+    // height: 60px;
+    .header-btn {
       height: 36px;
+      margin-left: 20px;
+      padding: 0 36px;
+      border: none;
+      border-radius: 3px;
+      &.default {
+        color: #2A7FFF;
+      }
+      &.primary {
+        background-color: #2A7FFF;
+      }
     }
   }
 }
@@ -80,8 +91,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
 .react-form-builder {
   display: flex;
   width: 100%;
-  padding-top: 110px;
-  margin-top: -110px;
+  padding-top: 157px;
+  margin-top: -157px;
+  padding-right: 102px;
   height: 100vh;
   box-sizing: border-box;
   // background:#F3F4F5;
