@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Table, message } from "antd";
-import TransactionDetail from "./TransactionDetail"
 import request from '../../utils/request'
 import classes from "./transactList.module.scss";
 import FormDataDetail from "../formBuilder/component/formData/components/formDataDetail"

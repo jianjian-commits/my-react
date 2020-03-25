@@ -9,7 +9,7 @@ const { Content } = Layout;
 const navigationList = (appId, history) => [
   {
     key: 0,
-    label: "理财产品合同审批",
+    label: "审批详情",
     disabled: true
   }
 ];
@@ -23,7 +23,7 @@ const getOreations = (appId, history) => [
   }
 ];
 const Backlog = () => {
-  const { appId } = useParams();
+  const { appId, disposeId } = useParams();
   const history = useHistory();
   return (
     <Layout>
