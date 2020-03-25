@@ -24,7 +24,7 @@
   cursor: pointer;
 
   &:global(.ant-card) {
-    margin: 10px 40px 40px 0px;
+    margin: 10px 30px 30px 0px;
     border-radius: 5px;
     border: none;
   }
@@ -66,7 +66,8 @@
 }
 
 .appSider {
-  padding: 30px 20px 0 20px;
+  border-right: 1px solid #D6D8DE;
+  // padding: 30px 20px 0 20px;
 
   :global(.ant-layout-sider-children) {
     height: calc(100vh - 50px);
@@ -167,7 +168,7 @@
       .dashBoardContent {
         cursor: pointer;
 
-        .dashboardSvg {}
+        // .dashboardSvg {}
 
         .dashboardDesc {
           margin-top: 21px;
@@ -196,7 +197,7 @@
       .formContent {
         cursor: pointer;
 
-        .formSvg {}
+        // .formSvg {}
 
         .formDesc {
           margin-top: 21px;
@@ -302,7 +303,7 @@
     display: inline-block;
     background-color: #fff;
     color: #333;
-    margin: 10px 40px 40px 0px;
+    margin: 10px 30px 30px 0px;
     vertical-align: top;
   }
 
