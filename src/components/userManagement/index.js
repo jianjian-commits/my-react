@@ -11,7 +11,6 @@ export default connect(({ login }) => ({
       <div>
         <InviteUser {...loginData} />
       </div>
-      <div>我是用户列表</div>
     </div>
   );
 });

@@ -113,7 +113,7 @@ class FormInforModal extends React.Component {
                   rules: [{ required: true, message: "请输入表单名字" }]
                 })(<Input placeholder="请输入表单名字" maxLength={20} />)}
               </Form.Item>
-              <Form.Item label={"Api名称"}>
+              <Form.Item label={"API名称"}>
                 {getFieldDecorator("formPath", {
                   initialValue: this.state.defaultApiName,
                   rules: [

@@ -10,21 +10,20 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   z-index: 1000;
   height: 113px;
   width: 100%;
-  padding-top: 9px;
+  padding: 10px 30px 0 30px;
+  box-sizing: border-box;
   background: transparent;
   min-width: 1000px;
   display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid rgba(238, 238, 238, 1);
-  box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
+  justify-content: space-between;
+  // border-bottom: 1px solid rgba(238, 238, 238, 1);
+  // box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
   .headerBarTitle {
-    height: 104px;
-    width: 75%;
     line-height: 104px;
     font-size: 18px;
     font-family: $font-Family;
     font-weight: 400;
-    color: rgba(86, 92, 110, 1);
+    color: #333;
   }
   .headerBarBack {
     line-height: 60px;
@@ -44,31 +43,27 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     }
   }
   .headerBarExtraTitle{
-    width:12%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color:  #2A7FFF;
-   span{
+   >span{
+     display: block;
+     width: 104px;
+     height: 36px;
+     line-height: 36px;
+     text-align: center;
+     background-color: #fff;
+      border-radius: 3px;
+      margin-right: 20px;
     cursor: pointer;
     user-select: none;
    }
   }
   .headerBarButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 104px;
-    margin-left: 29px;
-    .ant-btn {
-      border-radius: 4px;
-      background: rgba(0, 122, 255, 1);
-      font-size: 14px;
-      font-family: $font-Family;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-      height: 36px;
+    &.ant-btn {
       width: 104px;
+      height: 36px;
     }
   }
 }

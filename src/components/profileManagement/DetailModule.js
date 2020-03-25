@@ -47,7 +47,7 @@ export const BaseInfoModule = ({
                 {!disabled && index === 0 && (
                   <img
                     alt=""
-                    src="/image/davinci/edit.png"
+                    src="/image/davinci/edit.svg"
                     onClick={() => setEditable(true)}
                   />
                 )}

@@ -73,6 +73,7 @@ class FormChildTest extends React.Component {
     let newArray = [...this.props.submitDataArray];
     let { handleSetComponentEvent } = this.props;
     let data = submission[item.key] != void 0 ? submission[item.key].data : null ;
+    const {appId} = this.props.match.params;
     switch (item.type) {
       case "SingleText":
       case "TextArea":
@@ -133,7 +134,7 @@ class FormChildTest extends React.Component {
         let values = item.data.values;
         if (values.type == "otherFormData") {
           // 子表单关联其他数据
-          getSelection(values.formId, values.optionId).then(res => {
+          getSelection(appId, values.formId, values.optionId).then(res => {
             result[item.key].dropDownOptions = res.map(data => data.value);
             this.setState({
               refesh: !this.state.refesh
@@ -285,7 +286,7 @@ class FormChildTest extends React.Component {
             let values = item.data.values;
             if (values.type === "otherFormData") {
               // 子表单关联其他数据
-              getSelection(values.formId, values.optionId).then(res => {
+              getSelection(appId, values.formId, values.optionId).then(res => {
                 result[item.key].dropDownOptions = res.map(data => data.value);
                 this.setState({
                   refesh: !this.state.refesh
@@ -446,7 +447,7 @@ class FormChildTest extends React.Component {
           let values = item.data.values;
           if (values.type === "otherFormData") {
             // 子表单关联其他数据
-            getSelection(values.formId, values.optionId).then(res => {
+            getSelection(appId, values.formId, values.optionId).then(res => {
               result[item.key].dropDownOptions = res.map(data => data.value);
               this.setState({
                 refesh: !this.state.refesh

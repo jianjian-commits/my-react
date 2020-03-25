@@ -70,7 +70,6 @@ const AppDetail = props => {
         key: item.id,
         name: item.name
       }));
-      console.log(res)
       setMockForms({
         groups: [],
         searchList: [],
@@ -162,13 +161,17 @@ const AppDetail = props => {
         operations={getOreations(appId, history)}
       />
       <Layout>
-        <Sider className={classes.appSider} style={{ background: "#fff" }}>
+        <Sider className={classes.appSider} style={{ background: "#fff" }} width="240">
           <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} />
           <div className={classes.searchBox}>
             <Input
               placeholder="输入名称来搜索"
               value={searchKey}
               onChange={searchHandle}
+              prefix={ <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11.8696 11.2369L9.44935 8.80981C10.2291 7.87776 10.6988 6.67619 10.6988 5.36437C10.6988 2.40165 8.3039 0 5.34945 0C2.39492 0 0 2.40163 0 5.36437C0 8.32711 2.39494 10.7287 5.34945 10.7287C6.6747 10.7287 7.88717 10.2453 8.82161 9.44493L11.239 11.869C11.4131 12.0437 11.6955 12.0437 11.8696 11.869C12.0435 11.6944 12.0435 11.4115 11.8696 11.2369ZM5.34946 9.83465C2.88747 9.83465 0.89158 7.83323 0.89158 5.36435C0.89158 2.89549 2.88747 0.894038 5.34946 0.894038C7.81145 0.894038 9.80702 2.8955 9.80702 5.36435C9.80702 7.83323 7.81143 9.83465 5.34946 9.83465Z" fill="#B6B6BA"/>
+                      </svg>
+              }
             />
           </div>
           <div className={classes.formArea}>
