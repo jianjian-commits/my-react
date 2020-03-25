@@ -44,28 +44,30 @@ export const getOption = (xaxisList) => {
   } 
 }
 
-
 /**
  * Get chart attributes for req.
  */
 export const getChartAttrs = (bindDataArr) => {
   bindDataArr = bindDataArr || [];
   let dimensions = [], indexes = [];
-  const currentGroup = { name: "", value: "SUM" };
+  // const currentGroup = { name: "", value: "SUM" };
   const groups = [{ name: "", value: "COUNT" }];
   const sort = { fieldId: "", value: "DESC" };
   const conditions = [];
 
   bindDataArr.forEach((each) => {
     const field = Object.assign({}, each);
+    const option = field.option;
+    const currentGroup = option.currentGroup;
     delete field.bindType;
+    delete field.option;
 
     switch(each.bindType) {
       case Types.DIMENSION:
         dimensions.push({ field, currentGroup, groups, sort });
         break;
       case Types.MEASURE:
-        indexes.push({ currentGroup: {name: "求和", value: "SUM"}, field, groups, sort });
+        indexes.push({ field, currentGroup, groups, sort });
         break;
       default:
         console.log("wrong type!");

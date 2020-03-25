@@ -5,22 +5,25 @@ import ChartContainer from '../components/bi/component/elements/chart/ChartConta
 import EditorHeader from '../components/bi/component/elements/EditorHeader';
 import { Layout } from "antd";
 import { ChartBindPane, LeftPane, RightPane, DragAndDrop } from '../components/bi/component/bind';
+import { setDashboards } from '../components/bi/redux/action';
 import classes from "../styles/apps.module.scss";
+import { setDB } from "../components/bi/utils/reqUtil";
 const { Sider, Content } = Layout;
 
 const ElementEditor = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
-  const { chartData } = props;
+  const { chartData, setDashboards } = props;
 
-  const onbeforeunload = (e) => {
-    // history.push(`/app/${appId}/setting/bi/${dashboardId}`)
+  const load = (e) => {
+    history.push(`/app/${appId}/setting/bi/${dashboardId}`);
+    setDB(dashboardId, setDashboards);
   }
 
   useEffect(()=> {
-    window.addEventListener("beforeunload", onbeforeunload);
+    window.addEventListener("load", load);
     return () => {
-      window.removeEventListener("beforeunload", onbeforeunload);
+      window.removeEventListener("load", load);
     }
   })
 
@@ -48,4 +51,6 @@ const ElementEditor = props => {
 export default connect(store => ({
   dataSource: store.bi.dataSource,
   chartData: store.bi.chartData
-}),{})(ElementEditor);
+}), {
+  setDashboards
+})(ElementEditor);

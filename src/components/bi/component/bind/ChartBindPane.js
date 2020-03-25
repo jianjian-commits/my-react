@@ -44,15 +44,16 @@ const spec = {
       bindDataArr.push(item);
     }
 
-    processBind(bindDataArr, dataSource.id, changeBind, changeChartData);
+    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elementId);
   }
 }
 
-function processBind(bindDataArr, formId, changeBind, changeChartData) {
+function processBind(bindDataArr, formId, changeBind, changeChartData, chartId) {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
     const res = request(`/bi/charts/data`, {
       method: "POST",
       data: {
+        chartId,
         formId,
         dimensions,
         indexes,
@@ -104,13 +105,26 @@ class BindPane extends PureComponent {
   }
 
   removeField = (item) => {
-    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
 
     const newArr = bindDataArr.filter((each)=>{
       return item.id != each.id;
     })
 
-    processBind(newArr, dataSource.id, changeBind, changeChartData);
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
+  }
+
+  changeGroup = (currentGroup, id) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
+    const newArr = bindDataArr.map((each) => {
+      if(id == each.id) {
+        each.option.currentGroup = currentGroup
+      }
+      
+      return each;
+    })
+
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
   }
 
   getItems = (bindType) => {
@@ -122,10 +136,10 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (item) => {
         if(item.bindType == bindType && bindType == "dim") {
-          components.push(<FieldDimension item = {item} removeField={this.removeField} key={item.label} className={cls} />)
+          components.push(<FieldDimension item = {item} removeField={this.removeField} key={item.id} className={cls} />)
         }
         if(item.bindType == bindType && bindType == "mea") {
-          components.push(<FieldMeasureSelect item = {item} removeField={this.removeField} key={item.label} className={cls} />)
+          components.push(<FieldMeasureSelect item = {item} changeGroup={this.changeGroup} removeField={this.removeField} key={item.id} className={cls} />)
         }
       }
     )

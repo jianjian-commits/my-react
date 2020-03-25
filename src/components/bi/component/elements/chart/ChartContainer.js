@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import Chart from './Chart';
-import { getOption, getOption2 } from '../../../utils/ChartUtil';
+import { getOption } from '../../../utils/ChartUtil';
 import './chart.scss';
 
 const ChartContainer = (props) => {

@@ -1,14 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import {DBHeader, DBToolbar, DBEditor} from '../components/bi/component/dashboard';
+import { setDashboards } from '../components/bi/redux/action';
+import { setDB } from '../components/bi/utils/reqUtil';
+import request from '../components/bi/utils/request';
 import classes from "../styles/bi.module.scss";
 
 const BI = props => {
   const HEADER_HEIGHT = 30;
   const TOOLBAR_HEIGHT = 30;
+  const { dashboardId } = useParams();
 
-  const { dashboardId } = props;
+  const load = (e) => {
+    setDB(dashboardId, props.setDashboards);
+  }
+
+  useEffect(()=> {
+    window.addEventListener("load", load);
+    return () => {
+      window.removeEventListener("load", load);
+    }
+  })
 
   return (
     <div className={classes.biContainer}>
@@ -21,16 +34,4 @@ const BI = props => {
   );
 };
 
-const mapStateToProps = (store) => {
-  return {
-    dashboardId: store.bi.dashboardId,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BI);
+export default connect((store) => ({}), { setDashboards })(BI);

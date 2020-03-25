@@ -14,8 +14,6 @@ import {
 
 const initState = {
   type: 'bar',
-  dim: [],
-  mea: [],
   dbName: "",
   elemName: "",
   formDataArr: [],
@@ -48,8 +46,6 @@ export default function biReducer(state = initState, action) {
     case CLEAR_BIND: {
       return {
         ...state,
-        dim: action.dim,
-        mea: action.mea, 
         bindDataArr: action.bindDataArr, 
         dataSource: action.dataSource,
         chartData: action.chartData,

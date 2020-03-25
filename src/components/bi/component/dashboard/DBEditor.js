@@ -17,7 +17,7 @@ class DBEditor extends React.PureComponent {
   }
 
   getElements = (dashboards) => {
-    const elements = dashboards[0];
+    const elements = dashboards[0].elements;
     const keys = Object.keys(elements);
     const len = keys.length;
 

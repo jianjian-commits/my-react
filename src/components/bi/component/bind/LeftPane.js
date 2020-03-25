@@ -2,6 +2,7 @@ import React, {PureComponent, useState} from "react";
 import DragItem from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
+import { GroupType } from '../../component/elements/Constant';
 import './bind.scss';
 
 class LeftPane extends PureComponent {
@@ -19,12 +20,13 @@ class LeftPane extends PureComponent {
     }
 
     dataArr.forEach((each, idx) => {
+      const currentGroup = GroupType.SUM;
       if(each) {
         if(each.type === "NUMBER") {
-          const item = {...each, bindType: "mea"}
+          const item = {...each, bindType: "mea", option: {currentGroup}}
           meaArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
         } else {
-          const item = {...each,  bindType: 'dim'}
+          const item = {...each,  bindType: 'dim', option: {currentGroup}}
           dimArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
         }
       }

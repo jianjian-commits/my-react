@@ -1,27 +1,20 @@
 import React from "react";
 import { Select,Icon } from "antd";
+import { GroupType } from "./Constant";
 const { Option } = Select;
 const operationArr = [
-  {
-    value: "求和",
-  },
-  {
-    value: "平均",
-  },
-  {
-    value: "最大",
-  },
-  {
-    value: "最小",
-  }
+  {...GroupType.SUM},
+  {...GroupType.AVERAGE},
+  {...GroupType.MAX},
+  {...GroupType.MIN},
+  {...GroupType.COUNT}
 ];
 export default function FieldMeasureSelect(props) {
-  
   const creatFieldOperationArr = (componentLabel) => {
       return operationArr.map(operation => {
         return {
           ...operation,
-          label:`${componentLabel}(${operation.value})`
+          label:`${componentLabel}(${operation.name})`
         }
       })
   }
@@ -34,7 +27,7 @@ export default function FieldMeasureSelect(props) {
   }
 
   const getSelectOperation = value => {
-    console.log("你选择了",value);
+    props.changeGroup(GroupType[value], props.item.id);
   }
 
   const handleDeleteTarget = () => {

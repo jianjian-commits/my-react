@@ -69,6 +69,7 @@ export const setDataSource = (dataSource) => dispatch => {
 }
 
 export const setDashboards = (dashboards) => dispatch => {
+console.log("========setDashboards===========", dashboards);
   dispatch({
     type: SET_DASHBOARDS,
     dashboards
@@ -76,13 +77,10 @@ export const setDashboards = (dashboards) => dispatch => {
 } 
 
 export const clearBind = (params) => dispatch => {
-console.log("====clearBind===");
   dispatch({
     type: CLEAR_BIND,
     dataSource: {},
     bindDataArr: [],
     chartData: {},
-    dim: [],
-    mea: [],
   })
 }
