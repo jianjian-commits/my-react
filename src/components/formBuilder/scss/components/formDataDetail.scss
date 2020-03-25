@@ -1,9 +1,10 @@
 .formDetailBox {
-  width: calc(100vw - 220px);
-  padding: 29px 21px;
+  padding: 0 32px;
 }
 .FormDataDetailHeader{
   width: 100%;
+  padding-top: 30px;
+  padding-bottom: 10px;
   .title {
     font-family: "Microsoft YaHei";
     font-style: normal;

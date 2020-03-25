@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Row, Col, List, Table, Tabs , Modal, Icon, Input, message } from "antd";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import request from "../../utils/request";
 import { EditIcon, DeleteIcon }from './svgIcon/index'
 
@@ -212,6 +212,7 @@ const TransactionDetail = (props) => {
   const [fields, setFields] = React.useState([]);
   const [approveStatus, setApproveStatus] = React.useState("going")
   const [approvalData, setApprovalData] = React.useState([]);
+  const history = useHistory();
   useEffect(() => {
     getTransactionDetail();
   }, [fields, approvalData]);
@@ -226,15 +227,16 @@ const TransactionDetail = (props) => {
         setFields(fakeFields)
         setApprovalData(fakeData)
       } else {
-        message.error("获取审批详情失败");
+        // message.error("获取审批详情失败");
       }
     } catch (err) {
-      message.error("获取审批详情失败");
+      // message.error("获取审批详情失败");
     }
   }
 
   const onClickBack = (e) => {
-    props.fn(props.approvalKey)
+    // props.fn(props.approvalKey)
+    history.goBack();
   };
 
   function callback(key) {
@@ -262,7 +264,7 @@ const TransactionDetail = (props) => {
   }
 
   const ApprovalProcessButtonsOptions = {
-    isApprovalProcessor: true, 
+    isApprovalProcessor: false, 
     isMultiPersonApproval: false,
     isApproved: false
   }
@@ -278,14 +280,14 @@ const TransactionDetail = (props) => {
               </div>
             </Col>
             <Col>
-              <div className={clasess.title}>理财产品合同审批{`${currentDetailId}`}</div>
+              <div className={clasess.title}>理财产品合同审批</div>
             </Col>
           </Row>
         </Col>
         <Col>
           <div className={clasess.title}>
            <ApprovalProcessButtons {...ApprovalProcessButtonsOptions}/>
-           <WithdrawApprovalButton  isAllowedWithDraw = {true} />
+           <WithdrawApprovalButton  isAllowedWithDraw = {false} />
           </div>
         </Col>
       </Row>
