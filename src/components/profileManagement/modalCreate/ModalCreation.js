@@ -64,7 +64,7 @@ class ModalCreation extends Component {
             {iconDatas.map(item => (
               <img
                 key={item}
-                src={`/image/appCreateIcons/${item}.png`}
+                src={`/image/appCreateIcons/${item}.svg`}
                 alt=""
                 onClick={() =>
                   setFields({ icon: { errors: null, value: item } })

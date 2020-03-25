@@ -262,8 +262,10 @@
 
     img {
       width: 55% !important;
+    }
+    svg {
       margin-left: 6px;
-      margin-bottom: 2px;
+      margin-top: 8px;
     }
   }
 
@@ -275,6 +277,11 @@
       position: relative;
       left: -80px;
       filter: drop-shadow(#1890ff 80px 0);
+    }
+    svg  {
+      g, polyline, path {
+        fill: #1890ff;
+      }
     }
   }
 }
@@ -299,10 +306,22 @@
     vertical-align: top;
   }
 
-  >img {
+  > svg,>img {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -40%);
+  }
+  > p {
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -40%);
+    color: #777f97;
+    span {
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
   }
 }

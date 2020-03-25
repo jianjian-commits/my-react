@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Layout, Menu, Tooltip } from "antd";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
 import CommonHeader from "../components/header/CommonHeader";
 import { APP_FORM_EDIT } from "../auth";
 // import PlaceHolder from "./Placeholder";
@@ -10,19 +12,20 @@ import CreateForm from "../components/formBuilder/component/formBuilder/formBuil
 import Approval from "../components/ApprovalProcess";
 import Process from "../components/ProcessAuto";
 import classes from "../styles/apps.module.scss";
+import { ApIcon, FbIcon, PbIcon } from "../assets/icons/apps";
 
 const { Content, Sider } = Layout;
 
 const services = [
-  { key: "edit", name: "表单编辑", icon: "FB", component: CreateForm },
+  { key: "edit", name: "表单编辑", icon: FbIcon, component: CreateForm },
   {
     key: "process/list",
     name: "自动化",
-    icon: "PB",
+    icon: PbIcon,
     auth: APP_FORM_EDIT,
     component: Process
   },
-  { key: "approval/list", name: "审批流", icon: "AP", component: Approval }
+  { key: "approval/list", name: "审批流", icon: ApIcon, component: Approval }
 ];
 
 const navigationList = (history, appId, appName, formName) => [
@@ -83,15 +86,16 @@ const AppServices = props => {
               .map(s => (
                 <Menu.Item key={s.key} onClick={clickHandle}>
                   <Tooltip placement="right" title={s.name}>
-                    {/* <Icon type={s.icon} style={{ fontSize: 22 }} /> */}
-                    <img src={`/image/davinci/${s.icon}.svg`} alt="" />
+                    <s.icon />
                   </Tooltip>
                 </Menu.Item>
               ))}
           </Menu>
         </Sider>
         <Content>
+        <DndProvider backend={HTML5Backend}>
           <service.component />
+         </DndProvider> 
         </Content>
       </Layout>
     </Layout>
