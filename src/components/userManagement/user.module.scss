@@ -81,10 +81,11 @@
 
 .btn {
   & > button {
-    margin-left: 10px;
-    border-radius: 3px;
+    margin-left: 20px;
+    border-radius: 3px !important;
     width: 104px;
     height: 36px;
+    border:none;
   }
   & > button:first-child {
     background: #ffffff;
@@ -92,6 +93,8 @@
     font-weight: normal;
     font-size: 14px;
     color: #2a7fff;
+    border:1px solid #2a7fff;
+    background-color: transparent;
   }
   & > button:last-child {
     background: #2a7fff;

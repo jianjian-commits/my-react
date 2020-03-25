@@ -4,7 +4,7 @@
   > span {
     font-size: 18px;
     display: inline-block;
-    padding: 8px 0 41px 0;
+    padding: 4px 0 41px 0;
     color: #333333;
   }
   svg {
@@ -36,6 +36,9 @@
   }
   :global(.ant-table-tbody > tr > td) {
     padding: 9px 16px;
+  }
+  :global(.ant-table-tbody > tr:last-child > td){
+    border-bottom: 0;
   }
   :global(.ant-table-column-title) {
     color: #333333;
