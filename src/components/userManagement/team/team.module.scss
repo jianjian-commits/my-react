@@ -33,7 +33,7 @@
 }
 
 .listBox {
-  padding: 5px 30px;
+  // padding: 5px 30px;
   background-color: #fff;
   font-size: 14px;
 }
@@ -59,10 +59,6 @@
   box-sizing: border-box;
 }
 
-.filter {
-  padding: 0 0 10px 0;
-}
-
 .filterSvg {
   margin-right: 8px;
   line-height: 32px;
@@ -82,6 +78,9 @@
 }
 
 .tableBox {
+  // & table{
+  //   border: 1px solid #d9d9d9;
+  // }
   & th {
     padding: 14px !important;
     background: #fff !important;
@@ -105,12 +104,14 @@
       padding: 0 16px;
     }
   }
-
-  // & .rowKey:nth-of-type(2n) {
-  //   background-color: #fff;
-  // }
-
-  // & .rowKey:nth-of-type(2n + 1) {
-  //   background-color: #edf2fd;
-  // }
 }
+
+.filterRow{
+  padding: 10px 10px 10px 0 !important;
+}
+
+
+.submitBtn{
+  margin-left: 10px;
+}
+

@@ -8,7 +8,7 @@ import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
 import InviteUser from "../modalInviteUser";
 import Authenticate from "../../shared/Authenticate";
-import { ReactComponent as Funnel } from "./svg/filter.svg";
+import { ReactComponent as Funnel } from "../../../styles/images/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
   TEAM_MANAGEMENT_DROP,
