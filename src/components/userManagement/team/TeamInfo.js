@@ -107,7 +107,7 @@ export default connect(
     <div className={classes.container}>
       <div className={classes.title}>团队信息</div>
       <div className={classes.listBox}>
-        <List  itemLayout="horizontal" bordered size='small' style={{borderRadius:'0'}} >
+        <List itemLayout="horizontal" size='small' >
           <List.Item>
             <EditInput
               defaultValue={currentTeam.name}
