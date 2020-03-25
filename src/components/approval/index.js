@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { List, Icon, message } from "antd";
+import { List, Icon, message, Menu } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import request from "../../utils/request"
 import {  HandledIcon, PendingIcon, SubmittedIcon } from './svg/index'
 import classes from "./approval.module.scss";
+import commonClasses from "../../styles/common.module.scss"
 
 const baseUrl = path => {
   let arr = path.split("/");
@@ -20,6 +21,7 @@ export const ApprovalSection = props => {
   const [todos, setTodos] = React.useState(0);
   const [submits, setSubmits] = React.useState(0);
   const [dones, setDones] = React.useState(0);
+  const [selectedKey, setSelectedKey] = React.useState("");
   useEffect(()=>{
     getTagsCount()
   },[todos,submits,dones])
@@ -51,6 +53,7 @@ export const ApprovalSection = props => {
       onClick: () => {
         history.push(`${baseUrl(history.location.pathname)}/myPending`);
         props.fn("myPending");
+        setSelectedKey("myPending");
       }
     },
     {
@@ -61,6 +64,7 @@ export const ApprovalSection = props => {
       onClick: () => {
         history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
         props.fn("mySubmitted");
+        setSelectedKey("mySubmitted");
       }
     },
     {
@@ -71,29 +75,36 @@ export const ApprovalSection = props => {
       onClick: () => {
         history.push(`${baseUrl(history.location.pathname)}/myHandled`);
         props.fn("myHandled");
+        setSelectedKey("myHandled");
       }
     }
   ];
+
+  const getMenuItems = items =>
+    items.map(item=>(
+      <Menu.Item
+        className={`${classes.item}`}
+        key={item.key}
+        onClick={item.onClick}
+        style={
+          selectedKey === item.key
+            ? {
+                backgroundColor: "rgba(42, 127, 255, 0.2)"
+              }
+            : {}
+        }
+        >
+        {item.icon}
+         {item.label}
+         <span className={classes.tag}>{item.tagNumber}</span>
+      </Menu.Item>
+    ))
   return (
     <div className={classes.sectionWrapper}>
       <div className={classes.sectionContent}>
-        <List
-          split={false}
-          itemLayout="vertical"
-          size="small"
-          dataSource={items(history)}
-          renderItem={item => (
-            <List.Item
-              className={classes.item}
-              key={item.key}
-              onClick={item.onClick}
-            >
-            {item.icon}
-            {item.label}
-          <span className={classes.tag}>{item.tagNumber}</span>
-          </List.Item>
-          )}
-        ></List>
+        <Menu
+          selectedKeys={selectedKey}
+         >{getMenuItems(items(history))}</Menu>
       </div>
     </div>
   );
