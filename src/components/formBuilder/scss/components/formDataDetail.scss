@@ -1,9 +1,10 @@
 .formDetailBox {
-  width: calc(100vw - 220px);
-  padding: 29px 21px;
+  padding: 0 32px;
 }
 .FormDataDetailHeader{
   width: 100%;
+  padding-top: 30px;
+  padding-bottom: 10px;
   .title {
     font-family: "Microsoft YaHei";
     font-style: normal;
@@ -26,6 +27,11 @@
   font-family: "Microsoft YaHei";
   font-style: normal;
   font-weight: normal;
+  .ant-table-middle > .ant-table-content >.ant-table-body > table {
+    .approveCol{
+      padding-left: 20px;
+    }
+  }
   .ant-table-wrapper{
     .ant-table-thead > tr > th {
       padding: 14px;
@@ -43,13 +49,10 @@
       line-height: 20px;
       color: #333333;
     }
-}
+  }
   .dataDteailText {
     min-height: 68px;
-    margin-top: 16px;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-bottom: 17px;
+    padding: 16px 20px;
     border-bottom: 1px solid rgba(237, 239, 243, 1);
     p {
       word-break: break-all;
@@ -211,4 +214,5 @@
   .tabsBackground {
     background-color: #FFFFFF;
   }
+
 }
