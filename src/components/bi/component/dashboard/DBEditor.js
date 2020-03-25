@@ -31,13 +31,13 @@ class DBEditor extends React.PureComponent {
       const chartData = elements[item].data.xaxisList;
  
       if(idx % 2 == 0) {
-        elems.push(<ChartContainer key={item} chartData={chartData}/>);
+        elems.push(<ChartContainer chartId={"chart"+idx} key={item} chartData={chartData}/>);
 
         if(idx == len - 1) {
           rows.push(<Column children={elems} key={item}/>);
         }
       } else {
-        elems.push(<ChartContainer key={item} chartData={chartData}/>);
+        elems.push(<ChartContainer chartId={"chart"+idx} key={item} chartData={chartData}/>);
         rows.push(<Column children={elems} key={item}/>);
         elems = [];
       }
