@@ -4,7 +4,7 @@ import { Input, Row, Col, List, Button, Spin, message, Popover } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
-import { ReactComponent as Edit } from "../../../styles/images/edit.svg";
+import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
 import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 
