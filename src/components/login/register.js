@@ -4,7 +4,6 @@ import { Button, Result, message } from "antd";
 import request from "../../utils/request";
 import PublicForm from "./publicForm";
 import { registerParameter } from "./formItems";
-import Loading from "../../pages/Loading";
 import Styles from "./style/login.module.scss";
 
 export default connect()(function Register({
@@ -17,9 +16,7 @@ export default connect()(function Register({
   const { inviter, invitedTeam } = history.location.query || query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
-  const [spinning, setSpinning] = useState(false);
   const registerUser = async ({ actionType, rest }) => {
-    setSpinning(true);
     try {
       const res = await request(token ? `/reg?token=${token}` : "/reg", {
         method: "post",
@@ -40,7 +37,6 @@ export default connect()(function Register({
           "系统错误"
       );
     }
-    setSpinning(false);
   };
   const confirm = () => {
     if (!status) return setVisible(true);
@@ -83,21 +79,17 @@ export default connect()(function Register({
     </>
   );
   const registerResult = (
-    <Result
-      status={status ? "success" : "error"}
-      title={status ? "注册成功" : "注册失败, 请重试"}
-      extra={[
-        <Button type="primary" key={"success"} onClick={confirm}>
-          {status ? "OK" : "重新注册"}
-        </Button>
-      ]}
-    />
+    <div className={Styles.result}>
+      <Result
+        status={status ? "success" : "error"}
+        title={status ? "注册成功" : "注册失败, 请重试"}
+        extra={[
+          <Button type="primary" key={"success"} onClick={confirm}>
+            {status ? "OK" : "重新注册"}
+          </Button>
+        ]}
+      />
+    </div>
   );
-  return (
-    <>
-      <Loading spinning={spinning}>
-        {visible ? component : registerResult}
-      </Loading>
-    </>
-  );
+  return <>{visible ? component : registerResult}</>;
 });

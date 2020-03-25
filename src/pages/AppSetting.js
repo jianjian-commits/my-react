@@ -23,7 +23,7 @@ const navigationList = (history, appId, appName) => [
     label: `${appName}`,
     onClick: () => history.push(`/app/${appId}/detail`)
   },
-  { key: 1, label: "应用设置", disabled: true }
+  { key: 1, label: "应用管理", disabled: true }
 ];
 
 const AppSetting = props => {

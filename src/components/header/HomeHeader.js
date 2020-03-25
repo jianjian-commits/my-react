@@ -7,6 +7,7 @@ import { TEAM_MANAGEMENT_ABLE } from "../../auth";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
 import arrowLeft from "../../styles/images/arrow-left.svg";
+import { promptIcon, teamManageIcon } from "../../styles/images/index";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
@@ -16,7 +17,7 @@ const homeHeaderStyle = {
   lineHeight: "50px"
 };
 const logoStyle = {
-  background: "rgba(255, 255, 255, 0.4)",
+  // background: "rgba(255, 255, 255, 0.4)",
   height: "100%",
   color: "#333",
   lineHeight: "37px",
@@ -45,6 +46,20 @@ const backTitle = {
   fontSize: "16px",
   color: "#FFFFFF"
 };
+const ghostButton = {
+  background: "#4F96FF",
+  borderRadius: "3px",
+  color: "#ffffff",
+  width: "110px",
+  height: "32px",
+  padding: "0",
+  marginTop: "9px"
+};
+const ghostButtonContent = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
+};
 
 export default connect(({ router }) => ({
   router
@@ -63,12 +78,19 @@ export default connect(({ router }) => ({
       backArrow: true
     }
   } = props;
+  const getPrompt = count => (
+    <Badge count={count || 6}>
+      <img src={promptIcon} alt="" />
+    </Badge>
+  );
   return (
     <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
         <div className={classes.logo}>
           <Authenticate hide={hides.logo}>
-            <div style={logoStyle}>logo</div>
+            <div style={logoStyle}>
+              {/* logo */}
+              </div>
           </Authenticate>
         </div>
         <div style={backThunk}>
@@ -104,11 +126,24 @@ export default connect(({ router }) => ({
         </div>
         <div className={classes.operations}>
           <Authenticate auth={TEAM_MANAGEMENT_ABLE} hide={hides.teamManage}>
-            <Button type="link" ghost icon="user" onClick={toTeamMangement}>
-              团队管理
+            <Button
+              type="link"
+              // ghost
+              style={ghostButton}
+              onClick={toTeamMangement}
+            >
+              <div style={ghostButtonContent}>
+                <img
+                  style={{ paddingRight: "5px" }}
+                  src={teamManageIcon}
+                  alt=""
+                />
+                团队管理
+              </div>
             </Button>
           </Authenticate>
         </div>
+        <div className={classes.prompt}>{getPrompt(props.count)}</div>
         <div className={classes.user}>
           <User />
         </div>

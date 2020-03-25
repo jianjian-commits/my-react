@@ -37,7 +37,7 @@ const navigationList = (history, appId, appName, formName) => [
   },
   {
     key: 1,
-    label: "应用设置",
+    label: "应用管理",
     onClick: () => history.push(`/app/${appId}/setting`)
   },
   { key: 1, label: `${formName}`, disabled: true }
