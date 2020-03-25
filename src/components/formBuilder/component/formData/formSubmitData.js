@@ -4,11 +4,8 @@ import { connect } from "react-redux";
 import {
   ConfigProvider,
   Table,
-  Divider,
-  Select,
   Input,
   Button,
-  InputNumber,
   Menu,
   Dropdown,
   Icon,
@@ -40,7 +37,7 @@ class FormSubmitData extends PureComponent {
       openDataIdList: [],
       submissionArray: [],
       sortedInfo: null,
-      formId: "sWw",
+      formId: props.formId,
       submissionId: null,
       currentPage: 1,
       pageSize: 10,
@@ -615,6 +612,7 @@ class FormSubmitData extends PureComponent {
         render: (id, record) => {
           return (
             <ControlBtn
+              appId={this.props.appId}
               formId={this.state.formId}
               submissionId={record.id}
               userId={record.userId}
@@ -856,9 +854,7 @@ class FormSubmitData extends PureComponent {
             id={this.props.formId}
             dataId={this.state.formDataDetailId}
             appId={this.props.appId}
-            showformDataDetail={this.showformDataDetail}
             actionFun={this.props.actionFun}
-            handleDeleteSubmisson={this.handleDeleteSubmisson}
           />
         ) : (
           <>
@@ -871,6 +867,7 @@ class FormSubmitData extends PureComponent {
                 isShowBtn={true}
                 isShowBackBtn={false}
                 btnValue="提交数据"
+                formId={this.props.formId}
                 clickCallback={()=>{this.props.actionFun(null ,true)}}
                 clickExtendCallBack = {this.showFilterComponent}
               />

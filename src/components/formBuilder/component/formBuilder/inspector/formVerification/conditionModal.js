@@ -290,10 +290,11 @@ class ConditionModal extends React.Component {
         centered
         width="570"
         style={{
-          height: 505
+          height: 505,
+          width: 570
         }}
         bodyStyle={{
-          height: 350
+          height: 400
         }}
       >
         <div className="conditionModalContent">

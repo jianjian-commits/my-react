@@ -41,6 +41,7 @@ class ComponentItem extends React.Component {
     newData.key = ID.uuid(newData.type, this.props.data);
     newData.layout.i = key;
     newData.layout.y = 0;
+    newData.isSetAPIName = false;
     this.props.setItemAttr(element, "values", [...values, newData]);
   }
   render() {

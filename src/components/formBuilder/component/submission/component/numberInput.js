@@ -3,13 +3,14 @@ import React from "react";
 import { isValueValid, isStringValid } from "../../../utils/valueUtils";
 import { Input, Form} from "antd";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
 
-export default class NumberInput extends React.Component {
+class NumberInput extends React.Component {
 
 
   componentDidMount() {
@@ -22,7 +23,8 @@ export default class NumberInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, (value) => {
           let index = -1;
@@ -146,3 +148,4 @@ export default class NumberInput extends React.Component {
     );
   }
 }
+export default withRouter(NumberInput)

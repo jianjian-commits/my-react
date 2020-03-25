@@ -1650,6 +1650,19 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           }
         }
       }
+
+      .data-source-select {
+        margin-bottom: 26px!important;
+        width: 100%;
+      }
+      .data-link-set {
+        width: 100%;
+        margin-bottom: 26px!important;
+        &.has-error {
+          border-color: #f5222d;
+          color: #f5222d;
+        }
+      }
     }
   }
 }
@@ -1920,193 +1933,192 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       }
     }
   }
-//   .conditionModalContent {
-//     width: 540px;
-//     height: 70px;
-//     margin: auto;
-//     margin-top: 11px;
-//     .ModalContentInput {
-//       width: 540px;
-//       height: 70px;
-//       .ant-input {
-//         height: 70px;
-//       }
-//     }
-//     .ModalContentVerification {
-//       width: 540px;
-//       height: 270px;
-//       margin-top: 10px;
-//       background: rgba(255, 255, 255, 1);
-//       border-radius: 4px;
-//       border: 1px solid rgba(214, 216, 222, 1);
-//       overflow: hidden;
-//       .ant-tabs {
-//         height: 270px;
-//         // overflow: scroll;
-//         .ant-tabs-top-bar {
-//           margin-bottom: 10px;
-//         }
-//         .ant-tabs-nav {
-//           height: 39px;
-//           .ant-tabs {
-//             line-height: 39px;
-//             font-size: 13px;
-//             font-family: "PingFangSC-Regular", "PingFang SC";
-//             font-weight: 400;
-//             color: rgba(51, 51, 51, 1);
-//           }
-//         }
-//         .ant-tabs-content {
-//           // 展示可用字段
-//           .ItemList {
-//             text-align: left;
-//             width: 540px;
-//             height: 230px;
-//             overflow-y: auto;
-//             .ant-input {
-//               margin-left: 8px;
-//               width: 152px;
-//               height: 22px;
-//               border-radius: 4px;
-//               border: 1px solid rgba(214, 216, 222, 1);
-//             }
-//             p {
-//               font-size: 12px;
-//               margin-left: 8px;
-//               font-family: "PingFangSC-Regular", "PingFang SC";
-//               font-weight: 400;
-//               color: rgba(51, 51, 51, 1);
-//               margin-top: 8px;
-//               cursor: pointer;
-//               &:nth-child(1) {
-//                 margin-top: 11px;
-//               }
-//               &:hover {
-//                 background: rgba(247, 247, 247, 1);
-//               }
-//             }
-//           }
-//           // 展示公式
-//           .formulaChoose {
-//             width: 540px;
-//             height: 230px;
-//             margin-bottom: 10px;
-//             display: flex;
-//             flex-direction: row;
-//             .formulaList {
-//               width: 197px;
-//               height: 250px;
-//               text-align: center;
-//               overflow: scroll;
-//               .formulaListItem {
-//                 width: 100%;
-//                 height: 25px;
-//                 p {
-//                   margin-bottom: 1px;
-//                   margin-left: 30px;
-//                   font-size: 12px;
-//                   font-weight: 400;
-//                   color: rgba(102, 102, 102, 1);
-//                   cursor: pointer;
-//                 }
-//                 &:hover {
-//                   background: rgba(247, 247, 247, 1);
-//                 }
-//                 &.search {
-//                   text-align: left;
-//                   line-height: 25px;
-//                 }
-//               }
-//               .ant-input {
-//                 width: 152px;
-//                 margin: auto;
-//                 height: 22px;
-//                 border-radius: 4px;
-//                 border: 1px solid rgba(214, 216, 222, 1);
-//               }
-//               .ant-collapse {
-//                 background-color: white;
-//                 border: none;
-//                 .ant-collapse-item {
-//                   border-bottom: none;
-//                   text-align: left;
-//                   .ant-collapse-header {
-//                     padding: 4px 5px;
-//                     margin-left: 25px;
-//                     font-size: 12px;
-//                     font-family: "PingFangSC-Regular", "PingFang SC";
-//                     font-weight: 400;
-//                     color: rgba(51, 51, 51, 1);
-//                     i {
-//                       margin-left: -24px;
-//                     }
-//                   }
-//                   .ant-collapse-content {
-//                     border-top: none;
-//                     .ant-collapse-content-box {
-//                       padding: 0px;
-//                       text-align: left;
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//             .formulaDiscribe {
-//               width: 343px;
-//               height: 230px;
-//               border-left: 1px solid rgba(214, 216, 222, 1);
-//               .formulaDiscribeContent {
-//                 width: 300px;
-//                 margin: auto;
-//                 p {
-//                   font-size: 13px;
-//                   font-family: "PingFangSC-Regular", "PingFang SC";
-//                   font-weight: 400;
-//                   color: rgba(41, 120, 255, 1);
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-//   .ant-modal-footer {
-//     border: none;
-//     margin-top: 10px;
-//     .ant-btn {
-//       width: 98px;
-//       height: 36px;
-//       border-radius: 4px;
-//       border: 1px solid rgba(41, 120, 255, 1);
-//       &:nth-child(2) {
-//         background: rgba(41, 120, 255, 1);
-//       }
-//     }
-//   }
-//   .map-modal-container-content {
-//     .tip-input {
-//       position: absolute;
-//       top: 80px;
-//       left: 6%;
-//     }
-//     .err-border {
-//       border: 1px red solid;
-//     }
-//     .range-number-warper {
-//       margin-left: 20px;
-//       margin-top: 16px;
-//       .ant-input-number {
-//         margin-bottom: 8px;
-//         margin-left: 10px;
-//       }
-//       .orientation-range-tip {
-//         font-size: 12px;
-//         margin-left: 68px;
-//       }
-//     }
-//   }
-// }
+  .conditionModalContent {
+    width: 540px;
+    height: 70px;
+    margin: auto;
+    margin-top: 11px;
+    .ModalContentInput {
+      width: 540px;
+      height: 70px;
+      .ant-input {
+        height: 70px;
+      }
+    }
+    .ModalContentVerification {
+      width: 540px;
+      height: 270px;
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 4px;
+      border: 1px solid rgba(214, 216, 222, 1);
+      overflow: hidden;
+      .ant-tabs {
+        height: 270px;
+        // overflow: scroll;
+        .ant-tabs-top-bar {
+          margin-bottom: 10px;
+        }
+        .ant-tabs-nav {
+          height: 39px;
+          .ant-tabs {
+            line-height: 39px;
+            font-size: 13px;
+            font-family: "PingFangSC-Regular", "PingFang SC";
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+          }
+        }
+        .ant-tabs-content {
+          // 展示可用字段
+          .ItemList {
+            text-align: left;
+            width: 540px;
+            height: 230px;
+            overflow-y: auto;
+            .ant-input {
+              margin-left: 8px;
+              width: 152px;
+              height: 22px;
+              border-radius: 4px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+            p {
+              font-size: 12px;
+              margin-left: 8px;
+              font-family: "PingFangSC-Regular", "PingFang SC";
+              font-weight: 400;
+              color: rgba(51, 51, 51, 1);
+              margin-top: 8px;
+              cursor: pointer;
+              &:nth-child(1) {
+                margin-top: 11px;
+              }
+              &:hover {
+                background: rgba(247, 247, 247, 1);
+              }
+            }
+          }
+          // 展示公式
+          .formulaChoose {
+            width: 540px;
+            height: 230px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: row;
+            .formulaList {
+              width: 197px;
+              height: 250px;
+              text-align: center;
+              overflow: scroll;
+              .formulaListItem {
+                width: 100%;
+                height: 25px;
+                p {
+                  margin-bottom: 1px;
+                  margin-left: 30px;
+                  font-size: 12px;
+                  font-weight: 400;
+                  color: rgba(102, 102, 102, 1);
+                  cursor: pointer;
+                }
+                &:hover {
+                  background: rgba(247, 247, 247, 1);
+                }
+                &.search {
+                  text-align: left;
+                  line-height: 25px;
+                }
+              }
+              .ant-input {
+                width: 152px;
+                margin: auto;
+                height: 22px;
+                border-radius: 4px;
+                border: 1px solid rgba(214, 216, 222, 1);
+              }
+              .ant-collapse {
+                background-color: white;
+                border: none;
+                .ant-collapse-item {
+                  border-bottom: none;
+                  text-align: left;
+                  .ant-collapse-header {
+                    padding: 4px 5px;
+                    margin-left: 25px;
+                    font-size: 12px;
+                    font-family: "PingFangSC-Regular", "PingFang SC";
+                    font-weight: 400;
+                    color: rgba(51, 51, 51, 1);
+                    i {
+                      margin-left: -24px;
+                    }
+                  }
+                  .ant-collapse-content {
+                    border-top: none;
+                    .ant-collapse-content-box {
+                      padding: 0px;
+                      text-align: left;
+                    }
+                  }
+                }
+              }
+            }
+            .formulaDiscribe {
+              width: 343px;
+              height: 230px;
+              border-left: 1px solid rgba(214, 216, 222, 1);
+              .formulaDiscribeContent {
+                width: 300px;
+                margin: auto;
+                p {
+                  font-size: 13px;
+                  font-family: "PingFangSC-Regular", "PingFang SC";
+                  font-weight: 400;
+                  color: rgba(41, 120, 255, 1);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .ant-modal-footer {
+    border: none;
+    margin-top: 10px;
+    .ant-btn {
+      width: 98px;
+      height: 36px;
+      border-radius: 4px;
+      border: 1px solid rgba(41, 120, 255, 1);
+      &:nth-child(2) {
+        background: rgba(41, 120, 255, 1);
+      }
+    }
+  }
+  .map-modal-container-content {
+    .tip-input {
+      position: absolute;
+      top: 80px;
+      left: 6%;
+    }
+    .err-border {
+      border: 1px red solid;
+    }
+    .range-number-warper {
+      margin-left: 20px;
+      margin-top: 16px;
+      .ant-input-number {
+        margin-bottom: 8px;
+        margin-left: 10px;
+      }
+      .orientation-range-tip {
+        font-size: 12px;
+        margin-left: 68px;
+      }
+    }
+  }
 
 /*
 *
@@ -2150,3 +2162,4 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     margin-bottom: 0.4em;
   }
 }
+

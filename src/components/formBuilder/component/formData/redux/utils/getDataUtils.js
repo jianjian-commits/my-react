@@ -106,7 +106,6 @@ export const getSubmissionData = (
 ) => dispatch => {
   axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
     let forms = res.data;
-    
     instanceAxios
       .get(
         config.apiUrl +
@@ -124,7 +123,7 @@ export const getSubmissionData = (
           forms,
           submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-            let{ user } = item.extraProp
+            let{ user } = item.extraProp? item.extraProp: { user :{id:"",name:""}}
             return {
               data: item.data,
               id: item.id,
@@ -139,11 +138,12 @@ export const getSubmissionData = (
 };
 
 // 获得表单数据详情
-export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
+export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => {
   axios.get(config.apiUrl + `/form/${formId}`,
-  {   headers:{
+  {   
+    headers:{
       appid:appId
-  }
+    }
   }
   ).then(res => {
     let currentForm = res.data;
@@ -159,13 +159,21 @@ export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
         }
       )
       .then(res => {
-        // console.log("res.data", res.data)
-        dispatch({
-          type: RECEIVED_FORM_DETAIL,
-          forms: currentForm,
-          formDetail: res.data.data,
-          extraProp: res.data.extraProp
-        });
+        instanceAxios.get(
+          config.apiUrl + `/flow/history/approval/${submissionId}`,{
+            headers:{
+              appid:appId
+            }
+          }
+        ).then(response =>{
+            dispatch({
+              type: RECEIVED_FORM_DETAIL,
+              forms: currentForm,
+              formDetail: res.data.data,
+              extraProp: res.data.extraProp,
+              taskData: response.data.data
+            });
+        })
       });
   });
 };
@@ -188,7 +196,7 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
 };
 
 export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
-  instanceAxios({
+  return instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
     data: data,
@@ -198,11 +206,4 @@ export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
       formid: formId
     }
   })
-    .then(response => {
-  
-      console.log(response);
-    })
-    .catch(err => {
-      console.log(err)
-    });
 }
