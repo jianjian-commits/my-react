@@ -52,7 +52,6 @@ export const ApprovalSection = props => {
       onClick: () => {
         // history.push(`${baseUrl(history.location.pathname)}/myPending`);
         props.fn("myPending");
-        setSelectedKey("myPending");
       }
     },
     {
@@ -63,7 +62,6 @@ export const ApprovalSection = props => {
       onClick: () => {
         // history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
         props.fn("mySubmitted");
-        setSelectedKey("mySubmitted");
       }
     },
     {
@@ -74,7 +72,6 @@ export const ApprovalSection = props => {
       onClick: () => {
         // history.push(`${baseUrl(history.location.pathname)}/myHandled`);
         props.fn("myHandled");
-        setSelectedKey("myHandled");
       }
     }
   ];
@@ -86,7 +83,7 @@ export const ApprovalSection = props => {
         key={item.key}
         onClick={item.onClick}
         style={
-          selectedKey === item.key
+          props.approvalKey === item.key
             ? {
                 backgroundColor: "rgba(42, 127, 255, 0.2)"
               }
@@ -102,7 +99,7 @@ export const ApprovalSection = props => {
     <div className={classes.sectionWrapper}>
       <div className={classes.sectionContent}>
         <Menu
-          selectedKeys={selectedKey}
+          selectedKeys={props.approvalKey}
          >{getMenuItems(items(history))}</Menu>
       </div>
     </div>

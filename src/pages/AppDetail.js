@@ -128,8 +128,6 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
-  console.log("submit", submit);
-  console.log("selectedForm", selectedForm);
   let TransactList = <></> ;
   let transctionListOptions = {
     actionFun: (submission_id, submitFlag = false, formId)=>{
@@ -165,7 +163,7 @@ const AppDetail = props => {
       />
       <Layout>
         <Sider className={classes.appSider} style={{ background: "#fff" }} width="240">
-          <ApprovalSection fn={onClickMenu} />
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} />
           <div className={classes.searchBox}>
             <Input
               placeholder="输入名称来搜索"
@@ -183,6 +181,7 @@ const AppDetail = props => {
               draggable={false}
               onClick={e => {
                 setSelectedForm(e.key);
+                setApprovalKey("");
                 setSubmit(false);
                 setSubmissionId(null);
               }}
