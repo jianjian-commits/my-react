@@ -187,7 +187,6 @@ export default connect(
           } else {
             message.error(res.msg || "变更失败");
           }
-
         })
         .catch(err => {
           message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
@@ -248,7 +247,6 @@ export default connect(
           dataSource={data}
           rowClassName={classes.rowKey}
         />
-
       </div>
       {onOff.changeGroupSwitch ? (
         <ChangeGroup
