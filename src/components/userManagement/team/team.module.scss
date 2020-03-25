@@ -34,7 +34,6 @@
 }
 
 .listBox {
-  padding: 5px 30px;
   background-color: #fff;
   font-size: 14px;
 }
@@ -56,12 +55,9 @@
 .rowBox {
   width: 100%;
   height: 32px;
+  padding: 0 16px;
   line-height: 32px;
   box-sizing: border-box;
-}
-
-.filter {
-  padding: 0 0 10px 0;
 }
 
 .filterSvg {
@@ -87,9 +83,10 @@
     padding: 14px !important;
     background: #fff !important;
     color: #333 !important;
+    font-size: 14px;
   }
   :global(.ant-table-column-title) {
-    color: #777f97;
+    color: #333;
   }
   :global(.ant-table) {
     td {
@@ -106,12 +103,14 @@
       padding: 0 16px;
     }
   }
-
-  // & .rowKey:nth-of-type(2n) {
-  //   background-color: #fff;
-  // }
-
-  // & .rowKey:nth-of-type(2n + 1) {
-  //   background-color: #edf2fd;
-  // }
 }
+
+.filterRow{
+  padding: 10px 10px 10px 0 !important;
+}
+
+
+.submitBtn{
+  margin-left: 10px;
+}
+
