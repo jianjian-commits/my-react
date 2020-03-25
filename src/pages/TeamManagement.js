@@ -12,7 +12,7 @@ import { PROFILE_MANAGEMENT_LIST, TEAM_MANAGEMENT_LIST } from "../auth";
 import { authorityIsValid } from "../utils";
 import { Route } from "react-router-dom";
 import Authenticate from "../components/shared/Authenticate";
-import { InfoIcon, MemberIcon, ProfileIcon } from "../assets/icons/teams"
+import { InfoIcon, MemberIcon, ProfileIcon } from "../assets/icons/teams";
 
 const { Sider, Content } = Layout;
 
@@ -90,7 +90,8 @@ class TeamManagement extends React.Component {
             logo: true,
             menu: true,
             teamManage: true,
-            backArrow: false
+            backArrow: "团队管理",
+            backUrl: "/"
           }}
         />
         <Layout>

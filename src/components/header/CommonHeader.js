@@ -6,7 +6,7 @@ import classes from "./header.module.scss";
 import { connect } from "react-redux";
 import Authenticate from "../shared/Authenticate";
 import { getAppList } from "../../store/appReducer";
-import { promptIcon } from "../../styles/images/index";
+import { PromptIcon } from "../../assets/icons";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
@@ -18,7 +18,7 @@ const homeHeaderStyle = {
 const logoStyle = {
   // background: "rgba(255, 255, 255, 0.4)",
   height: "100%",
-  marginRight: "10px", 
+  marginRight: "10px",
   color: "#333",
   lineHeight: "37px",
   textAlign: "center"
@@ -73,9 +73,7 @@ const getOperations = ops => {
         onClick={o.onClick}
       >
         <div style={ghostButtonContent}>
-          {o.icon ? (
-            <img style={{ paddingRight: "5px" }} src={o.icon} alt="" />
-          ) : null}
+          {o.icon ? o.icon : null}
           {o.label}
         </div>
       </Button>
@@ -84,10 +82,12 @@ const getOperations = ops => {
 };
 
 const getPrompt = count => (
-  <Badge count={count || 6} >
-    <img src={promptIcon} alt="" />
+  <Badge count={count || 6}>
+    <PromptIcon />
   </Badge>
 );
+
+const getTitle = title => <span>{title}</span>;
 
 export default connect(
   ({ router, app }) => ({
@@ -103,10 +103,9 @@ export default connect(
     <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
         <div className={classes.logo}>
-          <div style={logoStyle}>
-            {/* logo */}
-            </div>
+          <div style={logoStyle}>{/* logo */}</div>
         </div>
+        <div className={classes.title}>{getTitle(props.title)}</div>
         <div className={classes.nav}>
           {getNavigationList(props.navigationList)}
         </div>

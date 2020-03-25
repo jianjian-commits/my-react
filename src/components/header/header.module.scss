@@ -28,6 +28,9 @@
       flex: 1;
       text-align: right;
       padding-right: 30px;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
     }
     // .user {
     //   width: 80px;
@@ -244,4 +247,12 @@
       }
     }
   }
+}
+.title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: #ffffff;
+  position: absolute;
+  left: 20px;
 }

@@ -1,38 +1,58 @@
 .container {
+  position: relative;
   height: calc(100vh - 50px);
+  width: 1680px;
+  background-color: #F0F2F5;
+
   .header {
     padding: 20px 40px;
   }
+
 }
+
+:global(#root) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
 .appCard {
   width: 180px;
   height: 144px;
   display: inline-block;
   cursor: pointer;
+
   &:global(.ant-card) {
     margin: 10px 40px 40px 0px;
     border-radius: 5px;
     border: none;
   }
+
   :global(.ant-card-body) {
     padding: 10px;
     height: 100%;
   }
+
   .appCardMeta {
     display: flex;
     flex-direction: column;
     text-align: center;
+
     :global(.ant-card-meta-avatar) {
       padding: 20px 0 0 0;
     }
+
     :global(.ant-card-meta-detail > div:not(:last-child)) {
       margin-bottom: 5px;
     }
+
     :global(.ant-card-meta-title) {
       margin-top: 12px;
       color: #363636;
       font-size: 13px;
     }
+
     :global(.ant-card-meta-description) {
       text-overflow: ellipsis;
       text-overflow: -o-ellipsis-lastline;
@@ -44,55 +64,219 @@
     }
   }
 }
+
 .appSider {
+  padding: 30px 20px 0 20px;
   :global(.ant-layout-sider-children) {
     height: calc(100vh - 50px);
     padding: 10px 0;
     display: flex;
     flex-direction: column;
   }
-}
-.newForm {
-  padding: 0 10px;
-}
-.searchBox {
-  padding: 10px;
+
   .addFolder {
     cursor: pointer;
-    font-size: 18px;
-    margin-left: 10px;
+    margin-top: 20px;
+    padding: 10px 0px;
+    padding-left: 53px;
+    padding-right: 53px;
+    width: 200px;
+    height: 40px;
+    border: 1px solid #777F97;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    .folderContent {
+      display: flex;
+      width: 94px;
+
+      .folderIcon {
+        margin-right: 10px;
+      }
+
+      .folderDesc {
+        width: 70px;
+        display: inline-block;
+        font-family: Noto Sans SC;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+
+        color: #777F97;
+      }
+    }
   }
 }
+
+.operateTitle {
+  height: 98px;
+  width: 100%;
+  padding: 36px 0;
+
+  .backBox {
+    width: 197px;
+    padding: 0 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    .backIcon {
+      float: left;
+      width: 15px;
+      margin-right: 10px;
+    }
+
+    .backDesc {
+      float: right;
+      width: 108px;
+      font-family: "Noto Sans SC";
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 26px;
+
+      color: #333333;
+    }
+  }
+}
+
+.operateGroup {
+  padding: 0 10px;
+
+  .btnGroup {
+    position: absolute;
+    width: 541px;
+    height: 240px;
+    // top: 393px;
+    // left: 570px;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    .newDashBoard {
+      background-color: #fff;
+      border-radius: 10px;
+      width: 240px;
+      height: 240px;
+      float: right;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .dashBoardContent {
+        cursor: pointer;
+
+        .dashboardSvg {}
+
+        .dashboardDesc {
+          margin-top: 21px;
+          text-align: center;
+          font-family: "Noto Sans SC";
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 23px;
+
+          color: #333333;
+        }
+      }
+    }
+
+    .newForm {
+      background-color: #fff;
+      border-radius: 10px;
+      width: 240px;
+      height: 240px;
+      float: left;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .formContent {
+        cursor: pointer;
+
+        .formSvg {}
+
+        .formDesc {
+          margin-top: 21px;
+          text-align: center;
+          font-family: "Noto Sans SC";
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 23px;
+
+          color: #333333;
+
+        }
+      }
+    }
+  }
+}
+
+.searchBox {
+  margin-bottom: 20px;
+
+  :global(.ant-input) {
+    font-family: "Noto Sans SC";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #B6B6BA;
+  }
+}
+
 .formArea {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: 359px;
   overflow-y: auto;
   overflow-x: hidden;
+  border-bottom: 1px solid #D6D8DE;
+
   :global(.ant-menu-inline) {
     border: none;
+    padding-top: 20px;
+
   }
+
   .empty {
     flex: 1;
   }
 }
+
 .serviceSider {
   width: 50px;
 }
+
 .menuBorderNone {
   border: none !important;
   margin-top: 35px !important;
+
   li {
     height: 46px !important;
     line-height: 46px !important;
     border-left: 4px solid #fff;
+
+    img {
+      width: 55% !important;
+    }
     svg {
       margin-left: 6px;
       margin-top: 8px;
     }
   }
+
   :global(.ant-menu-item-selected) {
     border-left: 4px solid #1890ff;
+
+    img {
+      width: 55% !important;
+      position: relative;
+      left: -80px;
+      filter: drop-shadow(#1890ff 80px 0);
+    }
     svg  {
       g, polyline, path {
         fill: #1890ff;
@@ -110,6 +294,7 @@
 .innerMain {
   margin: 0 64px;
   display: block;
+
   button {
     width: 180px;
     height: 144px;
@@ -119,7 +304,8 @@
     margin: 10px 40px 40px 0px;
     vertical-align: top;
   }
-  > svg {
+
+  > svg,>img {
     position: absolute;
     left: 50%;
     top: 50%;

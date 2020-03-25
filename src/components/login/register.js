@@ -58,7 +58,7 @@ export default connect()(function Register({
                 邀请您加入-<BlueFont>{invitedTeam}</BlueFont>
               </>
             ) : (
-              "感谢您的选择,"
+              "感谢您的选择, "
             )}
           </span>
         </div>
@@ -68,7 +68,7 @@ export default connect()(function Register({
       </div>
       <div>
         <PublicForm
-          marginBottom={24}
+          marginBottom={15}
           parameter={registerParameter}
           func={registerUser}
           params={params}

@@ -6,8 +6,8 @@ import Authenticate from "../shared/Authenticate";
 import { TEAM_MANAGEMENT_ABLE } from "../../auth";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
-import arrowLeft from "../../styles/images/arrow-left.svg";
-import { promptIcon, teamManageIcon } from "../../styles/images/index";
+import { ArrowLeftIcon, PromptIcon } from "../../assets/icons";
+import { TeamManageIcon } from "../../assets/icons/teams";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
@@ -34,6 +34,10 @@ const backThunk = {
   marginLeft: "10px",
   position: "absolute"
 };
+const backImg = {
+  display: "flex",
+  alignItems: "center"
+};
 const backArrow = {
   width: "15px",
   height: "14px",
@@ -52,8 +56,7 @@ const ghostButton = {
   color: "#ffffff",
   width: "110px",
   height: "32px",
-  padding: "0",
-  marginTop: "9px"
+  padding: "0"
 };
 const ghostButtonContent = {
   display: "flex",
@@ -75,12 +78,13 @@ export default connect(({ router }) => ({
       logo: false,
       menu: false,
       teamManage: false,
-      backArrow: true
+      backArrow: "init",
+      backUrl: null
     }
   } = props;
   const getPrompt = count => (
     <Badge count={count || 6}>
-      <img src={promptIcon} alt="" />
+      <PromptIcon />
     </Badge>
   );
   return (
@@ -88,23 +92,23 @@ export default connect(({ router }) => ({
       <div className={classes.wrapper}>
         <div className={classes.logo}>
           <Authenticate hide={hides.logo}>
-            <div style={logoStyle}>
-              {/* logo */}
-              </div>
+            <div style={logoStyle}>{/* logo */}</div>
           </Authenticate>
         </div>
         <div style={backThunk}>
-          <Authenticate hide={hides.backArrow}>
-            <div>
-              <img
-                src={arrowLeft}
-                alt=""
+          <Authenticate hide={hides.backArrow === "init"}>
+            <div style={backImg}>
+              <ArrowLeftIcon
                 style={backArrow}
-                onClick={() => history.push("/")}
+                onClick={
+                  hides.backArrow === "init"
+                    ? null
+                    : () => history.push(hides.backUrl)
+                }
               />
             </div>
             <div>
-              <span style={backTitle}>团队管理</span>
+              <span style={backTitle}>{hides.backArrow}</span>
             </div>
           </Authenticate>
         </div>
@@ -133,11 +137,7 @@ export default connect(({ router }) => ({
               onClick={toTeamMangement}
             >
               <div style={ghostButtonContent}>
-                <img
-                  style={{ paddingRight: "5px" }}
-                  src={teamManageIcon}
-                  alt=""
-                />
+                <TeamManageIcon style={{ marginRight: "5px"}} />
                 团队管理
               </div>
             </Button>

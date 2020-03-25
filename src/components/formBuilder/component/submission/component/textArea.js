@@ -2,13 +2,14 @@ import React from "react";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import { isValueValid } from "../../../utils/valueUtils";
 import { Input, Form } from "antd";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
 
-export default class TextArea extends React.Component {
+class TextArea extends React.Component {
 
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
@@ -20,7 +21,8 @@ export default class TextArea extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let index = -1;
@@ -142,3 +144,4 @@ export default class TextArea extends React.Component {
     );
   }
 }
+export default withRouter(TextArea)

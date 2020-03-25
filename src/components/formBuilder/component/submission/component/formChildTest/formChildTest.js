@@ -11,6 +11,7 @@ import {
   Button,
   DatePicker
 } from "antd";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -31,7 +32,7 @@ import DropDown from "./components/dropDown";
 import MultiDropDown from "./components/multiDropDown";
 import moment from "moment";
 
-export default class FormChildTest extends React.Component {
+class FormChildTest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,25 +48,30 @@ export default class FormChildTest extends React.Component {
     this.handleAddRow = this.handleAddRow.bind(this);
     this.renderFormChild = this.renderFormChild.bind(this);
   }
-  _initSubmitData = (item , submitDataArray) =>{
+  _initSubmitData = (item, submitDataArray) => {
     // 初始化子表单的数据，补齐或者填充数据
     let childComponent = item.values;
     let newSubmitDataArray = [];
-    newSubmitDataArray = submitDataArray.map( submission =>{
-      let result = {}
-      childComponent.map(component =>{
-        result[component.key] = this._buildDefaultValueByType(component, submission)
-      })
+    newSubmitDataArray = submitDataArray.map(submission => {
+      let result = {};
+      childComponent.map(component => {
+        result[component.key] = this._buildDefaultValueByType(
+          component,
+          submission
+        );
+      });
       return result;
-    })
-    return newSubmitDataArray
-  }
+    });
+    return newSubmitDataArray;
+  };
 
-  _buildDefaultValueByType = (item, submission) =>{
+  _buildDefaultValueByType = (item, submission) => {
     let result = {};
     let newArray = [...this.props.submitDataArray];
     let { handleSetComponentEvent } = this.props;
-    let data = submission[item.key] != void 0 ? submission[item.key].data : null ;
+    const {appId} = this.props.match.params;
+    let data =
+      submission[item.key] != void 0 ? submission[item.key].data : null;
     switch (item.type) {
       case "SingleText":
       case "TextArea":
@@ -80,7 +86,7 @@ export default class FormChildTest extends React.Component {
           formType: item.type,
           data: data || item.defaultValue || null,
           validate: item.validate,
-          hasErr: false,
+          hasErr: false
         };
         break;
       case "DateInput":
@@ -105,25 +111,24 @@ export default class FormChildTest extends React.Component {
           values: item.values
         };
       }
-      case "CheckboxInput":
-        {
-          result = {
-            type: item.label,
-            formType: item.type,
-            data: data,
-            hasErr: false,
-            validate: item.validate,
-            values: item.values
-          };
-          break;
-        }
+      case "CheckboxInput": {
+        result = {
+          type: item.label,
+          formType: item.type,
+          data: data,
+          hasErr: false,
+          validate: item.validate,
+          values: item.values
+        };
+        break;
+      }
       case "MultiDropDown":
       case "DropDown": {
         let dropDownOptions = [];
         let values = item.data.values;
         if (values.type == "otherFormData") {
           // 子表单关联其他数据
-          getSelection(values.formId, values.optionId).then(res => {
+          getSelection(appId, values.formId, values.optionId).then(res => {
             result[item.key].dropDownOptions = res.map(data => data.value);
             this.setState({
               refesh: !this.state.refesh
@@ -160,72 +165,74 @@ export default class FormChildTest extends React.Component {
         break;
     }
     // result.isShow = true;
-      // 根据dataLink的数据进行注册监听
-      if (item.data && item.data.values && item.data.values.linkFormId) {
-        const {
-          conditionId, //联动条件 id(当前表单)
-          linkComponentId, //联动条件 id(联动表单)
-          linkDataId, //联动数据 id(联动表单)
-          linkFormId //联动表单 id
-        } = item.data.values;
-        // 得到id表单的所有提交数据
-        getFormAllSubmission(linkFormId).then(submissions => {
-          // 根据联动表单的组件id 得到对应所有数据
-          let dataArr = filterSubmissionData(submissions, linkComponentId);
-          if (item.type === "DropDown" || item.type === "MultiDropDown") {
-            handleSetComponentEvent(
-              conditionId,
-              value =>
-                this.dataLinkCallEventForSelection({
-                  value,
-                  dataArr,
-                  submissions,
-                  linkDataId,
-                  result,
-                  item,
-                  newArray
-                }),
-              newArray.length - 1,
-              this.props.item.key
-            );
-          } else {
-            // 为需要联动的表单添加 change事件
-            handleSetComponentEvent(
-              conditionId,
-              value => {
-                let index = -1;
-                // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
-                // 如果change数据为数组 则进行深度比较
-                if (value instanceof Array) {
-                  index = compareEqualArray(dataArr, value);
-                } else {
-                  index = dataArr.indexOf(value);
-                }
-                // 如果存在 获得提交数据中关联字段的数据
-                if (index > -1) {
-                  let data = filterSubmissionData(submissions, linkDataId);
-                  // 根据查找的idnex取得对应的关联数据
-                  const res = data[index];
-                  // 更新对应字段的值
-                  result[item.key].data = res;
-                  this.props.saveSubmitData(newArray);
-                } else {
-                  result[item.key].data = null;
-                }
-              },
-              newArray.length - 1,
-              this.props.item.key
-            );
-          }
-        });
-      }
-    return result
-  }
+    // 根据dataLink的数据进行注册监听
+    if (item.data && item.data.values && item.data.values.linkFormId) {
+      const {
+        conditionId, //联动条件 id(当前表单)
+        linkComponentId, //联动条件 id(联动表单)
+        linkDataId, //联动数据 id(联动表单)
+        linkFormId //联动表单 id
+      } = item.data.values;
+      // 得到id表单的所有提交数据
+      const { appId } = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
+        // 根据联动表单的组件id 得到对应所有数据
+        let dataArr = filterSubmissionData(submissions, linkComponentId);
+        if (item.type === "DropDown" || item.type === "MultiDropDown") {
+          handleSetComponentEvent(
+            conditionId,
+            value =>
+              this.dataLinkCallEventForSelection({
+                value,
+                dataArr,
+                submissions,
+                linkDataId,
+                result,
+                item,
+                newArray
+              }),
+            newArray.length - 1,
+            this.props.item.key
+          );
+        } else {
+          // 为需要联动的表单添加 change事件
+          handleSetComponentEvent(
+            conditionId,
+            value => {
+              let index = -1;
+              // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
+              // 如果change数据为数组 则进行深度比较
+              if (value instanceof Array) {
+                index = compareEqualArray(dataArr, value);
+              } else {
+                index = dataArr.indexOf(value);
+              }
+              // 如果存在 获得提交数据中关联字段的数据
+              if (index > -1) {
+                let data = filterSubmissionData(submissions, linkDataId);
+                // 根据查找的idnex取得对应的关联数据
+                const res = data[index];
+                // 更新对应字段的值
+                result[item.key].data = res;
+                this.props.saveSubmitData(newArray);
+              } else {
+                result[item.key].data = null;
+              }
+            },
+            newArray.length - 1,
+            this.props.item.key
+          );
+        }
+      });
+    }
+    return result;
+  };
   // 重新计算子字段的数据联动
   _reSetDataLinkFormChildItem = () => {
     let { item, handleSetComponentEvent, submitDataArray } = this.props;
     let values = item.values;
     let newArray = [];
+    const {appId} = this.props.match.params;
 
     submitDataArray.forEach((child, index) => {
       let result = {};
@@ -307,7 +314,7 @@ export default class FormChildTest extends React.Component {
             linkFormId //联动表单 id
           } = item.data.values;
           // 得到id表单的所有提交数据
-          getFormAllSubmission(linkFormId).then(submissions => {
+          getFormAllSubmission(appId, linkFormId).then(submissions => {
             // 根据联动表单的组件id 得到对应所有数据
             let dataArr = filterSubmissionData(submissions, linkComponentId);
             if (item.type === "DropDown" || item.type === "MultiDropDown") {
@@ -375,6 +382,7 @@ export default class FormChildTest extends React.Component {
     let { item, handleSetComponentEvent } = this.props;
     let values = item.values;
     let result = {};
+    const {appId} = this.props.match.params;
 
     values.forEach(item => {
       switch (item.type) {
@@ -422,7 +430,7 @@ export default class FormChildTest extends React.Component {
           let values = item.data.values;
           if (values.type === "otherFormData") {
             // 子表单关联其他数据
-            getSelection(values.formId, values.optionId).then(res => {
+            getSelection(appId, values.formId, values.optionId).then(res => {
               result[item.key].dropDownOptions = res.map(data => data.value);
               this.setState({
                 refesh: !this.state.refesh
@@ -468,7 +476,7 @@ export default class FormChildTest extends React.Component {
           linkFormId //联动表单 id
         } = item.data.values;
         // 得到id表单的所有提交数据
-        getFormAllSubmission(linkFormId).then(submissions => {
+        getFormAllSubmission(appId, linkFormId).then(submissions => {
           // 根据联动表单的组件id 得到对应所有数据
           let dataArr = filterSubmissionData(submissions, linkComponentId);
           if (item.type === "DropDown" || item.type === "MultiDropDown") {
@@ -530,11 +538,11 @@ export default class FormChildTest extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { initData, item } = nextProps;
-    if(initData && this.state.initFlag){
+    if (initData && this.state.initFlag) {
       this.props.saveSubmitData(this._initSubmitData(item, initData));
       this.setState({
         initFlag: false
-      })
+      });
     }
   }
 
@@ -557,7 +565,8 @@ export default class FormChildTest extends React.Component {
         formChildData //子表单联动数据
       } = data.values;
       // 得到id表单的所有提交数据
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const { appId } = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         // 为需要联动的表单添加 change事件
@@ -983,35 +992,36 @@ export default class FormChildTest extends React.Component {
             </div>
           );
           break;
-        case "DateInput":{
-          let valueOption = {}
-          if(item.data && item.data.moment){
-            valueOption.value = moment(item.data.moment) 
-          }
-          resultArray.push(
-            <div key={key} style={{ width: 200 }} className={className}>
-              <DatePicker
-                showTime
-                locale={locale}
-                {...valueOption}
-                placeholder="请选择时间/日期"
-                onChange={(value, dataString) => {
-                  item.data.time = dataString;
-                  item.data.moment = value;
+        case "DateInput":
+          {
+            let valueOption = {};
+            if (item.data && item.data.moment) {
+              valueOption.value = moment(item.data.moment);
+            }
+            resultArray.push(
+              <div key={key} style={{ width: 200 }} className={className}>
+                <DatePicker
+                  showTime
+                  locale={locale}
+                  {...valueOption}
+                  placeholder="请选择时间/日期"
+                  onChange={(value, dataString) => {
+                    item.data.time = dataString;
+                    item.data.moment = value;
 
-                  checkValueValidByType(item, value)
-                    ? (item.hasErr = false)
-                    : (item.hasErr = true);
-                  this.setState(state => ({
-                    ...state,
-                    refesh: !this.state.refesh
-                  }));
-                  this._checkFormChildHasError(submitDataArray);
-                }}
-              />
-            </div>
-          );
-        }
+                    checkValueValidByType(item, value)
+                      ? (item.hasErr = false)
+                      : (item.hasErr = true);
+                    this.setState(state => ({
+                      ...state,
+                      refesh: !this.state.refesh
+                    }));
+                    this._checkFormChildHasError(submitDataArray);
+                  }}
+                />
+              </div>
+            );
+          }
           break;
         case "Address":
           resultArray.push(
@@ -1324,3 +1334,4 @@ export default class FormChildTest extends React.Component {
     );
   }
 }
+export default withRouter(FormChildTest);
