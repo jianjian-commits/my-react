@@ -6,6 +6,7 @@
   color: #333;
   font-size: 18px;
   margin-bottom: 41px;
+  margin-top:4px;
 }
 
 .lable {
@@ -16,7 +17,7 @@
   color: #333;
 }
 
-.text::after{
+.text::after {
   content: '';
   display: block;
   clear: both;
@@ -33,7 +34,6 @@
 }
 
 .listBox {
-  padding: 5px 30px;
   background-color: #fff;
   font-size: 14px;
 }
@@ -55,12 +55,9 @@
 .rowBox {
   width: 100%;
   height: 32px;
+  padding: 0 16px;
   line-height: 32px;
   box-sizing: border-box;
-}
-
-.filter {
-  padding: 0 0 10px 0;
 }
 
 .filterSvg {
@@ -82,35 +79,37 @@
 }
 
 .tableBox {
-  & th {
-    padding: 14px !important;
-    background: #fff !important;
-    color: #333 !important;
-  }
   :global(.ant-table-column-title) {
-    color: #777f97;
+    color: #333;
   }
+
   :global(.ant-table) {
+    th {
+      color: #333;
+      font-size: 14px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
     td {
+      padding: 0 16px;
       color: #000;
     }
   }
+
   .rowKey {
     height: 50px;
     box-sizing: border-box;
     background-color: #fff;
     color: #333;
-
-    & td {
-      padding: 0 16px;
-    }
   }
+}
 
-  // & .rowKey:nth-of-type(2n) {
-  //   background-color: #fff;
-  // }
+.filterRow {
+  padding: 10px 10px 10px 0 !important;
+}
 
-  // & .rowKey:nth-of-type(2n + 1) {
-  //   background-color: #edf2fd;
-  // }
+
+.submitBtn {
+  margin-left: 10px;
 }

@@ -211,12 +211,12 @@ class ProfileManagement extends React.Component {
                     cancelText="否"
                     onConfirm={() => this.removeGroup(record)}
                   >
-                    <Button type="link" key={w.key}>
+                    <Button type="link" key={w.key} style={{color:"#2A7FFF"}}>
                       {w.text}
                     </Button>
                   </Popconfirm>
                 ) : (
-                  <Button type="link" onClick={w.options} key={w.key}>
+                  <Button type="link" onClick={w.options} key={w.key} style={{color:"#2A7FFF"}}>
                     {w.text}
                   </Button>
                 )}

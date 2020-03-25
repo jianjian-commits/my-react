@@ -95,7 +95,7 @@ class Apps extends React.Component {
               >
                 创建应用
               </Button>
-              {appList.length < 2 && (
+              {appList.length < 1 && (
                 <>
                   <NoAppImg />
                   <p>

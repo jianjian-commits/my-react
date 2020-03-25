@@ -4,7 +4,7 @@
   > span {
     font-size: 18px;
     display: inline-block;
-    padding: 0 0 41px 0;
+    padding: 4px 0 41px 0;
     color: #333333;
   }
   svg {
@@ -12,11 +12,12 @@
   }
   > button {
     float: right;
-    color: #1890ff;
+    color: #2a7fff;
     width: 104px;
     height: 36px;
     padding: 0;
     margin-left: 20px;
+    border: none;
   }
   :global(.ant-table) {
     tr {
@@ -36,23 +37,39 @@
   :global(.ant-table-tbody > tr > td) {
     padding: 9px 16px;
   }
+  :global(.ant-table-tbody > tr:last-child > td){
+    border-bottom: 0;
+  }
   :global(.ant-table-column-title) {
-    color: #777f97;
+    color: #333333;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  :global(.ant-checkbox-inner) {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border: 1px solid #2a7fff;
   }
   :global(.ant-checkbox-checked .ant-checkbox-inner) {
     background-color: transparent;
   }
   :global(.ant-checkbox-checked .ant-checkbox-inner::after) {
-    border: 2px solid #1890ff;
+    border: 2px solid #2a7fff;
     border-top: 0;
     border-left: 0;
+    height: 12px;
+    width: 7px;
+    top: 44%;
+    left: 23%;
   }
 }
 
 .moduleTitle {
   font-size: 15px;
-  margin: 30px 8px 10px 0;
+  margin: 30px 8px 17px 0;
   display: inline-block;
+  color: #777f97;
 }
 
 // 基础信息
@@ -79,6 +96,7 @@
         color: #333;
         overflow-y: hidden;
         overflow-x: hidden;
+        position: relative;
         span {
           max-width: 190px;
           display: inline-block;
@@ -86,9 +104,9 @@
           white-space: nowrap;
           text-overflow: ellipsis;
         }
-        img {
-          float: absolute;
-          margin: 5px 0 35px 4px;
+        svg {
+          position: absolute;
+          margin: 10px 0 0 5px;
           cursor: pointer;
         }
       }
@@ -100,6 +118,9 @@
 .groupApp {
   table {
     border-top: 1px solid #e8e8e8;
+    th span {
+      font-weight: normal !important;
+    }
   }
   :global(td:nth-child(2) label) {
     margin-left: 20px;

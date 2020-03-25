@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Table, message } from "antd";
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { Table } from "antd";
 import TransactionDetail from "./TransactionDetail"
-import request from '../../utils/request'
 import classes from "./transactList.module.scss";
 
 
@@ -37,86 +36,9 @@ const data = [
   }
 ];
 
-const data2 = [
-  {
-    key: "1",
-    name: "理财产品合同审批2",
-    description: "理财产品管理",
-    owner: "张三",
-    result: "进行中",
-    process: "风险较大客户",
-    time: "2019/11/12"
-  },
-  {
-    key: "2",
-    name: "理财产品合同审批2",
-    description: "理财产品管理",
-    owner: "李四",
-    result: "进行中",
-    process: "高金额客户",
-    time: "2019/11/12"
-  },
-  {
-    key: "3",
-    name: "病假审批2",
-    description: "请假审批",
-    owner: "王五",
-    result: "进行中",
-    process: "部门审批",
-    time: "2019/11/12"
-  }
-];
-
 
 const TransactList = props => {
-  const { appId } = useParams();
-  const [transactList, setTransactList] = React.useState([]);
-  const [approvalKey, setApprovalKey] = React.useState(null);
-  const [currentDetailId, setCurrentDetailId] = React.useState(null);
-
-  useEffect(() => {
-    if(props.approvalKey !== approvalKey){
-      getTransactList();
-    }
-  });
-
-  async function getTransactList() {
-    let url = "";
-    let resData = [];
-    switch(props.approvalKey){
-      case "myPending": {
-        url="/userTask/taskDoing";
-        resData=data2;
-      };break;
-      case "myHandled": {
-        url="/userTask/taskDone";
-        resData=data;
-      };break;
-      case "mySubmitted": {
-        url="/userTask/taskStart";
-        resData=data;
-      };break;
-      default : break;
-    }
-
-    try {
-      const res = await request(url,{
-        headers:{
-          appid: appId
-        }
-      });
-      if (res && res.status === "SUCCESS") {
-        if(resData.length !== 0){
-          setTransactList(resData)
-          setApprovalKey(props.approvalKey)
-        }
-      } else {
-        message.error("获取审批列表失败");
-      }
-    } catch (err) {
-      message.error("获取审批列表失败");
-    }
-  }
+  // const [currentDetailId, setCurrentDetailId] = React.useState(null);
   const columns = [
     {
       title: "审批流名称",
@@ -153,7 +75,9 @@ const TransactList = props => {
       key: "action",
       render: (text, record) => {
         return (
-          <span style={{cursor:"pointer"}} onClick={(e)=>{props.setEnterApprovalDetail(true); setCurrentDetailId(record.key)}}>查看</span>
+          <span>
+            <Link to="/app/1/1">查看</Link>
+          </span>
         );
       }
     }
@@ -172,20 +96,12 @@ const TransactList = props => {
   })();
 
   return (
-    props.enterApprovalDetail === false ?(
-      <div className={classes.tableBox}>
+    <div className={classes.tableBox} style={{  width: "calc(100vw - 500px)", margin:"0 auto"}}>
       <div className={classes.tableTitle}>
-        {_title} <span className={classes.totalNumber}>（共{transactList.length}条）</span>
+        {_title} <span className={classes.totalNumber}>（共{data.length}条）</span>
       </div>
-      <Table columns={columns} dataSource={transactList} className={classes.tableContent}></Table>
+      <Table columns={columns} dataSource={data} className={classes.tableContent}></Table>
     </div>
-    ):(
-      <TransactionDetail 
-        fn = {props.fn} 
-        approvalKey={props.approvalKey}
-        currentDetailId={currentDetailId}/>
-    )
-    
   );
 };
 
