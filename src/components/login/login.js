@@ -7,8 +7,7 @@ import PublicForm from "./publicForm";
 import Loading from "../../pages/Loading";
 import { loginPasswordParameter, loginPhoneParameter } from "./formItems";
 import clx from "classnames";
-import signinImg from "./style/signin.svg";
-import registerImg from "./style/register.svg";
+import { SigninImage, RegisterImage } from "../../assets/icons/login";
 import Register from "./register";
 import { Redirect } from "react-router";
 
@@ -16,7 +15,7 @@ function Registe({ params, history, setActiveKey, query }) {
   return (
     <>
       <div>
-        <img src={registerImg} alt="" />
+        <RegisterImage/>
       </div>
       <div>
         <Register
@@ -34,7 +33,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
   return (
     <>
       <div>
-        <img src={signinImg} alt="" />
+        <SigninImage/>
       </div>
       <div>
         <Tabs
@@ -116,7 +115,7 @@ export default connect(
               { [Styles.activeRight]: activeKey === "signin" },
               { [Styles.activeLeft]: activeKey === "register" }
             )}
-            style={{ left: activeKey === "initRegister" ? "-1240px" : "0px" }}
+            style={{ left: activeKey === "initRegister" ? "-1016px" : "0px" }}
           >
             <div className={clx(Styles.signin)}>
               {
