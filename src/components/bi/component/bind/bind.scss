@@ -87,6 +87,17 @@
     border: 1px solid #adb5bd;
    }
 
+  .data-box{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 14px;
+  }
+  
+  .change-data-source{
+    cursor: pointer;
+    color: #2B81FF;
+  }
+
   .left-pane-dimension {
     height: 40%;
     border: 1px solid #adb5bd;
@@ -99,6 +110,7 @@
 
   .data-source-name {
     font-size: 15px;
+    margin-left: 14px;
   }
 
   .data-source-name:hover {

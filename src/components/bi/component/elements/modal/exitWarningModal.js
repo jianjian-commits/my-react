@@ -18,18 +18,19 @@ export default function ExitWaringTip(props) {
   return (
     <Modal
       title={<ModalTitle>{title}</ModalTitle>}
-      visible={true}
+      visible={props.visible}
       closable={false}
       footer={null}
       width={400}
       bodyStyle={{padding:0}}
       wrapClassName="BImodal"
       centered
+      handleCancel={props.handleCancel}
     >
       <div className="warningModalContainer">
         <div className="warningModalContent">{content}</div>
         <div className="warningBtnGroups">
-          <Button>取消</Button>
+          <Button onClick={props.handleCancel}>取消</Button>
           <Button>确定</Button>
         </div>
       </div>
