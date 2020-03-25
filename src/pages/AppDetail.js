@@ -163,7 +163,7 @@ const AppDetail = props => {
       <Layout>
         <Sider className={classes.appSider} style={{ background: "#fff" }} width="240">
           <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} />
-          <div className={classes.searchBox}>
+          <div className={classes.searchBox} style={{ margin: "20px 16px 0 16px"}}>
             <Input
               placeholder="输入名称来搜索"
               value={searchKey}

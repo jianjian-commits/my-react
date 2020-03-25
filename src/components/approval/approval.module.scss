@@ -1,13 +1,14 @@
 .sectionWrapper {
+  &:after{
+    content: '';
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    height: 1pX;
+    background-color: #DCDEE3;
+  }
   .sectionContent {
-    &:after{
-      content: '';
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      height: 1pX;
-      background-color: #e8e8e8;
-    }
+    margin-bottom: 20px;
     :global(.ant-menu-vertical) {
       border: none;
     }
@@ -26,7 +27,7 @@
     cursor: pointer;
     color: #333;
     &:hover {
-      background:rgba(42, 127, 255, 0.15);
+      background:#E7F0FF;
       color: #333;
     }
     svg {
