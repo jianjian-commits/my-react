@@ -7,29 +7,62 @@
   z-index: 1 !important;
 }
 .form-submit-data-table {
-  padding-top: 60px;
+  padding: 0 30px;
   box-sizing: border-box;
-  width: 86.041%;
-  margin: 0 auto;
-  padding-bottom: 56px;
-  overflow: hidden;
+  // overflow: hidden;
   position: relative;
   .filter-container {
     width: 364px;
     height: 385px;
     background-color: #ffffff;
-    margin-bottom: 20px;
-    padding: 22px;
     position: absolute;
+    padding: 20px;
     z-index: 10;
-    right: -38px;
-    top: 0;
+    right: 22px;
+    top: -22px;
+    box-shadow: 0px 2px 8px rgba(106, 116, 140, 0.25);
+    border-radius: 3px;
+    .line {
+      width: 364px;
+      height: 1px;
+      margin-left: -20px;
+      background-color: #d6d8de;
+    }
     .filter-item-container {
-      max-height: 265px;
+      width: 364px;
+      margin-left: -20px;
+      height: 217px;
       overflow-y: auto;
       overflow-x: hidden;
+      padding: 10px 0;
       .filter-item {
+        margin: 0 auto;
         margin-bottom: 10px;
+        width: 324px;
+        .ant-select-selection {
+          width: 149px;
+          height: 36px;
+        }
+        .logicSymbol {
+          .ant-select-selection {
+            width: 108px;
+            height: 36px;
+          }
+        }
+        .descBox {
+          display: inline-block;
+          height: 36px;
+          line-height: 36px;
+          text-align: center;
+        }
+        .valueBox {
+          height: 36px;
+        }
+        .filter-action {
+          .reduceBtn svg {
+            color: #e71010;
+          }
+        }
       }
     }
     .option-style {
@@ -48,12 +81,25 @@
       }
     }
     .filter-condition {
+      .filter-condition-option {
+        width: 281px;
+        height: 36px;
+        border-radius: 3px;
+        margin-bottom: 20px;
+      }
+      .clear-btn {
+        line-height: 30px;
+        color: #777F97;
+        padding-left: 11px;
+        cursor: pointer;
+      }
       .ant-select-selection-selected-value {
         font-size: 14px;
         color: #565c6e;
         font-weight: 500;
       }
       .ant-select-selection__placeholder {
+        width: 96px;
         font-size: 14px;
         color: #565c6e;
         font-weight: 500;
@@ -68,13 +114,16 @@
     }
     .filter-submit-container {
       display: flex;
-      justify-content: space-around;
-      button{
-        width: 125px;
+      justify-content: center;
+      align-items: center;
+      height: 76px;
+      button {
+        width: 140px;
         height: 36px;
       }
-      button:nth-of-type(2){
-        color: #B6B6BA;
+      button:nth-of-type(2) {
+        margin-left: 20px;
+        color: #b6b6ba;
       }
     }
   }
@@ -131,6 +180,9 @@
         }
         &.ant-table-row-cell-break-word,
         &.ant-table-column-has-actions {
+          font-size: 15px;
+          color: #333;
+          font-weight: bold;
           border-left: none;
           border-right: none;
         }
@@ -149,7 +201,7 @@
         text-align: center;
         line-height: 56px;
         height: 56px;
-        color: #565c6e;
+        color: #333;
         font-size: 14px;
         font-weight: 400;
         border-color: #f3f4f5 !important;
@@ -198,7 +250,7 @@
   }
 
   .ant-btn.ant-btn-link {
-    color: #5a8ced;
+    color: #2a7fff;
     height: 24px;
     padding: 0 10px;
   }
@@ -236,6 +288,7 @@
   width: auto;
   height: auto;
   .ant-modal-body {
+    padding:0;
     .showDataDetail {
       width: 520px;
       height: 600px;

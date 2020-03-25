@@ -21,16 +21,33 @@
     padding: 14px;
     background: #fff;
   }
+  :global(.ant-table-tbody){
+    font-size: 14px;
+  }
   :global(.ant-table-tbody > tr > td) {
     padding: 9px 16px;
   }
   :global(.ant-table-column-title) {
-    color: #777f97;
+        font-family: "Microsoft YaHei";
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
   }
 }
 .tableTitle {
-  padding: 20px 0;
-  font-size: 26px;
-  font-weight: 700;
-  color: #999;
+  font-family: "Microsoft YaHei";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 24px;
+  color: #333333;
+  padding:40px 0;
+  .totalNumber {
+    color: #777f97;
+  }
+}
+.tableContent{
+  font-family: "Microsoft YaHei";
+  font-style: normal;
+  font-size: 14px;
 }

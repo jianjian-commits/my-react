@@ -14,7 +14,10 @@ import { getFormsAll } from "../components/formBuilder/component/homePage/redux/
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
-import TransactList from "../components/transactList/TransactList";
+// import TransactList from "../components/transactList/TransactList";
+import TodoTransctionList from "../components/transactList/TodoTransctionList";
+import SubmitTransctionList from "../components/transactList/SubmitTransctionList";
+import HandleTranscationList from "../components/transactList/HandleTranscationList";
 
 import classes from "../styles/apps.module.scss";
 const { Content, Sider } = Layout;
@@ -67,6 +70,7 @@ const AppDetail = props => {
         key: item.id,
         name: item.name
       }));
+      console.log(res)
       setMockForms({
         groups: [],
         searchList: [],
@@ -126,6 +130,33 @@ const AppDetail = props => {
 
   console.log("submit", submit);
   console.log("selectedForm", selectedForm);
+  let TransactList = <></> ;
+  let transctionListOptions = {
+    actionFun: (submission_id, submitFlag = false, formId)=>{
+      setSubmit(submitFlag);
+      setSubmissionId(submission_id)
+      if(formId){
+        setSelectedForm(formId)
+      }
+    },
+    fn: onClickMenu, 
+    approvalKey: approvalKey, 
+    enterApprovalDetail: enterApprovalDetail, 
+    setEnterApprovalDetail: setEnterApprovalDetail
+  }
+  switch (approvalKey) {
+    case "myPending":
+      TransactList = <TodoTransctionList {...transctionListOptions}/> ;
+      break;
+    case "mySubmitted":
+      TransactList = <SubmitTransctionList {...transctionListOptions}/> ;
+      break;
+    case "myHandled":
+      TransactList = <HandleTranscationList {...transctionListOptions}/> ;
+      break;
+    default:break;
+      // return <></>;
+  }
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
@@ -133,13 +164,17 @@ const AppDetail = props => {
         operations={getOreations(appId, history)}
       />
       <Layout>
-        <Sider className={classes.appSider} style={{ background: "#fff" }}>
+        <Sider className={classes.appSider} style={{ background: "#fff" }} width="240">
           <ApprovalSection fn={onClickMenu} />
           <div className={classes.searchBox}>
             <Input
               placeholder="输入名称来搜索"
               value={searchKey}
               onChange={searchHandle}
+              prefix={ <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11.8696 11.2369L9.44935 8.80981C10.2291 7.87776 10.6988 6.67619 10.6988 5.36437C10.6988 2.40165 8.3039 0 5.34945 0C2.39492 0 0 2.40163 0 5.36437C0 8.32711 2.39494 10.7287 5.34945 10.7287C6.6747 10.7287 7.88717 10.2453 8.82161 9.44493L11.239 11.869C11.4131 12.0437 11.6955 12.0437 11.8696 11.869C12.0435 11.6944 12.0435 11.4115 11.8696 11.2369ZM5.34946 9.83465C2.88747 9.83465 0.89158 7.83323 0.89158 5.36435C0.89158 2.89549 2.88747 0.894038 5.34946 0.894038C7.81145 0.894038 9.80702 2.8955 9.80702 5.36435C9.80702 7.83323 7.81143 9.83465 5.34946 9.83465Z" fill="#B6B6BA"/>
+                      </svg>
+              }
             />
           </div>
           <div className={classes.formArea}>
@@ -157,54 +192,50 @@ const AppDetail = props => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          {// eslint-disable-next-line
-          selectedForm != void 0 ? (
-            <>
-              {submit ? (
-                submissionId ? (
-                  <FormBuilderEditFormData
-                    key={Math.random()}
-                    formId={selectedForm}
-                    submissionId={submissionId}
-                    appId={appId}
-                    extraProp={user}
-                    actionFun={(submission_id, submitFlag = false) => {
-                      setSubmissionId(submission_id);
-                      setSubmit(submitFlag);
-                    }}
-                  ></FormBuilderEditFormData>
+          { // eslint-disable-next-line
+            selectedForm != void 0 ? (
+              <>
+                {submit ? (
+                  submissionId ? (
+                    <FormBuilderEditFormData
+                      key={Math.random()}
+                      formId={selectedForm}
+                      submissionId={submissionId}
+                      appId={appId}
+                      extraProp={user}
+                      actionFun={(submission_id, submitFlag = false) => {
+                        setSubmissionId(submission_id)
+                        setSubmit(submitFlag);
+                      }}
+                    ></FormBuilderEditFormData>
+                  )
+                    : (
+                      <FormBuilderSubmission
+                        key={Math.random()}
+                        formId={selectedForm}
+                        extraProp={user}
+                        appid={appId}
+                        actionFun={skipToSubmissionData}
+                      ></FormBuilderSubmission>
+                    )
                 ) : (
-                  <FormBuilderSubmission
-                    key={Math.random()}
-                    formId={selectedForm}
-                    extraProp={user}
-                    appid={appId}
-                    actionFun={skipToSubmissionData}
-                  ></FormBuilderSubmission>
-                )
-              ) : (
-                <FormBuilderSubmitData
-                  key={Math.random()}
-                  formId={selectedForm}
-                  actionFun={(submission_id, submitFlag = false, formId) => {
-                    setSubmit(submitFlag);
-                    setSubmissionId(submission_id);
-                    if (formId) {
-                      setSelectedForm(formId);
-                    }
-                  }}
-                  appId={appId}
-                ></FormBuilderSubmitData>
-              )}
-            </>
-          ) : approvalKey !== null ? (
-            <TransactList
-              fn={onClickMenu}
-              approvalKey={approvalKey}
-              enterApprovalDetail={enterApprovalDetail}
-              setEnterApprovalDetail={setEnterApprovalDetail}
-            />
-          ) : null}
+                    <FormBuilderSubmitData
+                      key={Math.random()}
+                      formId={selectedForm}
+                      actionFun={(submission_id, submitFlag = false, formId) => {
+                        setSubmit(submitFlag);
+                        setSubmissionId(submission_id)
+                        if (formId) {
+                          setSelectedForm(formId)
+                        }
+                      }}
+                      appId={appId}
+                    ></FormBuilderSubmitData>
+                  )}
+              </>
+            ) : approvalKey !== null ? (
+              TransactList
+            ) : null}
         </Content>
       </Layout>
     </Authenticate>
@@ -212,5 +243,7 @@ const AppDetail = props => {
 };
 export default connect(({ app, login }) => ({
   appList: app.appList,
+  teamId: login.currentTeam && login.currentTeam.id,
+  permissions: (login.userDetail && login.userDetail.permissions) || [],
   userDetail: login.userDetail
 }))(AppDetail);

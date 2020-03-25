@@ -3,13 +3,14 @@ import { isValueValid } from "../../../../utils/valueUtils";
 import { Form, Input, Tooltip, Icon, Drawer } from "antd";
 import { getSelection } from "../../utils/filterData";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   getResIndexArray
 } from "../../utils/dataLinkUtils";
 
-export default class multiDropDown extends React.Component {
+class MultiDropDown extends React.Component {
   constructor(props) {
     // selections 是用来存储下来列表的
     super(props);
@@ -26,6 +27,7 @@ export default class multiDropDown extends React.Component {
     // 根据 type 决定渲染的数据来源
     const { form, item, handleSetComponentEvent, initData } = this.props;
     const { data } = item;
+    const {appId} = this.props.match.params;
     // 数据联动请看单行文本组件
     if (data && data.values) {
       let { values, type } = data;
@@ -36,7 +38,7 @@ export default class multiDropDown extends React.Component {
           linkDataId,
           linkFormId
         } = data.values;
-        getFormAllSubmission(linkFormId).then(submissions => {
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
           let dataArr = filterSubmissionData(submissions, linkComponentId);
           handleSetComponentEvent(conditionId, value => {
             let indexArr = getResIndexArray(value, dataArr);
@@ -99,7 +101,7 @@ export default class multiDropDown extends React.Component {
         // 关联其他数据
         // 通过表单id和字段id过滤对应的提交数据
         // 将过滤的数据作为该表单的选项
-        getSelection(values.formId, values.optionId).then(res => {
+        getSelection(appId, values.formId, values.optionId).then(res => {
           this.setState({
             selections: this.filterUniqueSelections(res),
             setValue: [],
@@ -149,7 +151,7 @@ export default class multiDropDown extends React.Component {
       let dropDownOptions = [];
       let values = item.values;
       if (values.type == "otherFormData") {
-        getSelection(values.formId, values.optionId).then(res => {
+        getSelection(appId, values.formId, values.optionId).then(res => {
           this.setState({
             selections: this.filterUniqueSelections(res),
           });
@@ -505,3 +507,4 @@ export default class multiDropDown extends React.Component {
     );
   }
 }
+export default withRouter(MultiDropDown)

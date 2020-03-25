@@ -5,38 +5,38 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   margin: 0px;
 }
 .formBuilder-NavBar {
-  // position: fixed;
   top: 60px;
   left: 0;
   z-index: 1000;
-  height: 60px;
+  height: 113px;
   width: 100%;
-  background: rgba(255, 255, 255, 1);
+  padding-top: 9px;
+  background: transparent;
   min-width: 1000px;
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid rgba(238, 238, 238, 1);
-  box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
+  // border-bottom: 1px solid rgba(238, 238, 238, 1);
+  // box-shadow: 0px 1px 0px 0px rgba(233, 235, 240, 1);
   .headerBarTitle {
-    text-align: center;
-    height: 60px;
+    height: 104px;
     width: 75%;
-    line-height: 60px;
-    font-size: 14px;
+    margin-left: 32px;
+    line-height: 104px;
+    font-size: 18px;
     font-family: $font-Family;
     font-weight: 400;
-    color: rgba(86, 92, 110, 1);
+    color: #333;
   }
   .headerBarBack {
     line-height: 60px;
-    height: 60px;
+    height: 104px;
     width: 8%;
     display: flex;
     align-items: center;
     .ant-btn-link {
       margin-left: 10px;
       font-size: 14px;
-      font-family: $font-Family;
+      font-family: "Microsoft YaHei";
       font-weight: 500;
       color: rgba(86, 92, 110, 1);
       span {
@@ -45,29 +45,27 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     }
   }
   .headerBarExtraTitle{
-    width:9%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color:  #2A7FFF;
-   span{
+   >span{
+     display: block;
+     width: 104px;
+     height: 36px;
+     line-height: 36px;
+     text-align: center;
+     background-color: #fff;
+      border-radius: 3px;
+      margin-right: 20px;
     cursor: pointer;
     user-select: none;
    }
   }
   .headerBarButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 60px;
-    width: 8%;
-    .ant-btn {
-      border-radius: 4px;
-      background: rgba(0, 122, 255, 1);
-      font-size: 14px;
-      font-family: $font-Family;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
+    margin-right: 20px;
+    &.ant-btn {
+      width: 104px;
       height: 36px;
     }
   }
