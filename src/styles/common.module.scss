@@ -1,8 +1,19 @@
+.sider{
+  background: #fff !important;
+  padding-top: 14px !important;
+  ul{
+    border-right: 0;
+  }
+}
+
 .container {
   height: calc(100vh - 50px);
   padding: 10px;
   .header {
     padding: 37px 64px 5px 64px;
+  }
+  :global(.ant-menu-vertical){
+    border-right: 0;
   }
 }
 .title {
@@ -12,7 +23,6 @@
 }
 
 .menu {
-
   &:global(.ant-menu-item-selected) {
     ::before {
       border-left: 4px solid #1890ff;

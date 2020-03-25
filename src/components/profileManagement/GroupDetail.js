@@ -22,11 +22,16 @@ const Top = ({ disabled, enterDetail, handleDetail }) => (
         <Button
           type="primary"
           onClick={() => handleDetail()}
-          style={{ color: "#fff" }}
+          style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
         >
           保存
         </Button>
-        <Button onClick={() => enterDetail()}>取消</Button>
+        <Button
+          onClick={() => enterDetail()}
+          style={{ border: "1px solid #2A7FFF",backgroundColor:"transparent" }}
+        >
+          取消
+        </Button>
       </>
     )}
   </>
