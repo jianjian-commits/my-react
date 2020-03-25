@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-03-19 09:32:47
  * @LastEditors: komons
- * @LastEditTime: 2020-03-20 09:35:07
+ * @LastEditTime: 2020-03-23 10:40:17
  * @Description: 表单权限工具函数
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\utils\permissionUtils.js
  */
@@ -73,8 +73,8 @@ export function deleteFormAuth(permissions, teamId, appId, formId) {
 export function editFormDataAuth(permissions, teamId, appId, formId, userId) {
   if (hasSuperAuth(permissions, teamId)) return true;
   // 校验1,2位和最后一位
-  const auth1 = `${teamId}:${appId}:id#${formId}:extraProp.user.id#${'owner'}:?:DU`; //等后台更新后owner替换为变量userId
-  const auth2 = `${teamId}:${appId}:id#${formId}:*:?:UD`;
+  const auth1 = `${teamId}:${appId}:id#${formId}:extraProp.user.id#${userId}:?:DU`; //等后台更新后owner替换为变量userId
+  const auth2 = `${teamId}:${appId}:id#${formId}:*:?:DU`;
   return (permissions.includes(auth1) || permissions.includes(auth2));
 }
 
@@ -85,8 +85,8 @@ export function editFormDataAuth(permissions, teamId, appId, formId, userId) {
 export function deleteFormDataAuth(permissions, teamId, appId, formId, userId) {
   if (hasSuperAuth(permissions, teamId)) return true;
   // 校验1,2位和最后一位
-  const auth1 = `${teamId}:${appId}:id#${formId}:extraProp.user.id#${'owner'}:?:DD`; //等后台更新后owner替换为变量userId
-  const auth2 = `${teamId}:${appId}:id#${formId}:*:?:UD`;
+  const auth1 = `${teamId}:${appId}:id#${formId}:extraProp.user.id#${userId}:?:DD`; //等后台更新后owner替换为变量userId
+  const auth2 = `${teamId}:${appId}:id#${formId}:*:?:DD`;
   return (permissions.includes(auth1) || permissions.includes(auth2));
 }
 
