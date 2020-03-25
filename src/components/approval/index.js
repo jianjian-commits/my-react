@@ -4,7 +4,6 @@ import { useHistory, useParams } from "react-router-dom";
 import request from "../../utils/request"
 import {  HandledIcon, PendingIcon, SubmittedIcon } from './svg/index'
 import classes from "./approval.module.scss";
-import commonClasses from "../../styles/common.module.scss"
 
 const baseUrl = path => {
   let arr = path.split("/");
@@ -51,7 +50,7 @@ export const ApprovalSection = props => {
       label: "我的待办",
       tagNumber: todos,
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/myPending`);
+        // history.push(`${baseUrl(history.location.pathname)}/myPending`);
         props.fn("myPending");
         setSelectedKey("myPending");
       }
@@ -62,7 +61,7 @@ export const ApprovalSection = props => {
       label: "我发起的",
       tagNumber: submits,
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
+        // history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
         props.fn("mySubmitted");
         setSelectedKey("mySubmitted");
       }
@@ -73,7 +72,7 @@ export const ApprovalSection = props => {
       label: "我处理的",
       tagNumber: dones,
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/myHandled`);
+        // history.push(`${baseUrl(history.location.pathname)}/myHandled`);
         props.fn("myHandled");
         setSelectedKey("myHandled");
       }
