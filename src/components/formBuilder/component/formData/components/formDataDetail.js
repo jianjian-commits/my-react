@@ -11,7 +11,8 @@ const { TabPane } = Tabs;
 const columns = [
   {
     title: "审批ID",
-    dataIndex: "id"
+    dataIndex: "id",
+    className:"approveCol",
   },
   {
     title: "环节名称",
@@ -454,14 +455,13 @@ class FormDataDetail extends PureComponent {
             taskData.status  ? (
             <TabPane tab="审批流水" key="approvelFlow">
               <Table
-                className="approveTable"
                 pagination={false}
                 columns={columns}
                 dataSource={list}
                 size="middle"
               />
             </TabPane>
-          ):<></>
+          ): null
           }
         </Tabs>
         </div>

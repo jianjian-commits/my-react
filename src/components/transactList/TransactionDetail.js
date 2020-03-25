@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Row, Col, List, Table, Tabs , Modal, Icon, Input, message } from "antd";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import request from "../../utils/request";
 import { EditIcon, DeleteIcon }from './svgIcon/index'
 
@@ -43,7 +43,8 @@ const fakeFields = [
 const columns = [
   {
     title: "审批ID",
-    dataIndex: "id"
+    dataIndex: "id",
+    className:"approveCol",
   },
   {
     title: "环节名称",
@@ -206,35 +207,12 @@ const ApprovalStatus = (props) =>{
 }
 
 const TransactionDetail = (props) => {
-  const { appId } = useParams();
-  const [currentDetailId ,setCurrentDetailId] = React.useState(props.currentDetailId);
   const [tabKey, setTabKey] =  React.useState("formDetail");
-  const [fields, setFields] = React.useState([]);
   const [approveStatus, setApproveStatus] = React.useState("going")
-  const [approvalData, setApprovalData] = React.useState([]);
-  useEffect(() => {
-    getTransactionDetail();
-  }, [fields, approvalData]);
-
-  async function getTransactionDetail() {
-    try {
-      // const res = await request("/sysRole/list");
-      const res = {status: "SUCCESS"};
-      if (res && res.status === "SUCCESS") {
-        // setFields(res.data.fields)
-        // setApprovalData(res.data.approvalData)
-        setFields(fakeFields)
-        setApprovalData(fakeData)
-      } else {
-        message.error("获取审批详情失败");
-      }
-    } catch (err) {
-      message.error("获取审批详情失败");
-    }
-  }
+  const history = useHistory();
 
   const onClickBack = (e) => {
-    props.fn(props.approvalKey)
+    history.goBack();
   };
 
   function callback(key) {
@@ -262,14 +240,14 @@ const TransactionDetail = (props) => {
   }
 
   const ApprovalProcessButtonsOptions = {
-    isApprovalProcessor: true, 
+    isApprovalProcessor: false, 
     isMultiPersonApproval: false,
     isApproved: false
   }
 
   return (
     <div className={clasess.box}>
-      <Row type="flex" justify="space-between" className={clasess.title}>
+      <Row type="flex" justify="space-between" className={clasess.titlebox}>
         <Col>
           <Row type="flex" align="middle" gutter={10} className={clasess.title}>
             <Col>
@@ -278,7 +256,7 @@ const TransactionDetail = (props) => {
               </div>
             </Col>
             <Col>
-              <div className={clasess.title}>理财产品合同审批{`${currentDetailId}`}</div>
+              <div className={clasess.title}>理财产品合同审批</div>
             </Col>
           </Row>
         </Col>
@@ -295,7 +273,7 @@ const TransactionDetail = (props) => {
             style={{ border: "none"}}
             bordered={true}
             itemLayout="vertical"
-            dataSource={fields}
+            dataSource={fakeFields}
             renderItem={item => (
               <List.Item className={clasess.ListItem}>
                 <Row type="flex" gutter={16}>
@@ -312,7 +290,7 @@ const TransactionDetail = (props) => {
           <Table
             pagination={false}
             columns={columns}
-            dataSource={approvalData}
+            dataSource={fakeData}
             size="middle"
           />
         </TabPane>
