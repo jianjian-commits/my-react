@@ -6,7 +6,7 @@
   color: #333;
   font-size: 18px;
   margin-bottom: 41px;
-  margin-top:8px;
+  margin-top: 8px;
 }
 
 .lable {
@@ -17,7 +17,7 @@
   color: #333;
 }
 
-.text::after{
+.text::after {
   content: '';
   display: block;
   clear: both;
@@ -79,38 +79,37 @@
 }
 
 .tableBox {
-  & th {
-    padding: 14px !important;
-    background: #fff !important;
-    color: #333 !important;
-    font-size: 14px;
-  }
   :global(.ant-table-column-title) {
     color: #333;
   }
+
   :global(.ant-table) {
+    th {
+      color: #333;
+      font-size: 14px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
     td {
+      padding: 0 16px;
       color: #000;
     }
   }
+
   .rowKey {
     height: 50px;
     box-sizing: border-box;
     background-color: #fff;
     color: #333;
-
-    & td {
-      padding: 0 16px;
-    }
   }
 }
 
-.filterRow{
+.filterRow {
   padding: 10px 10px 10px 0 !important;
 }
 
 
-.submitBtn{
+.submitBtn {
   margin-left: 10px;
 }
-
