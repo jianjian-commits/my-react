@@ -83,9 +83,10 @@
     padding: 14px !important;
     background: #fff !important;
     color: #333 !important;
+    font-size: 14px;
   }
   :global(.ant-table-column-title) {
-    color: #777f97;
+    color: #333;
   }
   :global(.ant-table) {
     td {

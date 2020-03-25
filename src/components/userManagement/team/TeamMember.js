@@ -40,7 +40,7 @@ export default connect(
     {
       title: "用户昵称",
       dataIndex: "name",
-      width: 100
+      width: 150
     },
     {
       title: "邮箱",
