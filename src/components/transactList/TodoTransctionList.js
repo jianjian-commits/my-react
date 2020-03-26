@@ -8,7 +8,7 @@ import FormDataDetail from "../formBuilder/component/formData/components/formDat
 const TodoTransactList = props => {
   const { appId } = useParams();
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(2);
+  const [pageSize, setPageSize] = React.useState(10);
   const [total, setTotal] = React.useState(0);
   const [transactList, setTransactList] = React.useState([]);
   const [approvalKey, setApprovalKey] = React.useState(null);
@@ -119,7 +119,6 @@ const TodoTransactList = props => {
       <Table 
         columns={columns} 
         dataSource={transactList} 
-        rowKey="dataId"
         pagination={paginationProps}
         ></Table>
     </div>
