@@ -258,29 +258,28 @@
 .menuBorderNone {
   border: none !important;
   margin-top: 35px !important;
-
   li {
     height: 46px !important;
     line-height: 46px !important;
-    border-left: 4px solid #fff;
     width: 59px;
-    img {
-      width: 55% !important;
+    &:hover{
+      background-color: #E7F0FF;
     }
     svg {
-      margin-right: 4px;
-      margin-top: 12.1px;
+      margin-top: 10.5px;
+      margin-left: 16px;
     }
   }
-
+  :global(.ant-menu-item) {
+    padding: 0 !important;
+  }
   :global(.ant-menu-item-selected) {
-    border-left: 4px solid #1890ff;
-
-    img {
-      width: 55% !important;
-      position: relative;
-      left: -80px;
-      filter: drop-shadow(#1890ff 80px 0);
+    &::before {
+      content: "";
+      border-left: 4px solid #1890ff;
+      position: absolute;
+      top: 0;
+      bottom: 0;
     }
     svg {
       g,
