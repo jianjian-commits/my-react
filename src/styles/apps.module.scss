@@ -68,6 +68,7 @@
 }
 
 .appSider {
+  padding: 30px 20px 0 20px;
   border-right: 1px solid #d6d8de;
   // padding: 30px 20px 0 20px;
 
@@ -218,8 +219,6 @@
 }
 
 .searchBox {
-  margin-bottom: 20px;
-
   :global(.ant-input) {
     font-family: "Noto Sans SC";
     font-style: normal;

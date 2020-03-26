@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Table, message } from "antd";
-import TransactionDetail from "./TransactionDetail"
 import request from '../../utils/request'
 import classes from "./transactList.module.scss";
 import FormDataDetail from "../formBuilder/component/formData/components/formDataDetail"
@@ -9,7 +8,7 @@ import FormDataDetail from "../formBuilder/component/formData/components/formDat
 const HandleTransactList = props => {
   const { appId } = useParams();
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(2);
+  const [pageSize, setPageSize] = React.useState(10);
   const [total, setTotal] = React.useState(0);
   const [transactList, setTransactList] = React.useState([]);
   const [approvalKey, setApprovalKey] = React.useState(null);
@@ -35,7 +34,7 @@ const HandleTransactList = props => {
       if (res && res.status === "SUCCESS") {
           const { total, currentPage, pageSize, datas } = res.data;
           const list = datas.map(item =>{
-            item.key= item.submitDate
+            item.key= item.submitDate;
             item.submitDate = new Date(item.submitDate).toLocaleString("chinese", { hour12: false })
             return item;
           });
@@ -120,7 +119,6 @@ const HandleTransactList = props => {
       <Table 
         columns={columns} 
         dataSource={transactList} 
-        rowKey="dataId"
         pagination={paginationProps}
         ></Table>
     </div>

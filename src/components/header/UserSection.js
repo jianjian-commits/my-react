@@ -15,7 +15,7 @@ const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
       <Menu.Item>
         <span>我的团队</span>
       </Menu.Item>
-
+      
       {allTeam.map(team => {
         const check = team.id === currentTeam.id;
         return (
