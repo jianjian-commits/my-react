@@ -180,7 +180,10 @@ const AppSetting = props => {
               }
             ></DropableWrapper>
           </div>
-            <div className = { classes.addFolder }onClick={addFolder}>
+            <div className = { classes.addFolder }
+              // ? 禁用点击新建文件夹功能,功能暂未开发 onClick={addFolder}
+              disabled
+              >
                 <div className={classes.folderContent}>
                 <i className={classes.folderIcon}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -244,7 +247,7 @@ const AppSetting = props => {
             <div
             className={ classes.newDashBoard}
               onClick={e => {
-                modalProps.showModal();
+                // ? 禁用新建仪表盘点击事件 功能暂未开发 modalProps.showModal();
               }}
             >
               <div className={classes.dashBoardContent}>
