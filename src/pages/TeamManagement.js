@@ -12,6 +12,7 @@ import { PROFILE_MANAGEMENT_LIST, TEAM_MANAGEMENT_LIST } from "../auth";
 import { authorityIsValid } from "../utils";
 import { Route } from "react-router-dom";
 import Authenticate from "../components/shared/Authenticate";
+import { InfoIcon, MemberIcon, ProfileIcon } from "../assets/icons/teams"
 
 const { Sider, Content } = Layout;
 
@@ -20,7 +21,7 @@ const webs = [
     path: "/team/info",
     key: "info",
     label: "团队信息",
-    icon: "info",
+    icon: InfoIcon,
     component: TeamInfo
   },
   {
@@ -28,7 +29,7 @@ const webs = [
     key: "member",
     label: "团队成员",
     auth: TEAM_MANAGEMENT_LIST,
-    icon: "member",
+    icon: MemberIcon,
     component: TeamMember
   },
   {
@@ -36,7 +37,7 @@ const webs = [
     key: "profile",
     label: "分组",
     auth: PROFILE_MANAGEMENT_LIST,
-    icon: "profile",
+    icon: ProfileIcon,
     exact: true,
     component: ProfileManagement
   }
@@ -74,7 +75,7 @@ class TeamManagement extends React.Component {
           }
         >
           <span>
-            <img src={`/image/davinci/${w.icon}.svg`} alt="" />
+            <w.icon />
             {w.label}
           </span>
         </Menu.Item>
@@ -93,7 +94,7 @@ class TeamManagement extends React.Component {
           }}
         />
         <Layout>
-          <Sider style={{ background: "#fff", paddingTop: "14px" }}>
+          <Sider className={commonClasses.sider}>
             <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
           </Sider>
           <Content className={commonClasses.container}>

@@ -2,6 +2,7 @@
 .appModalStyles {
   :global(.ant-modal-header) {
     border-bottom: 0;
+    padding: 33px 27px 16px 27px;
   }
   :global(.ant-modal-title) {
     font-weight: 600;
@@ -10,8 +11,18 @@
     border-top: 0;
     padding: 0 16px 25px 16px;
     button {
-      border: none;
       width: 87px;
+    }
+    button:first-child{
+      border: 1px solid #D6D8DE;
+      &:hover{
+        border: 1px solid #B6B6BA !important;
+        color: #777F97;
+        background: #F3F3F3;
+      }
+    }
+    button:last-child:hover{
+      background: #579AFF;
     }
   }
   :global(.ant-modal-body) {
@@ -20,6 +31,9 @@
     textarea {
       background: #f0f2f7;
       border: none;
+    }
+    form > div {
+      margin-bottom: 15px;
     }
   }
   :global(.ant-form-item-label) {
@@ -31,6 +45,9 @@
       content: "";
     }
   }
+  :global(.ant-form-explain) {
+    position: absolute;
+  }
 }
 .iconStyle {
   display: flex;
@@ -39,10 +56,10 @@
   img {
     width: 40px;
   }
-  .active {
+  .active,:hover {
     background-color: #ddd;
-    padding: 5px;
-    border-radius: 10px;
+    border:2px solid #B7D4FF;
+    border-radius: 8px;
   }
 }
 .stretch {
@@ -53,5 +70,5 @@
   position: absolute;
   font-size: 13px;
   left: 411px;
-  top: 76px;
+  top: 100px;
 }

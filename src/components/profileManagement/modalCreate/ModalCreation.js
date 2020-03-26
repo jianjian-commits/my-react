@@ -47,7 +47,6 @@ class ModalCreation extends Component {
         options: { rules: [{ required: true, message: "描述不能为空" }] },
         component: (
           <MyTextArea
-            required
             rows={5}
             maxLength={30}
             className={classes.stretch}
@@ -64,7 +63,7 @@ class ModalCreation extends Component {
             {iconDatas.map(item => (
               <img
                 key={item}
-                src={`/image/appCreateIcons/${item}.png`}
+                src={`/image/appCreateIcons/${item}.svg`}
                 alt=""
                 onClick={() =>
                   setFields({ icon: { errors: null, value: item } })
