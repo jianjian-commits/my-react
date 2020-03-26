@@ -18,7 +18,7 @@ const getOreations = (appId, history) => [
   {
     key: "setting",
     icon: "setting",
-    label: "应用设置",
+    label: "应用管理",
     onClick: () => history.push(`/app/${appId}/setting`)
   }
 ];

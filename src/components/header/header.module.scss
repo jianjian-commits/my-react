@@ -13,7 +13,7 @@
     }
     .nav {
       flex: 1;
-      padding-left: 30px;
+      margin-left: 30px;
       :global(.ant-menu-horizontal) {
         border-bottom: 0;
         color: rgba(255, 255, 255, 0.6);
@@ -28,6 +28,9 @@
       flex: 1;
       text-align: right;
       padding-right: 30px;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
     }
     // .user {
     //   width: 80px;
@@ -81,7 +84,23 @@
 }
 
 .overlay {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   top: 50px !important;
+  & > ul {
+    & > li:first-child {
+      cursor: auto;
+      color: rgb(24, 144, 255);
+      font-size: 13px;
+      margin-bottom: 0px !important;
+      -moz-user-select: none; /* Firefox私有属性 */
+      -webkit-user-select: none; /* WebKit内核私有属性 */
+      -ms-user-select: none; /* IE私有属性(IE10及以后) */
+      -khtml-user-select: none; /* KHTML内核私有属性 */
+      -o-user-select: none; /* Opera私有属性 */
+      user-select: none; /* CSS3属性 */
+      background-color: #ffffff !important;
+    }
+  }
 }
 
 .userDetail {
@@ -207,4 +226,33 @@
       text-align: left;
     }
   }
+}
+
+.prompt {
+  margin-right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & > span {
+    & > sup {
+      width: 11px !important;
+      height: 11px;
+      min-width: 11px !important;
+      top: 3px !important;
+      right: 1px !important;
+      & > span {
+        position: relative;
+        left: -3px;
+        top: -5px;
+      }
+    }
+  }
+}
+.title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: #ffffff;
+  position: absolute;
+  left: 20px;
 }
