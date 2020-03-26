@@ -19,9 +19,9 @@ import {
 const { Header } = Layout;
 const homeHeaderStyle = {
   background: "#2A7FFF",
-  height: 50,
+  height: 40,
   padding: "0 20px",
-  lineHeight: "50px"
+  lineHeight: "40px"
 };
 const logoStyle = {
   // background: "rgba(255, 255, 255, 0.4)",

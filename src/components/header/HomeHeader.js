@@ -15,9 +15,9 @@ import { TeamManageIcon } from "../../assets/icons/teams";
 const { Header } = Layout;
 const homeHeaderStyle = {
   background: "#2A7FFF",
-  height: 50,
+  height: 40,
   padding: "0 20px",
-  lineHeight: "50px"
+  lineHeight: "40px"
 };
 const logoStyle = {
   // background: "rgba(255, 255, 255, 0.4)",
@@ -27,11 +27,11 @@ const logoStyle = {
   textAlign: "center"
 };
 const menuStyle = {
-  // lineHeight: "50px",
+  // lineHeight: "40px",
   background: "transparent"
 };
 const backThunk = {
-  height: "50px",
+  height: "40px",
   display: "flex",
   alignItems: "center",
   marginLeft: "10px",
@@ -64,7 +64,8 @@ const ghostButton = {
 const ghostButtonContent = {
   display: "flex",
   alignItems: "center",
-  justifyContent: "center"
+  justifyContent: "center",
+  color: "rgba(255,255,255,0.9)"
 };
 
 export default connect(({ router }) => ({
@@ -128,7 +129,7 @@ export default connect(({ router }) => ({
                 <span>我的应用</span>
               </Menu.Item>
               <Menu.Item key="/backlog">
-                <Badge dot offset={[-5, 8]}>
+                <Badge dot offset={[-5, 7]}>
                   待办事项
                 </Badge>
               </Menu.Item>
@@ -144,7 +145,12 @@ export default connect(({ router }) => ({
               onClick={toTeamMangement}
             >
               <div style={ghostButtonContent}>
-                <TeamManageIcon style={{ marginRight: "5px" }} />
+                <TeamManageIcon
+                  style={{
+                    marginRight: "5px",
+                    stroke: "rgba(255,255,255,0.9)"
+                  }}
+                />
                 团队管理
               </div>
             </Button>
