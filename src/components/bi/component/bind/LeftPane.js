@@ -4,14 +4,11 @@ import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
 import { GroupType } from '../../component/elements/Constant';
 import './bind.scss';
-import ExitWarningModal from "../elements/modal/exitWarningModal";
+import DataListModal from "../elements/modal/dataListModal";
 
-// class LeftPane extends PureComponent {
-//   constructor(props) {
-//     super(props);
-//   }
 
 const LeftPane = props =>{
+
 
   const getItems = (dataSource) => {
     const dataArr = dataSource.data;
@@ -43,7 +40,6 @@ const LeftPane = props =>{
     // this.props.setDataSource();
   }
 
-  // render() {
   const { dataSource } = props;
 
   const [visible,setVisible] = useState(false); 
@@ -66,7 +62,7 @@ const LeftPane = props =>{
         <div className="data-box">
           <div className="data-text">数据</div>
           <div>
-            <ExitWarningModal key={Math.random()} {...modalProps}/>
+            <DataListModal key={Math.random()} {...modalProps}/>
             <div className="change-data-source" onClick={modalProps.showModal}>更改数据源</div>
           </div>
         </div>
