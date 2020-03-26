@@ -99,6 +99,7 @@ class FormInforModal extends React.Component {
     const { TextArea } = Input;
     return (
       <Modal
+        className={ "createForm" }
         title={<FormInforModalTitle />}
         visible={this.props.visible}
         onCancel={this.props.handleCancel}

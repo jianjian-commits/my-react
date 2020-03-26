@@ -151,7 +151,6 @@ class FormSubmitData extends PureComponent {
             hiddenFilterBoardCanClick: true
           })
         }
-        console.log(1)
     },false)
   }
   componentWillUnmount() {

@@ -283,12 +283,16 @@
     }
   }
 }
-
+.createForm{
+  .ant-modal-body {
+    padding: 0;
+  }
+}
 .ant-modal-content {
   width: auto;
   height: auto;
   .ant-modal-body {
-    padding:0;
+    //? padding:0;
     .showDataDetail {
       width: 520px;
       height: 600px;
