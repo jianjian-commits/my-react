@@ -22,7 +22,8 @@ function GroupList(props) {
     title,
     visible,
     onOk,
-    onCancel
+    onCancel,
+    loading
   } = props;
   return (
     <>
@@ -33,7 +34,7 @@ function GroupList(props) {
           添加分组
         </Button>
       </Authenticate>
-      <Table columns={columns} dataSource={dataSource} rowKey="roleId"></Table>
+      <Table columns={columns} loading={loading} dataSource={dataSource} rowKey="roleId"></Table>
       <ModalCreation
         title={title}
         visible={visible}
@@ -53,7 +54,8 @@ class ProfileManagement extends React.Component {
       enterP: false,
       title: "",
       oldRoleId: "",
-      roleList: []
+      roleList: [],
+      loading: true
     };
     this.action = "view";
     this.roleId = "";
@@ -64,15 +66,18 @@ class ProfileManagement extends React.Component {
   }
 
   componentDidMount() {
-    this.getGroupList();
+    this.getGroupList().then(res => this.loadingTimeout());
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.teamId !== this.props.teamId) {
-      this.getGroupList();
+      this.getGroupList().then(res => clearTimeout(this.loadingTimeout()));
     }
   }
-
+  //loading定时器
+  loadingTimeout() {
+    return this._timeout = setTimeout(() => { this.setState({ loading: false }); }, 500)
+  }
   // 获取分组总列表
   async getGroupList() {
     try {
@@ -87,7 +92,7 @@ class ProfileManagement extends React.Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
+        "系统错误"
       );
     }
   }
@@ -98,15 +103,15 @@ class ProfileManagement extends React.Component {
       const res =
         title === "添加分组"
           ? await request(`/sysRole/role?name=${data.roleName}`, {
-              method: "PUT"
-            })
+            method: "PUT"
+          })
           : await request("/sysRole/clone", {
-              method: "PUT",
-              data: {
-                oldRoleId: this.state.oldRoleId,
-                newRoleName: data.roleName
-              }
-            });
+            method: "PUT",
+            data: {
+              oldRoleId: this.state.oldRoleId,
+              newRoleName: data.roleName
+            }
+          });
       if (res && res.status === "SUCCESS") {
         message.success(`${title}成功!`);
         this.getGroupList();
@@ -116,7 +121,7 @@ class ProfileManagement extends React.Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
+        "系统错误"
       );
     } finally {
       this.setState({ open: false });
@@ -138,7 +143,7 @@ class ProfileManagement extends React.Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
+        "系统错误"
       );
     }
   }
@@ -163,7 +168,7 @@ class ProfileManagement extends React.Component {
   }
 
   render() {
-    const { open, title, roleList } = this.state;
+    const { open, title, roleList, loading } = this.state;
     const columns = [
       { title: "组名", dataIndex: "roleName", width: "70%" },
       {
@@ -213,15 +218,15 @@ class ProfileManagement extends React.Component {
                     cancelText="否"
                     onConfirm={() => this.removeGroup(record)}
                   >
-                    <Button type="link" key={w.key} style={{color:"#2A7FFF"}}>
+                    <Button type="link" key={w.key} style={{ color: "#2A7FFF" }}>
                       {w.text}
                     </Button>
                   </Popconfirm>
                 ) : (
-                  <Button type="link" onClick={w.options} key={w.key} style={{color:"#2A7FFF"}}>
-                    {w.text}
-                  </Button>
-                )}
+                    <Button type="link" onClick={w.options} key={w.key} style={{ color: "#2A7FFF" }}>
+                      {w.text}
+                    </Button>
+                  )}
               </Authenticate>
             ));
         }
@@ -246,16 +251,17 @@ class ProfileManagement extends React.Component {
             enterPermission={this.enterPermission}
           />
         ) : (
-          <GroupList
-            handleClick={() => this.setState({ open: true, title: "添加分组" })}
-            columns={columns}
-            dataSource={roleList}
-            onOk={data => this.handleCreate(data, title)}
-            onCancel={() => this.setState({ open: false })}
-            visible={open}
-            title={title}
-          />
-        )}
+              <GroupList
+                handleClick={() => this.setState({ open: true, title: "添加分组" })}
+                columns={columns}
+                dataSource={roleList}
+                onOk={data => this.handleCreate(data, title)}
+                onCancel={() => this.setState({ open: false })}
+                visible={open}
+                title={title}
+                loading={loading}
+              />
+            )}
       </div>
     );
   }
