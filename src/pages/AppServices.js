@@ -20,7 +20,7 @@ const services = [
   { key: "edit", name: "表单编辑", icon: FbIcon, component: CreateForm },
   {
     key: "process/list",
-    name: "自动化",
+    name: "自动化流程",
     icon: PbIcon,
     auth: APP_FORM_EDIT,
     component: Process
