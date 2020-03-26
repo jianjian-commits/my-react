@@ -22,11 +22,16 @@ const Top = ({ disabled, enterDetail, handleDetail }) => (
         <Button
           type="primary"
           onClick={() => handleDetail()}
-          style={{ color: "#fff" }}
+          style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
         >
           保存
         </Button>
-        <Button onClick={() => enterDetail()}>取消</Button>
+        <Button
+          onClick={() => enterDetail()}
+          style={{ border: "1px solid #2A7FFF",backgroundColor:"transparent" }}
+        >
+          取消
+        </Button>
       </>
     )}
   </>
@@ -95,7 +100,7 @@ class GroupDetail1 extends Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "获取详情失败"
+          "系统错误"
       );
     }
   }
@@ -165,7 +170,7 @@ class GroupDetail1 extends Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "保存失败！"
+          "系统错误"
       );
     } finally {
       this.props.enterDetail(false);

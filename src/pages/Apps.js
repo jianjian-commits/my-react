@@ -10,6 +10,8 @@ import Authenticate from "../components/shared/Authenticate";
 import { SUPER_ADMINISTRATOR, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import classes from "../styles/apps.module.scss";
+import { NoAppImg } from "../assets/images";
+
 const { Content } = Layout;
 const { Meta } = Card;
 
@@ -24,7 +26,7 @@ const getApps = list => {
         >
           <Meta
             className={classes.appCardMeta}
-            avatar={<img src={`/image/appCreateIcons/${e.icon}.png`} alt="" />}
+            avatar={<img src={`/image/appCreateIcons/${e.icon}.svg`} alt="" />}
             title={e.name}
             description={e.description}
           />
@@ -62,7 +64,7 @@ class Apps extends React.Component {
     } catch (err) {
       message.error(
         (err.response && err.response.data && err.response.data.msg) ||
-          "创建应用失败"
+          "系统错误"
       );
     }
   }
@@ -93,16 +95,22 @@ class Apps extends React.Component {
               >
                 创建应用
               </Button>
-              {appList.length < 2 && (
-                <img src="/image/davinci/noapps.png" alt="" />
+              {appList.length < 1 && (
+                <>
+                  <NoAppImg />
+                  <p>
+                    <span>您还没有添加应用</span>
+                    <br />
+                    点击左上角创建应用，添加你的第一个应用吧
+                  </p>
+                </>
               )}
             </Authenticate>
             {appList.length < 1 && sysUserName !== name && (
-              <img
-                src="/image/davinci/noapps-normal.png"
-                alt=""
-                style={{ paddingBottom: "16px", paddingRight: "28px" }}
-              />
+              <>
+                <NoAppImg />
+                <p>您的团队还没创建应用</p>
+              </>
             )}
           </Content>
           <ModalCreation

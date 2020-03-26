@@ -23,14 +23,14 @@ const Filter = props => {
         <Col span={5}>分组</Col>
       </Row>
       <Row>
-        <Col span={5} style={{ padding: "10px 10px 5px 0" }}>
+        <Col span={5} className={classes.filterRow}>
           <Input
             placeholder="姓名字或邮箱"
             value={inputStr}
             onChange={onChangeInput}
           />
         </Col>
-        <Col span={5} style={{ padding: "10px 10px 5px 0" }}>
+        <Col span={5} className={classes.filterRow}>
           <Select
             showSearch
             style={{ width: 100 }}
@@ -52,7 +52,7 @@ const Filter = props => {
               );
             })}
           </Select>
-          <Button>筛选</Button>
+          <Button className={classes.submitBtn}>筛选</Button>
         </Col>
       </Row>
     </div>

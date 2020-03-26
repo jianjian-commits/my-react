@@ -1,11 +1,17 @@
 .box {
-  width: calc(100vw - 220px);
-  padding: 29px 21px;
-  :global(.ant-table-thead > tr > th) {
+  width: calc(100vw - 500px);
+  margin: 0 auto;
+  :global(.ant-table-middle > .ant-table-content >.ant-table-body > table) {
+    .approveCol{
+      padding-left: 20px;
+    }
+  }
+  :global(.ant-table-middle > .ant-table-content > .ant-table-body > table >.ant-table-thead > tr > th) {
     padding: 14px;
     background: #fff;
   }
-  :global(.ant-table-tbody > tr > td) {
+  
+  :global(.ant-table-middle > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td) {
     padding: 9px 16px;
   }
   :global(.ant-table-column-title) {
@@ -16,13 +22,16 @@
     line-height: 20px;
     color: #333333;
   }
+  .titlebox{
+    padding-top: 30px;
+    padding-bottom: 40px;
+  }
   .title {
     font-family: "Microsoft YaHei";
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     color: #333333;
-    padding: 10px 0;
     }
     .btn {
       width: 104px;

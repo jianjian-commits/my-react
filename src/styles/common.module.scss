@@ -1,8 +1,19 @@
+.sider{
+  background: #fff !important;
+  padding-top: 14px !important;
+  ul{
+    border-right: 0;
+  }
+}
+
 .container {
   height: calc(100vh - 50px);
   padding: 10px;
   .header {
     padding: 37px 64px 5px 64px;
+  }
+  :global(.ant-menu-vertical){
+    border-right: 0;
   }
 }
 .title {
@@ -20,17 +31,22 @@
       left: 0;
       height: 100%;
     }
-    img {
-      position: relative;
-      left: -80px;
-      filter: drop-shadow(#1890ff 80px 0);
+    svg  {
+      g, polyline, path {
+        fill: #1890ff;
+      }
+      rect {
+        stroke: #1890ff;
+      }
     }
   }
   span {
     color: #333;
   }
-  img {
+  svg {
     display: inline-block;
+    position: relative;
+    top: 3px;
     margin-right: 10px;
   }
 }
