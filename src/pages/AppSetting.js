@@ -16,15 +16,15 @@ import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 const { Content, Sider } = Layout;
 
-// const navigationList = (history, appId, appName) => [
-//   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-//   {
-//     key: 1,
-//     label: `${appName}`,
-//     onClick: () => history.push(`/app/${appId}/detail`)
-//   },
-//   { key: 1, label: "应用管理", disabled: true }
-// ];
+const navigationList = (history, appId, appName) => [
+  { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
+  {
+    key: 1,
+    label: `${appName}`,
+    onClick: () => history.push(`/app/${appId}/detail`)
+  },
+  { key: 1, label: "应用管理", disabled: true }
+];
 
 const AppSetting = props => {
   const { appId } = useParams();
@@ -143,15 +143,8 @@ const AppSetting = props => {
         url={`/app/${appId}/setting/form/`}
       />
       <CommonHeader
-        title={appName}
-        // navigationList={navigationList(history, appId, appName)}
-        // hides={{
-        //   logo: true,
-        //   menu: true,
-        //   teamManage: true,
-        //   backArrow: appName,
-        //   backArrowIcon: false
-        // }}
+        // title={appName}
+        navigationList={navigationList(history, appId, appName)}
       />
       <Layout>
         <Sider className={classes.appSider} style={{ padding: "30px 20px 0 20px"}} theme="light" width="240">
@@ -199,7 +192,10 @@ const AppSetting = props => {
               }
             ></DropableWrapper>
           </div>
-          <div className={classes.addFolder} onClick={addFolder}>
+          <div className={classes.addFolder} 
+          // ? 禁用点击新建文件夹功能,功能暂未开发 onClick={addFolder}
+          disabled
+          >
             <div className={classes.folderContent}>
               <i className={classes.folderIcon}>
                 <svg
@@ -314,7 +310,7 @@ const AppSetting = props => {
               <div
                 className={classes.newDashBoard}
                 onClick={e => {
-                  modalProps.showModal();
+                  // ? 禁用新建仪表盘点击事件 功能暂未开发 modalProps.showModal();
                 }}
               >
                 <div className={classes.dashBoardContent}>

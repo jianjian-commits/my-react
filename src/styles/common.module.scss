@@ -1,7 +1,7 @@
-.sider{
+.sider {
   background: #fff !important;
   padding-top: 14px !important;
-  ul{
+  ul {
     border-right: 0;
   }
   li:hover{
@@ -15,7 +15,7 @@
   .header {
     padding: 37px 64px 5px 64px;
   }
-  :global(.ant-menu-vertical){
+  :global(.ant-menu-vertical) {
     border-right: 0;
   }
 }
@@ -34,8 +34,10 @@
       left: 0;
       height: 100%;
     }
-    svg  {
-      g, polyline, path {
+    svg {
+      g,
+      polyline,
+      path {
         fill: #1890ff;
       }
       rect {

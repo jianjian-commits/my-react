@@ -68,9 +68,7 @@
 }
 
 .appSider {
-  padding: 30px 20px 0 20px;
   border-right: 1px solid #d6d8de;
-  // padding: 30px 20px 0 20px;
 
   :global(.ant-layout-sider-children) {
     height: calc(100vh - 50px);
@@ -225,7 +223,7 @@
     font-weight: normal;
     font-size: 14px;
     line-height: 20px;
-    color: #B6B6BA;
+    color: #b6b6ba;
     padding: 10px 16px;
   }
   .addFolder {
@@ -238,7 +236,7 @@
 .formArea {
   display: flex;
   flex-direction: column;
-  height: 359px;
+  height: auto;
   overflow-y: auto;
   overflow-x: hidden;
   border-bottom: 1px solid #d6d8de;
@@ -265,13 +263,13 @@
     height: 46px !important;
     line-height: 46px !important;
     border-left: 4px solid #fff;
-
+    width: 59px;
     img {
       width: 55% !important;
     }
     svg {
-      margin-left: 6px;
-      margin-top: 8px;
+      margin-right: 4px;
+      margin-top: 12.1px;
     }
   }
 
