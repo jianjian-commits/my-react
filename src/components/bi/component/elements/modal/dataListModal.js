@@ -62,6 +62,7 @@ function DataListModal(props) {
       bodyStyle={{padding:0}}
       wrapClassName="BImodal"
       handleCancel={props.handleCancel}
+      handleOK={props.handleOK}
     >
       <div className="formChoiceModalContainer">
         <div className="formGroups">
@@ -91,7 +92,7 @@ function DataListModal(props) {
         </div>
         <div className="footBtnGroups">
           <Button onClick={props.handleCancel}>取消</Button>
-          <Button onClick={newChart}>确定</Button>
+          <Button onClick={(event)=>{newChart();props.handleOK()}}>确定</Button>
         </div>
       </div>
     </Modal>
