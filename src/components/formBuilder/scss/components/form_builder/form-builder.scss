@@ -1,7 +1,7 @@
 $font-Family: "PingFangSC-Regular", "PingFang SC";
 
 .formBuilder {
-  padding: 0 31px;
+  padding: 0 30px;
 }
 .react-form-builder-header {
   // position: fixed;
@@ -40,6 +40,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     display: flex;
     flex-direction: row;
     align-items: center;
+    font-size: 18px;
     .showFormTitle {
       margin-left: 5px;
       width: auto;
@@ -93,7 +94,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   width: 100%;
   padding-top: 157px;
   margin-top: -157px;
-  padding-right: 102px;
   height: 100vh;
   box-sizing: border-box;
   // background:#F3F4F5;
