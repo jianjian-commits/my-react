@@ -15,7 +15,7 @@ function Registe({ params, history, setActiveKey, query }) {
   return (
     <>
       <div>
-        <RegisterImage/>
+        <RegisterImage />
       </div>
       <div>
         <Register
@@ -29,26 +29,31 @@ function Registe({ params, history, setActiveKey, query }) {
   );
 }
 
-function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
+function Signin({ setActiveKey, params, loginUser, history }) {
+  const [activeTab, setActiveTab] = useState("1");
   return (
     <>
       <div>
-        <SigninImage/>
+        <SigninImage />
       </div>
       <div>
         <Tabs
           defaultActiveKey="1"
-          tabBarStyle={{ borderBottom: "1px solid #FFFFFF" }}
+          tabBarStyle={{
+            borderBottom: "1px solid #FFFFFF",
+            marginBottom: "50px"
+          }}
           tabBarGutter={35}
+          onChange={key => setActiveTab(key)}
         >
           <Tabs.TabPane
             tab={
               <span
                 className={clx(Styles.normalTabName, {
-                  [Styles.activeTabName]: activeKey === "1"
+                  [Styles.activeTabName]: activeTab === "1"
                 })}
               >
-                用户名密码登录
+                账号密码登录
               </span>
             }
             key="1"
@@ -57,7 +62,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
               parameter={loginPasswordParameter}
               func={loginUser}
               params={params}
-              marginBottom={20}
+              marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
             />
@@ -66,7 +71,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
             tab={
               <span
                 className={clx(Styles.normalTabName, {
-                  [Styles.activeTabName]: activeKey === "2"
+                  [Styles.activeTabName]: activeTab === "2"
                 })}
               >
                 手机验证码登录
@@ -78,7 +83,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
               parameter={loginPhoneParameter}
               func={loginUser}
               params={params}
-              marginBottom={20}
+              marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
             />

@@ -3,3 +3,4 @@ export { ReactComponent as EditIcon } from "./edit.svg";
 export { ReactComponent as PromptIcon } from "./prompt.svg";
 export { ReactComponent as ArrowLeftIcon } from "./arrow-left.svg";
 export { ReactComponent as CloseIcon } from "./close.svg";
+export { ReactComponent as RightOutlined } from "./rightOutlined.svg";
