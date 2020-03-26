@@ -227,7 +227,7 @@ const AppSetting = props => {
           </div>
         </Sider>
         <Content className={classes.container}>
-          <div className={classes.operateTitle}>
+          {/* <div className={classes.operateTitle}>
             <div
               className={classes.backBox}
               onClick={() => {
@@ -250,7 +250,7 @@ const AppSetting = props => {
               </i>
               <div className={classes.backDesc}>返回应用访问</div>
             </div>
-          </div>
+          </div> */}
           <div className={classes.operateGroup}>
             <div className={classes.btnGroup}>
               {isShowNewFormBtn ? (

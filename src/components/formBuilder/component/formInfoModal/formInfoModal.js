@@ -134,15 +134,15 @@ class FormInforModal extends React.Component {
                 <div className="buttonGroup">
                   <Button
                     onClick={this.props.handleCancel}
-                    type="primary"
-                    className="login-form-button"
+                    // type="primary"
+                    className="login-form-button-cancel"
                   >
                     取消
                   </Button>
                   <Button
                     type="primary"
                     htmlType="submit"
-                    className="login-form-button"
+                    className="login-form-button-create"
                   >
                     创建
                   </Button>
