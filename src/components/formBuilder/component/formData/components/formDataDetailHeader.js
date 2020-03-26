@@ -159,12 +159,15 @@ const ReSubmitApprovalButton = (props) =>{
 
 
 const FormDataDetailHeader = (props) =>{
-  const appId = useParams().appId;
+  const appId = useParams().appId || props.appId;
+  const history = useHistory();
   const onClickBack = () => {
     if(props.enterPort === "TransctionList"){
       props.fn(props.approvalKey)
-    } else{
+    } else if(props.enterPort === "FormSubmitData"){
       props.actionFun(props.submissionId, false, props.currentForm.id)
+    } else if(props.enterPort ==="Dispose") {
+      history.goBack();
     }
 
   };
