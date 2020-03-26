@@ -51,7 +51,9 @@ class FormSubmitData extends PureComponent {
       connectCondition: "&",
       formDataDetailId: "",
       // 是否展示筛选界面,默认为false(不展示)
-      showFilterBoard: false
+      showFilterBoard: false,
+      // 判断鼠标是否已经移出筛选容器,如果已经移出,则可以点击关闭;否则,反之.
+      hiddenFilterBoardCanClick: true,
     };
   }
   showformDataDetail = id => {
@@ -141,6 +143,15 @@ class FormSubmitData extends PureComponent {
         console.error(err);
       });
     this.setState({ formId: this.props.formId });
+    document.querySelector("html").addEventListener('click',
+      ()=> {
+        if(this.state.hiddenFilterBoardCanClick&&this.state.showFilterBoard){
+          this.setState({
+            showFilterBoard:false,
+            hiddenFilterBoardCanClick: true
+          })
+        }
+    },false)
   }
   componentWillUnmount() {
     this.props.clearFormData();
@@ -597,7 +608,8 @@ class FormSubmitData extends PureComponent {
       let hiddenFilterBoard = !this.state.showFilterBoard
 
       this.setState({
-        showFilterBoard:  hiddenFilterBoard
+        showFilterBoard:  hiddenFilterBoard,
+        hiddenFilterBoardCanClick: !this.setState.hiddenFilterBoardCanClick
       })
   }
   render() {
@@ -885,7 +897,8 @@ class FormSubmitData extends PureComponent {
                 formId={this.state.formId}
                 components={this.props.forms.components}
               />
-              {this.state.showFilterBoard? <FilterComponent
+              {this.state.showFilterBoard? 
+              <FilterComponent
                 fileds={fileds}
                 filterData={this.props.getFilterSubmissionData}
                 setFilterMode={this.setFilterMode}
@@ -893,6 +906,8 @@ class FormSubmitData extends PureComponent {
                 currentPage={this.state.currentPage}
                 pageSize={this.state.pageSize}
                 clickExtendCallBack = {this.showFilterComponent}
+                canClick = {()=> this.setState({ hiddenFilterBoardCanClick: true })}
+                canNotClick = {() =>this.setState({ hiddenFilterBoardCanClick: false })}
               />:<></>}
               
 
