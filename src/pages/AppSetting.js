@@ -147,7 +147,8 @@ const AppSetting = props => {
         navigationList={navigationList(history, appId, appName)}
       />
       <Layout>
-        <Sider className={classes.appSider} theme="light" width="240">
+        <Sider className={classes.appSider} style={{ padding: "30px 20px 0 20px"}} theme="light" width="240">
+          
           <div className={classes.searchBox}>
             <Input
               style={{ width: 200, height: 32 }}
@@ -191,7 +192,10 @@ const AppSetting = props => {
               }
             ></DropableWrapper>
           </div>
-          <div className={classes.addFolder} onClick={addFolder}>
+          <div className={classes.addFolder} 
+          // ? 禁用点击新建文件夹功能,功能暂未开发 onClick={addFolder}
+          disabled
+          >
             <div className={classes.folderContent}>
               <i className={classes.folderIcon}>
                 <svg
@@ -306,7 +310,7 @@ const AppSetting = props => {
               <div
                 className={classes.newDashBoard}
                 onClick={e => {
-                  modalProps.showModal();
+                  // ? 禁用新建仪表盘点击事件 功能暂未开发 modalProps.showModal();
                 }}
               >
                 <div className={classes.dashBoardContent}>

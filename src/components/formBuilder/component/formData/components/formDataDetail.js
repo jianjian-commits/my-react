@@ -1,5 +1,6 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent} from "react";
 import { Form, Table, Icon, Tabs, message } from "antd";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
 import { getSubmissionDetail, handleStartFlowDefinition } from "../redux/utils/getDataUtils";
@@ -56,10 +57,17 @@ const EditApprovalButton = (props) =>{
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
   const { detailAuthority , dataId, actionFun, deleteFormData, ...rest} = props;
+  const history = useHistory();
   const handleDeleteSubmisson = submissionId => {
       deleteFormData( "", submissionId)
       .then(response => {
-        props.actionFun(true)
+        if(props.enterPort === "TransctionList"){
+          props.fn(props.approvalKey)
+        } else if(props.enterPort === "FormSubmitData"){
+          props.actionFun(props.submissionId, false, props.currentForm.id)
+        } else if(props.enterPort ==="Dispose") {
+          history.goBack();
+        }
       })
       .catch(err => {
         message.error("删除失败！", 2);
@@ -67,7 +75,7 @@ const EditApprovalButton = (props) =>{
       });
   };
   return (
-    true ? 
+    props.enterPort === "FormSubmitData" ? 
     (
       <div className="toolbarBox">
         <span 
@@ -97,7 +105,6 @@ class FormDataDetail extends PureComponent {
       tipVisibility: false,
       formId: this.props.id,
       submissionId: this.props.dataId,
-      userId: JSON.parse(localStorage.getItem("userDetail")).id,
       tabKey: "formDetail"
     };
   }
@@ -404,9 +411,8 @@ class FormDataDetail extends PureComponent {
   }
 
   render() {
-    const { formDetail, currentForm, mobile = {}, extraProp, taskData } = this.props;
-    const { userId, tabKey } = this.state;
-    const editButtonOptions={detailAuthority: true};
+    const { formDetail, currentForm, mobile = {}, taskData } = this.props;
+    const { tabKey } = this.state;
 
     let newCurrentComponents = currentForm.components.filter(
       item => item.type != "CustomValue"
@@ -433,8 +439,12 @@ class FormDataDetail extends PureComponent {
         return item;
       });
     }
+    let BoxStyle = {};
+    if(this.props.enterPort === "Dispose"){
+      BoxStyle={  width: "calc(100vw - 500px)", margin:"0 auto"}
+    }
     return (
-      <div className="formDetailBox" >
+      <div className="formDetailBox" style={BoxStyle}>
         <FormDataDetailHeader
           submissionId={this.state.submissionId}
           taskData={taskData}
