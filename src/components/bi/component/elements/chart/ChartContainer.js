@@ -4,31 +4,46 @@ import { Icon } from "antd";
 import { getOption } from '../../../utils/ChartUtil';
 import './chart.scss';
 
-const Toolbarbtns = props => {
-  const { chartId = "default" } = props;
+const ToolbarBtns = props => {
 
-  const handleClick = () => {
-    console.log("你点击了编辑图表");
-  };
+  const { chartId = "default" , iconBtnGroup , isBtnBlock} = props;
 
   return (
-    <span className="iconBtn" style={{ display: "none" }} id={chartId + "btns"}>
-      <Icon type="edit" onClick={handleClick} />
+    <span className="iconBtn" 
+      style={ isBtnBlock ? { display:"block"} : {display:"none"}} 
+      id={chartId + "btns"}
+    >
+      {iconBtnGroup.map((iconBtn,index) => 
+          <Icon type={iconBtn.type} key={index} onClick={iconBtn.click} />
+      )}
     </span>
   );
 };
 
 const ChartContainer = props => {
-  const { chartData, style, chartId = "default" } = props;
+  const { chartData, style, chartId = "default"} = props;
   const chartOption = chartData ? getOption(chartData) : {};
   const chart = <Chart chartOption={chartOption} />;
 
-  const handlMouseEnter = id => {
-    document.getElementById(id + "btns").style.display = "block";
+  const isBtnBlock = true ;
+
+  const iconBtnGroup = [
+    {
+      type:"edit",
+      click:()=>{console.log("你点击了编辑按钮1");}
+    },
+    {
+      type:"edit",
+      click:()=>{console.log("你点击了编辑按钮2");}
+    }
+  ]
+
+  const handlMouseEnter = () => {
+    document.getElementById(chartId + "btns").style.display = "block";
   };
 
-  const handlMouseLeave = id => {
-    document.getElementById(id + "btns").style.display = "none";
+  const handlMouseLeave = () => {
+    document.getElementById(chartId + "btns").style.display = "none";
   };
 
   if (!chartData) {
@@ -39,18 +54,16 @@ const ChartContainer = props => {
     );
   }
 
+
   return (
     <div
       className="chart-container"
-      onMouseEnter={() => {
-        handlMouseEnter(chartId);
-      }}
-      onMouseLeave={() => {
-        handlMouseLeave(chartId);
-      }}
+      onMouseEnter={isBtnBlock?null:handlMouseEnter}
+      onMouseLeave={isBtnBlock?null:handlMouseLeave}
       style={style}
     >
-      <Toolbarbtns {...props} />
+      <div className="chart-title">这里是图表的标题</div>
+      <ToolbarBtns {...props} iconBtnGroup={iconBtnGroup} isBtnBlock={isBtnBlock}/>
       {chart}
     </div>
   );
