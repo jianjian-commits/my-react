@@ -1,6 +1,4 @@
-import React
-// , { useEffect, useState } 
-from "react";
+import React from "react"; // , { useEffect, useState }
 import { connect } from "react-redux";
 import { Layout, Menu, Tooltip } from "antd";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
@@ -92,7 +90,7 @@ const AppServices = props => {
           className={classes.appSider}
           style={{ borderRight: "1px solid #D6D8DE" }}
           theme="light"
-          width={80}
+          width={60}
         >
           <Menu className={classes.menuBorderNone} selectedKeys={service.key}>
             {services
