@@ -7,7 +7,7 @@ import { push } from "connected-react-router";
 import {connect} from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import request from '../../../utils/request';
-import { setFormData, setDataSource } from '../../../redux/action';
+import { setFormData, setDataSource, clearBind } from '../../../redux/action';
 
 const { Panel } = Collapse;
 
@@ -41,6 +41,7 @@ function DataListModal(props) {
         formId:choiceFormId
       }
     }).then((res) => {
+
       if(res && res.msg === 'success') {
         const data = res.data;
         const view = data.view;
@@ -49,6 +50,12 @@ function DataListModal(props) {
         history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
       }
     }, () => {message.error("创建图标失败")})
+  }
+
+  const onConfirm = () => {
+    newChart();
+    props.handleOK()
+    props.clearBind();
   }
 
   return (
@@ -68,7 +75,6 @@ function DataListModal(props) {
         <div className="formGroups">
           <Collapse
             bordered={false}
-            // defaultActiveKey={["1"]}
             expandIcon={({ isActive }) =>
               isActive ? <Icon type="folder-open" /> : <Icon type="folder" />
             }
@@ -92,7 +98,7 @@ function DataListModal(props) {
         </div>
         <div className="footBtnGroups">
           <Button onClick={props.handleCancel}>取消</Button>
-          <Button onClick={(event)=>{newChart();props.handleOK()}}>确定</Button>
+          <Button onClick={onConfirm}>确定</Button>
         </div>
       </div>
     </Modal>
@@ -104,5 +110,6 @@ export default connect(store => ({
 }),{
   push,
   setFormData,
-  setDataSource
+  setDataSource,
+  clearBind
 })(DataListModal);

@@ -7,9 +7,7 @@ import './bind.scss';
 import DataListModal from "../elements/modal/dataListModal";
 
 
-const LeftPane = props =>{
-
-
+const LeftPane = props => {
   const getItems = (dataSource) => {
     const dataArr = dataSource.data;
     const dimArr = [];

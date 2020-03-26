@@ -29,7 +29,8 @@ class DBEditor extends React.PureComponent {
     const rows = [];
 
     keys.forEach((item, idx) => {
-      const chartData = elements[item].data.xaxisList;
+      const data = elements[item].data;
+      const chartData = data ? data.xaxisList : null;
  
       if(idx % 2 == 0) {
         elems.push(<ChartContainer chartId={"chart"+idx} key={item} chartData={chartData}/>);
