@@ -38,6 +38,12 @@ const spec = {
     }
 
     const { bindDataArr, dataSource, changeBind, changeChartData, dashboardId, elementId } = props;
+    const isExisted = bindDataArr.length != 0 && bindDataArr.some((each) => {return item.id == each.id})
+
+    if(isExisted) {
+      return;
+    }
+
     const dropDim = component.getType() == Types.DIMENSION;
 
     if(dropDim && (item.bindType == Types.DIMENSION) || (!dropDim && (item.bindType == Types.MEASURE))) {

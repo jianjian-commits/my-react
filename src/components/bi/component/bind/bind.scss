@@ -1,5 +1,5 @@
 .bind-pane {
-  border: 10px solid #adb5bd;
+  border: 10px solid transparent;
 }
 
 .bind-line {
@@ -9,16 +9,15 @@
   height:30px;
   border-style: dotted;
   border-color: #adb5bd;
-  // min-width: 900px;
+  border-width: thin;
   margin-top: 5px;
 
   .bind-label {
     width: 40px;
+    padding-left: 10px;
   }
 
   .bind-child {
-    // text-align: center;
-    // border-radius: 10px;
     width: 80px;
     height: 26px;
     font-family: Microsoft YaHei;
@@ -87,16 +86,17 @@
   //  width: 240px;
    height:100%;
    flex-direction: column;
-   border: 1px solid #adb5bd;
 
   .left-pane-data {
     height: 20%;
     border: 1px solid #adb5bd;
+    border-bottom: none;
    }
 
   .left-pane-dimension {
     height: 40%;
     border: 1px solid #adb5bd;
+    border-bottom: none;
   }
 
   .left-pane-measure {
@@ -119,11 +119,11 @@
   display: flex;
   height:100%;
   flex-direction: column;
-  border: 1px solid #adb5bd;
 
   .right-pane-chart {
     height: 35%;
     border: 1px solid #adb5bd;
+    border-bottom: none;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
