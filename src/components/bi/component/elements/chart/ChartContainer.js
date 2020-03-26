@@ -21,11 +21,13 @@ const ToolbarBtns = props => {
 };
 
 const ChartContainer = props => {
-  const { chartData, style, chartId = "default" ,isBtnBlock = true , iconBtnGroup = []} = props;
+  const { chartData, style, chartId = "default"} = props;
   const chartOption = chartData ? getOption(chartData) : {};
   const chart = <Chart chartOption={chartOption} />;
 
-  iconBtnGroup = [
+  const isBtnBlock = true ;
+
+  const iconBtnGroup = [
     {
       type:"edit",
       click:()=>{console.log("你点击了编辑按钮1");}
@@ -35,7 +37,7 @@ const ChartContainer = props => {
       click:()=>{console.log("你点击了编辑按钮2");}
     }
   ]
-  
+
   const handlMouseEnter = () => {
     document.getElementById(chartId + "btns").style.display = "block";
   };
