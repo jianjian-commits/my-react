@@ -34,7 +34,7 @@ class NavBar extends PureComponent {
             </Button>
           </div>
         ) : (
-          <div style={{ flexGrow: 1 }} />
+          null
         )}
 
         <div className="headerBarTitle">
