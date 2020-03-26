@@ -145,7 +145,7 @@ const AppSetting = props => {
       />
       <CommonHeader navigationList={navigationList(history, appId, appName)} />
       <Layout>
-        <Sider className={classes.appSider} theme="light" width="240">
+        <Sider className={classes.appSider} style={{ padding: "30px 20px 0 20px"}} theme="light" width="240">
           
           <div className={classes.searchBox}>
             <Input
