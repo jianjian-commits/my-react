@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
 import { GroupType } from '../../component/elements/Constant';
 import './bind.scss';
+import DataListModal from "../elements/modal/dataListModal";
 
-class LeftPane extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
 
-  getItems = (dataSource) => {
+const LeftPane = props =>{
+
+
+  const getItems = (dataSource) => {
     const dataArr = dataSource.data;
     const dimArr = [];
     const meaArr = [];
@@ -35,37 +35,57 @@ class LeftPane extends PureComponent {
     return {dimArr, meaArr};
   }
 
-  onClick = () => {
+  const onClick = () => {
     // show modal.
     // this.props.setDataSource();
   }
 
-  render() {
-    const { dataSource } = this.props;
+  const { dataSource } = props;
 
-    return (
-      <div className="left-pane">
-        <div className="left-pane-data">
-          <span className="data-source-name" onClick={this.onClick}>
-            {dataSource.name || "选择数据源"}
-          </span>
+  const [visible,setVisible] = useState(false); 
+  const modalProps = {
+    visible,
+    showModal: () => {
+      setVisible(true);
+    },
+    handleCancel: e => {
+      setVisible(false);
+    },
+    handleOK: e => {
+      setVisible(false);
+    }
+  };  
+
+  return (
+    <div className="left-pane">
+      <div className="left-pane-data">
+        <div className="data-box">
+          <div className="data-text">数据</div>
+          <div>
+            <DataListModal key={Math.random()} {...modalProps}/>
+            <div className="change-data-source" onClick={modalProps.showModal}>更改数据源</div>
+          </div>
         </div>
-        <div className="left-pane-dimension">
-            <ul>
-              <li className="col-title">非数值型字段</li>
-              {this.getItems(dataSource).dimArr}
-            </ul>
-        </div>
-        <div className="left-pane-measure">
-           <ul>
-              <li className="col-title">数值型字段</li>
-              {this.getItems(dataSource).meaArr}
-            </ul>
-        </div>
+        <span className="data-source-name" onClick={onClick}>
+          {dataSource.name || "选择数据源"}
+        </span>
       </div>
-    )
-  }
+      <div className="left-pane-dimension">
+          <ul>
+            <li className="col-title">非数值型字段</li>
+            {getItems(dataSource).dimArr}
+          </ul>
+      </div>
+      <div className="left-pane-measure">
+          <ul>
+            <li className="col-title">数值型字段</li>
+            {getItems(dataSource).meaArr}
+          </ul>
+      </div>
+    </div>
+  )
 }
+
 
 export default connect((store) => {
   const state = store.bi;
