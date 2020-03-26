@@ -29,7 +29,7 @@ const Mete = {
     { key: "AP", value: "审批流元数据" },
     { key: "PB", value: "自动化流程元数据" }
   ],
-  displayApplySettingButton: "是否显示应用设置按钮",
+  displayApplySettingButton: "是否显示应用管理按钮",
   allowCreateNewForm: "允许新建列表",
   appSetting: "可见",
   createForm: "允许"

@@ -54,7 +54,7 @@ export const appPaths = [
   },
   {
     key: "setting",
-    label: "应用设置",
+    label: "应用管理",
     path: `/app/:appId/setting`,
     auth: APP_SETTING_ABLED,
     component: AppSetting

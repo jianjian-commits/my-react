@@ -13,7 +13,10 @@
     }
     .nav {
       flex: 1;
-      padding-left: 30px;
+      position: absolute;
+      left: 0;
+      height: 50px;
+      // margin-left: 30px;
       :global(.ant-menu-horizontal) {
         border-bottom: 0;
         color: rgba(255, 255, 255, 0.6);
@@ -28,6 +31,9 @@
       flex: 1;
       text-align: right;
       padding-right: 30px;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
     }
     // .user {
     //   width: 80px;
@@ -44,21 +50,31 @@
     -webkit-user-select: none; /*webkit浏览器*/
     -ms-user-select: none; /*IE10+*/
     user-select: none;
+    & > span:nth-last-child(2) {
+      & > span:last-child {
+        & > svg {
+          stroke: #ffffff !important;
+        }
+      }
+    }
   }
   :global(.ant-breadcrumb-separator) {
-    color: #ddd;
+    & svg {
+      stroke: #aaccff;
+      margin: 0 9px;
+    }
   }
 }
 .breadcrumbItem {
-  color: #ddd;
+  color: #aaccff;
   &.active {
     cursor: pointer;
     &:hover {
-      color: #3786fe;
+      color: #ffffff;
     }
   }
   &.disabled {
-    color: #aaa;
+    color: #ffffff;
   }
 }
 
@@ -70,18 +86,34 @@
   }
   th {
     font-weight: unset;
-    border-bottom: 1px solid rgb(154, 154, 154);
+    border-bottom: 1px solid #dcdee3;
     width: 200px;
   }
   td {
     width: 200px;
     font-weight: unset;
-    border-bottom: 1px solid rgb(154, 154, 154);
+    border-bottom: 1px solid #dcdee3;
   }
 }
 
 .overlay {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   top: 50px !important;
+  & > ul {
+    & > li:first-child {
+      cursor: auto;
+      color: #777f97;
+      font-size: 13px;
+      margin-bottom: 0px !important;
+      -moz-user-select: none; /* Firefox私有属性 */
+      -webkit-user-select: none; /* WebKit内核私有属性 */
+      -ms-user-select: none; /* IE私有属性(IE10及以后) */
+      -khtml-user-select: none; /* KHTML内核私有属性 */
+      -o-user-select: none; /* Opera私有属性 */
+      user-select: none; /* CSS3属性 */
+      background-color: #ffffff !important;
+    }
+  }
 }
 
 .userDetail {
@@ -95,7 +127,7 @@
     top: 6vw;
     background: #ffffff;
     width: 1000px;
-    height: 300px;
+    height: 303px;
     & > div {
       display: flex;
       justify-content: center;
@@ -113,8 +145,8 @@
       & > li {
         display: flex;
         align-items: center;
-        height: 47px;
-        border-top: 1px solid #eeeeee;
+        height: 50px;
+        border-top: 1px solid #dcdee3;
         & > span:first-child {
           font-style: normal;
           font-weight: normal;
@@ -205,6 +237,85 @@
       width: 100% !important;
       padding-left: 96px;
       text-align: left;
+    }
+  }
+}
+
+.prompt {
+  margin-right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & > span {
+    & > sup {
+      width: 11px !important;
+      height: 11px;
+      min-width: 11px !important;
+      top: 3px !important;
+      right: 1px !important;
+      & > span {
+        position: relative;
+        left: -3px;
+        top: -5px;
+      }
+    }
+  }
+}
+.title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: #ffffff;
+  position: absolute;
+  left: 20px;
+}
+
+.homeNav {
+  & > ul {
+    position: absolute;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border: none !important;
+    & > li {
+      width: 72px;
+      height: 28px;
+      // background: rgb(42, 127, 255);
+      border: none !important;
+      border-radius: 2px;
+      line-height: 28px;
+      text-align: center;
+      padding: 0;
+      margin-right: 30px;
+      & :hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 2px;
+      }
+      &:global(.ant-menu-item-selected) {
+        & > span {
+          color: #2a7fff !important;
+        }
+        background: #ffffff !important;
+      }
+    }
+    & > li > span {
+      width: 72px;
+      height: 28px;
+      display: inline-block;
+      border: none !important;
+      border-radius: 2px;
+      line-height: 28px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 15px;
+      color: #ffffff;
+      text-align: center;
+      padding: 0;
+    }
+    & > .selected {
+      background: #ffffff !important;
+      color: #2a7fff !important;
     }
   }
 }

@@ -59,6 +59,7 @@ class ProfileManagement extends React.Component {
     };
     this.action = "view";
     this.roleId = "";
+    this.roleName = "";
     this.appId = "";
     this.enterDetail = this.enterDetail.bind(this);
     this.enterPermission = this.enterPermission.bind(this);
@@ -154,6 +155,7 @@ class ProfileManagement extends React.Component {
     });
     this.action = type ? type : "view";
     this.roleId = record ? record.roleId : "";
+    this.roleName = record ? record.roleName :"";
     this.getGroupList();
   }
 
@@ -245,6 +247,7 @@ class ProfileManagement extends React.Component {
             action={this.action}
             enterDetail={this.enterDetail}
             roleId={this.roleId}
+            roleName={this.roleName}
             enterPermission={this.enterPermission}
           />
         ) : (

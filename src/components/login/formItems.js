@@ -4,12 +4,11 @@ import { Input as Inp, Button, Icon, message } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
 import itemsStyles from "./style/login.module.scss";
-import usernameImg from "./style/username.svg";
-import passwordImg from "./style/password.svg";
+import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 
 const meteImg = {
-  username: usernameImg,
-  password: passwordImg
+  username: <UserNameIcon style={{ marginLeft: "10px" }} />,
+  password: <PassWordIcon style={{ marginLeft: "10px" }} />
 };
 
 class Input extends React.Component {
@@ -18,20 +17,12 @@ class Input extends React.Component {
     this.state = {};
   }
   render() {
-    const { src, classes, icon, placeholder, ...rest } = this.props;
+    const { src, classes, icon, placeholder, unprefix, ...rest } = this.props;
     return (
       <Inp
         {...rest}
         className={clx(itemsStyles.input, classes)}
-        prefix={
-          icon ? null : (
-            <img
-              style={{ marginLeft: "10px" }}
-              src={meteImg[this.props.type]}
-              alt=""
-            />
-          )
-        }
+        prefix={icon || unprefix ? null : meteImg[this.props.type]}
         placeholder={icon ? null : placeholder}
       />
     );
@@ -64,7 +55,7 @@ const maxLength = (length, msg) => ({ max: length, message: msg });
 const number = () => ({ pattern: "^[0-9]*$", message: "只能输入小写数字" });
 const requireCharAndNum = () => ({
   pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$",
-  message: "密码为数字和字母组合,且为8-20位字符"
+  message: "密码不符合要求"
 });
 const requireChinese = () => ({
   pattern: "^[\u4e00-\u9fa5a-zA-Z0-9]*$",
@@ -97,7 +88,7 @@ const checkEmail = async (rule, value, callback) => {
   if (!value) return callback();
   try {
     const res = await request(`/sysUser/email/${value}/check`);
-    if (res && res.data === false) return callback("该电子邮箱已被注册");
+    if (res && res.data === false) return callback("该邮箱已被注册");
   } catch (err) {
     message.error(
       (err.response && err.response.data && err.response.data.msg) || "系统错误"
@@ -123,13 +114,13 @@ const checkEmail = async (rule, value, callback) => {
 // }
 
 // formItems表单项
-const username = ({ form, payload, icon }) => {
+const username = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "username",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        required("用户名不可为空"),
+        required("该项为必填"),
         whitespace()
         // maxLength(20, "用户名过长，最多20个字符")
       ]
@@ -140,19 +131,20 @@ const username = ({ form, payload, icon }) => {
         placeholder={"请输入注册时绑定的邮箱/手机号"}
         onChange={() => form.setFields({ username: { errors: null } })}
         icon={icon}
+        unprefix={unprefix}
       />
     ),
     additionComponent: null
   };
 };
 
-const name = ({ form, payload, icon }) => {
+const name = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "name",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        required("昵称不可为空"),
+        required("该项为必填"),
         whitespace(),
         maxLength(20, "昵称过长，最多20个字符")
       ]
@@ -163,17 +155,25 @@ const name = ({ form, payload, icon }) => {
         placeholder={"请输入用户昵称"}
         onChange={() => form.setFields({ name: { errors: null } })}
         icon={icon}
+        unprefix={unprefix}
       />
     ),
     additionComponent: null
   };
 };
 
-const password = ({ form, payload, itemName, icon }) => ({
+const password = ({
+  form,
+  payload,
+  itemName,
+  icon,
+  unprefix,
+  hasFeedback
+}) => ({
   itemName: itemName,
   options: {
     validateTrigger: "onBlur",
-    rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
+    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
   },
   component: (
     <Input
@@ -184,18 +184,19 @@ const password = ({ form, payload, itemName, icon }) => ({
           ? ""
           : payload === "login" || payload === "old"
           ? "请输入密码"
-          : "密码为数字和字母组合,且为8-20位字符"
+          : "密码至少8为, 必须包含数字和字母"
       }
       icon={icon}
+      unprefix={unprefix}
     />
   ),
   additionComponent: null
 });
-const oldPassWord = ({ form, payload, icon }) => ({
+const oldPassWord = ({ form, payload, icon, unprefix, hasFeedback }) => ({
   itemName: "oldPassWord",
   options: {
     validateTrigger: "onBlur",
-    rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
+    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
   },
   component: (
     <Input
@@ -204,15 +205,16 @@ const oldPassWord = ({ form, payload, icon }) => ({
       onChange={() => form.setFields({ oldPassWord: { errors: null } })}
       placeholder={"当前密码"}
       icon={icon}
+      unprefix={unprefix}
     />
   ),
   additionComponent: null
 });
-const newPassWord = ({ form, payload, icon }) => ({
+const newPassWord = ({ form, payload, icon, unprefix, hasFeedback }) => ({
   itemName: "newPassWord",
   options: {
     validateTrigger: "onBlur",
-    rules: [required("密码不可为空"), whitespace(), requireCharAndNum()]
+    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
   },
   component: (
     <Input
@@ -221,17 +223,25 @@ const newPassWord = ({ form, payload, icon }) => ({
       onChange={() => form.setFields({ newPassWord: { errors: null } })}
       placeholder={"新密码"}
       icon={icon}
+      unprefix={unprefix}
     />
   ),
   additionComponent: null
 });
-const confirmPassWord = ({ form, payload, newPassWord, icon }) => {
+const confirmPassWord = ({
+  form,
+  payload,
+  newPassWord,
+  icon,
+  unprefix,
+  hasFeedback
+}) => {
   return {
     itemName: "confirmPassWord",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        required("密码不可为空"),
+        required("该项为必填"),
         whitespace(),
         requireCharAndNum(),
         {
@@ -250,13 +260,14 @@ const confirmPassWord = ({ form, payload, newPassWord, icon }) => {
         onChange={() => form.setFields({ confirmPassWord: { errors: null } })}
         placeholder={"确认密码"}
         icon={icon}
+        unprefix={unprefix}
       />
     ),
     additionComponent: null
   };
 };
 
-const verificationCode = ({ form, payload, icon }) => {
+const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
   const { getFieldValue } = form;
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
@@ -302,7 +313,7 @@ const verificationCode = ({ form, payload, icon }) => {
     itemName: "verificationCode",
     options: {
       validateTrigger: "onBlur",
-      rules: [required("请输入验证码"), whitespace()]
+      rules: [required("该项为必填"), whitespace()]
     },
     component: (
       <Input
@@ -314,8 +325,9 @@ const verificationCode = ({ form, payload, icon }) => {
             style={{ color: "rgba(0,0,0,.25)" }}
           />
         }
-        placeholder={"请输入验证码"}
+        placeholder={"请填写验证码"}
         icon={icon}
+        unprefix={unprefix}
         addonAfter={
           <Button
             ref={verificationCodeButtonRef}
@@ -342,14 +354,13 @@ const verificationCode = ({ form, payload, icon }) => {
   };
 };
 
-const mobilePhone = ({ form, payload, icon }) => {
-  console.log(payload);
+const mobilePhone = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "mobilePhone",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        required("请输入手机号"),
+        required("该项为必填"),
         whitespace(),
         number(),
         { validator: checkphone(payload) },
@@ -358,27 +369,27 @@ const mobilePhone = ({ form, payload, icon }) => {
     },
     component: (
       <Input
-        placeholder={"请输入绑定的手机号"}
+        placeholder={"请填写手机号"}
         addonBefore={<span>+86</span>}
         prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,0.25)" }} />}
         onChange={() => form.setFields({ mobilePhone: { errors: null } })}
         icon={icon}
+        unprefix={unprefix}
       />
     ),
     additionComponent: null
   };
 };
 
-const companyName = ({ form, payload, icon }) => {
+const companyName = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "companyName",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        required("请输入公司名称"),
-        whitespace(),
+        hasFeedback ? required("该项为必填") : "",
         requireChinese(),
-        maxLength(30, "z公司名称过长，最多30个字符")
+        maxLength(30, "公司名称过长，最多30个字符")
         // payload === "redit" && { validator: checkCompanyNamePresence }
       ]
     },
@@ -386,21 +397,22 @@ const companyName = ({ form, payload, icon }) => {
       <Input
         prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
         onChange={() => form.setFields({ companyName: { errors: null } })}
-        placeholder={"请输入公司名"}
+        placeholder={"请填写公司名"}
         icon={icon}
+        unprefix={unprefix}
       />
     ),
     additionComponent: null
   };
 };
 
-const userEmail = ({ form, payload, icon }) => {
+const userEmail = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "userEmail",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        required("请输入电子邮箱"),
+        required("该项为必填"),
         whitespace(),
         email(),
         { validator: checkEmail }
@@ -409,9 +421,10 @@ const userEmail = ({ form, payload, icon }) => {
     component: (
       <Input
         prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
-        placeholder={"请输入绑定的电子邮箱"}
+        placeholder={"请填写工作邮箱"}
         onChange={() => form.setFields({ userEmail: { errors: null } })}
         icon={icon}
+        unprefix={unprefix}
       />
     ),
     additionComponent: null
@@ -457,7 +470,7 @@ const submit = ({
         {payload === "login" && (
           <div
             className={itemsStyles.buttonSuffix}
-            style={{ width: "100%", marginLeft: "0px" }}
+            style={{ width: "100%", marginLeft: "0px", textAlign: "right" }}
           >
             <Link to="/forgetPassword">忘记密码</Link>&nbsp;&nbsp;|&nbsp;&nbsp;
             <span onClick={() => setActiveKey("register")}>注册</span>
@@ -501,7 +514,6 @@ const userDetailModalSubmit = ({
   const filled = values.filter(f => f);
   const allowClickButton =
     values.length === filled.length && touched ? true : false;
-  console.log(values, filled, allowClickButton, isFieldsTouched());
   return {
     itemName: "userDetailModalSubmit",
     options: {
@@ -536,8 +548,8 @@ export const loginPasswordParameter = [
   { key: "submit", value: "login", itemName: "loginPasswordSubmit" }
 ];
 export const loginPhoneParameter = [
-  { key: "mobilePhone", value: "login" },
-  { key: "verificationCode", value: null },
+  { key: "mobilePhone", value: "login", itemName: "mobilePhone" },
+  { key: "verificationCode", value: null, itemName: "verificationCode" },
   { key: "submit", value: "login", itemName: "loginPhoneSubmit" }
 ];
 export const loginForgetPasswordParameter = [
@@ -581,7 +593,8 @@ export const registerParameter = [
     label: "用户昵称",
     hasFeedback: true,
     colon: false,
-    icon: true
+    // icon: true
+    unprefix: true
   },
   {
     help: "register",
@@ -590,7 +603,8 @@ export const registerParameter = [
     label: "邮箱",
     hasFeedback: true,
     colon: false,
-    icon: true
+    // icon: true
+    unprefix: true
   },
   {
     help: "register",
@@ -599,7 +613,8 @@ export const registerParameter = [
     label: "手机号",
     hasFeedback: true,
     colon: false,
-    icon: true
+    // icon: true
+    unprefix: true
   },
   {
     help: "register",
@@ -608,7 +623,8 @@ export const registerParameter = [
     label: "验证码",
     hasFeedback: true,
     colon: false,
-    icon: true
+    // icon: true
+    unprefix: true
   },
   {
     help: "register",
@@ -618,16 +634,18 @@ export const registerParameter = [
     hasFeedback: true,
     colon: false,
     itemName: "registerPassword",
-    icon: true
+    // icon: true
+    unprefix: true
   },
   {
     help: "register",
     key: "companyName",
     value: null,
     label: "公司名",
-    hasFeedback: true,
+    hasFeedback: false,
     colon: false,
-    icon: true
+    // icon: true
+    unprefix: true
   },
   { key: "submit", value: "register", itemName: "registerSubmit" }
 ];
