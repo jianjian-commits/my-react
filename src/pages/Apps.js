@@ -99,9 +99,9 @@ class Apps extends React.Component {
                 <>
                   <NoAppImg />
                   <p>
-                    <span>您还没有添加应用</span>
+                    <span>您还没有应用</span>
                     <br />
-                    点击左上角创建应用，添加你的第一个应用吧
+                    点击"创建应用"按钮，创建您的第一个应用吧
                   </p>
                 </>
               )}

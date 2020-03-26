@@ -56,9 +56,12 @@
   img {
     width: 40px;
   }
-  .active,:hover {
-    background-color: #ddd;
-    border:2px solid #B7D4FF;
+  .active {
+    border:2px solid #A2C7FF;
+    border-radius: 8px;
+  }
+  :hover{
+    border:2px solid #D8E7FF;
     border-radius: 8px;
   }
 }
