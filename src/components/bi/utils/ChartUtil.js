@@ -1,6 +1,12 @@
 import { Types } from '../component/bind/Types';
 
-export const getOption = (xaxisList) => {
+export const getOption = (data) => {
+  const { xaxisList, legends } = data;
+
+  if(!xaxisList || (xaxisList.length == 0) || !legends || (legends.length == 0)) {
+    return {};
+  }
+
   const legend = xaxisList[0];
 
   if(!legend) {
@@ -9,25 +15,38 @@ export const getOption = (xaxisList) => {
 
   const source = [];
   const series = [];
+  const title = ["名称"];
+
+  legends.forEach((each) => {
+    title.push(each.legendName);
+    series.push({type: 'bar'});
+  })
+
+  source.push(title)
 
   xaxisList.forEach((each, idx) => {
     let row = [];
-    let title = [];
     const items = each.items;
-
-    if(idx == 0) {
-      title.push("名称");
-      items.forEach((item)=> {
-        title.push(item.legend.legendName);
-        series.push({type: 'bar'});
-      })
-      source.push(title);
-    }
-
     row.push(each.dimensionName);
-    items.forEach((item)=> {
-      row.push(item.count);
-    })
+
+    if(legends.length == items.length) {
+      items.forEach((item)=> {
+        row.push(item.count);
+      })
+    }
+    else { // tow dimensions, one measure
+      legends.forEach((legend) => {
+        let count = 0
+
+        items.forEach((item)=> {
+          if(item.legend.legendName == legend.legendName) {
+            count = item.count;
+          }
+        })
+
+        row.push(count);
+      })
+    }
 
     source.push(row);
   });

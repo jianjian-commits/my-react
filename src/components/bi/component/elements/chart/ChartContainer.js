@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import Chart from './Chart';
 import { Icon } from "antd";
+import { connect } from "react-redux";
 import { getOption } from '../../../utils/ChartUtil';
+import BlankElement from '../BlankElement';
+import { useParams } from "react-router-dom";
 import './chart.scss';
 
 const ToolbarBtns = props => {
-
   const { chartId = "default" , iconBtnGroup , isBtnBlock} = props;
 
   return (
@@ -21,11 +23,24 @@ const ToolbarBtns = props => {
 };
 
 const ChartContainer = props => {
-  const { chartData, style, chartId = "default"} = props;
+  const { chartData, style, chartId = "default", dashboards, chartName, isBtnBlock } = props;
+  const { elementId } = useParams();
   const chartOption = chartData ? getOption(chartData) : {};
   const chart = <Chart chartOption={chartOption} />;
 
-  const isBtnBlock = true ;
+  const elements = dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
+  let name = "新建图表";
+
+  if(elementId) {
+    elements.forEach((item) => {
+      if(item.id == elementId) {
+        name = item.name;
+      }
+    })
+  }
+  else {
+    name = chartName || name;
+  }
 
   const iconBtnGroup = [
     {
@@ -49,24 +64,27 @@ const ChartContainer = props => {
   if (!chartData) {
     return (
       <div className="chart-container" style={style}>
-        <div>组件配置异常</div>
+        <BlankElement />
       </div>
     );
   }
 
-
   return (
     <div
       className="chart-container"
-      onMouseEnter={isBtnBlock?null:handlMouseEnter}
-      onMouseLeave={isBtnBlock?null:handlMouseLeave}
+      onMouseEnter={isBtnBlock ? null : handlMouseEnter}
+      onMouseLeave={isBtnBlock ? null : handlMouseLeave}
       style={style}
     >
-      <div className="chart-title">这里是图表的标题</div>
+      <div className="chart-title">{name}</div>
       <ToolbarBtns {...props} iconBtnGroup={iconBtnGroup} isBtnBlock={isBtnBlock}/>
       {chart}
     </div>
   );
 };
 
-export default ChartContainer;
+export default connect(
+  store => ({
+    dashboards: store.bi.dashboards}),
+    {}
+  )(ChartContainer);

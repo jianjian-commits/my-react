@@ -16,12 +16,12 @@ const EditorHeader = props => {
   const handleBack = () => {
     const { clearBind } = props;
     clearBind();
-    setDB(dashboardId, setDashboards);
     history.push(`/app/${appId}/setting/bi/${dashboardId}`);
   }
 
   const handleSave = (name) => {
     updateChartReq(elementId, bindDataArr, name);
+    setDB(dashboardId, setDashboards);
   }
 
   const onBlur = (e) => {
