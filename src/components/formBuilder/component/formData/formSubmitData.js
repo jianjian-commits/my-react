@@ -855,6 +855,7 @@ class FormSubmitData extends PureComponent {
             dataId={this.state.formDataDetailId}
             appId={this.props.appId}
             actionFun={this.props.actionFun}
+            enterPort ={"FormSubmitData"}
           />
         ) : (
           <>

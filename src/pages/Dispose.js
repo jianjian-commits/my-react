@@ -2,7 +2,7 @@ import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Layout } from "antd";
 import CommonHeader from "../components/header/CommonHeader";
-import TransactionDetail from "../components/transactList/TransactionDetail";
+import  FormDataDetail from "../components/formBuilder/component/formData/components/formDataDetail";
 
 const { Content } = Layout;
 
@@ -32,7 +32,13 @@ const Backlog = () => {
         operations={getOreations(appId, history)}
       />
       <Content>
-        <TransactionDetail></TransactionDetail>
+        <FormDataDetail
+          id={disposeId.substring(0, disposeId.indexOf("-"))}
+          dataId={disposeId}
+          appId={appId}
+          approvalKey={"MyPending"}
+          enterPort={"Dispose"}
+        ></FormDataDetail>
       </Content>
     </Layout>
   );
