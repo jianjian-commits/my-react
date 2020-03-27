@@ -26,17 +26,11 @@ const spec = {
 class DragItem extends PureComponent {
   render() {
     const { isDragging, connectDragSource, item } = this.props;
-    const icontype = () => {
-      if(item.type == "NUMBER"){
-        return "number"
-      }else {
-        return "tags"
-      }
-    } 
 
     return connectDragSource(
       <div>
-        <li className="bind-item"><Icon type={icontype()} style={{color:"lightskyblue"}} className="data-icon" />{item ? item.label : ""}</li>
+        <li className="bind-item"><Icon type={item.type == "NUMBER" ? "number" : "tags"}
+          className="data-icon" style={{color: "#2B81FF"}}/>{item ? item.label : ""}</li>
       </div>
     )
   }

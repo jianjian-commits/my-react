@@ -30,16 +30,16 @@ class DBEditor extends React.PureComponent {
 
     keys.forEach((item, idx) => {
       const data = elements[item].data;
-      const chartData = data ? data.xaxisList : null;
- 
+      const chartName = elements[item].name;
+      const containerObj = {chartId: "chart"+idx, isBtnBlock: false, key: item, chartData: data, chartName};
       if(idx % 2 == 0) {
-        elems.push(<ChartContainer chartId={"chart"+idx} key={item} chartData={chartData}/>);
+        elems.push(<ChartContainer {...containerObj}/>);
 
         if(idx == len - 1) {
           rows.push(<Column children={elems} key={item}/>);
         }
       } else {
-        elems.push(<ChartContainer chartId={"chart"+idx} key={item} chartData={chartData}/>);
+        elems.push(<ChartContainer {...containerObj} />);
         rows.push(<Column children={elems} key={item}/>);
         elems = [];
       }
@@ -49,9 +49,9 @@ class DBEditor extends React.PureComponent {
   }
 
   render() {
-    const { dataArr, height, dashboards } = this.props;
+    const { height, dashboards } = this.props;
 
-    if(!dashboards || dashboards.length == 0) {
+    if(!dashboards || (dashboards.length == 0) || dashboards[0].elements.length == 0) {
       return (
         <Fragment>
           <div className="db-placeholder" style={{height}}>
