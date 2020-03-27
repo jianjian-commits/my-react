@@ -146,7 +146,7 @@ class GetLocalPositionInspector extends React.Component {
       data,
       isSetAPIName
     } = this.props.element;
-    const { apiNameTemp, isUniqueApi = true } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage, } = this.state;
     const { adjustmentRange, isAdjustmentRange } = validate;
     // const formatChecks = inputMask ? true : false;
     return (
@@ -172,6 +172,8 @@ class GetLocalPositionInspector extends React.Component {
             onChange={this.handleChangeAPI}
             autoComplete="off"
           />
+          {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
+
           {isInFormChild(this.props.elementParent) ? null : (
             <>
               <p htmlFor="email-tip">提示信息</p>
@@ -227,8 +229,8 @@ class GetLocalPositionInspector extends React.Component {
               onChange={this.handleChangeSelect}
               disabled={!isAdjustmentRange}
             >
-              <Select.Option value="100米">100米</Select.Option>
-              <Select.Option value="200米">200米</Select.Option>
+              <Select.Option value="100">100米</Select.Option>
+              <Select.Option value="200">200米</Select.Option>
               <Select.Option value="5000">5000米</Select.Option>
             </Select>
           </div>

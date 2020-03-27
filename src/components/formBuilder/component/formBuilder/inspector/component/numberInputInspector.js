@@ -229,9 +229,10 @@ class NumberInputInspector extends React.PureComponent {
   };
 
   // API change
-  handleChangeAPI = ev => {
+   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -239,7 +240,8 @@ class NumberInputInspector extends React.PureComponent {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -258,6 +260,7 @@ class NumberInputInspector extends React.PureComponent {
       optionType,
       isLinked,
       apiNameTemp,
+      APIMessage,
       isUniqueApi = true
     } = this.state;
     const minBoundary = -Number.MAX_VALUE === validate.min ? "" : validate.min;
@@ -286,6 +289,7 @@ class NumberInputInspector extends React.PureComponent {
               onChange={this.handleChangeAPI}
               autoComplete="off"
             />
+            {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
 
             {isInFormChild(this.props.elementParent) ? null : (
               <>

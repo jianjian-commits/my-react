@@ -18,10 +18,10 @@ var getSubmissionDataTotal = resp => {
 };
 
 
-const filterData = (formPath, filterStr, pageSize, currentPage,appId) => {
+const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
   let queryData = pageSize === -1 ?
-   `/${formPath}/submission?${filterStr}` 
-   :`/${formPath}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
+   `/form/${formId}/submission?${filterStr}` 
+   :`/form/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
   return instanceAxios
     .get(
       encodeURI( config.apiUrl + queryData),
@@ -36,11 +36,14 @@ const filterData = (formPath, filterStr, pageSize, currentPage,appId) => {
 }
 
 
-export const getFilterSubmissionData = (formPath, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId) => dispatch => {
+export const getFilterSubmissionData = (args) => dispatch => {
+  const {formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId, callback} = args;
+  callback(true);
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formPath, filterStr, pageSize, currentPage,appId).then(res => {
+    filterData(formId, filterStr, pageSize, currentPage,appId).then(res => {
+      callback(false);
       dispatch({
         type: Filter_FORM_DATA,
         submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
@@ -56,13 +59,14 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         })
       });
     }).catch((error)=> {
+      callback(false);
       if (error.response) {
            message.error(error.response.data.msg);
          }
     });
   } else {
     axios.all(filterArray.map(filter => {
-      return filterData(formPath, filter, -1, 1)
+      return filterData(formId, filter, -1, 1)
     })).then(axios.spread((...data) => {
       const filterdata = data.map(data => data.data);
       const allSubmission = filterdata.flat();
@@ -74,6 +78,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
           return item.id === key
         })[0]
       })
+      callback(false);
       dispatch({
         type: Filter_FORM_DATA,
         submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
@@ -89,6 +94,7 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
         })
       });
     })).catch((error)=> {
+      callback(false);
       if (error.response) {
         message.error(error.response.data.msg);
       }
@@ -97,13 +103,9 @@ export const getFilterSubmissionData = (formPath, filterArray, connectCondition 
 
 }
 //获取提交的数据
-export const getSubmissionData = (
-  appId,
-  formId,
-  pageSize,
-  currentPage,
-  total = -1
-) => dispatch => {
+export const getSubmissionData = (params) => dispatch => {
+  const {  appId, formId, pageSize, currentPage, total = -1, callback } = params
+  callback(true);
   axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
     let forms = res.data;
     instanceAxios
@@ -118,6 +120,7 @@ export const getSubmissionData = (
         }
       )
       .then(res => {
+        callback(false);
         dispatch({
           type: RECEIVED_FORM_DATA,
           forms,
@@ -133,12 +136,17 @@ export const getSubmissionData = (
             }
           })
         });
+      }).catch(err=>{
+        callback(true);
       });
+  }).catch(err =>{
+    callback(true);
   });
 };
 
 // 获得表单数据详情
-export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => {
+export const getSubmissionDetail = (formId, submissionId, appId, callback) => dispatch => {
+  callback(true);
   axios.get(config.apiUrl + `/form/${formId}`,
   {   
     headers:{
@@ -166,6 +174,7 @@ export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => 
             }
           }
         ).then(response =>{
+          callback(false);
             dispatch({
               type: RECEIVED_FORM_DETAIL,
               forms: currentForm,
@@ -173,8 +182,14 @@ export const getSubmissionDetail = (formId, submissionId, appId) => dispatch => 
               extraProp: res.data.extraProp,
               taskData: response.data.data
             });
+        }).catch(err=>{
+          callback(false);
         })
+      }).catch(err=>{
+        callback(false);
       });
+  }).catch(err=>{
+    callback(false);
   });
 };
 

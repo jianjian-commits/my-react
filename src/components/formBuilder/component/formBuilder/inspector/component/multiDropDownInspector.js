@@ -399,9 +399,10 @@ class MultiDropDownInspector extends React.Component {
   };
 
   // API change
-  handleChangeAPI = ev => {
+   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -409,7 +410,8 @@ class MultiDropDownInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -418,6 +420,7 @@ class MultiDropDownInspector extends React.Component {
       optionType,
       isLinked,
       apiNameTemp,
+      APIMessage,
       isUniqueApi = true
     } = this.state;
     const { elementParent, element, data, errorComponentIndex } = this.props;
@@ -447,6 +450,7 @@ class MultiDropDownInspector extends React.Component {
             onChange={this.handleChangeAPI}
             autoComplete="off"
           />
+          {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
 
           {isInFormChild(this.props.elementParent) ? null : (
             <>
