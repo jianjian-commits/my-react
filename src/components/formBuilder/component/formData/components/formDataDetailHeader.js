@@ -4,9 +4,8 @@ import { useHistory, useParams } from "react-router-dom";
 import request from '../../../../../utils/request';
 
 const StartApprovalButton = (props) =>{
-  const [isSubmit ,setIsSubmit] = React.useState(false);
   const startApprovelBtnClick = () =>{
-    setIsSubmit(true)
+    props.setLoading(true)
     const { formDetail, currentForm, appId } = props;
     let fieldInfos = currentForm.components.map((component =>{
       if(formDetail[component.key]){
@@ -22,10 +21,10 @@ const StartApprovalButton = (props) =>{
     }
     props.handleStartFlowDefinition(currentForm.id, appId, data)
     .then(res=>{
-      setIsSubmit(false);
       props.resetData();
     }
     ).catch(err=>{
+      props.setLoading(false)
       console.log(err);
     });
 
@@ -36,10 +35,9 @@ const StartApprovalButton = (props) =>{
       (<Button 
         type="primary"
         className="btn" 
-        loading={isSubmit}
+        
         onClick={()=>{
           startApprovelBtnClick();
-          setIsSubmit(true)
         }}>提交审批</Button>)
       :(<></>)
   )
@@ -47,9 +45,8 @@ const StartApprovalButton = (props) =>{
 const WithdrawApprovalButton = (props) =>{
   // 撤回审批按钮
     const { isAllowedWithDraw, appId, processInstanceId } = props;
-    const [isSubmit ,setIsSubmit] = React.useState(false);
     async function withdraw() {
-      setIsSubmit(true);
+      props.setLoading(true)
       try{
         const res = await request(`/flow/approval/${processInstanceId}/withdraw`,{
           headers:{
@@ -59,12 +56,13 @@ const WithdrawApprovalButton = (props) =>{
         });
         if (res && res.status === "SUCCESS") {
           message.success("撤回审批成功");
-          setIsSubmit(false);
           props.resetData();
         } else {
+          props.setLoading(false)
           message.error("撤回审批失败");
         }
       } catch (err) {
+        props.setLoading(false)
         message.error("撤回审批失败");
       }
     }
@@ -73,7 +71,7 @@ const WithdrawApprovalButton = (props) =>{
       (<Button 
         type="primary" 
         className="btn"
-        loading={isSubmit} 
+         
         onClick={withdraw}>撤回</Button>)
       :<></>
     )
@@ -83,7 +81,6 @@ const WithdrawApprovalButton = (props) =>{
     // 特殊情况 多人审批 是否有人审批过？
     // 审批流程中的按钮(通过或者拒绝)
     const { isApprovalProcessor } = props;
-    const [isSubmit ,setIsSubmit] = React.useState(false);
   
     const handlePass = () =>{
       postApproveMsg(true);
@@ -94,7 +91,7 @@ const WithdrawApprovalButton = (props) =>{
     }
   
     async function postApproveMsg(approveResult){
-      setIsSubmit(true);
+      props.setLoading(true)
       try{
         const res = await request(`/flow/approval/${props.taskId}/approve/${approveResult}`,{
           headers:{
@@ -103,13 +100,14 @@ const WithdrawApprovalButton = (props) =>{
           method: "GET"
         });
         if (res && res.status === "SUCCESS") {
-          setIsSubmit(false);
           props.resetData();
           message.success("提交审批意见成功")
         } else {
+          props.setLoading(false)
           message.error("提交审批意见失败");
         }
       } catch (err) {
+        props.setLoading(false)
         message.error("提交审批意见失败");
       }
     }
@@ -118,17 +116,16 @@ const WithdrawApprovalButton = (props) =>{
       isApprovalProcessor ?
       (
         <>
-        <Button type="danger" loading={isSubmit} onClick={handleRefused} className="btn" style={{backgroundColor : "#fff",borderColor:"#fff",color:"#E71010"}}>拒绝</Button>
-        <Button type="primary" loading={isSubmit} onClick={handlePass} className="btn">通过</Button>
+        <Button type="danger"  onClick={handleRefused} className="btn" style={{backgroundColor : "#fff",borderColor:"#fff",color:"#E71010"}}>拒绝</Button>
+        <Button type="primary"  onClick={handlePass} className="btn">通过</Button>
         </>
       ):(<></>)
     )
   }
 const ReSubmitApprovalButton = (props) =>{
   const { canResubimit } = props;
-  const [isSubmit ,setIsSubmit] = React.useState(false);
   async function postApproveMsg(){
-    setIsSubmit(true);
+    props.setLoading(true)
     try{
       const res = await request(`/flow/approval/${props.taskId}/approve/true`,{
         headers:{
@@ -137,13 +134,14 @@ const ReSubmitApprovalButton = (props) =>{
         method: "GET"
       });
       if (res && res.status === "SUCCESS") {
-        setIsSubmit(false);
         props.resetData();
         message.success("提交审批成功")
       } else {
+        props.setLoading(false)
         message.error("提交审批失败");
       }
     } catch (err) {
+      props.setLoading(false)
       message.error("提交审批失败");
     }
   }
@@ -151,7 +149,7 @@ const ReSubmitApprovalButton = (props) =>{
     canResubimit ?
     (
       <>
-      <Button type="primary" loading={isSubmit} onClick={postApproveMsg} className="btn" >重新提交</Button>
+      <Button type="primary"  onClick={postApproveMsg} className="btn" >重新提交</Button>
       </>
     ):(<></>)
   )
@@ -169,8 +167,8 @@ const FormDataDetailHeader = (props) =>{
     } else if(props.enterPort ==="Dispose") {
       history.goBack();
     }
-
   };
+
   const { taskData, currentForm } = props; 
   const { canSubmit, canResubimit, canApprove, canWithdraw, currentProcessInstanceId ,currentTaskId } = taskData; 
   return (

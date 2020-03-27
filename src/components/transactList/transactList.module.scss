@@ -6,6 +6,9 @@
       td:first-child {
         color: #000000;
       }
+      &:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background-color: #E7F0FF;
+      }
     }
     td {
       > span {
@@ -25,6 +28,8 @@
   }
   :global(.ant-table-tbody > tr > td) {
     padding: 9px 16px;
+    border-bottom-color: #DCDEE3;
+    color: #333;
   }
   :global(.ant-table-column-title) {
         font-family: "Microsoft YaHei";

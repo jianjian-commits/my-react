@@ -604,7 +604,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
                   height: 34px;
                   font-size: 14px;
                   img {
+                    position: relative;
                     margin-right: 7px;
+                    top: -3px;
                   }
                 }
               }
@@ -1152,6 +1154,10 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             border-width: 1px;
             font-size: 13px;
             font-family: PingFangSC-Regular, PingFang SC;
+            i{
+              position: relative;
+              bottom: 2.5px;
+            }
           }
         }
         .RadioWapper {
@@ -1232,6 +1238,10 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             }
           }
           .ant-btn {
+            i{
+              position: relative;
+              bottom: 2.5px;
+            }
             width: 88%;
             height: 34px;
             border: dashed;
@@ -1463,6 +1473,10 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             border-width: 1px;
             font-size: 13px;
             font-family: PingFangSC-Regular, PingFang SC;
+            i{
+              position: relative;
+              bottom: 2.5px;
+            }
           }
         }
         .RadioWapper {
@@ -1562,6 +1576,10 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             border-width: 1px;
             font-size: 13px;
             font-family: PingFangSC-Regular, PingFang SC;
+            i{
+              position: relative;
+              bottom: 2.5px;
+            }
           }
         }
         .RadioWapper {
@@ -1643,6 +1661,10 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           width: 100%;
           .ant-btn {
             border-style: dashed;
+            i{
+              position: relative;
+              top: -4px;
+            }
           }
           margin-bottom: 20px;
           .position-center-item {

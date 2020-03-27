@@ -9,7 +9,6 @@
 .form-submit-data-table {
   padding: 0 30px;
   box-sizing: border-box;
-  // overflow: hidden;
   position: relative;
   .filter-container {
     width: 364px;
@@ -177,8 +176,8 @@
         line-height: 21px;
         background: rgba(255, 255, 255, 1);
         color: #a4adc8;
-        border: 0.3px solid #f3f4f5;
-        border-color: #f3f4f5 !important;
+        border: 0.3px solid #DCDEE3;
+        border-color: #DCDEE3 !important;
         .ant-table-column-sorter-inner-full {
           display: block;
           margin-left: 2px;
@@ -202,6 +201,10 @@
       }
     }
   }
+  // hover效果
+  // .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  //   background-color:#E7F0FF;
+  // }
   .ant-table-tbody {
     font-size: 14px;
     .ant-table-row {
@@ -214,7 +217,7 @@
         color: #333;
         font-size: 14px;
         font-weight: 400;
-        border-color: #f3f4f5 !important;
+        border-color: #DCDEE3 !important;
         &:last-child {
           border-left: 1px solid;
         }
@@ -224,7 +227,7 @@
           display: flex;
           justify-content: center;
           margin: 0 -10px;
-          border: 1px solid #f3f4f5;
+          border: 1px solid #DCDEE3;
           border-top: none;
           .formChild-item {
             flex: 0 1 auto;
@@ -247,7 +250,7 @@
           justify-content: center;
           align-items: center;
           margin: 0 -10px;
-          border: 1px solid #f3f4f5;
+          border: 1px solid #DCDEE3;
           border-top: none;
           border-bottom: none;
         }
