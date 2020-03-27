@@ -6,7 +6,7 @@
   color: #333;
   font-size: 18px;
   margin-bottom: 41px;
-  margin-top:4px;
+  margin-top: 4px;
 }
 
 .lable {
@@ -95,6 +95,33 @@
       padding: 0 16px;
       color: #000;
     }
+  }
+
+  :global(.ant-table-thead > tr > th) {
+    padding: 14px;
+    background: #fff;
+    border-bottom: 1px solid #dcdee3;
+  }
+
+  :global(.ant-table-thead > tr:first-child > th:first-child) {
+    border-radius: 0px;
+  }
+
+  :global(.ant-table-thead > tr:first-child > th:last-child ) {
+    border-radius: 0px;
+  }
+
+  :global(.ant-table-tbody > tr > td) {
+    padding: 9px 16px;
+    border-bottom: 1px solid #dcdee3;
+  }
+
+  :global(.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td) {
+    background-color: #e7f0ff;
+  }
+
+  :global(.ant-table-tbody > tr:last-child > td) {
+    border-bottom: 0;
   }
 
   .rowKey {

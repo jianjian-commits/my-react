@@ -25,7 +25,9 @@ class HeaderBar extends React.Component {
         newValues.forEach((element, index) => {
           let newKey = ID.oldUuid();
           newValues[index].id = newKey;
-          newValues[index].key = ID.uuid(newData.type, forms);
+          newValues[index].key = ID.uuid(element.type, forms, newValues);
+          console.log(newValues[index].key)
+          newValues[index].isSetAPIName = false;
         });
         newData.values = newValues;
       }

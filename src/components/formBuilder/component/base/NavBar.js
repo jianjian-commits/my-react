@@ -42,7 +42,7 @@ class NavBar extends PureComponent {
         </div>
         {isShowExtraTitle ? (
           <div className="headerBarExtraTitle">
-            <span> 显示字段 </span>
+            {/* <span> 显示字段 </span> */}
             <span onClick={clickExtendCallBack}> 筛选条件 </span>
             {isShowBtn === true && isSubmitAuth ? (
               <Button className="headerBarButton" type="primary" onClick={() => clickCallback()}>

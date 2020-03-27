@@ -181,9 +181,10 @@ class ForBuilderHeader extends React.Component {
         </div>
         <div className="CreateFormStep" />
         <div className="CreateFormOperations">
-          <Button className="header-btn default">预览</Button>
+          {/* <Button className="header-btn default">预览</Button> */}
           <Button
             disabled={!this.state.btnCanClick || !this.state.isEditAuth}
+            loading={!this.state.btnCanClick || !this.state.isEditAuth}
             className="header-btn primary"
             onClick={e => {
               const checkRes = checkAndSaveForm(this.props);
@@ -237,7 +238,7 @@ class ForBuilderHeader extends React.Component {
             }}
             type="primary"
           >
-            {this.state.btnCanClick === false ? <Spin /> : ""}保存
+            { this.state.btnCanClick ? "保存" : "保存"}
           </Button>
         </div>
       </div>

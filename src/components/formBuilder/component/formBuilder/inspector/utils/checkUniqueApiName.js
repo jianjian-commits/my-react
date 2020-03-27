@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-02-26 15:24:46
  * @LastEditors: komons
- * @LastEditTime: 2020-03-10 16:26:07
+ * @LastEditTime: 2020-03-27 11:01:43
  * @Description: 校验apiName是否唯一的方法
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formBuilder\inspector\utils\checkUniqueApiName.js
  */
@@ -14,7 +14,7 @@ export function checkUniqueApi(value, props) {
   }
   const reg = /[^A-Za-z0-9\/-]|^\/|\/$|^-|-$/;
   if (reg.test(value)) {
-    return false;
+    return {err:true, msg:"API Name只能包含字母、数字、连字符和正斜杠"};
   }
   const { data, element } = props;
   const formAPi = getDataFromUrl("path");
@@ -34,5 +34,5 @@ export function checkUniqueApi(value, props) {
       }
     });
   apiNames = apiNames.filter(item => item);
-  return !apiNames.includes(value);
+  return {err: apiNames.includes(value), msg: "API Name已存在"};
 }

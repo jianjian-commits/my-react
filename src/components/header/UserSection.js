@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dropdown, Icon, Menu, Modal } from "antd";
+import { Dropdown, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -8,7 +8,11 @@ import {
   initAllDetail
 } from "../../store/loginReducer";
 import Styles from "./header.module.scss";
-import { WarningIcon, DightOutlined } from "../../assets/icons";
+import {
+  WarningIcon,
+  DownOutlinedIcon,
+  CheckedIcon
+} from "../../assets/icons/header";
 
 const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
   <>
@@ -27,7 +31,7 @@ const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
             >
               {team.name}
               &nbsp;&nbsp;&nbsp;&nbsp;
-              {check && <Icon type="check" />}
+              {check && <CheckedIcon style={{ floatRight: "0px" }} />}
             </Link>
           </Menu.Item>
         );
@@ -69,7 +73,7 @@ const User = props => {
           style={{ color: "rgba(255, 255, 255, 0.9)" }}
         >
           {userDetail.name}
-          <DightOutlined
+          <DownOutlinedIcon
             style={{ margin: "0 0 0 5px", color: "rgba(255, 255, 255, 0.9)" }}
           />
           <Modal

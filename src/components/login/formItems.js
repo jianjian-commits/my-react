@@ -492,12 +492,12 @@ const submit = ({
             <Link to="/login">返回登录</Link>
           </div>
         )}
-        {payload === "addTeam" && (
+        {/* {payload === "addTeam" && (
           <div className={itemsStyles.buttonSuffix}>
             <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
             <span></span>
           </div>
-        )}
+        )} */}
       </>
     )
   };

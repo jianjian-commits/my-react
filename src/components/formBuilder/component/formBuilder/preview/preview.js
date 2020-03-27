@@ -232,8 +232,8 @@ class Preview extends React.Component {
         data={item}
         active={active}
         editModeOn={this.props.editModeOn}
-        setDragState={() => {}}
-        _onDestroy={() => {}}
+        setDragState={() => { }}
+        _onDestroy={() => { }}
       />
     );
   }
@@ -280,6 +280,7 @@ class Preview extends React.Component {
         return x.type !== "CustomValue";
       });
     }
+    console.log("builder", data)
     const items = data.map((item, index) =>
       this.getElement(data, item, index, activeIndex, this.customValue)
     );
@@ -293,8 +294,8 @@ class Preview extends React.Component {
               {this.buildDragParent(data, activeIndex)}
             </div>
           ) : (
-            this.buildEmptyComponent()
-          )}
+              this.buildEmptyComponent()
+            )}
         </div>
       </div>
     );

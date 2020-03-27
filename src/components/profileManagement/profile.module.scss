@@ -1,16 +1,19 @@
 .wrapper {
   width: calc(100vw - 220px);
   padding: 29px 21px;
-  > span {
+
+  >span {
     font-size: 18px;
     display: inline-block;
     padding: 4px 0 41px 0;
     color: #333333;
   }
+
   svg {
     margin: 0 6px 0 0;
   }
-  > button {
+
+  >button {
     float: right;
     color: #2a7fff;
     width: 104px;
@@ -19,48 +22,65 @@
     margin-left: 20px;
     border: none;
   }
+
   :global(.ant-table) {
     tr {
       background-color: #fff;
+
       td:first-child {
         color: #000000;
       }
     }
+
     button {
       padding: 0 30px 0 0;
     }
   }
+
   :global(.ant-table-thead > tr > th) {
     padding: 14px;
     background: #fff;
     border-bottom: 1px solid #dcdee3;
   }
+
+  :global(.ant-table-thead > tr:first-child > th:first-child) {
+    border-radius: 0px;
+  }
+
+  :global(.ant-table-thead > tr:first-child > th:last-child) {
+    border-radius: 0px;
+  }
+
   :global(.ant-table-tbody > tr > td) {
     padding: 9px 16px;
     border-bottom: 1px solid #dcdee3;
   }
-  :global(.ant-table-tbody
-      > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
-      > td) {
+
+  :global(.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td) {
     background-color: #e7f0ff;
   }
+
   :global(.ant-table-tbody > tr:last-child > td) {
     border-bottom: 0;
   }
+
   :global(.ant-table-column-title) {
     color: #333333;
     font-weight: bold;
     font-size: 15px;
   }
+
   :global(.ant-checkbox-inner) {
     width: 20px;
     height: 20px;
     border-radius: 3px;
     border: 1px solid #2a7fff;
   }
+
   :global(.ant-checkbox-checked .ant-checkbox-inner) {
     background-color: transparent;
   }
+
   :global(.ant-checkbox-checked .ant-checkbox-inner::after) {
     border: 2px solid #2a7fff;
     border-top: 0;
@@ -70,7 +90,8 @@
     top: 44%;
     left: 23%;
   }
-  :global(.ant-breadcrumb){
+
+  :global(.ant-breadcrumb) {
     display: inline-block;
     svg{
       margin-left:8px;
@@ -90,12 +111,15 @@
   color: #666666;
   display: inline-block;
   padding: 4px 0 41px 0;
+
   &.active {
     cursor: pointer;
+
     &:hover {
       color: #333333;
     }
   }
+
   &.disabled {
     color: #333333;
   }
@@ -109,15 +133,19 @@
     margin-top: 10px;
     padding: 10px;
     display: inline-block;
+
     tr {
       line-height: 36px;
+
       td {
         padding: 7px 20px;
       }
+
       td:first-child {
         width: 250px;
         color: #777f97;
       }
+
       td:nth-child(2) {
         display: block;
         width: 250px;
@@ -126,6 +154,7 @@
         overflow-y: hidden;
         overflow-x: hidden;
         position: relative;
+
         span {
           max-width: 190px;
           display: inline-block;
@@ -133,6 +162,7 @@
           white-space: nowrap;
           text-overflow: ellipsis;
         }
+
         svg {
           position: absolute;
           margin: 10px 0 0 5px;
@@ -147,22 +177,28 @@
 .groupApp {
   table {
     border-top: 1px solid #dcdee3;
+
     th span {
       font-weight: normal !important;
     }
   }
+
   :global(td:nth-child(2) label) {
     margin-left: 20px;
   }
+
   :global(.ant-table-thead > tr > th) {
     padding: 14px 14px 14px 30px;
   }
+
   :global(.ant-table-tbody > tr > td) {
     padding: 9px 16px 9px 30px;
   }
+
   .radioStyle {
     background-color: #fff;
     padding: 12px 12px 12px 30px;
+
     label {
       margin: 0 0 0 20px;
     }
@@ -175,21 +211,26 @@
     background: #fff;
     padding: 14px 16px;
   }
+
   :global(.ant-checkbox-group-item) {
     margin: 0 60px 0 10px;
     color: #333;
   }
+
   :global(.ant-radio-group) {
     display: block;
     background: #fff;
     padding: 14px 30px;
+
     label {
       margin-right: 20px;
     }
   }
+
   .checkboxStyle {
     background: #fff;
     padding: 14px 30px;
+
     label {
       margin: 0 60px 0 10px;
     }
@@ -200,17 +241,20 @@
   input {
     width: 15%;
   }
-  > div {
+
+  >div {
     background: #fff;
     padding: 9px 0;
     color: #000;
   }
+
   .star {
     font-family: SimSun, sans-serif;
     color: #f5222d;
     margin-left: 10px;
     display: inline-block;
   }
+
   input {
     margin: 0 5px;
   }
