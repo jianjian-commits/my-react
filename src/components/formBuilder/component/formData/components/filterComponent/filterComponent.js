@@ -600,9 +600,10 @@ export default class FilterComponent extends Component {
   render() {
     const fileds = this.props.fileds;
     const { conditionIsAll } = this.state;
+
     return (
       <>
-        <div className="filter-container">
+        <div className="filter-container" onMouseLeave={()=>this.props.canClick()} onMouseEnter={()=>this.props.canNotClick()}>
           <div className="filter-condition">
             <Select
               style={{ width: "281px", height: "36px" }}

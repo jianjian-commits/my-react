@@ -187,7 +187,7 @@ class SingleTextInspector extends React.Component {
       case "custom": {
         const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
         if (elementParent) {
-          setFormChildItemValues(elementParent, "data", {type: "custom"}, element);
+          setFormChildItemValues(elementParent, "data", { type: "custom" }, element);
         } else {
           setItemValues(this.props.element, "data", {});
         }
@@ -224,7 +224,6 @@ class SingleTextInspector extends React.Component {
       APIMessage
     });
   };
-
   render() {
     const {
       id,
@@ -242,6 +241,7 @@ class SingleTextInspector extends React.Component {
       isUniqueApi = true
     } = this.state;
 
+    console.log("fccc", label)
     return (
       <div className="textarea-text-input">
         <div className="base-form-tool">
@@ -336,7 +336,7 @@ class SingleTextInspector extends React.Component {
                 min={1}
                 precision={0}
                 onChange={this.handleChangeAttrMinLength}
-                value={validate.minLength==0 ? "" : validate.minLength}
+                value={validate.minLength == 0 ? "" : validate.minLength}
                 autoComplete="off"
               />
               ~
@@ -352,8 +352,8 @@ class SingleTextInspector extends React.Component {
             </div>
             {
               isInFormChild(this.props.elementParent)
-              ? null
-              : <div className="checkbox-wrapper">
+                ? null
+                : <div className="checkbox-wrapper">
                   <Checkbox
                     name="unique"
                     checked={unique}

@@ -22,6 +22,7 @@ export default connect(
   { getCurrentTeam }
 )(function TeamMember({ loginData, getCurrentTeam }) {
   const { currentTeam } = loginData;
+  const [loading, setLoading] = React.useState(true)
   const [data, setData] = React.useState(null); //用户数据
   const [total, setTotal] = React.useState(null);
   const [onOff, setOnOff] = React.useState({
@@ -114,6 +115,7 @@ export default connect(
         } else {
           message.error(res.msg || "成员获取失败！");
         }
+
       })
       .catch(err => {
         message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
@@ -206,7 +208,9 @@ export default connect(
   };
   //获取当前team只调用一次
   useEffect(() => {
+    const _timeout = setTimeout(() => { setLoading(false) }, 500)
     getCurrentTeam();
+    return () => { clearTimeout(_timeout) }
   }, [getCurrentTeam]);
   //初次改变页码获取成员
   useEffect(() => {
@@ -243,6 +247,7 @@ export default connect(
             pageSize: pageConfig.pageSize,
             onChange: onChangePage
           }}
+          loading={loading}
           columns={columns}
           dataSource={data}
           rowClassName={classes.rowKey}

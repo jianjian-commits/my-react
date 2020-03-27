@@ -23,6 +23,7 @@ import {
   SET_ERROR_COMPONENT_INDEX
 
 } from "./action";
+
 const initState = {
   verificationList: [],    //校验规则
   data: [],
@@ -73,8 +74,15 @@ export default function formBuilderReducer(state = initState, action) {
     }
     case SET_ITEM_ATTR: {
       let newData = [...state.data];
-      let index = newData.indexOf(action.data);
-      newData[index][action.attr] = action.value;
+      // let index = newData.indexOf(data);
+      // newData[index][action.attr] = action.value;
+      newData.forEach((item) => {
+        if (item.id == action.data.id) {
+          item[action.attr] = action.value
+        }
+      })
+
+      console.log("hehe", newData)
       return {
         ...state,
         data: newData,
@@ -191,7 +199,7 @@ export default function formBuilderReducer(state = initState, action) {
       };
     }
     case ADD_VERIFICATION: {
-      const {name, value} = action;
+      const { name, value } = action;
       return {
         ...state,
         verificationList: [...state.verificationList, { name, value }],
@@ -208,9 +216,9 @@ export default function formBuilderReducer(state = initState, action) {
       }
     }
     case EDIT_VERIFICATION: {
-      const {name, value} = action;
+      const { name, value } = action;
       let newArray = state.verificationList;
-      newArray[action.index] = {name, value}
+      newArray[action.index] = { name, value }
       return {
         ...state,
         verificationList: [...newArray],
@@ -234,7 +242,7 @@ export default function formBuilderReducer(state = initState, action) {
       return {
         ...state,
         isFormChanged: false,
-        data: action.data,
+        // data: action.data,
         localForm: action.localForm
       }
     }

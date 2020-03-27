@@ -1,54 +1,96 @@
 $unHoverGray: #b6b6ba;
 
+.input {
+  & > input {
+    margin-left: 2px;
+    width: calc(100% - 4px) !important;
+  }
+}
+
 .background {
   width: 100vw;
   height: 100vh;
-  background-image: url("./background.svg");
+  background-image: url("../../../assets/icons/login/background.svg");
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .panel {
-  width: 1240px;
-  height: 680px;
+  width: 1016px;
+  height: 510px;
   border-radius: 10px;
   overflow: hidden;
 }
 
 .room {
-  width: 2480px;
-  height: 680px;
+  width: 1016px;
+  height: 510px;
   display: flex;
   position: relative;
   & > div {
-    width: 1240px;
-    height: 680px;
+    width: 1016px;
+    height: 510px;
     background: #ffffff;
     display: flex;
     & > div {
       width: 50%;
       height: 100%;
-      & .input > input {
-        height: 42px;
-        background: #f7f6f9;
-        border-radius: 6px;
-        text-indent: 20px;
-      }
+    }
+  }
+  & .input input {
+    border: 1px solid #d6d8de;
+    box-sizing: border-box;
+    height: 42px;
+    background: #ffffff;
+    border-radius: 6px;
+    text-indent: 20px;
+    border-top-right-radius: 6px !important;
+    border-bottom-right-radius: 6px !important;
+
+    &::-webkit-input-placeholder {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: #b6b6ba;
+    }
+    &::-moz-placeholder {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: #b6b6ba;
+    }
+    &:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: #b6b6ba;
+    }
+    &:-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: #b6b6ba;
     }
   }
 }
 
 .signin {
   & > div:first-child {
-    & > img {
+    width: 396px;
+    & > svg {
+      width: 349px;
+      height: 342.72px;
       display: block;
-      margin: 94px auto 149.1px 100px;
+      margin: 77px auto auto 73px;
     }
   }
   & > div:last-child {
+    width: 620px;
     & > div {
-      margin: 190px 150px auto 57px;
+      margin: 105px auto auto 109px;
       width: 413px;
     }
   }
@@ -58,6 +100,11 @@ $unHoverGray: #b6b6ba;
         width: 413px;
       }
     }
+  }
+  & :global(.ant-tabs-ink-bar) {
+    color: #2a7fff;
+    box-shadow: 0px 2px 8px #6ca7ff;
+    border-radius: 21px;
   }
 }
 
@@ -72,7 +119,7 @@ $unHoverGray: #b6b6ba;
     left: 0;
   }
   to {
-    left: -1240px;
+    left: -1016px;
   }
 }
 @-webkit-keyframes actionLeft /* Safari 与 Chrome */ {
@@ -80,7 +127,7 @@ $unHoverGray: #b6b6ba;
     left: 0;
   }
   to {
-    left: -1240px;
+    left: -1016px;
   }
 }
 
@@ -91,7 +138,7 @@ $unHoverGray: #b6b6ba;
 }
 @keyframes actionRight {
   from {
-    left: -1240px;
+    left: -1016px;
   }
   to {
     left: 0;
@@ -99,7 +146,7 @@ $unHoverGray: #b6b6ba;
 }
 @-webkit-keyframes actionRight /* Safari 与 Chrome */ {
   from {
-    left: -1240px;
+    left: -1016px;
   }
   to {
     left: 0;
@@ -107,11 +154,11 @@ $unHoverGray: #b6b6ba;
 }
 
 .registe {
-  width: 1240px;
-  height: 680px;
+  width: 1016px;
+  height: 510px;
   & .title {
-    padding-left: 57px;
-    margin: 69px 0 30px 0;
+    padding-left: 54px;
+    display: flex;
     & > div {
       font-style: normal;
       font-weight: normal;
@@ -120,6 +167,13 @@ $unHoverGray: #b6b6ba;
     }
   }
   & form {
+    & :global(.ant-form-explain) {
+      & > div {
+        top: 7px !important;
+        line-height: 25px !important;
+        width: 150px !important;
+      }
+    }
     & > div > div:nth-of-type(2) > div {
       display: flex;
       & > span > span:nth-of-type(2) {
@@ -178,14 +232,19 @@ $unHoverGray: #b6b6ba;
     }
   }
   & > div:first-child {
-    & > img {
+    width: 396px;
+    & > svg {
+      width: 306px;
+      height: 339px;
       display: block;
-      margin: 101px auto 178px 135px;
+      margin: 81px auto auto 73px;
     }
   }
   & > div:last-child {
+    width: 620px;
     & > div {
-      width: 413px;
+      width: 544px;
+      margin: 27px auto auto 48px;
     }
   }
 }
@@ -267,12 +326,15 @@ $unHoverGray: #b6b6ba;
 }
 
 .activeTabName {
-  color: #000000;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #333333;
 }
 
 .button {
-  margin-top: 24px;
-  width: 413px;
+  margin-top: 18px;
+  width: 411px;
   height: 42px !important;
   background: #2a7fff;
   opacity: 0.5;
@@ -280,7 +342,7 @@ $unHoverGray: #b6b6ba;
 }
 
 .buttonSuffix {
-  text-align: right;
+  text-align: center;
   width: 308px;
   margin-left: 81px;
   & > a {
@@ -327,11 +389,6 @@ $unHoverGray: #b6b6ba;
   }
 }
 
-.title {
-  display: block;
-  text-align: center;
-}
-
 .forgetPassword {
   width: 100vw;
   height: 100vh;
@@ -360,7 +417,7 @@ $unHoverGray: #b6b6ba;
         & .input {
           & > span {
             width: 0;
-            & > img {
+            & > svg {
               width: 0;
             }
           }
@@ -454,4 +511,13 @@ $unHoverGray: #b6b6ba;
     color: #ffffff;
     background: #2a7fff;
   }
+}
+
+.result {
+  width: 100% !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
 }

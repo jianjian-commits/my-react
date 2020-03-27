@@ -8,6 +8,7 @@ import {
   initAllDetail
 } from "../../store/loginReducer";
 import Styles from "./header.module.scss";
+import { WarningIcon, DightOutlined } from "../../assets/icons";
 
 const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
   <>
@@ -62,17 +63,31 @@ const User = props => {
         overlayClassName={Styles.overlay}
         overlay={MenuItems(allTeam, setVisible, currentTeam, switchCurrentTeam)}
       >
-        <Link className="ant-dropdown-link" to="#" style={{ color: "#ffffff" }}>
+        <Link
+          className="ant-dropdown-link"
+          to="#"
+          style={{ color: "rgba(255, 255, 255, 0.9)" }}
+        >
           {userDetail.name}
-          <Icon type="down" style={{ margin: "0 0 0 5px" }} />
+          <DightOutlined
+            style={{ margin: "0 0 0 5px", color: "rgba(255, 255, 255, 0.9)" }}
+          />
           <Modal
+            className={Styles.signoutModal}
             visible={visible}
-            width="419px"
-            title={"退出登录"}
-            cancelText={"取消"}
+            width="404px"
+            title={
+              <>
+                <WarningIcon />
+                退出登录
+              </>
+            }
+            cancelText={<span style={{ color: "#777F97" }}>取消</span>}
             okText={"确定"}
             onCancel={() => setVisible(false)}
             onOk={signOut}
+            closable={false}
+            mask={false}
           >
             确定退出登录?
           </Modal>

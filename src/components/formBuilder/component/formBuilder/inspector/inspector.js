@@ -182,7 +182,7 @@ export default class Inspector extends React.Component {
         );
       case "Address":
         return (
-          <AddressInspector  element={editElement} elementParent={editElementParent} key={editElement.id} element={editElement} />
+          <AddressInspector element={editElement} elementParent={editElementParent} key={editElement.key} element={editElement} />
         );
       case "Button":
         return (
@@ -194,6 +194,7 @@ export default class Inspector extends React.Component {
   }
 
   render() {
+    console.log("12ww", this.props.editElement)
     return (
       <div className="react-form-builder-inspector">
         <Tabs defaultActiveKey="1" className="tab-bar">
