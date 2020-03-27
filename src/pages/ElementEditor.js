@@ -5,7 +5,7 @@ import ChartContainer from '../components/bi/component/elements/chart/ChartConta
 import EditorHeader from '../components/bi/component/elements/EditorHeader';
 import { Layout } from "antd";
 import { ChartBindPane, LeftPane, RightPane, DragAndDrop } from '../components/bi/component/bind';
-import classes from "../styles/apps.module.scss";
+import classes from "../styles/bi.module.scss";
 const { Sider, Content } = Layout;
 
 const ElementEditor = props => {
@@ -25,23 +25,23 @@ const ElementEditor = props => {
   })
 
     return (
-      <Layout>
-        <EditorHeader/>
-        <DragAndDrop>
-          <Layout>
-            <Sider style={{ background: "#fff" }}>
-              <LeftPane/>
-            </Sider>
-            <Content className={classes.container}>
-              <ChartBindPane/>
-              <ChartContainer chartData={chartData} style={{height: "85%"}}/>
-            </Content>
-            <Sider style={{ background: "#fff" }}>
-              <RightPane/>
-            </Sider>
-          </Layout>
-        </DragAndDrop>
-      </Layout>
+        <Layout style={{height: document.body.scrollHeight}}>
+          <EditorHeader/>
+          <DragAndDrop>
+            <Layout>
+              <Sider style={{ background: "#fff" }}>
+                <LeftPane />
+              </Sider>
+              <Content className={classes.elemContainer}>
+                <ChartBindPane/>
+                <ChartContainer chartData={chartData} style={{flexGrow: 1}}/>
+              </Content>
+              <Sider style={{ background: "#fff" }}>
+                <RightPane/>
+              </Sider>
+            </Layout>
+          </DragAndDrop>
+        </Layout>
     )
 }
 
