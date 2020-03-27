@@ -29,7 +29,8 @@ const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
         headers: {
           // "X-Custom-Header": "ProcessThisImmediately",
           "Content-Type": "application/json",
-          appid:appId
+          appid: appId,
+          "isDataPage": true,
         }
       }
     )
@@ -115,7 +116,8 @@ export const getSubmissionData = (params) => dispatch => {
         {
           headers: {
             "Content-Type": "application/json",
-            appid:appId
+            appid:appId,
+            "isDataPage": true,
           }
         }
       )
@@ -150,7 +152,8 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
   axios.get(config.apiUrl + `/form/${formId}`,
   {   
     headers:{
-      appid:appId
+      appid:appId,
+      "isDataPage": true,
     }
   }
   ).then(res => {
@@ -162,7 +165,8 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
         {
           headers: {
             "Content-Type": "application/json",
-            appid:appId
+            appid: appId,
+            "isDataPage": true,
           }
         }
       )
@@ -170,7 +174,8 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
         instanceAxios.get(
           config.apiUrl + `/flow/history/approval/${submissionId}`,{
             headers:{
-              appid:appId
+              appid: appId,
+              "isDataPage": true,
             }
           }
         ).then(response =>{
@@ -190,6 +195,8 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
       });
   }).catch(err=>{
     callback(false);
+  }).catch(err=>{
+    callback(false);
   });
 };
 
@@ -200,7 +207,8 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      appid:appid
+      appid:appid,
+      "isDataPage": true,
     },
     data: {
       data: formData,
@@ -218,7 +226,8 @@ export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
     headers: {
       "Content-Type": "application/json",
       appid: appId,
-      formid: formId
+      formid: formId,
+      "isDataPage": true,
     }
   })
 }
