@@ -1,19 +1,23 @@
-import React, { PureComponent} from "react";
+import React, { PureComponent } from "react";
 import { Form, Table, Icon, Tabs, message } from "antd";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
-import { getSubmissionDetail, handleStartFlowDefinition } from "../redux/utils/getDataUtils";
-import { deleteFormData } from "../redux/utils/deleteDataUtils"
+import {
+  getSubmissionDetail,
+  handleStartFlowDefinition
+} from "../redux/utils/getDataUtils";
+import { deleteFormData } from "../redux/utils/deleteDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
-import { DeleteIcon, EditIcon } from './svgIcon/index'
-import FormDataDetailHeader from "./formDataDetailHeader"
+import { DeleteIcon, EditIcon } from "./svgIcon/index";
+import FormDataDetailHeader from "./formDataDetailHeader";
+import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionUtils";
 const { TabPane } = Tabs;
 const columns = [
   {
     title: "审批ID",
     dataIndex: "id",
-    className:"approveCol",
+    className: "approveCol"
   },
   {
     title: "环节名称",
@@ -37,35 +41,40 @@ const columns = [
   }
 ];
 
-const ApprovalStatus = (props) =>{
-  const { approveStatus  } = props;
+const ApprovalStatus = props => {
+  const { approveStatus } = props;
   switch (approveStatus) {
     case "已同意":
-      return (<span style={{color : "#00c39c"}}>{approveStatus}</span>)
+      return <span style={{ color: "#00c39c" }}>{approveStatus}</span>;
       break;
     case "已拒绝":
-      return (<span style={{color: "red"}}>{approveStatus}</span>)
+      return <span style={{ color: "red" }}>{approveStatus}</span>;
     case "审批中":
-        return (<span style={{color: "#ffa439"}}>{approveStatus}</span>)
+      return <span style={{ color: "#ffa439" }}>{approveStatus}</span>;
     default:
-   return (<span >{approveStatus}</span>)
+      return <span>{approveStatus}</span>;
       break;
   }
-}
+};
 
-const EditApprovalButton = (props) =>{
+const EditApprovalButton = props => {
+  // 权限相关
+  const { appId } = useParams();
+  const { userId, permissions, teamId, id:formId } = props;
+  const idEditAuth = editFormDataAuth(permissions, teamId, appId, formId, userId);
+  const isDeleteAuth = deleteFormDataAuth(permissions, teamId, appId, formId, userId);
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
-  const { detailAuthority , dataId, actionFun, deleteFormData, ...rest} = props;
+  const { detailAuthority, dataId, actionFun, deleteFormData, ...rest } = props;
   const history = useHistory();
   const handleDeleteSubmisson = submissionId => {
-      deleteFormData( "", submissionId)
+    deleteFormData("", submissionId)
       .then(response => {
-        if(props.enterPort === "TransctionList"){
-          props.fn(props.approvalKey)
-        } else if(props.enterPort === "FormSubmitData"){
-          props.actionFun(props.submissionId, false, props.currentForm.id)
-        } else if(props.enterPort ==="Dispose") {
+        if (props.enterPort === "TransctionList") {
+          props.fn(props.approvalKey);
+        } else if (props.enterPort === "FormSubmitData") {
+          props.actionFun(props.submissionId, false, props.currentForm.id);
+        } else if (props.enterPort === "Dispose") {
           history.goBack();
         }
       })
@@ -74,29 +83,29 @@ const EditApprovalButton = (props) =>{
         console.log(err);
       });
   };
-  return (
-    props.enterPort === "FormSubmitData" ? 
-    (
-      <div className="toolbarBox">
-        <span 
-          onClick={() => {
-          actionFun(dataId, true)
-           }
-        }><Icon component={EditIcon} style={{marginRight: 5}}/>编辑</span> 
-        <span
-            onClick={
-              ()=>{
-                handleDeleteSubmisson(dataId);
-              }
-            }
-      ><Icon component={DeleteIcon} style={{marginRight: 5}}/>删除</span> 
-      </div>
-    ):(
-      <></>
-    )
-  )
-}
-
+  return props.enterPort === "FormSubmitData" ? (
+    <div className="toolbarBox" style={{"cursor": "pointer"}}>
+      {idEditAuth ? <span
+        onClick={() => {
+          actionFun(dataId, true);
+        }}
+      >
+        <Icon component={EditIcon} style={{ marginRight: 5 }} />
+        编辑
+      </span> : null}
+      {isDeleteAuth ? <span style={{"cursor": "pointer"}}
+        onClick={() => {
+          handleDeleteSubmisson(dataId);
+        }}
+      >
+        <Icon component={DeleteIcon} style={{ marginRight: 5 }} />
+        删除
+      </span> : null}
+    </div>
+  ) : (
+    <></>
+  );
+};
 
 class FormDataDetail extends PureComponent {
   constructor(props) {
@@ -132,7 +141,7 @@ class FormDataDetail extends PureComponent {
       this.state.submissionId,
       this.props.appId
     );
-  }
+  };
 
   _renderFileData = fileData => {
     if (fileData.length > 0) {
@@ -163,7 +172,9 @@ class FormDataDetail extends PureComponent {
       case "DateInput":
         return (
           <div className="formChildData">
-            {submitData.time ? coverTimeUtils.localTime(submitData.time, "yyyy-MM-dd hh:mm:ss") : ""}
+            {submitData.time
+              ? coverTimeUtils.localTime(submitData.time, "yyyy-MM-dd hh:mm:ss")
+              : ""}
           </div>
         );
       case "FileUpload":
@@ -267,10 +278,14 @@ class FormDataDetail extends PureComponent {
           case "DateInput":
             return (
               <div key={item.key} className="dataDteailText">
-              <p className="dataTitle">{item.label}</p>
-              <p className="dataContent">{ formDetail[item.key] ? coverTimeUtils.localTime(formDetail[item.key]) : ""}</p>
-            </div>
-            )
+                <p className="dataTitle">{item.label}</p>
+                <p className="dataContent">
+                  {formDetail[item.key]
+                    ? coverTimeUtils.localTime(formDetail[item.key])
+                    : ""}
+                </p>
+              </div>
+            );
           case "MultiDropDown":
           case "CheckboxInput":
             return (
@@ -404,11 +419,11 @@ class FormDataDetail extends PureComponent {
       });
   }
 
-  onChangeTab = (key) => {
+  onChangeTab = key => {
     this.setState({
       tabKey: key
-    })
-  }
+    });
+  };
 
   render() {
     const { formDetail, currentForm, mobile = {}, taskData } = this.props;
@@ -417,31 +432,41 @@ class FormDataDetail extends PureComponent {
     let newCurrentComponents = currentForm.components.filter(
       item => item.type != "CustomValue"
     );
-    let operations = {}
+    let operations = {};
     switch (tabKey) {
       case "formDetail":
-        operations = <EditApprovalButton {...this.props} />
+        operations = <EditApprovalButton {...this.props} />;
         break;
       case "approvelFlow":
         {
-          operations = taskData.status? (<div className="approvalbox">审批状态：<ApprovalStatus approveStatus={taskData.status}/></div>):(<></>)
+          operations = taskData.status ? (
+            <div className="approvalbox">
+              审批状态：
+              <ApprovalStatus approveStatus={taskData.status} />
+            </div>
+          ) : (
+            <></>
+          );
         }
-          break;
+        break;
       default:
-        operations = (<></>)
+        operations = <></>;
         break;
     }
     let list = [];
-    if(taskData.status){
-      list = taskData.tasks.map(item =>{
-        item.key= item.approveDate
-        item.approveDate = new Date(item.approveDate).toLocaleString("chinese", { hour12: false })
+    if (taskData.status) {
+      list = taskData.tasks.map(item => {
+        item.key = item.approveDate;
+        item.approveDate = new Date(item.approveDate).toLocaleString(
+          "chinese",
+          { hour12: false }
+        );
         return item;
       });
     }
     let BoxStyle = {};
-    if(this.props.enterPort === "Dispose"){
-      BoxStyle={  width: "calc(100vw - 500px)", margin:"0 auto"}
+    if (this.props.enterPort === "Dispose") {
+      BoxStyle = { width: "calc(100vw - 500px)", margin: "0 auto" };
     }
     return (
       <div className="formDetailBox" style={BoxStyle}>
@@ -450,30 +475,29 @@ class FormDataDetail extends PureComponent {
           taskData={taskData}
           resetData={this.resetData}
           {...this.props}
-          />
+        />
         <div className="formDataDetailContainer">
-        <Tabs defaultActiveKey="detail" 
-          className="tabsBackground"
-          onChange={this.onChangeTab} 
-          tabBarExtraContent={operations}
-        >
-          <TabPane tab="表单详情" key="formDetail">
-            {this._renderDataByType(formDetail, newCurrentComponents)}
-          </TabPane>
-          {
-            // 关联审批的才展示审批  taskData.tasks
-            taskData.status  ? (
-            <TabPane tab="审批流水" key="approvelFlow">
-              <Table
-                pagination={false}
-                columns={columns}
-                dataSource={list}
-                size="middle"
-              />
+          <Tabs
+            defaultActiveKey="detail"
+            className="tabsBackground"
+            onChange={this.onChangeTab}
+            tabBarExtraContent={operations}
+          >
+            <TabPane tab="表单详情" key="formDetail">
+              {this._renderDataByType(formDetail, newCurrentComponents)}
             </TabPane>
-          ): null
-          }
-        </Tabs>
+            {// 关联审批的才展示审批  taskData.tasks
+            taskData.status ? (
+              <TabPane tab="审批流水" key="approvelFlow">
+                <Table
+                  pagination={false}
+                  columns={columns}
+                  dataSource={list}
+                  size="middle"
+                />
+              </TabPane>
+            ) : null}
+          </Tabs>
         </div>
       </div>
     );
@@ -483,16 +507,19 @@ class FormDataDetail extends PureComponent {
 const DataDetail = Form.create()(FormDataDetail);
 
 export default connect(
-  store => ({
+  ({ login, ...store }) => ({
     formDetail: store.formSubmitData.formDetail,
     currentForm: store.formSubmitData.forms,
     token: store.rootData.token,
     extraProp: store.formSubmitData.extraProp,
-    taskData: store.formSubmitData.taskData
+    taskData: store.formSubmitData.taskData,
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    teamId: login.currentTeam && login.currentTeam.id,
+    permissions: (login.userDetail && login.userDetail.permissions) || []
   }),
   {
     getSubmissionDetail,
     handleStartFlowDefinition,
-    deleteFormData,
+    deleteFormData
   }
 )(DataDetail);

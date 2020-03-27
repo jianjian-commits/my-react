@@ -145,8 +145,18 @@
   }
   .ant-table-body {
     overflow-x: auto !important;
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background-color: #D4D5D7;
+        box-shadow: none;
+      }
+    }
     &::-webkit-scrollbar {
-      height: 10px;
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      box-shadow: none;
     }
   }
 
@@ -398,15 +408,28 @@
             color: rgba(170, 178, 203, 1);
             line-height: 20px;
           }
-          .formChildTable {
-            .ant-table-body {
-              overflow-x: auto !important;
-              &::-webkit-scrollbar {
-                height: 10px;
-              }
-              td {
-                padding: 6px 8px;
-              }
+        }
+      }
+      .dataDteailFormChild {
+        font-size: 14px;
+        font-family: "PingFangSC-Regular", "PingFang SC";
+        border-bottom: 1px solid rgba(237, 239, 243, 1);
+        margin-top: 10px;
+        max-height: 177px;
+        p {
+          margin-bottom: 7px;
+          word-break: break-all;
+        }
+        .dataTitle {
+          font-weight: 500;
+          color: rgba(170, 178, 203, 1);
+          line-height: 20px;
+        }
+        .formChildTable {
+          .ant-table-body {
+            overflow-x: auto !important;
+            &::-webkit-scrollbar {
+              height: 6px;
             }
             .ant-table-thead {
               span {
