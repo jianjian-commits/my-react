@@ -15,6 +15,7 @@ import Authenticate from "../components/shared/Authenticate";
 import request from '../components/bi/utils/request';
 import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
+import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -36,7 +37,8 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  const [user, setUser] = React.useState({})
+  const [user, setUser] = React.useState({});
+
   let { groups, list, searchList } = mockForms;
 
   useEffect(() => {
@@ -46,7 +48,7 @@ const AppSetting = props => {
     setUser({ user: { id, name } })
     // let extraProp = { user: { id: user.id, name: user.name } }
 
-    getFormsAll(appId, true).then(res => {
+    getFormsAll(appId, false).then(res => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name,
@@ -148,6 +150,9 @@ const AppSetting = props => {
     }
   };
 
+  const { permissions, teamId } = props;
+  const isShowNewFormBtn = newFormAuth(permissions, teamId, appId);
+
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <ForInfoModal
@@ -171,15 +176,17 @@ const AppSetting = props => {
             >
               新建仪表盘
             </Button>
-            <Button
-              type="primary"
-              block
-              onClick={e => {
-                modalProps.showModal();
-              }}
-            >
-              新建表单
-            </Button>
+            {isShowNewFormBtn ? (
+              <Button
+                type="primary"
+                block
+                onClick={e => {
+                  modalProps.showModal();
+                }}
+              >
+                新建表单
+              </Button>
+            ) : null}
           </div>
           <div className={classes.searchBox}>
             <Input
@@ -215,10 +222,15 @@ const AppSetting = props => {
     </Authenticate>
   );
 };
-export default connect(({login, app }) => ({
-  appList: app.appList,
-  userDetail: login.userDetail
-}), {
-  setAllForms,
-  newDashboard
-})(AppSetting);
+export default connect(
+  ({ app, login }) => ({
+    appList: app.appList,
+    teamId: login.currentTeam && login.currentTeam.id,
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    userDetail: login.userDetail
+  }),
+  {
+    setAllForms,
+    newDashboard
+  }
+)(AppSetting);

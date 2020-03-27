@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { DndProvider } from "react-dnd";
 import { withRouter } from "react-router-dom";
 import { Spin } from "antd";
 import {
@@ -15,7 +14,6 @@ import {
   getAllForms
 } from "./redux/utils/operateForm";
 import { setAllForms } from "./redux/utils/operateFormComponent";
-import HTML5Backend from "react-dnd-html5-backend";
 import Preview from "./preview/preview";
 import Toolbar from "./toolbar/toolbar";
 import Inspector from "./inspector/inspector";
@@ -104,7 +102,6 @@ class ReactFormBuilder extends React.Component {
       <div className={"formBuilder"} >
         <Spin spinning={this.props.isInitForming} >
           <FormBuilderHeader appid={this.state.appid} extraProp={this.state.extraProp} editForm={this.props.localForm} />
-          <DndProvider backend={HTML5Backend}>
             <div>
               <div className="react-form-builder clearfix">
                 <Toolbar {...toolbarProps} />
@@ -136,7 +133,6 @@ class ReactFormBuilder extends React.Component {
                 />
               </div>
             </div>
-          </DndProvider>
         </Spin>
       </div>
     );

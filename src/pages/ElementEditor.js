@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { useParams, useHistory } from "react-router-dom";
 import ChartContainer from '../components/bi/component/elements/chart/ChartContainer';
 import EditorHeader from '../components/bi/component/elements/EditorHeader';
 import { Layout } from "antd";
@@ -7,13 +8,22 @@ import { ChartBindPane, LeftPane, RightPane, DragAndDrop } from '../components/b
 import classes from "../styles/apps.module.scss";
 const { Sider, Content } = Layout;
 
-class ElementEditor extends React.PureComponent {
-  constructor(props) {
-    super(props);
+const ElementEditor = props => {
+  const history = useHistory();
+  const { appId, dashboardId } = useParams();
+  const { chartData } = props;
+
+  const load = (e) => {
+    history.push(`/app/${appId}/setting/bi/${dashboardId}`);
   }
 
-  render() {
-    const { chartData } = this.props;
+  useEffect(()=> {
+    window.addEventListener("load", load);
+    return () => {
+      window.removeEventListener("load", load);
+    }
+  })
+
     return (
       <Layout>
         <EditorHeader/>
@@ -24,7 +34,7 @@ class ElementEditor extends React.PureComponent {
             </Sider>
             <Content className={classes.container}>
               <ChartBindPane/>
-              <ChartContainer chartData={chartData}/>
+              <ChartContainer chartData={chartData} style={{height: "85%"}}/>
             </Content>
             <Sider style={{ background: "#fff" }}>
               <RightPane/>
@@ -33,10 +43,10 @@ class ElementEditor extends React.PureComponent {
         </DragAndDrop>
       </Layout>
     )
-  }
 }
 
 export default connect(store => ({
   dataSource: store.bi.dataSource,
   chartData: store.bi.chartData
-}),{})(ElementEditor);
+}), {
+})(ElementEditor);

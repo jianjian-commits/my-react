@@ -2,7 +2,8 @@ import React, {PureComponent} from "react";
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
-import FieldTargetSelect from "./FieldTargetSelect";
+import FieldMeasureSelect from "../elements/FieldMeasureSelect";
+import FieldDimension from "../elements/FieldDimension";
 import { ChartType } from '../elements/Constant';
 import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
@@ -37,36 +38,42 @@ const spec = {
     }
 
     const { bindDataArr, dataSource, changeBind, changeChartData, dashboardId, elementId } = props;
+    const isExisted = bindDataArr.length != 0 && bindDataArr.some((each) => {return item.id == each.id})
+
+    if(isExisted) {
+      return;
+    }
+
     const dropDim = component.getType() == Types.DIMENSION;
 
     if(dropDim && (item.bindType == Types.DIMENSION) || (!dropDim && (item.bindType == Types.MEASURE))) {
       bindDataArr.push(item);
     }
 
-    const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elementId);
+  }
+}
 
+function processBind(bindDataArr, formId, changeBind, changeChartData, chartId) {
+  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
     const res = request(`/bi/charts/data`, {
       method: "POST",
       data: {
-        formId: dataSource.id,
+        chartId,
+        formId,
         dimensions,
         indexes,
         conditions
-}
+      }
     }).then((res) => {
       if(res && res.msg === "success") {
         const dataObj = res.data;
         const data = dataObj.data;
-
-        if(data) {
-          const xaxisList = data.xaxisList;
-          changeChartData(xaxisList);
-        }
+        changeChartData(data ? data.xaxisList: null);
       }
     })
 
     changeBind(bindDataArr);
-  }
 }
 
 /**
@@ -89,7 +96,7 @@ class BindPane extends PureComponent {
   }
 
   render() {
-    const { col, label, bindType, connectDropTarget } = this.props;
+    const { label, bindType, connectDropTarget } = this.props;
 
     return connectDropTarget(
       <div className="bind-line" key={label}>
@@ -103,6 +110,29 @@ class BindPane extends PureComponent {
     return this.props.bindType;
   }
 
+  removeField = (item) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
+
+    const newArr = bindDataArr.filter((each)=>{
+      return item.id != each.id;
+    })
+
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
+  }
+
+  changeGroup = (currentGroup, id) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
+    const newArr = bindDataArr.map((each) => {
+      if(id == each.id) {
+        each.option.currentGroup = currentGroup
+      }
+      
+      return each;
+    })
+
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
+  }
+
   getItems = (bindType) => {
     let { bindDataArr } = this.props;
     bindDataArr = bindDataArr || [];
@@ -111,8 +141,11 @@ class BindPane extends PureComponent {
 
     bindDataArr.forEach(
       (item) => {
-        if(item.bindType == bindType) {
-          components.push(<FieldTargetSelect label = {item.label} className={cls} key={item.id}/> )
+        if(item.bindType == bindType && bindType == "dim") {
+          components.push(<FieldDimension item = {item} removeField={this.removeField} key={item.id} className={cls} />)
+        }
+        if(item.bindType == bindType && bindType == "mea") {
+          components.push(<FieldMeasureSelect item = {item} changeGroup={this.changeGroup} removeField={this.removeField} key={item.id} className={cls} />)
         }
       }
     )

@@ -1,81 +1,43 @@
-import React, {Fragment} from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, Icon, Modal, Tooltip, Spin } from "antd";
-import { renameElement, changeBind, saveDashboards } from '../../redux/action';
+import { Button, Icon} from "antd";
+import { changeBind, setDashboards, clearBind } from '../../redux/action';
 import request from '../../utils/request';
-import { ChartType } from '../elements/Constant';
-import { getChartAttrs } from '../../utils/ChartUtil';
+import { updateChartReq, setDB } from '../../utils/reqUtil';
 import "./element.scss";
 import { useParams, useHistory } from "react-router-dom";
 
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, renameElement, bindDataArr, saveDashboards } = props;
+  const { elemName, bindDataArr, setDashboards } = props;
+  let [name, setName] = useState("新建图表");
 
   const handleBack = () => {
-    const { dbChanged, changeBind } = props;
-
-    if (!dbChanged) {
-      changeBind([]);
-      history.push(`/app/${appId}/setting/bi/${dashboardId}`);
-    } else {
-      // @temp len, show modal dialog
-    }
+    const { clearBind } = props;
+    clearBind();
+    setDB(dashboardId, setDashboards);
+    history.push(`/app/${appId}/setting/bi/${dashboardId}`);
   }
 
-  const handleSave = () => {
-    const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
-    request(`/bi/charts/${elementId}`, {
-      method: "PUT",
-      data: {
-        view: {
-          conditions,
-          dimensions,
-          formFields: [
-            {
-              id: "string",
-              label: "string",
-              type: "string"
-            }
-          ],
-          indexes,
-          name: "sdsdds",
-          supportChartTypes: [
-            {
-              "metadataId": "string",
-              "status": "SUCCESS"
-            }
-          ],
-          type: ChartType.HISTOGRAM
-        }
-      }
-    }).then((res) => {
-      if(res && res.msg === "success") {
-        request(`/bi/charts?dashboardId=${dashboardId}`).then((res) => {
-          if(res && res.msg === "success") {
-            const dataObj = res.data;
-            saveDashboards([{...dataObj.items}]);
-            history.push(`/app/${appId}/setting/bi/${dashboardId}`)
-          }
-        });
-      }
-    })
+  const handleSave = (name) => {
+    updateChartReq(elementId, bindDataArr, name);
   }
 
   const onBlur = (e) => {
-    renameElement(e.target.value);
+    setName(e.target.value);
+    handleSave(e.target.value);
   }
 
   return (
     <div className="element-header">
       <div className="element-header-back">
         <Button onClick={handleBack} type="link">
-          <Icon type="left" />
+          <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
       <input className="rename-element" defaultValue={elemName ? elemName: "新建图表"} onBlur={onBlur}/>
-      <Button onClick={handleSave} className="element-header-save" type="link">
+      <Button onClick={()=> {handleSave(name)}} className="element-header-save" type="link">
         保 存
       </Button>
     </div>
@@ -87,5 +49,5 @@ export default connect(
     elemName: store.bi.elemName,
     bindDataArr: store.bi.bindDataArr
   }),
-  { renameElement, changeBind, saveDashboards }
+  { changeBind, setDashboards, clearBind }
 )(EditorHeader);

@@ -9,5 +9,25 @@
 
 .chart-container {
   flex: 1;
-  height: 300px;
+  display: flex;
+  height: 400px;
+  margin: 12px;
+  background: #ffffff;
+  position: relative;
+  .iconBtn {
+    height: 100%;
+    width: 20px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+    i {
+      font-size: 16px;
+      color: #4f95ff;
+    }
+  }
 }

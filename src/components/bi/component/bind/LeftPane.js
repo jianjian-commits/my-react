@@ -2,13 +2,13 @@ import React, {PureComponent, useState} from "react";
 import DragItem from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
+import { GroupType } from '../../component/elements/Constant';
 import './bind.scss';
 import DataListModal from "../elements/modal/dataListModal";
+import { Icon } from "antd";
 
 
-const LeftPane = props =>{
-
-
+const LeftPane = props => {
   const getItems = (dataSource) => {
     const dataArr = dataSource.data;
     const dimArr = [];
@@ -19,12 +19,13 @@ const LeftPane = props =>{
     }
 
     dataArr.forEach((each, idx) => {
+      const currentGroup = GroupType.SUM;
       if(each) {
         if(each.type === "NUMBER") {
-          const item = {...each, bindType: "mea"}
+          const item = {...each, bindType: "mea", option: {currentGroup}}
           meaArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
         } else {
-          const item = {...each,  bindType: 'dim'}
+          const item = {...each,  bindType: 'dim', option: {currentGroup}}
           dimArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
         }
       }
@@ -64,9 +65,12 @@ const LeftPane = props =>{
             <div className="change-data-source" onClick={modalProps.showModal}>更改数据源</div>
           </div>
         </div>
-        <span className="data-source-name" onClick={onClick}>
-          {dataSource.name || "选择数据源"}
-        </span>
+        <div>
+          <Icon type="profile" style={{color:"orange"}}/>
+          <span className="data-source-name" onClick={onClick}>
+            {dataSource.name || "选择数据源"}
+          </span>
+        </div>
       </div>
       <div className="left-pane-dimension">
           <ul>
@@ -89,7 +93,6 @@ export default connect((store) => {
   const state = store.bi;
 
   return {
-    dataName: state.dataName,
     dataArr: state.dataArr,
     dataSource: state.dataSource,
   }

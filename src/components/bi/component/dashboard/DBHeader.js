@@ -1,44 +1,53 @@
-import React from "react";
+import React, {useState} from "react";
 import { connect } from "react-redux";
 import { Icon, Button } from "antd";
-import { renameDashboard } from '../../redux/action';
+import { setDashboards } from '../../redux/action';
 import "../../scss/dashboard.scss";
 import request from '../../utils/request';
 import { useParams, useHistory } from "react-router-dom";
 
-    
 const DBHeader = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
-  const { renameDashboard, dbName } = props;
+  const { dashboards, setDashboards } = props;
 
   const handleBack = () => {
+    setDashboards([]);
     history.push(`/app/${appId}/setting`);
   }
 
   const onBlur = (e) => {
-    renameDashboard(e.target.value);
+    updateDB(e.target.value);
   }
 
   const saveDB = () => {
-    history.push(`/app/${appId}/setting`);
+    // history.push(`/app/${appId}/setting`);
+  }
 
-    const res = request(`/bi/dashboards/${dashboardId}`, {
-      method: "POST",
+  const updateDB = (dbName) => {
+    request(`/bi/dashboards/${dashboardId}`, {
+      method: "PUT",
       data: {
-        dashboardId,
+        name: dbName
       }
     });
   }
 
+  const onChange = (e) => {
+    setName(e.target.value);
+  }
+
+  const [name, setName] = useState("");
+
+  const value = (dashboards && dashboards.length > 0) ? dashboards[0].name : null;
   return (
     <div className="biHeader">
       <div className="headerBarBack">
         <Button onClick={handleBack} type="link">
-          <Icon type="left"/>
+          <Icon type="arrow-left"/>
         </Button>
       </div>
-      <input className="rename-db" defaultValue={dbName ? dbName : "新建仪表盘"} onBlur={onBlur}/>
+      <input className="rename-db" value={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
       <Button onClick={saveDB} className="db-header-save" type="link">
         保 存
       </Button>
@@ -47,6 +56,8 @@ const DBHeader = props => {
 }
 
 export default connect(
-  store => ({ dbName: store.bi.dbName }),
-  { renameDashboard }
+  store => ({
+    dashboards: store.bi.dashboards
+  }),
+  { setDashboards }
 )(DBHeader);
