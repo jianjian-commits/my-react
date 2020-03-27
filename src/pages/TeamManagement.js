@@ -51,6 +51,16 @@ class TeamManagement extends React.Component {
       selectedKey: (matches && matches[1]) || "info"
     };
   }
+
+  componentDidUpdate() {
+    if (this.state.selectedKey !== /^\/team\/(\w+)\/?/.exec(history.location.pathname)[1]) {
+      const matches = /^\/team\/(\w+)\/?/.exec(history.location.pathname);
+      this.setState({
+        selectedKey: (matches && matches[1]) || "info"
+      })
+    }
+  }
+
   setSelectedKey(key, path) {
     this.setState({ selectedKey: key });
     history.push(path);
@@ -69,8 +79,8 @@ class TeamManagement extends React.Component {
           style={
             this.state.selectedKey === w.key
               ? {
-                  backgroundColor: "rgba(42, 127, 255, 0.2)"
-                }
+                backgroundColor: "rgba(42, 127, 255, 0.2)"
+              }
               : {}
           }
         >
