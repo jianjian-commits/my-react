@@ -413,6 +413,10 @@ class FormDataDetail extends PureComponent {
     })
   }
 
+  setLoading = (isLoading) =>{
+    this.setState({isLoading})
+  }
+  
   render() {
     const { formDetail, currentForm, mobile = {}, taskData } = this.props;
     const { tabKey } = this.state;
@@ -454,6 +458,7 @@ class FormDataDetail extends PureComponent {
             taskData={taskData}
             resetData={this.resetData}
             {...this.props}
+            setLoading={this.setLoading}
             />
           <div className="formDataDetailContainer">
           <Tabs defaultActiveKey="detail" 
