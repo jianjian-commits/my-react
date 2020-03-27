@@ -145,8 +145,19 @@
   }
   .ant-table-body {
     overflow-x: auto !important;
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background-color: #D4D5D7;
+        box-shadow: none;
+      }
+    }
     &::-webkit-scrollbar {
-      height: 10px;
+      height: 6px;
+      border-color: #e71010;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      box-shadow: none;
     }
   }
 
@@ -402,7 +413,7 @@
           .ant-table-body {
             overflow-x: auto !important;
             &::-webkit-scrollbar {
-              height: 10px;
+              height: 6px;
             }
             td {
               padding: 6px 8px;
