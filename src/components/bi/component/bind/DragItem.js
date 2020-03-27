@@ -36,7 +36,8 @@ class DragItem extends PureComponent {
 
     return connectDragSource(
       <div>
-        <li className="bind-item"><Icon type={icontype()} style={{color:"lightskyblue"}} className="data-icon" />{item ? item.label : ""}</li>
+        <li className="bind-item"><Icon type={item.type == "NUMBER" ? "number" : "tags"}
+          className="data-icon" style={{color: "#2B81FF"}}/>{item ? item.label : ""}</li>
       </div>
     )
   }

@@ -1,9 +1,12 @@
 .element-header {
-  height: 40px;
-  line-height: 40px;
-  background-color: rgb(38, 163, 240);
-  border: 1px solid lightgrey;
+  height: 50px;
+  line-height: 50px;
+  background-color: #2B81FF;
   color: #fff;
+
+  .ant-btn {
+    height: 50px;
+  }
 }
 
 .element-header-back {
@@ -28,16 +31,15 @@
   border: none;
   margin-left: 10px;
   background-color: transparent;
+  color: #FFFFFF;
 }
 
 .element-header-save {
   float: right;
   margin-right: 15px;
-
   span {
     background-color: #fff;
     color: rgb(38, 163, 240);
-    display: inline-block;
     width: 60px;
     height: 30px;
     line-height: 30px;

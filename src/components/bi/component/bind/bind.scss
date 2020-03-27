@@ -5,8 +5,8 @@
 .bind-line {
   display: inline-flex;
   align-items: center;
-  width:100%;
-  height:30px;
+  width: 100%;
+  height: 30px;
   border-style: dotted;
   border-color: #adb5bd;
   border-width: thin;
@@ -24,7 +24,7 @@
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
-    color: #FFFFFF;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,25 +41,26 @@
       display: flex;
       align-items: center;
       font-size: 12px;
-      color: #FFFFFF;
+      color: #ffffff;
       border: none;
-      background-color: #00C59F;
+      background-color: #00c59f;
       border-radius: 0px 15px 15px 0px;
       .ant-select-arrow {
         color: rgba(255, 255, 255, 1);
       }
-      .ant-select-selection-selected-value{
+      .ant-select-selection-selected-value {
         max-width: 120px;
       }
     }
   }
-  
+
   .bind-child-dim {
     @extend .bind-child;
-    background-color: #2B81FF;
-    padding-left: 15px;
+    background-color: #2b81ff;
+    padding-left: 4px;
     border-radius: 15px;
-    i{
+    i {
+      display: none;
       position: absolute;
       left: 3px;
     }
@@ -68,25 +69,29 @@
   .bind-child-mea {
     @extend .bind-child;
     width: auto;
-    .cancelIcon{
+    .cancelIcon {
       padding-left: 3px;
       height: 26px;
-      line-height: 26px;
       width: 16px;
-      background-color: #00C59F;
+      display: flex;
+      align-items: center;
+      background-color: #00c59f;
       margin-right: -1px;
       border-radius: 15px 0px 0px 15px;
+      i{
+        display: none;
+      }
     }
   }
 }
 
-
 .left-pane {
-   display: flex;
-  //  width: 240px;
-   height:100%;
-   flex-direction: column;
-
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  font-family: Noto Sans SC;
+  font-style: normal;
+  font-weight: normal;
   .left-pane-data {
     height: 20%;
     border: 1px solid #adb5bd;
@@ -94,15 +99,15 @@
     padding: 0 14px;
    }
 
-  .data-box{
+  .data-box {
     display: flex;
     justify-content: space-between;
     padding: 20px 0;
   }
-  
-  .change-data-source{
+
+  .change-data-source {
     cursor: pointer;
-    color: #2B81FF;
+    color: #2b81ff;
   }
 
   .left-pane-dimension {
@@ -116,7 +121,6 @@
     height: 40%;
     border: 1px solid #adb5bd;
     border-top: 1px dashed #adb5bd;
-    border-bottom: none;
   }
 
   .data-source-name {
@@ -133,38 +137,39 @@
 
 .right-pane {
   display: flex;
-  height:100%;
+  height: 100%;
   flex-direction: column;
-
+  font-family: Noto Sans SC;
+  font-style: normal;
+  font-weight: normal;
   .right-pane-chart {
-    height: 35%;
-    border: 1px solid #adb5bd;
-    border-bottom: none;
+    height: 250px;
+    // border-bottom: 1px solid #adb5bd;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
-    span{
+    span {
       width: 100%;
       height: 30px;
       color: #333333;
       padding: 10px 10px 10px 7px;
     }
-    .IconBox{
+    .IconBox {
       width: 50px;
       height: 50px;
       margin: 7px;
       box-sizing: border-box;
       position: relative;
       border: 2px solid transparent;
-      color:gray;
-      &:hover{
+      color: gray;
+      &:hover {
         background-color: rgba(43, 129, 255, 0.1);
       }
-      &:nth-child(2){
-        color:#2194F4;
+      &:nth-child(2) {
+        color: #2194f4;
       }
-      i{
+      i {
         right: 0;
         top: 0;
         position: absolute;
@@ -172,15 +177,49 @@
         font-weight: 400;
       }
     }
-    .activeIcon{
+    .activeIcon {
       background-color: rgba(43, 129, 255, 0.1);
       border: 2px solid #169bd5;
     }
-   }
+  }
 
   .right-pane-tools {
     height: 30%;
-    border: 1px solid #adb5bd;
+    border-top: 1px solid #adb5bd;
+    padding: 16px 10px 0px 10px;
+    .title {
+      color: #333333;
+      display: block;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 14px;
+      color: #777f97;
+      margin-bottom: 7px;
+    }
+    .ant-input {
+      width: 100%;
+      height: 32px;
+      border: 1px solid #d6d8de;
+      margin-bottom: 16px;
+      border-radius: 0px;
+    }
+    .checkboxGroup {
+      display: flex;
+      flex-direction: column;
+      .ant-checkbox-wrapper {
+        margin-left: 0px;
+        margin-bottom: 8px;
+        .ant-checkbox {
+          width: 12px;
+          height: 12px;
+        }
+        span {
+          font-size: 12px;
+          color: #777f97;
+        }
+      }
+    }
   }
 }
 

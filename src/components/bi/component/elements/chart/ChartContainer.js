@@ -1,26 +1,12 @@
 import React, { PureComponent } from 'react';
 import Chart from './Chart';
-import { Icon } from "antd";
 import { connect } from "react-redux";
 import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
 import { useParams } from "react-router-dom";
 import './chart.scss';
+import ChartToolbarBtn from "../ChartToolbarBtn";
 
-const ToolbarBtns = props => {
-  const { chartId = "default" , iconBtnGroup , isBtnBlock} = props;
-
-  return (
-    <span className="iconBtn" 
-      style={ isBtnBlock ? { display:"block"} : {display:"none"}} 
-      id={chartId + "btns"}
-    >
-      {iconBtnGroup.map((iconBtn,index) => 
-          <Icon type={iconBtn.type} key={index} onClick={iconBtn.click} />
-      )}
-    </span>
-  );
-};
 
 const ChartContainer = props => {
   const { chartData, style, chartId = "default", dashboards, chartName, isBtnBlock } = props;
@@ -77,7 +63,7 @@ const ChartContainer = props => {
       style={style}
     >
       <div className="chart-title">{name}</div>
-      <ToolbarBtns {...props} iconBtnGroup={iconBtnGroup} isBtnBlock={isBtnBlock}/>
+      <ChartToolbarBtn {...props} iconBtnGroup={iconBtnGroup} isBtnBlock={isBtnBlock}/>
       {chart}
     </div>
   );
