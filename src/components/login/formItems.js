@@ -548,8 +548,8 @@ export const loginPasswordParameter = [
   { key: "submit", value: "login", itemName: "loginPasswordSubmit" }
 ];
 export const loginPhoneParameter = [
-  { key: "mobilePhone", value: "login" },
-  { key: "verificationCode", value: null },
+  { key: "mobilePhone", value: "login", itemName: "mobilePhone" },
+  { key: "verificationCode", value: null, itemName: "verificationCode" },
   { key: "submit", value: "login", itemName: "loginPhoneSubmit" }
 ];
 export const loginForgetPasswordParameter = [

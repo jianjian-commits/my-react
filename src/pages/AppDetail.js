@@ -31,7 +31,11 @@ const navigationList = (appName, history) => [
 const getOreations = (appId, history) => [
   {
     key: "setting",
-    icon: <AppManageIcon style={{ paddingRight: "5px", width: "17px", height: "18px" }} />,
+    icon: (
+      <AppManageIcon
+        style={{ paddingRight: "5px", width: "17px", height: "18px" }}
+      />
+    ),
     label: "应用管理",
     auth: APP_SETTING_ABLED(appId),
     onClick: () => history.push(`/app/${appId}/setting`)
@@ -128,7 +132,7 @@ const AppDetail = props => {
     setSubmit(!val);
   };
 
-  let TransactList = <></> ;
+  let TransactList = <></>;
   let transctionListOptions = {
     actionFun: (submission_id, submitFlag = false, formId) => {
       setSubmit(submitFlag);
@@ -159,12 +163,16 @@ const AppDetail = props => {
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
-        title={appName}
+        // title={appName}
         navigationList={navigationList(appName, history)}
         operations={getOreations(appId, history)}
       />
       <Layout>
-        <Sider className={classes.appSider} style={{ background: "#fff" }} width="240">
+        <Sider
+          className={classes.appSider}
+          style={{ background: "#fff" }}
+          width="240"
+        >
           <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} />
           <div className={classes.searchBox} style={{ margin: "20px 16px 0 16px"}}>
             <Input
