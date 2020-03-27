@@ -181,7 +181,7 @@ class ForBuilderHeader extends React.Component {
         </div>
         <div className="CreateFormStep" />
         <div className="CreateFormOperations">
-          <Button className="header-btn default">预览</Button>
+          {/* <Button className="header-btn default">预览</Button> */}
           <Button
             disabled={!this.state.btnCanClick || !this.state.isEditAuth}
             loading={!this.state.btnCanClick || !this.state.isEditAuth}
