@@ -27,6 +27,7 @@ class DBEditor extends React.PureComponent {
 
     let elems = [];
     const rows = [];
+
     keys.forEach((item, idx) => {
       const data = elements[item].data;
       const chartName = elements[item].name;

@@ -5,6 +5,7 @@ import { setDataSource } from '../../redux/action';
 import { GroupType } from '../../component/elements/Constant';
 import './bind.scss';
 import DataListModal from "../elements/modal/dataListModal";
+import { Icon } from "antd";
 
 
 const LeftPane = props => {
@@ -64,9 +65,12 @@ const LeftPane = props => {
             <div className="change-data-source" onClick={modalProps.showModal}>更改数据源</div>
           </div>
         </div>
-        <span className="data-source-name" onClick={onClick}>
-          {dataSource.name || "选择数据源"}
-        </span>
+        <div>
+          <Icon type="profile" style={{color:"orange"}}/>
+          <span className="data-source-name" onClick={onClick}>
+            {dataSource.name || "选择数据源"}
+          </span>
+        </div>
       </div>
       <div className="left-pane-dimension">
           <ul>

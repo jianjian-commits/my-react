@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { DragSource } from 'react-dnd';
 import {Types} from './Types';
+import { Icon } from "antd";
+import './bind.scss';
 
 const spec = {
   beginDrag(props, monitor, component) {
@@ -24,9 +26,18 @@ const spec = {
 class DragItem extends PureComponent {
   render() {
     const { isDragging, connectDragSource, item } = this.props;
+    const icontype = () => {
+      if(item.type == "NUMBER"){
+        return "number"
+      }else {
+        return "tags"
+      }
+    } 
 
     return connectDragSource(
-      <li className="bind-item">{item ? item.label : ""}</li>
+      <div>
+        <li className="bind-item"><Icon type={icontype()} style={{color:"lightskyblue"}} className="data-icon" />{item ? item.label : ""}</li>
+      </div>
     )
   }
 }
