@@ -36,13 +36,22 @@
       align-items: center;
       & > button {
         &:hover {
-          background: #61a1ff !important;
+          background: rgba(255, 255, 255, 0.2) !important;
         }
         & > div {
           color: rgba(255, 255, 255, 0.9);
           & > svg {
             stroke: rgba(255, 255, 255, 0.9);
           }
+        }
+      }
+    }
+    & > div:last-child {
+      & > a {
+        font-size: 14px;
+        & > svg {
+          position: relative;
+          top: -2px;
         }
       }
     }
@@ -335,7 +344,7 @@
       line-height: 28px;
       text-align: center;
       padding: 0;
-      margin-right: 30px;
+      margin-right: 20px;
       & :hover {
         background: rgba(255, 255, 255, 0.2) !important;
         border-radius: 2px;
