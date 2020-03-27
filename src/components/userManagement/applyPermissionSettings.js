@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Icon, Button, Checkbox, message, Radio } from "antd";
+import { Button, Checkbox, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
+import { InnerHeader } from "../profileManagement/GroupDetail";
 
 const formMeteDataThead = [
   { key: "TYPE", value: "类型" },
@@ -415,16 +416,37 @@ const Permission = ({
   );
 };
 
-const Top = ({ state, disabled, initialData, enterPermission }) => {
+const Top = ({
+  roleName,
+  state,
+  disabled,
+  initialData,
+  enterPermission,
+  enterDetail
+}) => {
+  console.log("roleName", roleName);
+  const navigationList = [
+    {
+      key: 0,
+      label: "分组",
+      onClick: () => {
+        enterPermission();
+        enterDetail();
+      }
+    },
+    { key: 1, label: roleName, onClick: () => enterPermission() },
+    { key: 2, label: "应用权限设置", disabled: true }
+  ];
   return (
     <div className={Styles.top}>
-      <div className={Styles.back} onClick={enterPermission}>
-        <span>
+      {/* <div className={Styles.back} onClick={enterPermission}> */}
+      {/* <span>
           <Icon type="arrow-left" />
         </span>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <span>应用权限设置</span>
-      </div>
+        <span>应用权限设置</span> */}
+      <InnerHeader navs={navigationList} />
+      {/* </div> */}
       <div className={Styles.btn}>
         <Button onClick={enterPermission}>取消</Button>
         <Button
@@ -491,7 +513,14 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
 }
 
 export default function ApplyPermissionSetting(props) {
-  const { action, roleId, appId, enterPermission } = props;
+  const {
+    action,
+    roleId,
+    appId,
+    enterPermission,
+    roleName,
+    enterDetail
+  } = props;
   const initialData = {
     roleId: roleId,
     appId: appId,
@@ -537,6 +566,8 @@ export default function ApplyPermissionSetting(props) {
             disabled={disabled}
             initialData={initialData}
             enterPermission={enterPermission}
+            enterDetail={enterDetail}
+            roleName={roleName}
           />
           <Permission
             value={"form"}
