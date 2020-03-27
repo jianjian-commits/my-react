@@ -84,7 +84,7 @@ const EditApprovalButton = props => {
       });
   };
   return props.enterPort === "FormSubmitData" ? (
-    <div className="toolbarBox">
+    <div className="toolbarBox" style={{"cursor": "pointer"}}>
       {idEditAuth ? <span
         onClick={() => {
           actionFun(dataId, true);
@@ -93,7 +93,7 @@ const EditApprovalButton = props => {
         <Icon component={EditIcon} style={{ marginRight: 5 }} />
         编辑
       </span> : null}
-      {isDeleteAuth ? <span
+      {isDeleteAuth ? <span style={{"cursor": "pointer"}}
         onClick={() => {
           handleDeleteSubmisson(dataId);
         }}
