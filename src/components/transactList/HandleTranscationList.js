@@ -117,6 +117,7 @@ const HandleTransactList = props => {
       我处理的 <span className={classes.totalNumber}>（共{total}条）</span>
       </div>
       <Table 
+        rowClassName={classes.tableRow}
         columns={columns} 
         dataSource={transactList} 
         pagination={paginationProps}
