@@ -69,7 +69,6 @@ export const setDataSource = (dataSource) => dispatch => {
 }
 
 export const setDashboards = (dashboards) => dispatch => {
-console.log("========setDashboards===========", dashboards);
   dispatch({
     type: SET_DASHBOARDS,
     dashboards
