@@ -962,6 +962,7 @@ class FormSubmitData extends PureComponent {
                 <Table
                   key={Math.random()}
                   loading={this.props.submissionDataTotal <= -1}
+                  rowClassName={"tableRow"}
                   rowKey={record => record.id}
                   columns={columns}
                   dataSource={formDataShowArray}

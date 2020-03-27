@@ -32,6 +32,11 @@
     }
   }
   .ant-table-wrapper{
+    tr {
+      &:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background-color: #E7F0FF;
+      }
+    }
     .ant-table-thead > tr > th {
       padding: 14px;
       background: #fff;
@@ -39,6 +44,7 @@
 
     .ant-table-tbody > tr > td {
       padding: 9px 16px;
+      border-bottom-color: #DCDEE3;
     }
     .ant-table-column-title{
       font-family: "Microsoft YaHei";
@@ -52,7 +58,7 @@
   .dataDteailText {
     min-height: 68px;
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(237, 239, 243, 1);
+    border-bottom: 1px solid #DCDEE3;
     p {
       word-break: break-all;
     }
@@ -70,7 +76,7 @@
   .dataDteailFile {
     font-size: 14px;
     min-height: 68px;
-    border-bottom: 1px solid rgba(237, 239, 243, 1);
+    border-bottom: 1px solid #DCDEE3;
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 17px;
@@ -140,7 +146,7 @@
   .dataDteailFormChild {
     font-size: 14px;
     font-family: "PingFangSC-Regular", "PingFang SC";
-    border-bottom: 1px solid rgba(237, 239, 243, 1);
+    border-bottom: 1px solid #DCDEE3;
     margin-top: 10px;
     padding-left: 30px;
     padding-right: 30px;

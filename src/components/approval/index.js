@@ -85,7 +85,7 @@ export const ApprovalSection = props => {
         style={
           props.approvalKey === item.key
             ? {
-                backgroundColor: "rgba(42, 127, 255, 0.2)"
+                backgroundColor: "#E7F0FF"
               }
             : {}
         }
