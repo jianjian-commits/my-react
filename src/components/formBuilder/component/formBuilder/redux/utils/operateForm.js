@@ -252,6 +252,11 @@ export const updateForm = (
   appid,
   extraProp
 ) => dispatch => {
+
+  formDataArray.forEach((item) => {
+    item.layout.i = item.key
+  });
+
   _calcFormComponentLayout(formDataArray);
 
   let defaultLayout = {

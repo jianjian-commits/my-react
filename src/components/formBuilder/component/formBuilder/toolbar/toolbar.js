@@ -348,7 +348,7 @@ class Toolbar extends React.Component {
       key: newKey,
       isSetAPIName: false, // 判断APiName是否可以编辑
       isShow: true,
-      layout: { i: key, x: 0, y: 0, w: 10, h: 3, minH: 2, minW: 2 },
+      layout: { i: newKey, x: 0, y: 0, w: 10, h: 3, minH: 2, minW: 2 },
       element: item.type
     };
 
