@@ -227,8 +227,8 @@ class GetLocalPositionInspector extends React.Component {
               onChange={this.handleChangeSelect}
               disabled={!isAdjustmentRange}
             >
-              <Select.Option value="100米">100米</Select.Option>
-              <Select.Option value="200米">200米</Select.Option>
+              <Select.Option value="100">100米</Select.Option>
+              <Select.Option value="200">200米</Select.Option>
               <Select.Option value="5000">5000米</Select.Option>
             </Select>
           </div>
