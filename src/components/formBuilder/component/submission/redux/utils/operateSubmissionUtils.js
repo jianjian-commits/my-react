@@ -65,7 +65,11 @@ export const submitLayout = (
 
 export const getFormComponent = id => dispatch => {
   instanceAxios
-    .get(config.apiUrl + "/form/" + id)
+    .get(config.apiUrl + "/form/" + id,{
+      headers: {
+        "isDataPage": true,
+      }
+    })
     .then(res => {
       dispatch({
         type: GET_FORM_COMPONENT,
