@@ -199,7 +199,7 @@ const AppSetting = props => {
               }
             ></DropableWrapper>
           </div>
-          <div className={classes.addFolder} 
+          {/* <div className={classes.addFolder} 
           // ? 禁用点击新建文件夹功能,功能暂未开发 onClick={addFolder}
           disabled
           >
@@ -224,7 +224,7 @@ const AppSetting = props => {
               </i>
               <span className={classes.folderDesc}>新建文件夹</span>
             </div>
-          </div>
+          </div> */}
         </Sider>
         <Content className={classes.container}>
           {/* <div className={classes.operateTitle}>
