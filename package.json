@@ -13,7 +13,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-slider": "^10.6.2",
     "classnames": "^2.2.6",
-    "componentized-process": "git+http://192.168.3.101/wct/frontend-componentized-process.git#c384b0323a0c23fc5d8b074389744bdc04404c24",
+    "componentized-process": "git+http://192.168.3.101/wct/frontend-componentized-process.git#2fc554dc89f997ea0792a887c1d83a34c144d9c7",
     "connected-react-router": "^6.6.1",
     "copy-to-clipboard": "^3.2.1",
     "moment": "^2.24.0",
