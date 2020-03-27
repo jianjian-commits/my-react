@@ -10,12 +10,14 @@ const TransactList = props => {
   const [pageSize, setPageSize] = React.useState(10);
   const [total, setTotal] = React.useState(0);
   const [transactList, setTransactList] = React.useState([]);
+  const [tableLoading, setTableLoading] = React.useState(false);
 
   useEffect(() => {
     getTransactList(currentPage, pageSize);
 },[currentPage]);
 
   async function getTransactList(currentPage, pageSize) {
+    setTableLoading(true)
     try {
       const res = await request(`/flow/history/approval/todos`,{
         method:"POST",
@@ -35,11 +37,14 @@ const TransactList = props => {
           setTotal(total);
           setPageSize(pageSize);
           setCurrentPage(currentPage);
+          setTableLoading(false)
       } else {
         message.error("获取审批列表失败");
+        setTableLoading(false)
       }
     } catch (err) {
       message.error("获取审批列表失败");
+      setTableLoading(false)
     }
   }
   const columns = [
@@ -109,7 +114,8 @@ const TransactList = props => {
       <div className={classes.tableTitle}>
       我的待办 <span className={classes.totalNumber}>（共{total}条）</span>
       </div>
-      <Table 
+      <Table
+        loading={tableLoading}
         columns={columns} 
         dataSource={transactList} 
         rowKey="dataId"
