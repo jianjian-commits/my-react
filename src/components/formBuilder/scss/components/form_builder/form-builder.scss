@@ -169,7 +169,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       margin: 0 auto;
       border: 1px solid #ddd;
       background: #fff;
-      height: 870px;
+      // height: 870px;
       #emptyFormComponent {
         height: 96%;
       }
@@ -398,18 +398,25 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
                 overflow-y: hidden;
                 display: flex;
                 &::-webkit-scrollbar-thumb {
-                  background: #cccccc;
+                  background: transparent;
+                  box-shadow: none;
+                }
+                &:hover {
+                  &::-webkit-scrollbar-thumb {
+                    background: #D4D5D7;
+                    box-shadow: none;
+                  }
                 }
                 &::-webkit-scrollbar {
                   height: 5px;
                 }
-                &::-webkit-scrollbar-track {
-                  box-shadow: 0 0;
-                  background-color: rgba(255, 255, 255, 0);
-                }
-                &::-webkit-scrollbar-track-piece {
-                  background-color: rgba(255, 255, 255, 0);
-                }
+                // &::-webkit-scrollbar-track {
+                //   box-shadow: 0 0;
+                //   background-color: rgba(255, 255, 255, 0);
+                // }
+                // &::-webkit-scrollbar-track-piece {
+                //   background-color: rgba(255, 255, 255, 0);
+                // }
                 &:hover {
                   cursor: auto;
                 }
@@ -1699,6 +1706,12 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           color: #f5222d;
         }
       }
+      .api-err {
+        position: absolute;
+        top: 200px;
+        left: 20px;
+        color: #f5222d!important;
+      }
     }
   }
 }
@@ -1871,7 +1884,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       outline: 1px dashed rgba(0, 122, 255, 1);
     }
     width: 100%;
-    height: 100%;
+    height: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -120,6 +120,10 @@ export default function formBuilderReducer(state = initState, action) {
     case SET_ITEM_VALUES: {
       let newData = [...state.data];
       let index = newData.indexOf(action.data);
+      console.log(index)
+      if(index === -1) {
+        return state;
+      }
       newData[index][action.attr] = {
         values: action.value,
         custom: "",
