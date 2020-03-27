@@ -5,7 +5,7 @@ import { updateUserDetail } from "../../store/loginReducer";
 import HomeHeader from "./HomeHeader";
 import { userDetailParameter, formItems } from "../login/formItems";
 import userDetailStyles from "./header.module.scss";
-import { CloseIcon } from "../../assets/icons/index";
+import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
 
 const Mete = {
