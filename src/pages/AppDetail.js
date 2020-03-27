@@ -21,6 +21,8 @@ import SubmitTransctionList from "../components/transactList/SubmitTransctionLis
 import HandleTranscationList from "../components/transactList/HandleTranscationList";
 import { AppManageIcon } from "../assets/icons/apps";
 import classes from "../styles/apps.module.scss";
+import appDeatilClasses from "../styles/appDetail.module.scss";
+import { TableIcon } from "../assets/icons/index"
 const { Content, Sider } = Layout;
 
 const navigationList = (appName, history) => [
@@ -69,7 +71,8 @@ const AppDetail = props => {
     getFormsAll(appId, true).then(res => {
       newList = res.map(item => ({
         key: item.id,
-        name: item.name
+        name: item.name,
+        icon: TableIcon
       }));
       setMockForms({
         groups: [],
@@ -166,7 +169,7 @@ const AppDetail = props => {
       <Layout>
         <Sider className={classes.appSider} style={{ background: "#fff" }} width="240">
           <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} />
-          <div className={classes.searchBox} style={{ margin: "20px 16px 0 16px"}}>
+          <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"
               value={searchKey}
@@ -187,7 +190,7 @@ const AppDetail = props => {
               }
             />
           </div>
-          <div className={classes.formArea}>
+          <div className={appDeatilClasses.formArea}>
             <DraggableList
               selected={selectedForm}
               draggable={false}

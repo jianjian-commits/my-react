@@ -56,9 +56,9 @@ export const ApprovalSection = props => {
     },
     {
       key: "mySubmitted",
-      icon: <SubmittedIcon style={{marginRight: 5}}/>,
+      icon: <SubmittedIcon style={{marginRight: 5, position: "relative", top: 3}}/>,
       label: "我发起的",
-      tagNumber: submits,
+      // tagNumber: submits,
       onClick: () => {
         // history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
         props.fn("mySubmitted");
@@ -66,9 +66,9 @@ export const ApprovalSection = props => {
     },
     {
       key: "myHandled",
-      icon: <HandledIcon style={{marginRight: 5}}/>,
+      icon: <HandledIcon style={{marginRight: 5, position: "relative", top: 3}}/>,
       label: "我处理的",
-      tagNumber: dones,
+      // tagNumber: dones,
       onClick: () => {
         // history.push(`${baseUrl(history.location.pathname)}/myHandled`);
         props.fn("myHandled");
@@ -91,8 +91,8 @@ export const ApprovalSection = props => {
         }
         >
         {item.icon}
-         {item.label}
-         <span className={classes.tag}>{item.tagNumber}</span>
+        {item.label}
+        {item.tagNumber !== undefined && item.tagNumber > 0 ? <span className={classes.tag}>{item.tagNumber}</span> : null }
       </Menu.Item>
     ))
   return (
