@@ -8,13 +8,14 @@ import {
   PermissionsModule
   // SettingModule
 } from "./DetailModule";
-import clx from "classnames"
-import classes from "./profile.module.scss"
+import clx from "classnames";
+import classes from "./profile.module.scss";
+import { BreadRight } from "../../assets/icons";
 
 export const InnerHeader = ({ navs }) => {
   return (
     <>
-      <Breadcrumb separator=">">
+      <Breadcrumb separator={<BreadRight />}>
         {navs.map(n => (
           <Breadcrumb.Item
             key={n.key}
