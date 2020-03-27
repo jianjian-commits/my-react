@@ -6,7 +6,7 @@ var CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".spl
 var ID = {};
 let uuidTypeIndex = {};
 
-ID.uuid = function(type, components = []) {
+ID.uuid = function(type, components = [], formChildren) {
   if(components.length === 0) {
     uuidTypeIndex = {};
   }
@@ -22,7 +22,10 @@ ID.uuid = function(type, components = []) {
       keys.push(component.key);
     }
   });
-  console.log(keys);
+
+  if(formChildren && Array.isArray(formChildren)) {
+    formChildren.forEach(item => keys.push(item.key))
+  }
 
   while (
     keys.includes(type) &&
