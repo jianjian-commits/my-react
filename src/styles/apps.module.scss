@@ -22,7 +22,7 @@
   display: inline-block;
   cursor: pointer;
   > div:hover {
-    box-shadow: 0px 4px 8px rgba(210, 210, 210, 0.25);
+    box-shadow: 0px 4px 8px rgba(176, 176, 176, 0.25);
   }
 
   &:global(.ant-card) {
@@ -223,7 +223,7 @@
     font-weight: normal;
     font-size: 14px;
     line-height: 20px;
-    color: #B6B6BA;
+    color: #b6b6ba;
     padding: 10px 16px;
   }
   .addFolder {
@@ -236,10 +236,10 @@
 .formArea {
   display: flex;
   flex-direction: column;
-  height: 359px;
+  height: auto;
   overflow-y: auto;
   overflow-x: hidden;
-  border-bottom: 1px solid #d6d8de;
+  // border-bottom: 1px solid #d6d8de;
 
   :global(.ant-menu-inline) {
     border: none;
@@ -258,29 +258,28 @@
 .menuBorderNone {
   border: none !important;
   margin-top: 35px !important;
-
   li {
     height: 46px !important;
     line-height: 46px !important;
-    border-left: 4px solid #fff;
-
-    img {
-      width: 55% !important;
+    width: 59px;
+    &:hover{
+      background-color: #E7F0FF;
     }
     svg {
-      margin-left: 6px;
-      margin-top: 8px;
+      margin-top: 10.5px;
+      margin-left: 16px;
     }
   }
-
+  :global(.ant-menu-item) {
+    padding: 0 !important;
+  }
   :global(.ant-menu-item-selected) {
-    border-left: 4px solid #1890ff;
-
-    img {
-      width: 55% !important;
-      position: relative;
-      left: -80px;
-      filter: drop-shadow(#1890ff 80px 0);
+    &::before {
+      content: "";
+      border-left: 4px solid #1890ff;
+      position: absolute;
+      top: 0;
+      bottom: 0;
     }
     svg {
       g,

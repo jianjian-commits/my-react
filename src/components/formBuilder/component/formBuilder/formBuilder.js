@@ -30,8 +30,8 @@ class ReactFormBuilder extends React.Component {
       editElement: null,
       editElementParent: null,
       formId: locationUtils.getUrlParamObj().formId,
-      appid:window.location.pathname.split("/")[2],
-      extraProp:{user:{name:this.props.userDetail.name,id:this.props.userDetail.id}}
+      appid: window.location.pathname.split("/")[2],
+      extraProp: { user: { name: this.props.userDetail.name, id: this.props.userDetail.id } }
     };
 
     this.editModeOn = this.editModeOn.bind(this);
@@ -44,7 +44,7 @@ class ReactFormBuilder extends React.Component {
     if (formId) {
       initForm(formId);
     }
-    if(formArray.length === 0) {
+    if (formArray.length === 0) {
       getFormsAll(appId).then(res => {
         setAllForms(res);
       });
@@ -66,6 +66,7 @@ class ReactFormBuilder extends React.Component {
         editElementParent: editElement
       }));
     } else {
+      console.log("fc", editElement)
       this.setState(state => ({
         ...state,
         isEditMode: !this.state.isEditMode,
@@ -95,6 +96,7 @@ class ReactFormBuilder extends React.Component {
   render() {
     const toolbarProps = {};
 
+    console.log("fccc", this.state.editElement)
     if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
     }
@@ -102,37 +104,37 @@ class ReactFormBuilder extends React.Component {
       <div className={"formBuilder"} >
         <Spin spinning={this.props.isInitForming} >
           <FormBuilderHeader appid={this.state.appid} extraProp={this.state.extraProp} editForm={this.props.localForm} />
-            <div>
-              <div className="react-form-builder clearfix">
-                <Toolbar {...toolbarProps} />
+          <div>
+            <div className="react-form-builder clearfix">
+              <Toolbar {...toolbarProps} />
 
-                <Preview
-                  manualEditModeOff={this.manualEditModeOff.bind(this)}
-                  showCorrectColumn={this.props.showCorrectColumn}
-                  parent={this}
-                  editModeOn={this.editModeOn}
-                  setActiveInnerIndex={this.props.setActiveInnerIndex}
-                  isEditMode={this.state.isEditMode}
-                  editElement={this.state.editElement}
-                  defaultForm={
-                    //  this.props.localForm? this.props.localForm:null
-                    null
-                  }
-                />
+              <Preview
+                manualEditModeOff={this.manualEditModeOff.bind(this)}
+                showCorrectColumn={this.props.showCorrectColumn}
+                parent={this}
+                editModeOn={this.editModeOn}
+                setActiveInnerIndex={this.props.setActiveInnerIndex}
+                isEditMode={this.state.isEditMode}
+                editElement={this.state.editElement}
+                defaultForm={
+                  //  this.props.localForm? this.props.localForm:null
+                  null
+                }
+              />
 
-                <Inspector
-                  key="formBuilder-inspector"
-                  editModeOn={this.editModeOn}
-                  isEditMode={this.state.isEditMode}
-                  editElement={this.state.editElement}
-                  editElementParent={this.state.editElementParent}
-                  defaultForm={
-                    //  this.props.localForm? this.props.localForm:null
-                    null
-                  }
-                />
-              </div>
+              <Inspector
+                key="formBuilder-inspector"
+                editModeOn={this.editModeOn}
+                isEditMode={this.state.isEditMode}
+                editElement={this.state.editElement}
+                editElementParent={this.state.editElementParent}
+                defaultForm={
+                  //  this.props.localForm? this.props.localForm:null
+                  null
+                }
+              />
             </div>
+          </div>
         </Spin>
       </div>
     );

@@ -1,19 +1,27 @@
 import React from "react";
 import clx from "classnames";
-import { Layout, Breadcrumb, Button, Badge } from "antd";
+import {
+  Layout,
+  Breadcrumb,
+  Button
+  // , Badge
+} from "antd";
 import User from "./UserSection";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
 import Authenticate from "../shared/Authenticate";
 import { getAppList } from "../../store/appReducer";
-import { PromptIcon } from "../../assets/icons";
+import {
+  // PromptIcon,
+  RightOutlined
+} from "../../assets/icons";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
   background: "#2A7FFF",
-  height: 50,
+  height: 40,
   padding: "0 20px",
-  lineHeight: "50px"
+  lineHeight: "40px"
 };
 const logoStyle = {
   // background: "rgba(255, 255, 255, 0.4)",
@@ -29,7 +37,7 @@ const getNavigationList = navs => {
   if (navs.filter(v => !v.label).length > 0) return null;
   return (
     <div className={classes.breadCrumbs}>
-      <Breadcrumb separator=">">
+      <Breadcrumb separator={<RightOutlined className={classes.rightOutlined} />}>
         {navs.map(n => (
           <Breadcrumb.Item
             key={n.key}
@@ -81,11 +89,11 @@ const getOperations = ops => {
   ));
 };
 
-const getPrompt = count => (
-  <Badge count={count || 6}>
-    <PromptIcon />
-  </Badge>
-);
+// const getPrompt = count => (
+//   <Badge count={count || 6}>
+//     <PromptIcon />
+//   </Badge>
+// );
 
 const getTitle = title => <span>{title}</span>;
 
@@ -112,7 +120,7 @@ export default connect(
         <div className={classes.operations}>
           {getOperations(props.operations)}
         </div>
-        <div className={classes.prompt}>{getPrompt(props.count)}</div>
+        {/* <div className={classes.prompt}>{getPrompt(props.count)}</div> */}
         <div className={classes.user}>
           <User />
         </div>

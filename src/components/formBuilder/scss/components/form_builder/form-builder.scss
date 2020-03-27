@@ -74,9 +74,10 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     justify-content: center;
     // height: 60px;
     .header-btn {
+      display: block;
+      width: 103px;
       height: 36px;
       margin-left: 20px;
-      padding: 0 36px;
       border: none;
       border-radius: 3px;
       &.default {
@@ -84,6 +85,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       }
       &.primary {
         background-color: #2A7FFF;
+        color: #fff;
       }
     }
   }
@@ -159,7 +161,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     width: 70%;
     flex: initial;
     padding-top: 49px;
-    background: #f3f4f5;
+    background: #F7F7F8;
     overflow-y: auto;
     .react-form-builder-preview {
       min-height: 100%;
