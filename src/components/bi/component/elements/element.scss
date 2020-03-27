@@ -1,7 +1,6 @@
 .element-header {
   height: 30px;
-  background-color: lightgray;
-  border: 1px solid lightgrey;
+  background-color: #2B81FF;
 }
 
 .element-header-back {
@@ -14,7 +13,8 @@
     margin-left: 10px;
     font-size: 14px;
     font-weight: 500;
-    color: rgba(86, 92, 110, 1);
+    // color: rgba(86, 92, 110, 1);
+    color: #FFFFFF;
   }
   .ant-btn {
     padding: 0px;
@@ -26,14 +26,14 @@
   border: none;
   margin-left: 10px;
   background-color: transparent;
+  color: #FFFFFF;
 }
 
 .element-header-save {
   float: right;
   margin-right: 15px;
-
   span {
-    background-color: #169bd5;
+    // background-color: #169bd5;
     color: white;
   }
 }

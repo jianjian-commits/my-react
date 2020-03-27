@@ -1,6 +1,6 @@
 import React, {PureComponent} from "react";
 import { connect } from "react-redux";
-import { Icon,Tooltip } from 'antd';
+import { Icon,Tooltip, Checkbox, Input } from 'antd';
 import './bind.scss';
 import classNames from "classnames";
 
@@ -42,7 +42,15 @@ export default class RightPane extends PureComponent {
           )}
         </div>
         <div className="right-pane-tools">
-          <span>工具栏</span>
+          <span className="title">工具栏</span>
+          <p>X轴标题</p>
+          <Input/>
+          <p>Y轴标题</p>
+          <Input/>
+          <div className="checkboxGroup">
+            <Checkbox>显示数据标签</Checkbox>
+            <Checkbox>显示图例</Checkbox>
+          </div>
         </div>
       </div>
     )

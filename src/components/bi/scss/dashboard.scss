@@ -1,10 +1,9 @@
 .biHeader {
   height: 30px;
-  background-color: lightgray;
-  border: 1px solid lightgrey;
+  background-color: #2B81FF;
 
   .ant-btn {
-    height: 25px;
+    height: 30px;
   }
 }
 
@@ -13,11 +12,12 @@
   border: none;
   margin-left: 10px;
   background-color: transparent;
+  color: #FFFFFF
 }
 
-.rename-db:hover {
-  background-color: lightgreen;
-}
+// .rename-db:hover {
+//   background-color: lightgreen;
+// }
 
 .headerBarBack {
     height: 30px;
@@ -29,7 +29,8 @@
       margin-left: 10px;
       font-size: 14px;
       font-weight: 500;
-      color: rgba(86, 92, 110, 1);
+      // color: rgba(86, 92, 110, 1);
+      color: #FFFFFF
     }
     .ant-btn {
       padding: 0px;
@@ -45,9 +46,10 @@
 
 .db-toolbar {
   height: 30px;
-  background-color: lightslategrey;
+  background-color: #FFFFFF;
   display: flex;
   align-items: center;
+  color: #2B81FF;
 }
 
 .new-chart-icon {
@@ -70,7 +72,6 @@
   margin-right: 15px;
 
   span {
-    background-color: #169bd5;
     color: white;
   }
 }
