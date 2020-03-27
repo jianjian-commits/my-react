@@ -107,7 +107,7 @@ export const getFilterSubmissionData = (args) => dispatch => {
 export const getSubmissionData = (params) => dispatch => {
   const {  appId, formId, pageSize, currentPage, total = -1, callback } = params
   callback(true);
-  axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
+  axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId,"isDataPage":true}}).then(res => {
     let forms = res.data;
     instanceAxios
       .get(
