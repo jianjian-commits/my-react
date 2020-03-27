@@ -29,7 +29,7 @@ export const BaseInfoModule = ({
   ];
   return (
     <div className={classes.groupBasic}>
-      <div style={{ fontSize: "15px", color: "#777F97" }}>基本信息</div>
+      <div style={{ fontSize: "15px", color: "#777F97",marginBottom:"7px" }}>基本信息</div>
       <table>
         <tbody>
           {list.map((i, index) => (

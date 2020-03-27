@@ -129,7 +129,7 @@ export default connect(({ router }) => ({
                 <span>我的应用</span>
               </Menu.Item>
               <Menu.Item key="/backlog">
-                <Badge dot offset={[-5, 7]}>
+                <Badge dot offset={[-5, 7]} count={0}>
                   待办事项
                 </Badge>
               </Menu.Item>

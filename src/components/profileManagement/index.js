@@ -69,6 +69,12 @@ class ProfileManagement extends React.Component {
     this.getGroupList().then(res => this.loadingTimeout());
   }
 
+//   componentWillUnmount = () => {
+//     this.setState = (state,callback)=>{
+//       return;
+//     };
+// }
+
   componentDidUpdate(prevProps) {
     if (prevProps.teamId !== this.props.teamId) {
       this.getGroupList().then(res => clearTimeout(this.loadingTimeout()));

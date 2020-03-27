@@ -6,3 +6,4 @@ export { ReactComponent as CloseIcon } from "./close.svg";
 export { ReactComponent as RightOutlined } from "./rightOutlined.svg";
 export { ReactComponent as WarningIcon } from "./warning.svg";
 export { ReactComponent as DightOutlined } from "./downOutlined.svg";
+export { ReactComponent as BreadRight} from "./bread-right.svg";
