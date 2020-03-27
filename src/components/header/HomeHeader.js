@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import {
   ArrowLeftIcon
   // , PromptIcon
-} from "../../assets/icons";
+} from "../../assets/icons/header";
 import { TeamManageIcon } from "../../assets/icons/teams";
 
 const { Header } = Layout;
@@ -34,23 +34,26 @@ const backThunk = {
   height: "40px",
   display: "flex",
   alignItems: "center",
-  marginLeft: "10px",
+  marginLeft: "4.5px",
   position: "absolute"
 };
 const backImg = {
   display: "flex",
-  alignItems: "center"
+  alignItems: "center",
+  justifyContent: "center",
+  width: "26px",
+  height: "26px",
+  cursor: "pointer"
 };
 const backArrow = {
   width: "15px",
-  height: "14px",
-  cursor: "pointer"
+  height: "14px"
 };
 const backTitle = {
-  marginLeft: "19px",
+  marginLeft: "13.5px",
   fontStyle: "normal",
   fontWeight: "normal",
-  fontSize: "16px",
+  fontSize: "14px",
   color: "#FFFFFF"
 };
 const ghostButton = {
@@ -101,15 +104,16 @@ export default connect(({ router }) => ({
         </div>
         <div style={backThunk}>
           <Authenticate hide={hides.backArrow === "init"}>
-            <div style={backImg}>
-              <ArrowLeftIcon
-                style={backArrow}
-                onClick={
-                  hides.backArrow === "init"
-                    ? null
-                    : () => history.push(hides.backUrl)
-                }
-              />
+            <div
+              style={backImg}
+              className={classes.backImg}
+              onClick={
+                hides.backArrow === "init"
+                  ? null
+                  : () => history.push(hides.backUrl)
+              }
+            >
+              <ArrowLeftIcon style={backArrow} />
             </div>
             <div>
               <span style={backTitle}>{hides.backArrow}</span>

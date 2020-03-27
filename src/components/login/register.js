@@ -49,13 +49,19 @@ export default connect()(function Register({
 
   const component = (
     <>
-      <div className={Styles.title}>
+      <div
+        className={Styles.title}
+        style={{
+          // display: token ? "block" : "flex",
+          paddingLeft: token ? "20px" : "80px"
+        }}
+      >
         <div>
           <span>
             {token ? (
               <>
                 <BlueFont>{inviter}</BlueFont>
-                邀请您加入-<BlueFont>{invitedTeam}</BlueFont>
+                邀请您加入-<BlueFont>{invitedTeam}</BlueFont>,
               </>
             ) : (
               "感谢您的选择, "

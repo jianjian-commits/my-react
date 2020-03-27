@@ -240,6 +240,8 @@ class ProfileManagement extends React.Component {
             action={this.action}
             roleId={this.roleId}
             appId={this.appId}
+            roleName={this.roleName}
+            enterDetail={this.enterDetail}
             enterPermission={this.enterPermission}
           />
         ) : this.state.enterD === true ? (

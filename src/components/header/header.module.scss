@@ -72,7 +72,7 @@
   :global(.ant-breadcrumb-separator) {
     & svg {
       stroke: rgba(255, 255, 255, 0.6);
-      margin: 0 9px;
+      margin: 0 1px;
     }
   }
 }
@@ -115,8 +115,18 @@
   & > ul {
     & > li {
       color: #333333 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      padding: 0 15px !important;
+      min-width: 160px;
       & > a {
         color: #333333 !important;
+        position: relative;
+        & > svg {
+          position: absolute;
+          right: 0;
+          top: 15px;
+        }
       }
       &:hover {
         background: #e7f0ff !important;
@@ -142,6 +152,9 @@
         background: #ffffff !important;
         color: #777f97 !important;
       }
+    }
+    & > li:last-child {
+      margin-bottom: 6px !important;
     }
   }
 }
@@ -306,7 +319,7 @@
 .homeNav {
   & > ul {
     position: absolute;
-    left: 48px;
+    left: 74px;
     display: flex;
     align-items: center;
     height: 40px;
@@ -341,7 +354,7 @@
       line-height: 26px;
       font-style: normal;
       font-weight: normal;
-      font-size: 15px;
+      font-size: 14px;
       color: #ffffff;
       text-align: center;
       padding: 0;
@@ -418,5 +431,11 @@
         }
       }
     }
+  }
+}
+
+.backImg {
+  &:hover {
+    background-image: url("../../assets/icons/header/arrowLeftBG.svg");
   }
 }

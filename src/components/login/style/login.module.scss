@@ -39,7 +39,7 @@ $unHoverGray: #b6b6ba;
     }
   }
   & .input input {
-    border: 1px solid #d6d8de;
+    // border: 1px solid #d6d8de;
     box-sizing: border-box;
     height: 42px;
     background: #ffffff;
@@ -157,7 +157,7 @@ $unHoverGray: #b6b6ba;
   width: 1016px;
   height: 510px;
   & .title {
-    padding-left: 54px;
+    padding-left: 80px;
     display: flex;
     & > div {
       font-style: normal;
