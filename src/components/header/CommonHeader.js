@@ -13,8 +13,8 @@ import Authenticate from "../shared/Authenticate";
 import { getAppList } from "../../store/appReducer";
 import {
   // PromptIcon,
-  RightOutlined
-} from "../../assets/icons";
+  RightOutlinedIcon
+} from "../../assets/icons/header";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
@@ -37,7 +37,7 @@ const getNavigationList = navs => {
   if (navs.filter(v => !v.label).length > 0) return null;
   return (
     <div className={classes.breadCrumbs}>
-      <Breadcrumb separator={<RightOutlined className={classes.rightOutlined} />}>
+      <Breadcrumb separator={<RightOutlinedIcon className={classes.rightOutlined} />}>
         {navs.map(n => (
           <Breadcrumb.Item
             key={n.key}
