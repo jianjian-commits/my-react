@@ -442,7 +442,6 @@ const Top = ({
   enterPermission,
   enterDetail
 }) => {
-  console.log("roleName", roleName);
   const navigationList = [
     {
       key: 0,

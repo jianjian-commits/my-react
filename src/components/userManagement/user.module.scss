@@ -65,9 +65,10 @@
 
 //** top
 .top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  height: 36px;
 }
 
 .back {
@@ -93,7 +94,8 @@
 }
 
 .btn {
-  &>button {
+  float: right;
+  & > button {
     margin-left: 20px;
     border-radius: 3px !important;
     width: 104px;
@@ -123,7 +125,7 @@
 
 //** meteData
 .meteData {
-  margin-top: 70px;
+  margin-top: 75px;
   background: #ffffff;
   box-shadow: 0px 0px 6px rgba(180, 198, 224, 0.28);
   position: relative;
@@ -138,7 +140,6 @@
     /* identical to box height */
     color: #777f97;
   }
-
   &>div:nth-child(1) {
     margin-bottom: 20px;
   }

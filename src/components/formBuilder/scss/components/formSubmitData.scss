@@ -9,7 +9,6 @@
 .form-submit-data-table {
   padding: 0 30px;
   box-sizing: border-box;
-  // overflow: hidden;
   position: relative;
   .filter-container {
     width: 364px;
@@ -145,8 +144,18 @@
   }
   .ant-table-body {
     overflow-x: auto !important;
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background-color: #D4D5D7;
+        box-shadow: none;
+      }
+    }
     &::-webkit-scrollbar {
-      height: 10px;
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      box-shadow: none;
     }
   }
 
@@ -167,8 +176,8 @@
         line-height: 21px;
         background: rgba(255, 255, 255, 1);
         color: #a4adc8;
-        border: 0.3px solid #f3f4f5;
-        border-color: #f3f4f5 !important;
+        border: 0.3px solid #DCDEE3;
+        border-color: #DCDEE3 !important;
         .ant-table-column-sorter-inner-full {
           display: block;
           margin-left: 2px;
@@ -192,6 +201,10 @@
       }
     }
   }
+  // hover效果
+  // .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  //   background-color:#E7F0FF;
+  // }
   .ant-table-tbody {
     font-size: 14px;
     .ant-table-row {
@@ -204,7 +217,7 @@
         color: #333;
         font-size: 14px;
         font-weight: 400;
-        border-color: #f3f4f5 !important;
+        border-color: #DCDEE3 !important;
         &:last-child {
           border-left: 1px solid;
         }
@@ -214,7 +227,7 @@
           display: flex;
           justify-content: center;
           margin: 0 -10px;
-          border: 1px solid #f3f4f5;
+          border: 1px solid #DCDEE3;
           border-top: none;
           .formChild-item {
             flex: 0 1 auto;
@@ -237,7 +250,7 @@
           justify-content: center;
           align-items: center;
           margin: 0 -10px;
-          border: 1px solid #f3f4f5;
+          border: 1px solid #DCDEE3;
           border-top: none;
           border-bottom: none;
         }
@@ -398,15 +411,28 @@
             color: rgba(170, 178, 203, 1);
             line-height: 20px;
           }
-          .formChildTable {
-            .ant-table-body {
-              overflow-x: auto !important;
-              &::-webkit-scrollbar {
-                height: 10px;
-              }
-              td {
-                padding: 6px 8px;
-              }
+        }
+      }
+      .dataDteailFormChild {
+        font-size: 14px;
+        font-family: "PingFangSC-Regular", "PingFang SC";
+        border-bottom: 1px solid rgba(237, 239, 243, 1);
+        margin-top: 10px;
+        max-height: 177px;
+        p {
+          margin-bottom: 7px;
+          word-break: break-all;
+        }
+        .dataTitle {
+          font-weight: 500;
+          color: rgba(170, 178, 203, 1);
+          line-height: 20px;
+        }
+        .formChildTable {
+          .ant-table-body {
+            overflow-x: auto !important;
+            &::-webkit-scrollbar {
+              height: 6px;
             }
             .ant-table-thead {
               span {
@@ -441,6 +467,79 @@
             }
           }
         }
+      }
+    }
+  }
+  .formInfoModalContainer {
+    width: 520px;
+    height: 420px;
+    .formContainer {
+      width: 460px;
+      margin: auto;
+      .ant-form-item {
+        margin-bottom: 25px;
+        &:nth-child(-n + 2) {
+          height: 70px;
+        }
+        &:nth-child(1) {
+          margin-top: 27px;
+        }
+      }
+      .ant-form-item-label {
+        line-height: 20px;
+        label {
+          font-size: 14px;
+          font-family: "PingFangSC-Regular, PingFang SC";
+          font-weight: 400;
+          color: rgba(51, 51, 51, 1);
+          margin-bottom: 9px;
+        }
+      }
+      .ant-input {
+        width: 460px;
+        height: 36px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 4px;
+        border: 1px solid rgba(214, 216, 222, 1);
+      }
+      .ant-input-affix-wrapper .ant-input {
+        min-height: none;
+      }
+      .buttonGroup {
+        width: 100%;
+        text-align: right;
+        display: flex;
+        justify-content: space-around;
+        padding: 0 95px;
+        .ant-btn {
+          width: 98px;
+          height: 36px;
+          box-shadow: 0px 6px 21px 0px rgba(158, 158, 166, 0.32);
+          font-size: 14px;
+          font-family: "PingFangSC-Regular, PingFang SC";
+          font-weight: 400;
+          border-radius: 6px;
+          border:1px solid #D6D8DE;
+          &:nth-child(1) {
+            background: rgba(255, 255, 255, 1);
+            margin-right: 16px;
+          }
+          &:nth-child(1):hover{
+            border: 1px solid #B6B6BA !important;
+            color: #777F97;
+            background: #F3F3F3;
+          }
+          &:nth-child(2) {
+            background: #2978ff;
+            color: rgba(255, 255, 255, 1);
+          }
+          &:nth-child(2):hover{
+            background: #579AFF;
+          }
+        }
+      }
+      .ant-form-explain {
+        margin-top: 3px;
       }
     }
   }

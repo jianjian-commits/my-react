@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Modal, Form, Icon, Input, Button, Checkbox } from "antd";
 import { saveForm } from "../formBuilder/redux/utils/operateForm";
 import { push } from "connected-react-router";
+import pinyin from "chinese-to-pinyin";
 class FormInforModalTitle extends React.Component {
   render() {
     const style = {
@@ -17,53 +18,9 @@ class FormInforModalTitle extends React.Component {
 class FormInforModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      defaultApiName: "",
-    };
   }
 
-  componentDidMount() {
-    // 初始化表单的apiName
-      let defaultApiName = this._initDefaultPath(this.props.pathArray);
-      this.setState({
-        defaultApiName
-      })
-  }
 
-  _initDefaultPath(pathArray) {
-    // 已经有apiName 再次编辑的时候
-    let startWithForm = /^form/;
-    let endWithNumber = /(\d+)$/;
-    let defaultApiName = "";
-    var formNumerArray = [];
-    pathArray.map(item => {
-      if (startWithForm.test(item.path) && endWithNumber.test(item.path)) {
-        if (!Number.isNaN(Number(item.path.slice(4)))) {
-          formNumerArray.push({
-            number: Number(item.path.slice(4))
-          });
-        }
-      }
-    });
-
-    formNumerArray.sort((a, b) => {
-      var numberA = a.number;
-      var numberB = b.number;
-      if (numberA < numberB) {
-        return 1;
-      }
-      if (numberA > numberB) {
-        return -1;
-      }
-      return 0;
-    });
-    if (formNumerArray.length > 0) {
-      defaultApiName = `form${formNumerArray[0].number + 1}`;
-    } else if (formNumerArray.length === 0) {
-      defaultApiName = "form1";
-    }
-    return defaultApiName;
-  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -85,15 +42,33 @@ class FormInforModal extends React.Component {
       }
     });
   };
+
+  _isApiNameExist(apiName) {
+    return this.props.pathArray.filter(item => item.path == apiName).length > 0
+      ? true
+      : false;
+  }
+
   apiUniqueCheck = (rule, value, callback) => {
     //检测apiName只能由字母数字及下划线构成
     var reg = /^\w+$/
-    if (!reg.test(value)) {
-      callback("apiName只能有字母数字及下划线构成");
+    if (this._isApiNameExist(value)) {
+      callback("API Name已存在，请重新输入");
+    } else if (!reg.test(value)) {
+      callback("API Name只能由字母、数字及下划线构成");
     } else {
       callback();
     }
   };
+
+  handleFormName = e =>{
+    let formPath = pinyin(`${e.target.value}`,{removeSpace: true, removeTone: true, keepRest: true});
+    this.props.form.setFieldsValue({
+      formPath
+    });
+    this.props.form.validateFields(["formPath"])
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { TextArea } = Input;
@@ -111,12 +86,15 @@ class FormInforModal extends React.Component {
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item label={"表单名称"}>
                 {getFieldDecorator("formName", {
-                  rules: [{ required: true, message: "请输入表单名字" }]
-                })(<Input placeholder="请输入表单名字" maxLength={20} />)}
+                  rules: [{ required: true, message: "请输入表单名字" }],
+                  validateTrigger: "onBlur"
+                })(<Input 
+                    placeholder="请输入表单名字" 
+                    maxLength={20}
+                    onBlur={this.handleFormName} />)}
               </Form.Item>
               <Form.Item label={"API名称"}>
                 {getFieldDecorator("formPath", {
-                  initialValue: this.state.defaultApiName,
                   rules: [
                     { required: true, message: "请输入表单api" },
                     {
@@ -134,15 +112,15 @@ class FormInforModal extends React.Component {
                 <div className="buttonGroup">
                   <Button
                     onClick={this.props.handleCancel}
-                    type="primary"
-                    className="login-form-button"
+                    // type="primary"
+                    className="login-form-button-cancel"
                   >
                     取消
                   </Button>
                   <Button
                     type="primary"
                     htmlType="submit"
-                    className="login-form-button"
+                    className="login-form-button-create"
                   >
                     创建
                   </Button>

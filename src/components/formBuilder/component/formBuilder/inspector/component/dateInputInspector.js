@@ -180,9 +180,10 @@ class DateInputInspector extends React.PureComponent {
   };
 
   // API change
-  handleChangeAPI = ev => {
+   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -190,7 +191,8 @@ class DateInputInspector extends React.PureComponent {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -209,6 +211,7 @@ class DateInputInspector extends React.PureComponent {
       optionType,
       isLinked,
       apiNameTemp,
+      APIMessage,
       isUniqueApi = true
     } = this.state;
 
@@ -235,6 +238,7 @@ class DateInputInspector extends React.PureComponent {
             onChange={this.handleChangeAPI}
             autoComplete="off"
           />
+          {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
 
           <p htmlFor="email-title">默认值</p>
           {isLinked ? (

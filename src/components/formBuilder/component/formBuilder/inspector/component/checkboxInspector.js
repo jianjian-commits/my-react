@@ -170,9 +170,10 @@ class CheckboxInspector extends React.Component {
   };
 
   // API change
-  handleChangeAPI = ev => {
+   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -180,7 +181,8 @@ class CheckboxInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -193,7 +195,7 @@ class CheckboxInspector extends React.Component {
       tooltip,
       isSetAPIName
     } = this.props.element;
-    const { apiNameTemp, isUniqueApi = true } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
@@ -218,6 +220,7 @@ class CheckboxInspector extends React.Component {
             onChange={this.handleChangeAPI}
             autoComplete="off"
           />
+          {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
 
           {isInFormChild(this.props.elementParent) ? null : (
             <>
