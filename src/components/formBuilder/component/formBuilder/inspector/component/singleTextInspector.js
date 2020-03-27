@@ -211,7 +211,8 @@ class SingleTextInspector extends React.Component {
   // API change
   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -219,7 +220,8 @@ class SingleTextInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -236,6 +238,7 @@ class SingleTextInspector extends React.Component {
       optionType,
       isLinked,
       apiNameTemp,
+      APIMessage,
       isUniqueApi = true
     } = this.state;
 
@@ -264,6 +267,8 @@ class SingleTextInspector extends React.Component {
               onChange={this.handleChangeAPI}
               autoComplete="off"
             />
+            {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
+
             {isInFormChild(this.props.elementParent) ? null : (
               <>
                 <p htmlFor="single-text-tip">提示信息</p>

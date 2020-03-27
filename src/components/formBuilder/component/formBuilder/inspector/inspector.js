@@ -57,7 +57,7 @@ export default class Inspector extends React.Component {
       case "SingleText":
         return (
           <SingleTextInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -65,7 +65,7 @@ export default class Inspector extends React.Component {
       case "TextArea":
         return (
           <TextAreaInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -73,7 +73,7 @@ export default class Inspector extends React.Component {
       case "EmailInput":
         return (
           <PhoneInputInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -81,7 +81,7 @@ export default class Inspector extends React.Component {
       case "PhoneInput":
         return (
           <PhoneInputInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -89,7 +89,7 @@ export default class Inspector extends React.Component {
       case "NumberInput":
         return (
           <NumberInputInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -97,7 +97,7 @@ export default class Inspector extends React.Component {
       case "RadioButtons":
         return (
           <RadioInputInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -105,7 +105,7 @@ export default class Inspector extends React.Component {
       case "DropDown":
         return (
           <DropDownInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -113,7 +113,7 @@ export default class Inspector extends React.Component {
       case "CheckboxInput":
         return (
           <CheckboxInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -121,7 +121,7 @@ export default class Inspector extends React.Component {
       case "IdCardInput":
         return (
           <IdCardInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -129,7 +129,7 @@ export default class Inspector extends React.Component {
       case "DateInput":
         return (
           <DateInputInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -137,7 +137,7 @@ export default class Inspector extends React.Component {
       case "FileUpload":
         return (
           <FileUploadInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -145,7 +145,7 @@ export default class Inspector extends React.Component {
       case "MultiDropDown":
         return (
           <MultiDropDownInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -153,7 +153,7 @@ export default class Inspector extends React.Component {
       case "ImageUpload":
         return (
           <ImageUploadInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
@@ -161,32 +161,32 @@ export default class Inspector extends React.Component {
       case "GetLocalPosition":
         return (
           <GetLocalPositionInspector
-            key={editElement.key}
+            key={editElement.id}
             elementParent={editElementParent}
             element={editElement}
           />
         );
       case "FormChildTest":
         return (
-          <FormChildTestInspector elementParent={editElementParent} key={editElement.key} element={editElement} />
+          <FormChildTestInspector elementParent={editElementParent} key={editElement.id} element={editElement} />
         );
       case "SetFormName":
-        return <SetFormName key={editElement.key} />;
+        return <SetFormName key={editElement.id} />;
       case "FormChild":
         return (
-          <FormChildInspector key={editElement.key} element={editElement} />
+          <FormChildInspector key={editElement.id} element={editElement} />
         );
       case "HandWrittenSignature":
         return (
-          <SignatureInspector key={editElement.key} element={editElement} />
+          <SignatureInspector key={editElement.id} element={editElement} />
         );
       case "Address":
         return (
-          <AddressInspector  element={editElement} elementParent={editElementParent} key={editElement.key} element={editElement} />
+          <AddressInspector  element={editElement} elementParent={editElementParent} key={editElement.id} element={editElement} />
         );
       case "Button":
         return (
-          <SubmitBtnInspector key={editElement.key} element={editElement} />
+          <SubmitBtnInspector key={editElement.id} element={editElement} />
         );
       default:
         return <div></div>;

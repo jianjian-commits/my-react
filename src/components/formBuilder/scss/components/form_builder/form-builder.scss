@@ -1677,6 +1677,12 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           color: #f5222d;
         }
       }
+      .api-err {
+        position: absolute;
+        top: 200px;
+        left: 20px;
+        color: #f5222d!important;
+      }
     }
   }
 }

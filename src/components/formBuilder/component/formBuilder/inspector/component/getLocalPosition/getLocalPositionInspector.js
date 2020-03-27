@@ -146,7 +146,7 @@ class GetLocalPositionInspector extends React.Component {
       data,
       isSetAPIName
     } = this.props.element;
-    const { apiNameTemp, isUniqueApi = true } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage, } = this.state;
     const { adjustmentRange, isAdjustmentRange } = validate;
     // const formatChecks = inputMask ? true : false;
     return (
@@ -172,6 +172,8 @@ class GetLocalPositionInspector extends React.Component {
             onChange={this.handleChangeAPI}
             autoComplete="off"
           />
+          {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
+
           {isInFormChild(this.props.elementParent) ? null : (
             <>
               <p htmlFor="email-tip">提示信息</p>
