@@ -1,10 +1,4 @@
 export { ReactComponent as EditIcon } from "./edit.svg";
-// export { ReactComponent as PromptIcon } from "./prompt.svg";
-// export { ReactComponent as ArrowLeftIcon } from "./arrow-left.svg";
-// export { ReactComponent as CloseIcon } from "./close.svg";
-// export { ReactComponent as RightOutlined } from "./rightOutlined.svg";
-// export { ReactComponent as WarningIcon } from "./warning.svg";
-// export { ReactComponent as DightOutlined } from "./downOutlined.svg";
 export { ReactComponent as BreadRight} from "./bread-right.svg";
 export { ReactComponent as TableIcon } from "./table.svg";
 
