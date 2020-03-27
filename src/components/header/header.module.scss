@@ -328,6 +328,8 @@
       width: 72px;
       height: 28px;
       // background: rgb(42, 127, 255);
+      top: 0 !important;
+      margin-top: 0 !important;
       border: none !important;
       border-radius: 2px;
       line-height: 28px;
@@ -351,13 +353,12 @@
       display: inline-block;
       border: none !important;
       border-radius: 2px;
-      line-height: 26px;
+      line-height: 28px;
       font-style: normal;
       font-weight: normal;
       font-size: 14px;
       color: #ffffff;
       text-align: center;
-      padding: 0;
       & > sup {
         box-shadow: none !important;
         &:hover {
