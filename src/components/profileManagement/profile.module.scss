@@ -70,6 +70,9 @@
     top: 44%;
     left: 23%;
   }
+  :global(.ant-breadcrumb){
+    display: inline-block;
+  }
 }
 
 .moduleTitle {
@@ -87,7 +90,6 @@
   &.active {
     cursor: pointer;
     &:hover {
-      // color: #3786fe;
       color: #333333;
     }
   }
