@@ -13,7 +13,8 @@ export const submitSubmission = (formId, values, appid, extraProp) => dispatch =
     headers: {
       // "X-Custom-Header": "ProcessThisImmediately",
       "Content-Type": "application/json",
-      appid:appid
+      appid:appid,
+      "isDataPage": true,
     },
     data: {
       data: values,
