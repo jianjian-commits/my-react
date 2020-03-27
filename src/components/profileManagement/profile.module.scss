@@ -93,6 +93,9 @@
 
   :global(.ant-breadcrumb) {
     display: inline-block;
+    svg{
+      margin-left:8px;
+    }
   }
 }
 
@@ -100,7 +103,7 @@
   font-size: 15px;
   margin: 30px 8px 17px 0;
   display: inline-block;
-  color: #333333;
+  color: #777f97;
 }
 
 .breadcrumbItem {
