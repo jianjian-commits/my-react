@@ -61,7 +61,7 @@ const ghostButton = {
   borderRadius: "3px",
   color: "#ffffff",
   width: "110px",
-  height: "32px",
+  height: "28px",
   padding: "0"
 };
 const ghostButtonContent = {
@@ -87,7 +87,8 @@ export default connect(({ router }) => ({
       teamManage: false,
       backArrow: "init",
       backUrl: null
-    }
+    },
+    badgenum
   } = props;
   // const getPrompt = count => (
   //   <Badge count={count || 6}>
@@ -133,7 +134,7 @@ export default connect(({ router }) => ({
                 <span>我的应用</span>
               </Menu.Item>
               <Menu.Item key="/backlog">
-                <Badge dot offset={[-5, 7]} count={0}>
+                <Badge dot offset={[-8, 8]} count ={badgenum || 0}>
                   待办事项
                 </Badge>
               </Menu.Item>
