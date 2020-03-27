@@ -184,9 +184,15 @@ class Submission extends Component {
       ) {
         // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
         if (values[component.key].constructor === Date) {
-          values[component.key] = new Date(values[component.key].setUTCMilliseconds(0)).toJSON().replace("Z","");
+          let date = new Date(values[component.key].setUTCMilliseconds(0));
+          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+          values[component.key] = new Date(date).toJSON().replace("Z","");
         } else {
-          values[component.key] = new Date(values[component.key]._d.setUTCMilliseconds(0)).toJSON().toString().replace("Z","")
+          let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
+          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+          values[component.key] = new Date(date).toJSON().toString().replace("Z","")
         }
       }
     });
