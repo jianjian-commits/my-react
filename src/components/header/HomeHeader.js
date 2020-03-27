@@ -152,7 +152,9 @@ export default connect(({ router }) => ({
                 <TeamManageIcon
                   style={{
                     marginRight: "5px",
-                    stroke: "rgba(255,255,255,0.9)"
+                    stroke: "#2A7FFF",
+                    strokeWidth:"0.1",
+                    fill:"#fff"
                   }}
                 />
                 团队管理
