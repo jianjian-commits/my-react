@@ -13,7 +13,10 @@
     }
     .nav {
       flex: 1;
-      margin-left: 30px;
+      position: absolute;
+      left: 0;
+      height: 40px;
+      // margin-left: 30px;
       :global(.ant-menu-horizontal) {
         border-bottom: 0;
         color: rgba(255, 255, 255, 0.6);
@@ -31,6 +34,17 @@
       display: flex;
       flex-direction: row-reverse;
       align-items: center;
+      & > button {
+        &:hover {
+          background: #61a1ff !important;
+        }
+        & > div {
+          color: rgba(255, 255, 255, 0.9);
+          & > svg {
+            stroke: rgba(255, 255, 255, 0.9);
+          }
+        }
+      }
     }
     // .user {
     //   width: 80px;
@@ -47,21 +61,31 @@
     -webkit-user-select: none; /*webkit浏览器*/
     -ms-user-select: none; /*IE10+*/
     user-select: none;
+    & > span:nth-last-child(2) {
+      & > span:last-child {
+        & > svg {
+          stroke: rgba(255, 255, 255, 0.9) !important;
+        }
+      }
+    }
   }
   :global(.ant-breadcrumb-separator) {
-    color: #ddd;
+    & svg {
+      stroke: rgba(255, 255, 255, 0.6);
+      margin: 0 9px;
+    }
   }
 }
 .breadcrumbItem {
-  color: #ddd;
+  color: rgba(255, 255, 255, 0.6);
   &.active {
     cursor: pointer;
     &:hover {
-      color: #3786fe;
+      color: rgba(255, 255, 255, 0.9);
     }
   }
   &.disabled {
-    color: #aaa;
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -73,23 +97,38 @@
   }
   th {
     font-weight: unset;
-    border-bottom: 1px solid rgb(154, 154, 154);
+    border-bottom: 1px solid #dcdee3;
     width: 200px;
   }
   td {
     width: 200px;
     font-weight: unset;
-    border-bottom: 1px solid rgb(154, 154, 154);
+    border-bottom: 1px solid #dcdee3;
   }
 }
 
 .overlay {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  top: 50px !important;
+  background: #ffffff;
+  box-shadow: 0px 2px 6px #d2d4db;
+  border-radius: 3px;
+  top: 40px !important;
   & > ul {
+    & > li {
+      color: #333333 !important;
+      & > a {
+        color: #333333 !important;
+      }
+      &:hover {
+        background: #e7f0ff !important;
+        color: #333333 !important;
+      }
+    }
     & > li:first-child {
+      & > a {
+        color: #777f97 !important;
+      }
+      color: #777f97 !important;
       cursor: auto;
-      color: rgb(24, 144, 255);
       font-size: 13px;
       margin-bottom: 0px !important;
       -moz-user-select: none; /* Firefox私有属性 */
@@ -99,6 +138,10 @@
       -o-user-select: none; /* Opera私有属性 */
       user-select: none; /* CSS3属性 */
       background-color: #ffffff !important;
+      &:hover {
+        background: #ffffff !important;
+        color: #777f97 !important;
+      }
     }
   }
 }
@@ -114,12 +157,12 @@
     top: 6vw;
     background: #ffffff;
     width: 1000px;
-    height: 300px;
+    height: 306px;
     & > div {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 53px;
+      height: 56px;
       & > span {
         font-style: normal;
         font-weight: normal;
@@ -132,8 +175,8 @@
       & > li {
         display: flex;
         align-items: center;
-        height: 47px;
-        border-top: 1px solid #eeeeee;
+        height: 50px;
+        border-top: 1px solid #dcdee3;
         & > span:first-child {
           font-style: normal;
           font-weight: normal;
@@ -226,6 +269,9 @@
       text-align: left;
     }
   }
+  &:global(.ant-modal-content) {
+    box-shadow: 0 4px 20px #aea5b7;
+  }
 }
 
 .prompt {
@@ -255,4 +301,122 @@
   color: #ffffff;
   position: absolute;
   left: 20px;
+}
+
+.homeNav {
+  & > ul {
+    position: absolute;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: none !important;
+    & > li {
+      width: 72px;
+      height: 28px;
+      // background: rgb(42, 127, 255);
+      border: none !important;
+      border-radius: 2px;
+      line-height: 28px;
+      text-align: center;
+      padding: 0;
+      margin-right: 30px;
+      & :hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 2px;
+      }
+      &:global(.ant-menu-item-selected) {
+        & > span {
+          color: #2a7fff !important;
+        }
+        background: #ffffff !important;
+      }
+    }
+    & > li > span {
+      width: 72px;
+      height: 28px;
+      display: inline-block;
+      border: none !important;
+      border-radius: 2px;
+      line-height: 26px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 15px;
+      color: #ffffff;
+      text-align: center;
+      padding: 0;
+      & > sup {
+        box-shadow: none !important;
+        &:hover {
+          background: red !important;
+          border-radius: 50% !important;
+        }
+      }
+    }
+    & > .selected {
+      background: #ffffff !important;
+      color: #2a7fff !important;
+    }
+  }
+}
+
+.signoutModal {
+  position: fixed !important;
+  top: calc((100vh - 170px) / 2 - 60px) !important;
+  left: calc((100vw - 404px) / 2);
+  height: 170px !important;
+  background: #ffffff;
+  box-shadow: 0px 4px 20px rgba(165, 174, 183, 0.25);
+  border-radius: 5px;
+  & > div:nth-child(2) {
+    & > div {
+      border: none;
+    }
+    & > div:nth-child(1) {
+      padding: 26px 0 8.5px 30px !important;
+      & > div {
+        & > svg {
+          margin: auto 10px auto auto;
+          position: relative;
+          top: 3px;
+        }
+      }
+    }
+    & > div:nth-child(2) {
+      padding: 0 0 39px 30px !important;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: #777f97;
+    }
+    & > div:nth-child(3) {
+      padding: 0 0 21px 234px !important;
+      margin: 0;
+      & > div {
+        text-align: left;
+        & > button {
+          width: 70px;
+          height: 32px;
+          border-radius: 3px;
+        }
+        & > button:first-child {
+          border: 1px solid #b6b6ba !important;
+          box-sizing: border-box;
+          &:hover {
+            background: #f3f3f3 !important;
+            border: 1px solid #b6b6ba;
+            box-sizing: border-box;
+            border-radius: 3px;
+          }
+        }
+        & > button:last-child {
+          background: #2a7fff;
+          &:hover {
+            background: #579aff !important;
+            border-radius: 3px;
+          }
+        }
+      }
+    }
+  }
 }

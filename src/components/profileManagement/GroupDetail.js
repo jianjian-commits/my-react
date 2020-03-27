@@ -1,41 +1,75 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import request from "../../utils/request";
-import { Icon, Button, message } from "antd";
+import { Button, message, Breadcrumb } from "antd";
 import {
   BaseInfoModule,
   AppManagerModule,
   PermissionsModule
   // SettingModule
 } from "./DetailModule";
+import clx from "classnames"
+import classes from "./profile.module.scss"
 
-const Top = ({ disabled, enterDetail, handleDetail }) => (
-  <>
-    <Icon
+export const InnerHeader = ({ navs }) => {
+  return (
+    <>
+      <Breadcrumb separator=">">
+        {navs.map(n => (
+          <Breadcrumb.Item
+            key={n.key}
+            className={clx({
+              [classes.breadcrumbItem]: true,
+              [classes.disabled]: n.disabled,
+              [classes.active]: !n.disabled
+            })}
+            onClick={n.onClick}
+          >
+            {n.label}
+          </Breadcrumb.Item>
+        ))}
+      </Breadcrumb>
+    </>
+  );
+};
+
+const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
+  const navigationList = [
+    { key: 0, label: "分组", onClick: () => enterDetail() },
+    { key: 1, label: roleName, disabled: true }
+  ];
+  return (
+    <>
+      {/* <Icon
       type="arrow-left"
       style={{ fontSize: "18px" }}
       onClick={() => enterDetail()}
     />
-    <span style={{ textIndent: "10px" }}>分组</span>
-    {!disabled && (
-      <>
-        <Button
-          type="primary"
-          onClick={() => handleDetail()}
-          style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
-        >
-          保存
-        </Button>
-        <Button
-          onClick={() => enterDetail()}
-          style={{ border: "1px solid #2A7FFF",backgroundColor:"transparent" }}
-        >
-          取消
-        </Button>
-      </>
-    )}
-  </>
-);
+    <span style={{ textIndent: "10px" }}>分组</span> */}
+      <InnerHeader navs={navigationList} />
+      {!disabled && (
+        <>
+          <Button
+            type="primary"
+            onClick={() => handleDetail()}
+            style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
+          >
+            保存
+          </Button>
+          <Button
+            onClick={() => enterDetail()}
+            style={{
+              border: "1px solid #2A7FFF",
+              backgroundColor: "transparent"
+            }}
+          >
+            取消
+          </Button>
+        </>
+      )}
+    </>
+  );
+};
 
 class GroupDetail1 extends Component {
   constructor(props) {
@@ -228,12 +262,13 @@ class GroupDetail1 extends Component {
   }
 
   render() {
-    const { action, enterDetail, enterPermission } = this.props;
+    const { action, enterDetail, enterPermission, roleName } = this.props;
     const { editable, baseInfoBo, appManagerBos, permissions } = this.state;
     const disabled = action === "view" ? true : false;
     return (
       <>
         <Top
+          roleName={roleName}
           disabled={disabled}
           enterDetail={enterDetail}
           handleDetail={this.handleDetail.bind(this)}

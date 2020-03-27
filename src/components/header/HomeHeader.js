@@ -6,15 +6,18 @@ import Authenticate from "../shared/Authenticate";
 import { TEAM_MANAGEMENT_ABLE } from "../../auth";
 import classes from "./header.module.scss";
 import { connect } from "react-redux";
-import { ArrowLeftIcon, PromptIcon } from "../../assets/icons";
+import {
+  ArrowLeftIcon
+  // , PromptIcon
+} from "../../assets/icons";
 import { TeamManageIcon } from "../../assets/icons/teams";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
   background: "#2A7FFF",
-  height: 50,
+  height: 40,
   padding: "0 20px",
-  lineHeight: "50px"
+  lineHeight: "40px"
 };
 const logoStyle = {
   // background: "rgba(255, 255, 255, 0.4)",
@@ -24,11 +27,11 @@ const logoStyle = {
   textAlign: "center"
 };
 const menuStyle = {
-  // lineHeight: "50px",
+  // lineHeight: "40px",
   background: "transparent"
 };
 const backThunk = {
-  height: "50px",
+  height: "40px",
   display: "flex",
   alignItems: "center",
   marginLeft: "10px",
@@ -51,7 +54,7 @@ const backTitle = {
   color: "#FFFFFF"
 };
 const ghostButton = {
-  background: "#4F96FF",
+  // background: "#4F96FF",
   borderRadius: "3px",
   color: "#ffffff",
   width: "110px",
@@ -61,7 +64,8 @@ const ghostButton = {
 const ghostButtonContent = {
   display: "flex",
   alignItems: "center",
-  justifyContent: "center"
+  justifyContent: "center",
+  color: "rgba(255,255,255,0.9)"
 };
 
 export default connect(({ router }) => ({
@@ -82,11 +86,11 @@ export default connect(({ router }) => ({
       backUrl: null
     }
   } = props;
-  const getPrompt = count => (
-    <Badge count={count || 6}>
-      <PromptIcon />
-    </Badge>
-  );
+  // const getPrompt = count => (
+  //   <Badge count={count || 6}>
+  //     <PromptIcon />
+  //   </Badge>
+  // );
   return (
     <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
@@ -112,7 +116,7 @@ export default connect(({ router }) => ({
             </div>
           </Authenticate>
         </div>
-        <div className={classes.nav}>
+        <div className={classes.homeNav}>
           <Authenticate hide={hides.menu}>
             <Menu
               style={menuStyle}
@@ -121,9 +125,13 @@ export default connect(({ router }) => ({
               // theme="dark"
               onClick={selectHandle}
             >
-              <Menu.Item key="/app/list">我的应用</Menu.Item>
+              <Menu.Item key="/app/list">
+                <span>我的应用</span>
+              </Menu.Item>
               <Menu.Item key="/backlog">
-                <Badge dot>待办事项</Badge>
+                <Badge dot offset={[-5, 7]}>
+                  待办事项
+                </Badge>
               </Menu.Item>
             </Menu>
           </Authenticate>
@@ -137,13 +145,20 @@ export default connect(({ router }) => ({
               onClick={toTeamMangement}
             >
               <div style={ghostButtonContent}>
-                <TeamManageIcon style={{ marginRight: "5px"}} />
+                <TeamManageIcon
+                  style={{
+                    marginRight: "5px",
+                    stroke: "#2A7FFF",
+                    strokeWidth:"0.1",
+                    fill:"#fff"
+                  }}
+                />
                 团队管理
               </div>
             </Button>
           </Authenticate>
         </div>
-        <div className={classes.prompt}>{getPrompt(props.count)}</div>
+        {/* <div className={classes.prompt}>{getPrompt(props.count)}</div> */}
         <div className={classes.user}>
           <User />
         </div>
