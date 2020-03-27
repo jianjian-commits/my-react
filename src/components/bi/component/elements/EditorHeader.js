@@ -33,7 +33,7 @@ const EditorHeader = props => {
     <div className="element-header">
       <div className="element-header-back">
         <Button onClick={handleBack} type="link">
-          <Icon type="left" />
+          <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
       <input className="rename-element" defaultValue={elemName ? elemName: "新建图表"} onBlur={onBlur}/>

@@ -96,12 +96,13 @@
     height: 20%;
     border: 1px solid #adb5bd;
     border-bottom: none;
-  }
+    padding: 0 14px;
+   }
 
   .data-box {
     display: flex;
     justify-content: space-between;
-    padding: 20px 14px;
+    padding: 20px 0;
   }
 
   .change-data-source {
@@ -111,18 +112,20 @@
 
   .left-pane-dimension {
     height: 40%;
-    border: 1px solid #adb5bd;
+    border: 1px solid #babfc5;
+    border-top: 1px dashed #adb5bd;
     border-bottom: none;
   }
 
   .left-pane-measure {
     height: 40%;
     border: 1px solid #adb5bd;
+    border-top: 1px dashed #adb5bd;
   }
 
   .data-source-name {
     font-size: 15px;
-    margin-left: 14px;
+    margin-left: 10px;
   }
 
   .data-source-name:hover {
@@ -221,15 +224,23 @@
 }
 
 .col-title {
-  text-align: center;
+  // text-align: center;
+  list-style: none;
+  margin: 20px 14px;
+  font-size: 16px;
+  color: gray;
 }
 
 .bind-item {
   height: 20px;
-  margin: 3px;
+  margin: 10px 14px;
   overflow: hidden;
 }
 
 .bind-item:hover {
   background-color: lightgreen;
+}
+
+.data-icon{
+  margin-right: 10px;
 }

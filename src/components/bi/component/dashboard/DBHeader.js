@@ -44,7 +44,7 @@ const DBHeader = props => {
     <div className="biHeader">
       <div className="headerBarBack">
         <Button onClick={handleBack} type="link">
-          <Icon type="left"/>
+          <Icon type="arrow-left"/>
         </Button>
       </div>
       <input className="rename-db" value={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
