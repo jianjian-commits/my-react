@@ -1,5 +1,5 @@
 import React, { PureComponent} from "react";
-import { Form, Table, Icon, Tabs, message } from "antd";
+import { Form, Table, Icon, Tabs, message, Spin } from "antd";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
@@ -105,7 +105,8 @@ class FormDataDetail extends PureComponent {
       tipVisibility: false,
       formId: this.props.id,
       submissionId: this.props.dataId,
-      tabKey: "formDetail"
+      tabKey: "formDetail",
+      isLoading: false,
     };
   }
 
@@ -118,7 +119,8 @@ class FormDataDetail extends PureComponent {
         this.props.getSubmissionDetail(
           this.state.formId,
           this.state.submissionId,
-          this.props.appId
+          this.props.appId,
+          (isLoading)=>{this.setState({isLoading})}
         );
       })
       .catch(err => {
@@ -130,7 +132,8 @@ class FormDataDetail extends PureComponent {
     this.props.getSubmissionDetail(
       this.state.formId,
       this.state.submissionId,
-      this.props.appId
+      this.props.appId,
+      (isLoading)=>{this.setState({isLoading})}
     );
   }
 
@@ -445,36 +448,38 @@ class FormDataDetail extends PureComponent {
     }
     return (
       <div className="formDetailBox" style={BoxStyle}>
-        <FormDataDetailHeader
-          submissionId={this.state.submissionId}
-          taskData={taskData}
-          resetData={this.resetData}
-          {...this.props}
-          />
-        <div className="formDataDetailContainer">
-        <Tabs defaultActiveKey="detail" 
-          className="tabsBackground"
-          onChange={this.onChangeTab} 
-          tabBarExtraContent={operations}
-        >
-          <TabPane tab="表单详情" key="formDetail">
-            {this._renderDataByType(formDetail, newCurrentComponents)}
-          </TabPane>
-          {
-            // 关联审批的才展示审批  taskData.tasks
-            taskData.status  ? (
-            <TabPane tab="审批流水" key="approvelFlow">
-              <Table
-                pagination={false}
-                columns={columns}
-                dataSource={list}
-                size="middle"
-              />
+        <Spin spinning={this.state.isLoading}>
+          <FormDataDetailHeader
+            submissionId={this.state.submissionId}
+            taskData={taskData}
+            resetData={this.resetData}
+            {...this.props}
+            />
+          <div className="formDataDetailContainer">
+          <Tabs defaultActiveKey="detail" 
+            className="tabsBackground"
+            onChange={this.onChangeTab} 
+            tabBarExtraContent={operations}
+          >
+            <TabPane tab="表单详情" key="formDetail">
+              {this._renderDataByType(formDetail, newCurrentComponents)}
             </TabPane>
-          ): null
-          }
-        </Tabs>
-        </div>
+            {
+              // 关联审批的才展示审批  taskData.tasks
+              taskData.status  ? (
+              <TabPane tab="审批流水" key="approvelFlow">
+                <Table
+                  pagination={false}
+                  columns={columns}
+                  dataSource={list}
+                  size="middle"
+                />
+              </TabPane>
+            ): null
+            }
+          </Tabs>
+          </div>
+        </Spin>
       </div>
     );
   }
