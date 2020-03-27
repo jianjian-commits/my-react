@@ -41,7 +41,7 @@
     "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export NODE_OPTIONS=--max_old_space_size=4096 react-scripts start",
     "dev": "export EXTEND_ESLINT=true&& react-scripts start",
     "dev-win": "set EXTEND_ESLINT=true&& react-scripts start",
     "build": "react-scripts build",
