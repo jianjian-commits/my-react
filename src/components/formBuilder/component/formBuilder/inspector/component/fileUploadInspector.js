@@ -96,9 +96,10 @@ class FileUploadInspector extends React.Component {
   };
 
   // API change
-  handleChangeAPI = ev => {
+   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -106,7 +107,8 @@ class FileUploadInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -121,7 +123,7 @@ class FileUploadInspector extends React.Component {
       inputMask
     } = this.props.element;
     const { fileSize, fileUnit, fileCount } = validate;
-    const { apiNameTemp, isUniqueApi = true } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
     const formatChecks = inputMask ? true : false;
 
     return (
@@ -148,6 +150,8 @@ class FileUploadInspector extends React.Component {
             onChange={this.handleChangeAPI}
             autoComplete="off"
           />
+          {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
+
           {isInFormChild(this.props.elementParent) ? null : (
             <>
               <p htmlFor="email-tip">错误提示</p>

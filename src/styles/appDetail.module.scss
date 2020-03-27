@@ -1,0 +1,43 @@
+.searchBox {
+  margin: 20px 16px 0 16px;
+  :global(.ant-input) {
+    font-family: "Noto Sans SC";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #B6B6BA;
+    padding: 10px 16px;
+    border-radius: 28px;
+    background-color: #ECF1FC;
+    border: none;
+  }
+  .addFolder {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+  }
+}
+.formArea {
+  display: flex;
+  flex-direction: column;
+  height: 359px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  :global(.ant-menu-inline) {
+    border: none;
+    font-size: 14px;
+    padding-top: 20px;
+  }
+  :global(.ant-menu-item.draggable-menu-item) {
+    color: #333;
+    font-size: 14px;
+  }
+  :global(.ant-menu-item.draggable-menu-item.ant-menu-item-selected) {
+    color: #333;
+  }
+  .empty {
+    flex: 1;
+  }
+}

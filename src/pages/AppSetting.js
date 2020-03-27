@@ -102,7 +102,7 @@ const AppSetting = props => {
     setSearchKey(value);
   };
 
-  const addFolder = () => alert("没用的");
+  // const addFolder = () => alert("没用的");
   const dragFileToFolder = (formId, groupId) => {
     alert(formId + " 放进 " + groupId);
   };
@@ -192,7 +192,7 @@ const AppSetting = props => {
               }
             ></DropableWrapper>
           </div>
-          <div className={classes.addFolder} 
+          {/* <div className={classes.addFolder} 
           // ? 禁用点击新建文件夹功能,功能暂未开发 onClick={addFolder}
           disabled
           >
@@ -217,10 +217,10 @@ const AppSetting = props => {
               </i>
               <span className={classes.folderDesc}>新建文件夹</span>
             </div>
-          </div>
+          </div> */}
         </Sider>
         <Content className={classes.container}>
-          <div className={classes.operateTitle}>
+          {/* <div className={classes.operateTitle}>
             <div
               className={classes.backBox}
               onClick={() => {
@@ -243,7 +243,7 @@ const AppSetting = props => {
               </i>
               <div className={classes.backDesc}>返回应用访问</div>
             </div>
-          </div>
+          </div> */}
           <div className={classes.operateGroup}>
             <div className={classes.btnGroup}>
               {isShowNewFormBtn ? (

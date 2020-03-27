@@ -1,6 +1,7 @@
 import React from "react";
 import { Menu, Icon } from "antd";
 import "./draggableList.scss";
+import { TableIcon } from "../../assets/icons/index"
 
 const { SubMenu } = Menu;
 
@@ -54,7 +55,7 @@ const DraggableList = ({
                       formId={l.key}
                       onDrop={dropHandle}
                     >
-                      {l.key !== -1 ? <Icon type={l.icon || "table"} /> : ""}
+                      {l.key !== -1 ? <Icon component={l.icon || TableIcon} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
                   </Menu.Item>
@@ -70,7 +71,7 @@ const DraggableList = ({
               formId={l.key}
               onDrop={e => onDrop(e.dataTransfer.getData("formId"), null)}
             >
-              {l.key !== "" ? <Icon type={l.icon || "table"} /> : ""}
+              {l.key !== "" ? <Icon component={l.icon || TableIcon} /> : ""}
               <span>{l.name}</span>
             </DraggableWrapper>
           </Menu.Item>
