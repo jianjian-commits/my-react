@@ -34,10 +34,18 @@ export default function FieldMeasureSelect(props) {
     props.removeField(props.item);
   }
   
+  const handlMouseEnter = () => {
+    document.getElementById("mea"+props.item.id).style.display = "block";
+  };
+
+  const handlMouseLeave = () => {
+    document.getElementById("mea"+props.item.id).style.display = "none";
+  };
+
   return (
-    <div className={props.className}>
+    <div className={props.className} onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
       <div className="cancelIcon">
-        <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />
+        <Icon type="close-circle" id={"mea"+props.item.id} onClick={handleDeleteTarget} theme="filled" />
       </div>
       <Select dropdownStyle={style} defaultValue={fieldOperationArr[0].value} onChange={getSelectOperation}>
         {fieldOperationArr.map(option => (
