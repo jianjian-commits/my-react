@@ -84,7 +84,7 @@ export const getFormsAll = (appId, isDataPage , extraProp) => {
     "Content-Type": "application/json",
     appid: appId,
   };
-  if (isDataPage === true) {
+  if (isDataPage == true) {
     headerObj.isDataPage = true
   }
   return new Promise((resolve, reject) => {

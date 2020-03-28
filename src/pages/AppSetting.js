@@ -102,7 +102,7 @@ const AppSetting = props => {
     setSearchKey(value);
   };
 
-  const addFolder = () => alert("没用的");
+  // const addFolder = () => alert("没用的");
   const dragFileToFolder = (formId, groupId) => {
     alert(formId + " 放进 " + groupId);
   };

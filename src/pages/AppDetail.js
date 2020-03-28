@@ -89,7 +89,7 @@ const AppDetail = props => {
     });
   }, [appId, props.userDetail]);
 
-  const [approvalKey, setApprovalKey] = React.useState(null);
+  const [approvalKey, setApprovalKey] = React.useState("myPending");
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";

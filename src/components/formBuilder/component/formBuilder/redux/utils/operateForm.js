@@ -226,18 +226,20 @@ export const saveForm = (
       "Content-Type": "application/json",
       appid: appId
     }
-  }).then(response => {
-    let id = response.data.id;
-    console.log(id);
-    callback(`${url}${id}/edit?formId=${id}`);
-  }).catch(err => {
-    console.info(err);
-    if ((err.response.data.code = "1002")) {
-      message.error("该api已存在");
-    }
+  })
+    .then(response => {
+      let id = response.data.id;
+      console.log(id);
+      callback(`${url}${id}/edit?formId=${id}`);
+    })
+    .catch(err => {
+      console.info(err);
+      if ((err.response.data.code = "1002")) {
+        message.error("该api已存在");
+      }
 
-    // }
-  });
+      // }
+    });
 };
 
 export const updateForm = (
@@ -252,6 +254,11 @@ export const updateForm = (
   appid,
   extraProp
 ) => dispatch => {
+
+  formDataArray.forEach((item) => {
+    item.layout.i = item.key
+  });
+
   _calcFormComponentLayout(formDataArray);
 
   let defaultLayout = {
@@ -268,6 +275,8 @@ export const updateForm = (
       isShow: true
     });
   });
+
+  let tempApiStatus = setIsSetApiStatus(formDataArray);
 
   if (localForm.layoutArray != void 0) {
     localForm.layoutArray.shift();
@@ -295,11 +304,9 @@ export const updateForm = (
       validate: verificationList
     },
     currentLayoutId, //默认布局ID
-    layoutArray,//布局
+    layoutArray, //布局
     extraProp
   };
-
-
 
   instanceAxios({
     url: config.apiUrl + `/form/${formData.id}`,
@@ -311,6 +318,7 @@ export const updateForm = (
     }
   })
     .then(response => {
+      setIsSetApiStatus(formDataArray, tempApiStatus);
       if (type === "back") {
         message.success("保存成功", 1, () => {
           dispatch({
@@ -398,3 +406,32 @@ export const getAllForms = () => dispatch => {
       console.log(err);
     });
 };
+
+// 设置isSetAPIName状态
+function setIsSetApiStatus(components, tempSetArray = []) {
+  components.forEach(component => {
+    if (tempSetArray.length === 0) {
+      if (component.type === "FormChildTest") {
+        component.values.forEach(item => {
+          if (!item.isSetAPIName) {
+            tempSetArray.push(item.id);
+            item.isSetAPIName = true;
+          }
+        });
+      } else if (!component.isSetAPIName) {
+        tempSetArray.push(component.id);
+        component.isSetAPIName = true;
+      }
+    } else {
+      if (component.type === "FormChildTest") {
+        component.values.forEach(item => {
+          if (tempSetArray.includes(item.id)) {
+            item.isSetAPIName = false;
+          }
+        });
+      } else if (tempSetArray.includes(component.id)) {
+        component.isSetAPIName = false;
+      }
+    }
+  });
+}
