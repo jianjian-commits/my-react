@@ -23,6 +23,7 @@ export const SIGN_OUT_SUCCESS = "Login/SIGN_OUT_SUCCESS";
 export const FETCH_ALL_TEAM = "Login/FETCH_ALL_TEAM";
 export const FETCH_CURRENT_TEAM = "Login/FETCH_CURRENT_TEAM";
 export const FETCH_USER_DETAIL = "Login/FETCH_USER_DETAIL";
+export const FETCH_TRANSACT_LIST = "Login/FETCH_TRANSACT_LIST";
 
 export const startSpinning = () => ({
   type: START_SPINNING
@@ -58,6 +59,36 @@ export const fetchUserDetail = payload => ({
   type: FETCH_USER_DETAIL,
   payload
 });
+
+export const fetchTransactList = payload => ({
+  type: FETCH_TRANSACT_LIST,
+  payload
+});
+
+//获取我的待办
+export const getTransactList = ({
+  currentPage,
+  pageSize
+}) => async dispatch => {
+  try {
+    const res = await request(`/flow/history/approval/todos`, {
+      method: "POST",
+      data: {
+        page: currentPage || 1,
+        size: pageSize || 1
+      }
+    });
+    if (res && res.status === "SUCCESS") {
+      dispatch(fetchTransactList(res.data));
+    } else {
+      message.error(res.msg || "待办列表获取失败");
+    }
+  } catch (err) {
+    message.error(
+      (err.response && err.response.data && err.response.data.msg) || "系统错误"
+    );
+  }
+};
 
 //转换当前团队
 export const switchCurrentTeam = teamId => async dispatch => {
@@ -260,6 +291,11 @@ export default function loginReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         currentTeam: payload
+      };
+    case FETCH_TRANSACT_LIST:
+      return {
+        ...state,
+        transactList: payload
       };
     default:
       return state;
