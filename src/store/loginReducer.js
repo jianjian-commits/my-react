@@ -1,6 +1,7 @@
 import { message } from "antd";
 import request from "../utils/request";
 import { getAppList } from "./appReducer";
+import { history } from "./index";
 
 export const initialState = {
   isLoading: false,
@@ -95,6 +96,7 @@ export const switchCurrentTeam = teamId => async dispatch => {
   try {
     const res = await request(`/team/${teamId}/currentTeam`, { method: "put" });
     if (res && res.status === "SUCCESS") {
+      history.push("/app/list");
       dispatch(getCurrentTeam());
       dispatch(getUserDetail());
       dispatch(getAppList());
