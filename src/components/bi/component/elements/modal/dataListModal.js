@@ -75,11 +75,12 @@ function DataListModal(props) {
         <div className="formGroups">
           <Collapse
             bordered={false}
+            activeKey={"formList"}
             expandIcon={({ isActive }) =>
               isActive ? <Icon type="folder-open" /> : <Icon type="folder" />
             }
           >
-            <Panel header={"表单列表"}>
+            <Panel header={"表单列表"} key={"formList"}>
               {props.formDataArr.map(form => (
                 <span
                   onClick={() => {
