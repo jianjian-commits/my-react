@@ -63,6 +63,26 @@
   cursor: pointer;
 }
 
+.new-chart-button{
+  position: absolute;
+  right: 10px;
+  .new-chart-preview{
+    width: 80px;
+    height: 30px;
+    border: 1px solid #2B81FF;
+    margin-right: 10px;
+    box-sizing: border-box;
+    border-radius: 3px;
+  }
+  .new-chart-save{
+    width: 80px;
+    height: 32px;
+    background: #2B81FF;
+    border-radius: 3px;
+    color: #FFFFFF;
+  }
+}
+
 .db-header-save {
   float: right;
   margin-right: 15px;

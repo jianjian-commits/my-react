@@ -26,13 +26,6 @@ const spec = {
 class DragItem extends PureComponent {
   render() {
     const { isDragging, connectDragSource, item } = this.props;
-    const icontype = () => {
-      if(item.type == "NUMBER"){
-        return "number"
-      }else {
-        return "tags"
-      }
-    } 
 
     return connectDragSource(
       <div>
