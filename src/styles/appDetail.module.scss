@@ -1,5 +1,5 @@
 .searchBox {
-  margin: 20px 16px 0 16px;
+  margin: 20px 16px 20px 16px;
   :global(.ant-input) {
     font-family: "Noto Sans SC";
     font-style: normal;
@@ -21,14 +21,13 @@
 .formArea {
   display: flex;
   flex-direction: column;
-  height: 359px;
+  height: auto;
   overflow-y: auto;
   overflow-x: hidden;
 
   :global(.ant-menu-inline) {
     border: none;
     font-size: 14px;
-    padding-top: 20px;
   }
   :global(.ant-menu-item.draggable-menu-item) {
     color: #333;
