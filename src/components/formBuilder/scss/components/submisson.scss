@@ -138,10 +138,18 @@ body {
                   &>input[type="text"] {
                     width: 405px;
                   }
+                  &>input[type="number"] {
+                    width: 405px;
+                  }
                   &>.ant-input-affix-wrapper>textarea{
                     width: 405px;
                   }
-
+                  &>.dropDownContainer{
+                    width: 405px;
+                  }
+                  &>.multiDropDownContainer{
+                    width: 405px;
+                  }
                   .ant-input-affix-wrapper {
                     .ant-input {
                       min-height: auto;
