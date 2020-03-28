@@ -392,16 +392,6 @@ const Permission = ({
   disabled
 }) => {
   const permissionsValue = value + "Permissions";
-  console.log(
-    value,
-    headers,
-    setState,
-    state,
-    CheckBox,
-    settingDisplay,
-    title,
-    disabled
-  );
   return (
     <div className={Styles.meteData}>
       <div>

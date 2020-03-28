@@ -105,6 +105,9 @@ export default connect(
     getTransactList({});
     return null;
   }
+  const fetchData = () => {
+    getTransactList({});
+  };
   return (
     <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
@@ -140,10 +143,10 @@ export default connect(
               // theme="dark"
               onClick={selectHandle}
             >
-              <Menu.Item key="/app/list">
+              <Menu.Item key="/app/list" onClick={fetchData}>
                 <span>我的应用</span>
               </Menu.Item>
-              <Menu.Item key="/backlog">
+              <Menu.Item key="/backlog" onClick={fetchData}>
                 <Badge dot offset={[-8, 8]} count={transactList.total}>
                   待办事项
                 </Badge>

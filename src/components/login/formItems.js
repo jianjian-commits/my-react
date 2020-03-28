@@ -184,7 +184,7 @@ const password = ({
           ? ""
           : payload === "login" || payload === "old"
           ? "请输入密码"
-          : "密码至少8位, 必须包含数字和字母"
+          : "密码至少8位，必须包含数字和字母"
       }
       icon={icon}
       unprefix={unprefix}
@@ -278,14 +278,14 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
   //       verificationCodeButtonRef.current.buttonNode.disabled = true;
   //     if (verificationCodeSpanRef.current)
   //       verificationCodeSpanRef.current.innerHTML = sended
-  //         ? `验证码已发送,如未收到请在${initNum}s后重试`
-  //         : `验证码发送失败,请在${initNum}s后重试`;
+  //         ? `验证码已发送，如未收到请在${initNum}s后重试`
+  //         : `验证码发送失败，请在${initNum}s后重试`;
   //     let num = initNum - 1;
   //     const int = setInterval(() => {
   //       if (verificationCodeSpanRef.current)
   //         verificationCodeSpanRef.current.innerHTML = sended
-  //           ? `验证码已发送,如未收到请在${num}s后重试`
-  //           : `验证码发送失败,请在${num}s后重试`;
+  //           ? `验证码已发送，如未收到请在${num}s后重试`
+  //           : `验证码发送失败，请在${num}s后重试`;
   //       num = num - 1;
   //     }, timeTerval);
   //     setTimeout(() => {

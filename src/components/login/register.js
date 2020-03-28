@@ -61,10 +61,10 @@ export default connect()(function Register({
             {token ? (
               <>
                 <BlueFont>{inviter}</BlueFont>
-                邀请您加入-<BlueFont>{invitedTeam}</BlueFont>,
+                邀请您加入-<BlueFont>{invitedTeam}</BlueFont>，
               </>
             ) : (
-              "感谢您的选择, "
+              "感谢您的选择，"
             )}
           </span>
         </div>

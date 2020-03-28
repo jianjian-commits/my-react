@@ -73,7 +73,7 @@
     & > span:nth-last-child(2) {
       & > span:last-child {
         & > svg {
-          stroke: rgba(255, 255, 255, 0.9) !important;
+          stroke: rgba(255, 255, 255, 0.6) !important;
         }
       }
     }
@@ -81,7 +81,7 @@
   :global(.ant-breadcrumb-separator) {
     & svg {
       stroke: rgba(255, 255, 255, 0.6);
-      margin: 0 1px;
+      margin: 0 11px !important;
     }
   }
 }
