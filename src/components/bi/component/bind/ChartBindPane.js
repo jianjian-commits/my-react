@@ -37,10 +37,31 @@ const spec = {
       return;
     }
 
-    const { bindDataArr, dataSource, changeBind, changeChartData, dashboardId, elementId } = props;
-    const isExisted = bindDataArr.length != 0 && bindDataArr.some((each) => {return item.id == each.id})
+    const { bindDataArr, dataSource, changeBind, changeChartData, elementId } = props;
+    let isExisted = false, isDimExceed = false, isMeaExceed = false;
 
-    if(isExisted) {
+    if(bindDataArr.length != 0) {
+      let dimCount = item.bindType == "dim" ? 1 : 0;
+      let meaCount = item.bindType == "mea" ? 1 : 0;
+      bindDataArr.forEach((each, idx) => {
+        if(each.bindType == "dim") {
+          dimCount++;
+        }
+
+        if(each.bindType == "mea") {
+          meaCount++;
+        }
+
+        if(each.id == item.id) {
+          isExisted = true;
+        }
+      })
+
+      isDimExceed = dimCount > 2 || (dimCount == 2 && meaCount > 1);
+      isMeaExceed = dimCount == 1 && meaCount >= 10;
+    }
+
+    if(isExisted || isDimExceed || isMeaExceed) {
       return;
     }
 

@@ -32,10 +32,6 @@ const ChartContainer = props => {
     {
       type:"edit",
       click:()=>{console.log("你点击了编辑按钮1");}
-    },
-    {
-      type:"edit",
-      click:()=>{console.log("你点击了编辑按钮2");}
     }
   ]
 

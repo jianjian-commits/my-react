@@ -34,7 +34,7 @@ const ElementEditor = props => {
               </Sider>
               <Content className={classes.elemContainer}>
                 <ChartBindPane/>
-                <ChartContainer chartData={chartData} style={{flexGrow: 1}}/>
+                <ChartContainer isBtnBlock={true} chartData={chartData} style={{flexGrow: 1}}/>
               </Content>
               <Sider style={{ background: "#fff" }}>
                 <RightPane/>

@@ -55,7 +55,7 @@ export const getOption = (data) => {
     dataset: {
       source
     },
-    legend: {},
+    legend: {y: 'bottom'},
     tooltip: {},
     xAxis: {type: 'category'},
     yAxis: {},
