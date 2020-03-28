@@ -10,14 +10,20 @@
 .chart-container {
   flex: 1;
   display: flex;
+  flex-direction: column;
   height: 400px;
   margin: 12px;
   background: #ffffff;
   position: relative;
+  .chart-title{
+    height: 60px;
+    line-height: 60px;
+    font-size: 14px;
+    padding-left: 20px;
+  }
   .iconBtn {
     height: 100%;
-    width: 20px;
-    height: 30px;
+    width: auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -28,6 +34,11 @@
     i {
       font-size: 16px;
       color: #4f95ff;
+      margin-left: 3px;
+      padding: 3px;
+      &:hover{
+        background-color: #EBEBEB;
+      }
     }
   }
 }

@@ -7,8 +7,8 @@ import { setDB } from '../components/bi/utils/reqUtil';
 import classes from "../styles/bi.module.scss";
 
 const BI = props => {
-  const HEADER_HEIGHT = 30;
-  const TOOLBAR_HEIGHT = 30;
+  const HEADER_HEIGHT = 50;
+  const TOOLBAR_HEIGHT = 45;
   const { dashboardId } = useParams();
   const { formDataArr } = props;
 

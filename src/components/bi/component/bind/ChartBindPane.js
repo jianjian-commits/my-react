@@ -69,7 +69,7 @@ function processBind(bindDataArr, formId, changeBind, changeChartData, chartId) 
       if(res && res.msg === "success") {
         const dataObj = res.data;
         const data = dataObj.data;
-        changeChartData(data ? data.xaxisList: null);
+        changeChartData(data);
       }
     })
 

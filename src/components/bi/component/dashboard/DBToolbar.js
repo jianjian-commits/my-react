@@ -52,6 +52,14 @@ const DBToolbar = props => {
         onClick={modalProps.showModal}
       />
       <div className="new-chart" onClick={modalProps.showModal}>新建图表</div>
+      <div className="new-chart-button">
+        <Button className="new-chart-preview" type="link">
+          预 览
+        </Button>
+        <Button className="new-chart-save" type="link">
+          保 存
+        </Button>
+      </div>
     </div>
   )
 }
