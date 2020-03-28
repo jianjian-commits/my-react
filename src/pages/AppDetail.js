@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
@@ -22,7 +22,7 @@ import HandleTranscationList from "../components/transactList/HandleTranscationL
 import { AppManageIcon } from "../assets/icons/apps";
 import classes from "../styles/apps.module.scss";
 import appDeatilClasses from "../styles/appDetail.module.scss";
-import { TableIcon } from "../assets/icons/index"
+// import { TableIcon } from "../assets/icons/index"
 const { Content, Sider } = Layout;
 
 const navigationList = (appName, history) => [
@@ -65,7 +65,7 @@ const AppDetail = props => {
   //zxx groups目录结构 list无目录结构的表单
   let { groups, list, searchList } = mockForms;
 
-  useEffect(() => {
+  React.useEffect(() => {
     let newList = [];
     let { id, name } = props.userDetail;
 
@@ -74,11 +74,13 @@ const AppDetail = props => {
     // let extraProp = { user: { id, name} }
 
     getFormsAll(appId, true).then(res => {
+      // let newList = []
       newList = res.map(item => ({
         key: item.id,
         name: item.name,
-        icon: TableIcon
+        // icon: TableIcon
       }));
+      
       setMockForms({
         groups: [],
         searchList: [],
@@ -87,7 +89,7 @@ const AppDetail = props => {
     });
   }, [appId, props.userDetail]);
 
-  const [approvalKey, setApprovalKey] = React.useState(null);
+  const [approvalKey, setApprovalKey] = React.useState("myPending");
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
   const appName = currentApp.name || "";

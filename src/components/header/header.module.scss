@@ -36,13 +36,22 @@
       align-items: center;
       & > button {
         &:hover {
-          background: #61a1ff !important;
+          background: rgba(255, 255, 255, 0.2) !important;
         }
         & > div {
           color: rgba(255, 255, 255, 0.9);
           & > svg {
             stroke: rgba(255, 255, 255, 0.9);
           }
+        }
+      }
+    }
+    & > div:last-child {
+      & > a {
+        font-size: 14px;
+        & > svg {
+          position: relative;
+          top: -2px;
         }
       }
     }
@@ -328,12 +337,14 @@
       width: 72px;
       height: 28px;
       // background: rgb(42, 127, 255);
+      top: 0 !important;
+      margin-top: 0 !important;
       border: none !important;
       border-radius: 2px;
       line-height: 28px;
       text-align: center;
       padding: 0;
-      margin-right: 30px;
+      margin-right: 20px;
       & :hover {
         background: rgba(255, 255, 255, 0.2) !important;
         border-radius: 2px;
@@ -351,13 +362,12 @@
       display: inline-block;
       border: none !important;
       border-radius: 2px;
-      line-height: 26px;
+      line-height: 28px;
       font-style: normal;
       font-weight: normal;
       font-size: 14px;
       color: #ffffff;
       text-align: center;
-      padding: 0;
       & > sup {
         box-shadow: none !important;
         &:hover {

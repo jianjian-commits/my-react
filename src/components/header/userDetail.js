@@ -60,7 +60,8 @@ export default Form.create({ name: "reset-form" })(
         itemName: m.itemName,
         icon: m.icon,
         modalMeter,
-        setModalMeter
+        setModalMeter,
+        update: true
       });
     });
     const render = meter => {
