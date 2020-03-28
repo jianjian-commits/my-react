@@ -53,7 +53,7 @@ const AppDetail = props => {
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
   const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false);
-
+  const [todosNumber, setTodosNumber] = React.useState(null);
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -154,7 +154,7 @@ const AppDetail = props => {
   };
   switch (approvalKey) {
     case "myPending":
-      TransactList = <TodoTransctionList {...transctionListOptions} />;
+      TransactList = <TodoTransctionList {...transctionListOptions} setTodosNumber={setTodosNumber}/>;
       break;
     case "mySubmitted":
       TransactList = <SubmitTransctionList {...transctionListOptions} />;
@@ -179,7 +179,7 @@ const AppDetail = props => {
           style={{ background: "#fff" }}
           width="240"
         >
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} />
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} todosNumber={todosNumber}/>
           <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"

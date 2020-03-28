@@ -37,13 +37,14 @@ const TransactList = props => {
           setTotal(total);
           setPageSize(pageSize);
           setCurrentPage(currentPage);
-          setTableLoading(false)
+          setTableLoading(false);
+          props.setBadgenum(5);
       } else {
-        message.error("获取审批列表失败");
+        message.error("获取审批列表失败1");
         setTableLoading(false)
       }
     } catch (err) {
-      message.error("获取审批列表失败");
+      message.error("获取审批列表失败2");
       setTableLoading(false)
     }
   }
@@ -118,7 +119,6 @@ const TransactList = props => {
         loading={tableLoading}
         columns={columns} 
         dataSource={transactList} 
-        rowKey="dataId"
         pagination={paginationProps}
         >
       </Table>

@@ -37,7 +37,14 @@ const columns = [
   },
   {
     title: "日期",
-    dataIndex: "approveDate"
+    dataIndex: "approveDate",
+    render:(text, record, index) =>{
+      if(record.approveDate !== null){
+        return new Date(text).toLocaleString("chinese", { hour12: false })
+      } else{
+        return null
+      }
+    }
   }
 ];
 
@@ -460,17 +467,6 @@ class FormDataDetail extends PureComponent {
         operations = <></>;
         break;
     }
-    let list = [];
-    if (taskData.status) {
-      list = taskData.tasks.map(item => {
-        item.key = item.approveDate;
-        item.approveDate = new Date(item.approveDate).toLocaleString(
-          "chinese",
-          { hour12: false }
-        );
-        return item;
-      });
-    }
     let BoxStyle = {};
     if (this.props.enterPort === "Dispose") {
       BoxStyle = { width: "calc(100vw - 500px)", margin: "0 auto" };
@@ -499,9 +495,10 @@ class FormDataDetail extends PureComponent {
               taskData.status  ? (
               <TabPane tab="审批流水" key="approvelFlow">
                 <Table
+                  rowKey={(record)=>record.id+record.approveDate}
                   pagination={false}
                   columns={columns}
-                  dataSource={list}
+                  dataSource={taskData.tasks}
                   size="middle"
                 />
               </TabPane>
