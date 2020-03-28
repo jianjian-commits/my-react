@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, Icon, Button } from "antd";
-import "./modal.scss";
 import {ModalTitle} from "./exitWarningModal";
 const title = "图表设计有修改是否保存";
 

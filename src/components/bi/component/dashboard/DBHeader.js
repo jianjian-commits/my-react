@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import { connect } from "react-redux";
 import { Icon, Button } from "antd";
 import { setDashboards } from '../../redux/action';
-import "../../scss/dashboard.scss";
 import request from '../../utils/request';
 import { useParams, useHistory } from "react-router-dom";
 
@@ -48,9 +47,9 @@ const DBHeader = props => {
         </Button>
       </div>
       <input className="rename-db" value={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
-      <Button onClick={saveDB} className="db-header-save" type="link">
+      {/* <Button onClick={saveDB} className="db-header-save" type="link">
         保 存
-      </Button>
+      </Button> */}
     </div>
   )
 }

@@ -6,6 +6,7 @@ import EditorHeader from '../components/bi/component/elements/EditorHeader';
 import { Layout } from "antd";
 import { ChartBindPane, LeftPane, RightPane, DragAndDrop } from '../components/bi/component/bind';
 import classes from "../styles/bi.module.scss";
+import "../components/bi/scss/index.scss";
 const { Sider, Content } = Layout;
 
 const ElementEditor = props => {

@@ -9,7 +9,6 @@ import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
-import './bind.scss';
 
 /**
  * Specifies the drop target contract.

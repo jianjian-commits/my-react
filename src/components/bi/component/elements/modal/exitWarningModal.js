@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, Icon, Button } from "antd";
-import "./modal.scss";
 const title = "更改数据源";
 
 const content = "更改数据源将清空当前图表配置，是否确认修改？";

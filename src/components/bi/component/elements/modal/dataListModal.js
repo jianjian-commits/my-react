@@ -2,7 +2,6 @@ import React from "react";
 import { Modal, Button, Collapse, Icon , message } from "antd";
 import { useState ,useEffect} from "react";
 import classNames from "classnames";
-import "./modal.scss";
 import { push } from "connected-react-router";
 import {connect} from "react-redux";
 import { useParams, useHistory } from "react-router-dom";

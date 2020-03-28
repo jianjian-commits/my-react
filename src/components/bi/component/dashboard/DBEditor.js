@@ -1,7 +1,6 @@
 import React, {Fragment} from "react";
 import { connect } from "react-redux";
 import ChartContainer from '../elements/chart/ChartContainer';
-import "../../scss/dashboard.scss";
 
 const Column = (props) => {
   return (

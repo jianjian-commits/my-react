@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
 import { useParams } from "react-router-dom";
-import './chart.scss';
 import ChartToolbarBtn from "../ChartToolbarBtn";
 
 

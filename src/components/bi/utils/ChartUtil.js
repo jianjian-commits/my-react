@@ -7,12 +7,6 @@ export const getOption = (data) => {
     return {};
   }
 
-  const legend = xaxisList[0];
-
-  if(!legend) {
-    return {};
-  }
-
   const source = [];
   const series = [];
   const title = ["名称"];
@@ -23,8 +17,7 @@ export const getOption = (data) => {
   })
 
   source.push(title)
-
-  xaxisList.forEach((each, idx) => {
+  xaxisList.forEach((each) => {
     let row = [];
     const items = each.items;
     row.push(each.dimensionName);

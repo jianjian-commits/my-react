@@ -1,7 +1,6 @@
 import React, {PureComponent} from "react";
 import { connect } from "react-redux";
 import { Icon,Tooltip, Checkbox, Input } from 'antd';
-import './bind.scss';
 import classNames from "classnames";
 
 export default class RightPane extends PureComponent {
