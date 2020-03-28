@@ -42,6 +42,7 @@ const TodoTransactList = props => {
           setTransactList(list);
           setApprovalKey(approvalKey);
           setTotal(total);
+          props.setTodosNumber(total);
           setPageSize(pageSize);
           setCurrentPage(currentPage);
           setTableLoading(false)
