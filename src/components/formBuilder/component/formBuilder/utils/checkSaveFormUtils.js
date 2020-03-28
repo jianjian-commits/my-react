@@ -1,7 +1,7 @@
 /*
  * @Author: komons
  * @Date: 2020-02-17 10:23:58
- * @LastEditTime: 2020-03-14 12:58:47
+ * @LastEditTime: 2020-03-28 09:45:39
  * @LastEditors: komons
  * @Description: 用于检验编辑的表单是否合理， 如果合理返回true
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formBuilder\utils\checkSaveFormUtils.js
@@ -76,7 +76,6 @@ export function checkHasUniqueApiName(components = [], tempAPINameArr = []) {
         return res;
       }
     }
-    components[i].isSetAPIName = true;
     let key = components[i].key;
     if (key) {
       if (key == formAPi) {
