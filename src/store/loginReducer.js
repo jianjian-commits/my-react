@@ -2,6 +2,7 @@ import { message } from "antd";
 import request from "../utils/request";
 import { getAppList } from "./appReducer";
 import { history } from "./index";
+import { catchError } from "../utils";
 
 export const initialState = {
   isLoading: false,
@@ -85,9 +86,7 @@ export const getTransactList = ({
       message.error(res.msg || "待办列表获取失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -104,9 +103,7 @@ export const switchCurrentTeam = teamId => async dispatch => {
       message.error(res.msg || "团队转换失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -124,9 +121,7 @@ export const updateUserDetail = payload => async dispatch => {
       message.error(res.msg || "个人信息修改失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -141,9 +136,7 @@ export const getUserDetail = () => async dispatch => {
       message.error(res.msg || "个人信息获取失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -158,9 +151,7 @@ export const getCurrentTeam = () => async dispatch => {
       message.error(res.msg || "团队信息获取失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -175,9 +166,7 @@ export const getAllTeam = () => async dispatch => {
       message.error(res.msg || "获取全部团队信息失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -194,9 +183,7 @@ export const initAllDetail = () => async dispatch => {
       message.error(res.msg || "获取当前用户信息失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -218,9 +205,7 @@ export const loginUser = ({ token, rest, history }) => async dispatch => {
     }
   } catch (err) {
     dispatch(loginFailure());
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -238,9 +223,7 @@ export const signOut = () => async dispatch => {
       message.error(res.msg || "退出失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 

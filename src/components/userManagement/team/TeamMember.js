@@ -8,6 +8,7 @@ import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
 import InviteUser from "../modalInviteUser";
 import Authenticate from "../../shared/Authenticate";
+import { catchError } from "../../../utils";
 import { ReactComponent as Funnel } from "../../../assets/icons/teams/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
@@ -22,7 +23,7 @@ export default connect(
   { getCurrentTeam }
 )(function TeamMember({ loginData, getCurrentTeam }) {
   const { currentTeam } = loginData;
-  const [loading, setLoading] = React.useState(true)
+  const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState(null); //用户数据
   const [total, setTotal] = React.useState(null);
   const [onOff, setOnOff] = React.useState({
@@ -67,31 +68,31 @@ export default connect(
           currentTeam.groups.filter(item => {
             return item.name === "超级管理员";
           })[0].peopleNumber === 1 ? (
-            true
-          ) : false ? null : (
-            <span>
-              <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
-                <Button
-                  type="link"
-                  onClick={handleChange.bind(this, text)}
-                  className={classes.changeGroup}
-                >
-                  变更分组
+          true
+        ) : false ? null : (
+          <span>
+            <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
+              <Button
+                type="link"
+                onClick={handleChange.bind(this, text)}
+                className={classes.changeGroup}
+              >
+                变更分组
               </Button>
-              </Authenticate>
-              <Authenticate auth={TEAM_MANAGEMENT_DROP}>
-                <Popconfirm
-                  title="把该成员从团队中踢出?"
-                  onConfirm={confirm.bind(this, text.id)}
-                  okText="确认"
-                  cancelText="取消"
-                  placement="bottom"
-                >
-                  <Button type="link">踢出</Button>
-                </Popconfirm>
-              </Authenticate>
-            </span>
-          );
+            </Authenticate>
+            <Authenticate auth={TEAM_MANAGEMENT_DROP}>
+              <Popconfirm
+                title="把该成员从团队中踢出?"
+                onConfirm={confirm.bind(this, text.id)}
+                okText="确认"
+                cancelText="取消"
+                placement="bottom"
+              >
+                <Button type="link">踢出</Button>
+              </Popconfirm>
+            </Authenticate>
+          </span>
+        );
       }
     }
   ];
@@ -115,10 +116,9 @@ export default connect(
         } else {
           message.error(res.msg || "成员获取失败！");
         }
-
       })
       .catch(err => {
-        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
+        catchError(err);
         return currentTeam.id;
       });
   }, [pageConfig, currentTeam.id]);
@@ -149,9 +149,7 @@ export default connect(
           message.error(res.msg || "踢出失败");
         }
       })
-      .catch(err => {
-        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
-      });
+      .catch(err => catchError(err));
   };
   // 过滤
   const onClickFilter = () => {
@@ -190,9 +188,7 @@ export default connect(
             message.error(res.msg || "变更失败");
           }
         })
-        .catch(err => {
-          message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
-        });
+        .catch(err => catchError(err));
     }
     setOnOff({
       ...onOff,
@@ -208,9 +204,13 @@ export default connect(
   };
   //获取当前team只调用一次
   useEffect(() => {
-    const _timeout = setTimeout(() => { setLoading(false) }, 500)
+    const _timeout = setTimeout(() => {
+      setLoading(false);
+    }, 500);
     getCurrentTeam();
-    return () => { clearTimeout(_timeout) }
+    return () => {
+      clearTimeout(_timeout);
+    };
   }, [getCurrentTeam]);
   //初次改变页码获取成员
   useEffect(() => {
@@ -263,6 +263,6 @@ export default connect(
       ) : null}
     </div>
   ) : (
-      <Spin size="large" />
-    );
+    <Spin size="large" />
+  );
 });

@@ -5,6 +5,7 @@ import request from "../../utils/request";
 import PublicForm from "./publicForm";
 import { registerParameter } from "./formItems";
 import Styles from "./style/login.module.scss";
+import { catchError } from "../../utils";
 
 export default connect()(function Register({
   history,
@@ -32,10 +33,7 @@ export default connect()(function Register({
     } catch (err) {
       setStatus(false);
       setVisible(false);
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     }
   };
   const confirm = () => {
