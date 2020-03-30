@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
+import { catchError } from "../../utils";
 import { InnerHeader } from "../profileManagement/GroupDetail";
 
 const formMeteDataThead = [
@@ -488,10 +489,7 @@ function handleSaveButton({ state, initialData, enterPermission }) {
       }
     },
     err =>
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      )
+    catchError(err)
   );
 }
 
@@ -512,10 +510,7 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
       }
     },
     err =>
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      )
+    catchError(err)
   );
 }
 

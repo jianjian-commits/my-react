@@ -4,12 +4,13 @@ import Authenticate from "../shared/Authenticate";
 import { Button, Table, message, Popconfirm } from "antd";
 import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
-import PermissionSetting from "../userManagement/applyPermissionSettings";
+import PermissionSetting from "../userManagement/ApplyPermissionSettings";
 import {
   PROFILE_MANAGEMENT_NEW,
   PROFILE_MANAGEMENT_UPDATE,
   PROFILE_MANAGEMENT_DELETE
 } from "../../auth";
+import { catchError } from "../../utils";
 import { CreateIcon } from "../../assets/icons/teams";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
@@ -96,10 +97,7 @@ class ProfileManagement extends React.Component {
         message.error(res.msg || "获取分组列表失败");
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-        "系统错误"
-      );
+      catchError(err);
     }
   }
 
@@ -125,10 +123,7 @@ class ProfileManagement extends React.Component {
         message.error(res.msg || `${title}失败`);
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-        "系统错误"
-      );
+      catchError(err);
     } finally {
       this.setState({ open: false });
     }
@@ -147,10 +142,7 @@ class ProfileManagement extends React.Component {
         message.error(res.msg || "删除失败！");
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-        "系统错误"
-      );
+      catchError(err);
     }
   }
 

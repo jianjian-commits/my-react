@@ -7,9 +7,9 @@ import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
-import Login from "./login/login";
-import ForgetPassword from "./login/forgetPassword";
-import InviteUser from "../components/login/inviteUser";
+import Login from "./login";
+import ForgetPassword from "./login/ForgetPassword";
+import InviteUser from "../components/login/InviteUser";
 import { setDebug } from "../store/debugReducer";
 
 import ErrorBoundary from "./shared/ErrorBoundary";

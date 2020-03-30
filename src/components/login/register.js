@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Result, message } from "antd";
 import request from "../../utils/request";
-import PublicForm from "./publicForm";
-import { registerParameter } from "./formItems";
+import PublicForm from "./PublicForm";
+import { registerParameter } from "./formItemConfig";
 import Styles from "./style/login.module.scss";
+import { catchError } from "../../utils";
 import { RegisteSuccessIcon, RegisteErrorIcon } from "../../assets/icons/login";
 
 export default connect()(function Register({
@@ -33,10 +34,7 @@ export default connect()(function Register({
     } catch (err) {
       setStatus(false);
       setVisible(false);
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     }
   };
   const confirm = () => {

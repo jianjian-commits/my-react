@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button as Btn, Icon, message } from "antd";
+import { Input as Inp, Button as Btn, Icon } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
+import { catchError } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 
@@ -90,10 +91,7 @@ const checkphone = actionType => {
       const res = await request(`/sysUser/mobilePhone/${value}/check`);
       if (res && res.data === bol) return callback(context);
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     }
     callback();
   };
@@ -105,9 +103,7 @@ const checkEmail = async (rule, value, callback) => {
     const res = await request(`/sysUser/email/${value}/check`);
     if (res && res.data === false) return callback("该邮箱已被注册");
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
   callback();
 };
