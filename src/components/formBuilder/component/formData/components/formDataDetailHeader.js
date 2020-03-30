@@ -4,29 +4,42 @@ import { useHistory, useParams } from "react-router-dom";
 import request from '../../../../../utils/request';
 
 const StartApprovalButton = (props) =>{
-  const startApprovelBtnClick = () =>{
-    props.setLoading(true)
-    const { formDetail, currentForm, appId } = props;
-    let fieldInfos = currentForm.components.map((component =>{
-      if(formDetail[component.key]){
-        return ({
-          name: component.key,
-          value: formDetail[component.key]
-        })
+  async function startApprovelBtnClick(){
+    try{
+      props.setLoading(true)
+      const { formDetail, currentForm, appId } = props;
+      let fieldInfos = currentForm.components.map((component =>{
+        if(formDetail[component.key]){
+          return ({
+            name: component.key,
+            value: formDetail[component.key]
+          })
+        }
+      })).filter(item => item !== undefined)
+      let data = {
+        dataId: props.submissionId,
+        fieldInfos: fieldInfos
       }
-    })).filter(item => item !== undefined)
-    let data = {
-      dataId: props.submissionId,
-      fieldInfos: fieldInfos
-    }
-    props.handleStartFlowDefinition(currentForm.id, appId, data)
-    .then(res=>{
-      props.resetData();
-    }
-    ).catch(err=>{
+      const res = await request(`/flow/approval/start`,{
+        headers:{
+          appid: appId,
+          formid: currentForm.id,
+        },
+        method: "post",
+        data: data
+      });
+      if (res && res.status === "SUCCESS") {
+        message.success("提交审批成功");
+        props.resetData();
+        props.getApproveCount(appId);
+      } else {
+        props.setLoading(false)
+        message.error("提交审批失败");
+      }
+    } catch (err) {
       props.setLoading(false)
-      console.log(err);
-    });
+      message.error("提交审批失败");
+    }
 
   }
 
@@ -101,6 +114,7 @@ const WithdrawApprovalButton = (props) =>{
         });
         if (res && res.status === "SUCCESS") {
           props.resetData();
+          props.getApproveCount(props.appId);
           message.success("提交审批意见成功")
         } else {
           props.setLoading(false)
@@ -135,6 +149,7 @@ const ReSubmitApprovalButton = (props) =>{
       });
       if (res && res.status === "SUCCESS") {
         props.resetData();
+        props.getApproveCount(props.appId);
         message.success("提交审批成功")
       } else {
         props.setLoading(false)

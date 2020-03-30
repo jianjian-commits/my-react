@@ -11,6 +11,7 @@ import { deleteFormData } from "../redux/utils/deleteDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import { DeleteIcon, EditIcon } from "./svgIcon/index";
 import FormDataDetailHeader from "./formDataDetailHeader";
+import { getApproveCount } from "../../homePage/redux/utils/operateFormUtils"
 import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionUtils";
 const { TabPane } = Tabs;
 const columns = [
@@ -153,6 +154,11 @@ class FormDataDetail extends PureComponent {
     );
   };
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
   _renderFileData = fileData => {
     if (fileData.length > 0) {
       return fileData.map((item, index) => (
@@ -480,6 +486,7 @@ class FormDataDetail extends PureComponent {
             resetData={this.resetData}
             {...this.props}
             setLoading={this.setLoading}
+            getApproveCount={this.props.getApproveCount}
             />
           <div className="formDataDetailContainer">
           <Tabs defaultActiveKey="detail" 
@@ -515,7 +522,7 @@ class FormDataDetail extends PureComponent {
 const DataDetail = Form.create()(FormDataDetail);
 
 export default connect(
-  ({ login, ...store }) => ({
+  ({ login,forms, ...store }) => ({
     formDetail: store.formSubmitData.formDetail,
     currentForm: store.formSubmitData.forms,
     token: store.rootData.token,
@@ -523,11 +530,13 @@ export default connect(
     taskData: store.formSubmitData.taskData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentTeam && login.currentTeam.id,
-    permissions: (login.userDetail && login.userDetail.permissions) || []
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    approveListCount: forms.approveListCount
   }),
   {
     getSubmissionDetail,
     handleStartFlowDefinition,
-    deleteFormData
+    deleteFormData,
+    getApproveCount
   }
 )(DataDetail);
