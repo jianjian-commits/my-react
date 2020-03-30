@@ -29,7 +29,7 @@ const ChangeGroup = props => {
           <Select
             defaultValue={props.groupKey}
             showSearch
-            style={{ width: 100 }}
+            style={{ width: 200 }}
             placeholder="分组"
             optionFilterProp="children"
             onChange={onChange}

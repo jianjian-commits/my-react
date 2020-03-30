@@ -37,6 +37,7 @@ export default connect(
     currentPage: 1,
     pageSize: 10
   });
+  const [filterConditions, setFilterConditions] = React.useState([])
   const columns = [
     {
       title: "用户昵称",
@@ -96,18 +97,22 @@ export default connect(
     }
   ];
   //获取成员
-  const gainData = useCallback(() => {
-    request(`/sysUser/currentTeam/all`, {
+  const gainData = useCallback(async () => {
+    setLoading(true)
+    const loadingTimeout = () => setTimeout(() => { setLoading(false) }, 500)
+    await request(`/sysUser/currentTeam/all`, {
       method: "POST",
-      data: { page: pageConfig.currentPage, size: pageConfig.pageSize }
+      data: {
+        page: pageConfig.currentPage,
+        size: pageConfig.pageSize,
+        fields: filterConditions
+      }
     })
       .then(res => {
         if (res && res.status === "SUCCESS") {
           res.data.datas.forEach(item => {
             item.key = item.id;
-            item.lastModifiedDate = new Date().toLocaleString(
-              item.lastModifiedDate
-            );
+            item.lastModifiedDate = new Date(item.lastModifiedDate).toLocaleString();
             item.groupName = item.group.name;
           });
           setData(res.data.datas);
@@ -115,13 +120,15 @@ export default connect(
         } else {
           message.error(res.msg || "成员获取失败！");
         }
-
+        loadingTimeout()
       })
       .catch(err => {
         message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
+        loadingTimeout()
         return currentTeam.id;
       });
-  }, [pageConfig, currentTeam.id]);
+    return clearTimeout(loadingTimeout())
+  }, [pageConfig, filterConditions, currentTeam.id]);
   //踢出成员
   const confirm = sysUserId => {
     request(`/sysUser/${sysUserId}/team`, {
@@ -153,15 +160,31 @@ export default connect(
         message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
       });
   };
-  // 过滤
+  // 过滤组件开关显示
   const onClickFilter = () => {
     setOnOff({
       ...onOff,
       filterSwith: !onOff.filterSwith
     });
   };
-  const filterData = value => {
-    setData(value);
+  //过滤请求参数设置
+  const filterData = (value, groupId) => {
+    const _fiels = []
+    _fiels[0] = value ? {
+      conditions: [
+        { negative: false, rule: 'LK', value },
+        { negative: false, rule: 'LK', value }
+      ],
+      properties: ['email', 'name']
+    } : null
+    _fiels[1] = groupId ? {
+      conditions: [
+        { negative: false, rule: 'EQ', value: groupId }
+      ],
+      properties: ['sysRoles']
+    } : null
+    const _newFiels = _fiels.filter(item => item !== null)
+    setFilterConditions(_newFiels)
   };
   //变更分组
   const handleChange = (obj, e) => {
@@ -175,9 +198,9 @@ export default connect(
     });
   };
   // 提交变更分组
-  const changeGroupCal = groupKey => {
+  const changeGroupCal = async groupKey => {
     if (groupKey) {
-      request(`/sysUser/${key.userKey}/group`, {
+      await request(`/sysUser/${key.userKey}/group`, {
         method: "PUT",
         data: { oldGroupId: key.groupKey, newGroupId: groupKey }
       })
@@ -206,11 +229,11 @@ export default connect(
       currentPage: e
     });
   };
+
+
   //获取当前team只调用一次
   useEffect(() => {
-    const _timeout = setTimeout(() => { setLoading(false) }, 500)
     getCurrentTeam();
-    return () => { clearTimeout(_timeout) }
   }, [getCurrentTeam]);
   //初次改变页码获取成员
   useEffect(() => {
