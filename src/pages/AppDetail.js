@@ -10,7 +10,7 @@ import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
-import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
+import { getFormsAll, getApproveCount } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
@@ -53,7 +53,6 @@ const AppDetail = props => {
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
   const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false);
-  const [todosNumber, setTodosNumber] = React.useState(null);
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -88,6 +87,10 @@ const AppDetail = props => {
       });
     });
   }, [appId, props.userDetail]);
+
+  React.useEffect(()=>{
+    props.getApproveCount(appId)
+  },[appId])
 
   const [approvalKey, setApprovalKey] = React.useState("myPending");
   const currentApp =
@@ -154,7 +157,7 @@ const AppDetail = props => {
   };
   switch (approvalKey) {
     case "myPending":
-      TransactList = <TodoTransctionList {...transctionListOptions} setTodosNumber={setTodosNumber}/>;
+      TransactList = <TodoTransctionList {...transctionListOptions} approveListCount={props.approveListCount}/>;
       break;
     case "mySubmitted":
       TransactList = <SubmitTransctionList {...transctionListOptions} />;
@@ -179,7 +182,7 @@ const AppDetail = props => {
           style={{ background: "#fff" }}
           width="240"
         >
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} todosNumber={todosNumber}/>
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} />
           <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"
@@ -265,9 +268,12 @@ const AppDetail = props => {
     </Authenticate>
   );
 };
-export default connect(({ app, login }) => ({
+export default connect(({ app, login, forms }) => ({
   appList: app.appList,
   teamId: login.currentTeam && login.currentTeam.id,
   permissions: (login.userDetail && login.userDetail.permissions) || [],
-  userDetail: login.userDetail
-}))(AppDetail);
+  userDetail: login.userDetail,
+  approveListCount: forms.approveListCount
+}),{
+  getApproveCount
+})(AppDetail);
