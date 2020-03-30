@@ -88,7 +88,7 @@ const AppDetail = props => {
     });
   }, [appId, props.userDetail]);
 
-  React.useEffect(()=>{
+  React.useEffect((props)=>{
     props.getApproveCount(appId)
   },[appId])
 
