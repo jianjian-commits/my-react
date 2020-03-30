@@ -1,0 +1,1298 @@
+$white: #fff;
+
+$font-Family: "PingFangSC-Regular", "PingFang SC";
+$font-color: rgba(51, 51, 51, 1);
+$border-color: rgba(233, 235, 240, 1);
+
+body {
+  background-color: rgba(243, 244, 245, 1);
+}
+.formBuilder-Submission {
+  width: 870px;
+  min-height: 962px;
+  margin: auto;
+  display: flex;
+  flex-flow: row;
+  .Content {
+    width: 870px;
+    min-height: 962px;
+    margin-top: 92px;
+    background: white;
+    border: 1px solid $border-color;
+    .submission-title {
+      width: 100%;
+      height: 56px;
+      line-height: 56px;
+      font-size: 18px;
+      color: $font-color;
+      background: #fafafa;
+      font-weight: 500;
+      text-align: center;
+      border-bottom: 1px solid $border-color;
+      font-family: $font-Family;
+      margin-bottom: 32px;
+    }
+    .submission-formInfo {
+      width: 870px;
+      height: auto;
+      border-bottom: 1px solid $border-color;
+      margin-bottom: 10px;
+      font-size: 14px;
+      padding: 0 15px 10px 15px;
+    }
+    .form-layout {
+      width: 870px;
+      .ant-form-item-label {
+        text-align: left;
+        width: 100%;
+        white-space: normal;
+        margin-bottom: 10px;
+      }
+      label {
+        font-size: 13px;
+        font-family: $font-Family;
+        font-weight: 400;
+        color: $font-color;
+        line-height: 18px;
+        &::after {
+          content: "";
+          margin: 0;
+        }
+        &.ant-form-item-required {
+          &::after {
+            content: " ";
+            margin: 0;
+            // color: red;
+            top: 0.5px;
+          }
+          &::before {
+            margin-right: 0;
+            content: "";
+          }
+        }
+        .label-text {
+          margin-right: 3px;
+        }
+      }
+      .label {
+        padding: 0;
+        color: #333333;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+        background-color: transparent;
+        word-break: break-all;
+        white-space: normal;
+      }
+      .red-star {
+        color: red;
+        font-size: 13px;
+        margin-left: 5px;
+      }
+      .radio-tooltip {
+        font-size: 13px;
+        line-height: 18px;
+        display: block;
+        color: #92979f;
+        margin-bottom: 7px 0;
+        word-break: break-all;
+      }
+      .lengthTip {
+        font-size: 14px;
+        display: inline;
+        line-height: 22px;
+        margin-left: 2px;
+        color: #333;
+      }
+      .checkbox-span,
+      .radiobox-span {
+        white-space: normal;
+        font-weight: normal;
+        display: block;
+        height: auto;
+        line-height: 23px;
+        word-break: break-all;
+        font-family: PingFangSC-Regular, PingFang SC;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.65);
+      }
+      .react-grid-layout {
+        // .multiple-drop-down {
+        //   z-index: 100;
+        // }
+        // .single-drop-down {
+        //   z-index: 100;
+        // }
+        // padding-left: 30px;
+        &>div{
+          margin-left: 30px;
+        }
+        .react-grid-item {
+          .ant-form-item {
+            font-size: 13px;
+            // margin-bottom: 37px;
+            .ant-form-item-control-wrapper {
+              .ant-form-item-control {
+                .ant-form-item-children {
+                  &>input[type="text"] {
+                    width: 405px;
+                  }
+                  &>.ant-input-affix-wrapper>textarea{
+                    width: 405px;
+                  }
+
+                  .ant-input-affix-wrapper {
+                    .ant-input {
+                      min-height: auto;
+                    }
+                    &.ant-input-affix-wrapper-textarea-with-clear-btn {
+                      .ant-input {
+                        resize: none;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        .formChild-container {
+          .ant-form-item {
+            margin-bottom: 0px;
+            height: 100%;
+            .ant-form-item-control-wrapper {
+              height: 193px;
+              padding-bottom: 30px;
+              button {
+                margin-top: 8px;
+              }
+            }
+          }
+        }
+        .checkboxGroup {
+          height: auto;
+          width: 100%;
+          cursor: pointer;
+          // line-height: 24px;
+          .checkboxOption {
+            margin-bottom: 6px;
+            i {
+              display: inline-block;
+              width: 14px;
+              height: 14px;
+              border: 1px solid #91a1b7;
+              position: relative;
+              background: #fff;
+              transition: all 218ms ease-in-out;
+              top: 2px;
+              &:before {
+                content: " ";
+                display: block;
+                opacity: 1;
+                height: 6px;
+                width: 10px;
+                border-left: solid 2px #fff;
+                border-bottom: solid 2px #fff;
+                position: absolute;
+                top: 2px;
+                left: 1px;
+                transform: rotate(-45deg);
+              }
+            }
+            span {
+              margin-left: 5px;
+              line-height: 23.5px;
+            }
+            .selectOption {
+              background-color: #007aff;
+            }
+          }
+        }
+        .radioGroup {
+          height: auto;
+          width: 100%;
+          cursor: pointer;
+          // line-height: 28px;
+          .radioOption {
+            margin-bottom: 5px;
+            margin-top: 5px;
+            line-height: 1;
+            .out_i {
+              display: inline-block;
+              border-radius: 50%;
+              width: 14px;
+              height: 14px;
+              border: 1px solid #91a1b7;
+              position: relative;
+              background: #fff;
+              transition: all 218ms ease-in-out;
+              top: 2px;
+              line-height: 14px;
+              .inner_i {
+                display: inline-block;
+                border-radius: 50%;
+                width: 8px;
+                height: 8px;
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                transition: all 218ms ease-in-out;
+              }
+            }
+            span {
+              margin-left: 5px;
+              line-height: 23.5px;
+            }
+            .selectOption {
+              background-color: #007aff;
+            }
+          }
+          .radioInline {
+            margin-right: 18px;
+          }
+        }
+        .radioGroupInline {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .dropDownContainer {
+          width: 100%;
+          position: relative;
+          .dropDownBtn {
+            width: 100%;
+            height: 32px;
+            border: 1px solid #f3f4f5;
+            line-height: 32px;
+            position: relative;
+            .dropDownBtnSpan {
+              display: inline-block;
+              height: 32px;
+              width: 90%;
+              margin-left: 15px;
+              font-size: 13px;
+              font-family: PingFangSC-Regular, PingFang SC;
+              font-weight: 400;
+              color: rgba(51, 51, 51, 1);
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+            i {
+              position: absolute;
+              right: 6px;
+              top: 10px;
+            }
+          }
+          .dropDownItemContainer {
+            width: 100%;
+            height: auto;
+            border: 1px solid #f3f4f5;
+            background-color: #fff;
+            position: absolute;
+            z-index: 100;
+            .dropDownItem {
+              width: 100%;
+              height: 32px;
+              line-height: 32px;
+              position: relative;
+              &:hover {
+                background-color: #e6f7ff;
+              }
+              .dropDownItemSpan {
+                display: inline-block;
+                height: 32px;
+                width: 90%;
+                margin-left: 15px;
+                font-size: 13px;
+                font-family: PingFangSC-Regular, PingFang SC;
+                font-weight: 400;
+                color: rgba(51, 51, 51, 1);
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+            }
+            .selectOption {
+              background-color: #e6f7ff;
+            }
+          }
+        }
+        .multiDropDownContainer {
+          width: 100%;
+          position: relative;
+          .dropDownBtn {
+            width: 100%;
+            height: 32px;
+            border: 1px solid #f3f4f5;
+            line-height: 32px;
+            position: relative;
+            .dropDownBtnSpan {
+              display: inline-block;
+              height: 32px;
+              width: 90%;
+              margin-left: 15px;
+              font-size: 13px;
+              font-family: PingFangSC-Regular, PingFang SC;
+              font-weight: 400;
+              color: rgba(51, 51, 51, 1);
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+            i {
+              position: absolute;
+              right: 6px;
+              top: 10px;
+            }
+          }
+          .dropDownItemContainer {
+            width: 100%;
+            height: auto;
+            border: 1px solid #f3f4f5;
+            background-color: #fff;
+            position: absolute;
+            z-index: 100;
+            .dropDownItem {
+              width: 100%;
+              height: 32px;
+              line-height: 32px;
+              position: relative;
+              &:hover {
+                background-color: #e6f7ff;
+              }
+              .dropDownItemSpan {
+                display: inline-block;
+                height: 32px;
+                width: 90%;
+                margin-left: 15px;
+                font-size: 13px;
+                font-family: PingFangSC-Regular, PingFang SC;
+                font-weight: 400;
+                color: rgba(51, 51, 51, 1);
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+              i {
+                position: absolute;
+                right: 6px;
+                top: 10px;
+                color: #09bb07;
+              }
+            }
+            .selectOption {
+              background-color: #e6f7ff;
+            }
+          }
+        }
+      }
+      .ant-form {
+        .ant-form-item {
+          font-size: 13px;
+          margin-bottom: 0;
+          .ant-form-item-control-wrapper {
+            .ant-form-item-control {
+              .ant-form-explain {
+                margin-top: 7px;
+                margin-bottom: -8px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                p {
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+              }
+              .ant-form-item-children {
+                .ant-input-affix-wrapper {
+                  .ant-input {
+                    min-height: auto;
+                  }
+                }
+                .ant-select-selection--single {
+                  position: relative;
+                  height: 34px;
+                  cursor: pointer;
+                  font-size: 13px;
+                  border-radius: 0;
+                }
+              }
+            }
+          }
+          .ant-input {
+            min-height: 34px;
+            font-size: 14px;
+            border-radius: 0;
+          }
+          .SubmitBtn {
+            border-top: 1px dashed #B4B6BC;;
+            padding:16px 0 15px;
+            .ant-btn {
+              min-width: 110px;
+              height: 36px;
+              border-radius: 4px;
+              font-size: 14px;
+              font-family: $font-Family;
+              font-weight: 400;
+              line-height: 36px;
+            }
+          }
+
+          .fileUploadContainer {
+            .ant-upload {
+              width: 260px;
+              height: 34px;
+              border-radius: 4px;
+              .ant-btn {
+                width: 260px;
+                height: 34px;
+                border-radius: 4px;
+                border: 1px dashed rgba(206, 207, 213, 1);
+                .fileUploadStatus {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  img {
+                    width: 20px;
+                    height: 20px;
+                  }
+                  span {
+                    display: inline-block;
+                    margin-left: 3px;
+                    font-size: 13px;
+                    font-family: "PingFangSC-Regular", "PingFang SC";
+                    font-weight: 400;
+                    margin-left: 3px;
+                    color: rgba(51, 51, 51, 1);
+                  }
+                  i {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: rgba(51, 51, 51, 1);
+                  }
+                }
+              }
+            }
+            .showFileList {
+              max-height: 121px;
+              overflow-y: auto;
+              width: 300px;
+              &::-webkit-scrollbar-thumb {
+                background: #D4D5D7;
+              }
+              &::-webkit-scrollbar {
+                height: 5px;
+              }
+              // &::-webkit-scrollbar-track {
+              //   box-shadow: 0 0;
+              //   background-color: rgba(255, 255, 255, 0);
+              // }
+              // &::-webkit-scrollbar-track-piece {
+              //   background-color: rgba(255, 255, 255, 0);
+              // }
+              &:hover {
+                cursor: auto;
+              }
+              .fileItem {
+                width: 285px;
+                height: 34px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                margin-top: 5px;
+                .fileName {
+                  width: 260px;
+                  height: 34px;
+                  background: rgba(239, 240, 248, 1);
+                  border-radius: 5px;
+                  display: flex;
+                  align-items: center;
+                  i {
+                    margin-left: 17px;
+                  }
+                  span {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    display: inline-block;
+                    margin-left: 8px;
+                    font-size: 13px;
+                    font-family: "PingFangSC-Regular", "PingFang SC";
+                    font-weight: 400;
+                    color: rgba(51, 51, 51, 1);
+                  }
+                }
+                img {
+                  position: absolute;
+                  widows: 16px;
+                  height: 16px;
+                  right: 0px;
+                }
+              }
+            }
+          }
+          .imageUploadContainer {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            .ant-upload {
+              display: inline-block;
+              width: 150px;
+              height: 116px;
+              border-radius: 4px;
+              margin-bottom: 7px;
+              .ant-btn {
+                width: 100%;
+                height: 100%;
+                border: 1px dashed rgba(206, 207, 213, 1);
+                i {
+                  color: rgba(0, 122, 255, 1);
+                  font-size: 25px;
+                  margin-bottom: 8px;
+                }
+                p {
+                  font-family: "PingFangSC-Regular", "PingFang SC";
+
+                  &:nth-child(2) {
+                    font-size: 13px;
+                    font-weight: 400;
+                    color: rgba(119, 119, 119, 1);
+                  }
+                  &:nth-child(3) {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: rgba(204, 204, 204, 1);
+                  }
+                }
+              }
+            }
+            .img-item-container {
+              display: flex;
+              width: 520px;
+              margin-left: 15px;
+              overflow-x: auto;
+              &::-webkit-scrollbar-thumb {
+                background: #D4D5D7;
+              }
+              &::-webkit-scrollbar {
+                height: 5px;
+              }
+              // &::-webkit-scrollbar-track {
+              //   box-shadow: 0 0;
+              //   background-color: rgba(255, 255, 255, 0);
+              // }
+              // &::-webkit-scrollbar-track-piece {
+              //   background-color: rgba(255, 255, 255, 0);
+              // }
+              &:hover {
+                cursor: auto;
+              }
+              .imageItem {
+                flex-basis: 150px;
+                flex-shrink: 0;
+                width: 150px;
+                height: 116px;
+                margin-right: 9px;
+                margin-bottom: 7px;
+                position: relative;
+                &:nth-child(2) {
+                  margin-left: 9px;
+                }
+                img {
+                  width: 100%;
+                  height: 100%;
+                  z-index: -1;
+                }
+                .deleteBtn {
+                  z-index: 111;
+                  position: absolute;
+                  top: 7px;
+                  right: 6px;
+                  img {
+                    width: 15px;
+                    height: 15px;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .formChildContainer {
+          width: 100%;
+          max-height: 160px;
+          // border: 0.5px solid rgba(214,216,222,1);
+          // border: 0.5px solid rgba(214, 216, 222, 1);
+          overflow: auto;
+          overflow: auto;
+          &:hover {
+            &::-webkit-scrollbar-thumb {
+              background-color: #D4D5D7;
+              box-shadow: none;
+            }
+          }
+          &::-webkit-scrollbar {
+            height: 4px;
+          }
+          &::-webkit-scrollbar-thumb {
+            background-color: transparent;
+            box-shadow: none;
+          }
+          // &::-webkit-scrollbar-track {
+          //   box-shadow: 0 0;
+          //   background-color: rgba(255, 255, 255, 0);
+          // }
+          // &::-webkit-scrollbar-track-piece {
+          //   background-color: rgba(255, 255, 255, 0);
+          // }
+          .TitleContainer {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            .componentTitle {
+              height: 30px;
+              padding: 5px;
+              line-height: 20px;
+              font-weight: 400;
+              flex: 0 0 140px;
+              border-right: 1px solid rgba(214, 216, 222, 1);
+              border-bottom: 1px solid rgba(214, 216, 222, 1);
+              border-top: 1px solid rgba(214, 216, 222, 1);
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              &:nth-child(1) {
+                position: absolute;
+                border-left: 1px solid rgba(214, 216, 222, 1);
+                left: 0px;
+                top: 0px;
+                width: 40px;
+              }
+              &:nth-child(2) {
+                margin-left: 40px;
+              }
+            }
+            .componentTitle-required {
+              height: 30px;
+              padding: 5px;
+              line-height: 20px;
+              font-weight: 400;
+              flex: 0 0 140px;
+              border-right: 1px solid rgba(214, 216, 222, 1);
+              border-bottom: 1px solid rgba(214, 216, 222, 1);
+              border-top: 1px solid rgba(214, 216, 222, 1);
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              &:nth-child(1) {
+                position: absolute;
+                border-left: 1px solid rgba(214, 216, 222, 1);
+                left: 0px;
+                top: 0px;
+                width: 40px;
+              }
+              &:nth-child(2) {
+                margin-left: 40px;
+              }
+              &::after {
+                content: "*";
+                margin: 0 0 0 2;
+                color: red;
+                top: 0.5px;
+              }
+            }
+          }
+          .contentContainer {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            .componentContent {
+              &:hover {
+                background-color: #f1f2f4;
+                .ant-input {
+                  background-color: #f1f2f4;
+                }
+              }
+              height: 40px;
+              width: 140px;
+              padding: 3px;
+              display: flex;
+              flex: 0 0 140px;
+              text-align: center;
+              align-items: center;
+              justify-content: center;
+
+              border-right: 1px solid rgba(214, 216, 222, 1);
+              border-bottom: 1px solid rgba(214, 216, 222, 1);
+              &:nth-child(1) {
+                border-left: 1px solid rgba(214, 216, 222, 1);
+                position: absolute;
+                text-align: center;
+                left: 0px;
+                top: 0px;
+                width: 40px;
+                img {
+                  display: none;
+                }
+              }
+              &:nth-child(2) {
+                margin-left: 40px;
+              }
+              .inputContainer {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                position: relative;
+                align-items: center;
+                .ant-input {
+                  width: 96px;
+                  height: 80%;
+                  border: none;
+                  padding: 0px;
+                  box-shadow: none;
+                  outline: none;
+                }
+                input[type="number"] {
+                  -moz-appearance: textfield;
+                }
+                input[type="number"]::-webkit-inner-spin-button,
+                input[type="number"]::-webkit-outer-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+                }
+                img {
+                  position: absolute;
+                  right: 4px;
+                  height: 32px;
+                  width: 32px;
+                }
+              }
+              .ant-select {
+                width: 95%;
+                height: 80%;
+                margin-bottom: 6px;
+              }
+              .checkboxComponent {
+                width: 95%;
+                height: 90%;
+                display: flex;
+                position: relative;
+                align-items: center;
+                .dataSpan {
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  display: block;
+                  width: 95px;
+                  text-align: left;
+                }
+                img {
+                  position: absolute;
+                  right: 3px;
+                  height: 100%;
+                  width: 32px;
+                }
+              }
+              .dataComponent {
+                width: 100%;
+                height: 100%;
+                line-height: 35px;
+                text-align: left;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+              }
+            }
+            .activeContent {
+              border: 1px dashed #007aff;
+            }
+            .has-value-error {
+              border: 1px solid red;
+            }
+          }
+        }
+        .formChildAddBtn {
+          .ant-btn {
+            margin-left: 0px;
+            text-align: left;
+            span {
+              margin-left: 0px;
+              font-size: 12px;
+              font-weight: 400;
+            }
+          }
+        }
+      }
+      .row-layout {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .column-layout {
+        display: flex;
+        flex-direction: column;
+      }
+      .ant-checkbox-wrapper + .ant-checkbox-wrapper {
+        margin-left: 0;
+        span {
+          word-break: break-all;
+          line-height: 22px;
+        }
+      }
+    }
+  }
+}
+
+.ant-calender {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+.ant-calendar-header .ant-calendar-prev-century-btn,
+.ant-calendar-header .ant-calendar-next-century-btn,
+.ant-calendar-header .ant-calendar-prev-decade-btn,
+.ant-calendar-header .ant-calendar-next-decade-btn,
+.ant-calendar-header .ant-calendar-prev-month-btn,
+.ant-calendar-header .ant-calendar-next-month-btn,
+.ant-calendar-header .ant-calendar-prev-year-btn,
+.ant-calendar-header {
+  .ant-calendar-prev-year-btn,
+  .ant-calendar-prev-month-btn,
+  .ant-calendar-next-month-btn,
+  .ant-calendar-next-year-btn {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.ant-calendar-year-panel-header .ant-calendar-year-panel-prev-century-btn,
+.ant-calendar-year-panel-header .ant-calendar-year-panel-next-century-btn,
+.ant-calendar-year-panel-header .ant-calendar-year-panel-prev-decade-btn,
+.ant-calendar-year-panel-header .ant-calendar-year-panel-next-decade-btn,
+.ant-calendar-year-panel-header .ant-calendar-year-panel-prev-month-btn,
+.ant-calendar-year-panel-header .ant-calendar-year-panel-next-month-btn,
+.ant-calendar-year-panel-header .ant-calendar-year-panel-prev-year-btn,
+.ant-calendar-month-panel-header .ant-calendar-month-panel-prev-century-btn,
+.ant-calendar-month-panel-header .ant-calendar-month-panel-prev-decade-btn,
+.ant-calendar-month-panel-header .ant-calendar-month-panel-prev-year-btn,
+.ant-calendar-month-panel-header .ant-calendar-month-panel-next-year-btn,
+.ant-calendar-decade-panel-header .ant-calendar-decade-panel-prev-century-btn,
+.ant-calendar-decade-panel-header .ant-calendar-decade-panel-next-century-btn {
+  display: flex;
+  align-items: center;
+}
+
+.ant-calendar-year-panel-header,
+.ant-calendar-month-panel-header,
+.ant-calendar-decade-panel-header {
+  height: fit-content;
+}
+
+.ant-calendar-year-panel-table,
+.ant-calendar-month-panel-table,
+.ant-calendar-decade-panel-table {
+  height: 87%;
+}
+
+.localposition-container {
+  .loaction-tip {
+    line-height: 21px;
+    margin-bottom: 10px;
+
+    display: block;
+    width: 240px;
+    color: #999;
+  }
+  .ant-btn {
+    width: 330px;
+  }
+  img {
+    margin-right: 7px;
+  }
+}
+
+.normalProver {
+  width: 250px !important;
+  .ant-popover-inner {
+    .ant-popover-inner-content {
+      // width: auto;
+      padding: 6.667% 15px;
+      // padding: 0% 0%;
+      .ant-radio-wrapper {
+        display: block;
+        word-break: break-all;
+      }
+      .ant-checkbox-wrapper {
+        display: block;
+        margin-left: 0px;
+        word-break: break-all;
+      }
+      .dropDownWrapper {
+        p {
+          &:hover {
+            background-color: #eaeced;
+          }
+        }
+      }
+      .formChildFileUpload {
+        width: 216px;
+        .ant-upload {
+          width: 216px;
+          .ant-btn {
+            width: 100%;
+            height: 28px;
+            background-color: rgba(38, 124, 255, 1);
+            border-radius: 5px;
+            color: white;
+          }
+        }
+        .showFileList {
+          width: 100%;
+          p {
+            margin-top: 30px;
+            font-size: 13px;
+            font-family: "PingFangSC-Regular", "PingFang SC";
+            font-weight: 400;
+            color: rgba(170, 170, 170, 1);
+          }
+          .fileItem {
+            width: 100%;
+            height: 18px;
+            margin-top: 5px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            .fileItemSpan {
+              font-size: 13px;
+              font-family: "PingFangSC-Regular", "PingFang SC";
+              overflow: hidden;
+              white-space: nowrap;
+              font-weight: 400;
+              text-overflow: ellipsis;
+              color: #666666;
+              display: block;
+              width: 200px;
+            }
+            i {
+              color: rgba(51, 132, 254, 1);
+              font-size: 15px;
+              right: 3px;
+              position: absolute;
+            }
+            img {
+              position: absolute;
+              width: 15px;
+              height: 15px;
+              right: 3px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.addressProver {
+  width: 515px !important;
+  .form-address {
+    width: 450px;
+    .ant-select {
+      width: 140px;
+      .ant-select-selection-selected-value {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+.dropDownProver {
+  width: 687px !important;
+  height: auto !important;
+  padding-top: 0px !important;
+  .ant-popover-content {
+    margin-top: -2px;
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner {
+      .ant-popover-inner-content {
+        padding: 0px !important;
+        .dropDownItem {
+          width: 100%;
+          height: 32px;
+          line-height: 32px;
+          position: relative;
+          &:hover {
+            background-color: #e6f7ff;
+          }
+          .dropDownItemSpan {
+            display: inline-block;
+            height: 32px;
+            width: 90%;
+            margin-left: 15px;
+            font-size: 13px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+        .selectOption {
+          background-color: #e6f7ff;
+        }
+      }
+    }
+  }
+}
+
+.multiDropDownProver {
+  width: 687px !important;
+  height: auto !important;
+  padding-top: 0px !important;
+  .ant-popover-content {
+    margin-top: -2px;
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner {
+      .ant-popover-inner-content {
+        padding: 0px !important;
+        .dropDownItem {
+          width: 100%;
+          height: 32px;
+          line-height: 32px;
+          position: relative;
+          &:hover {
+            background-color: #e6f7ff;
+          }
+          .dropDownItemSpan {
+            display: inline-block;
+            height: 32px;
+            width: 90%;
+            margin-left: 15px;
+            font-size: 13px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          i {
+            position: absolute;
+            right: 6px;
+            top: 10px;
+            color: #09bb07;
+          }
+        }
+        .selectOption {
+          background-color: #e6f7ff;
+        }
+      }
+    }
+  }
+}
+
+.checkboxProver {
+  width: 250px !important;
+  .ant-popover-inner {
+    .ant-popover-inner-content {
+      // width: auto;
+      padding: 6.667% 15px;
+      // padding: 0% 0%;
+      .checkboxGroup {
+        height: auto;
+        width: 100%;
+        cursor: pointer;
+        // line-height: 24px;
+        .checkboxOption {
+          i {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #91a1b7;
+            position: relative;
+            background: #fff;
+            transition: all 218ms ease-in-out;
+            top: 2px;
+            &:before {
+              content: " ";
+              display: block;
+              opacity: 1;
+              height: 6px;
+              width: 10px;
+              border-left: solid 2px #fff;
+              border-bottom: solid 2px #fff;
+              position: absolute;
+              top: 2px;
+              left: 1px;
+              transform: rotate(-45deg);
+            }
+          }
+          span {
+            margin-left: 5px;
+          }
+          .selectOption {
+            background-color: #007aff;
+          }
+        }
+      }
+    }
+  }
+}
+
+.radioButtonsProver {
+  width: 250px !important;
+  .ant-popover-inner {
+    .ant-popover-inner-content {
+      // width: auto;
+      padding: 6.667% 15px;
+      // padding: 0% 0%;
+      .radioGroup {
+        height: auto;
+        width: 100%;
+        cursor: pointer;
+        // line-height: 24px;
+        .radioOption {
+          .out_i {
+            display: inline-block;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #91a1b7;
+            position: relative;
+            background: #fff;
+            transition: all 218ms ease-in-out;
+            top: 2px;
+
+            line-height: 14px;
+            .inner_i {
+              display: inline-block;
+              border-radius: 50%;
+              width: 8px;
+              height: 8px;
+              position: absolute;
+              left: 2px;
+              top: 2.5px;
+              transition: all 218ms ease-in-out;
+            }
+
+            // &:before {
+            //   content: " ";
+            //   display: block;
+            //   opacity: 1;
+            //   width: 6px;
+            //   height: 6px;
+            //   border-radius: 50%;
+            //   background: #fff;
+            //   position: absolute;
+            //   top: 50%;
+            //   left: 50%;
+            //   transform: translate(-50%, -50%);
+            // }
+          }
+          span {
+            margin-left: 5px;
+          }
+          .selectOption {
+            background-color: #007aff;
+          }
+        }
+      }
+    }
+  }
+}
+
+.formChild-DropDownProver {
+  width: 140px !important;
+  min-width: 140px !important;
+  height: auto !important;
+  padding-top: 0px !important;
+  .ant-popover-content {
+    margin-top: 1px;
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner {
+      .ant-popover-inner-content {
+        padding: 0px !important;
+        .dropDownItem {
+          width: 100%;
+          height: 28px;
+          line-height: 28px;
+          position: relative;
+          &:hover {
+            background-color: #e6f7ff;
+          }
+          .dropDownItemSpan {
+            display: inline-block;
+            height: 32px;
+            width: 90%;
+            margin-left: 6px;
+            font-size: 13px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+        .selectOption {
+          background-color: #e6f7ff;
+        }
+      }
+    }
+  }
+}
+
+.formChild-multiDropDownProver {
+  width: 140px !important;
+  min-width: 140px !important;
+  height: auto !important;
+  padding-top: 0px !important;
+  .ant-popover-content {
+    margin-top: 1px;
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner {
+      .ant-popover-inner-content {
+        padding: 0px !important;
+        .dropDownItem {
+          width: 100%;
+          height: 28px;
+          line-height: 28px;
+          position: relative;
+          &:hover {
+            background-color: #e6f7ff;
+          }
+          .dropDownItemSpan {
+            display: inline-block;
+            height: 32px;
+            width: 90%;
+            margin-left: 6px;
+            font-size: 13px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          i {
+            position: absolute;
+            right: 6px;
+            top: 6px;
+            color: #09bb07;
+          }
+        }
+        .selectOption {
+          background-color: #e6f7ff;
+        }
+      }
+    }
+  }
+}

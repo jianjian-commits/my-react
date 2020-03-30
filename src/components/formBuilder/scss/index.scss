@@ -1,0 +1,104 @@
+@import "./components/errorPage.scss";
+// @import "~antd/dist/antd.css";
+@import "~antd-mobile/dist/antd-mobile.css";
+@import "./base/base.scss";
+@import "./base/isMobile.scss";
+@import "./base/icon.scss";
+@import "./base/message.scss";
+@import "./components/home.scss";
+@import "./components/formSubmitData.scss";
+@import "./utils/variables.scss";
+@import "./components/form_builder/react-star-rating";
+@import "./components/form_builder/react-select";
+@import "./components/form_builder/react-bootstrap-slider";
+@import "./components/form_builder/react-date-picker";
+@import "./components/form_builder/react-draft";
+@import "./components/form_builder/form-builder";
+@import "./components/form_builder/form-builder-form";
+@import "./components/form_builder/form-data-link.scss";
+
+@import "./components/layout.scss";
+@import "./components/header.scss";
+@import "./components/submisson.scss";
+@import "./components/confirm.scss";
+@import "./components/NavBar.scss";
+@import "./components/dataLinkageModel.scss";
+@import "./components/formModal.scss";
+@import "./components/formDataDetail.scss";
+@import "./components/submissonTitle.scss";
+
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #868e96;
+$gray-700: #495057;
+$gray-800: #373a3c;
+$gray-900: #212529;
+$black: #000;
+
+$blue: #2780e3;
+$indigo: #6610f2;
+$purple: #613d7c;
+$pink: #e83e8c;
+$red: #ff0039;
+$orange: #f2661f;
+$yellow: #bed32b;
+$green: #3fb618;
+$teal: #20c997;
+$cyan: #9954bb;
+$lightblue: lighten($blue, 20%);
+
+$primary: $blue;
+$secondary: $orange;
+$success: $green;
+$info: $lightblue;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-800;
+
+.logo {
+  height: 1.9em;
+}
+
+.text-blue {
+  color: #127abf;
+}
+
+.text-green {
+  color: #449414;
+}
+
+.hero-image {
+  display: inline;
+  height: 2em;
+}
+
+#main {
+  margin-top: 10px;
+}
+body {
+  background: #f3f4f5;
+}
+
+/*滚动条样式*/
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  // box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #D4D5D7;
+}
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  // box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  background: #D4D5D7;
+}

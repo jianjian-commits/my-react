@@ -1,0 +1,8 @@
+$slider-horizontal-width: 100%;
+
+// bootstrap 影响 antd， 样式修正, 放到 formBuilder 下声明
+
+.formBuilder {
+  @import "../../../../../../node_modules/bootstrap-slider/src/sass/bootstrap-slider";
+  @import "../../../../../../node_modules/bootstrap/scss/bootstrap.scss";
+}

@@ -1,0 +1,72 @@
+// modal覆盖样式
+.appModalStyles {
+  :global(.ant-modal-content){
+    box-shadow: 0px 4px 30px rgba(163, 170, 177, 0.25);
+  }
+  :global(.ant-modal-header) {
+    border-bottom: 0;
+    padding: 33px 27px 16px 27px;
+  }
+  :global(.ant-modal-footer) {
+    border-top: 0;
+    padding: 0 16px 25px 16px;
+    button {
+      width: 87px;
+    }
+    button:first-child{
+      border: 1px solid #D6D8DE;
+      &:hover{
+        border: 1px solid #B6B6BA !important;
+        color: #777F97;
+        background: #F3F3F3;
+      }
+    }
+    button:last-child:hover{
+      background: #579AFF;
+    }
+  }
+  :global(.ant-modal-body) {
+    padding: 0 25px 20px 25px;
+    form > div {
+      margin-bottom: 15px;
+    }
+  }
+  :global(.ant-form-item-label) {
+    label {
+      color: #777f97;
+      line-height: 24px;
+    }
+    label:after {
+      content: "";
+    }
+  }
+  :global(.ant-form-explain) {
+    position: absolute;
+  }
+}
+.iconStyle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  img {
+    width: 40px;
+  }
+  .active {
+    border:2px solid #A2C7FF;
+    border-radius: 8px;
+  }
+  :hover{
+    border:2px solid #D8E7FF;
+    border-radius: 8px;
+  }
+}
+.stretch {
+  resize: none;
+  position: relative;
+}
+.text {
+  position: absolute;
+  font-size: 13px;
+  left: 411px;
+  top: 100px;
+}

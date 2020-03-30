@@ -1,0 +1,49 @@
+.form-builder {
+  .ant-input {
+    color: #565c6e;
+    border-radius: 0;
+    font-weight: 400;
+  }
+  .ant-message {
+    top: 272px;
+    width: 92%;
+    margin-left: 4%;
+    .ant-message-notice-content {
+      display: inline-block;
+      min-width: 186px;
+      border-radius: 6px;
+      padding: 0;
+      -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      pointer-events: all;
+      .ant-message-custom-content {
+        padding: 12px 22px;
+        span {
+          // display: inline-block;
+          line-height: 30px;
+          vertical-align: middle;
+          color: #333;
+          font-size: 15px;
+          font-family: "PingFangSC-Medium,PingFang SC";
+          font-weight: 500;
+          color: rgba(51, 51, 51, 1);
+        }
+      }
+      .ant-message-success {
+        padding: 12px 22px;
+        background: #ddfff1;
+        text-align: left;
+        .anticon {
+          color: #00c9a0;
+          margin-right: 17px;
+          font-size: 26px;
+          text-align: left;
+          svg {
+            display: inline-block;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+}

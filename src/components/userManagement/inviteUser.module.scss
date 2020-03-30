@@ -1,0 +1,33 @@
+.title {
+  font-size: 20px;
+  line-height: 26px;
+  color: #000;
+}
+
+.text {
+  font-size: 14px;
+  margin: 43px 0 29px;
+  color: #333333;
+}
+
+.btn {
+  width: 104px;
+  height: 36px !important;
+  background: #2a7fff !important;
+  border-radius: 3px !important;
+  svg{
+    margin: 0 6px 0 0;
+    rect{
+      fill:#fff;
+    }
+  }
+}
+
+.warn {
+  color: #b6b6ba;
+  margin-top: 18px;
+}
+
+.action {
+  color: #666;
+}
