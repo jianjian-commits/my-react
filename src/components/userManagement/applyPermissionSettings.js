@@ -279,7 +279,7 @@ const thunkSetting = (state, settingValue, setState, disabled, visMete) => {
   return (
     <>
       <div className={Styles.radioThunk}>
-        <div style={{ border: visMete ? "none" : "1px solid #d6d8de;" }}>
+        <div style={{ borderBottom: visMete ? "none" : "1px solid #d6d8de" }}>
           <span>{blackSpan(Mete[dat.label])}</span>
           <Radio.Group
             onChange={onChange}
@@ -335,6 +335,18 @@ const radioData = ({ state, dat, formId, value }) => {
   });
 };
 const crreteData = ({ defaultChecked, checked, state, dat, formId }) => {
+  console.log(
+    "defaultChecked",
+    defaultChecked,
+    "checked",
+    checked,
+    "state",
+    state,
+    "dat",
+    dat,
+    "formId",
+    formId
+  );
   const fi = state.data.filter(f => f.formId === formId);
   const fil = item => {
     return item.filter(f => f !== dat.value);
@@ -488,8 +500,7 @@ function handleSaveButton({ state, initialData, enterPermission }) {
         message.error(res.msg || "保存应用权限失败");
       }
     },
-    err =>
-    catchError(err)
+    err => catchError(err)
   );
 }
 
@@ -509,8 +520,7 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
         message.error(res.msg || "获取应用权限失败");
       }
     },
-    err =>
-    catchError(err)
+    err => catchError(err)
   );
 }
 
