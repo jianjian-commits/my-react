@@ -13,6 +13,7 @@ import Approval from "../components/ApprovalProcess";
 import Process from "../components/ProcessAuto";
 import classes from "../styles/apps.module.scss";
 import { ApIcon, FbIcon, PbIcon } from "../assets/icons/apps";
+import { getAppList } from "../store/appReducer";
 
 const { Content, Sider } = Layout;
 
@@ -72,7 +73,10 @@ const AppServices = props => {
   if (!service) {
     return <Route render={() => <Redirect to={`/app/${appId}/setting`} />} />;
   }
-
+  if (!appName) {
+    props.getAppList();
+    return null;
+  }
   return (
     <Layout>
       <HomeHeader
@@ -113,9 +117,12 @@ const AppServices = props => {
     </Layout>
   );
 };
-export default connect(({ app, login, debug }) => ({
-  appList: app.appList,
-  permissions: (login.userDetail && login.userDetail.permissions) || [],
-  teamId: login.currentTeam && login.currentTeam.id,
-  debug: debug.isOpen
-}))(AppServices);
+export default connect(
+  ({ app, login, debug }) => ({
+    appList: app.appList,
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    teamId: login.currentTeam && login.currentTeam.id,
+    debug: debug.isOpen
+  }),
+  { getAppList }
+)(AppServices);

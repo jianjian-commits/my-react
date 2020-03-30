@@ -25,7 +25,8 @@ export const getFormAllSubmission = (appId, formId) => {
         headers: {
           // "X-Custom-Header": "ProcessThisImmediately",
           "Content-Type": "application/json",
-          appid:appId
+          appid:appId,
+          "isDataPage": true,
         }
       })
       .then(res => {

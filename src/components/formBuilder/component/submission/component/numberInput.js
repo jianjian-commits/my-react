@@ -82,8 +82,8 @@ class NumberInput extends React.Component {
     setTimeout(()=>{
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
+        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
       }
     },300)
   };

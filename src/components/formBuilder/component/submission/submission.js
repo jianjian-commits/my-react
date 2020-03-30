@@ -539,7 +539,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <Email
                   forms={forms}
@@ -558,7 +558,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <PhoneInput
                   forms={forms}
@@ -577,7 +577,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <IdCard
                   forms={forms}
@@ -596,7 +596,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <SingleText
                   forms={forms}
@@ -615,7 +615,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <NumberInput
                   forms={forms}
@@ -634,7 +634,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <RadioButtonsMobile
@@ -663,7 +663,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <Checkbox
                   forms={forms}
@@ -682,7 +682,7 @@ class Submission extends Component {
                 key={item.key}
                 className="single-drop-down"
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <DropDownMobile
@@ -710,7 +710,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <DateInputMobile
@@ -736,7 +736,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <HandWrittenSignatureMobile
@@ -761,7 +761,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <FileUploadMobile
@@ -792,7 +792,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <TextArea
                   forms={forms}
@@ -810,7 +810,7 @@ class Submission extends Component {
                 key={item.key}
                 style={{ zIndex: 300 - i }}
                 className="multiple-drop-down"
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <MultiDropDownMobile
@@ -838,7 +838,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <ImageUploadMobile
@@ -868,7 +868,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <PositionComponentMobile
@@ -895,7 +895,7 @@ class Submission extends Component {
                 key={item.key}
                 style={{ zIndex: 300 - i }}
                 className="formChild-container"
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <FormChildMobile
@@ -948,7 +948,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <AddressMobile
@@ -1116,6 +1116,7 @@ class Submission extends Component {
       });
     }
 
+    console.log(layout)
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];
@@ -1178,6 +1179,7 @@ class Submission extends Component {
                       rowHeight={22}
                       width={870}
                       onLayoutChange={layout => {
+                        console.log(layout)
                         this.setState({ currentLayout: layout });
                       }}
                     >

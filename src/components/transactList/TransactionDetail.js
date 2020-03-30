@@ -1,8 +1,19 @@
 import React, { useEffect } from "react";
-import { Button, Row, Col, List, Table, Tabs , Modal, Icon, Input, message } from "antd";
+import {
+  Button,
+  Row,
+  Col,
+  List,
+  Table,
+  Tabs,
+  Modal,
+  Icon,
+  Input,
+  message
+} from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../../utils/request";
-import { EditIcon, DeleteIcon }from './svgIcon/index'
+import { EditIcon, DeleteIcon } from "./svgIcon/index";
 
 import clasess from "./transactionDetail.module.scss";
 const { TabPane } = Tabs;
@@ -44,7 +55,7 @@ const columns = [
   {
     title: "审批ID",
     dataIndex: "id",
-    className:"approveCol",
+    className: "approveCol"
   },
   {
     title: "环节名称",
@@ -79,53 +90,68 @@ const fakeData = [
   }
 ];
 
-
-const WithdrawApprovalButton = (props) =>{
-// 撤回审批按钮
+const WithdrawApprovalButton = props => {
+  // 撤回审批按钮
   const { isAllowedWithDraw, withdraw } = props;
-  return (
-    isAllowedWithDraw ?
-    (<Button type="primary" className={clasess.btn} onClick={withdraw}>撤回</Button>)
-    :<></>
-  )
-}
+  return isAllowedWithDraw ? (
+    <Button type="primary" className={clasess.btn} onClick={withdraw}>
+      撤回
+    </Button>
+  ) : (
+    <></>
+  );
+};
 
-const EditApprovalButton = (props) =>{
+const EditApprovalButton = props => {
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
   return (
-      <div className={clasess.toolbarBox}>
-        <span><Icon component={EditIcon} style={{marginRight:5, cursor:'pointer'}}/>编辑</span> 
-        <span><Icon component={DeleteIcon} style={{marginRight:5, cursor:'pointer'}}/>删除</span> 
-      </div>
-  )
-}
+    <div className={clasess.toolbarBox}>
+      <span>
+        <Icon
+          component={EditIcon}
+          style={{ marginRight: 5, cursor: "pointer" }}
+        />
+        编辑
+      </span>
+      <span>
+        <Icon
+          component={DeleteIcon}
+          style={{ marginRight: 5, cursor: "pointer" }}
+        />
+        删除
+      </span>
+    </div>
+  );
+};
 
-
-const ApprovalProcessButtons = (props) =>{
+const ApprovalProcessButtons = props => {
   // 当前节点处理人
   // 特殊情况 多人审批 是否有人审批过？
   // 审批流程中的按钮(通过或者拒绝)
-  const { isApprovalProcessor, isMultiPersonApproval, isApproved } = props;
+  const {
+    isApprovalProcessor,
+    isMultiPersonApproval,
+    isApproved
+  } = props;
   const [currentApproved, setCurrentApproved] = React.useState(false);
   const [approveMsg, setApproveMsg] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const handleApproval = () =>{
+  const handleApproval = () => {
     // 显示弹窗填意见
-  }
+  };
   // isApprovalProcessor = true, isMultiPersonApproval = false, isApproved = false
 
-
-  const handlePass = () =>{
+  const handlePass = () => {
     setCurrentApproved(true);
     setVisible(true);
-  }
+  };
 
-  const handleRefused = (e) =>{
+  const handleRefused = e => {
     setCurrentApproved(false);
     setVisible(true);
-  }
+  };
 
   const handleOk = () => {
     // 这里调用审批意见的接口
@@ -133,20 +159,20 @@ const ApprovalProcessButtons = (props) =>{
     setTimeout(() => {
       setVisible(false);
       setConfirmLoading(false);
-      postApproveMsg()
+      postApproveMsg();
     }, 2000);
   };
 
   const handleCancel = () => {
-    setVisible(false)
+    setVisible(false);
   };
 
-  async function postApproveMsg(){
+  async function postApproveMsg() {
     setVisible(false);
     setConfirmLoading(false);
-    try{
-      console.log("approveMsg", approveMsg)
-      const res = await request("/sysRole/list",{
+    try {
+      console.log("approveMsg", approveMsg);
+      const res = await request("/sysRole/list", {
         // headers:{
         //   appid: appId
         // }
@@ -164,63 +190,75 @@ const ApprovalProcessButtons = (props) =>{
     }
   }
 
-
-
-  return (
-    isApprovalProcessor ?
-    (
-      <>
-      <Button type="danger" onClick={handleRefused} className={clasess.btn} style={{backgroundColor : "#fff",borderColor:"#fff",color:"#E71010"}}>拒绝</Button>
-      <Button type="primary" onClick={handlePass} className={clasess.btn}>通过</Button>
+  return isApprovalProcessor ? (
+    <>
+      <Button
+        type="danger"
+        onClick={handleRefused}
+        className={clasess.btn}
+        style={{
+          backgroundColor: "#fff",
+          borderColor: "#fff",
+          color: "#E71010"
+        }}
+      >
+        拒绝
+      </Button>
+      <Button type="primary" onClick={handlePass} className={clasess.btn}>
+        通过
+      </Button>
       <Modal
-          title="审批意见"
-          visible={visible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          confirmLoading={confirmLoading}
-        >
-          <Input.TextArea
-            allowClear
-            style={{resize:"none"}}
-            onChange={(e)=>{setApproveMsg(e.target.value)}}
-          />
+        title="审批意见"
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        confirmLoading={confirmLoading}
+      >
+        <Input.TextArea
+          allowClear
+          style={{ resize: "none" }}
+          onChange={e => {
+            setApproveMsg(e.target.value);
+          }}
+        />
       </Modal>
     </>
-    ):(<></>)
-  )
-}
+  ) : (
+    <></>
+  );
+};
 
-const ApprovalStatus = (props) =>{
+const ApprovalStatus = props => {
   const { approveStatus = "going" } = props;
   switch (approveStatus) {
     case "approved":
-      return (<span style={{color : "#00c39c"}}>通过</span>)
+      return <span style={{ color: "#00c39c" }}>通过</span>;
       break;
     case "refused":
-      return (<span style={{color: "red"}}>已拒绝</span>)
+      return <span style={{ color: "red" }}>已拒绝</span>;
     case "going":
-        return (<span style={{color: "#ffa439"}}>进行中</span>)
+      return <span style={{ color: "#ffa439" }}>进行中</span>;
     default:
-      return <></>
+      return <></>;
       break;
   }
-}
+};
 
-const TransactionDetail = (props) => {
-  const [tabKey, setTabKey] =  React.useState("formDetail");
-  const [approveStatus, setApproveStatus] = React.useState("going")
+const TransactionDetail = props => {
+  const [tabKey, setTabKey] = React.useState("formDetail");
+  const [approveStatus, setApproveStatus] = React.useState("going");
   const history = useHistory();
 
-  const onClickBack = (e) => {
+  const onClickBack = e => {
     history.goBack();
   };
 
   function callback(key) {
-    setTabKey(key)
+    setTabKey(key);
   }
 
-  let operations ={}
-  const detailAuthority = true
+  let operations = {};
+  const detailAuthority = true;
   switch (tabKey) {
     case "formDetail":
       {
@@ -229,21 +267,26 @@ const TransactionDetail = (props) => {
       break;
     case "approvelFlow":
       {
-        operations = <div className={clasess.approvalbox}>审批状态：<ApprovalStatus approveStatus={approveStatus}/></div>
+        operations = (
+          <div className={clasess.approvalbox}>
+            审批状态：
+            <ApprovalStatus approveStatus={approveStatus} />
+          </div>
+        );
       }
-        break;
+      break;
     default:
       {
-        operations = (<></>)
+        operations = <></>;
       }
       break;
   }
 
   const ApprovalProcessButtonsOptions = {
-    isApprovalProcessor: false, 
+    isApprovalProcessor: false,
     isMultiPersonApproval: false,
     isApproved: false
-  }
+  };
 
   return (
     <div className={clasess.box}>
@@ -262,15 +305,20 @@ const TransactionDetail = (props) => {
         </Col>
         <Col>
           <div className={clasess.title}>
-           <ApprovalProcessButtons {...ApprovalProcessButtonsOptions}/>
-           <WithdrawApprovalButton  isAllowedWithDraw = {true} />
+            <ApprovalProcessButtons {...ApprovalProcessButtonsOptions} />
+            <WithdrawApprovalButton isAllowedWithDraw={true} />
           </div>
         </Col>
       </Row>
-      <Tabs className={clasess.tabsBackground} defaultActiveKey="detail" onChange={ callback } tabBarExtraContent={operations}>
+      <Tabs
+        className={clasess.tabsBackground}
+        defaultActiveKey="detail"
+        onChange={callback}
+        tabBarExtraContent={operations}
+      >
         <TabPane tab="表单详情" key="formDetail">
-         <List
-            style={{ border: "none"}}
+          <List
+            style={{ border: "none" }}
             bordered={true}
             itemLayout="vertical"
             dataSource={fakeFields}
