@@ -54,7 +54,8 @@ class FormSubmitData extends PureComponent {
       showFilterBoard: false,
       // 判断鼠标是否已经移出筛选容器,如果已经移出,则可以点击关闭;否则,反之.
       hiddenFilterBoardCanClick: true,
-      isLoading: false, // 加在数据的loading标志
+      isLoading: false, // 加在数据的loading标志,
+      formDataCache:[]
     };
   }
   showformDataDetail = id => {
@@ -139,7 +140,9 @@ class FormSubmitData extends PureComponent {
   componentDidMount() {
     let { formId, appId } = this.props;
     const {pageSize, currentPage} = this.state;
-    initToken()
+
+    if(this.props.searchStatus){
+      initToken()
       .then(() => {
         this.props.getSubmissionData({  
           appId: appId, 
@@ -149,10 +152,13 @@ class FormSubmitData extends PureComponent {
           total: -1, 
           callback: (isLoading)=>{this.setState({isLoading})}
           });
+          
       })
       .catch(err => {
         console.error(err);
       });
+    }
+
     this.setState({ formId: this.props.formId });
     document.querySelector("html").addEventListener('click',
       ()=> {
@@ -590,7 +596,15 @@ class FormSubmitData extends PureComponent {
       })
   }
   render() {
-    const { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
+    let { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
+    
+    if(formData.length !== 0) {
+      this.setState({formDataCache:formData});
+    }
+    if(formData.length === 0){
+      formData = this.state.formDataCache
+    }
+    let total = this.state.formDataCache.length===0? -1:this.props.submissionDataTotal;
     const controlCol = [
       {
         title: "操作",
@@ -774,12 +788,13 @@ class FormSubmitData extends PureComponent {
       formDataShowArray.push(obj);
     });
 
+    
     const paginationProps = {
       defaultCurrent: 1,
       position: "bottom",
       showQuickJumper: true,
       pageSize: this.state.pageSize,
-      total: this.props.submissionDataTotal,
+      total: total,
       loading: this.props.loading,
       current: this.state.currentPage,
       onChange: (current, pageSize) => {
