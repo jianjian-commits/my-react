@@ -37,7 +37,7 @@ const getNavigationList = navs => {
   if (navs.filter(v => !v.label).length > 0) return null;
   return (
     <div className={classes.breadCrumbs}>
-      <Breadcrumb separator={<RightOutlinedIcon className={classes.rightOutlined} />}>
+      <Breadcrumb separator={<RightOutlinedIcon />}>
         {navs.map(n => (
           <Breadcrumb.Item
             key={n.key}

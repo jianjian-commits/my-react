@@ -8,13 +8,15 @@ import {
   PermissionsModule
   // SettingModule
 } from "./DetailModule";
-import clx from "classnames"
-import classes from "./profile.module.scss"
+import { catchError } from "../../utils";
+import clx from "classnames";
+import classes from "./profile.module.scss";
+import { BreadRight } from "../../assets/icons";
 
 export const InnerHeader = ({ navs }) => {
   return (
     <>
-      <Breadcrumb separator=">">
+      <Breadcrumb separator={<BreadRight />}>
         {navs.map(n => (
           <Breadcrumb.Item
             key={n.key}
@@ -132,10 +134,7 @@ class GroupDetail1 extends Component {
         message.error(res.msg || "获取详情失败");
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err)
     }
   }
 
@@ -202,10 +201,7 @@ class GroupDetail1 extends Component {
         message.error(res.msg || "保存失败！");
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     } finally {
       this.props.enterDetail(false);
     }

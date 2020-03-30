@@ -17,6 +17,7 @@
 
 .metedate {
   &>div:nth-of-type(1) {
+    padding-bottom: 5px !important;
     font-weight: bold;
     font-size: 15px;
     color: rgba(72, 72, 72, 1);
@@ -64,9 +65,10 @@
 
 //** top
 .top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  height: 36px;
 }
 
 .back {
@@ -92,7 +94,8 @@
 }
 
 .btn {
-  &>button {
+  float: right;
+  & > button {
     margin-left: 20px;
     border-radius: 3px !important;
     width: 104px;
@@ -122,7 +125,7 @@
 
 //** meteData
 .meteData {
-  margin-top: 70px;
+  margin-top: 75px;
   background: #ffffff;
   box-shadow: 0px 0px 6px rgba(180, 198, 224, 0.28);
   position: relative;
@@ -137,7 +140,6 @@
     /* identical to box height */
     color: #777f97;
   }
-
   &>div:nth-child(1) {
     margin-bottom: 20px;
   }
@@ -275,6 +277,29 @@
         height: 12px;
         width: 6px;
         border: 2px solid #2a7fff !important;
+        border-left: none !important;
+        border-top: none !important;
+      }
+    }
+  }
+}
+
+.disabled {
+  &>span {
+    &>span {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #2a7fff;
+      box-sizing: border-box;
+      border-radius: 3px;
+      background-color: #ffffff !important;
+
+      &::after {
+        top: 44%;
+        left: 20% !important;
+        height: 12px;
+        width: 6px;
+        // border: 2px solid #2a7fff !important;
         border-left: none !important;
         border-top: none !important;
       }

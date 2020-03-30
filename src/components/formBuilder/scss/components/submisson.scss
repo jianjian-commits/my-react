@@ -124,7 +124,10 @@ body {
         // .single-drop-down {
         //   z-index: 100;
         // }
-        padding-left: 30px;
+        // padding-left: 30px;
+        &>div{
+          margin-left: 30px;
+        }
         .react-grid-item {
           .ant-form-item {
             font-size: 13px;
@@ -132,12 +135,13 @@ body {
             .ant-form-item-control-wrapper {
               .ant-form-item-control {
                 .ant-form-item-children {
-                  & input[type="text"] {
+                  &>input[type="text"] {
                     width: 405px;
                   }
-                  & textarea {
+                  &>.ant-input-affix-wrapper>textarea{
                     width: 405px;
                   }
+
                   .ant-input-affix-wrapper {
                     .ant-input {
                       min-height: auto;

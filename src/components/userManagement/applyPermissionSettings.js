@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
+import { catchError } from "../../utils";
 import { InnerHeader } from "../profileManagement/GroupDetail";
 
 const formMeteDataThead = [
@@ -26,12 +27,12 @@ const formDataThead = [
 const Mete = {
   DISPLAY: "是否可见",
   TABLE: [
-    { key: "FORM", value: "表单元数据" },
+    { key: "FORM", value: "表单数据" },
     { key: "AP", value: "审批流元数据" },
     { key: "PB", value: "自动化流程元数据" }
   ],
   displayApplySettingButton: "是否显示应用管理按钮",
-  allowCreateNewForm: "允许新建列表",
+  allowCreateNewForm: "允许新建表单",
   appSetting: "可见",
   createForm: "允许"
 };
@@ -250,7 +251,7 @@ const thunkForm = (
   );
 };
 
-const thunkSetting = (state, settingValue, setState, disabled) => {
+const thunkSetting = (state, settingValue, setState, disabled, visMete) => {
   const dat = state["state"][settingValue];
   const onChange = e => {
     const { value } = e.target;
@@ -278,7 +279,7 @@ const thunkSetting = (state, settingValue, setState, disabled) => {
   return (
     <>
       <div className={Styles.radioThunk}>
-        <div>
+        <div style={{ border: visMete ? "none" : "1px solid #d6d8de;" }}>
           <span>{blackSpan(Mete[dat.label])}</span>
           <Radio.Group
             onChange={onChange}
@@ -399,11 +400,19 @@ const Permission = ({
       </div>
       {state["state"].appSetting &&
         settingDisplay &&
-        thunkSetting(state, "appSetting", setState, disabled)}
+        thunkSetting(
+          state,
+          "appSetting",
+          setState,
+          disabled,
+          !state["state"]["appSetting"]["checked"]
+        )}
       {state["state"].createForm &&
+        (state["state"]["appSetting"]["checked"] || value === "data") &&
         settingDisplay &&
         thunkSetting(state, "createForm", setState, disabled)}
       {state["state"][permissionsValue] &&
+        (state["state"]["appSetting"]["checked"] || value === "data") &&
         thunkForm(
           state,
           permissionsValue,
@@ -424,7 +433,6 @@ const Top = ({
   enterPermission,
   enterDetail
 }) => {
-  console.log("roleName", roleName);
   const navigationList = [
     {
       key: 0,
@@ -481,10 +489,7 @@ function handleSaveButton({ state, initialData, enterPermission }) {
       }
     },
     err =>
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      )
+    catchError(err)
   );
 }
 
@@ -505,10 +510,7 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
       }
     },
     err =>
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      )
+    catchError(err)
   );
 }
 
@@ -543,7 +545,7 @@ export default function ApplyPermissionSetting(props) {
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        className={Styles.checkBox}
+        className={disabled ? Styles.disabled : Styles.checkBox}
       />
     );
   };

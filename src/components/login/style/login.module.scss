@@ -157,7 +157,7 @@ $unHoverGray: #b6b6ba;
   width: 1016px;
   height: 510px;
   & .title {
-    padding-left: 80px;
+    padding-left: 73px;
     display: flex;
     & > div {
       font-style: normal;
@@ -198,7 +198,7 @@ $unHoverGray: #b6b6ba;
     & button {
       height: 40px !important;
       background: #1890ff;
-      opacity: 0.5;
+      // opacity: 0.5;
     }
     & > div:last-child {
       & button {
@@ -336,9 +336,11 @@ $unHoverGray: #b6b6ba;
   margin-top: 18px;
   width: 411px;
   height: 42px !important;
-  background: #2a7fff;
-  opacity: 0.5;
-  border-radius: 6px;
+  border-radius: 6px !important;
+  border: none !important;
+  :hover {
+    background: #1890ff !important;
+  }
 }
 
 .buttonSuffix {
@@ -500,16 +502,22 @@ $unHoverGray: #b6b6ba;
     width: 149px !important;
     height: 40px;
     border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
   }
   & > button:first-child {
-    color: #b6b6ba;
-    background: #f2f2f2;
-    border-color: #f2f2f2;
+    color: #777f97;
+    background: #ffffff;
+    box-shadow: 0px 3px 12px rgba(108, 121, 166, 0.1);
+    border-radius: 5px;
+    border: 1px solid #b6b6ba;
   }
   & > button:last-child {
     margin-left: 10px;
     color: #ffffff;
     background: #2a7fff;
+    opacity: 0.5;
+    border-radius: 6px;
   }
 }
 
@@ -520,4 +528,33 @@ $unHoverGray: #b6b6ba;
   align-items: center;
   justify-content: center;
   margin: 0 !important;
+  & > div {
+    display: flex;
+    width: 176px;
+    flex-wrap: wrap;
+    padding: 0;
+    & > div:first-child {
+      width: 35px;
+      margin-right: 14px;
+      margin-bottom: 0;
+    }
+    & > div:nth-child(2) {
+      width: 126px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 49px;
+      color: #333333;
+      text-align: left;
+    }
+    & > div:last-child {
+      width: 175px;
+      margin-top: 27px;
+      text-align: unset;
+      & > button{
+        width: 112px;
+        height: 36px;
+      }
+    }
+  }
 }

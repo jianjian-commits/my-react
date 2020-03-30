@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
-import { Checkbox, Button, Table, Input, Radio } from "antd";
+import { Checkbox, Button, Table, Input, Radio, ConfigProvider } from "antd";
 import classes from "./profile.module.scss";
 import moment from "moment";
 import { EditIcon } from "../../assets/icons";
-// import EditIcon from "../../assets/icons/index.js";
+import zhCN from "antd/es/locale/zh_CN";
 
 export const BaseInfoModule = ({
   disabled,
@@ -29,7 +29,9 @@ export const BaseInfoModule = ({
   ];
   return (
     <div className={classes.groupBasic}>
-      <div style={{ fontSize: "15px", color: "#777F97" }}>基本信息</div>
+      <div style={{ fontSize: "15px", color: "#777F97", marginBottom: "7px" }}>
+        基本信息
+      </div>
       <table>
         <tbody>
           {list.map((i, index) => (
@@ -125,12 +127,14 @@ export const AppManagerModule = ({
           <Radio value={false}>不允许</Radio>
         </Radio.Group>
       </div>
-      <Table
-        columns={columns}
-        dataSource={appManagerBos}
-        rowKey="appId"
-        pagination={false}
-      ></Table>
+      <ConfigProvider locale={zhCN}>
+        <Table
+          columns={columns}
+          dataSource={appManagerBos}
+          rowKey="appId"
+          pagination={false}
+        ></Table>
+      </ConfigProvider>
     </div>
   );
 };

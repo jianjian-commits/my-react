@@ -6,8 +6,9 @@ import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
-import InviteUser from "../modalInviteUser";
+import InviteUser from "../ModalInviteUser";
 import Authenticate from "../../shared/Authenticate";
+import { catchError } from "../../../utils";
 import { ReactComponent as Funnel } from "../../../assets/icons/teams/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
@@ -22,7 +23,7 @@ export default connect(
   { getCurrentTeam }
 )(function TeamMember({ loginData, getCurrentTeam }) {
   const { currentTeam } = loginData;
-  const [loading, setLoading] = React.useState(true)
+  const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState(null); //用户数据
   const [total, setTotal] = React.useState(null);
   const [onOff, setOnOff] = React.useState({
@@ -123,8 +124,8 @@ export default connect(
         loadingTimeout()
       })
       .catch(err => {
-        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
         loadingTimeout()
+        catchError(err);
         return currentTeam.id;
       });
     return clearTimeout(loadingTimeout())
@@ -156,9 +157,7 @@ export default connect(
           message.error(res.msg || "踢出失败");
         }
       })
-      .catch(err => {
-        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
-      });
+      .catch(err => catchError(err));
   };
   // 过滤组件开关显示
   const onClickFilter = () => {
@@ -181,7 +180,7 @@ export default connect(
       conditions: [
         { negative: false, rule: 'EQ', value: groupId }
       ],
-      properties: ['sysRoles']
+      properties: ['sysRoles.id']
     } : null
     const _newFiels = _fiels.filter(item => item !== null)
     setFilterConditions(_newFiels)
@@ -213,9 +212,7 @@ export default connect(
             message.error(res.msg || "变更失败");
           }
         })
-        .catch(err => {
-          message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
-        });
+        .catch(err => catchError(err));
     }
     setOnOff({
       ...onOff,
