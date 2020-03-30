@@ -12,3 +12,31 @@ export function catchError(err) {
     (err.response && err.response.data && err.response.data.msg) || "系统错误"
   );
 }
+// 防抖
+export const debounce = (fn, delay) => {
+  let timer;
+  return function() {
+    const args = arguments;
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+      timer = null;
+    }, delay);
+  };
+};
+
+// 节流
+export const throttle = (fn, delay) => {
+  let last = 0;
+  return function() {
+    const args = arguments;
+    const now = +new Date();
+    const offset = now - last;
+    if (offset > delay) {
+      last = now;
+      fn.apply(this, args);
+    }
+  };
+};

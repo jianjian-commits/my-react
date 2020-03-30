@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout, Menu, Badge, Button } from "antd";
 import { useHistory } from "react-router-dom";
 import User from "./UserSection";
@@ -101,13 +101,15 @@ export default connect(
   //     <PromptIcon />
   //   </Badge>
   // );
+  const [init, setInit] = useState(true);
   if (!transactList) {
     getTransactList({});
     return null;
-  }
-  const fetchData = () => {
+  } 
+  if (init && transactList) {
     getTransactList({});
-  };
+    setInit(false);
+  }
   return (
     <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
@@ -143,10 +145,10 @@ export default connect(
               // theme="dark"
               onClick={selectHandle}
             >
-              <Menu.Item key="/app/list" onClick={fetchData}>
+              <Menu.Item key="/app/list">
                 <span>我的应用</span>
               </Menu.Item>
-              <Menu.Item key="/backlog" onClick={fetchData}>
+              <Menu.Item key="/backlog">
                 <Badge dot offset={[-8, 8]} count={transactList.total}>
                   待办事项
                 </Badge>

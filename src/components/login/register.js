@@ -6,6 +6,7 @@ import PublicForm from "./PublicForm";
 import { registerParameter } from "./formItemConfig";
 import Styles from "./style/login.module.scss";
 import { catchError } from "../../utils";
+import { RegisteSuccessIcon, RegisteErrorIcon } from "../../assets/icons/login";
 
 export default connect()(function Register({
   history,
@@ -85,11 +86,22 @@ export default connect()(function Register({
   const registerResult = (
     <div className={Styles.result}>
       <Result
-        status={status ? "success" : "error"}
-        title={status ? "注册成功" : "注册失败, 请重试"}
+        title={status ? "恭喜您注册成功" : "注册失败"}
+        icon={
+          status ? (
+            <RegisteSuccessIcon />
+          ) : (
+            <RegisteErrorIcon style={{ marginTop: "7.86px" }} />
+          )
+        }
         extra={[
-          <Button type="primary" key={"success"} onClick={confirm}>
-            {status ? "OK" : "重新注册"}
+          <Button
+            type="primary"
+            key={"success"}
+            onClick={confirm}
+            style={{ marginLeft: status ? "31.5px" : "8.6px" }}
+          >
+            {status ? "立即登录" : "重新注册"}
           </Button>
         ]}
       />
