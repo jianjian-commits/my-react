@@ -8,9 +8,9 @@ export const initialState = {
   isLoading: false,
   loginData: null,
   isAuthenticated: !!localStorage.getItem("id_token"),
-  currentTeam: JSON.parse(localStorage.getItem("currentTeam")) || {},
-  userDetail: JSON.parse(localStorage.getItem("userDetail")) || {},
-  allTeam: JSON.parse(localStorage.getItem("allTeam")) || [],
+  currentTeam: {},
+  userDetail: {},
+  allTeam: [],
   error: null,
   isSpinning: false
 };
@@ -130,7 +130,6 @@ export const getUserDetail = () => async dispatch => {
   try {
     const res = await request(`/sysUser/current`);
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("userDetail", JSON.stringify(res.data));
       dispatch(fetchUserDetail(res.data));
     } else {
       message.error(res.msg || "个人信息获取失败");
@@ -145,7 +144,6 @@ export const getCurrentTeam = () => async dispatch => {
   try {
     const res = await request(`/team/current`);
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("currentTeam", JSON.stringify(res.data));
       dispatch(fetchCurrentTeam(res.data));
     } else {
       message.error(res.msg || "团队信息获取失败");
@@ -160,7 +158,6 @@ export const getAllTeam = () => async dispatch => {
   try {
     const res = await request(`/team/currentSysUser/all`);
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("allTeam", JSON.stringify(res.data));
       dispatch(fetchAllTeam(res.data));
     } else {
       message.error(res.msg || "获取全部团队信息失败");
@@ -175,7 +172,6 @@ export const initAllDetail = () => async dispatch => {
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("userDetail", JSON.stringify(res.data));
       await getAllTeam(res.data.id)(dispatch);
       getCurrentTeam()(dispatch);
       dispatch(fetchUserDetail(res.data));
