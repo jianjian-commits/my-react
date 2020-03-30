@@ -550,7 +550,7 @@ export default function ApplyPermissionSetting(props) {
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        className={Styles.checkBox}
+        className={disabled ? Styles.disabled : Styles.checkBox}
       />
     );
   };
