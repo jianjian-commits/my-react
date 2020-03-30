@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button, Icon, message } from "antd";
+import { Input as Inp, Button as Btn, Icon, message } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
 import itemsStyles from "./style/login.module.scss";
@@ -25,6 +25,21 @@ class Input extends React.Component {
         prefix={icon || unprefix ? null : meteImg[this.props.type]}
         placeholder={icon ? null : placeholder}
       />
+    );
+  }
+}
+
+class Button extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    const { children, style, className, ...rest } = this.props;
+    return (
+      <Btn {...rest} style={Object.assign(style)} className={clx(className)}>
+        {children}
+      </Btn>
     );
   }
 }
@@ -473,6 +488,7 @@ const submit = ({
             ? "rgba(24,144,255,1)"
             : "rgba(24,144,255,0.5)"
         }}
+        // onClick={throttle(e => (e.target.disabled = true), 3000)}
       >
         {payload === "login" && "登录"}
         {payload === "register" && "注册"}

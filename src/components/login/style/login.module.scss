@@ -157,7 +157,7 @@ $unHoverGray: #b6b6ba;
   width: 1016px;
   height: 510px;
   & .title {
-    padding-left: 80px;
+    padding-left: 73px;
     display: flex;
     & > div {
       font-style: normal;
@@ -528,4 +528,33 @@ $unHoverGray: #b6b6ba;
   align-items: center;
   justify-content: center;
   margin: 0 !important;
+  & > div {
+    display: flex;
+    width: 176px;
+    flex-wrap: wrap;
+    padding: 0;
+    & > div:first-child {
+      width: 35px;
+      margin-right: 14px;
+      margin-bottom: 0;
+    }
+    & > div:nth-child(2) {
+      width: 126px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 49px;
+      color: #333333;
+      text-align: left;
+    }
+    & > div:last-child {
+      width: 175px;
+      margin-top: 27px;
+      text-align: unset;
+      & > button{
+        width: 112px;
+        height: 36px;
+      }
+    }
+  }
 }
