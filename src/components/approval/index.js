@@ -20,35 +20,12 @@ export const ApprovalSection = props => {
   const [todos, setTodos] = React.useState(0);
   const [submits, setSubmits] = React.useState(0);
   const [dones, setDones] = React.useState(0);
-  const [selectedKey, setSelectedKey] = React.useState("");
-  useEffect(()=>{
-    getTagsCount()
-  },[todos,submits,dones])
-  async function getTagsCount() {
-    try {
-      const res = await request(`/flow/history/approval/count`,{
-        headers:{
-          appid: appId
-        },
-      });
-      if (res && res.status === "SUCCESS") {
-        const {todos, submits, dones} = res.data;
-        setDones(dones);
-        setSubmits(submits);
-        setTodos(todos);
-      } else {
-        message.error("获取列表个数失败");
-      }
-    } catch (err) {
-      message.error("获取列表个数失败");
-    }
-  }
   const items = history => [
     {
       key: "myPending",
       icon: <PendingIcon style={{marginRight: 5}}/>,
       label: "我的待办",
-      tagNumber: props.todosNumber || todos,
+      tagNumber: props.todosNumber,
       onClick: () => {
         // history.push(`${baseUrl(history.location.pathname)}/myPending`);
         props.fn("myPending");
@@ -85,7 +62,7 @@ export const ApprovalSection = props => {
         style={
           props.approvalKey === item.key
             ? {
-                backgroundColor: "#E7F0FF"
+                backgroundColor: "#DDEAFF"
               }
             : {}
         }
