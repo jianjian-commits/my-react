@@ -10,6 +10,7 @@ export const initialState = {
   isAuthenticated: !!localStorage.getItem("id_token"),
   currentTeam: {},
   userDetail: {},
+  fetchRequestSent: false,
   allTeam: [],
   error: null,
   isSpinning: false
@@ -18,6 +19,7 @@ export const initialState = {
 export const START_SPINNING = "Login/START_SPINNING";
 export const START_LOGIN = "Login/START_LOGIN";
 export const LOGIN_SUCCESS = "Login/LOGIN_SUCCESS";
+const FETCH_REQUEST_SENT = "Login/FETCH_REQUEST_SENT"
 export const LOGIN_FAILURE = "Login/LOGIN_FAILURE";
 export const RESET_ERROR = "Login/RESET_ERROR";
 export const LOGIN_USER = "Login/LOGIN_USER";
@@ -169,6 +171,7 @@ export const getAllTeam = () => async dispatch => {
 
 //初始化所有信息
 export const initAllDetail = () => async dispatch => {
+  dispatch({ type: FETCH_REQUEST_SENT})
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
@@ -194,6 +197,7 @@ export const loginUser = ({ token, rest, history }) => async dispatch => {
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("id_token", 1);
       dispatch(loginSuccess());
+      dispatch(initAllDetail());
       history.push("/");
     } else {
       dispatch(loginFailure());
@@ -242,6 +246,11 @@ export default function loginReducer(state = initialState, { type, payload }) {
         isAuthenticated: true,
         error: null,
         userId: payload
+      };
+    case FETCH_REQUEST_SENT:
+      return {
+        ...state,
+        fetchRequestSent: true
       };
     case LOGIN_FAILURE:
       return {

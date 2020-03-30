@@ -2,7 +2,7 @@ import React from "react";
 import { Layout, Menu } from "antd";
 import { history } from "../store";
 import { connect } from "react-redux";
-// import CommonHeader from "../components/header/CommonHeader";
+import { useLocation } from "react-router-dom";
 import HomeHeader from "../components/header/HomeHeader";
 import TeamInfo from "../components/userManagement/team/TeamInfo";
 import TeamMember from "../components/userManagement/team/TeamMember";
@@ -19,14 +19,12 @@ const { Sider, Content } = Layout;
 const webs = [
   {
     path: "/team/info",
-    key: "info",
     label: "团队信息",
     icon: InfoIcon,
     component: TeamInfo
   },
   {
     path: "/team/member",
-    key: "member",
     label: "团队成员",
     auth: TEAM_MANAGEMENT_LIST,
     icon: MemberIcon,
@@ -34,7 +32,6 @@ const webs = [
   },
   {
     path: "/team/profile",
-    key: "profile",
     label: "分组",
     auth: PROFILE_MANAGEMENT_LIST,
     icon: ProfileIcon,
@@ -43,46 +40,27 @@ const webs = [
   }
 ];
 
-class TeamManagement extends React.Component {
-  constructor(props) {
-    super(props);
-    const matches = /^\/team\/(\w+)\/?/.exec(history.location.pathname);
-    this.state = {
-      selectedKey: (matches && matches[1]) || "info"
-    };
-  }
+const TeamManagement = props => {
+  const { pathname } = useLocation();
 
-  componentDidUpdate() {
-    if (this.state.selectedKey !== /^\/team\/(\w+)\/?/.exec(history.location.pathname)[1]) {
-      const matches = /^\/team\/(\w+)\/?/.exec(history.location.pathname);
-      this.setState({
-        selectedKey: (matches && matches[1]) || "info"
-      })
-    }
-  }
-
-  setSelectedKey(key, path) {
-    this.setState({ selectedKey: key });
+  const setSelectedKey = path => {
     history.push(path);
-  }
-  getMenu = webs =>
+  };
+
+  const getMenu = webs =>
     webs
       .filter(w => {
-        const { permissions, teamId, debug } = this.props;
+        const { permissions, teamId, debug } = props;
         return authorityIsValid({ permissions, teamId, debug, auth: w.auth });
       })
       .map(w => (
         <Menu.Item
-          key={w.key}
-          onClick={() => this.setSelectedKey(w.key, w.path)}
+          key={w.path}
+          onClick={() => setSelectedKey(w.path)}
           className={commonClasses.menu}
-          style={
-            this.state.selectedKey === w.key
-              ? {
-                backgroundColor: "#DDEAFF"
-              }
-              : {}
-          }
+          style={{
+            backgroundColor: pathname === w.path ? "#DDEAFF" : "inherit"
+          }}
         >
           <span>
             <w.icon />
@@ -91,35 +69,32 @@ class TeamManagement extends React.Component {
         </Menu.Item>
       ));
 
-  render() {
-    const { selectedKey } = this.state;
-    return (
+  return (
+    <Layout>
+      <HomeHeader
+        hides={{
+          logo: true,
+          menu: true,
+          teamManage: true,
+          backArrow: "团队管理",
+          backUrl: "/"
+        }}
+      />
       <Layout>
-        <HomeHeader
-          hides={{
-            logo: true,
-            menu: true,
-            teamManage: true,
-            backArrow: "团队管理",
-            backUrl: "/"
-          }}
-        />
-        <Layout>
-          <Sider className={commonClasses.sider}>
-            <Menu selectedKeys={selectedKey}>{this.getMenu(webs)}</Menu>
-          </Sider>
-          <Content className={commonClasses.container}>
-            {webs.map(route => (
-              <Authenticate key={route.key} auth={route.auth}>
-                <Route {...route} />
-              </Authenticate>
-            ))}
-          </Content>
-        </Layout>
+        <Sider className={commonClasses.sider}>
+          <Menu selectedKeys={pathname}>{getMenu(webs)}</Menu>
+        </Sider>
+        <Content className={commonClasses.container}>
+          {webs.map(route => (
+            <Authenticate key={route.path} auth={route.auth}>
+              <Route {...route} />
+            </Authenticate>
+          ))}
+        </Content>
       </Layout>
-    );
-  }
-}
+    </Layout>
+  );
+};
 
 export default connect(({ login, debug }) => ({
   permissions: (login.userDetail && login.userDetail.permissions) || [],
