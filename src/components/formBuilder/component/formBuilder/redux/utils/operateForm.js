@@ -313,7 +313,6 @@ export const updateForm = (
     }
   })
     .then(response => {
-      setIsSetApiStatus(formDataArray, tempApiStatus);
       if (type === "back") {
         message.success("保存成功", 1, () => {
           dispatch({
@@ -338,6 +337,7 @@ export const updateForm = (
       }
     })
     .catch(err => {
+      setIsSetApiStatus(formDataArray, tempApiStatus);
       // if (err.response.data === "Token Expired") {
       //   console.log("token 已过期，正在请求新的token");
       //   // mockLoginAndSetData(false, true);
