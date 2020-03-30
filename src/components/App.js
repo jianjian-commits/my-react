@@ -8,8 +8,8 @@ import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
 import Login from "./login";
-import ForgetPassword from "./login/ForgetPassword";
-import InviteUser from "./login/InviteUser";
+import ForgetPassword from "./login/forgetPassword";
+import InviteUser from "./login/inviteUser";
 import { setDebug } from "../store/debugReducer";
 
 import ErrorBoundary from "./shared/ErrorBoundary";

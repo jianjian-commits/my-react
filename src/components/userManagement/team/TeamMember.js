@@ -6,7 +6,7 @@ import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
-import InviteUser from "../ModalInviteUser";
+import InviteUser from "../modalInviteUser";
 import Authenticate from "../../shared/Authenticate";
 import { catchError } from "../../../utils";
 import { ReactComponent as Funnel } from "../../../assets/icons/teams/filter.svg";

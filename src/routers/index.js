@@ -8,7 +8,7 @@ import AppDetail from "../pages/AppDetail";
 import AppSetting from "../pages/AppSetting";
 import AppServices from "../pages/AppServices";
 // import AppServicesEdit from "../pages/AppServicesEdit";
-import UserDetail from "../components/header/UserDetail";
+import UserDetail from "../components/header/userDetail";
 import Dispose from "../pages/Dispose";
 import { APP_SETTING_ABLED } from "../auth";
 
