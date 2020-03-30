@@ -67,7 +67,7 @@ class ProfileManagement extends React.Component {
   }
 
   componentDidMount() {
-    this.getGroupList().then(res => this.loadingTimeout());
+    this.getGroupList()
   }
 
 //   componentWillUnmount = () => {
@@ -78,7 +78,8 @@ class ProfileManagement extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.teamId !== this.props.teamId) {
-      this.getGroupList().then(res => clearTimeout(this.loadingTimeout()));
+      clearTimeout(this.loadingTimeout());
+      this.getGroupList()
     }
   }
   //loading定时器
@@ -87,6 +88,7 @@ class ProfileManagement extends React.Component {
   }
   // 获取分组总列表
   async getGroupList() {
+    this.setState({ loading: true })
     try {
       const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
@@ -96,7 +98,9 @@ class ProfileManagement extends React.Component {
       } else {
         message.error(res.msg || "获取分组列表失败");
       }
+      this.loadingTimeout()
     } catch (err) {
+      this.loadingTimeout()
       catchError(err);
     }
   }
@@ -153,7 +157,7 @@ class ProfileManagement extends React.Component {
     });
     this.action = type ? type : "view";
     this.roleId = record ? record.roleId : "";
-    this.roleName = record ? record.roleName :"";
+    this.roleName = record ? record.roleName : "";
     this.getGroupList();
   }
 
