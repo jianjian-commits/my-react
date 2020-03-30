@@ -13,11 +13,16 @@ class SignatureInspector extends React.Component {
 
   componentDidMount() {
     const { key } = this.props.element;
-    const isUniqueApi = checkUniqueApi(key, this.props);
+   const {err, msg:APIMessage} = checkUniqueApi(key, this.props);
+    const isUnique = !err;
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
     this.setState({
       apiNameTemp: key,
       isUniqueApi: isUniqueApi,
-      formPath: locationUtils.getUrlParamObj().path
+      APIMessage
     });
   }
 
@@ -60,6 +65,7 @@ class SignatureInspector extends React.Component {
     this.props.setItemAttr(this.props.element, "fileUnit", value);
   };
 
+  // API change
   handleChangeAPI = ev => {
     const { value } = ev.target;
     const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
