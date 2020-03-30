@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import { Button, Result, message } from "antd";
 import request from "../../utils/request";
 import PublicForm from "./PublicForm";
+<<<<<<< HEAD
+import { registerParameter } from "./FormItemConfig";
+=======
 import { registerParameter } from "./formItemConfig";
+>>>>>>> 85bf1e4f6b3b2c6b0246ba939488555309c693b7
 import Styles from "./style/login.module.scss";
 import { catchError } from "../../utils";
 import { RegisteSuccessIcon, RegisteErrorIcon } from "../../assets/icons/login";

@@ -488,7 +488,8 @@ function handleSaveButton({ state, initialData, enterPermission }) {
         message.error(res.msg || "保存应用权限失败");
       }
     },
-    err => catchError(err)
+    err =>
+    catchError(err)
   );
 }
 
@@ -508,7 +509,8 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
         message.error(res.msg || "获取应用权限失败");
       }
     },
-    err => catchError(err)
+    err =>
+    catchError(err)
   );
 }
 
