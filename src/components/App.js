@@ -9,7 +9,7 @@ import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
 import Login from "./login";
 import ForgetPassword from "./login/ForgetPassword";
-import InviteUser from "../components/login/InviteUser";
+import InviteUser from "./login/InviteUser";
 import { setDebug } from "../store/debugReducer";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
