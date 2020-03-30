@@ -79,7 +79,7 @@ class TeamManagement extends React.Component {
           style={
             this.state.selectedKey === w.key
               ? {
-                backgroundColor: "rgba(42, 127, 255, 0.2)"
+                backgroundColor: "#DDEAFF"
               }
               : {}
           }

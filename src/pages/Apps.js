@@ -81,7 +81,7 @@ class Apps extends React.Component {
         <HomeHeader />
         <Content className={commonClasses.container}>
           <header className={commonClasses.header}>
-            <span style={{ fontSize: 18,color:"#333333" }}>我的应用</span>
+            <span style={{ fontSize: 16,color:"#333333" }}>我的应用</span>
           </header>
           <Content className={classes.innerMain}>
             {getApps(appList)}
