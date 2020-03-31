@@ -1,5 +1,30 @@
 .tableBox {
   padding: 0 32px;
+  :global(.ant-table-wrapper) {
+      background-color: #fff;
+  }
+  :global(.ant-table-pagination.ant-pagination ){
+    flex: none;
+    text-align: center;
+    margin: 20px;
+    width: 100%;
+    :global(.ant-pagination-prev,
+    .ant-pagination-next) {
+      :global(.ant-pagination-item-link) {
+        line-height: 28px;
+        padding: 9px;
+        vertical-align: middle;
+        display: table-cell;
+      }
+    }
+    :global(.ant-pagination-item-active) {
+      background: #2A7FFF;
+      border-color: #2A7FFF;
+      a {
+        color: #fff;
+      }
+    }
+  }
   :global(.ant-table) {
     tr {
       background-color: #fff;
@@ -45,7 +70,7 @@
   font-family: "Microsoft YaHei";
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 24px;
   color: #333333;
   padding:40px 0 30px 0;
