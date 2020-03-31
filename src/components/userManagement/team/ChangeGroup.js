@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Select, Row, Col } from "antd";
+import classes from './team.module.scss'
 
 const { Option } = Select;
 
@@ -41,7 +42,7 @@ const ChangeGroup = props => {
           >
             {props.groups.map((item, index) => {
               return (
-                <Option key={index} value={item.id}>
+                <Option className={classes.selection} key={index} value={item.id}>
                   {item.name}
                 </Option>
               );

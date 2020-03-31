@@ -215,7 +215,7 @@ class ProfileManagement extends React.Component {
               <Authenticate key={w.key} auth={w.auth}>
                 {w.key === "delete" ? (
                   <Popconfirm
-                    title="是否删除这个分组？"
+                    title="删除分组后，该分组下的所有用户都会变更至普通用户分组"
                     okText="是"
                     cancelText="否"
                     onConfirm={() => this.removeGroup(record)}

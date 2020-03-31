@@ -36,6 +36,10 @@
 .listBox {
   background-color: #fff;
   font-size: 14px;
+
+  :global(.ant-list-split .ant-list-item) {
+    border-bottom: 1px solid #dcdee3;
+  }
 }
 
 .infoInput {
@@ -141,4 +145,8 @@
   background-color: #2a7fff !important;
   border-color: #2a7fff !important;
   color: #F3F4F6 !important;
+}
+
+.selection:hover {
+  background-color: #e7f0ff !important;
 }
