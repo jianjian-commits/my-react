@@ -99,7 +99,7 @@ class DateInput extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if(initData){
-      options.initialValue = moment(initData) 
+      options.initialValue = moment(initData+"Z") 
     }
     return (
       <Form.Item label={<LabelUtils data={item} />}>

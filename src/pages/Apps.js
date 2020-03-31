@@ -7,7 +7,7 @@ import ModalCreation from "../components/profileManagement/modalCreate/ModalCrea
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
 import Authenticate from "../components/shared/Authenticate";
-import { SUPER_ADMINISTRATOR, APP_VISIABLED } from "../auth";
+import { TEAM_CREATE_APP, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import { catchError } from "../utils";
 import classes from "../styles/apps.module.scss";
@@ -85,7 +85,7 @@ class Apps extends React.Component {
           </header>
           <Content className={classes.innerMain}>
             {getApps(appList)}
-            <Authenticate auth={SUPER_ADMINISTRATOR}>
+            <Authenticate auth={TEAM_CREATE_APP}>
               <Button
                 type="dashed"
                 icon="plus"

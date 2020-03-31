@@ -111,7 +111,7 @@ const TransactList = props => {
   };
 
   return (
-    <div className={classes.tableBox} style={{  width: "calc(100vw - 500px)", margin:"0 auto"}}>
+    <div className={classes.tableBox} style={{ margin:"0 42px"}}>
       <div className={classes.tableTitle}>
       我的待办 <span className={classes.totalNumber}>（共{total}条）</span>
       </div>

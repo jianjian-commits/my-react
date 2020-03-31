@@ -62,8 +62,8 @@ $white: #fff;
           }
         }
         .ant-pagination-item-active {
-          background: $btnBgBlue;
-          border-color: $btnBgBlue;
+          background: #2A7FFF;
+          border-color:#2A7FFF;
           a {
             color: $white;
           }
@@ -71,7 +71,7 @@ $white: #fff;
       }
       .ant-pagination-options-quick-jumper {
         input {
-          border-color: $inputBorderColor !important;
+          border-color: #2A7FFF !important;
         }
       }
     }

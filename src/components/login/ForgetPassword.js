@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import signinStyles from "./style/login.module.scss";
 import { loginUser } from "../../store/loginReducer";
 import PublicForm from "./PublicForm";
-import { loginForgetPasswordParameter } from "./FormItemConfig";
+import { loginForgetPasswordParameter } from "./formItemConfig";
 
 export default connect(() => ({}), {
   loginUser

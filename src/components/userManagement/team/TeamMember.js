@@ -87,7 +87,7 @@ export default connect(
                   onConfirm={confirm.bind(this, text.id)}
                   okText="确认"
                   cancelText="取消"
-                  placement="bottom"
+                  placement="top"
                 >
                   <Button type="link">踢出</Button>
                 </Popconfirm>

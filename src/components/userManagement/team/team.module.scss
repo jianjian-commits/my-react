@@ -1,5 +1,15 @@
 .container {
   padding: 29px 21px 0px;
+  ul{
+    width: 100%;
+    text-align: center;
+    :global(.ant-pagination-item-active){
+      background-color:#2A7FFF;
+      a{
+        color:#fff;
+      }
+    }
+  }
 }
 
 .title {

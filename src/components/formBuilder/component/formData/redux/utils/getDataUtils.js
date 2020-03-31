@@ -149,7 +149,7 @@ export const getSubmissionData = (params) => dispatch => {
 // 获得表单数据详情
 export const getSubmissionDetail = (formId, submissionId, appId, callback) => dispatch => {
   callback(true);
-  axios.get(config.apiUrl + `/form/${formId}`,
+  return axios.get(config.apiUrl + `/form/${formId}`,
   {   
     headers:{
       appid:appId,
@@ -175,6 +175,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
           config.apiUrl + `/flow/history/approval/${submissionId}`,{
             headers:{
               appid: appId,
+              formid: formId,
               "isDataPage": true,
             }
           }
@@ -189,14 +190,18 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
             });
         }).catch(err=>{
           callback(false);
+          message.error("获取审批流水失败",err.response.data.msg)
         })
       }).catch(err=>{
         callback(false);
+        message.error("获取数据详情失败",err.response.data.msg)
       });
   }).catch(err=>{
     callback(false);
+    message.error("获取元数据失败",err.response.data.msg)
   }).catch(err=>{
     callback(false);
+    message.error(err.response.data.msg)
   });
 };
 
