@@ -8,15 +8,6 @@ const content = "您修改了图表设计但没有保存，是否需要保存图
 
 
 export default function ChartPreservationTip(props) {
-
-  const saveChart = () => {
-      props.handleOK();
-  }
-
-  const saveNoChart = () => {
-      props.handleOK();
-  }
-
   return (
     <Modal
       title={<ModalTitle>{title}</ModalTitle>}
@@ -33,8 +24,8 @@ export default function ChartPreservationTip(props) {
         <div className="normalModalContent">{content}</div>
         <div className="tipBtnGroup">
           <Button onClick={props.handleCancel}>取消</Button>
-          <Button onClick={saveNoChart}>不保存</Button>
-          <Button onClick={saveChart}>保存</Button>
+          <Button onClick={props.saveNoChart}>不保存</Button>
+          <Button onClick={props.saveChart}>保存</Button>
         </div>
       </div>
     </Modal>

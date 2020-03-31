@@ -24,13 +24,12 @@ export default function ExitWaringTip(props) {
       bodyStyle={{padding:0}}
       wrapClassName="BImodal"
       centered
-      handleCancel={props.handleCancel}
     >
       <div className="normalModalContainer">
         <div className="normalModalContent">{content}</div>
         <div className="warningBtnGroup">
           <Button onClick={props.handleCancel}>取消</Button>
-          <Button onClick={props.handleOk}>确定</Button>
+          <Button onClick={props.handleOK}>确定</Button>
         </div>
       </div>
     </Modal>

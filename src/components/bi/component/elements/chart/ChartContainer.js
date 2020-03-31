@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Chart from './Chart';
 import { connect } from "react-redux";
 import { getOption } from '../../../utils/ChartUtil';
@@ -11,25 +11,25 @@ import { useHistory, useParams } from "react-router-dom";
 import { changeBind, changeChartData, setDataSource } from '../../../redux/action';
 
 const ChartContainer = props => {
-  const { chartData, style, dashboards, chartName, isBtnBlock, dbMode, chartId,
+  const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
     changeBind, changeChartData, setDataSource } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
   const chartOption = chartData ? getOption(chartData) : {};
   const chart = <Chart chartOption={chartOption} />;
-
-  const elements = dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
+  const [btnVisible, setBtnVisible] = useState(isBtnBlock);
+  const elements =
+    dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
   let name = "新建图表";
   let iconBtnGroup = [];
 
-  if(elementId) {
-    elements.forEach((item) => {
-      if(item.id == elementId) {
+  if (elementId) {
+    elements.forEach(item => {
+      if (item.id == elementId) {
         name = item.name;
       }
-    })
-  }
-  else {
+    });
+  } else {
     name = chartName || name;
   }
 
@@ -104,11 +104,15 @@ const ChartContainer = props => {
   }
 
   const handlMouseEnter = () => {
-    document.getElementById(chartId + "btns").style.display = "block";
+    if (!isBtnBlock) {
+      setBtnVisible(true);
+    }
   };
 
   const handlMouseLeave = () => {
-    document.getElementById(chartId + "btns").style.display = "none";
+    if (!isBtnBlock) {
+      setBtnVisible(false);
+    }
   };
 
   if (!chartData) {
@@ -122,12 +126,18 @@ const ChartContainer = props => {
   return (
     <div
       className="chart-container"
-      onMouseEnter={isBtnBlock ? null : handlMouseEnter}
-      onMouseLeave={isBtnBlock ? null : handlMouseLeave}
+      onMouseEnter={handlMouseEnter}
+      onMouseLeave={handlMouseLeave}
       style={style}
     >
       <div className="chart-title">{name}</div>
-      <ChartToolbarBtn {...props} iconBtnGroup={iconBtnGroup} isBtnBlock={isBtnBlock}/>
+      {btnVisible && (
+        <ChartToolbarBtn
+          {...props}
+          iconBtnGroup={iconBtnGroup}
+          isBtnBlock={isBtnBlock}
+        />
+      )}
       {chart}
     </div>
   );
