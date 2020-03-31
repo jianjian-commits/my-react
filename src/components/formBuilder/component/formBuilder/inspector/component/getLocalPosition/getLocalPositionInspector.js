@@ -114,18 +114,24 @@ class GetLocalPositionInspector extends React.Component {
   componentDidMount() {
     const { element } = this.props;
     const { key } = element;
-    const isUniqueApi = checkUniqueApi(key, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(key, this.props);
+    const isUnique = !err;
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
     this.setState({
       apiNameTemp: key,
-      isUniqueApi: isUniqueApi
+      isUniqueApi: isUniqueApi,
+      APIMessage
     });
   }
 
   // API change
   handleChangeAPI = ev => {
-    console.log(this.props);
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const { err, msg: APIMessage } = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -133,7 +139,8 @@ class GetLocalPositionInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 

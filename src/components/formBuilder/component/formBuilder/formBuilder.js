@@ -66,7 +66,7 @@ class ReactFormBuilder extends React.Component {
         editElementParent: editElement
       }));
     } else {
-      console.log("fc", editElement)
+      // console.log("fc", editElement)
       this.setState(state => ({
         ...state,
         isEditMode: !this.state.isEditMode,
@@ -96,7 +96,7 @@ class ReactFormBuilder extends React.Component {
   render() {
     const toolbarProps = {};
 
-    console.log("fccc", this.state.editElement)
+    // console.log("fccc", this.state.editElement)
     if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
     }
