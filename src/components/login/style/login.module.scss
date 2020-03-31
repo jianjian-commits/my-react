@@ -159,6 +159,7 @@ $unHoverGray: #b6b6ba;
   & .title {
     padding-left: 80px;
     display: flex;
+    flex-wrap: wrap;
     & > div {
       font-style: normal;
       font-weight: normal;
@@ -198,7 +199,7 @@ $unHoverGray: #b6b6ba;
     & button {
       height: 40px !important;
       background: #1890ff;
-      opacity: 0.5;
+      // opacity: 0.5;
     }
     & > div:last-child {
       & button {
@@ -299,22 +300,23 @@ $unHoverGray: #b6b6ba;
         }
       }
     }
-    & > .result {
-      & > div {
-        margin-top: 10pxpx;
-        text-align: center;
-      }
-      & > div:first-child {
-        margin-top: 76px;
-      }
-      & > div:last-child {
-        margin-top: 26px;
-        & > button {
-          width: 100px;
-          background: #2a7fff;
-        }
-      }
-    }
+    // & > .result {
+    //   display: block;
+    //   & > div {
+    //     margin-top: 10pxpx;
+    //     text-align: center;
+    //   }
+    //   & > div:first-child {
+    //     margin-top: 76px;
+    //   }
+    //   & > div:last-child {
+    //     margin-top: 26px;
+    //     & > button {
+    //       width: 100px;
+    //       background: #2a7fff;
+    //     }
+    //   }
+    // }
   }
 }
 
@@ -522,10 +524,36 @@ $unHoverGray: #b6b6ba;
 }
 
 .result {
-  width: 100% !important;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 !important;
+  width: 240px !important;
+  height: 127px;
+  margin: 136.5px 0 0 240px !important;
+  & > div {
+    width: 100%;
+    text-align: center;
+    padding: 0;
+    color: #777F97;
+  }
+  & > div:first-child {
+    margin-bottom: 14.41px;
+    font-size: 16px;
+  }
+  & > div:nth-child(2) {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  & > div:last-child {
+    & > a {
+      width: 240px !important;
+      height: 44px;
+      background: #2a7fff;
+      border-radius: 6px;
+      & > span {
+        font-size: 14px;
+        line-height: 40px;
+        color: #ffffff;
+      }
+    }
+  }
 }

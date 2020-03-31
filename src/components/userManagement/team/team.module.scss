@@ -1,5 +1,15 @@
 .container {
   padding: 29px 21px 0px;
+  ul{
+    width: 100%;
+    text-align: center;
+    :global(.ant-pagination-item-active){
+      background-color:#2A7FFF;
+      a{
+        color:#fff;
+      }
+    }
+  }
 }
 
 .title {
@@ -107,7 +117,7 @@
     border-radius: 0px;
   }
 
-  :global(.ant-table-thead > tr:first-child > th:last-child ) {
+  :global(.ant-table-thead > tr:first-child > th:last-child) {
     border-radius: 0px;
   }
 
@@ -133,9 +143,12 @@
 }
 
 .filterRow {
-  padding: 10px 10px 10px 0 !important;
+  padding: 10px 0px 20px 0 !important;
 }
 
 .submitBtn {
-  margin-left: 10px;
+  border-radius: 3px !important;
+  background-color: #2a7fff !important;
+  border-color: #2a7fff !important;
+  color: #F3F4F6 !important;
 }

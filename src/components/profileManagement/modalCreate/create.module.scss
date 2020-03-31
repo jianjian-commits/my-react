@@ -51,12 +51,12 @@
   img {
     width: 40px;
   }
-  .active {
-    border:2px solid #A2C7FF;
-    border-radius: 8px;
-  }
   :hover{
     border:2px solid #D8E7FF;
+    border-radius: 8px;
+  }
+  .active {
+    border:2px solid #A2C7FF;
     border-radius: 8px;
   }
 }

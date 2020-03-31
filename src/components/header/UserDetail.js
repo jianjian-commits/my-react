@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Modal, Form } from "antd";
 import { updateUserDetail } from "../../store/loginReducer";
 import HomeHeader from "./HomeHeader";
-import { userDetailParameter, formItems } from "../login/formItems";
+import { userDetailParameter, formItems } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
 import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
