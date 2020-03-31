@@ -15,7 +15,7 @@ export const BaseInfoModule = ({
   const {
     roleName,
     createName,
-    createDate,
+    createdDate,
     lastModifyName,
     lastModifyDate
   } = baseInfoBo;
@@ -23,7 +23,7 @@ export const BaseInfoModule = ({
   const list = [
     { title: "分组名", value: roleName },
     { title: "创建人", value: createName },
-    { title: "创建时间", value: formatDate(createDate) },
+    { title: "创建时间", value: formatDate(createdDate) },
     { title: "最后修改人", value: lastModifyName },
     { title: "最后修改时间", value: formatDate(lastModifyDate) }
   ];
@@ -92,17 +92,37 @@ export const AppManagerModule = ({
     {
       title: "操作",
       dataIndex: "action",
-      render: (text, record) => (
-        <Button
-          type="link"
-          onClick={() => {
-            enterPermission(true, record);
-          }}
-          style={{ color: "#2A7FFF" }}
-        >
-          权限管理
-        </Button>
-      )
+      width:"27%",
+      // render: (text, record) => (
+      //   <Button
+      //     type="link"
+      //     onClick={() => {
+      //       enterPermission(true, record);
+      //     }}
+      //     style={{ color: "#2A7FFF" }}
+      //   >
+      //     权限管理
+      //   </Button>
+      // )
+      render: (text, record) => {
+        console.log('text',text);
+        console.log('record',record);
+        return (
+          <>
+            {record.checked && (
+              <Button
+                type="link"
+                onClick={() => {
+                  enterPermission(true, record);
+                }}
+                style={{ color: "#2A7FFF" }}
+              >
+                权限管理
+              </Button>
+            )}
+          </>
+        );
+      }
     }
   ];
   return (

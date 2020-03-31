@@ -5,7 +5,7 @@
 .setting {
   background: rgba(245, 245, 245, 1);
 
-  &>div {
+  & > div {
     margin: 30px auto;
     width: 85%;
   }
@@ -16,14 +16,14 @@
 }
 
 .metedate {
-  &>div:nth-of-type(1) {
+  & > div:nth-of-type(1) {
     padding-bottom: 5px !important;
     font-weight: bold;
     font-size: 15px;
     color: rgba(72, 72, 72, 1);
   }
 
-  &>div:nth-of-type(2)>div {
+  & > div:nth-of-type(2) > div {
     font-size: 15px;
     margin: 0;
   }
@@ -35,11 +35,11 @@
   display: flex;
   justify-content: space-between;
 
-  &>div:nth-of-type(1) {
+  & > div:nth-of-type(1) {
     display: inherit;
     align-items: center;
 
-    &>span {
+    & > span {
       margin: 0 10px 0 0;
       font-size: 17px;
       font-weight: 500;
@@ -79,14 +79,14 @@
   color: #333333;
   cursor: pointer;
 
-  &>span {
+  & > span {
     display: block;
   }
 
-  &>a {
+  & > a {
     display: flex;
 
-    &>span {
+    & > span {
       display: inherit;
       align-items: center;
     }
@@ -104,7 +104,7 @@
     margin-bottom: 36px;
   }
 
-  &>button:first-child {
+  & > button:first-child {
     background: #ffffff;
     font-style: normal;
     font-weight: normal;
@@ -114,7 +114,7 @@
     background-color: transparent;
   }
 
-  &>button:last-child {
+  & > button:last-child {
     background: #2a7fff;
     font-style: normal;
     font-weight: normal;
@@ -130,7 +130,7 @@
   box-shadow: 0px 0px 6px rgba(180, 198, 224, 0.28);
   position: relative;
 
-  &>div:first-child {
+  & > div:first-child {
     background: #f0f2f5;
     position: absolute;
     top: -40px;
@@ -140,7 +140,7 @@
     /* identical to box height */
     color: #777f97;
   }
-  &>div:nth-child(1) {
+  & > div:nth-child(1) {
     margin-bottom: 20px;
   }
 }
@@ -150,7 +150,7 @@
   margin: 0 32px 0 28px;
   padding-bottom: 20px;
 
-  &>div:first-child {
+  & > div:first-child {
     display: flex;
     align-items: center;
     width: 240px;
@@ -158,22 +158,22 @@
     padding-top: 20px;
     margin-right: 5px;
 
-    &>div {
+    & > div {
       width: 42px;
       height: 22px;
-      background: #EAF2FF;
+      background: #eaf2ff;
       border-radius: 3px;
       display: flex;
       justify-content: center;
       align-items: center;
       margin-right: 5px;
 
-      &>span {
+      & > span {
         color: #2a7fff;
       }
     }
 
-    &>span {
+    & > span {
       font-style: normal;
       font-weight: normal;
       font-size: 14px;
@@ -181,12 +181,12 @@
     }
   }
 
-  &>div:nth-child(2) {
+  & > div:nth-child(2) {
     height: 40px;
     padding-top: 20px;
     width: 100%;
 
-    &>div {
+    & > div {
       width: 100%;
       height: 20px;
       margin: 0;
@@ -194,7 +194,7 @@
     }
   }
 
-  &> :nth-child(3) {
+  & > :nth-child(3) {
     margin-top: 20px;
   }
 }
@@ -246,7 +246,7 @@
   height: 64px;
   justify-content: center;
 
-  &>div {
+  & > div {
     width: calc(100% - 60px);
     height: 64px;
     margin: 0 32px 0 28px;
@@ -254,16 +254,22 @@
     align-items: center;
     border-bottom: 1px solid #d6d8de;
 
-    &>span:first-child {
+    & > span:first-child {
       display: block;
       width: 240px;
+    }
+    & > div label {
+      cursor: default;
+      > span {
+        cursor: default;
+      }
     }
   }
 }
 
 .checkBox {
-  &>span {
-    &>span {
+  & > span {
+    & > span {
       width: 20px;
       height: 20px;
       border: 1px solid #2a7fff;
@@ -285,8 +291,8 @@
 }
 
 .disabled {
-  &>span {
-    &>span {
+  & > span {
+    & > span {
       width: 20px;
       height: 20px;
       border: 1px solid #2a7fff;
