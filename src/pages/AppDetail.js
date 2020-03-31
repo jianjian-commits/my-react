@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Layout, Input } from "antd";
+import { Layout, Input, ConfigProvider } from "antd";
+import zhCN from 'antd/es/locale/zh_CN';
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
@@ -219,51 +220,53 @@ const AppDetail = props => {
             />
           </div>
         </Sider>
-        <Content className={classes.container}>
-          {// eslint-disable-next-line
-          selectedForm != void 0 ? (
-            <>
-              {submit ? (
-                submissionId ? (
-                  <FormBuilderEditFormData
-                    key={Math.random()}
-                    formId={selectedForm}
-                    submissionId={submissionId}
-                    appId={appId}
-                    extraProp={user}
-                    actionFun={(submission_id, submitFlag = false) => {
-                      setSubmissionId(submission_id);
-                      setSubmit(submitFlag);
-                    }}
-                  ></FormBuilderEditFormData>
+        <ConfigProvider locale={zhCN}>
+          <Content className={classes.container}>
+            {// eslint-disable-next-line
+            selectedForm != void 0 ? (
+              <>
+                {submit ? (
+                  submissionId ? (
+                    <FormBuilderEditFormData
+                      key={Math.random()}
+                      formId={selectedForm}
+                      submissionId={submissionId}
+                      appId={appId}
+                      extraProp={user}
+                      actionFun={(submission_id, submitFlag = false) => {
+                        setSubmissionId(submission_id);
+                        setSubmit(submitFlag);
+                      }}
+                    ></FormBuilderEditFormData>
+                  ) : (
+                    <FormBuilderSubmission
+                      key={Math.random()}
+                      formId={selectedForm}
+                      extraProp={user}
+                      appid={appId}
+                      actionFun={skipToSubmissionData}
+                    ></FormBuilderSubmission>
+                  )
                 ) : (
-                  <FormBuilderSubmission
+                  <FormBuilderSubmitData
                     key={Math.random()}
                     formId={selectedForm}
-                    extraProp={user}
-                    appid={appId}
-                    actionFun={skipToSubmissionData}
-                  ></FormBuilderSubmission>
-                )
-              ) : (
-                <FormBuilderSubmitData
-                  key={Math.random()}
-                  formId={selectedForm}
-                  actionFun={(submission_id, submitFlag = false, formId) => {
-                    setSubmit(submitFlag);
-                    setSubmissionId(submission_id);
-                    if (formId) {
-                      setSelectedForm(formId);
-                    }
-                  }}
-                  appId={appId}
-                ></FormBuilderSubmitData>
-              )}
-            </>
-          ) : approvalKey !== null ? (
-            TransactList
-          ) : null}
-        </Content>
+                    actionFun={(submission_id, submitFlag = false, formId) => {
+                      setSubmit(submitFlag);
+                      setSubmissionId(submission_id);
+                      if (formId) {
+                        setSelectedForm(formId);
+                      }
+                    }}
+                    appId={appId}
+                  ></FormBuilderSubmitData>
+                )}
+              </>
+            ) : approvalKey !== null ? (
+              TransactList
+            ) : null}
+          </Content>
+        </ConfigProvider>
       </Layout>
     </Authenticate>
   );
