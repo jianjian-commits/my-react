@@ -175,6 +175,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
           config.apiUrl + `/flow/history/approval/${submissionId}`,{
             headers:{
               appid: appId,
+              formid: formId,
               "isDataPage": true,
             }
           }
