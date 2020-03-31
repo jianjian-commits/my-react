@@ -60,7 +60,7 @@ const User = props => {
     if (!fetchRequestSent) initAllDetail()
   }, [fetchRequestSent, initAllDetail])
   loadData();
-  
+
   return (
     <>
       <Dropdown
