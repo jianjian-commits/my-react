@@ -4,7 +4,7 @@ import Authenticate from "../shared/Authenticate";
 import { Button, Table, message, Popconfirm } from "antd";
 import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
-import PermissionSetting from "../userManagement/applyPermissionSettings";
+import PermissionSetting from "../userManagement/ApplyPermissionSettings";
 import {
   PROFILE_MANAGEMENT_NEW,
   PROFILE_MANAGEMENT_UPDATE,
