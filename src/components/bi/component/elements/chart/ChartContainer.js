@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
 import { useParams } from "react-router-dom";
-import './chart.scss';
 import ChartToolbarBtn from "../ChartToolbarBtn";
 
 
@@ -32,10 +31,6 @@ const ChartContainer = props => {
     {
       type:"edit",
       click:()=>{console.log("你点击了编辑按钮1");}
-    },
-    {
-      type:"edit",
-      click:()=>{console.log("你点击了编辑按钮2");}
     }
   ]
 

@@ -2,7 +2,6 @@ import React from "react";
 import { Modal, Button, Collapse, Icon , message } from "antd";
 import { useState ,useEffect} from "react";
 import classNames from "classnames";
-import "./modal.scss";
 import { push } from "connected-react-router";
 import {connect} from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
@@ -75,11 +74,12 @@ function DataListModal(props) {
         <div className="formGroups">
           <Collapse
             bordered={false}
+            activeKey={"formList"}
             expandIcon={({ isActive }) =>
               isActive ? <Icon type="folder-open" /> : <Icon type="folder" />
             }
           >
-            <Panel header={"表单列表"}>
+            <Panel header={"表单列表"} key={"formList"}>
               {props.formDataArr.map(form => (
                 <span
                   onClick={() => {

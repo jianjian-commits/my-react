@@ -5,6 +5,7 @@ import {DBHeader, DBToolbar, DBEditor} from '../components/bi/component/dashboar
 import { setDashboards } from '../components/bi/redux/action';
 import { setDB } from '../components/bi/utils/reqUtil';
 import classes from "../styles/bi.module.scss";
+import "../components/bi/scss/index.scss";
 
 const BI = props => {
   const HEADER_HEIGHT = 50;

@@ -9,7 +9,7 @@ import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
-import './bind.scss';
+import { message } from 'antd';
 
 /**
  * Specifies the drop target contract.
@@ -37,10 +37,38 @@ const spec = {
       return;
     }
 
-    const { bindDataArr, dataSource, changeBind, changeChartData, dashboardId, elementId } = props;
-    const isExisted = bindDataArr.length != 0 && bindDataArr.some((each) => {return item.id == each.id})
+    const { bindDataArr, dataSource, changeBind, changeChartData, elementId } = props;
+    let isExisted = false, isDimExceed = false, isMeaExceed = false;
+
+    if(bindDataArr.length != 0) {
+      let dimCount = item.bindType == "dim" ? 1 : 0;
+      let meaCount = item.bindType == "mea" ? 1 : 0;
+      bindDataArr.forEach((each, idx) => {
+        if(each.bindType == "dim") {
+          dimCount++;
+        }
+
+        if(each.bindType == "mea") {
+          meaCount++;
+        }
+
+        if(each.id == item.id && each.bindType == "dim") {
+          isExisted = true;
+        }
+      })
+
+      isDimExceed = dimCount > 2 || (dimCount == 2 && meaCount > 1);
+      isMeaExceed = dimCount == 1 && meaCount >= 10;
+    }
 
     if(isExisted) {
+      message.warning("添加失败，同一字段不能重复添加维度！");
+      return;
+    }else if(isDimExceed){
+      message.warning("添加失败，当前暂不支持此模式！");
+      return;
+    }else if(isMeaExceed){
+      message.warning("添加失败，已超出系统限定字段数量！");
       return;
     }
 
