@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -56,11 +56,11 @@ const User = props => {
   const { signOut, login, switchCurrentTeam, initAllDetail } = props;
   const { userDetail, allTeam, currentTeam, fetchRequestSent } = login;
   const [visible, setVisible] = useState(false);
-  const loadData = useCallback(() => {
-    if (!fetchRequestSent) initAllDetail()
+  
+  useEffect(() => {
+    !fetchRequestSent && initAllDetail();
   }, [fetchRequestSent, initAllDetail])
-  loadData();
-
+  
   return (
     <>
       <Dropdown
