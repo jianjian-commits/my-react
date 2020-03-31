@@ -1,59 +1,99 @@
-import React from "react";
-import { Select,Icon } from "antd";
+import React, { useState, useEffect } from "react";
+import { Icon } from "antd";
 import { GroupType } from "./Constant";
-const { Option } = Select;
+import classNames from "classnames";
 const operationArr = [
-  {...GroupType.SUM},
-  {...GroupType.AVERAGE},
-  {...GroupType.MAX},
-  {...GroupType.MIN},
-  {...GroupType.COUNT}
+  { ...GroupType.SUM },
+  { ...GroupType.AVERAGE },
+  { ...GroupType.MAX },
+  { ...GroupType.MIN },
+  { ...GroupType.COUNT }
 ];
 export default function FieldMeasureSelect(props) {
-  const creatFieldOperationArr = (componentLabel) => {
-      return operationArr.map(operation => {
-        return {
-          ...operation,
-          label:`${componentLabel}(${operation.name})`
-        }
-      })
-  }
-
-  const fieldOperationArr = creatFieldOperationArr(props.item.label);
-
-  const style = {
-    fontSize: 12,
-    lineHeight:32,
-  }
+  const [selectIndex, setSelectIndex] = useState(0);
+  const [popoverVisible, setPopoverVisible] = useState(false);
+  const [btnVisible,setBtnVisible] = useState(false);
+  useEffect(() => {
+    const dropDownEvent = event => {
+      const e = event || window.event;
+      const btn = document.getElementById("dropDownBtn" + props.item.id);
+      if (
+        e.srcElement.parentElement &&
+        !e.srcElement.parentElement.isSameNode(btn) &&
+        !e.srcElement.isSameNode(btn)
+      ) {
+        setPopoverVisible(false);
+      }
+    }
+    document.addEventListener("click", dropDownEvent);
+    getSelectOperation(operationArr[selectIndex]);
+    return () => {
+      document.removeEventListener("click", dropDownEvent);
+    }
+  }, []);
 
   const getSelectOperation = value => {
-    props.item.changeGroup(GroupType[value], props.item.id);
-  }
+    props.item.changeGroup(value, props.item.id);
+  };
 
   const handleDeleteTarget = () => {
     props.item.removeField(props.item);
-  }
-  
+  };
+
   const handlMouseEnter = () => {
-    document.getElementById("mea"+props.item.id).style.display = "block";
+    setBtnVisible(true);
   };
 
   const handlMouseLeave = () => {
-    document.getElementById("mea"+props.item.id).style.display = "none";
+    setBtnVisible(false);
   };
 
   const className = props.item.className;
 
   return (
-    <div className={className} onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
-      <div className="cancelIcon">
-        <Icon type="close-circle" id={"mea"+props.item.id} onClick={handleDeleteTarget} theme="filled" />
+    <div className="meaContainer">
+      <div
+        className="dropDownBtn"
+        onMouseEnter={handlMouseEnter} 
+        onMouseLeave={handlMouseLeave}
+        id={"dropDownBtn" + props.item.id}
+        onClick={e => {
+          e.stopPropagation();
+          setPopoverVisible(!popoverVisible);
+        }}
+      >
+        {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
+        <span className="dropDownBtnSpan">
+          {`${props.item.label}(${operationArr[selectIndex].name})`}
+        </span>
+        {btnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>
-      <Select dropdownStyle={style} defaultValue={fieldOperationArr[0].value} onChange={getSelectOperation}>
-        {fieldOperationArr.map(option => (
-          <Option className="fieldOpertaion" key={option.value} value={option.value}>{option.label}</Option>
-        ))}
-      </Select>
+      {popoverVisible && (
+        <div className="dropDownItemContainer" id={"dropDown" + props.item.id}>
+          {operationArr.map((operation, index) => (
+            <div
+              className={classNames("dropDownItem", {
+                selectOption: selectIndex == index
+              })}
+              onClick={() => {
+                if (selectIndex === index) {
+                  setPopoverVisible(false);
+                } else {
+                  setSelectIndex(index);
+                  getSelectOperation(operationArr[index]);
+                  setPopoverVisible(false);
+                }
+              }}
+              key={index}
+            >
+              <span className="dropDownItemSpan">
+                {operation.name}
+              </span>
+              {selectIndex === index && <Icon type="check"/>}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
