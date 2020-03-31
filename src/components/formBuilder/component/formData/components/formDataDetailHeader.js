@@ -48,7 +48,6 @@ const StartApprovalButton = (props) =>{
       (<Button 
         type="primary"
         className="btn" 
-        
         onClick={()=>{
           startApprovelBtnClick();
         }}>提交审批</Button>)
@@ -83,8 +82,7 @@ const WithdrawApprovalButton = (props) =>{
       isAllowedWithDraw ?
       (<Button 
         type="primary" 
-        className="btn"
-         
+        className="btn shortletter"
         onClick={withdraw}>撤回</Button>)
       :<></>
     )
@@ -127,13 +125,14 @@ const WithdrawApprovalButton = (props) =>{
     }
 
     return (
-      isApprovalProcessor ?
+      // isApprovalProcessor ?
       (
         <>
-        <Button type="danger"  onClick={handleRefused} className="btn" style={{backgroundColor : "#fff",borderColor:"#fff",color:"#E71010"}}>拒绝</Button>
-        <Button type="primary"  onClick={handlePass} className="btn">通过</Button>
+        <Button type="danger"  onClick={handleRefused} className="btn redBtn shortletter" >拒绝</Button>
+        <Button type="primary"  onClick={handlePass} className="btn shortletter">通过</Button>
         </>
-      ):(<></>)
+      )
+      // :(<></>)
     )
   }
 const ReSubmitApprovalButton = (props) =>{
