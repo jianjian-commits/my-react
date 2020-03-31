@@ -746,12 +746,13 @@ class FormSubmitData extends PureComponent {
     let formDataShowArray = [];
 
     formData.forEach((dataObj, i) => {
+      let { name, id } = dataObj.extraProp["user"] ? dataObj.extraProp["user"]: {name:"",id:""}
       let obj = {
         id: dataObj.id,
         created: dataObj.created,
         modified: dataObj.modified,
-        founder: dataObj.extraProp["name"],
-        userId: dataObj.extraProp["id"]
+        founder: name,
+        userId: id
       };
       let dataItem = dataObj.data;
       for (let n in dataItem) {
