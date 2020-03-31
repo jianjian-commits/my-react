@@ -4,8 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
 import {
-  getSubmissionDetail,
-  handleStartFlowDefinition
+  getSubmissionDetail
 } from "../redux/utils/getDataUtils";
 import { deleteFormData } from "../redux/utils/deleteDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
@@ -535,7 +534,6 @@ export default connect(
   }),
   {
     getSubmissionDetail,
-    handleStartFlowDefinition,
     deleteFormData,
     getApproveCount
   }

@@ -189,14 +189,18 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
             });
         }).catch(err=>{
           callback(false);
+          message.error("获取审批流水失败",err.response.data.msg)
         })
       }).catch(err=>{
         callback(false);
+        message.error("获取数据详情失败",err.response.data.msg)
       });
   }).catch(err=>{
     callback(false);
+    message.error("获取元数据失败",err.response.data.msg)
   }).catch(err=>{
     callback(false);
+    message.error(err.response.data.msg)
   });
 };
 

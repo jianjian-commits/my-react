@@ -125,14 +125,14 @@ const WithdrawApprovalButton = (props) =>{
     }
 
     return (
-      // isApprovalProcessor ?
+      isApprovalProcessor ?
       (
         <>
         <Button type="danger"  onClick={handleRefused} className="btn redBtn shortletter" >拒绝</Button>
         <Button type="primary"  onClick={handlePass} className="btn shortletter">通过</Button>
         </>
       )
-      // :(<></>)
+      :(<></>)
     )
   }
 const ReSubmitApprovalButton = (props) =>{
