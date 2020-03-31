@@ -78,7 +78,7 @@ const EditApprovalButton = props => {
   const handleDeleteSubmisson = submissionId => {
     deleteFormData("", submissionId)
       .then(response => {
-        if (props.enterPort === "TransctionList") {
+        if (props.enterPort === "TransctionList") {j
           props.fn(props.approvalKey);
         } else if (props.enterPort === "FormSubmitData") {
           props.actionFun(props.submissionId, false, props.currentForm.id);
@@ -540,11 +540,8 @@ export default connect(
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentTeam && login.currentTeam.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
-<<<<<<< HEAD
-    approveListCount: forms.approveListCount
-=======
+    approveListCount: forms.approveListCount,
     userDetail: login.userDetail
->>>>>>> origin/komons-formBuilder
   }),
   {
     getSubmissionDetail,
