@@ -150,7 +150,11 @@ class FormDataDetail extends PureComponent {
       this.state.submissionId,
       this.props.appId,
       (isLoading)=>{this.setState({isLoading})}
-    );
+    ).then(()=>{
+      if(this.props.enterPort === "TransctionList"){
+        this.props.getApproveCount(this.props.appId)
+      }
+    });
   };
 
   componentWillUnmount() {

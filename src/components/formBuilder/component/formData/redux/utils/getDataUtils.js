@@ -149,7 +149,7 @@ export const getSubmissionData = (params) => dispatch => {
 // 获得表单数据详情
 export const getSubmissionDetail = (formId, submissionId, appId, callback) => dispatch => {
   callback(true);
-  axios.get(config.apiUrl + `/form/${formId}`,
+  return axios.get(config.apiUrl + `/form/${formId}`,
   {   
     headers:{
       appid:appId,

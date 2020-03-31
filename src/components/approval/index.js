@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu } from "antd";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import {  HandledIcon, PendingIcon, SubmittedIcon } from './svg/index'
 import classes from "./approval.module.scss";
 
@@ -15,7 +15,13 @@ const baseUrl = path => {
 };
 export const ApprovalSection = props => {
   const history = useHistory();
+  const { appId } = useParams();
   const { todos, submits, dones } = props.approveListCount;
+
+  React.useEffect(()=>{
+    props.getApproveCount(appId)
+  },[appId])
+
   const items = history => [
     {
       key: "myPending",

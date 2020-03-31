@@ -89,9 +89,6 @@ const AppDetail = props => {
     });
   }, [appId, props.userDetail]);
 
-  React.useEffect((props)=>{
-    props.getApproveCount(appId)
-  },[appId])
 
   const [approvalKey, setApprovalKey] = React.useState("myPending");
   const currentApp =
@@ -183,7 +180,7 @@ const AppDetail = props => {
           style={{ background: "#fff" }}
           width="240"
         >
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} />
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount}/>
           <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"

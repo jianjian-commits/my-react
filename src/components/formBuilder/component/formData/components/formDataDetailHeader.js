@@ -31,7 +31,6 @@ const StartApprovalButton = (props) =>{
       if (res && res.status === "SUCCESS") {
         message.success("提交审批成功");
         props.resetData();
-        props.getApproveCount(appId);
       } else {
         props.setLoading(false)
         message.error("提交审批失败");
@@ -112,7 +111,6 @@ const WithdrawApprovalButton = (props) =>{
         });
         if (res && res.status === "SUCCESS") {
           props.resetData();
-          props.getApproveCount(props.appId);
           message.success("提交审批意见成功")
         } else {
           props.setLoading(false)
@@ -148,7 +146,6 @@ const ReSubmitApprovalButton = (props) =>{
       });
       if (res && res.status === "SUCCESS") {
         props.resetData();
-        props.getApproveCount(props.appId);
         message.success("提交审批成功")
       } else {
         props.setLoading(false)
@@ -184,7 +181,7 @@ const FormDataDetailHeader = (props) =>{
   };
   let backSpanText = "";
   if(props.enterPort === "TransctionList"){
-    switch(props.approvalKey){ //    
+    switch(props.approvalKey){    
       case "myPending":backSpanText="我的待办";break;
       case "mySubmitted": backSpanText="我提交的";break;
       case "myHandled": backSpanText="我处理的";break;
