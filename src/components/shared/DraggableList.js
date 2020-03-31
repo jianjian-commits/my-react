@@ -1,5 +1,7 @@
 import React from "react";
 import { Menu, Icon } from "antd";
+import "./draggableList.scss";
+import { TableIcon } from "../../assets/icons/index"
 
 const { SubMenu } = Menu;
 
@@ -28,7 +30,7 @@ const DraggableList = ({
   ...props
 }) => {
   return (
-    <Menu {...props} selectedKeys={selected} mode="inline" theme="light">
+    <Menu {...props} className="draggable-list" selectedKeys={selected} mode="inline" theme="light">
       {groups &&
         groups.map((g, i) => {
           const dropHandle = e =>
@@ -47,13 +49,13 @@ const DraggableList = ({
             >
               {g.list &&
                 g.list.map((l, n) => (
-                  <Menu.Item key={l.key || n}>
+                  <Menu.Item key={l.key || n} className="draggable-menu-item">
                     <DraggableWrapper
                       draggable={draggable}
                       formId={l.key}
                       onDrop={dropHandle}
                     >
-                      {l.key !== -1 ? <Icon type={l.icon || "table"} /> : ""}
+                      {l.key !== -1 ? <Icon component={l.icon || TableIcon} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
                   </Menu.Item>
@@ -63,13 +65,13 @@ const DraggableList = ({
         })}
       {list &&
         list.map((l, n) => (
-          <Menu.Item key={l.key || n}>
+          <Menu.Item key={l.key || n} className="draggable-menu-item">
             <DraggableWrapper
               draggable={draggable}
               formId={l.key}
               onDrop={e => onDrop(e.dataTransfer.getData("formId"), null)}
             >
-              {l.key !== "" ? <Icon type={l.icon || "table"} /> : ""}
+              {l.key !== "" ? <Icon component={l.icon || TableIcon} /> : ""}
               <span>{l.name}</span>
             </DraggableWrapper>
           </Menu.Item>

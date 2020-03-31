@@ -1,8 +1,23 @@
+.sider {
+  background: #fff !important;
+  padding-top: 14px !important;
+  border-right: 1px solid #d6d8de;
+  ul {
+    border-right: 0;
+  }
+  li:hover {
+    background-color: #e7f0ff;
+  }
+}
+
 .container {
   height: calc(100vh - 50px);
   padding: 10px;
   .header {
-    padding: 37px 64px 5px 64px;
+    padding: 37px 64px 10px 64px;
+  }
+  :global(.ant-menu-vertical) {
+    border-right: 0;
   }
 }
 .title {
@@ -21,12 +36,11 @@
       left: 0;
       height: 100%;
     }
-    svg  {
-      g, polyline, path {
+    svg {
+      g,
+      polyline,
+      path {
         fill: #1890ff;
-      }
-      rect {
-        stroke: #1890ff;
       }
     }
   }

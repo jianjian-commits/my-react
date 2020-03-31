@@ -2,13 +2,14 @@ import React from "react";
 import { isValueValid, isStringValid } from "../../../utils/valueUtils";
 import { Input, Form, Tooltip, Icon } from "antd";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
 
-export default class IdCard extends React.Component {
+class IdCard extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
@@ -19,7 +20,8 @@ export default class IdCard extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let index = -1;
@@ -63,13 +65,13 @@ export default class IdCard extends React.Component {
       if (
         !Object.is(
           document
-            .querySelector(`#${key}Dom`)
+            .querySelector(`#Id${key}Dom`)
             .querySelector(".ant-form-explain"),
           null
         )
       ) {
         document
-          .querySelector(`#${key}Dom`)
+          .querySelector(`#Id${key}Dom`)
           .querySelector(".ant-form-explain")
           .setAttribute("title", customMessage);
       }
@@ -243,3 +245,4 @@ export default class IdCard extends React.Component {
     );
   }
 }
+export default withRouter(IdCard)

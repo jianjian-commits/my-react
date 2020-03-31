@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input, Button, Modal, message } from "antd";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
+import { catchError } from "../../utils";
 import classes from "./inviteUser.module.scss";
 import { CreateIcon } from "../../assets/icons/teams"
 const customCss = {
@@ -27,10 +28,7 @@ export default function InviteUser(props) {
         message.error(res.msg || "invitedToken获取失败");
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     }
   }
   const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;

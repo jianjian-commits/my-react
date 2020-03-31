@@ -6,9 +6,10 @@ import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../../utils/request";
 import { getCurrentTeam } from "../../../store/loginReducer";
-import InviteUser from "../modalInviteUser";
+import InviteUser from "../ModalInviteUser";
 import Authenticate from "../../shared/Authenticate";
-import { ReactComponent as Funnel } from "./svg/filter.svg";
+import { catchError } from "../../../utils";
+import { ReactComponent as Funnel } from "../../../assets/icons/teams/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
   TEAM_MANAGEMENT_DROP,
@@ -22,6 +23,7 @@ export default connect(
   { getCurrentTeam }
 )(function TeamMember({ loginData, getCurrentTeam }) {
   const { currentTeam } = loginData;
+  const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState(null); //用户数据
   const [total, setTotal] = React.useState(null);
   const [onOff, setOnOff] = React.useState({
@@ -36,11 +38,12 @@ export default connect(
     currentPage: 1,
     pageSize: 10
   });
+  const [filterConditions, setFilterConditions] = React.useState([])
   const columns = [
     {
       title: "用户昵称",
       dataIndex: "name",
-      width: 100
+      width: 150
     },
     {
       title: "邮箱",
@@ -95,18 +98,22 @@ export default connect(
     }
   ];
   //获取成员
-  const gainData = useCallback(() => {
-    request(`/sysUser/currentTeam/all`, {
+  const gainData = useCallback(async () => {
+    setLoading(true)
+    const loadingTimeout = () => setTimeout(() => { setLoading(false) }, 500)
+    await request(`/sysUser/currentTeam/all`, {
       method: "POST",
-      data: { page: pageConfig.currentPage, size: pageConfig.pageSize }
+      data: {
+        page: pageConfig.currentPage,
+        size: pageConfig.pageSize,
+        fields: filterConditions
+      }
     })
       .then(res => {
         if (res && res.status === "SUCCESS") {
           res.data.datas.forEach(item => {
             item.key = item.id;
-            item.lastModifiedDate = new Date().toLocaleString(
-              item.lastModifiedDate
-            );
+            item.lastModifiedDate = new Date(item.lastModifiedDate).toLocaleString();
             item.groupName = item.group.name;
           });
           setData(res.data.datas);
@@ -114,12 +121,15 @@ export default connect(
         } else {
           message.error(res.msg || "成员获取失败！");
         }
+        loadingTimeout()
       })
       .catch(err => {
-        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
+        loadingTimeout()
+        catchError(err);
         return currentTeam.id;
       });
-  }, [pageConfig, currentTeam.id]);
+    return clearTimeout(loadingTimeout())
+  }, [pageConfig, filterConditions, currentTeam.id]);
   //踢出成员
   const confirm = sysUserId => {
     request(`/sysUser/${sysUserId}/team`, {
@@ -147,19 +157,33 @@ export default connect(
           message.error(res.msg || "踢出失败");
         }
       })
-      .catch(err => {
-        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
-      });
+      .catch(err => catchError(err));
   };
-  // 过滤
+  // 过滤组件开关显示
   const onClickFilter = () => {
     setOnOff({
       ...onOff,
       filterSwith: !onOff.filterSwith
     });
   };
-  const filterData = value => {
-    setData(value);
+  //过滤请求参数设置
+  const filterData = (value, groupId) => {
+    const _fiels = []
+    _fiels[0] = value ? {
+      conditions: [
+        { negative: false, rule: 'LK', value },
+        { negative: false, rule: 'LK', value }
+      ],
+      properties: ['email', 'name']
+    } : null
+    _fiels[1] = groupId ? {
+      conditions: [
+        { negative: false, rule: 'EQ', value: groupId }
+      ],
+      properties: ['sysRoles.id']
+    } : null
+    const _newFiels = _fiels.filter(item => item !== null)
+    setFilterConditions(_newFiels)
   };
   //变更分组
   const handleChange = (obj, e) => {
@@ -173,9 +197,9 @@ export default connect(
     });
   };
   // 提交变更分组
-  const changeGroupCal = groupKey => {
+  const changeGroupCal = async groupKey => {
     if (groupKey) {
-      request(`/sysUser/${key.userKey}/group`, {
+      await request(`/sysUser/${key.userKey}/group`, {
         method: "PUT",
         data: { oldGroupId: key.groupKey, newGroupId: groupKey }
       })
@@ -187,11 +211,8 @@ export default connect(
           } else {
             message.error(res.msg || "变更失败");
           }
-
         })
-        .catch(err => {
-          message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
-        });
+        .catch(err => catchError(err));
     }
     setOnOff({
       ...onOff,
@@ -205,6 +226,8 @@ export default connect(
       currentPage: e
     });
   };
+
+
   //获取当前team只调用一次
   useEffect(() => {
     getCurrentTeam();
@@ -244,6 +267,7 @@ export default connect(
             pageSize: pageConfig.pageSize,
             onChange: onChangePage
           }}
+          loading={loading}
           columns={columns}
           dataSource={data}
           rowClassName={classes.rowKey}

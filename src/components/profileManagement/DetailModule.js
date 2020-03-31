@@ -1,7 +1,9 @@
-import React from "react";
-import { Checkbox, Button, Table, Input, Radio } from "antd";
+import React, { Fragment } from "react";
+import { Checkbox, Button, Table, Input, Radio, ConfigProvider } from "antd";
 import classes from "./profile.module.scss";
 import moment from "moment";
+import { EditIcon } from "../../assets/icons";
+import zhCN from "antd/es/locale/zh_CN";
 
 export const BaseInfoModule = ({
   disabled,
@@ -27,7 +29,9 @@ export const BaseInfoModule = ({
   ];
   return (
     <div className={classes.groupBasic}>
-      <div style={{ fontSize: "15px" }}>基本信息</div>
+      <div style={{ fontSize: "15px", color: "#777F97", marginBottom: "7px" }}>
+        基本信息
+      </div>
       <table>
         <tbody>
           {list.map((i, index) => (
@@ -44,12 +48,8 @@ export const BaseInfoModule = ({
                   />
                 )}
                 <span>{i.value}</span>
-                {!disabled && index === 0 && (
-                  <img
-                    alt=""
-                    src="/image/davinci/edit.svg"
-                    onClick={() => setEditable(true)}
-                  />
+                {!disabled && !editable && index === 0 && (
+                  <EditIcon onClick={() => setEditable(true)} />
                 )}
               </td>
             </tr>
@@ -98,6 +98,7 @@ export const AppManagerModule = ({
           onClick={() => {
             enterPermission(true, record);
           }}
+          style={{ color: "#2A7FFF" }}
         >
           权限管理
         </Button>
@@ -126,12 +127,14 @@ export const AppManagerModule = ({
           <Radio value={false}>不允许</Radio>
         </Radio.Group>
       </div>
-      <Table
-        columns={columns}
-        dataSource={appManagerBos}
-        rowKey="appId"
-        pagination={false}
-      ></Table>
+      <ConfigProvider locale={zhCN}>
+        <Table
+          columns={columns}
+          dataSource={appManagerBos}
+          rowKey="appId"
+          pagination={false}
+        ></Table>
+      </ConfigProvider>
     </div>
   );
 };
@@ -159,7 +162,7 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
     <div className={classes.groupManage}>
       {radioList.map(i => {
         return (
-          <div key={i.key}>
+          <Fragment key={i.key}>
             {(i.key === "teamVisible" || teamVisible.checked !== false) && (
               <>
                 <span className={classes.moduleTitle}>{i.label}</span>
@@ -181,16 +184,16 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
                 </Radio.Group>
               </>
             )}
-          </div>
+          </Fragment>
         );
       })}
       {teamVisible.checked !== false &&
         checkboxList.map(i => (
-          <div key={i.key}>
+          <Fragment key={i.key}>
             <span className={classes.moduleTitle}>{i.title}</span>
             <div className={classes.checkboxStyle}>
               {i.data.map(j => (
-                <span key={j.label}>
+                <Fragment key={j.label}>
                   <span>{j.label}</span>
                   <Checkbox
                     checked={j.checked}
@@ -206,10 +209,10 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
                       )
                     }
                   />
-                </span>
+                </Fragment>
               ))}
             </div>
-          </div>
+          </Fragment>
         ))}
     </div>
   );

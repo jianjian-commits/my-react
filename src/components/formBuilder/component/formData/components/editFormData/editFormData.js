@@ -429,7 +429,7 @@ class EditFormData extends Component {
         let componentDIVOptions = {
           key: item.key,
           style: { zIndex: 300 - i },
-          id: item.key + "Dom"
+          id: "Id" + item.key + "Dom"
         }
         let componentCommonOptions = {
           forms: currentForm,
@@ -663,7 +663,7 @@ class EditFormData extends Component {
                 key={item.key}
                 style={{ zIndex: 300 - i }}
                 className="formChild-container"
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <FormChildMobile

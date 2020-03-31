@@ -118,7 +118,7 @@ class ForBuilderHeader extends React.Component {
     let editForm = this.props.editForm;
     return (
       <div className="react-form-builder-header">
-        <Modal
+        {/* <Modal
           title=""
           visible={this.state.visible}
           closable={false}
@@ -148,13 +148,13 @@ class ForBuilderHeader extends React.Component {
               </Button>
             </div>
           </div>
-        </Modal>
+        </Modal> */}
 
-        <div className="headerBarBack">
+        {/* <div className="headerBarBack">
           <Button onClick={this.showModal} type="link">
             <Icon type="left" />
           </Button>
-        </div>
+        </div> */}
         <div className="FormTitle">
           {this.state.isTitleCanEdit === true ? (
             <span>{this._truncateValue(this.props.name)}</span>
@@ -168,7 +168,7 @@ class ForBuilderHeader extends React.Component {
               value={this.props.name}
             />
           )}
-          {this.state.isTitleCanEdit === true ? (
+          {/* {this.state.isTitleCanEdit === true ? (
             <Tooltip title="编辑">
               <img
                 onClick={this.handleTitleEdit}
@@ -177,12 +177,15 @@ class ForBuilderHeader extends React.Component {
             </Tooltip>
           ) : (
             <></>
-          )}
+          )} */}
         </div>
         <div className="CreateFormStep" />
         <div className="CreateFormOperations">
+          {/* <Button className="header-btn default">预览</Button> */}
           <Button
             disabled={!this.state.btnCanClick || !this.state.isEditAuth}
+            loading={!this.state.btnCanClick || !this.state.isEditAuth}
+            className="header-btn primary"
             onClick={e => {
               const checkRes = checkAndSaveForm(this.props);
               if (!checkRes.res) {
@@ -235,7 +238,7 @@ class ForBuilderHeader extends React.Component {
             }}
             type="primary"
           >
-            {this.state.btnCanClick === false ? <Spin /> : ""}保存
+            { this.state.btnCanClick ? "保存" : "保存"}
           </Button>
         </div>
       </div>

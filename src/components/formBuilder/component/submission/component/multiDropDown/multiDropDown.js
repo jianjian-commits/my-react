@@ -4,13 +4,14 @@ import { Form, Select, Tooltip, Icon } from "antd";
 import { getSelection } from "../../utils/filterData";
 import MultiDropDownItem from "./multiDropDownItem";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   getResIndexArray
 } from "../../utils/dataLinkUtils";
 
-export default class MultiDropDown extends React.Component {
+class MultiDropDown extends React.Component {
   constructor(props) {
     super(props);
 
@@ -24,6 +25,7 @@ export default class MultiDropDown extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     let { values, type } = data;
+    const {appId} = this.props.match.params;
     if (data && data.type === "DataLinkage") {
       const {
         conditionId,
@@ -31,7 +33,7 @@ export default class MultiDropDown extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let indexArr = getResIndexArray(value, dataArr);
@@ -90,7 +92,7 @@ export default class MultiDropDown extends React.Component {
         });
       });
     } else if (type === "otherFormData") {
-      getSelection(values.formId, values.optionId).then(res => {
+      getSelection(appId, values.formId, values.optionId).then(res => {
         this.setState({
           selections: res
         });
@@ -169,3 +171,4 @@ export default class MultiDropDown extends React.Component {
     );
   }
 }
+export default withRouter(MultiDropDown)

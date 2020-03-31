@@ -127,9 +127,10 @@ class EmailInputInspector extends React.PureComponent {
   };
 
   // API change
-  handleChangeAPI = ev => {
+   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -137,7 +138,8 @@ class EmailInputInspector extends React.PureComponent {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 

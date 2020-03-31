@@ -2,12 +2,13 @@ import React from "react";
 import { Form, Radio, Tooltip, Icon } from "antd";
 import { isValueValid } from "../../../utils/valueUtils";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
-export default class radioInput extends React.Component {
+class RadioInput extends React.Component {
 
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
@@ -20,7 +21,8 @@ export default class radioInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, (value) => {
           let index = -1;
@@ -60,8 +62,8 @@ export default class radioInput extends React.Component {
     setTimeout(()=>{
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
+        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
       }
     },300)
   }
@@ -103,3 +105,4 @@ export default class radioInput extends React.Component {
     );
   }
 }
+export default withRouter(RadioInput)

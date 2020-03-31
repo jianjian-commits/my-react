@@ -3,13 +3,14 @@ import { isValueValid } from "../../../utils/valueUtils";
 import { Form, Select, Tooltip, Icon } from "antd";
 import { getSelection } from "../utils/filterData";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   getResIndexArray
 } from "../utils/dataLinkUtils";
 
-export default class DropDown extends React.Component {
+class DropDown extends React.Component {
   constructor(props) {
     super(props);
 
@@ -23,7 +24,8 @@ export default class DropDown extends React.Component {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
     let { values, type } = data;
-    console.log("values", values);
+    // console.log("values", values);
+    const {appId} = this.props.match.params;
     // 数据联动请看单行文本组件
     if (data && data.type === "DataLinkage") {
       const {
@@ -32,7 +34,7 @@ export default class DropDown extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
           let indexArr = getResIndexArray(value, dataArr);
@@ -98,7 +100,7 @@ export default class DropDown extends React.Component {
       // 通过表单id和字段id过滤对应的提交数据
       // 将过滤的数据作为该表单的选项
       console.log("values", values);
-      getSelection(values.formId, values.optionId).then(res => {
+      getSelection(appId, values.formId, values.optionId).then(res => {
         this.setState({
           selections: res
         });
@@ -124,13 +126,13 @@ export default class DropDown extends React.Component {
       if (
         !Object.is(
           document
-            .querySelector(`#${key}Dom`)
+            .querySelector(`#Id${key}Dom`)
             .querySelector(".ant-form-explain"),
           null
         )
       ) {
         document
-          .querySelector(`#${key}Dom`)
+          .querySelector(`#Id${key}Dom`)
           .querySelector(".ant-form-explain")
           .setAttribute("title", customMessage);
       }
@@ -174,3 +176,4 @@ export default class DropDown extends React.Component {
     );
   }
 }
+export default withRouter(DropDown)
