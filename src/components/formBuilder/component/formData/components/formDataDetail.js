@@ -60,9 +60,9 @@ const ApprovalStatus = props => {
 const EditApprovalButton = props => {
   // 权限相关
   const { appId } = useParams();
-  const { userId, permissions, teamId, id:formId } = props;
-  const idEditAuth = editFormDataAuth(permissions, teamId, appId, formId, userId);
-  const isDeleteAuth = deleteFormDataAuth(permissions, teamId, appId, formId, userId);
+  const { permissions, teamId, id:formId, userDetail } = props;
+  const idEditAuth = editFormDataAuth(permissions, teamId, appId, formId, userDetail.id);
+  const isDeleteAuth = deleteFormDataAuth(permissions, teamId, appId, formId, userDetail.id);
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
   const { detailAuthority, dataId, actionFun, deleteFormData, ...rest } = props;
@@ -526,7 +526,8 @@ export default connect(
     taskData: store.formSubmitData.taskData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentTeam && login.currentTeam.id,
-    permissions: (login.userDetail && login.userDetail.permissions) || []
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    userDetail: login.userDetail
   }),
   {
     getSubmissionDetail,
