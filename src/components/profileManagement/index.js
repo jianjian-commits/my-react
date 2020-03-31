@@ -219,6 +219,7 @@ class ProfileManagement extends React.Component {
                     okText="是"
                     cancelText="否"
                     onConfirm={() => this.removeGroup(record)}
+                    placement="top"
                   >
                     <Button type="link" key={w.key} style={{ color: "#2A7FFF" }}>
                       {w.text}

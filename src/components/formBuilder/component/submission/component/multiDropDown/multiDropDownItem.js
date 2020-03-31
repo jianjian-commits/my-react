@@ -6,7 +6,8 @@ export default class MultiDropDownItem extends React.Component {
     super(props);
     this.state = {
       selectIndexArr: [],
-      isPopoverVisible: false
+      isPopoverVisible: false,
+      initFlag: true
     };
   }
 
@@ -14,15 +15,15 @@ export default class MultiDropDownItem extends React.Component {
   //   if (newProps.selections.length == 0) {
   //     this.setState({ selectIndexArr: [] });
   //   }
-  //   let selectIndexArr = []
-  //     newProps.value.map( value =>{
-  //       newProps.item.data.values.map((item,index) => {
-  //         if(item.value === value){
-  //           selectIndexArr.push(index)
-  //         }
-  //       })
-  //     })
-  //     this.setState({ selectIndexArr });
+    // let selectIndexArr = []
+    //   newProps.value.map( value =>{
+    //     newProps.item.data.values.map((item,index) => {
+    //       if(item.value === value){
+    //         selectIndexArr.push(index)
+    //       }
+    //     })
+    //   })
+    //   this.setState({ selectIndexArr });
   // }
 
   componentDidMount() {
@@ -57,6 +58,16 @@ export default class MultiDropDownItem extends React.Component {
       this.setState({
         selectIndexArr: []
       });
+    } else if(nextProps.isEditData && this.state.initFlag &&nextProps.value instanceof Array){
+      let selectIndexArr = []
+      nextProps.value.map( value =>{
+        nextProps.item.data.values.map((item,index) => {
+          if(item.value === value){
+            selectIndexArr.push(index)
+          }
+        })
+      })
+      this.setState({ selectIndexArr, initFlag:false });
     }
   }
 

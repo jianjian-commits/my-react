@@ -157,8 +157,9 @@ $unHoverGray: #b6b6ba;
   width: 1016px;
   height: 510px;
   & .title {
-    padding-left: 73px;
+    padding-left: 80px;
     display: flex;
+    flex-wrap: wrap;
     & > div {
       font-style: normal;
       font-weight: normal;
@@ -299,22 +300,23 @@ $unHoverGray: #b6b6ba;
         }
       }
     }
-    & > .result {
-      & > div {
-        margin-top: 10pxpx;
-        text-align: center;
-      }
-      & > div:first-child {
-        margin-top: 76px;
-      }
-      & > div:last-child {
-        margin-top: 26px;
-        & > button {
-          width: 100px;
-          background: #2a7fff;
-        }
-      }
-    }
+    // & > .result {
+    //   display: block;
+    //   & > div {
+    //     margin-top: 10pxpx;
+    //     text-align: center;
+    //   }
+    //   & > div:first-child {
+    //     margin-top: 76px;
+    //   }
+    //   & > div:last-child {
+    //     margin-top: 26px;
+    //     & > button {
+    //       width: 100px;
+    //       background: #2a7fff;
+    //     }
+    //   }
+    // }
   }
 }
 
@@ -522,38 +524,35 @@ $unHoverGray: #b6b6ba;
 }
 
 .result {
-  width: 100% !important;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 !important;
+  width: 240px !important;
+  height: 127px;
+  margin: 136.5px 0 0 240px !important;
   & > div {
-    display: flex;
-    width: 176px;
-    flex-wrap: wrap;
+    width: 100%;
+    text-align: center;
     padding: 0;
-    & > div:first-child {
-      width: 35px;
-      margin-right: 14px;
-      margin-bottom: 0;
-    }
-    & > div:nth-child(2) {
-      width: 126px;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 49px;
-      color: #333333;
-      text-align: left;
-    }
-    & > div:last-child {
-      width: 175px;
-      margin-top: 27px;
-      text-align: unset;
-      & > button{
-        width: 112px;
-        height: 36px;
+    color: #777F97;
+  }
+  & > div:first-child {
+    margin-bottom: 14.41px;
+    font-size: 16px;
+  }
+  & > div:nth-child(2) {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  & > div:last-child {
+    & > a {
+      width: 240px !important;
+      height: 44px;
+      background: #2a7fff;
+      border-radius: 6px;
+      & > span {
+        font-size: 14px;
+        line-height: 40px;
+        color: #ffffff;
       }
     }
   }

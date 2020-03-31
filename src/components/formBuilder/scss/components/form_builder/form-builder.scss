@@ -161,8 +161,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     width: 70%;
     flex: initial;
     padding-top: 49px;
-    background: #F7F7F8;
-    overflow-y: auto;
+    background: #FFF;
+    overflow:auto;
+    overflow-x:hidden;
     .react-form-builder-preview {
       min-height: 100%;
       max-width: 870px;
