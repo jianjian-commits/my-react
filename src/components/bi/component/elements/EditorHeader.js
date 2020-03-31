@@ -4,7 +4,6 @@ import { Button, Icon} from "antd";
 import { changeBind, setDashboards, clearBind } from '../../redux/action';
 import request from '../../utils/request';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
-import "./element.scss";
 import { useParams, useHistory } from "react-router-dom";
 
 const EditorHeader = props => {

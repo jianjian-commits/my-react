@@ -5,7 +5,6 @@ import { useParams, useHistory } from "react-router-dom";
 import request from '../../utils/request';
 import { setFormData, setDataSource } from '../../redux/action';
 import DataListModal from "../elements/modal/dataListModal";
-import "../../scss/dashboard.scss";
 
 const DBToolbar = props => {
   const history = useHistory();

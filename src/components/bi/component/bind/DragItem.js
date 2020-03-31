@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { DragSource } from 'react-dnd';
 import {Types} from './Types';
 import { Icon } from "antd";
-import './bind.scss';
 
 const spec = {
   beginDrag(props, monitor, component) {
