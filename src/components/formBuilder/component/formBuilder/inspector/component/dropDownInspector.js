@@ -44,10 +44,16 @@ class DropdownInspector extends React.Component {
     }
 
     const { key } = element;
-    const isUniqueApi = checkUniqueApi(key, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(key, this.props);
+    const isUnique = !err;
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
     this.setState({
       apiNameTemp: key,
-      isUniqueApi: isUniqueApi
+      isUniqueApi: isUniqueApi,
+      APIMessage
     });
   }
 

@@ -135,6 +135,9 @@ body {
             .ant-form-item-control-wrapper {
               .ant-form-item-control {
                 .ant-form-item-children {
+                  &>input[type="number"] {
+                    width: 405px;
+                  }
                   &>input[type="text"] {
                     width: 405px;
                   }
@@ -257,8 +260,9 @@ body {
           flex-wrap: wrap;
         }
         .dropDownContainer {
-          width: 100%;
+          width: 405px;
           position: relative;
+          border: 1px solid #d9d9d9;
           .dropDownBtn {
             width: 100%;
             height: 32px;
@@ -297,7 +301,7 @@ body {
               line-height: 32px;
               position: relative;
               &:hover {
-                background-color: #e6f7ff;
+                background-color: #E7F0FF;
               }
               .dropDownItemSpan {
                 display: inline-block;
@@ -314,13 +318,14 @@ body {
               }
             }
             .selectOption {
-              background-color: #e6f7ff;
+              background-color: #E7F0FF;
             }
           }
         }
         .multiDropDownContainer {
-          width: 100%;
+          width: 405px;
           position: relative;
+          border: 1px solid #d9d9d9;
           .dropDownBtn {
             width: 100%;
             height: 32px;
@@ -359,7 +364,7 @@ body {
               line-height: 32px;
               position: relative;
               &:hover {
-                background-color: #e6f7ff;
+                background-color: #E7F0FF;
               }
               .dropDownItemSpan {
                 display: inline-block;
@@ -382,7 +387,7 @@ body {
               }
             }
             .selectOption {
-              background-color: #e6f7ff;
+              background-color: #E7F0FF;
             }
           }
         }
@@ -522,6 +527,7 @@ body {
                     font-family: "PingFangSC-Regular", "PingFang SC";
                     font-weight: 400;
                     color: rgba(51, 51, 51, 1);
+                    max-width: 150px;
                   }
                 }
                 img {
@@ -608,11 +614,15 @@ body {
                 .deleteBtn {
                   z-index: 111;
                   position: absolute;
-                  top: 7px;
-                  right: 6px;
-                  img {
+                  top: -9px;
+                  right: 2px;
+                  svg {
                     width: 15px;
                     height: 15px;
+                    cursor: pointer;
+                    &:hover path{
+                      fill:#D01414;
+                    }
                   }
                 }
               }
@@ -1023,7 +1033,7 @@ body {
           line-height: 32px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1040,7 +1050,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }
@@ -1065,7 +1075,7 @@ body {
           line-height: 32px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1088,7 +1098,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }
@@ -1224,7 +1234,7 @@ body {
           line-height: 28px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1241,7 +1251,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }
@@ -1267,7 +1277,7 @@ body {
           line-height: 28px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1290,7 +1300,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }

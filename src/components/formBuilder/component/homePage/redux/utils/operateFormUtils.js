@@ -3,7 +3,7 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import coverTimeUtils from "../../../../utils/coverTimeUtils";
 import config from "../../../../config/config";
 import { message } from "antd";
-import { RECIVE_FORMS } from "../action";
+import { RECIVE_FORMS, GET_APPROVE_LIST_COUNT} from "../action";
 
 export const deleteForm = formId => dispatch => {
   instanceAxios({
@@ -141,3 +141,24 @@ export const getFormsByFormId = formId => {
       });
   });
 };
+
+export const getApproveCount = (appId) =>dispatch =>{
+  return new Promise((resolve, reject) =>{
+    axios({
+      url: config.apiUrl + "/flow/history/approval/count",
+      headers:{appid: appId},
+      method: "get"
+    })
+      .then(response => {
+        dispatch({
+          type: GET_APPROVE_LIST_COUNT,
+          approveListCount: response.data.data
+        })
+        // resolve(response.data.data);
+      })
+      .catch(err => {
+        console.log(err);
+        // reject(err);
+      });
+  })
+}

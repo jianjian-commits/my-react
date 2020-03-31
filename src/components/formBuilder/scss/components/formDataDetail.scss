@@ -6,15 +6,49 @@
   padding-top: 40px;
   padding-bottom: 30px;
   .title {
-    font-family: "Microsoft YaHei";
+    font-family: "Noto Sans SC";
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     color: #333333;
+    .ant-breadcrumb{
+      height: 26px;
+      line-height: 26px;
+      font-family:"Noto Sans SC";
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      color: #666666;
+      .recordList{
+          cursor: pointer;
+      }
+      .submitRecord{
+          cursor: default;
+      }
+      }
+      .ant-breadcrumb > span:last-child {
+          color: #333333;
+      }
     }
   .btn{
     width: 104px;
     margin-left: 20px;
+    height: 36px;
+    text-shadow: none;
+    box-shadow: none;
+  }
+  .redBtn {
+    background: #fff;
+    border-color: #fff;
+    color: #E71010;
+  }
+  .ant-btn-danger:hover, .ant-btn-danger:focus {
+    color: #E71010;
+    background-color: #E6E6E6;
+    border-color: #E6E6E6;
+  }
+  .shortletter {
+    letter-spacing: -2px; 
   }
 }
 .formDataDetailContainer {
@@ -23,7 +57,7 @@
   height: auto;
   margin: auto;
   background: #ffffff;
-  font-family: "Microsoft YaHei";
+  font-family: "Noto Sans SC";
   font-style: normal;
   font-weight: normal;
   .ant-table-middle > .ant-table-content >.ant-table-body > table {
@@ -47,12 +81,12 @@
       border-bottom-color: #DCDEE3;
     }
     .ant-table-column-title{
-      font-family: "Microsoft YaHei";
+      font-family: "Noto Sans SC";
       font-style: normal;
       font-weight: bold;
       font-size: 15px;
       line-height: 20px;
-      color: #333333;
+      color: #333;
     }
   }
   .dataDteailText {
