@@ -25,14 +25,14 @@ const formDataThead = [
 ];
 
 const Mete = {
-  DISPLAY: "是否可见",
+  VISIBLE: "是否可见",
   TABLE: [
     { key: "FORM", value: "表单数据" },
     { key: "AP", value: "审批流元数据" },
     { key: "PB", value: "自动化流程元数据" }
   ],
-  displayApplySettingButton: "是否显示应用管理按钮",
-  allowCreateNewForm: "允许新建表单",
+  APP_SETTING: "是否显示应用管理按钮",
+  APP_CREATEFORM: "允许新建表单",
   appSetting: "可见",
   createForm: "允许"
 };
@@ -59,35 +59,71 @@ const Tr = ({
     <tr>
       {headers.map(header => {
         const Td = filte.filter(f => f.label.split("_")[1] === header.key);
+        const disabledCheck = value => {
+          if (value === "DELETE") {
+            const relater = filters.filter(
+              f => f.label.split("_")[1] === "DELETEALL"
+            )[0].checked;
+            return relater;
+          }
+          if (value === "REDITOWNER") {
+            const relater = filters.filter(
+              f => f.label.split("_")[1] === "REDITALL"
+            )[0].checked;
+            return relater;
+          }
+          if (value === "SEARCHOWNER") {
+            const relater = filters.filter(
+              f => f.label.split("_")[1] === "SEARCHALL"
+            )[0].checked;
+            return relater;
+          }
+          return false;
+        };
         return (
           <td key={header.key}>
             {header.key === "TYPE" && <span>{table.value}</span>}
             {Td[0] && (
               <CheckBox
-                defaultChecked={Td[0].defaultChecked || Td[0].checked}
+                // defaultChecked={Td[0].defaultChecked || Td[0].checked}
                 checked={Td[0].checked}
+                disabledCheck={
+                  fp === "dataPermissions"
+                    ? disabledCheck(Td[0].label.split("_")[1])
+                    : null
+                }
                 onChange={e => {
                   dat[index][fp] = filters.map(f => {
-                    // const relate = (r, rd) => {
-                    //   if (
-                    //     Td[0].label.split("_")[1] === r &&
-                    //     f.label.split("_")[1] === rd
-                    //   )
-                    //     return {
-                    //       ...f,
-                    //       checked: true,
-                    //       defaultChecked: f.defaultChecked || f.checked
-                    //     };
-                    // };
-                    // relate("DELETEALL", "DELETE");
-                    // relate("REDITALL", "REDITOWNER");
-                    // relate("SEARCHALL", "SEARCHOWNER");
-                    if (f.label === Td[0].label)
+                    if (
+                      Td[0].label.split("_")[1] === "DELETEALL" &&
+                      f.label.split("_")[1] === "DELETE"
+                    )
                       return {
                         ...f,
-                        checked: !f.checked,
-                        defaultChecked: f.defaultChecked || f.checked
+                        checked: e.target.checked
                       };
+                    if (
+                      Td[0].label.split("_")[1] === "REDITALL" &&
+                      f.label.split("_")[1] === "REDITOWNER"
+                    )
+                      return {
+                        ...f,
+                        checked: e.target.checked
+                      };
+                    if (
+                      Td[0].label.split("_")[1] === "SEARCHALL" &&
+                      f.label.split("_")[1] === "SEARCHOWNER"
+                    )
+                      return {
+                        ...f,
+                        checked: e.target.checked
+                      };
+                    if (f.label === Td[0].label) {
+                      return {
+                        ...f,
+                        checked: !f.checked
+                      };
+                    }
                     return f;
                   });
                   setState({
@@ -97,7 +133,7 @@ const Tr = ({
                       [permissionsValue]: dat
                     },
                     data: crreteData({
-                      defaultChecked: e.target.defaultChecked,
+                      defaultChecked: Td[0].defaultChecked || Td[0].checked,
                       checked: e.target.checked,
                       state,
                       dat: Td[0],
@@ -175,10 +211,12 @@ const thunkForm = (
     <>
       {dat.map((form, index) => {
         const filters = form.formDetailPermissions || form.dataPermissions;
-        const display = filters.filter(f => f.label === "DISPLAY");
+        const display = filters.filter(
+          f => f.value.split("_")[1] === "VISIBLE"
+        );
         const onChange = e => {
           dat[index][fp] = filters.map(f => {
-            if (f.label === "DISPLAY") {
+            if (f.value.split("_")[1] === "VISIBLE") {
               return {
                 ...f,
                 checked: e.target.value
@@ -211,7 +249,9 @@ const thunkForm = (
             <div className={Styles.radioThunk}>
               <div>
                 <span>
-                  {display && display[0] && blackSpan(Mete[display[0].label])}
+                  {display &&
+                    display[0] &&
+                    blackSpan(Mete[display[0].value.split("_")[1]])}
                 </span>
                 <Radio.Group
                   onChange={onChange}
@@ -279,8 +319,8 @@ const thunkSetting = (state, settingValue, setState, disabled, visMete) => {
   return (
     <>
       <div className={Styles.radioThunk}>
-        <div style={{ border: visMete ? "none" : "1px solid #d6d8de;" }}>
-          <span>{blackSpan(Mete[dat.label])}</span>
+        <div style={{ borderBottom: visMete ? "none" : "1px solid #d6d8de" }}>
+          <span>{blackSpan(Mete[dat.value])}</span>
           <Radio.Group
             onChange={onChange}
             value={dat.checked}
@@ -350,11 +390,10 @@ const crreteData = ({ defaultChecked, checked, state, dat, formId }) => {
     ];
   return state.data.map(d => {
     const values = () => {
-      // const profix = dat.value.split("_");
-      // if (profix[1] === "SEARCHALL")
-      //   return [dat.value, profix[0] + "SEARCHOWNER"];
-      // if (profix[1] === "REDITALL") return [dat.value, profix[0] + "REDITOWNER"];
-      // if (profix[1] === "DELETEALL") return [dat.value, profix[0] + "DELETE"];
+      const profix = dat.value.split("_");
+      if (profix[1] === "LIST") return [dat.value, profix[0] + "_CHECK"];
+      if (profix[1] === "EDITALL") return [dat.value, profix[0] + "_EDIT"];
+      if (profix[1] === "DELALL") return [dat.value, profix[0] + "_DEL"];
       return [dat.value];
     };
     if (d.formId === formId) {
@@ -488,8 +527,7 @@ function handleSaveButton({ state, initialData, enterPermission }) {
         message.error(res.msg || "保存应用权限失败");
       }
     },
-    err =>
-    catchError(err)
+    err => catchError(err)
   );
 }
 
@@ -509,8 +547,7 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
         message.error(res.msg || "获取应用权限失败");
       }
     },
-    err =>
-    catchError(err)
+    err => catchError(err)
   );
 }
 
@@ -538,14 +575,21 @@ export default function ApplyPermissionSetting(props) {
   });
   const [init, setInit] = useState(false);
   const disabled = action === "view" ? true : false;
-  const CheckBox = ({ defaultChecked, checked, onChange }) => {
+  const CheckBox = ({
+    defaultChecked,
+    checked,
+    onChange,
+    disabledCheck,
+    ...args
+  }) => {
     return (
       <Checkbox
         defaultChecked={defaultChecked}
         checked={checked}
         onChange={onChange}
-        disabled={disabled}
-        className={disabled ? Styles.disabled : Styles.checkBox}
+        disabled={disabledCheck || disabled}
+        className={Styles.checkBox}
+        {...args}
       />
     );
   };
