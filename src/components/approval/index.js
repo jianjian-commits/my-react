@@ -48,7 +48,7 @@ export const ApprovalSection = props => {
       key: "myPending",
       icon: <PendingIcon style={{marginRight: 5}}/>,
       label: "我的待办",
-      tagNumber: todos,
+      tagNumber: props.todosNumber || todos,
       onClick: () => {
         // history.push(`${baseUrl(history.location.pathname)}/myPending`);
         props.fn("myPending");

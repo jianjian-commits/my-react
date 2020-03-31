@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { message, Button } from "antd";
 import request from "../../utils/request";
 import Loading from "../../pages/Loading";
+import { catchError } from "../../utils";
 import registerStyles from "./style/login.module.scss";
 
 export default connect()(function InviteUser({ match, history }) {
@@ -78,11 +79,7 @@ export default connect()(function InviteUser({ match, history }) {
           });
         }
       },
-      err =>
-        message.error(
-          (err.response && err.response.data && err.response.data.msg) ||
-            "系统错误"
-        )
+      err => catchError(err)
     );
   }
   const {
@@ -113,10 +110,7 @@ export default connect()(function InviteUser({ match, history }) {
       err => {
         if (err.response && err.response.data && err.response.data.msg)
           setState({ ...state, alreadyAddTeam: true });
-        message.error(
-          (err.response && err.response.data && err.response.data.msg) ||
-            "系统错误"
-        );
+        catchError(err);
       }
     );
   };

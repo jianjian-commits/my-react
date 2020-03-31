@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
+import { catchError } from "../../utils";
 import { InnerHeader } from "../profileManagement/GroupDetail";
 
 const formMeteDataThead = [
@@ -392,16 +393,6 @@ const Permission = ({
   disabled
 }) => {
   const permissionsValue = value + "Permissions";
-  console.log(
-    value,
-    headers,
-    setState,
-    state,
-    CheckBox,
-    settingDisplay,
-    title,
-    disabled
-  );
   return (
     <div className={Styles.meteData}>
       <div>
@@ -498,10 +489,7 @@ function handleSaveButton({ state, initialData, enterPermission }) {
       }
     },
     err =>
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      )
+    catchError(err)
   );
 }
 
@@ -522,10 +510,7 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
       }
     },
     err =>
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      )
+    catchError(err)
   );
 }
 
@@ -560,7 +545,7 @@ export default function ApplyPermissionSetting(props) {
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        className={Styles.checkBox}
+        className={disabled ? Styles.disabled : Styles.checkBox}
       />
     );
   };

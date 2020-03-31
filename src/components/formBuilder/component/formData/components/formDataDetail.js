@@ -1,4 +1,4 @@
-import React, { PureComponent} from "react";
+import React, { PureComponent } from "react";
 import { Form, Table, Icon, Tabs, message, Spin } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
@@ -11,7 +11,11 @@ import { deleteFormData } from "../redux/utils/deleteDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import { DeleteIcon, EditIcon } from "./svgIcon/index";
 import FormDataDetailHeader from "./formDataDetailHeader";
-import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionUtils";
+import {
+  editFormDataAuth,
+  deleteFormDataAuth
+} from "../../../utils/permissionUtils";
+import { getTransactList } from "../../../../../store/loginReducer";
 const { TabPane } = Tabs;
 const columns = [
   {
@@ -37,7 +41,14 @@ const columns = [
   },
   {
     title: "日期",
-    dataIndex: "approveDate"
+    dataIndex: "approveDate",
+    render: (text, record, index) => {
+      if (record.approveDate !== null) {
+        return new Date(text).toLocaleString("chinese", { hour12: false });
+      } else {
+        return null;
+      }
+    }
   }
 ];
 
@@ -60,9 +71,21 @@ const ApprovalStatus = props => {
 const EditApprovalButton = props => {
   // 权限相关
   const { appId } = useParams();
-  const { userId, permissions, teamId, id:formId } = props;
-  const idEditAuth = editFormDataAuth(permissions, teamId, appId, formId, userId);
-  const isDeleteAuth = deleteFormDataAuth(permissions, teamId, appId, formId, userId);
+  const { userId, permissions, teamId, id: formId } = props;
+  const idEditAuth = editFormDataAuth(
+    permissions,
+    teamId,
+    appId,
+    formId,
+    userId
+  );
+  const isDeleteAuth = deleteFormDataAuth(
+    permissions,
+    teamId,
+    appId,
+    formId,
+    userId
+  );
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
   const { detailAuthority, dataId, actionFun, deleteFormData, ...rest } = props;
@@ -84,23 +107,28 @@ const EditApprovalButton = props => {
       });
   };
   return props.enterPort === "FormSubmitData" ? (
-    <div className="toolbarBox" style={{"cursor": "pointer"}}>
-      {idEditAuth ? <span
-        onClick={() => {
-          actionFun(dataId, true);
-        }}
-      >
-        <Icon component={EditIcon} style={{ marginRight: 5 }} />
-        编辑
-      </span> : null}
-      {isDeleteAuth ? <span style={{"cursor": "pointer"}}
-        onClick={() => {
-          handleDeleteSubmisson(dataId);
-        }}
-      >
-        <Icon component={DeleteIcon} style={{ marginRight: 5 }} />
-        删除
-      </span> : null}
+    <div className="toolbarBox" style={{ cursor: "pointer" }}>
+      {idEditAuth ? (
+        <span
+          onClick={() => {
+            actionFun(dataId, true);
+          }}
+        >
+          <Icon component={EditIcon} style={{ marginRight: 5 }} />
+          编辑
+        </span>
+      ) : null}
+      {isDeleteAuth ? (
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            handleDeleteSubmisson(dataId);
+          }}
+        >
+          <Icon component={DeleteIcon} style={{ marginRight: 5 }} />
+          删除
+        </span>
+      ) : null}
     </div>
   ) : (
     <></>
@@ -115,10 +143,9 @@ class FormDataDetail extends PureComponent {
       formId: this.props.id,
       submissionId: this.props.dataId,
       tabKey: "formDetail",
-      isLoading: false,
+      isLoading: false
     };
   }
-
   componentDidMount() {
     const { mobile = {}, mountClassNameOnRoot } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
@@ -129,7 +156,9 @@ class FormDataDetail extends PureComponent {
           this.state.formId,
           this.state.submissionId,
           this.props.appId,
-          (isLoading)=>{this.setState({isLoading})}
+          isLoading => {
+            this.setState({ isLoading });
+          }
         );
       })
       .catch(err => {
@@ -142,7 +171,9 @@ class FormDataDetail extends PureComponent {
       this.state.formId,
       this.state.submissionId,
       this.props.appId,
-      (isLoading)=>{this.setState({isLoading})}
+      isLoading => {
+        this.setState({ isLoading });
+      }
     );
   };
 
@@ -428,10 +459,10 @@ class FormDataDetail extends PureComponent {
     });
   };
 
-  setLoading = (isLoading) =>{
-    this.setState({isLoading})
-  }
-  
+  setLoading = isLoading => {
+    this.setState({ isLoading });
+  };
+
   render() {
     const { formDetail, currentForm, mobile = {}, taskData } = this.props;
     const { tabKey } = this.state;
@@ -460,17 +491,6 @@ class FormDataDetail extends PureComponent {
         operations = <></>;
         break;
     }
-    let list = [];
-    if (taskData.status) {
-      list = taskData.tasks.map(item => {
-        item.key = item.approveDate;
-        item.approveDate = new Date(item.approveDate).toLocaleString(
-          "chinese",
-          { hour12: false }
-        );
-        return item;
-      });
-    }
     let BoxStyle = {};
     if (this.props.enterPort === "Dispose") {
       BoxStyle = { width: "calc(100vw - 500px)", margin: "0 auto" };
@@ -484,30 +504,30 @@ class FormDataDetail extends PureComponent {
             resetData={this.resetData}
             {...this.props}
             setLoading={this.setLoading}
-            />
+          />
           <div className="formDataDetailContainer">
-          <Tabs defaultActiveKey="detail" 
-            className="tabsBackground"
-            onChange={this.onChangeTab} 
-            tabBarExtraContent={operations}
-          >
-            <TabPane tab="表单详情" key="formDetail">
-              {this._renderDataByType(formDetail, newCurrentComponents)}
-            </TabPane>
-            {
-              // 关联审批的才展示审批  taskData.tasks
-              taskData.status  ? (
-              <TabPane tab="审批流水" key="approvelFlow">
-                <Table
-                  pagination={false}
-                  columns={columns}
-                  dataSource={list}
-                  size="middle"
-                />
+            <Tabs
+              defaultActiveKey="detail"
+              className="tabsBackground"
+              onChange={this.onChangeTab}
+              tabBarExtraContent={operations}
+            >
+              <TabPane tab="表单详情" key="formDetail">
+                {this._renderDataByType(formDetail, newCurrentComponents)}
               </TabPane>
-            ): null
-            }
-          </Tabs>
+              {// 关联审批的才展示审批  taskData.tasks
+              taskData.status ? (
+                <TabPane tab="审批流水" key="approvelFlow">
+                  <Table
+                    rowKey={record => record.id + record.approveDate}
+                    pagination={false}
+                    columns={columns}
+                    dataSource={taskData.tasks}
+                    size="middle"
+                  />
+                </TabPane>
+              ) : null}
+            </Tabs>
           </div>
         </Spin>
       </div>
@@ -531,6 +551,7 @@ export default connect(
   {
     getSubmissionDetail,
     handleStartFlowDefinition,
-    deleteFormData
+    deleteFormData,
+    getTransactList
   }
 )(DataDetail);

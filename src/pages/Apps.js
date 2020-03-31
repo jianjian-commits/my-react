@@ -9,6 +9,7 @@ import { getAppList } from "../store/appReducer";
 import Authenticate from "../components/shared/Authenticate";
 import { SUPER_ADMINISTRATOR, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
+import { catchError } from "../utils";
 import classes from "../styles/apps.module.scss";
 import { NoAppImg } from "../assets/images";
 
@@ -62,10 +63,7 @@ class Apps extends React.Component {
         message.error(res.msg || "创建应用失败");
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     }
   }
 
@@ -83,7 +81,7 @@ class Apps extends React.Component {
         <HomeHeader />
         <Content className={commonClasses.container}>
           <header className={commonClasses.header}>
-            <span style={{ fontSize: 18,color:"#333333" }}>我的应用</span>
+            <span style={{ fontSize: 16,color:"#333333" }}>我的应用</span>
           </header>
           <Content className={classes.innerMain}>
             {getApps(appList)}

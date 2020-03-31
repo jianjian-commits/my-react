@@ -209,6 +209,7 @@ export default class PositionCenterList extends React.Component {
                 className = "" 
                 ref = {this.rangeNumber}
                 min={0}
+                max={10000}
                 onChange={this.handleChangeRange}
                 value={this.state.orientationRange} 
                 autoComplete = "off" />
