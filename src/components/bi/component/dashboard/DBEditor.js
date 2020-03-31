@@ -30,7 +30,7 @@ class DBEditor extends React.PureComponent {
     keys.forEach((item, idx) => {
       const data = elements[item].data;
       const chartName = elements[item].name;
-      const containerObj = {chartId: "chart"+idx, isBtnBlock: false, key: item, chartData: data, chartName};
+      const containerObj = {isBtnBlock: false, key: item, chartData: data, chartName};
       if(idx % 2 == 0) {
         elems.push(<ChartContainer {...containerObj}/>);
 
