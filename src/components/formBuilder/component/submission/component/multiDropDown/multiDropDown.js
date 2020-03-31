@@ -146,7 +146,7 @@ class MultiDropDown extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, initData } = this.props;
+    const { getFieldDecorator, item, initData, isEditData } = this.props;
     let errMsg = this.props.item.validate.customMessage;
 
     return (
@@ -165,7 +165,7 @@ class MultiDropDown extends React.Component {
           ],
           initialValue: initData || []
         })(
-          <MultiDropDownItem selections={this.state.selections} item={item} />
+          <MultiDropDownItem selections={this.state.selections} item={item} isEditData={isEditData || false}/>
         )}
       </Form.Item>
     );

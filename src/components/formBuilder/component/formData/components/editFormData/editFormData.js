@@ -238,7 +238,7 @@ class EditFormData extends Component {
   _iterateAllComponentToSetData(formComponentArray, customDataArray, values) {
     for (let i in values) {
       let currentComponent = formComponentArray.filter(item => {
-        return item.id == i;
+        return item.key == i;
       })[0];
       currentComponent || (currentComponent = {});
 
@@ -440,6 +440,7 @@ class EditFormData extends Component {
           form: this.props.form,
           initData: formDetail[item.key],
           errorResponseMsg: errorResponseMsg[item.key],
+          isEditData: true,
           resetErrorMsg: this._changeErrorResponseData
         }
         switch (item.type) {
