@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Row, Col, Icon, Modal, Input, message } from "antd";
+import { Button, Row, Col, Icon, Modal, Breadcrumb, message } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import request from '../../../../../utils/request';
 
@@ -182,6 +182,18 @@ const FormDataDetailHeader = (props) =>{
       history.goBack();
     }
   };
+  let backSpanText = "";
+  if(props.enterPort === "TransctionList"){
+    switch(props.approvalKey){ //    
+      case "myPending":backSpanText="我的待办";break;
+      case "mySubmitted": backSpanText="我提交的";break;
+      case "myHandled": backSpanText="我处理的";break;
+    }
+  } else if(props.enterPort === "FormSubmitData"){
+    backSpanText="记录列表"
+  } else if(props.enterPort ==="Dispose") {
+    backSpanText="我的待办";
+  }
 
   const { taskData, currentForm } = props; 
   const { canSubmit, canResubimit, canApprove, canWithdraw, currentProcessInstanceId ,currentTaskId } = taskData; 
@@ -192,11 +204,17 @@ const FormDataDetailHeader = (props) =>{
           <Row type="flex" align="middle" gutter={10}>
             <Col>
               <div className="title">
-                <Icon type="arrow-left" onClick={onClickBack}></Icon>
+                <Breadcrumb separator={
+                  <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z" fill="#666666"/>
+                  </svg>                     
+                }>
+                <Breadcrumb.Item className="recordList"
+                onClick = {onClickBack}
+              >{backSpanText}</Breadcrumb.Item>
+                <Breadcrumb.Item className="submitRecord">{currentForm.name}</Breadcrumb.Item>
+                </Breadcrumb>
               </div>
-            </Col>
-            <Col>
-              <div className="title">{currentForm.name}</div>
             </Col>
           </Row>
         </Col>
