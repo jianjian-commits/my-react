@@ -3,11 +3,10 @@ import { Icon } from "antd";
 
 export default function FieldDimension(props) {
   const handleDeleteDimension = () => {
-    props.removeField(props.item);
+    props.item.removeField(props.item);
   };
 
-  const { className, item } = props;
-  
+  const { item } = props;
   const handlMouseEnter = () => {
     document.getElementById("dim"+item.id).style.display = "block";
   };
@@ -17,7 +16,7 @@ export default function FieldDimension(props) {
   };
 
   return(
-  <div className={className} onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
+  <div className={item.className} onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
     <Icon type="close-circle" id={"dim"+item.id} onClick={handleDeleteDimension} theme="filled" />
     {item.label}
   </div>

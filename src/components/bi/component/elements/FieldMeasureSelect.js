@@ -27,11 +27,11 @@ export default function FieldMeasureSelect(props) {
   }
 
   const getSelectOperation = value => {
-    props.changeGroup(GroupType[value], props.item.id);
+    props.item.changeGroup(GroupType[value], props.item.id);
   }
 
   const handleDeleteTarget = () => {
-    props.removeField(props.item);
+    props.item.removeField(props.item);
   }
   
   const handlMouseEnter = () => {
@@ -42,8 +42,10 @@ export default function FieldMeasureSelect(props) {
     document.getElementById("mea"+props.item.id).style.display = "none";
   };
 
+  const className = props.item.className;
+
   return (
-    <div className={props.className} onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
+    <div className={className} onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
       <div className="cancelIcon">
         <Icon type="close-circle" id={"mea"+props.item.id} onClick={handleDeleteTarget} theme="filled" />
       </div>

@@ -20,7 +20,6 @@ function ModalTitle() {
 }
 
 function DataListModal(props) {
-
   const [choiceFormId,setChoiceFormId] = useState("");
   const [choiceFormName,setChoiceFormName] = useState("");
   const history = useHistory();

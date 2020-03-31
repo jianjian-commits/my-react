@@ -2,10 +2,19 @@ import React, {PureComponent, useState} from "react";
 import DragItem from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
+import { Types } from './Types';
 import { GroupType } from '../../component/elements/Constant';
 import DataListModal from "../elements/modal/dataListModal";
 import { Icon } from "antd";
 
+const DragChild = props => {
+  const { item } = props;
+
+  return (
+    <li className="bind-item"><Icon type={item.type == "NUMBER" ? "number" : "tags"}
+      className="data-icon" style={{color: "#2B81FF"}}/>{item ? item.label : ""}</li>
+  );
+}
 
 const LeftPane = props => {
   const getItems = (dataSource) => {
@@ -21,11 +30,11 @@ const LeftPane = props => {
       const currentGroup = GroupType.SUM;
       if(each) {
         if(each.type === "NUMBER") {
-          const item = {...each, bindType: "mea", option: {currentGroup}}
-          meaArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
+          const item = {...each, bindType: Types.MEASURE, option: {currentGroup}}
+          meaArr.push(<DragItem item={item} key={each.id} id={each.id} Child={DragChild}/>);
         } else {
-          const item = {...each,  bindType: 'dim', option: {currentGroup}}
-          dimArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
+          const item = {...each,  bindType: Types.DIMENSION, option: {currentGroup}}
+          dimArr.push(<DragItem item={item} key={each.id} id={each.id} Child={DragChild}/>);
         }
       }
     })

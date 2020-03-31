@@ -9,7 +9,7 @@ export default function ToolbarBtns(props){
       id={chartId + "btns"}
     >
       {iconBtnGroup.map((iconBtn,index) => 
-          <Icon type={iconBtn.type} key={index} onClick={iconBtn.click} />
+        <Icon type={iconBtn.type} key={index} onClick={iconBtn.click} />
       )}
     </span>
   );
