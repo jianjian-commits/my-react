@@ -614,11 +614,15 @@ body {
                 .deleteBtn {
                   z-index: 111;
                   position: absolute;
-                  top: 7px;
-                  right: 6px;
-                  img {
+                  top: -9px;
+                  right: 2px;
+                  svg {
                     width: 15px;
                     height: 15px;
+                    cursor: pointer;
+                    &:hover path{
+                      fill:#D01414;
+                    }
                   }
                 }
               }
