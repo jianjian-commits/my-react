@@ -1,12 +1,13 @@
 import React from "react";
 import { Modal, Button, Collapse, Icon , message } from "antd";
-import { useState ,useEffect} from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import { push } from "connected-react-router";
 import {connect} from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import request from '../../../utils/request';
-import { setFormData, setDataSource, clearBind } from '../../../redux/action';
+import { DBMode } from '../../dashboard/Constant';
+import { setFormData, setDataSource, clearBind, setDBMode } from '../../../redux/action';
 
 const { Panel } = Collapse;
 
@@ -20,7 +21,7 @@ function ModalTitle() {
 }
 
 function DataListModal(props) {
-  const [choiceFormId,setChoiceFormId] = useState("");
+  const [choiceFormId, setChoiceFormId] = useState("");
   const [choiceFormName,setChoiceFormName] = useState("");
   const history = useHistory();
   const { appId, dashboardId } = useParams();
@@ -39,13 +40,13 @@ function DataListModal(props) {
         formId:choiceFormId
       }
     }).then((res) => {
-
       if(res && res.msg === 'success') {
         const data = res.data;
         const view = data.view;
         const elementId = view.id;
-        props.setDataSource({id:choiceFormId,name:choiceFormName,data:view.formFields});
+        props.setDataSource({id:choiceFormId, name:choiceFormName, data:view.formFields});
         history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
+        props.setDBMode(DBMode.Editing);
       }
     }, () => {message.error("创建图标失败")})
   }
@@ -110,5 +111,6 @@ export default connect(store => ({
   push,
   setFormData,
   setDataSource,
-  clearBind
+  clearBind,
+  setDBMode,
 })(DataListModal);
