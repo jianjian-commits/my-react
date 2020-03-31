@@ -93,20 +93,7 @@ export const AppManagerModule = ({
       title: "操作",
       dataIndex: "action",
       width:"27%",
-      // render: (text, record) => (
-      //   <Button
-      //     type="link"
-      //     onClick={() => {
-      //       enterPermission(true, record);
-      //     }}
-      //     style={{ color: "#2A7FFF" }}
-      //   >
-      //     权限管理
-      //   </Button>
-      // )
       render: (text, record) => {
-        console.log('text',text);
-        console.log('record',record);
         return (
           <>
             {record.checked && (
