@@ -10,6 +10,7 @@ import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
+import { message } from 'antd';
 
 /**
  * Specifies the drop target contract.
@@ -53,7 +54,7 @@ const spec = {
           meaCount++;
         }
 
-        if(each.id == item.id) {
+        if(each.id == item.id && each.bindType == Types.DIMENSION) {
           isExisted = true;
         }
       })
@@ -62,7 +63,14 @@ const spec = {
       isMeaExceed = dimCount == 1 && meaCount >= 10;
     }
 
-    if(isExisted || isDimExceed || isMeaExceed) {
+    if(isExisted) {
+      message.warning("添加失败，同一字段不能重复添加维度！");
+      return;
+    }else if(isDimExceed){
+      message.warning("添加失败，当前暂不支持此模式！");
+      return;
+    }else if(isMeaExceed){
+      message.warning("添加失败，已超出系统限定字段数量！");
       return;
     }
 
@@ -164,11 +172,12 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (each, idx) => {
         if(each.bindType == bindType && bindType == Types.DIMENSION) {
-          components.push(<DragItem item={{...each, removeField: this.removeField, className: cls}} Child={FieldDimension} key={each.id}/>)
+          components.push(<DragItem item={{...each, removeField: this.removeField, className: cls}} Child={FieldDimension} key={each.id + "_" + idx}/>)
         }
 
         if(each.bindType == bindType && bindType == Types.MEASURE) {
-          components.push(<DragItem item={{...each, removeField: this.removeField, changeGroup: this.changeGroup, className: cls}} Child={FieldMeasureSelect} key={each.id}/>)
+          components.push(<DragItem item={{...each, removeField: this.removeField, changeGroup: this.changeGroup, className: cls}}
+            Child={FieldMeasureSelect} key={each.id + "_" + idx}/>)
         }
       }
     )

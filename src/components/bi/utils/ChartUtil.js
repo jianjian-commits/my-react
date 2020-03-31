@@ -13,7 +13,18 @@ export const getOption = (data) => {
 
   legends.forEach((each) => {
     title.push(each.legendName);
-    series.push({type: 'bar'});
+    series.push({type: 'bar',
+      // itemStyle: {
+      //   color: 'lightskyblue',
+      // },
+      // label: {
+      //   show: true,
+      //   position: 'top',
+      //   textStyle: {
+      //     color: 'black'
+      //   }
+      // }
+    });
   })
 
   source.push(title)
@@ -44,14 +55,26 @@ export const getOption = (data) => {
     source.push(row);
   });
 
+  const style = {
+    color: 'red'
+  }
+
   return  {
     dataset: {
       source
     },
     legend: {y: 'bottom'},
     tooltip: {},
-    xAxis: {type: 'category'},
-    yAxis: {},
+    xAxis: [
+      {
+        type: 'category', 
+        name: 'x轴标题', 
+        axisLabel: {
+          interval:0,  
+          rotate:30  
+        }
+      }],
+    yAxis: {name: 'y轴标题'},
     series
   } 
 }

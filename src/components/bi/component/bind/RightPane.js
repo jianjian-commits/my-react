@@ -8,7 +8,17 @@ export default class RightPane extends PureComponent {
     super(props);
     this.state = {
       activeIcon:"bar-chart",
+      seriesCheck: true,
+      dataCheck: false
     };
+  }
+
+  showSeries = () => {
+    this.setState({seriesCheck: !this.state.seriesCheck});
+  }
+
+  showDataTag = () => {
+    this.setState({dataCheck: !this.state.dataCheck});
   }
 
   handleSelectIcon = chartIcon => {
@@ -39,12 +49,12 @@ export default class RightPane extends PureComponent {
         <div className="right-pane-tools">
           <span className="title">工具栏</span>
           <p>X轴标题</p>
-          <Input/>
+          <Input />
           <p>Y轴标题</p>
-          <Input/>
+          <Input />
           <div className="checkboxGroup">
-            <Checkbox>显示数据标签</Checkbox>
-            <Checkbox>显示图例</Checkbox>
+            <Checkbox checked={this.state.dataCheck} onClick={this.showDataTag}>显示数据标签</Checkbox>
+            <Checkbox checked={this.state.seriesCheck} onClick={this.showSeries}>显示图例</Checkbox>
           </div>
         </div>
       </div>
