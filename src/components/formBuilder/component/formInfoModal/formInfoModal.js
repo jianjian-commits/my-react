@@ -4,6 +4,7 @@ import { Modal, Form, Icon, Input, Button, Checkbox } from "antd";
 import { saveForm } from "../formBuilder/redux/utils/operateForm";
 import { push } from "connected-react-router";
 import pinyin from "chinese-to-pinyin";
+import textArea from "../submission/component/textArea";
 class FormInforModalTitle extends React.Component {
   render() {
     const style = {
@@ -105,7 +106,7 @@ class FormInforModal extends React.Component {
               </Form.Item>
               <Form.Item label={"表单说明"}>
                 {getFieldDecorator("formInfo")(
-                  <TextArea row={5} style={{ height: 110 }} />
+                  <TextArea className={"textArea"} row={5} style={{ height: 110 }} />
                 )}
               </Form.Item>
               <Form.Item>

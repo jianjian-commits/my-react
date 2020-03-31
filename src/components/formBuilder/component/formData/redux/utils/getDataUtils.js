@@ -49,12 +49,12 @@ export const getFilterSubmissionData = (args) => dispatch => {
         type: Filter_FORM_DATA,
         submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
         formData: res.data.map(item => {
-          let extraProp = item.extraProp
+          let extraProp = item.extraProp? item.extraProp: { user :{id:"",name:""}}
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
-            extraProp: extraProp.user,
+            extraProp: extraProp,
             id: item.id
           }
         })
@@ -84,12 +84,12 @@ export const getFilterSubmissionData = (args) => dispatch => {
         type: Filter_FORM_DATA,
         submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
         formData: filterSubmisstion.map(item => {
-          let extraProp = item.extraProp
+          let extraProp = item.extraProp? item.extraProp: { user :{id:"",name:""}}
           return {
             data: item.data,
             created: item.createdTime,
             modified: item.updateTime,
-            extraProp: extraProp.user,
+            extraProp: extraProp,
             id: item.id
           }
         })
@@ -128,13 +128,13 @@ export const getSubmissionData = (params) => dispatch => {
           forms,
           submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-            let{ user } = item.extraProp? item.extraProp: { user :{id:"",name:""}}
+            let extraProp = item.extraProp? item.extraProp: { user :{id:"",name:""}}
             return {
               data: item.data,
               id: item.id,
               created: item.createdTime,
               modified: item.updateTime,
-              extraProp: user
+              extraProp: extraProp
             }
           })
         });
