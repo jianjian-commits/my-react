@@ -78,7 +78,7 @@ const EditApprovalButton = props => {
   const handleDeleteSubmisson = submissionId => {
     deleteFormData("", submissionId)
       .then(response => {
-        if (props.enterPort === "TransctionList") {j
+        if (props.enterPort === "TransctionList") {
           props.fn(props.approvalKey);
         } else if (props.enterPort === "FormSubmitData") {
           props.actionFun(props.submissionId, false, props.currentForm.id);
