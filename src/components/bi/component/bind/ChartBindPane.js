@@ -10,6 +10,7 @@ import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
+import { deepClone } from '../../utils/Util';
 import { message } from 'antd';
 
 /**
@@ -54,7 +55,7 @@ const spec = {
           meaCount++;
         }
 
-        if(each.id == item.id && each.bindType == Types.DIMENSION) {
+        if(item.fieldId && (each.fieldId == item.fieldId) && each.bindType == Types.DIMENSION) {
           isExisted = true;
         }
       })
@@ -77,7 +78,9 @@ const spec = {
     const dropDim = component.getType() == Types.DIMENSION;
 
     if(dropDim && (item.bindType == Types.DIMENSION) || (!dropDim && (item.bindType == Types.MEASURE))) {
-      bindDataArr.push(item);
+      const obj = deepClone(item);
+      obj['idx'] = bindDataArr.length;
+      bindDataArr.push(obj);
     }
 
     processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elementId);
@@ -131,7 +134,7 @@ class BindPane extends PureComponent {
     return connectDropTarget(
       <div className="bind-line" key={label} ref={(ref)=> {this.line = ref}}>
         <div className="bind-label">{label}</div>
-        {this.getItems(bindType)}
+        <div className="bind-cols">{this.getItems(bindType)}</div>
       </div>
     )
   }
@@ -142,9 +145,9 @@ class BindPane extends PureComponent {
 
   removeField = (item) => {
     let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
-
-    const newArr = bindDataArr.filter((each)=>{
-      return item.id != each.id;
+    
+    const newArr = bindDataArr.filter((each) => {
+      return item.idx != each.idx;
     })
 
     processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);

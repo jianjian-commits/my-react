@@ -33,10 +33,10 @@ const LeftPane = props => {
       if(each) {
         if(each.type === "NUMBER") {
           const item = {...each, bindType: Types.MEASURE, option: {currentGroup}}
-          meaArr.push(<DragItem item={item} key={each.id} id={each.id} Child={DragChild}/>);
+          meaArr.push(<DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
         } else {
           const item = {...each,  bindType: Types.DIMENSION, option: {currentGroup}}
-          dimArr.push(<DragItem item={item} key={each.id} id={each.id} Child={DragChild}/>);
+          dimArr.push(<DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
         }
       }
     })

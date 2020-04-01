@@ -63,18 +63,19 @@ export const getOption = (data) => {
     dataset: {
       source
     },
-    legend: {y: 'bottom'},
+    legend: {y: 'top'},
     tooltip: {},
     xAxis: [
       {
         type: 'category', 
-        name: 'x轴标题', 
+        // name: 'x轴标题', 
         axisLabel: {
           interval:0,  
           rotate:30  
         }
       }],
-    yAxis: {name: 'y轴标题'},
+    yAxis: {},
+    // yAxis: {name: 'y轴标题'},
     series
   } 
 }

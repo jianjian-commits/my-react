@@ -47,10 +47,11 @@ const ChartContainer = props => {
               const indexes = data.indexes;
 
               if(dimensions && dimensions.length > 0) {
-                const dimArr = dimensions.map((each) => {
+                const dimArr = dimensions.map((each, idx) => {
                   const field = each.field;
                   field["option"] = {currentGroup: each.currentGroup}
                   field["bindType"] = Types.DIMENSION;
+                  field["idx"] = idx;
                   return field;
                 })
 
@@ -58,10 +59,11 @@ const ChartContainer = props => {
               }
 
               if(indexes && indexes.length > 0) {
-                const meaArr = indexes.map((each) => {
+                const meaArr = indexes.map((each, idx) => {
                   const field = each.field;
                   field["option"] = {currentGroup: each.currentGroup}
                   field["bindType"] = Types.MEASURE;
+                  field["idx"] = bindDataArr.length + idx;
                   return field;
                 })
 
