@@ -43,7 +43,7 @@ var _checkMinAndMax = components => {
       component.validate.maxOptionNumber = component.validate.minOptionNumber;
       component.validate.minOptionNumber = tmpLength;
     }
-return component;
+    return component;
   });
   return componentArray;
 };
@@ -236,7 +236,6 @@ export const saveForm = (
       if ((err.response.data.code = "1002")) {
         message.error("该api已存在");
       }
-
       // }
     });
 };
@@ -256,6 +255,17 @@ export const updateForm = (
 
   formDataArray.forEach((item) => {
     item.layout.i = item.key
+
+    if (item.type == "CheckboxInput") {
+      let validate = item.validate;
+      let min = validate.minOptionNumber;
+      let max = validate.maxOptionNumber;
+      console.log(min, max)
+      if (min > max) {
+        validate.minOptionNumber = max;
+        validate.maxOptionNumber = min;
+      }
+    }
   });
 
   _calcFormComponentLayout(formDataArray);
