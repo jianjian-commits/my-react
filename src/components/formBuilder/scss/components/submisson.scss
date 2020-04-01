@@ -46,15 +46,15 @@ body {
         text-align: left;
         width: 100%;
         white-space: normal;
-        margin-bottom: 10px;
-        line-height: 1;
+        margin-bottom: 8px;
+        line-height: 0;
       }
       label {
         font-size: 13px;
         font-family: $font-Family;
         font-weight: 400;
         color: $font-color;
-        line-height: 18px;
+        // line-height: 18px;
         &::after {
           content: "";
           margin: 0;

@@ -43,8 +43,7 @@ var _checkMinAndMax = components => {
       component.validate.maxOptionNumber = component.validate.minOptionNumber;
       component.validate.minOptionNumber = tmpLength;
     }
-
-    return component;
+return component;
   });
   return componentArray;
 };
@@ -67,7 +66,7 @@ var _calcFormComponentLayout = formDataArray => {
     } else if (item.type === "FileUpload") {
       newHeight = 180 / 30;
     } else {
-      newHeight = domElement.offsetHeight / 30;
+      newHeight = (domElement.offsetHeight + 10) / 30;
     }
 
     newHeight = Number(newHeight.toFixed(1));
