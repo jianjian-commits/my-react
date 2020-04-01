@@ -66,16 +66,16 @@ export default class CheckboxInput extends React.Component {
       });
     };
   
-  componentWillReceiveProps(nextProps) {
-     if (!this.state.hasClicked) {
-       const {item, value } = nextProps;
-      if (value) {
-        this.setDefaultSetected(value, item.values);
-      } else if (item.isMobileChild && item.data) {
-      this.setDefaultSetected(item.data, item.values);
-      }
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //    if (!this.state.hasClicked) {
+  //      const {item, value } = nextProps;
+  //     if (value) {
+  //       this.setDefaultSetected(value, item.values);
+  //     } else if (item.isMobileChild && item.data) {
+  //     this.setDefaultSetected(item.data, item.values);
+  //     }
+  //   }
+  // }
   
   handleSelect(index) {
     const { onChange } = this.props;
