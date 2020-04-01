@@ -540,6 +540,7 @@ export default connect(
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentTeam && login.currentTeam.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
+    approveListCount: forms.approveListCount,
     userDetail: login.userDetail
   }),
   {
