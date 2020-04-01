@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Icon} from "antd";
-import { changeBind, setDashboards, clearBind, setDBMode } from '../../redux/action';
+import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange} from '../../redux/action';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
@@ -10,7 +10,7 @@ import SaveTipModal from "../elements/modal/saveTipModal";
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, setDashboards, setDBMode } = props;
+  const { elemName, bindDataArr, setDashboards, setDBMode,saveChartChange ,isChartEdited} = props;
   let [name, setName] = useState("新建图表");
 
   const handleBack = () => {
@@ -23,6 +23,7 @@ const EditorHeader = props => {
   const handleSave = (name) => {
     updateChartReq(elementId, bindDataArr, name);
     setDB(dashboardId, setDashboards);
+    saveChartChange();
   }
 
   const onBlur = (e) => {
@@ -41,6 +42,7 @@ const EditorHeader = props => {
     },
     //返回且保存图表
     saveChart: e => {
+      handleSave(name);
       handleBack();
       setVisible(false);
     },
@@ -55,7 +57,7 @@ const EditorHeader = props => {
     <div className="element-header">
       <SaveTipModal {...modalProps}/>
       <div className="element-header-back">
-        <Button onClick={modalProps.showModal} type="link">
+        <Button onClick={isChartEdited ? modalProps.showModal : handleBack} type="link">
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
@@ -70,7 +72,8 @@ const EditorHeader = props => {
 export default connect(
   store => ({
     elemName: store.bi.elemName,
-    bindDataArr: store.bi.bindDataArr
+    bindDataArr: store.bi.bindDataArr,
+    isChartEdited:store.bi.isChartEdited
   }),
-  { changeBind, setDashboards, clearBind, setDBMode }
+  { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange}
 )(EditorHeader);
