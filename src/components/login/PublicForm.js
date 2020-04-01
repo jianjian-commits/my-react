@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "antd";
-import { formItems } from "./formItemConfig";
+import { formItems } from "./FormItemConfig";
 
 export default Form.create({ name: "login-form" })(function PublicForm({
   form,

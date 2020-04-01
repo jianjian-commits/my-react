@@ -540,11 +540,7 @@ export default connect(
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentTeam && login.currentTeam.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
-<<<<<<< HEAD
-    approveListCount: forms.approveListCount
-=======
     userDetail: login.userDetail
->>>>>>> origin/komons-formBuilder
   }),
   {
     getSubmissionDetail,
