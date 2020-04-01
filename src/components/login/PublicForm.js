@@ -72,7 +72,11 @@ export default Form.create({ name: "login-form" })(function PublicForm({
                   {helpText}
                 </div>
               ) : (
-                <span>{helpText}</span>
+                <span
+                  style={{ display: "block", height: helpText ? "32px" : 0 , lineHeight: "32px"}}
+                >
+                  {helpText}
+                </span>
               )
             }
           >
