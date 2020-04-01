@@ -13,7 +13,7 @@ export const saveAppList = payload => ({
   payload
 });
 
-export default function loginReducer(state = initialState, { type, payload }) {
+export default function appReducer(state = initialState, { type, payload }) {
   switch (type) {
     case SAVE_APP_LIST:
       return {

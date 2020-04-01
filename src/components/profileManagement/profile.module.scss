@@ -3,7 +3,7 @@
   padding: 29px 21px;
 
   > span {
-    font-size: 18px;
+    font-size: 16px;
     display: inline-block;
     padding: 4px 0 41px 0;
     color: #333333;
@@ -49,7 +49,8 @@
   }
 
   :global(.ant-table-thead > tr > th) {
-    padding: 14px;
+    padding:0 16px;
+    height: 50px;
     background: #fff;
     border-bottom: 1px solid #dcdee3;
   }
@@ -63,7 +64,8 @@
   }
 
   :global(.ant-table-tbody > tr > td) {
-    padding: 9px 16px;
+    padding:0 16px;
+    height: 50px;
     border-bottom: 1px solid #dcdee3;
   }
 
@@ -101,7 +103,7 @@
     height: 12px;
     width: 7px;
     top: 45%;
-    left: 21%;
+    left: 20%;
   }
   :global(.ant-checkbox-disabled.ant-checkbox-checked
       .ant-checkbox-inner::after) {
@@ -124,7 +126,7 @@
 }
 
 .breadcrumbItem {
-  font-size: 18px;
+  font-size: 16px;
   color: #666666;
   display: inline-block;
   padding: 4px 0 41px 0;
@@ -205,18 +207,16 @@
   }
 
   :global(.ant-table-thead > tr > th) {
-    padding: 14px 14px 14px 30px;
+    padding: 0 30px;
   }
 
   :global(.ant-table-tbody > tr > td) {
-    padding: 9px 16px 9px 30px;
-    height: 50px;
+    padding: 0 30px;
   }
 
   .radioStyle {
     background-color: #fff;
-    padding: 12px 12px 12px 30px;
-
+    padding: 14px 12px 14px 30px;
     label {
       margin: 0 0 0 20px;
       cursor: default;
