@@ -47,6 +47,7 @@ body {
         width: 100%;
         white-space: normal;
         margin-bottom: 10px;
+        line-height: 1;
       }
       label {
         font-size: 13px;
@@ -141,10 +142,18 @@ body {
                   &>input[type="text"] {
                     width: 405px;
                   }
+                  &>input[type="number"] {
+                    width: 405px;
+                  }
                   &>.ant-input-affix-wrapper>textarea{
                     width: 405px;
                   }
-
+                  &>.dropDownContainer{
+                    width: 405px;
+                  }
+                  &>.multiDropDownContainer{
+                    width: 405px;
+                  }
                   .ant-input-affix-wrapper {
                     .ant-input {
                       min-height: auto;
@@ -434,6 +443,8 @@ body {
           .SubmitBtn {
             border-top: 1px dashed #B4B6BC;;
             padding:16px 0 15px;
+            // !这个需要修改
+            margin-top: 30px;
             .ant-btn {
               min-width: 110px;
               height: 36px;

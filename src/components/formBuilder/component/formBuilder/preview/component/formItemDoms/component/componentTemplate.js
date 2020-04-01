@@ -58,9 +58,10 @@ class ComponentTemplate extends Component {
   insertTmpComponentToForm = (component, indexInArray, e) => {
     const { editModeOn, insertCard, index } = this.props;
     let newData = JSON.parse(JSON.stringify(component));
-    let key = ID.uuid();
+    let key = ID.oldUuid();
+    newData.isSetAPIName = false;
     newData.id = key;
-    newData.key = key;
+    newData.key = "";
     newData.layout.i = key;
     newData.layout.y = 0;
     insertCard(newData, index + indexInArray);
@@ -295,7 +296,8 @@ class ComponentTemplate extends Component {
 
 export default connect(
   store => ({
-    forms: store.formBuilder.formArray
+    forms: store.formBuilder.formArray,
+    // data: store.formBuilder.data
   }),
   {}
 )(ComponentTemplate);
