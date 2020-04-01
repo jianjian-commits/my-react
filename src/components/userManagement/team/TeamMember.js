@@ -52,7 +52,7 @@ export default connect(
     },
     {
       title: "最后登录时间",
-      dataIndex: "lastModifiedDate",
+      dataIndex: "lastLoginDate",
       width: 200
     },
     {
@@ -113,7 +113,7 @@ export default connect(
         if (res && res.status === "SUCCESS") {
           res.data.datas.forEach(item => {
             item.key = item.id;
-            item.lastModifiedDate = new Date(item.lastModifiedDate).toLocaleString();
+            item.lastLoginDate = new Date(item.lastLoginDate).toLocaleString();
             item.groupName = item.group.name;
           });
           setData(res.data.datas);
