@@ -28,11 +28,12 @@ class RadioOption extends React.Component {
 export default class RadioTest extends React.Component {
   constructor(props) {
     super(props);
-    const {item} = this.props;
+    const { item, value } = this.props;
     let index = -1;
-    if(item != void 0){
-      const indexs = this.props.item.values.map(item => item.value);
-      index = indexs.indexOf(item.data);
+    if(value && item != void 0) {
+      index = this.setDefaultSetected(value, item.values);
+    } else if(item.isMobileChild) {
+      index = this.setDefaultSetected(item.data, item.values);
     }
     this.state = {
       selectValue: index
@@ -41,26 +42,23 @@ export default class RadioTest extends React.Component {
   }
 
     // 设置默认的选中值
-  setDefaultSetected = (selectedValues, allvalues=[]) => {
+  setDefaultSetected(selectedValues, allvalues=[]) {
     const indexs = allvalues.map(item => item.value);
     const index = indexs.indexOf(selectedValues);
-
-    this.setState({
-      selectValue: index
-    });
+    return index;
   };
 
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.state.hasClicked) {
-      const {item, value} = nextProps;
-      if(value) {
-        this.setDefaultSetected(value, item.values);
-      } else if(item.isMobileChild) {
-        this.setDefaultSetected(item.data, item.values);
-      }
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (!this.state.hasClicked) {
+  //     const {item, value} = nextProps;
+  //     if(value) {
+  //       this.setDefaultSetected(value, item.values);
+  //     } else if(item.isMobileChild) {
+  //       this.setDefaultSetected(item.data, item.values);
+  //     }
+  //   }
+  // }
   
   handleSelect(index) {
     const { onChange } = this.props;
