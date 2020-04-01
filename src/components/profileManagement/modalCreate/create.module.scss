@@ -64,9 +64,14 @@
   resize: none;
   position: relative;
 }
+
+.textBox{
+  position: relative;
+}
 .text {
   position: absolute;
   font-size: 13px;
   left: 411px;
-  top: 100px;
+  bottom: 0px;
+  color:#bfbfbf;
 }
