@@ -20,7 +20,7 @@ const Filter = props => {
     setGroupKey(value);
   };
   const filterSubmit = () => {
-    props.fn(inputKey,groupKey)
+    props.fn(inputKey, groupKey)
   }
 
   // 过滤
@@ -50,10 +50,10 @@ const Filter = props => {
                 .indexOf(input.toLowerCase()) >= 0
             }
           >
-            <Option value={null}>全部</Option>
+            <Option className={classes.selection} value={null}>全部</Option>
             {props.groups.map((item, index) => {
               return (
-                <Option key={item.id} value={item.id}>
+                <Option className={classes.selection} key={item.id} value={item.id}>
                   {item.name}
                 </Option>
               );
