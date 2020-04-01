@@ -75,7 +75,7 @@ class FormChildTest extends React.Component {
     switch (item.type) {
       case "SingleText":
       case "TextArea":
-      case "number":
+      case "NumberInput":
       case "PhoneInput":
       case "IdCardInput":
       case "EmailInput":

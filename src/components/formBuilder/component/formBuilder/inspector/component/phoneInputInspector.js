@@ -340,13 +340,13 @@ class PhoneInputInspector extends React.PureComponent {
                 不允许重复
               </Checkbox>
             )}
-            <Checkbox
+            {/* <Checkbox
               name="inputMask"
               checked={formatChecks}
               onChange={this.handleChangeAttr}
             >
               格式校验
-            </Checkbox>
+            </Checkbox> */}
           </div>
         </div>
       </div>
