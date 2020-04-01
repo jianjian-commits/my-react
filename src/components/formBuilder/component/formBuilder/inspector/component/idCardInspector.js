@@ -176,13 +176,13 @@ class IdCardInspector extends React.Component {
               </Checkbox>
             )}
 
-            <Checkbox
+            {/* <Checkbox
               name="inputMask"
               checked={formatChecks}
               onChange={this.handleChangeAttr}
             >
               格式校验
-            </Checkbox>
+            </Checkbox> */}
           </div>
         </div>
       </div>
