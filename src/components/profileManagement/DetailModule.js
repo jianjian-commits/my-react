@@ -19,7 +19,7 @@ export const BaseInfoModule = ({
     lastModifyName,
     lastModifyDate
   } = baseInfoBo;
-  const formatDate = date => moment(date).format("YYYY/MM/DD hh:mm");
+  const formatDate = date => moment(date).format("YYYY/MM/DD H:mm");
   const list = [
     { title: "分组名", value: roleName },
     { title: "创建人", value: createName },
