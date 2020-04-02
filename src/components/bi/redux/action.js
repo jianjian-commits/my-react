@@ -93,7 +93,6 @@ export const clearBind = (params) => dispatch => {
 }
 
 export const setDBMode = (mode) => dispatch => {
-  console.log("=====setDBMode=======mode======", mode);
   dispatch({
     type: SET_DB_MODE,
     dbMode: mode

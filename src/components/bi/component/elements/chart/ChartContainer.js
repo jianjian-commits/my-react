@@ -7,6 +7,7 @@ import ChartToolbarBtn from "../ChartToolbarBtn";
 import request from '../../../utils/request';
 import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
+import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
 import { changeBind, changeChartData, setDataSource } from '../../../redux/action';
 
@@ -47,10 +48,11 @@ const ChartContainer = props => {
               const indexes = data.indexes;
 
               if(dimensions && dimensions.length > 0) {
-                const dimArr = dimensions.map((each) => {
+                const dimArr = dimensions.map((each, idx) => {
                   const field = each.field;
                   field["option"] = {currentGroup: each.currentGroup}
                   field["bindType"] = Types.DIMENSION;
+                  field["idx"] = idx;
                   return field;
                 })
 
@@ -58,10 +60,11 @@ const ChartContainer = props => {
               }
 
               if(indexes && indexes.length > 0) {
-                const meaArr = indexes.map((each) => {
+                const meaArr = indexes.map((each, idx) => {
                   const field = each.field;
                   field["option"] = {currentGroup: each.currentGroup}
                   field["bindType"] = Types.MEASURE;
+                  field["idx"] = bindDataArr.length + idx;
                   return field;
                 })
 
@@ -76,7 +79,8 @@ const ChartContainer = props => {
                   formId,
                   dimensions,
                   indexes,
-                  conditions: data.conditions
+                  conditions: data.conditions,
+                  chartType: ChartType.HISTOGRAM
                 }
               }).then((res) => {
                 if(res && res.msg === "success") {

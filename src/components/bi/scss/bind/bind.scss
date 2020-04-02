@@ -6,18 +6,30 @@
   display: inline-flex;
   align-items: center;
   width: 100%;
-  height: 30px;
   border-style: dotted;
   border-color: #adb5bd;
   border-width: thin;
   margin-top: 5px;
 
+  .bind-split-div {
+    height: 30px;
+    background-color: #00c59f;
+    width: 3px;
+  }
+
   font-family: Microsoft YaHei;
   font-style: normal;
   font-weight: normal;
+  .bind-cols {
+    display: flex;
+    flex-wrap: wrap;
+  }
   .bind-label {
-    width: 40px;
+    width: 60px;
     padding-left: 10px;
+    min-height: 30px;
+    max-height: 70px;
+    line-height: 30px;
   }
   .meaContainer {
     height: 26px;
@@ -26,7 +38,8 @@
     position: relative;
     cursor: pointer;
     background-color: #00c59f;
-    margin-left: 10px;
+    // margin-left: 10px;
+    margin: 3px;
     .dropDownBtn {
       height: 26px;
       line-height: 26px;
@@ -96,7 +109,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-left: 10px;
+    margin: 3px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
