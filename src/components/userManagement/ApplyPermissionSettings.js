@@ -495,7 +495,7 @@ const Top = ({
       <InnerHeader navs={navigationList} />
       {/* </div> */}
       <div className={Styles.btn}>
-        <Button onClick={enterPermission}>取消</Button>
+        <Button onClick={() => enterPermission()}>取消</Button>
         <Button
           onClick={() =>
             handleSaveButton({ state, initialData, enterPermission })
