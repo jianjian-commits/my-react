@@ -48,6 +48,17 @@ class FormSubmitData extends PureComponent {
       limitDataNumber: false,
       isFilterMode: false,
       filterArray: [],
+      selectArray:[{
+        selectedFiled: "",
+        selectedLogicalOperator: "",
+        logicalOperators: [],
+        costomValue: "",
+        filterType: "",
+        selectedFiledKey: "",
+        field: {type:"", key: Math.random()},
+        options: [],
+        key: Math.random()
+      }],
       connectCondition: "&",
       formDataDetailId: "",
       // 是否展示筛选界面,默认为false(不展示)
@@ -591,6 +602,7 @@ class FormSubmitData extends PureComponent {
   }
   render() {
     const { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
+    const { selectArray, connectCondition, isFilterMode } = this.state.filterArray;
     const controlCol = [
       {
         title: "操作",
@@ -864,6 +876,7 @@ class FormSubmitData extends PureComponent {
                 formId={this.props.formId}
                 clickCallback={()=>{this.props.actionFun(null ,true)}}
                 clickExtendCallBack = {this.showFilterComponent}
+                isFilterMode={this.state.isFilterMode}
               />
             )}
             <div
@@ -881,6 +894,11 @@ class FormSubmitData extends PureComponent {
               {this.state.showFilterBoard? 
               <FilterComponent
                 fileds={fileds}
+                selectArray = {this.state.selectArray}
+                changeFilterArray = {(selectArray)=>{this.setState({selectArray: selectArray})}}
+                connectCondition={connectCondition}
+                setConnectCondition = {(connectCondition)=>{this.setState({connectCondition: connectCondition})}}
+                isFilterMode={isFilterMode}
                 filterData={this.props.getFilterSubmissionData}
                 setFilterMode={this.setFilterMode}
                 formId={this.state.formId}
