@@ -13,10 +13,7 @@ export const getOption = (data) => {
 
   legends.forEach((each) => {
     title.push(each.legendName);
-    series.push({type: 'bar',
-      // itemStyle: {
-      //   color: 'lightskyblue',
-      // },
+    series.push({type: 'bar'
       // label: {
       //   show: true,
       //   position: 'top',
@@ -70,12 +67,13 @@ export const getOption = (data) => {
         type: 'category', 
         // name: 'x轴标题', 
         axisLabel: {
-          interval:0,  
-          rotate:30  
+          interval:0 
         }
       }],
     yAxis: {},
     // yAxis: {name: 'y轴标题'},
+    // color: [],
+    grid: {top: '80px'},
     series
   } 
 }
