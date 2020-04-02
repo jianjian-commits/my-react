@@ -7,6 +7,7 @@ import ChartToolbarBtn from "../ChartToolbarBtn";
 import request from '../../../utils/request';
 import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
+import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
 import { changeBind, changeChartData, setDataSource } from '../../../redux/action';
 
@@ -78,7 +79,8 @@ const ChartContainer = props => {
                   formId,
                   dimensions,
                   indexes,
-                  conditions: data.conditions
+                  conditions: data.conditions,
+                  chartType: ChartType.HISTOGRAM
                 }
               }).then((res) => {
                 if(res && res.msg === "success") {

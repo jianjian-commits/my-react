@@ -1,5 +1,5 @@
 import React, {PureComponent, useState} from "react";
-import DragItem from './DragItem';
+import DragItem, { DimDragItem, MeaDragItem } from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
 import { Types } from './Types';
@@ -33,10 +33,10 @@ const LeftPane = props => {
       if(each) {
         if(each.type === "NUMBER") {
           const item = {...each, bindType: Types.MEASURE, option: {currentGroup}}
-          meaArr.push(<DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
+          meaArr.push(<MeaDragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
         } else {
           const item = {...each,  bindType: Types.DIMENSION, option: {currentGroup}}
-          dimArr.push(<DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
+          dimArr.push(<DimDragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
         }
       }
     })
