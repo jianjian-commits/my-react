@@ -10,6 +10,13 @@ export const SET_DATA_SOURCE = "SET_DATA_SOURCE";
 export const CHANGE_CHART_DATA = "CHANGE_CHART_DATA";
 export const CLEAR_BIND = "CLEAR_BIND";
 export const SET_DB_MODE = "SET_DB_MODE";
+export const SAVE_CHART_CHANGE = "SAVE_CHART_CHANGE";
+
+export const saveChartChange = () => dispatch => {
+  dispatch({
+    type: SAVE_CHART_CHANGE,
+  })
+}
 
 export const newDashboard = (dashboardId, dbName) => dispatch => {
   dispatch({

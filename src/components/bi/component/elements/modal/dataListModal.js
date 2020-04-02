@@ -88,7 +88,7 @@ function DataListModal(props) {
                   key={form.formId}
                   className={classNames({activeSpan:form.id==choiceFormId})}
                 >
-                  <Icon type="file-text" />
+                  <Icon type="profile" style={{color:"orange"}}/>
                   {form.formName}
                   {form.formId==choiceFormId?<Icon type="check-circle" theme="filled" />:""}
                 </span>
