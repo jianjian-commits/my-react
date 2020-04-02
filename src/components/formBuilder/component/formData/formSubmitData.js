@@ -635,7 +635,7 @@ class FormSubmitData extends PureComponent {
 
     let { sortedInfo } = this.state;
     sortedInfo = sortedInfo || {};
-    let columns = this.props.forms.components
+    let columns = this.props.forms.components ? this.props.forms.components
       .filter(item => {
         return item.type !== "Button";
       })
@@ -723,7 +723,7 @@ class FormSubmitData extends PureComponent {
           };
         }
         return resultObj;
-      });
+      }) : [];
       columns.push({
         title: "创建人",
         dataIndex: "founder",
