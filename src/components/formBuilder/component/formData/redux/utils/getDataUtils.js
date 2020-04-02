@@ -139,9 +139,23 @@ export const getSubmissionData = (params) => dispatch => {
           })
         });
       }).catch(err=>{
-        callback(true);
+        message.error("数据加载失败，请重试!");
+        dispatch({
+          type: RECEIVED_FORM_DATA,
+          forms,
+          submissionDataTotal: -1,
+          formData: []
+        });
+        callback(false);
       });
   }).catch(err =>{
+    message.error("数据加载失败，请重试!");
+    dispatch({
+      type: RECEIVED_FORM_DATA,
+      forms: { components: [], name: "" },
+      submissionDataTotal: -1,
+      formData: []
+    });
     callback(true);
   });
 };
@@ -158,7 +172,6 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
   }
   ).then(res => {
     let currentForm = res.data;
-    console.log(currentForm)
 
     instanceAxios
       .get(
@@ -172,7 +185,6 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
         }
       )
       .then(res => {
-        console.log(res)
         instanceAxios.get(
           config.apiUrl + `/flow/history/approval/${submissionId}`,{
             headers:{
@@ -216,7 +228,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
     callback(false);
     dispatch({
       type: RECEIVED_FORM_DETAIL,
-      forms: {},
+      forms: { components: [], name: "" },
       formDetail: {},
       extraProp: {},
       taskData: []
