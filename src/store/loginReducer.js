@@ -2,6 +2,7 @@ import { message } from "antd";
 import request from "../utils/request";
 import { getAppList } from "./appReducer";
 import { history } from "./index";
+import { clearAppList } from "./appReducer";
 import { catchError } from "../utils";
 
 export const initialState = {
@@ -28,6 +29,7 @@ export const FETCH_ALL_TEAM = "Login/FETCH_ALL_TEAM";
 export const FETCH_CURRENT_TEAM = "Login/FETCH_CURRENT_TEAM";
 export const FETCH_USER_DETAIL = "Login/FETCH_USER_DETAIL";
 export const FETCH_TRANSACT_LIST = "Login/FETCH_TRANSACT_LIST";
+export const CLEAR_USER_DATA = "Login/CLEAR_USER_DATA";
 
 export const startSpinning = () => ({
   type: START_SPINNING
@@ -171,7 +173,8 @@ export const getAllTeam = () => async dispatch => {
 
 //初始化所有信息
 export const initAllDetail = () => async dispatch => {
-  dispatch({ type: FETCH_REQUEST_SENT})
+  dispatch({ type: FETCH_REQUEST_SENT});
+  dispatch({ type: CLEAR_USER_DATA});
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
@@ -229,6 +232,14 @@ export const signOut = () => async dispatch => {
 
 export default function loginReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case CLEAR_USER_DATA:
+      return {
+        ...state,
+        currentTeam: {},
+        userDetail: {},
+        fetchRequestSent: true,
+        allTeam: [],
+      };
     case START_SPINNING:
       return {
         ...state,
@@ -290,4 +301,14 @@ export default function loginReducer(state = initialState, { type, payload }) {
     default:
       return state;
   }
-}
+};
+
+
+export const loginMiddleware = store => next => action => {
+  if (action.type === SIGN_OUT_SUCCESS) {
+    store.dispatch(clearAppList());
+  }
+  next(action);
+};
+
+

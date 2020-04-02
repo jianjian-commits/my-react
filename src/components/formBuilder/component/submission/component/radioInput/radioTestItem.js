@@ -10,14 +10,15 @@ class RadioOption extends React.Component {
     const { label, value } = this.props.option;
     return (
       <div
-        className={classNames('radioOption',{radioInline: this.props.inline })}
+        className={classNames('radioOption', { radioInline: this.props.inline })}
         value={value}
         onClick={() => {
+          console.log(this.props.index)
           this.props.handleSelect(this.props.index);
         }}
       >
         <i className='out_i'>
-          <i className={classNames('inner_i',{ selectOption: this.props.isSelect })}/>
+          <i className={classNames('inner_i', { selectOption: this.props.isSelect })} />
         </i>
         <span>{label}</span>
       </div>
@@ -62,6 +63,7 @@ export default class RadioTest extends React.Component {
   
   handleSelect(index) {
     const { onChange } = this.props;
+    console.log(this.state.selectValue, index)
     if (this.state.selectValue === index) {
       this.setState(
         state => ({
@@ -87,16 +89,17 @@ export default class RadioTest extends React.Component {
         }
       );
     }
-    if(this.props.handleChange)
-    {
+    if (this.props.handleChange) {
       this.props.handleChange(this.props.item.values[index]);
     }
   }
   render() {
-    const { values,inline } = this.props.item;
-    
+    const { values, inline } = this.props.item;
+
+    console.log(values)
+
     return (
-      <div className={classNames('radioGroup',{ radioGroupInline:inline})}>
+      <div className={classNames('radioGroup', { radioGroupInline: inline })}>
         {values.map((item, index) => (
           <RadioOption
             option={item}

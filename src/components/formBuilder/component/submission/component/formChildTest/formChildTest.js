@@ -727,11 +727,11 @@ class FormChildTest extends React.Component {
               <div
                 className="inputContainer"
                 onClick={e => {
-                  document.getElementById(key + rowIndex).focus();
-                  document.querySelectorAll(".componentContent").forEach(el => {
-                    el.classList.remove("activecontent");
-                  });
-                  e.target.parentNode.parentNode.classList.add("activecontent");
+                  // document.getElementById(key + rowIndex).focus();
+                  // document.querySelectorAll(".componentContent").forEach(el => {
+                  //   el.classList.remove("activecontent");
+                  // });
+                  // e.target.parentNode.parentNode.classList.add("activecontent");
                 }}
                 onBlur={e => {
                   document.querySelectorAll(".componentContent").forEach(el => {
@@ -1131,8 +1131,8 @@ class FormChildTest extends React.Component {
   componentDidUpdate() {
     const { showFormChildErr, submitDataArray, closeFormChildErr } = this.props;
     if (showFormChildErr === true) {
-      this._checkFormChildHasError(submitDataArray);
-      closeFormChildErr();
+      // this._checkFormChildHasError(submitDataArray);
+      // closeFormChildErr();
     }
   }
 

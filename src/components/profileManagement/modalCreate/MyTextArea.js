@@ -14,7 +14,7 @@ function MyTextArea(props) {
   );
   const checkNum = num > 30 ? 30 : num;
   return (
-    <div>
+    <div className={classes.textBox}>
       <TextArea
         {...others}
         maxLength={maxLength}
