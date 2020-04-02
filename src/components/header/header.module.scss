@@ -137,6 +137,13 @@
           top: 15px;
         }
       }
+      &::selection {
+        background: #ffffff !important;
+        color: #333333 !important;
+      }
+      &:global(.ant-menu-item-selected) {
+        background: none !important;
+      }
       &:hover {
         background: #e7f0ff !important;
         color: #333333 !important;
