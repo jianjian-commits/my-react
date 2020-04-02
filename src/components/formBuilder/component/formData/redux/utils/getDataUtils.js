@@ -13,12 +13,12 @@ var getSubmissionDataTotal = resp => {
     const index = contentRangeValue.indexOf("/");
     return Number(contentRangeValue.substr(index + 1));
   }else{
-    return 0;
+    return 20;
   }
 };
 
 
-const filterData = (formId, filterStr, pageSize, currentPage) => {
+const filterData = (formId, filterStr, pageSize, currentPage,appId) => {
   let queryData = pageSize === -1 ?
    `/form/${formId}/submission?${filterStr}` 
    :`/form/${formId}/submission?${filterStr}&limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`; 
@@ -29,17 +29,22 @@ const filterData = (formId, filterStr, pageSize, currentPage) => {
         headers: {
           // "X-Custom-Header": "ProcessThisImmediately",
           "Content-Type": "application/json",
+          appid: appId,
+          "isDataPage": true,
         }
       }
     )
 }
 
 
-export const getFilterSubmissionData = (formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber= -1) => dispatch => {
+export const getFilterSubmissionData = (args) => dispatch => {
+  const {formId, filterArray, connectCondition = "&", pageSize, currentPage, totalNumber = -1,appId, callback} = args;
+  callback(true);
   let filterStr = "";
   if (connectCondition === "&") {
     filterStr = filterArray.join(connectCondition);
-    filterData(formId, filterStr, pageSize, currentPage).then(res => {
+    filterData(formId, filterStr, pageSize, currentPage,appId).then(res => {
+      callback(false);
       dispatch({
         type: Filter_FORM_DATA,
         submissionDataTotal: (totalNumber === -1 || getSubmissionDataTotal(res) < totalNumber) ? getSubmissionDataTotal(res) :totalNumber,
@@ -55,6 +60,7 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
         })
       });
     }).catch((error)=> {
+      callback(false);
       if (error.response) {
            message.error(error.response.data.msg);
          }
@@ -73,6 +79,7 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
           return item.id === key
         })[0]
       })
+      callback(false);
       dispatch({
         type: Filter_FORM_DATA,
         submissionDataTotal:(totalNumber === -1 || totalNumber>filterSubmisstion.length) ? filterSubmisstion.length : totalNumber,
@@ -88,6 +95,7 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
         })
       });
     })).catch((error)=> {
+      callback(false);
       if (error.response) {
         message.error(error.response.data.msg);
       }
@@ -96,16 +104,11 @@ export const getFilterSubmissionData = (formId, filterArray, connectCondition = 
 
 }
 //获取提交的数据
-export const getSubmissionData = (
-  appId,
-  formId,
-  pageSize,
-  currentPage,
-  total = -1
-) => dispatch => {
-  axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId}}).then(res => {
+export const getSubmissionData = (params) => dispatch => {
+  const {  appId, formId, pageSize, currentPage, total = -1, callback } = params
+  callback(true);
+  axios.get(config.apiUrl + `/form/${formId}`,{headers:{appid:appId,"isDataPage":true}}).then(res => {
     let forms = res.data;
-    
     instanceAxios
       .get(
         config.apiUrl +
@@ -113,17 +116,19 @@ export const getSubmissionData = (
         {
           headers: {
             "Content-Type": "application/json",
-            appid:appId
+            appid:appId,
+            "isDataPage": true,
           }
         }
       )
       .then(res => {
+        callback(false);
         dispatch({
           type: RECEIVED_FORM_DATA,
           forms,
           submissionDataTotal: total === -1 || total > getSubmissionDataTotal(res) ? getSubmissionDataTotal(res) : total,
           formData: res.data.map(item => {
-            let{ user } = item.extraProp
+            let{ user } = item.extraProp? item.extraProp: { user :{id:"",name:""}}
             return {
               data: item.data,
               id: item.id,
@@ -133,16 +138,23 @@ export const getSubmissionData = (
             }
           })
         });
+      }).catch(err=>{
+        callback(true);
       });
+  }).catch(err =>{
+    callback(true);
   });
 };
 
 // 获得表单数据详情
-export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
+export const getSubmissionDetail = (formId, submissionId, appId, callback) => dispatch => {
+  callback(true);
   axios.get(config.apiUrl + `/form/${formId}`,
-  {   headers:{
-      appid:appId
-  }
+  {   
+    headers:{
+      appid:appId,
+      "isDataPage": true,
+    }
   }
   ).then(res => {
     let currentForm = res.data;
@@ -153,19 +165,38 @@ export const getSubmissionDetail = (formId, submissionId,appId) => dispatch => {
         {
           headers: {
             "Content-Type": "application/json",
-            appid:appId
+            appid: appId,
+            "isDataPage": true,
           }
         }
       )
       .then(res => {
-        // console.log("res.data", res.data)
-        dispatch({
-          type: RECEIVED_FORM_DETAIL,
-          forms: currentForm,
-          formDetail: res.data.data,
-          extraProp: res.data.extraProp
-        });
+        instanceAxios.get(
+          config.apiUrl + `/flow/history/approval/${submissionId}`,{
+            headers:{
+              appid: appId,
+              "isDataPage": true,
+            }
+          }
+        ).then(response =>{
+          callback(false);
+            dispatch({
+              type: RECEIVED_FORM_DETAIL,
+              forms: currentForm,
+              formDetail: res.data.data,
+              extraProp: res.data.extraProp,
+              taskData: response.data.data
+            });
+        }).catch(err=>{
+          callback(false);
+        })
+      }).catch(err=>{
+        callback(false);
       });
+  }).catch(err=>{
+    callback(false);
+  }).catch(err=>{
+    callback(false);
   });
 };
 
@@ -176,7 +207,8 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      appid:appid
+      appid:appid,
+      "isDataPage": true,
     },
     data: {
       data: formData,
@@ -187,21 +219,15 @@ export const modifySubmissionDetail = (formId, submissionId, formData, appid, ex
 };
 
 export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
-  instanceAxios({
+  return instanceAxios({
     url: config.apiUrl + `/flow/approval/start`,
     method: "POST",
     data: data,
     headers: {
       "Content-Type": "application/json",
       appid: appId,
-      formid: formId
+      formid: formId,
+      "isDataPage": true,
     }
   })
-    .then(response => {
-  
-      console.log(response);
-    })
-    .catch(err => {
-      console.log(err)
-    });
 }

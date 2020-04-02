@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Icon} from "antd";
-import { changeBind, setDashboards, clearBind } from '../../redux/action';
-import request from '../../utils/request';
+import { changeBind, setDashboards, clearBind, setDBMode } from '../../redux/action';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
+import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
+import SaveTipModal from "../elements/modal/saveTipModal";
 
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, setDashboards } = props;
+  const { elemName, bindDataArr, setDashboards, setDBMode } = props;
   let [name, setName] = useState("新建图表");
 
   const handleBack = () => {
     const { clearBind } = props;
     clearBind();
     history.push(`/app/${appId}/setting/bi/${dashboardId}`);
+    setDBMode(DBMode.Edit);
   }
 
   const handleSave = (name) => {
@@ -28,10 +30,32 @@ const EditorHeader = props => {
     handleSave(e.target.value);
   }
 
+  const [visible, setVisible] = useState(false);
+  const modalProps = {
+    visible,
+    showModal: () => {
+      setVisible(true);
+    },
+    handleCancel: e => {
+      setVisible(false);
+    },
+    //返回且保存图表
+    saveChart: e => {
+      handleBack();
+      setVisible(false);
+    },
+    //返回但不保存图表
+    saveNoChart:e => {
+      handleBack();
+      setVisible(false);
+    }
+  };
+
   return (
     <div className="element-header">
+      <SaveTipModal {...modalProps}/>
       <div className="element-header-back">
-        <Button onClick={handleBack} type="link">
+        <Button onClick={modalProps.showModal} type="link">
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
@@ -48,5 +72,5 @@ export default connect(
     elemName: store.bi.elemName,
     bindDataArr: store.bi.bindDataArr
   }),
-  { changeBind, setDashboards, clearBind }
+  { changeBind, setDashboards, clearBind, setDBMode }
 )(EditorHeader);

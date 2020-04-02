@@ -600,9 +600,10 @@ export default class FilterComponent extends Component {
   render() {
     const fileds = this.props.fileds;
     const { conditionIsAll } = this.state;
+
     return (
       <>
-        <div className="filter-container">
+        <div className="filter-container" onMouseLeave={()=>this.props.canClick()} onMouseEnter={()=>this.props.canNotClick()}>
           <div className="filter-condition">
             <Select
               style={{ width: "281px", height: "36px" }}
@@ -620,8 +621,9 @@ export default class FilterComponent extends Component {
                 满足任一条件
               </Option>
             </Select>
+            <span className="clear-btn">清空</span>
           </div>
-
+          <div className="line"></div>
           {/* <Row type="flex" justify="center" gutter={19}>
             <Col span={8}>字段</Col>
             <Col span={7}>类型</Col>
@@ -641,6 +643,7 @@ export default class FilterComponent extends Component {
               />
             }))}
           </div>
+          <div className="line"></div>
           <div className="filter-submit-container">
             <Button
               type="primary"

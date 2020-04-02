@@ -10,7 +10,10 @@ import {
   SET_DATA_SOURCE,
   CHANGE_CHART_DATA,
   CLEAR_BIND,
+  SET_DB_MODE,
 } from "./action";
+
+import { DBMode } from '../component/dashboard/Constant';
 
 const initState = {
   type: 'bar',
@@ -20,7 +23,8 @@ const initState = {
   dataSource: {},
   bindDataArr: [],
   chartData: {},
-  dashboards: []
+  dashboards: [],
+  dbMode: DBMode.Edit
 };
 
 export default function biReducer(state = initState, action) {
@@ -86,6 +90,12 @@ export default function biReducer(state = initState, action) {
       return {
         ...state,
         chartData: action.chartData
+      };
+    }
+    case SET_DB_MODE: {
+      return {
+        ...state,
+        dbMode: action.dbMode
       };
     }
     case SET_TYPE: {

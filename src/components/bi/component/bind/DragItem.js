@@ -4,8 +4,9 @@ import {Types} from './Types';
 import { Icon } from "antd";
 
 const spec = {
+  // Necessary, return the pure javascript object that can be operated by monitor -- monitor.getItem().
   beginDrag(props, monitor, component) {
-    return props.item
+    return props.item;
   },
   canDrag(props) {
     return true;
@@ -17,6 +18,7 @@ const spec = {
     if (!monitor.didDrop()) {
       return
     }
+
     const item = monitor.getItem()
     const dropResult = monitor.getDropResult()
   },
@@ -24,12 +26,10 @@ const spec = {
 
 class DragItem extends PureComponent {
   render() {
-    const { isDragging, connectDragSource, item } = this.props;
-
+    const { isDragging, connectDragSource, item, Child } = this.props;
     return connectDragSource(
       <div>
-        <li className="bind-item"><Icon type={item.type == "NUMBER" ? "number" : "tags"}
-          className="data-icon" style={{color: "#2B81FF"}}/>{item ? item.label : ""}</li>
+        <Child item={item}/>
       </div>
     )
   }

@@ -7,10 +7,8 @@
   z-index: 1 !important;
 }
 .form-submit-data-table {
-  width: calc(100vw - 220px);
-  padding: 29px 21px;
+  padding: 0 30px;
   box-sizing: border-box;
-  overflow: hidden;
   position: relative;
   .filter-container {
     width: 364px;
@@ -19,38 +17,49 @@
     position: absolute;
     padding: 20px;
     z-index: 10;
-    right: -38px;
-    top: 0;
+    right: 22px;
+    top: -22px;
+    box-shadow: 0px 2px 8px rgba(106, 116, 140, 0.25);
+    border-radius: 3px;
+    .line {
+      width: 364px;
+      height: 1px;
+      margin-left: -20px;
+      background-color: #d6d8de;
+    }
     .filter-item-container {
-      width: 324px;
+      width: 364px;
+      margin-left: -20px;
       height: 217px;
       overflow-y: auto;
       overflow-x: hidden;
+      padding: 10px 0;
       .filter-item {
+        margin: 0 auto;
         margin-bottom: 10px;
-        width: 304px;
-        .ant-select-selection{
+        width: 324px;
+        .ant-select-selection {
           width: 149px;
           height: 36px;
         }
-        .logicSymbol{
-          .ant-select-selection{
-          width: 96px;
-          height: 36px;
+        .logicSymbol {
+          .ant-select-selection {
+            width: 108px;
+            height: 36px;
+          }
         }
-        }
-        .descBox{
+        .descBox {
           display: inline-block;
           height: 36px;
           line-height: 36px;
           text-align: center;
         }
-        .valueBox{
-          height:36px;
+        .valueBox {
+          height: 36px;
         }
-        .filter-action{
-          .reduceBtn svg{
-            color:#E71010;
+        .filter-action {
+          .reduceBtn svg {
+            color: #e71010;
           }
         }
       }
@@ -72,12 +81,17 @@
       
     }
     .filter-condition {
-      .filter-condition-option{
+      .filter-condition-option {
         width: 281px;
         height: 36px;
         border-radius: 3px;
         margin-bottom: 20px;
-        box-shadow: 0px 2px 8px rgba(106,116,140,0.25);
+      }
+      .clear-btn {
+        line-height: 30px;
+        color: #777F97;
+        padding-left: 11px;
+        cursor: pointer;
       }
       .ant-select-selection-selected-value {
         font-size: 14px;
@@ -85,7 +99,7 @@
         font-weight: 500;
       }
       .ant-select-selection__placeholder {
-        width:96px;
+        width: 96px;
         font-size: 14px;
         color: #565c6e;
         font-weight: 500;
@@ -100,17 +114,16 @@
     }
     .filter-submit-container {
       display: flex;
-      justify-content: flex-start;
-      border-top: 1px solid #D6D8DE;;
+      justify-content: center;
       align-items: center;
       height: 76px;
-      button{
+      button {
         width: 140px;
         height: 36px;
       }
-      button:nth-of-type(2){
+      button:nth-of-type(2) {
         margin-left: 20px;
-        color: #B6B6BA;
+        color: #b6b6ba;
       }
     }
   }
@@ -132,8 +145,18 @@
   }
   .ant-table-body {
     overflow-x: auto !important;
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background-color: #D4D5D7;
+        box-shadow: none;
+      }
+    }
     &::-webkit-scrollbar {
-      height: 10px;
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      box-shadow: none;
     }
   }
 
@@ -154,8 +177,8 @@
         line-height: 21px;
         background: rgba(255, 255, 255, 1);
         color: #a4adc8;
-        border: 0.3px solid #f3f4f5;
-        border-color: #f3f4f5 !important;
+        border: 0.3px solid #DCDEE3;
+        border-color: #DCDEE3 !important;
         .ant-table-column-sorter-inner-full {
           display: block;
           margin-left: 2px;
@@ -167,6 +190,9 @@
         }
         &.ant-table-row-cell-break-word,
         &.ant-table-column-has-actions {
+          font-size: 15px;
+          color: #333;
+          font-weight: bold;
           border-left: none;
           border-right: none;
         }
@@ -176,6 +202,10 @@
       }
     }
   }
+  // hover效果
+  // .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  //   background-color:#E7F0FF;
+  // }
   .ant-table-tbody {
     font-size: 14px;
     .ant-table-row {
@@ -185,10 +215,10 @@
         text-align: center;
         line-height: 56px;
         height: 56px;
-        color: #565c6e;
+        color: #333;
         font-size: 14px;
         font-weight: 400;
-        border-color: #f3f4f5 !important;
+        border-color: #DCDEE3 !important;
         &:last-child {
           border-left: 1px solid;
         }
@@ -198,7 +228,7 @@
           display: flex;
           justify-content: center;
           margin: 0 -10px;
-          border: 1px solid #f3f4f5;
+          border: 1px solid #DCDEE3;
           border-top: none;
           .formChild-item {
             flex: 0 1 auto;
@@ -221,7 +251,7 @@
           justify-content: center;
           align-items: center;
           margin: 0 -10px;
-          border: 1px solid #f3f4f5;
+          border: 1px solid #DCDEE3;
           border-top: none;
           border-bottom: none;
         }
@@ -234,7 +264,7 @@
   }
 
   .ant-btn.ant-btn-link {
-    color: #5a8ced;
+    color: #2a7fff;
     height: 24px;
     padding: 0 10px;
   }
@@ -267,101 +297,119 @@
     }
   }
 }
-
-.ant-modal-content {
-  width: auto;
-  height: auto;
-  .ant-modal-body {
-    .showDataDetail {
-      width: 520px;
-      height: 600px;
-      padding: 19px;
-      overflow-x: hidden;
-      overflow-y: auto;
-      &::-webkit-scrollbar {
-        width: 5px;
-      }
-      .dataDteailText {
-        min-height: 60px;
-        margin-top: 10px;
-        font-size: 14px;
-        font-family: "PingFangSC-Regular", "PingFang SC";
-        border-bottom: 1px solid rgba(237, 239, 243, 1);
-        p {
-          margin-bottom: 7px;
-          word-break: break-all;
+.createForm{
+  .ant-modal-content {
+    width: auto;
+    height: auto;
+    .ant-modal-body {
+        padding:0;
+      .showDataDetail {
+        width: 520px;
+        height: 600px;
+        padding: 19px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+          width: 5px;
         }
-        .dataTitle {
-          font-weight: 500;
-          color: rgba(170, 178, 203, 1);
-          line-height: 20px;
+        .dataDteailText {
+          min-height: 60px;
+          margin-top: 10px;
+          font-size: 14px;
+          font-family: "PingFangSC-Regular", "PingFang SC";
+          border-bottom: 1px solid rgba(237, 239, 243, 1);
+          p {
+            margin-bottom: 7px;
+            word-break: break-all;
+          }
+          .dataTitle {
+            font-weight: 500;
+            color: rgba(170, 178, 203, 1);
+            line-height: 20px;
+          }
+          .dataContent {
+            font-weight: 400;
+            color: rgba(86, 92, 110, 1);
+            line-height: 20px;
+          }
         }
-        .dataContent {
-          font-weight: 400;
-          color: rgba(86, 92, 110, 1);
-          line-height: 20px;
-        }
-      }
-      .dataDteailFile {
-        font-size: 14px;
-        min-height: 60px;
-        font-family: "PingFangSC-Regular", "PingFang SC";
-        border-bottom: 1px solid rgba(237, 239, 243, 1);
-        margin-top: 10px;
-        p {
-          margin-bottom: 7px;
-          word-break: break-all;
-        }
-        .dataTitle {
-          font-weight: 500;
-          color: rgba(170, 178, 203, 1);
-          line-height: 20px;
-        }
-        .imageList {
-          width: 100%;
-          height: auto;
-          display: flex;
-          flex-wrap: wrap;
-          margin-bottom: 10px;
-          .imageContainer {
-            width: 100px;
-            height: 100px;
-            margin-top: 5px;
-            margin-right: 8px;
-            position: relative;
-            img {
-              z-index: 1;
-              width: 100%;
-              height: 100%;
-            }
-            .imageHover {
-              z-index: 111;
-              display: none;
-              position: absolute;
-              background: rgba(51, 51, 51, 1);
-              opacity: 0.6;
-              width: 100%;
-              height: 100%;
-              top: 0px;
-              left: 0px;
-              p {
-                &:nth-child(1) {
-                  margin-top: 5px;
+        .dataDteailFile {
+          font-size: 14px;
+          min-height: 60px;
+          font-family: "PingFangSC-Regular", "PingFang SC";
+          border-bottom: 1px solid rgba(237, 239, 243, 1);
+          margin-top: 10px;
+          p {
+            margin-bottom: 7px;
+            word-break: break-all;
+          }
+          .dataTitle {
+            font-weight: 500;
+            color: rgba(170, 178, 203, 1);
+            line-height: 20px;
+          }
+          .imageList {
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            .imageContainer {
+              width: 100px;
+              height: 100px;
+              margin-top: 5px;
+              margin-right: 8px;
+              position: relative;
+              img {
+                z-index: 1;
+                width: 100%;
+                height: 100%;
+              }
+              .imageHover {
+                z-index: 111;
+                display: none;
+                position: absolute;
+                background: rgba(51, 51, 51, 1);
+                opacity: 0.6;
+                width: 100%;
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                p {
+                  &:nth-child(1) {
+                    margin-top: 5px;
+                  }
+                  margin-bottom: 0px;
+                  margin-left: 10px;
+                  font-size: 12px;
+                  line-height: 17px;
+                  font-family: "PingFangSC-Medium", "PingFang SC";
+                  font-weight: 500;
+                  color: rgba(255, 255, 255, 1);
                 }
-                margin-bottom: 0px;
-                margin-left: 10px;
-                font-size: 12px;
-                line-height: 17px;
-                font-family: "PingFangSC-Medium", "PingFang SC";
-                font-weight: 500;
-                color: rgba(255, 255, 255, 1);
               }
             }
           }
+          .fileList {
+            margin-bottom: 10px;
+            .fileContainer {
+              line-height: 20px;
+            }
+          }
         }
-        .fileList {
-          margin-bottom: 10px;
-          .fileContainer {
+        .dataDteailFormChild {
+          font-size: 14px;
+          font-family: "PingFangSC-Regular", "PingFang SC";
+          border-bottom: 1px solid rgba(237, 239, 243, 1);
+          margin-top: 10px;
+          max-height: 177px;
+          p {
+            margin-bottom: 7px;
+            word-break: break-all;
+          }
+          .dataTitle {
+            font-weight: 500;
+            color: rgba(170, 178, 203, 1);
             line-height: 20px;
           }
         }
@@ -385,48 +433,119 @@
           .ant-table-body {
             overflow-x: auto !important;
             &::-webkit-scrollbar {
-              height: 10px;
+              height: 6px;
             }
-            td {
-              padding: 6px 8px;
+            .ant-table-thead {
+              span {
+                color: rgba(170, 178, 203, 1);
+              }
+              th {
+                padding: 6px 8px;
+              }
             }
-          }
-          .ant-table-thead {
-            span {
-              color: rgba(170, 178, 203, 1);
+            table {
+              font-size: 14px;
             }
-            th {
-              padding: 6px 8px;
+            .ant-table-wrapper {
+              width: 100%;
+              height: auto;
+              max-height: 150px;
             }
-          }
-          table {
-            font-size: 14px;
-          }
-          .ant-table-wrapper {
-            width: 100%;
-            height: auto;
-            max-height: 150px;
-          }
-          .formChildData {
-            min-height: 25px;
-            color: rgba(86, 92, 110, 1);
-            width: auto;
-            display: flex;
-            align-items: center;
-            flex-direction: row;
-            flex-wrap: wrap;
-            img {
-              width: 45px;
-              height: 25px;
-              margin-right: 3px;
-              margin-top: 3px;
+            .formChildData {
+              min-height: 25px;
+              color: rgba(86, 92, 110, 1);
+              width: auto;
+              display: flex;
+              align-items: center;
+              flex-direction: row;
+              flex-wrap: wrap;
+              img {
+                width: 45px;
+                height: 25px;
+                margin-right: 3px;
+                margin-top: 3px;
+              }
             }
           }
         }
       }
     }
   }
+  .formInfoModalContainer {
+    width: 520px;
+    height: 420px;
+    .formContainer {
+      width: 460px;
+      margin: auto;
+      .ant-form-item {
+        margin-bottom: 25px;
+        &:nth-child(-n + 2) {
+          height: 70px;
+        }
+        &:nth-child(1) {
+          margin-top: 27px;
+        }
+      }
+      .ant-form-item-label {
+        line-height: 20px;
+        label {
+          font-size: 14px;
+          font-family: "PingFangSC-Regular, PingFang SC";
+          font-weight: 400;
+          color: rgba(51, 51, 51, 1);
+          margin-bottom: 9px;
+        }
+      }
+      .ant-input {
+        width: 460px;
+        height: 36px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 4px;
+        border: 1px solid rgba(214, 216, 222, 1);
+      }
+      .ant-input-affix-wrapper .ant-input {
+        min-height: none;
+      }
+      .buttonGroup {
+        width: 100%;
+        text-align: right;
+        display: flex;
+        justify-content: space-around;
+        padding: 0 95px;
+        .ant-btn {
+          width: 98px;
+          height: 36px;
+          box-shadow: 0px 6px 21px 0px rgba(158, 158, 166, 0.32);
+          font-size: 14px;
+          font-family: "PingFangSC-Regular, PingFang SC";
+          font-weight: 400;
+          border-radius: 6px;
+          border:1px solid #D6D8DE;
+          &:nth-child(1) {
+            background: rgba(255, 255, 255, 1);
+            margin-right: 16px;
+          }
+          &:nth-child(1):hover{
+            border: 1px solid #B6B6BA !important;
+            color: #777F97;
+            background: #F3F3F3;
+          }
+          &:nth-child(2) {
+            background: #2978ff;
+            color: rgba(255, 255, 255, 1);
+          }
+          &:nth-child(2):hover{
+            background: #579AFF;
+          }
+        }
+      }
+      .ant-form-explain {
+        margin-top: 3px;
+      }
+    }
+  }
 }
+
 // .ant-select-dropdown-menu-item-selected {
 //   font-weight: 400;
 // }

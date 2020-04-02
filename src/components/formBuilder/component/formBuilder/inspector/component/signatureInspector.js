@@ -60,10 +60,10 @@ class SignatureInspector extends React.Component {
     this.props.setItemAttr(this.props.element, "fileUnit", value);
   };
 
-  // API change
   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -71,7 +71,8 @@ class SignatureInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -87,7 +88,7 @@ class SignatureInspector extends React.Component {
       inputMask,
       isSetAPIName
     } = this.props.element;
-    const { apiNameTemp, isUniqueApi = true } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
     const formatChecks = inputMask ? true : false;
 
     return (
@@ -114,6 +115,7 @@ class SignatureInspector extends React.Component {
             onChange={this.handleChangeAPI}
             autoComplete="off"
           />
+          {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
 
           {isInFormChild(this.props.elementParent) ? null : (
             <>

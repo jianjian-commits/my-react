@@ -2,13 +2,14 @@ import React from "react";
 import { isValueValid } from "../../../utils/valueUtils";
 import { Input, Form, Tooltip, Icon } from "antd";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
 
-export default class SingleTextInput extends React.Component {
+class SingleTextInput extends React.Component {
 
   constructor(props) {
     super(props);
@@ -30,7 +31,8 @@ export default class SingleTextInput extends React.Component {
         linkFormId, //联动表单 id
       } = data.values;
       // 得到id表单的所有提交数据
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         // 为需要联动的表单添加 change事件
@@ -93,8 +95,8 @@ export default class SingleTextInput extends React.Component {
     setTimeout(()=>{
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
+        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
       }
     },300)
   };
@@ -161,3 +163,5 @@ export default class SingleTextInput extends React.Component {
     );
   }
 }
+
+export default withRouter(SingleTextInput);

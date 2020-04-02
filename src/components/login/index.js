@@ -3,20 +3,19 @@ import { connect } from "react-redux";
 import { Tabs } from "antd";
 import Styles from "./style/login.module.scss";
 import { loginUser } from "../../store/loginReducer";
-import PublicForm from "./publicForm";
+import PublicForm from "./PublicForm";
 import Loading from "../../pages/Loading";
-import { loginPasswordParameter, loginPhoneParameter } from "./formItems";
+import { loginPasswordParameter, loginPhoneParameter } from "./formItemConfig";
 import clx from "classnames";
-import signinImg from "./style/signin.svg";
-import registerImg from "./style/register.svg";
-import Register from "./register";
+import { SigninImage, RegisterImage } from "../../assets/icons/login";
+import Register from "./Register";
 import { Redirect } from "react-router";
 
 function Registe({ params, history, setActiveKey, query }) {
   return (
     <>
       <div>
-        <img src={registerImg} alt="" />
+        <RegisterImage />
       </div>
       <div>
         <Register
@@ -30,26 +29,31 @@ function Registe({ params, history, setActiveKey, query }) {
   );
 }
 
-function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
+function Signin({ setActiveKey, params, loginUser, history }) {
+  const [activeTab, setActiveTab] = useState("1");
   return (
     <>
       <div>
-        <img src={signinImg} alt="" />
+        <SigninImage />
       </div>
       <div>
         <Tabs
           defaultActiveKey="1"
-          tabBarStyle={{ borderBottom: "1px solid #FFFFFF" }}
+          tabBarStyle={{
+            borderBottom: "1px solid #FFFFFF",
+            marginBottom: "50px"
+          }}
           tabBarGutter={35}
+          onChange={key => setActiveTab(key)}
         >
           <Tabs.TabPane
             tab={
               <span
                 className={clx(Styles.normalTabName, {
-                  [Styles.activeTabName]: activeKey === "1"
+                  [Styles.activeTabName]: activeTab === "1"
                 })}
               >
-                用户名密码登录
+                账号密码登录
               </span>
             }
             key="1"
@@ -58,7 +62,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
               parameter={loginPasswordParameter}
               func={loginUser}
               params={params}
-              marginBottom={20}
+              marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
             />
@@ -67,7 +71,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
             tab={
               <span
                 className={clx(Styles.normalTabName, {
-                  [Styles.activeTabName]: activeKey === "2"
+                  [Styles.activeTabName]: activeTab === "2"
                 })}
               >
                 手机验证码登录
@@ -79,7 +83,7 @@ function Signin({ setActiveKey, activeKey, params, loginUser, history }) {
               parameter={loginPhoneParameter}
               func={loginUser}
               params={params}
-              marginBottom={20}
+              marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
             />
@@ -116,7 +120,7 @@ export default connect(
               { [Styles.activeRight]: activeKey === "signin" },
               { [Styles.activeLeft]: activeKey === "register" }
             )}
-            style={{ left: activeKey === "initRegister" ? "-1240px" : "0px" }}
+            style={{ left: activeKey === "initRegister" ? "-1016px" : "0px" }}
           >
             <div className={clx(Styles.signin)}>
               {

@@ -12,6 +12,7 @@ function MyTextArea(props) {
     },
     [onChange]
   );
+  const checkNum = num > 30 ? 30 : num;
   return (
     <div>
       <TextArea
@@ -21,7 +22,7 @@ function MyTextArea(props) {
         ref={forwardRef}
       />
       <span className={classes.text}>
-        {num}/{maxLength}
+        {checkNum}/{maxLength}
       </span>
     </div>
   );

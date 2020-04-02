@@ -13,7 +13,8 @@ export const submitSubmission = (formId, values, appid, extraProp) => dispatch =
     headers: {
       // "X-Custom-Header": "ProcessThisImmediately",
       "Content-Type": "application/json",
-      appid:appid
+      appid:appid,
+      "isDataPage": true,
     },
     data: {
       data: values,
@@ -64,7 +65,11 @@ export const submitLayout = (
 
 export const getFormComponent = id => dispatch => {
   instanceAxios
-    .get(config.apiUrl + "/form/" + id)
+    .get(config.apiUrl + "/form/" + id,{
+      headers: {
+        "isDataPage": true,
+      }
+    })
     .then(res => {
       dispatch({
         type: GET_FORM_COMPONENT,
