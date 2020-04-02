@@ -4,12 +4,13 @@ import Authenticate from "../shared/Authenticate";
 import { Button, Table, message, Popconfirm } from "antd";
 import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
-import PermissionSetting from "../userManagement/applyPermissionSettings";
+import PermissionSetting from "../userManagement/ApplyPermissionSettings";
 import {
   PROFILE_MANAGEMENT_NEW,
   PROFILE_MANAGEMENT_UPDATE,
   PROFILE_MANAGEMENT_DELETE
 } from "../../auth";
+import { catchError } from "../../utils";
 import { CreateIcon } from "../../assets/icons/teams";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
@@ -66,12 +67,19 @@ class ProfileManagement extends React.Component {
   }
 
   componentDidMount() {
-    this.getGroupList().then(res => this.loadingTimeout());
+    this.getGroupList()
   }
+
+//   componentWillUnmount = () => {
+//     this.setState = (state,callback)=>{
+//       return;
+//     };
+// }
 
   componentDidUpdate(prevProps) {
     if (prevProps.teamId !== this.props.teamId) {
-      this.getGroupList().then(res => clearTimeout(this.loadingTimeout()));
+      clearTimeout(this.loadingTimeout());
+      this.getGroupList()
     }
   }
   //loading定时器
@@ -80,6 +88,7 @@ class ProfileManagement extends React.Component {
   }
   // 获取分组总列表
   async getGroupList() {
+    this.setState({ loading: true })
     try {
       const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
@@ -89,11 +98,10 @@ class ProfileManagement extends React.Component {
       } else {
         message.error(res.msg || "获取分组列表失败");
       }
+      this.loadingTimeout()
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-        "系统错误"
-      );
+      this.loadingTimeout()
+      catchError(err);
     }
   }
 
@@ -119,10 +127,7 @@ class ProfileManagement extends React.Component {
         message.error(res.msg || `${title}失败`);
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-        "系统错误"
-      );
+      catchError(err);
     } finally {
       this.setState({ open: false });
     }
@@ -141,10 +146,7 @@ class ProfileManagement extends React.Component {
         message.error(res.msg || "删除失败！");
       }
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-        "系统错误"
-      );
+      catchError(err);
     }
   }
 
@@ -155,7 +157,7 @@ class ProfileManagement extends React.Component {
     });
     this.action = type ? type : "view";
     this.roleId = record ? record.roleId : "";
-    this.roleName = record ? record.roleName :"";
+    this.roleName = record ? record.roleName : "";
     this.getGroupList();
   }
 
@@ -213,10 +215,11 @@ class ProfileManagement extends React.Component {
               <Authenticate key={w.key} auth={w.auth}>
                 {w.key === "delete" ? (
                   <Popconfirm
-                    title="是否删除这个分组？"
+                    title={<div style={{width:'200px'}}>删除分组后，该分组下的所有用户都会变更至普通用户分组。</div> }
                     okText="是"
                     cancelText="否"
                     onConfirm={() => this.removeGroup(record)}
+                    placement="top"
                   >
                     <Button type="link" key={w.key} style={{ color: "#2A7FFF" }}>
                       {w.text}

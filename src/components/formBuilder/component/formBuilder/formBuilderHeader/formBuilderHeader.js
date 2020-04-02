@@ -157,7 +157,7 @@ class ForBuilderHeader extends React.Component {
         </div> */}
         <div className="FormTitle">
           {this.state.isTitleCanEdit === true ? (
-            <span>{this._truncateValue(this.props.name)}</span>
+            <span>编辑表单</span>
           ) : (
             <input
               disabled={this.state.isTitleCanEdit}

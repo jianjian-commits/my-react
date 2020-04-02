@@ -102,7 +102,7 @@ const AppSetting = props => {
     setSearchKey(value);
   };
 
-  const addFolder = () => alert("没用的");
+  // const addFolder = () => alert("没用的");
   const dragFileToFolder = (formId, groupId) => {
     alert(formId + " 放进 " + groupId);
   };
@@ -147,9 +147,9 @@ const AppSetting = props => {
         navigationList={navigationList(history, appId, appName)}
       />
       <Layout>
-        <Sider className={classes.appSider} style={{ padding: "30px 20px 0 20px"}} theme="light" width="240">
+        <Sider className={classes.appSider} theme="light" width="240">
           
-          <div className={classes.searchBox}>
+          <div className={classes.searchBox} style={{ padding: "30px 20px 0 20px"}}>
             <Input
               style={{ width: 200, height: 32 }}
               placeholder="输入名称来搜索"

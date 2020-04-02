@@ -80,13 +80,13 @@ class DateInput extends React.Component {
       if (
         !Object.is(
           document
-            .querySelector(`#${key}Dom`)
+            .querySelector(`#Id${key}Dom`)
             .querySelector(".ant-form-explain"),
           null
         )
       ) {
         document
-          .querySelector(`#${key}Dom`)
+          .querySelector(`#Id${key}Dom`)
           .querySelector(".ant-form-explain")
           .setAttribute("title", customMessage);
       }
@@ -99,7 +99,7 @@ class DateInput extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if(initData){
-      options.initialValue = moment(initData) 
+      options.initialValue = moment(initData+"Z") 
     }
     return (
       <Form.Item label={<LabelUtils data={item} />}>

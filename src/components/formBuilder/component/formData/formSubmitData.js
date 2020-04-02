@@ -714,6 +714,7 @@ class FormSubmitData extends PureComponent {
         title: "创建人",
         dataIndex: "founder",
         key: "founder",
+        width: 210,
         sorter: (a, b) => new Date(a.created) - new Date(b.created),
         sortOrder: sortedInfo.columnKey === "founder" && sortedInfo.order,
       });
@@ -721,6 +722,7 @@ class FormSubmitData extends PureComponent {
       title: "创建时间",
       dataIndex: "created",
       key: "created",
+      width: 210,
       sorter: (a, b) => new Date(a.created) - new Date(b.created),
       sortOrder: sortedInfo.columnKey === "created" && sortedInfo.order,
       render: record => {
@@ -731,6 +733,7 @@ class FormSubmitData extends PureComponent {
       title: "修改时间",
       dataIndex: "modified",
       key: "modified",
+      width: 210,
       sorter: (a, b) => new Date(a.created) - new Date(b.created),
       sortOrder: sortedInfo.columnKey === "modified" && sortedInfo.order,
       render: record => {
@@ -743,12 +746,13 @@ class FormSubmitData extends PureComponent {
     let formDataShowArray = [];
 
     formData.forEach((dataObj, i) => {
+      let { name, id } = dataObj.extraProp["user"] ? dataObj.extraProp["user"]: {name:"",id:""}
       let obj = {
         id: dataObj.id,
         created: dataObj.created,
         modified: dataObj.modified,
-        founder: dataObj.extraProp["name"],
-        userId: dataObj.extraProp["id"]
+        founder: name,
+        userId: id
       };
       let dataItem = dataObj.data;
       for (let n in dataItem) {

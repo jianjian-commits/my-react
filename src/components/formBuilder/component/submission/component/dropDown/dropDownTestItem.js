@@ -7,7 +7,8 @@ export default class DropDownTestItem extends React.Component {
     super(props);
     this.state = {
       selectIndex: -1,
-      isPopoverVisible: false
+      isPopoverVisible: false,
+      initFlag: true
     };
   }
 
@@ -42,7 +43,10 @@ export default class DropDownTestItem extends React.Component {
       this.setState({
         selectIndex: -1
       });
-    }
+    }else if(nextProps.item.data.values instanceof Array && nextProps.isEditData && this.state.initFlag){
+      let selectIndex = nextProps.item.data.values.map(item =>item.value).indexOf(nextProps.value)
+          this.setState({selectIndex,initFlag: false})
+      }
   }
 
   render() {

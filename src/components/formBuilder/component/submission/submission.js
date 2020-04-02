@@ -184,9 +184,15 @@ class Submission extends Component {
       ) {
         // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
         if (values[component.key].constructor === Date) {
-          values[component.key] = new Date(values[component.key].setUTCMilliseconds(0)).toJSON().replace("Z","");
+          let date = new Date(values[component.key].setUTCMilliseconds(0));
+          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+          values[component.key] = new Date(date).toJSON().replace("Z","");
         } else {
-          values[component.key] = new Date(values[component.key]._d.setUTCMilliseconds(0)).toJSON().toString().replace("Z","")
+          let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
+          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+          values[component.key] = new Date(date).toJSON().toString().replace("Z","")
         }
       }
     });
@@ -533,7 +539,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <Email
                   forms={forms}
@@ -552,7 +558,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <PhoneInput
                   forms={forms}
@@ -571,7 +577,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <IdCard
                   forms={forms}
@@ -590,7 +596,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <SingleText
                   forms={forms}
@@ -609,7 +615,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <NumberInput
                   forms={forms}
@@ -628,7 +634,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <RadioButtonsMobile
@@ -657,7 +663,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <Checkbox
                   forms={forms}
@@ -676,7 +682,7 @@ class Submission extends Component {
                 key={item.key}
                 className="single-drop-down"
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <DropDownMobile
@@ -704,7 +710,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <DateInputMobile
@@ -730,7 +736,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <HandWrittenSignatureMobile
@@ -755,7 +761,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <FileUploadMobile
@@ -786,7 +792,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 <TextArea
                   forms={forms}
@@ -804,7 +810,7 @@ class Submission extends Component {
                 key={item.key}
                 style={{ zIndex: 300 - i }}
                 className="multiple-drop-down"
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <MultiDropDownMobile
@@ -832,7 +838,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <ImageUploadMobile
@@ -862,7 +868,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {this.props.mobile.is ? (
                   <PositionComponentMobile
@@ -889,7 +895,7 @@ class Submission extends Component {
                 key={item.key}
                 style={{ zIndex: 300 - i }}
                 className="formChild-container"
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <FormChildMobile
@@ -942,7 +948,7 @@ class Submission extends Component {
               <div
                 key={item.key}
                 style={{ zIndex: 300 - i }}
-                id={item.key + "Dom"}
+                id={"Id" + item.key + "Dom"}
               >
                 {mobile.is ? (
                   <AddressMobile
@@ -1110,6 +1116,7 @@ class Submission extends Component {
       });
     }
 
+    console.log(layout)
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];
@@ -1172,6 +1179,7 @@ class Submission extends Component {
                       rowHeight={22}
                       width={870}
                       onLayoutChange={layout => {
+                        console.log(layout)
                         this.setState({ currentLayout: layout });
                       }}
                     >

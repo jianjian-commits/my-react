@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button, Icon, message } from "antd";
+import { Input as Inp, Button as Btn, Icon } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
+import { catchError } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 
@@ -29,30 +30,45 @@ class Input extends React.Component {
   }
 }
 
-// 发送验证码
-async function sendVerificationCode(mobilePhone) {
-  if (!mobilePhone) return false;
-  try {
-    const res = await request(`/yanzhengma${mobilePhone}`);
-    if (res && res.status === "SUCCESS") {
-      return true;
-    } else {
-      message.error(res.msg || "验证码获取失败");
-    }
-  } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
+class Button extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    const { children, style, className, ...rest } = this.props;
+    return (
+      <Btn {...rest} style={Object.assign(style)} className={clx(className)}>
+        {children}
+      </Btn>
     );
-    return false;
   }
 }
+
+// 发送验证码
+// async function sendVerificationCode(mobilePhone) {
+//   if (!mobilePhone) return false;
+//   try {
+//     const res = await request(`/yanzhengma${mobilePhone}`);
+//     if (res && res.status === "SUCCESS") {
+//       return true;
+//     } else {
+//       message.error(res.msg || "验证码获取失败");
+//     }
+//   } catch (err) {
+//     message.error(
+//       (err.response && err.response.data && err.response.data.msg) || "系统错误"
+//     );
+//     return false;
+//   }
+// }
 
 //  rules校验规则
 const required = msg => ({ required: true, message: msg });
 const whitespace = () => ({ whitespace: true, message: "不允许出现空格" });
 const maxLength = (length, msg) => ({ max: length, message: msg });
 // const minLength = (length, msg) => ({ min: length, message: msg });
-const number = () => ({ pattern: "^[0-9]*$", message: "只能输入小写数字" });
+const number = () => ({ pattern: "^[0-9]*$", message: " " });
 const requireCharAndNum = () => ({
   pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$",
   message: "密码不符合要求"
@@ -75,10 +91,7 @@ const checkphone = actionType => {
       const res = await request(`/sysUser/mobilePhone/${value}/check`);
       if (res && res.data === bol) return callback(context);
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     }
     callback();
   };
@@ -90,9 +103,7 @@ const checkEmail = async (rule, value, callback) => {
     const res = await request(`/sysUser/email/${value}/check`);
     if (res && res.data === false) return callback("该邮箱已被注册");
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
   callback();
 };
@@ -184,7 +195,7 @@ const password = ({
           ? ""
           : payload === "login" || payload === "old"
           ? "请输入密码"
-          : "密码至少8为, 必须包含数字和字母"
+          : "密码至少8位，必须包含数字和字母"
       }
       icon={icon}
       unprefix={unprefix}
@@ -272,43 +283,43 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
   const phone = getFieldValue("mobilePhone");
-  const buttonConfirm = () => {
-    const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
-      if (verificationCodeButtonRef.current)
-        verificationCodeButtonRef.current.buttonNode.disabled = true;
-      if (verificationCodeSpanRef.current)
-        verificationCodeSpanRef.current.innerHTML = sended
-          ? `验证码已发送,如未收到请在${initNum}s后重试`
-          : `验证码发送失败,请在${initNum}s后重试`;
-      let num = initNum - 1;
-      const int = setInterval(() => {
-        if (verificationCodeSpanRef.current)
-          verificationCodeSpanRef.current.innerHTML = sended
-            ? `验证码已发送,如未收到请在${num}s后重试`
-            : `验证码发送失败,请在${num}s后重试`;
-        num = num - 1;
-      }, timeTerval);
-      setTimeout(() => {
-        window.clearInterval(int);
-        if (verificationCodeButtonRef.current)
-          verificationCodeButtonRef.current.buttonNode.disabled = false;
-        if (verificationCodeSpanRef.current)
-          verificationCodeSpanRef.current.innerHTML = "";
-        num = initNum - 1;
-      }, timeOut);
-    };
-    sendVerificationCode(phone).then(res => {
-      if (res) {
-        setTime({
-          sended: true,
-          initNum: 60,
-          timeOut: 60000
-        });
-      } else {
-        setTime({ sended: false, initNum: 6, timeOut: 6000 });
-      }
-    });
-  };
+  // const buttonConfirm = () => {
+  //   const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
+  //     if (verificationCodeButtonRef.current)
+  //       verificationCodeButtonRef.current.buttonNode.disabled = true;
+  //     if (verificationCodeSpanRef.current)
+  //       verificationCodeSpanRef.current.innerHTML = sended
+  //         ? `验证码已发送，如未收到请在${initNum}s后重试`
+  //         : `验证码发送失败，请在${initNum}s后重试`;
+  //     let num = initNum - 1;
+  //     const int = setInterval(() => {
+  //       if (verificationCodeSpanRef.current)
+  //         verificationCodeSpanRef.current.innerHTML = sended
+  //           ? `验证码已发送，如未收到请在${num}s后重试`
+  //           : `验证码发送失败，请在${num}s后重试`;
+  //       num = num - 1;
+  //     }, timeTerval);
+  //     setTimeout(() => {
+  //       window.clearInterval(int);
+  //       if (verificationCodeButtonRef.current)
+  //         verificationCodeButtonRef.current.buttonNode.disabled = false;
+  //       if (verificationCodeSpanRef.current)
+  //         verificationCodeSpanRef.current.innerHTML = "";
+  //       num = initNum - 1;
+  //     }, timeOut);
+  //   };
+  //   sendVerificationCode(phone).then(res => {
+  //     if (res) {
+  //       setTime({
+  //         sended: true,
+  //         initNum: 60,
+  //         timeOut: 60000
+  //       });
+  //     } else {
+  //       setTime({ sended: false, initNum: 6, timeOut: 6000 });
+  //     }
+  //   });
+  // };
   return {
     itemName: "verificationCode",
     options: {
@@ -332,7 +343,8 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
           <Button
             ref={verificationCodeButtonRef}
             disabled={null}
-            onClick={phone ? buttonConfirm : null}
+            onClick={null}
+            // onClick={phone ? buttonConfirm : null}
             style={{
               height: "42px",
               background: "#2A7FFF",
@@ -348,7 +360,11 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
     additionComponent: (
       <span
         ref={verificationCodeSpanRef}
-        style={{ position: "absolute", right: 0, top: "30px" }}
+        style={{
+          position: "absolute",
+          right: 0,
+          top: "30px"
+        }}
       ></span>
     )
   };
@@ -381,13 +397,20 @@ const mobilePhone = ({ form, payload, icon, unprefix, hasFeedback }) => {
   };
 };
 
-const companyName = ({ form, payload, icon, unprefix, hasFeedback }) => {
+const companyName = ({
+  form,
+  payload,
+  icon,
+  unprefix,
+  hasFeedback,
+  update
+}) => {
   return {
     itemName: "companyName",
     options: {
       validateTrigger: "onBlur",
       rules: [
-        hasFeedback ? required("该项为必填") : "",
+        hasFeedback || update ? required("该项为必填") : "",
         requireChinese(),
         maxLength(30, "公司名称过长，最多30个字符")
         // payload === "redit" && { validator: checkCompanyNamePresence }
@@ -456,7 +479,12 @@ const submit = ({
         type="primary"
         htmlType="submit"
         className={itemsStyles.button}
-        style={{ opacity: allowClickButton ? 1 : 0.5 }}
+        style={{
+          background: allowClickButton
+            ? "rgba(24,144,255,1)"
+            : "rgba(24,144,255,0.5)"
+        }}
+        // onClick={throttle(e => (e.target.disabled = true), 3000)}
       >
         {payload === "login" && "登录"}
         {payload === "register" && "注册"}

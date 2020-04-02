@@ -31,26 +31,32 @@ export default class CheckboxInput extends React.Component {
     let selectValues = [];
       if (value) {
           value.forEach(item => {
-          let index = indexs.indexOf(item);
-          if (index > -1) {
-            selectValues.push(index);
-          }
+            let newIndexs = this.setIndex(selectValues, item, indexs, 0);
+            selectValues = selectValues.concat(newIndexs);
           });
       } else if (item.isMobileChild && item.data) {
-        // console.log("item data",item.data);
         item.data.forEach(item => {
-          let index = indexs.indexOf(item);
-          if (index > -1) {
-            selectValues.push(index);
-          }
+          let newIndexs = this.setIndex(selectValues, item, indexs, 0);
+          selectValues = selectValues.concat(newIndexs);
           });
       }
+      selectValues = [...new Set(selectValues)];
     this.state = {
-      selectValues: selectValues,
-      hasClicked: false // 判断是否去URL的默认值
+      selectValues: selectValues
     };
     this.handleSelect = this.handleSelect.bind(this);
   }
+
+  setIndex(selectValues=[], data, indexs, startIndex){
+    let index = indexs.indexOf(data, startIndex);
+    if(index > -1 && selectValues.indexOf(index) !== -1 && startIndex < indexs.length - 1){
+      startIndex ++;
+      return this.setIndex(selectValues, data, indexs, startIndex)
+    }
+    selectValues.push(index);
+    return selectValues;
+  }
+
     // 设置默认的选中值
     setDefaultSetected = (selectedValues = [], allvalues = []) => {
       const indexs = allvalues.map(item => item.value);
@@ -66,16 +72,6 @@ export default class CheckboxInput extends React.Component {
       });
     };
   
-  componentWillReceiveProps(nextProps) {
-     if (!this.state.hasClicked) {
-       const {item, value } = nextProps;
-      if (value) {
-        this.setDefaultSetected(value, item.values);
-      } else if (item.isMobileChild && item.data) {
-      this.setDefaultSetected(item.data, item.values);
-      }
-    }
-  }
   
   handleSelect(index) {
     const { onChange } = this.props;

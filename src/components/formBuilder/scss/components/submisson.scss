@@ -46,14 +46,15 @@ body {
         text-align: left;
         width: 100%;
         white-space: normal;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+        line-height: 0;
       }
       label {
         font-size: 13px;
         font-family: $font-Family;
         font-weight: 400;
         color: $font-color;
-        line-height: 18px;
+        // line-height: 18px;
         &::after {
           content: "";
           margin: 0;
@@ -124,7 +125,10 @@ body {
         // .single-drop-down {
         //   z-index: 100;
         // }
-        padding-left: 30px;
+        // padding-left: 30px;
+        &>div{
+          margin-left: 30px;
+        }
         .react-grid-item {
           .ant-form-item {
             font-size: 13px;
@@ -132,10 +136,22 @@ body {
             .ant-form-item-control-wrapper {
               .ant-form-item-control {
                 .ant-form-item-children {
-                  & input[type="text"] {
+                  &>input[type="number"] {
                     width: 405px;
                   }
-                  & textarea {
+                  &>input[type="text"] {
+                    width: 405px;
+                  }
+                  &>input[type="number"] {
+                    width: 405px;
+                  }
+                  &>.ant-input-affix-wrapper>textarea{
+                    width: 405px;
+                  }
+                  &>.dropDownContainer{
+                    width: 405px;
+                  }
+                  &>.multiDropDownContainer{
                     width: 405px;
                   }
                   .ant-input-affix-wrapper {
@@ -253,8 +269,9 @@ body {
           flex-wrap: wrap;
         }
         .dropDownContainer {
-          width: 100%;
+          width: 405px;
           position: relative;
+          border: 1px solid #d9d9d9;
           .dropDownBtn {
             width: 100%;
             height: 32px;
@@ -293,7 +310,7 @@ body {
               line-height: 32px;
               position: relative;
               &:hover {
-                background-color: #e6f7ff;
+                background-color: #E7F0FF;
               }
               .dropDownItemSpan {
                 display: inline-block;
@@ -310,13 +327,14 @@ body {
               }
             }
             .selectOption {
-              background-color: #e6f7ff;
+              background-color: #E7F0FF;
             }
           }
         }
         .multiDropDownContainer {
-          width: 100%;
+          width: 405px;
           position: relative;
+          border: 1px solid #d9d9d9;
           .dropDownBtn {
             width: 100%;
             height: 32px;
@@ -355,7 +373,7 @@ body {
               line-height: 32px;
               position: relative;
               &:hover {
-                background-color: #e6f7ff;
+                background-color: #E7F0FF;
               }
               .dropDownItemSpan {
                 display: inline-block;
@@ -378,7 +396,7 @@ body {
               }
             }
             .selectOption {
-              background-color: #e6f7ff;
+              background-color: #E7F0FF;
             }
           }
         }
@@ -425,6 +443,8 @@ body {
           .SubmitBtn {
             border-top: 1px dashed #B4B6BC;;
             padding:16px 0 15px;
+            // !这个需要修改
+            margin-top: 30px;
             .ant-btn {
               min-width: 110px;
               height: 36px;
@@ -518,6 +538,7 @@ body {
                     font-family: "PingFangSC-Regular", "PingFang SC";
                     font-weight: 400;
                     color: rgba(51, 51, 51, 1);
+                    max-width: 150px;
                   }
                 }
                 img {
@@ -588,8 +609,9 @@ body {
               .imageItem {
                 flex-basis: 150px;
                 flex-shrink: 0;
-                width: 150px;
-                height: 116px;
+                width: 140px;
+                height: 108px;
+                margin-top: 8px;
                 margin-right: 9px;
                 margin-bottom: 7px;
                 position: relative;
@@ -604,11 +626,15 @@ body {
                 .deleteBtn {
                   z-index: 111;
                   position: absolute;
-                  top: 7px;
-                  right: 6px;
-                  img {
-                    width: 15px;
-                    height: 15px;
+                  top: -17px;
+                  right: -7px;
+                  svg {
+                    width: 16px;
+                    height: 16px;
+                    cursor: pointer;
+                    &:hover path{
+                      fill:#D01414;
+                    }
                   }
                 }
               }
@@ -1019,7 +1045,7 @@ body {
           line-height: 32px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1036,7 +1062,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }
@@ -1061,7 +1087,7 @@ body {
           line-height: 32px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1084,7 +1110,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }
@@ -1220,7 +1246,7 @@ body {
           line-height: 28px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1237,7 +1263,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }
@@ -1263,7 +1289,7 @@ body {
           line-height: 28px;
           position: relative;
           &:hover {
-            background-color: #e6f7ff;
+            background-color: #E7F0FF;
           }
           .dropDownItemSpan {
             display: inline-block;
@@ -1286,7 +1312,7 @@ body {
           }
         }
         .selectOption {
-          background-color: #e6f7ff;
+          background-color: #E7F0FF;
         }
       }
     }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout, Menu, Badge, Button } from "antd";
 import { useHistory } from "react-router-dom";
 import User from "./UserSection";
@@ -11,6 +11,7 @@ import {
   // , PromptIcon
 } from "../../assets/icons/header";
 import { TeamManageIcon } from "../../assets/icons/teams";
+import { getTransactList } from "../../store/loginReducer";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
@@ -61,7 +62,7 @@ const ghostButton = {
   borderRadius: "3px",
   color: "#ffffff",
   width: "110px",
-  height: "32px",
+  height: "28px",
   padding: "0"
 };
 const ghostButtonContent = {
@@ -71,9 +72,13 @@ const ghostButtonContent = {
   color: "rgba(255,255,255,0.9)"
 };
 
-export default connect(({ router }) => ({
-  router
-}))(function HomeHeader(props) {
+export default connect(
+  ({ router, login }) => ({
+    router,
+    transactList: login.transactList
+  }),
+  { getTransactList }
+)(function HomeHeader(props) {
   const history = useHistory();
   const selectHandle = e => {
     history.push(e.key);
@@ -87,13 +92,24 @@ export default connect(({ router }) => ({
       teamManage: false,
       backArrow: "init",
       backUrl: null
-    }
+    },
+    transactList,
+    getTransactList
   } = props;
   // const getPrompt = count => (
   //   <Badge count={count || 6}>
   //     <PromptIcon />
   //   </Badge>
   // );
+  const [init, setInit] = useState(true);
+  if (!transactList) {
+    getTransactList({});
+    return null;
+  } 
+  if (init && transactList) {
+    getTransactList({});
+    setInit(false);
+  }
   return (
     <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
@@ -133,7 +149,7 @@ export default connect(({ router }) => ({
                 <span>我的应用</span>
               </Menu.Item>
               <Menu.Item key="/backlog">
-                <Badge dot offset={[-5, 7]}>
+                <Badge dot offset={[-8, 8]} count={transactList.total}>
                   待办事项
                 </Badge>
               </Menu.Item>
@@ -153,8 +169,8 @@ export default connect(({ router }) => ({
                   style={{
                     marginRight: "5px",
                     stroke: "#2A7FFF",
-                    strokeWidth:"0.1",
-                    fill:"#fff"
+                    strokeWidth: "0.1",
+                    fill: "#fff"
                   }}
                 />
                 团队管理

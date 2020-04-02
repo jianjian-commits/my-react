@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { message, Button } from "antd";
 import request from "../../utils/request";
 import Loading from "../../pages/Loading";
+import { catchError } from "../../utils";
 import registerStyles from "./style/login.module.scss";
 
 export default connect()(function InviteUser({ match, history }) {
@@ -78,11 +79,7 @@ export default connect()(function InviteUser({ match, history }) {
           });
         }
       },
-      err =>
-        message.error(
-          (err.response && err.response.data && err.response.data.msg) ||
-            "系统错误"
-        )
+      err => catchError(err)
     );
   }
   const {
@@ -113,10 +110,6 @@ export default connect()(function InviteUser({ match, history }) {
       err => {
         if (err.response && err.response.data && err.response.data.msg)
           setState({ ...state, alreadyAddTeam: true });
-        message.error(
-          (err.response && err.response.data && err.response.data.msg) ||
-            "系统错误"
-        );
       }
     );
   };
@@ -139,6 +132,9 @@ export default connect()(function InviteUser({ match, history }) {
 
   const BlueFont = props => {
     return <span style={{ color: "rgb(42, 127, 255)" }}>{props.children}</span>;
+  };
+  const BlackFont = props => {
+    return <span style={{ color: "#333333" }}>{props.children}</span>;
   };
   if (!init) return null;
   return (
@@ -184,14 +180,17 @@ export default connect()(function InviteUser({ match, history }) {
               <>
                 <div className={registerStyles.result}>
                   <div>
-                    <span>您的账号</span>
+                    <span>
+                      您的账号-<BlueFont>{currentUserDetail.name}</BlueFont>
+                    </span>
                   </div>
                   <div>
-                    <BlueFont>{currentUserDetail.name}</BlueFont>
+                    <span>
+                      已经加入团队：<BlackFont>{invitedTeam}</BlackFont>
+                    </span>
                   </div>
-                  <div>已经加入团队{invitedTeam}</div>
                   <div>
-                    <Button href="/">ok</Button>
+                    <Button href="/">进入我的主页</Button>
                   </div>
                 </div>
               </>

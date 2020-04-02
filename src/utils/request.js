@@ -5,7 +5,6 @@ import { signOut } from "../store/loginReducer";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = `${HOST_IP}`;
-axios.defaults.headers.common["Content-Type"] = "application/json";
 
 axios.interceptors.response.use(
   response => response,

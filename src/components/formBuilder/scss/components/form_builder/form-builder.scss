@@ -161,8 +161,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     width: 70%;
     flex: initial;
     padding-top: 49px;
-    background: #F7F7F8;
-    overflow-y: auto;
+    background: #FFF;
+    overflow:auto;
+    overflow-x:hidden;
     .react-form-builder-preview {
       min-height: 100%;
       max-width: 870px;
@@ -2149,8 +2150,8 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   .map-modal-container-content {
     .tip-input {
       position: absolute;
-      top: 80px;
-      left: 6%;
+      top: 88px;
+      left: 8%;
     }
     .err-border {
       border: 1px red solid;
@@ -2164,7 +2165,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       }
       .orientation-range-tip {
         font-size: 12px;
-        margin-left: 68px;
+        // margin-left: 68px;
       }
     }
   }

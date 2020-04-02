@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { List, Icon, message, Menu } from "antd";
+import React from "react";
+import { Menu } from "antd";
 import { useHistory, useParams } from "react-router-dom";
-import request from "../../utils/request"
 import {  HandledIcon, PendingIcon, SubmittedIcon } from './svg/index'
 import classes from "./approval.module.scss";
 
@@ -16,37 +15,17 @@ const baseUrl = path => {
 };
 export const ApprovalSection = props => {
   const history = useHistory();
-  const appId = useParams().appId;
-  const [todos, setTodos] = React.useState(0);
-  const [submits, setSubmits] = React.useState(0);
-  const [dones, setDones] = React.useState(0);
-  const [selectedKey, setSelectedKey] = React.useState("");
-  useEffect(()=>{
-    getTagsCount()
-  },[todos,submits,dones])
-  async function getTagsCount() {
-    try {
-      const res = await request(`/flow/history/approval/count`,{
-        headers:{
-          appid: appId
-        },
-      });
-      if (res && res.status === "SUCCESS") {
-        const {todos, submits, dones} = res.data;
-        setDones(dones);
-        setSubmits(submits);
-        setTodos(todos);
-      } else {
-        message.error("获取列表个数失败");
-      }
-    } catch (err) {
-      message.error("获取列表个数失败");
-    }
-  }
+  const { appId } = useParams();
+  const { todos, submits, dones } = props.approveListCount;
+
+  React.useEffect(()=>{
+    props.getApproveCount(appId)
+  },[appId])
+
   const items = history => [
     {
       key: "myPending",
-      icon: <PendingIcon style={{marginRight: 5}}/>,
+      icon: <PendingIcon/>,
       label: "我的待办",
       tagNumber: todos,
       onClick: () => {
@@ -56,7 +35,7 @@ export const ApprovalSection = props => {
     },
     {
       key: "mySubmitted",
-      icon: <SubmittedIcon style={{marginRight: 5, position: "relative", top: 3}}/>,
+      icon: <SubmittedIcon style={{top: 3}}/>,
       label: "我发起的",
       // tagNumber: submits,
       onClick: () => {
@@ -66,7 +45,7 @@ export const ApprovalSection = props => {
     },
     {
       key: "myHandled",
-      icon: <HandledIcon style={{marginRight: 5, position: "relative", top: 3}}/>,
+      icon: <HandledIcon style={{top: 3}}/>,
       label: "我处理的",
       // tagNumber: dones,
       onClick: () => {
@@ -85,7 +64,7 @@ export const ApprovalSection = props => {
         style={
           props.approvalKey === item.key
             ? {
-                backgroundColor: "#E7F0FF"
+                backgroundColor: "#DDEAFF"
               }
             : {}
         }
