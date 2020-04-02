@@ -5,19 +5,22 @@ import config from "../../../../config/config";
 import { message } from "antd";
 import { RECIVE_FORMS } from "../action";
 
-export const deleteForm = formId => dispatch => {
-  instanceAxios({
-    url: config.apiUrl + `/form/${formId}`,
-    method: "DELETE"
-  })
-    .then(response => {
-      response.data === "ok"
-        ? (window.location.href = config.hostUrl)
-        : message.error("删除失败！", 2);
+export const deleteForm = ( appId, formId ) => {
+  return new Promise((resolve,reject)=>{
+    axios({
+      url: config.apiUrl + `/form/${formId}`,
+      method: "DELETE",
+      headers:{
+        appid:appId
+      }
     })
-    .catch(err => {
-      console.log(err);
-    });
+      .then(response => {
+        resolve(response)
+      })
+      .catch(err => {
+        reject(err)
+      });
+  })
 };
 
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
@@ -141,3 +144,22 @@ export const getFormsByFormId = formId => {
       });
   });
 };
+
+export const updateFormName = (appId,formId,params={}) =>{
+  return new Promise((resolve,reject)=>{
+    axios({
+      url: config.apiUrl + `/form/${formId}`,
+      method: "PATCH",
+      headers:{
+        appid:appId
+      },
+      data:{...params}
+    })
+      .then(response => {
+        resolve(response)
+      })
+      .catch(err => {
+        reject(err)
+      });
+  })
+}

@@ -110,7 +110,7 @@ const ApprovalProcessButtons = (props) =>{
   const [currentApproved, setCurrentApproved] = React.useState(false);
   const [approveMsg, setApproveMsg] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
+  const [Loading, setConfirmLoading] = React.useState(false);
   const handleApproval = () =>{
     // 显示弹窗填意见
   }

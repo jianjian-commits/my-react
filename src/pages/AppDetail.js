@@ -208,7 +208,7 @@ const AppDetail = props => {
             <DraggableList
               selected={selectedForm}
               draggable={false}
-              onClick={e => {
+              onSelect={e => {
                 setSelectedForm(e.key);
                 setApprovalKey("");
                 setSubmit(false);
