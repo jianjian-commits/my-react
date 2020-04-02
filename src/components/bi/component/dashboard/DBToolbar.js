@@ -5,6 +5,7 @@ import { useParams, useHistory } from "react-router-dom";
 import request from '../../utils/request';
 import { setFormData, setDataSource } from '../../redux/action';
 import DataListModal from "../elements/modal/dataListModal";
+import create from "antd/lib/icon/IconFont";
 
 const DBToolbar = props => {
   const history = useHistory();
@@ -31,6 +32,7 @@ const DBToolbar = props => {
   const [visible, setVisible] = useState(false);
   const modalProps = {
     visible,
+    type:"create",
     showModal: () => {
       setVisible(true);
     },
