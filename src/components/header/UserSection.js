@@ -56,21 +56,20 @@ const User = props => {
   const { signOut, login, switchCurrentTeam, initAllDetail } = props;
   const { userDetail, allTeam, currentTeam, fetchRequestSent } = login;
   const [visible, setVisible] = useState(false);
-  
+
   useEffect(() => {
     !fetchRequestSent && initAllDetail();
-  }, [fetchRequestSent, initAllDetail])
-  
+  }, [fetchRequestSent, initAllDetail]);
+
   return (
     <>
       <Dropdown
         overlayClassName={Styles.overlay}
         overlay={MenuItems(allTeam, setVisible, currentTeam, switchCurrentTeam)}
       >
-        <Link
+        <span
           className="ant-dropdown-link"
-          to="#"
-          style={{ color: "rgba(255, 255, 255, 0.9)" }}
+          style={{ color: "rgba(255, 255, 255, 0.9)", cursor: "default" }}
         >
           {userDetail.name}
           <DownOutlinedIcon
@@ -95,7 +94,7 @@ const User = props => {
           >
             确定退出登录?
           </Modal>
-        </Link>
+        </span>
       </Dropdown>
     </>
   );
