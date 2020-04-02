@@ -14,6 +14,7 @@ import { catchError } from "../../utils";
 import { CreateIcon } from "../../assets/icons/teams";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
+import clx from "classnames";
 
 function GroupList(props) {
   const {
@@ -177,7 +178,7 @@ class ProfileManagement extends React.Component {
   }
 
   render() {
-    const { open, title, roleList, loading } = this.state;
+    const { open, title, roleList, loading, enterP, enterD } = this.state;
     const columns = [
       { title: "组名", dataIndex: "roleName", width: "70%" },
       {
@@ -258,22 +259,24 @@ class ProfileManagement extends React.Component {
 
     return (
       <div className={classes.wrapper}>
-        {this.state.enterP === true ? (
-          <PermissionSetting
-            action={this.action}
-            roleId={this.roleId}
-            appId={this.appId}
-            roleName={this.roleName}
-            enterDetail={this.enterDetail}
-            enterPermission={this.enterPermission}
-          />
-        ) : this.state.enterD === true ? (
+        {enterP && <PermissionSetting
+          action={this.action}
+          roleId={this.roleId}
+          appId={this.appId}
+          roleName={this.roleName}
+          enterDetail={this.enterDetail}
+          enterPermission={this.enterPermission}
+        />}
+        {enterD === true ? (
           <GroupDetail
             action={this.action}
             enterDetail={this.enterDetail}
             roleId={this.roleId}
             roleName={this.roleName}
             enterPermission={this.enterPermission}
+            className={clx({
+              [classes.isHide]: enterP,
+            })}
           />
         ) : (
           <GroupList

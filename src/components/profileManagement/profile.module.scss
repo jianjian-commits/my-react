@@ -13,7 +13,7 @@
     margin: 0 6px 0 0;
   }
 
-  > button {
+  > button,section > button {
     float: right;
     color: #2a7fff;
     width: 104px;
@@ -21,6 +21,10 @@
     padding: 0;
     margin-left: 20px;
     border: none;
+  }
+
+  .isHide{
+    display: none;
   }
 
   ul {
