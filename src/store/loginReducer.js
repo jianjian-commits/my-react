@@ -174,7 +174,7 @@ export const getAllTeam = () => async dispatch => {
 //初始化所有信息
 export const initAllDetail = () => async dispatch => {
   dispatch({ type: FETCH_REQUEST_SENT});
-  dispatch({ type: CLEAR_USER_DATA});
+  // dispatch({ type: CLEAR_USER_DATA});
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
