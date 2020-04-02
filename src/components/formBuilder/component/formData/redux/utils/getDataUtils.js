@@ -158,6 +158,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
   }
   ).then(res => {
     let currentForm = res.data;
+    console.log(currentForm)
 
     instanceAxios
       .get(
@@ -171,6 +172,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
         }
       )
       .then(res => {
+        console.log(res)
         instanceAxios.get(
           config.apiUrl + `/flow/history/approval/${submissionId}`,{
             headers:{
@@ -190,14 +192,35 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
             });
         }).catch(err=>{
           callback(false);
+          dispatch({
+            type: RECEIVED_FORM_DETAIL,
+            forms: currentForm,
+            formDetail: res.data.data,
+            extraProp: res.data.extraProp,
+            taskData: []
+          });
           message.error("获取审批流水失败",err.response.data.msg)
         })
       }).catch(err=>{
         callback(false);
+        dispatch({
+          type: RECEIVED_FORM_DETAIL,
+          forms: currentForm,
+          formDetail: {},
+          extraProp: {},
+          taskData: []
+        });
         message.error("获取数据详情失败",err.response.data.msg)
       });
   }).catch(err=>{
     callback(false);
+    dispatch({
+      type: RECEIVED_FORM_DETAIL,
+      forms: {},
+      formDetail: {},
+      extraProp: {},
+      taskData: []
+    });
     message.error("获取元数据失败",err.response.data.msg)
   }).catch(err=>{
     callback(false);
