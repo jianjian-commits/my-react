@@ -2,10 +2,20 @@ import React, {PureComponent, useState} from "react";
 import DragItem from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
+import { Types } from './Types';
 import { GroupType } from '../../component/elements/Constant';
 import DataListModal from "../elements/modal/dataListModal";
+import ChangeTipModal from "../elements/modal/changeTipModal";
 import { Icon } from "antd";
 
+const DragChild = props => {
+  const { item } = props;
+
+  return (
+    <li className="bind-item"><Icon type={item.type == "NUMBER" ? "number" : "tags"}
+      className="data-icon" style={{color: "#2B81FF"}}/>{item ? item.label : ""}</li>
+  );
+}
 
 const LeftPane = props => {
   const getItems = (dataSource) => {
@@ -19,13 +29,14 @@ const LeftPane = props => {
 
     dataArr.forEach((each, idx) => {
       const currentGroup = GroupType.SUM;
+
       if(each) {
         if(each.type === "NUMBER") {
-          const item = {...each, bindType: "mea", option: {currentGroup}}
-          meaArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
+          const item = {...each, bindType: Types.MEASURE, option: {currentGroup}}
+          meaArr.push(<DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
         } else {
-          const item = {...each,  bindType: 'dim', option: {currentGroup}}
-          dimArr.push(<DragItem item={item} key={each.id} id={each.id}/>);
+          const item = {...each,  bindType: Types.DIMENSION, option: {currentGroup}}
+          dimArr.push(<DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>);
         }
       }
     })
@@ -40,28 +51,43 @@ const LeftPane = props => {
 
   const { dataSource } = props;
 
-  const [visible,setVisible] = useState(false); 
-  const modalProps = {
-    visible,
+  const [ listVisible,setListVisible] = useState(false); 
+  const listModalProps = {
+    visible:listVisible,
     showModal: () => {
-      setVisible(true);
+      setListVisible(true);
     },
     handleCancel: e => {
-      setVisible(false);
+      setListVisible(false);
     },
     handleOK: e => {
-      setVisible(false);
+      setListVisible(false);
     }
   };  
 
+  const [ changeVisible,setChangeVisible] = useState(false); 
+  const changeModalProps = {
+    visible:changeVisible,
+    showModal: () => {
+      setChangeVisible(true);
+    },
+    handleCancel: e => {
+      setChangeVisible(false);
+    },
+    handleOK: e => {
+      setChangeVisible(false);
+      listModalProps.showModal();
+    }
+  };  
   return (
     <div className="left-pane">
       <div className="left-pane-data">
         <div className="data-box">
           <div className="data-text">数据</div>
           <div>
-            <DataListModal key={Math.random()} {...modalProps}/>
-            <div className="change-data-source" onClick={modalProps.showModal}>更改数据源</div>
+            <DataListModal key={Math.random()} {...listModalProps}/>
+            <ChangeTipModal {...changeModalProps}/>
+            <div className="change-data-source" onClick={changeModalProps.showModal}>更改数据源</div>
           </div>
         </div>
         <div>

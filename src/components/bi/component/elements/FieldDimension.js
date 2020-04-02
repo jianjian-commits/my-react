@@ -1,25 +1,26 @@
-import React from "react";
+import React ,{useState}from "react";
 import { Icon } from "antd";
 
 export default function FieldDimension(props) {
+  const [btnVisible,setBtnVisible] = useState(false);
   const handleDeleteDimension = () => {
-    props.removeField(props.item);
+    props.item.removeField(props.item);
   };
 
-  const { className, item } = props;
+  const { item } = props;
   
   const handlMouseEnter = () => {
-    document.getElementById("dim"+item.id).style.display = "block";
+    setBtnVisible(true);
   };
 
   const handlMouseLeave = () => {
-    document.getElementById("dim"+item.id).style.display = "none";
+    setBtnVisible(false);
   };
 
   return(
-  <div className={className} onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
-    <Icon type="close-circle" id={"dim"+item.id} onClick={handleDeleteDimension} theme="filled" />
+  <div className="dimContainer" onMouseEnter={handlMouseEnter} onMouseLeave={handlMouseLeave}>
     {item.label}
+    {btnVisible && <Icon type="close-circle" id={"dim"+item.id} onClick={handleDeleteDimension} theme="filled" />}
   </div>
   )
 }

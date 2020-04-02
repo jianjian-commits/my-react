@@ -19,11 +19,13 @@ const { Option } = Select;
 
 const defaultStyle = {
   height: 505,
+  width: 570,
   bodyHeight: 350
 };
 
 const formChildStyle = {
   height: 600,
+  width: 570,
   bodyHeight: 465
 };
 
@@ -313,10 +315,12 @@ class DataLinkageModal extends React.Component {
         className="dataLinkage"
         width="570"
         style={{
-          height: currentStyle.height
+          height: currentStyle.height,
+          width: currentStyle.width
         }}
         bodyStyle={{
-          height: currentStyle.bodyHeight
+          height: currentStyle.bodyHeight,
+          width: currentStyle.width
         }}
       >
         <div className="data-linkage-wrap">

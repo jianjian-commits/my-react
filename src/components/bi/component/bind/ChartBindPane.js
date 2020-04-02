@@ -1,14 +1,16 @@
 import React, {PureComponent} from "react";
+import ReactDOM from 'react-dom';
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
 import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
-import { ChartType } from '../elements/Constant';
+import DragItem from './DragItem';
 import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
+import { deepClone } from '../../utils/Util';
 import { message } from 'antd';
 
 /**
@@ -19,11 +21,12 @@ const spec = {
   canDrop(props, monitor, component) {
     return true;
   },
-
   hover(props, monitor, component) {
-    // const clientOffset = monitor.getClientOffset()
-    // const isOnlyThisOne = monitor.isOver({ shallow: true })
-    // const canDrop = monitor.canDrop()
+    // Calculate the position of hover bar.
+    const clientOffset = monitor.getClientOffset()
+    const isOnlyThisOne = monitor.isOver({ shallow: true })
+    const canDrop = monitor.canDrop()
+    let dom = (ReactDOM.findDOMNode(component)).getBoundingClientRect();
   },
 
   drop(props, monitor, component) {
@@ -41,18 +44,18 @@ const spec = {
     let isExisted = false, isDimExceed = false, isMeaExceed = false;
 
     if(bindDataArr.length != 0) {
-      let dimCount = item.bindType == "dim" ? 1 : 0;
-      let meaCount = item.bindType == "mea" ? 1 : 0;
+      let dimCount = item.bindType == Types.DIMENSION ? 1 : 0;
+      let meaCount = item.bindType == Types.MEASURE ? 1 : 0;
       bindDataArr.forEach((each, idx) => {
-        if(each.bindType == "dim") {
+        if(each.bindType == Types.DIMENSION) {
           dimCount++;
         }
 
-        if(each.bindType == "mea") {
+        if(each.bindType == Types.MEASURE) {
           meaCount++;
         }
 
-        if(each.id == item.id && each.bindType == "dim") {
+        if(item.fieldId && (each.fieldId == item.fieldId) && each.bindType == Types.DIMENSION) {
           isExisted = true;
         }
       })
@@ -75,7 +78,9 @@ const spec = {
     const dropDim = component.getType() == Types.DIMENSION;
 
     if(dropDim && (item.bindType == Types.DIMENSION) || (!dropDim && (item.bindType == Types.MEASURE))) {
-      bindDataArr.push(item);
+      const obj = deepClone(item);
+      obj['idx'] = bindDataArr.length;
+      bindDataArr.push(obj);
     }
 
     processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elementId);
@@ -127,9 +132,9 @@ class BindPane extends PureComponent {
     const { label, bindType, connectDropTarget } = this.props;
 
     return connectDropTarget(
-      <div className="bind-line" key={label}>
+      <div className="bind-line" key={label} ref={(ref)=> {this.line = ref}}>
         <div className="bind-label">{label}</div>
-        {this.getItems(bindType)}
+        <div className="bind-cols">{this.getItems(bindType)}</div>
       </div>
     )
   }
@@ -140,9 +145,9 @@ class BindPane extends PureComponent {
 
   removeField = (item) => {
     let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
-
-    const newArr = bindDataArr.filter((each)=>{
-      return item.id != each.id;
+    
+    const newArr = bindDataArr.filter((each) => {
+      return item.idx != each.idx;
     })
 
     processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
@@ -168,12 +173,14 @@ class BindPane extends PureComponent {
     const components = [];
 
     bindDataArr.forEach(
-      (item) => {
-        if(item.bindType == bindType && bindType == "dim") {
-          components.push(<FieldDimension item = {item} removeField={this.removeField} key={item.id} className={cls} />)
+      (each, idx) => {
+        if(each.bindType == bindType && bindType == Types.DIMENSION) {
+          components.push(<DragItem item={{...each, removeField: this.removeField, className: cls}} Child={FieldDimension} key={each.id + "_" + idx}/>)
         }
-        if(item.bindType == bindType && bindType == "mea") {
-          components.push(<FieldMeasureSelect item = {item} changeGroup={this.changeGroup} removeField={this.removeField} key={item.id} className={cls} />)
+
+        if(each.bindType == bindType && bindType == Types.MEASURE) {
+          components.push(<DragItem item={{...each, removeField: this.removeField, changeGroup: this.changeGroup, className: cls}}
+            Child={FieldMeasureSelect} key={each.id + "_" + idx}/>)
         }
       }
     )

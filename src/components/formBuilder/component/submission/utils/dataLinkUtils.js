@@ -17,14 +17,16 @@ export const getFormById = formId => {
 };
 
 // 获取表单的所有提交数据
-export const getFormAllSubmission = formId => {
+export const getFormAllSubmission = (appId, formId) => {
   // 这里暂时获取9999条数据
   return new Promise((resolve, reject) => {
     instanceAxios
-      .get(config.apiUrl + `/form/${formId}/submissions`, {
+      .get(config.apiUrl + `/form/${formId}/submission`, {
         headers: {
           // "X-Custom-Header": "ProcessThisImmediately",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          appid:appId,
+          "isDataPage": true,
         }
       })
       .then(res => {

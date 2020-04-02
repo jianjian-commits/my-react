@@ -1,17 +1,21 @@
 .formDetailBox {
-  width: calc(100vw - 220px);
-  padding: 29px 21px;
+  padding: 0 32px;
 }
 .FormDataDetailHeader{
   width: 100%;
+  padding-top: 40px;
+  padding-bottom: 30px;
   .title {
     font-family: "Microsoft YaHei";
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     color: #333333;
-    padding: 10px 0;
     }
+  .btn{
+    width: 104px;
+    margin-left: 20px;
+  }
 }
 .formDataDetailContainer {
   width: 100%;
@@ -22,7 +26,17 @@
   font-family: "Microsoft YaHei";
   font-style: normal;
   font-weight: normal;
+  .ant-table-middle > .ant-table-content >.ant-table-body > table {
+    .approveCol{
+      padding-left: 20px;
+    }
+  }
   .ant-table-wrapper{
+    tr {
+      &:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background-color: #E7F0FF;
+      }
+    }
     .ant-table-thead > tr > th {
       padding: 14px;
       background: #fff;
@@ -30,6 +44,7 @@
 
     .ant-table-tbody > tr > td {
       padding: 9px 16px;
+      border-bottom-color: #DCDEE3;
     }
     .ant-table-column-title{
       font-family: "Microsoft YaHei";
@@ -39,14 +54,11 @@
       line-height: 20px;
       color: #333333;
     }
-}
+  }
   .dataDteailText {
     min-height: 68px;
-    margin-top: 16px;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-bottom: 17px;
-    border-bottom: 1px solid rgba(237, 239, 243, 1);
+    padding: 16px 20px;
+    border-bottom: 1px solid #DCDEE3;
     p {
       word-break: break-all;
     }
@@ -64,7 +76,7 @@
   .dataDteailFile {
     font-size: 14px;
     min-height: 68px;
-    border-bottom: 1px solid rgba(237, 239, 243, 1);
+    border-bottom: 1px solid #DCDEE3;
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 17px;
@@ -134,7 +146,7 @@
   .dataDteailFormChild {
     font-size: 14px;
     font-family: "PingFangSC-Regular", "PingFang SC";
-    border-bottom: 1px solid rgba(237, 239, 243, 1);
+    border-bottom: 1px solid #DCDEE3;
     margin-top: 10px;
     padding-left: 30px;
     padding-right: 30px;
@@ -154,7 +166,7 @@
       .ant-table-body {
         overflow-x: auto !important;
         &::-webkit-scrollbar {
-          height: 7px;
+          height: 6px;
         }
         td {
           padding: 6px 8px;
@@ -207,4 +219,5 @@
   .tabsBackground {
     background-color: #FFFFFF;
   }
+
 }

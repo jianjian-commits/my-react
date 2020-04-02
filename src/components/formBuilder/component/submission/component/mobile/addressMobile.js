@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Select, Input } from "antd";
 import { Form } from "antd";
 import { Picker, List } from "antd-mobile";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -13,7 +14,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 // let AMap;
 
-export default class address extends Component {
+class Address extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,7 +89,8 @@ export default class address extends Component {
         linkFormId //联动表单 id
       } = data.values;
       // 得到id表单的所有提交数据
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         // 为需要联动的表单添加 change事件
@@ -284,3 +286,4 @@ export default class address extends Component {
     );
   }
 }
+export default withRouter(Address)

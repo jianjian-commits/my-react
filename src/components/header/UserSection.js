@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Dropdown, Icon, Menu, Modal } from "antd";
+import React, { useState, useCallback } from "react";
+import { Dropdown, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -8,6 +8,11 @@ import {
   initAllDetail
 } from "../../store/loginReducer";
 import Styles from "./header.module.scss";
+import {
+  WarningIcon,
+  DownOutlinedIcon,
+  CheckedIcon
+} from "../../assets/icons/header";
 
 const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
   <>
@@ -26,7 +31,7 @@ const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
             >
               {team.name}
               &nbsp;&nbsp;&nbsp;&nbsp;
-              {check && <Icon type="check" />}
+              {check && <CheckedIcon style={{ floatRight: "0px" }} />}
             </Link>
           </Menu.Item>
         );
@@ -49,30 +54,44 @@ const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
 
 const User = props => {
   const { signOut, login, switchCurrentTeam, initAllDetail } = props;
-  const { userDetail, allTeam, currentTeam } = login;
-  const [init, setInit] = useState(false);
+  const { userDetail, allTeam, currentTeam, fetchRequestSent } = login;
   const [visible, setVisible] = useState(false);
-  if (!init) {
-    initAllDetail();
-    setInit(true);
-  }
+  const loadData = useCallback(() => {
+    if (!fetchRequestSent) initAllDetail()
+  }, [fetchRequestSent, initAllDetail])
+  loadData();
+  
   return (
     <>
       <Dropdown
         overlayClassName={Styles.overlay}
         overlay={MenuItems(allTeam, setVisible, currentTeam, switchCurrentTeam)}
       >
-        <Link className="ant-dropdown-link" to="#" style={{ color: "#ffffff" }}>
+        <Link
+          className="ant-dropdown-link"
+          to="#"
+          style={{ color: "rgba(255, 255, 255, 0.9)" }}
+        >
           {userDetail.name}
-          <Icon type="down" style={{ margin: "0 0 0 5px" }} />
+          <DownOutlinedIcon
+            style={{ margin: "0 0 0 5px", color: "rgba(255, 255, 255, 0.9)" }}
+          />
           <Modal
+            className={Styles.signoutModal}
             visible={visible}
-            width="419px"
-            title={"退出登录"}
-            cancelText={"取消"}
+            width="404px"
+            title={
+              <>
+                <WarningIcon />
+                退出登录
+              </>
+            }
+            cancelText={<span style={{ color: "#777F97" }}>取消</span>}
             okText={"确定"}
             onCancel={() => setVisible(false)}
             onOk={signOut}
+            closable={false}
+            mask={false}
           >
             确定退出登录?
           </Modal>

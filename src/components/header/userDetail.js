@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import { Modal, Form } from "antd";
 import { updateUserDetail } from "../../store/loginReducer";
 import HomeHeader from "./HomeHeader";
-import { userDetailParameter, formItems } from "../login/formItems";
+import { userDetailParameter, formItems } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
-import closeIcon from "../login/style/close.svg";
+import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
 
 const Mete = {
@@ -60,7 +60,8 @@ export default Form.create({ name: "reset-form" })(
         itemName: m.itemName,
         icon: m.icon,
         modalMeter,
-        setModalMeter
+        setModalMeter,
+        update: true
       });
     });
     const render = meter => {
@@ -162,13 +163,7 @@ export default Form.create({ name: "reset-form" })(
           width={"484px"}
           onCancel={() => setModalMeter({ ...modalMeter, meter: false })}
           className={userDetailStyles.detailUpdateModal}
-          closeIcon={
-            <img
-              style={{ width: "14px", height: "14px" }}
-              src={closeIcon}
-              alt=""
-            />
-          }
+          closeIcon={<CloseIcon />}
         >
           <Form
             onSubmit={e => handleSubmit(e)}
@@ -203,7 +198,7 @@ export default Form.create({ name: "reset-form" })(
                   // }
                 >
                   {getFieldDecorator(parameters[index]["key"], {
-                    ...o.options,
+                    ...o.options
                     // initialValue:
                     //   o.itemName === "oldPassWord"
                     //     ? null

@@ -41,6 +41,7 @@ class ComponentItem extends React.Component {
     newData.key = ID.uuid(newData.type, this.props.data);
     newData.layout.i = key;
     newData.layout.y = 0;
+    newData.isSetAPIName = false;
     this.props.setItemAttr(element, "values", [...values, newData]);
   }
   render() {
@@ -229,9 +230,10 @@ class FormChildTestInspector extends React.Component {
   };
 
   // API change
-  handleChangeAPI = ev => {
+   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -239,7 +241,8 @@ class FormChildTestInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
 
@@ -255,7 +258,7 @@ class FormChildTestInspector extends React.Component {
       isSetAPIName
     } = this.props.element;
     const { optionType } = this.state;
-    const { apiNameTemp, isUniqueApi = true } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
 
     return (
       <div className="FormChildTestInspector">
@@ -282,6 +285,7 @@ class FormChildTestInspector extends React.Component {
               onChange={this.handleChangeAPI}
               autoComplete="off"
             />
+            {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
 
             <p htmlFor="single-text-tip">提示信息</p>
             <Input

@@ -1,6 +1,8 @@
-import React from "react";
-import { List, Icon } from "antd";
-import { useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { List, Icon, message, Menu } from "antd";
+import { useHistory, useParams } from "react-router-dom";
+import request from "../../utils/request"
+import {  HandledIcon, PendingIcon, SubmittedIcon } from './svg/index'
 import classes from "./approval.module.scss";
 
 const MyHandled = () =>{
@@ -45,55 +47,91 @@ const baseUrl = path => {
 };
 export const ApprovalSection = props => {
   const history = useHistory();
+  const appId = useParams().appId;
+  const [todos, setTodos] = React.useState(0);
+  const [submits, setSubmits] = React.useState(0);
+  const [dones, setDones] = React.useState(0);
+  const [selectedKey, setSelectedKey] = React.useState("");
+  useEffect(()=>{
+    getTagsCount()
+  },[todos,submits,dones])
+  async function getTagsCount() {
+    try {
+      const res = await request(`/flow/history/approval/count`,{
+        headers:{
+          appid: appId
+        },
+      });
+      if (res && res.status === "SUCCESS") {
+        const {todos, submits, dones} = res.data;
+        setDones(dones);
+        setSubmits(submits);
+        setTodos(todos);
+      } else {
+        message.error("获取列表个数失败");
+      }
+    } catch (err) {
+      message.error("获取列表个数失败");
+    }
+  }
   const items = history => [
     {
       key: "myPending",
-      icon: MyPending,
+      icon: <PendingIcon style={{marginRight: 5}}/>,
       label: "我的待办",
+      tagNumber: props.todosNumber || todos,
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/myPending`);
+        // history.push(`${baseUrl(history.location.pathname)}/myPending`);
         props.fn("myPending");
       }
     },
     {
       key: "mySubmitted",
-      icon: MySubmitted,
+      icon: <SubmittedIcon style={{marginRight: 5, position: "relative", top: 3}}/>,
       label: "我发起的",
+      // tagNumber: submits,
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
+        // history.push(`${baseUrl(history.location.pathname)}/mySubmitted`);
         props.fn("mySubmitted");
       }
     },
     {
       key: "myHandled",
-      icon: MyHandled,
+      icon: <HandledIcon style={{marginRight: 5, position: "relative", top: 3}}/>,
       label: "我处理的",
+      // tagNumber: dones,
       onClick: () => {
-        history.push(`${baseUrl(history.location.pathname)}/myHandled`);
+        // history.push(`${baseUrl(history.location.pathname)}/myHandled`);
         props.fn("myHandled");
       }
     }
   ];
+
+  const getMenuItems = items =>
+    items.map(item=>(
+      <Menu.Item
+        className={`${classes.item}`}
+        key={item.key}
+        onClick={item.onClick}
+        style={
+          props.approvalKey === item.key
+            ? {
+                backgroundColor: "#E7F0FF"
+              }
+            : {}
+        }
+        >
+        {item.icon}
+        {item.label}
+        {item.tagNumber !== undefined && item.tagNumber > 0 ? <span className={classes.tag}>{item.tagNumber}</span> : null }
+      </Menu.Item>
+    ))
   return (
     <div className={classes.sectionWrapper}>
       <div className={classes.sectionContent}>
-        <List
-          split={false}
-          itemLayout="vertical"
-          size="small"
-          dataSource={items(history)}
-          renderItem={item => (
-            <List.Item
-              className={classes.item}
-              key={item.key}
-              onClick={item.onClick}
-            >
-            <Icon component={item.icon} style={{marginRight: 5}}/>
-            {item.label}
-            <span className={classes.tag}>2</span>
-          </List.Item>
-          )}
-        ></List>
+        <Menu
+          selectedKeys={props.approvalKey}
+         >{getMenuItems(items(history))}</Menu>
       </div>
     </div>
   );

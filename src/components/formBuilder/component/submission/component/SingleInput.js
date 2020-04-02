@@ -1,6 +1,7 @@
 import React from "react";
 import { isValueValid, isStringValid } from "../../../utils/valueUtils";
 import { Input, Form, Tooltip, Icon } from "antd";
+import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData
@@ -18,7 +19,8 @@ export default class SingleInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      getFormAllSubmission(linkFormId).then(submissions => {
+      const {appId} = this.props.match.params;
+      getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, (value) => {
           let index = dataArr.indexOf(value);
@@ -47,8 +49,8 @@ export default class SingleInput extends React.Component {
     setTimeout(()=>{
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
+        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
       }
     },300)
   }

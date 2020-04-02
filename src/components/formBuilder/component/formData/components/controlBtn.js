@@ -4,10 +4,6 @@ import { withRouter, useParams } from "react-router-dom";
 import { Button, Popconfirm } from "antd";
 import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionUtils";
 function ControlBtn(props) {
-  const handleSeeDetail = () => {
-    props.showModal(props.submissionId);
-    props.getSubmissionDetail(props.formId, props.submissionId,props.appId);
-  };
 
   const handleConfirmDelete = () => {
     props.handleDeleteSubmisson(props.submissionId);

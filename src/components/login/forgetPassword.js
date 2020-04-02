@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import signinStyles from "./style/login.module.scss";
 import { loginUser } from "../../store/loginReducer";
-import PublicForm from "./publicForm";
-import { loginForgetPasswordParameter } from "./formItems";
+import PublicForm from "./PublicForm";
+import { loginForgetPasswordParameter } from "./formItemConfig";
 
 export default connect(() => ({}), {
   loginUser

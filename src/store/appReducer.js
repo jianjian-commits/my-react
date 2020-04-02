@@ -1,4 +1,5 @@
 import { message } from "antd";
+import { catchError } from "../utils";
 import request from "../utils/request";
 
 export const initialState = {
@@ -40,8 +41,6 @@ export const getAppList = () => async dispatch => {
       message.error(res.msg || "获取应用列表失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };

@@ -51,6 +51,15 @@ export default class MultiDropDownItem extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { selections } = nextProps;
+    if (selections.length === 0) {
+      this.setState({
+        selectIndexArr: []
+      });
+    }
+  }
+
   render() {
     const { item, onChange, selections } = this.props;
     // const { selections } = item.data;

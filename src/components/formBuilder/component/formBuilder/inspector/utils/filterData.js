@@ -9,7 +9,7 @@ const LinkFormAcceptDataType = {
     "RadioButtons",
     "CheckboxInput",
     "MultiDropDown",
-    "number",
+    "NumberInput",
     "DateInput",
     "DropDown"
   ],
@@ -18,11 +18,11 @@ const LinkFormAcceptDataType = {
     "RadioButtons",
     "CheckboxInput",
     "MultiDropDown",
-    "number",
+    "NumberInput",
     "DateInput",
     "DropDown"
   ],
-  number: ["number"],
+  NumberInput: ["NumberInput"],
   DateInput: ["DateInput"],
   EmailInput: ["EmailInput"],
   PhoneInput: ["PhoneInput"],

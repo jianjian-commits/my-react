@@ -187,7 +187,7 @@ class SingleTextInspector extends React.Component {
       case "custom": {
         const { elementParent, element, setItemValues, setFormChildItemValues } = this.props;
         if (elementParent) {
-          setFormChildItemValues(elementParent, "data", {type: "custom"}, element);
+          setFormChildItemValues(elementParent, "data", { type: "custom" }, element);
         } else {
           setItemValues(this.props.element, "data", {});
         }
@@ -211,7 +211,8 @@ class SingleTextInspector extends React.Component {
   // API change
   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const isUnique = checkUniqueApi(value, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
       isUniqueApi = false;
@@ -219,10 +220,10 @@ class SingleTextInspector extends React.Component {
     this.handleChangeAttr(ev);
     this.setState({
       apiNameTemp: value,
-      isUniqueApi
+      isUniqueApi,
+      APIMessage
     });
   };
-
   render() {
     const {
       id,
@@ -236,9 +237,11 @@ class SingleTextInspector extends React.Component {
       optionType,
       isLinked,
       apiNameTemp,
+      APIMessage,
       isUniqueApi = true
     } = this.state;
 
+    console.log("fccc", label)
     return (
       <div className="textarea-text-input">
         <div className="base-form-tool">
@@ -264,6 +267,8 @@ class SingleTextInspector extends React.Component {
               onChange={this.handleChangeAPI}
               autoComplete="off"
             />
+            {isUniqueApi ? null : <p className="api-err">{APIMessage}</p>}
+
             {isInFormChild(this.props.elementParent) ? null : (
               <>
                 <p htmlFor="single-text-tip">提示信息</p>
@@ -331,7 +336,7 @@ class SingleTextInspector extends React.Component {
                 min={1}
                 precision={0}
                 onChange={this.handleChangeAttrMinLength}
-                value={validate.minLength==0 ? "" : validate.minLength}
+                value={validate.minLength == 0 ? "" : validate.minLength}
                 autoComplete="off"
               />
               ~
@@ -347,8 +352,8 @@ class SingleTextInspector extends React.Component {
             </div>
             {
               isInFormChild(this.props.elementParent)
-              ? null
-              : <div className="checkbox-wrapper">
+                ? null
+                : <div className="checkbox-wrapper">
                   <Checkbox
                     name="unique"
                     checked={unique}

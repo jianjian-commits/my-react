@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "antd";
-import { formItems } from "./formItems";
+import { formItems } from "./formItemConfig";
 
 export default Form.create({ name: "login-form" })(function PublicForm({
   form,
@@ -36,6 +36,8 @@ export default Form.create({ name: "login-form" })(function PublicForm({
                 itemName: p.itemName,
                 icon: p.icon,
                 setActiveKey,
+                unprefix: p.unprefix,
+                hasFeedback: p.hasFeedback,
                 ...params
               })
             : formItems[p.key]({
@@ -43,6 +45,8 @@ export default Form.create({ name: "login-form" })(function PublicForm({
                 payload: p.value,
                 itemName: p.itemName,
                 icon: p.icon,
+                unprefix: p.unprefix,
+                hasFeedback: p.hasFeedback,
                 setActiveKey
               });
         const helpText = getFieldError(formItem.itemName);
