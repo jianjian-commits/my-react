@@ -7,14 +7,22 @@ const { Content } = Layout;
 class Backlog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      badgenum: 0
+    };
+  }
+
+  setBadgenum = (badgenum) =>{
+    this.setState({
+      badgenum
+    })
   }
   render() {
     return (
       <Layout>
-        <HomeHeader />
+        <HomeHeader badgenum={this.state.badgenum}/>
         <Content>
-          <TransactList></TransactList>
+          <TransactList setBadgenum={this.setBadgenum}></TransactList>
         </Content>
       </Layout>
     );

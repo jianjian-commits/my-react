@@ -6,6 +6,7 @@ import classes from "./team.module.scss";
 import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
+import { catchError } from "../../../utils";
 import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
@@ -24,11 +25,7 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
     setDataStr(e.target.value);
   };
 
-  const content = (
-    <div>
-      {dataStr}
-    </div>
-  );
+  const content = <div>{dataStr}</div>;
 
   return (
     <div className={classes.rowBox}>
@@ -51,22 +48,22 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
             </Button>
           </Col>
         ) : (
-            <Col span={16} className={classes.text}>
-              <Popover placement="bottom" content={content}>
-                <span className={classes.overInfo}> {defaultValue}</span>
-              </Popover>
-              <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
-                <Button
-                  size="small"
-                  type="link"
-                  className={classes.edit}
-                  onClick={switchRedact}
-                >
-                  <Edit />
-                </Button>
-              </Authenticate>
-            </Col>
-          )}
+          <Col span={16} className={classes.text}>
+            <Popover placement="bottom" content={content}>
+              <span className={classes.overInfo}> {defaultValue}</span>
+            </Popover>
+            <Authenticate auth={TEAM_MANAGEMENT_UPDATE_INFO}>
+              <Button
+                size="small"
+                type="link"
+                className={classes.edit}
+                onClick={switchRedact}
+              >
+                <Edit />
+              </Button>
+            </Authenticate>
+          </Col>
+        )}
       </Row>
     </div>
   );
@@ -98,16 +95,14 @@ export default connect(
           message.error(res.msg || "修改失败！");
         }
       })
-      .catch(err => {
-        message.error((err.response && err.response.data && err.response.data.msg) || "系统错误");
-      });
+      .catch(err => catchError(err));
   };
 
   return currentTeam ? (
     <div className={classes.container}>
       <div className={classes.title}>团队信息</div>
       <div className={classes.listBox}>
-        <List itemLayout="horizontal" size='small' >
+        <List itemLayout="horizontal" size="small">
           <List.Item>
             <EditInput
               defaultValue={currentTeam.name}
@@ -152,6 +147,6 @@ export default connect(
       </div>
     </div>
   ) : (
-      <Spin size="large" />
-    );
+    <Spin size="large" />
+  );
 });

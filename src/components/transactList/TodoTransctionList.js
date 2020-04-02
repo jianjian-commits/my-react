@@ -16,10 +16,10 @@ const TodoTransactList = props => {
   const [tableLoading, setTableLoading] = React.useState(false);
 
   useEffect(() => {
-      getTransactList(currentPage, pageSize);
-  },[approvalKey]);
+      getTransactList();
+  },[approvalKey, pageSize, currentPage, props.approveListCount.todos]);
 
-  async function getTransactList(currentPage, pageSize) {
+  async function getTransactList() {
     setTableLoading(true)
     try {
       const res = await request(`/flow/history/approval/todos`,{
@@ -111,7 +111,6 @@ const TodoTransactList = props => {
   function onChangePages(current, pageSize) {
     setCurrentPage(current);
     setPageSize(pageSize);
-    getTransactList(current, pageSize);
   };
 
   return (

@@ -728,6 +728,7 @@ class FormSubmitData extends PureComponent {
         title: "创建人",
         dataIndex: "founder",
         key: "founder",
+        width: 210,
         sorter: (a, b) => new Date(a.created) - new Date(b.created),
         sortOrder: sortedInfo.columnKey === "founder" && sortedInfo.order,
       });
@@ -735,6 +736,7 @@ class FormSubmitData extends PureComponent {
       title: "创建时间",
       dataIndex: "created",
       key: "created",
+      width: 210,
       sorter: (a, b) => new Date(a.created) - new Date(b.created),
       sortOrder: sortedInfo.columnKey === "created" && sortedInfo.order,
       render: record => {
@@ -745,6 +747,7 @@ class FormSubmitData extends PureComponent {
       title: "修改时间",
       dataIndex: "modified",
       key: "modified",
+      width: 210,
       sorter: (a, b) => new Date(a.created) - new Date(b.created),
       sortOrder: sortedInfo.columnKey === "modified" && sortedInfo.order,
       render: record => {

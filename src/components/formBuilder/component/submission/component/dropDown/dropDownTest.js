@@ -124,7 +124,7 @@ class DropDown extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled, initData } = this.props;
+    const { getFieldDecorator, item, disabled, initData, isEditData } = this.props;
     const { selections } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
@@ -142,7 +142,7 @@ class DropDown extends React.Component {
           ],
           initialValue: initData ||""
         })(
-          <DropDownTestItem selections={selections} item={item} />
+          <DropDownTestItem selections={selections} item={item} isEditData={isEditData || false}/>
         )}
       </Form.Item>
     );

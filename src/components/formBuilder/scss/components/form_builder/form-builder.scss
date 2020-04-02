@@ -161,8 +161,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     width: 70%;
     flex: initial;
     padding-top: 49px;
-    background: #F7F7F8;
-    overflow-y: auto;
+    background: #FFF;
+    overflow:auto;
+    overflow-x:hidden;
     .react-form-builder-preview {
       min-height: 100%;
       max-width: 870px;
@@ -894,9 +895,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             margin-bottom: 26px;
             border-radius: 0px;
           }
-          .err-input {
-            border: 1px solid red;
-          }
           .checkbox-wrapper {
             display: flex;
             flex-direction: column;
@@ -1365,9 +1363,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             margin-bottom: 26px;
             border-radius: 0px;
           }
-          .err-input {
-            border: 1px solid red;
-          }
           .checkbox-wrapper {
             display: flex;
             flex-direction: column;
@@ -1691,6 +1686,12 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
               }
             }
           }
+        }
+      }
+      .err-input {
+        border: 1px solid red;
+        &:focus {
+          box-shadow: 0 0 0 2px rgba(245,34,45,.2);
         }
       }
 
@@ -2149,8 +2150,8 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   .map-modal-container-content {
     .tip-input {
       position: absolute;
-      top: 80px;
-      left: 6%;
+      top: 88px;
+      left: 8%;
     }
     .err-border {
       border: 1px red solid;
@@ -2164,7 +2165,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       }
       .orientation-range-tip {
         font-size: 12px;
-        margin-left: 68px;
+        // margin-left: 68px;
       }
     }
   }

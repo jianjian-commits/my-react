@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown, Menu, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -54,13 +54,13 @@ const MenuItems = (allTeam, setVisible, currentTeam, switchCurrentTeam) => (
 
 const User = props => {
   const { signOut, login, switchCurrentTeam, initAllDetail } = props;
-  const { userDetail, allTeam, currentTeam } = login;
-  const [init, setInit] = useState(false);
+  const { userDetail, allTeam, currentTeam, fetchRequestSent } = login;
   const [visible, setVisible] = useState(false);
-  if (!init) {
-    initAllDetail();
-    setInit(true);
-  }
+  
+  useEffect(() => {
+    !fetchRequestSent && initAllDetail();
+  }, [fetchRequestSent, initAllDetail])
+  
   return (
     <>
       <Dropdown

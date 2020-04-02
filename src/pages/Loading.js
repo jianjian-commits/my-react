@@ -7,7 +7,6 @@ export default function Loading(props) {
       tip="Loading..."
       spinning={props.spinning}
       style={{ top: "450px" }}
-      delay={1000}
     >
       {props.children}
     </Spin>

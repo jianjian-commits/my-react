@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button, Icon, message } from "antd";
+import { Input as Inp, Button as Btn, Icon } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
+import { catchError } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 
@@ -25,6 +26,21 @@ class Input extends React.Component {
         prefix={icon || unprefix ? null : meteImg[this.props.type]}
         placeholder={icon ? null : placeholder}
       />
+    );
+  }
+}
+
+class Button extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    const { children, style, className, ...rest } = this.props;
+    return (
+      <Btn {...rest} style={Object.assign(style)} className={clx(className)}>
+        {children}
+      </Btn>
     );
   }
 }
@@ -75,10 +91,7 @@ const checkphone = actionType => {
       const res = await request(`/sysUser/mobilePhone/${value}/check`);
       if (res && res.data === bol) return callback(context);
     } catch (err) {
-      message.error(
-        (err.response && err.response.data && err.response.data.msg) ||
-          "系统错误"
-      );
+      catchError(err);
     }
     callback();
   };
@@ -90,9 +103,7 @@ const checkEmail = async (rule, value, callback) => {
     const res = await request(`/sysUser/email/${value}/check`);
     if (res && res.data === false) return callback("该邮箱已被注册");
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
   callback();
 };
@@ -184,7 +195,7 @@ const password = ({
           ? ""
           : payload === "login" || payload === "old"
           ? "请输入密码"
-          : "密码至少8位, 必须包含数字和字母"
+          : "密码至少8位，必须包含数字和字母"
       }
       icon={icon}
       unprefix={unprefix}
@@ -278,14 +289,14 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
   //       verificationCodeButtonRef.current.buttonNode.disabled = true;
   //     if (verificationCodeSpanRef.current)
   //       verificationCodeSpanRef.current.innerHTML = sended
-  //         ? `验证码已发送,如未收到请在${initNum}s后重试`
-  //         : `验证码发送失败,请在${initNum}s后重试`;
+  //         ? `验证码已发送，如未收到请在${initNum}s后重试`
+  //         : `验证码发送失败，请在${initNum}s后重试`;
   //     let num = initNum - 1;
   //     const int = setInterval(() => {
   //       if (verificationCodeSpanRef.current)
   //         verificationCodeSpanRef.current.innerHTML = sended
-  //           ? `验证码已发送,如未收到请在${num}s后重试`
-  //           : `验证码发送失败,请在${num}s后重试`;
+  //           ? `验证码已发送，如未收到请在${num}s后重试`
+  //           : `验证码发送失败，请在${num}s后重试`;
   //       num = num - 1;
   //     }, timeTerval);
   //     setTimeout(() => {
@@ -473,6 +484,7 @@ const submit = ({
             ? "rgba(24,144,255,1)"
             : "rgba(24,144,255,0.5)"
         }}
+        // onClick={throttle(e => (e.target.disabled = true), 3000)}
       >
         {payload === "login" && "登录"}
         {payload === "register" && "注册"}

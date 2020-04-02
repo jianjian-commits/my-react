@@ -37,13 +37,14 @@ const TransactList = props => {
           setTotal(total);
           setPageSize(pageSize);
           setCurrentPage(currentPage);
-          setTableLoading(false)
+          setTableLoading(false);
+          props.setBadgenum(5);
       } else {
-        message.error("获取审批列表失败");
+        message.error("获取审批列表失败1");
         setTableLoading(false)
       }
     } catch (err) {
-      message.error("获取审批列表失败");
+      message.error("获取审批列表失败2");
       setTableLoading(false)
     }
   }
@@ -110,7 +111,7 @@ const TransactList = props => {
   };
 
   return (
-    <div className={classes.tableBox} style={{  width: "calc(100vw - 500px)", margin:"0 auto"}}>
+    <div className={classes.tableBox} style={{ margin:"0 42px"}}>
       <div className={classes.tableTitle}>
       我的待办 <span className={classes.totalNumber}>（共{total}条）</span>
       </div>
@@ -118,7 +119,6 @@ const TransactList = props => {
         loading={tableLoading}
         columns={columns} 
         dataSource={transactList} 
-        rowKey="dataId"
         pagination={paginationProps}
         >
       </Table>

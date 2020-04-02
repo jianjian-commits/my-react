@@ -2,14 +2,17 @@ import { message } from "antd";
 import request from "../utils/request";
 import { getAppList } from "./appReducer";
 import { history } from "./index";
+import { clearAppList } from "./appReducer";
+import { catchError } from "../utils";
 
 export const initialState = {
   isLoading: false,
   loginData: null,
   isAuthenticated: !!localStorage.getItem("id_token"),
-  currentTeam: JSON.parse(localStorage.getItem("currentTeam")) || {},
-  userDetail: JSON.parse(localStorage.getItem("userDetail")) || {},
-  allTeam: JSON.parse(localStorage.getItem("allTeam")) || [],
+  currentTeam: {},
+  userDetail: {},
+  fetchRequestSent: false,
+  allTeam: [],
   error: null,
   isSpinning: false
 };
@@ -17,6 +20,7 @@ export const initialState = {
 export const START_SPINNING = "Login/START_SPINNING";
 export const START_LOGIN = "Login/START_LOGIN";
 export const LOGIN_SUCCESS = "Login/LOGIN_SUCCESS";
+const FETCH_REQUEST_SENT = "Login/FETCH_REQUEST_SENT"
 export const LOGIN_FAILURE = "Login/LOGIN_FAILURE";
 export const RESET_ERROR = "Login/RESET_ERROR";
 export const LOGIN_USER = "Login/LOGIN_USER";
@@ -24,6 +28,8 @@ export const SIGN_OUT_SUCCESS = "Login/SIGN_OUT_SUCCESS";
 export const FETCH_ALL_TEAM = "Login/FETCH_ALL_TEAM";
 export const FETCH_CURRENT_TEAM = "Login/FETCH_CURRENT_TEAM";
 export const FETCH_USER_DETAIL = "Login/FETCH_USER_DETAIL";
+export const FETCH_TRANSACT_LIST = "Login/FETCH_TRANSACT_LIST";
+export const CLEAR_USER_DATA = "Login/CLEAR_USER_DATA";
 
 export const startSpinning = () => ({
   type: START_SPINNING
@@ -60,6 +66,34 @@ export const fetchUserDetail = payload => ({
   payload
 });
 
+export const fetchTransactList = payload => ({
+  type: FETCH_TRANSACT_LIST,
+  payload
+});
+
+//获取我的待办
+export const getTransactList = ({
+  currentPage,
+  pageSize
+}) => async dispatch => {
+  try {
+    const res = await request(`/flow/history/approval/todos`, {
+      method: "POST",
+      data: {
+        page: currentPage || 1,
+        size: pageSize || 1
+      }
+    });
+    if (res && res.status === "SUCCESS") {
+      dispatch(fetchTransactList(res.data));
+    } else {
+      message.error(res.msg || "待办列表获取失败");
+    }
+  } catch (err) {
+    catchError(err);
+  }
+};
+
 //转换当前团队
 export const switchCurrentTeam = teamId => async dispatch => {
   try {
@@ -73,9 +107,7 @@ export const switchCurrentTeam = teamId => async dispatch => {
       message.error(res.msg || "团队转换失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -93,9 +125,7 @@ export const updateUserDetail = payload => async dispatch => {
       message.error(res.msg || "个人信息修改失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -104,15 +134,12 @@ export const getUserDetail = () => async dispatch => {
   try {
     const res = await request(`/sysUser/current`);
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("userDetail", JSON.stringify(res.data));
       dispatch(fetchUserDetail(res.data));
     } else {
       message.error(res.msg || "个人信息获取失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -121,15 +148,12 @@ export const getCurrentTeam = () => async dispatch => {
   try {
     const res = await request(`/team/current`);
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("currentTeam", JSON.stringify(res.data));
       dispatch(fetchCurrentTeam(res.data));
     } else {
       message.error(res.msg || "团队信息获取失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -138,24 +162,22 @@ export const getAllTeam = () => async dispatch => {
   try {
     const res = await request(`/team/currentSysUser/all`);
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("allTeam", JSON.stringify(res.data));
       dispatch(fetchAllTeam(res.data));
     } else {
       message.error(res.msg || "获取全部团队信息失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
 //初始化所有信息
 export const initAllDetail = () => async dispatch => {
+  dispatch({ type: FETCH_REQUEST_SENT});
+  dispatch({ type: CLEAR_USER_DATA});
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
-      localStorage.setItem("userDetail", JSON.stringify(res.data));
       await getAllTeam(res.data.id)(dispatch);
       getCurrentTeam()(dispatch);
       dispatch(fetchUserDetail(res.data));
@@ -163,9 +185,7 @@ export const initAllDetail = () => async dispatch => {
       message.error(res.msg || "获取当前用户信息失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -180,6 +200,7 @@ export const loginUser = ({ token, rest, history }) => async dispatch => {
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("id_token", 1);
       dispatch(loginSuccess());
+      dispatch(initAllDetail());
       history.push("/");
     } else {
       dispatch(loginFailure());
@@ -187,9 +208,7 @@ export const loginUser = ({ token, rest, history }) => async dispatch => {
     }
   } catch (err) {
     dispatch(loginFailure());
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
@@ -207,14 +226,20 @@ export const signOut = () => async dispatch => {
       message.error(res.msg || "退出失败");
     }
   } catch (err) {
-    message.error(
-      (err.response && err.response.data && err.response.data.msg) || "系统错误"
-    );
+    catchError(err);
   }
 };
 
 export default function loginReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case CLEAR_USER_DATA:
+      return {
+        ...state,
+        currentTeam: {},
+        userDetail: {},
+        fetchRequestSent: true,
+        allTeam: [],
+      };
     case START_SPINNING:
       return {
         ...state,
@@ -232,6 +257,11 @@ export default function loginReducer(state = initialState, { type, payload }) {
         isAuthenticated: true,
         error: null,
         userId: payload
+      };
+    case FETCH_REQUEST_SENT:
+      return {
+        ...state,
+        fetchRequestSent: true
       };
     case LOGIN_FAILURE:
       return {
@@ -263,7 +293,22 @@ export default function loginReducer(state = initialState, { type, payload }) {
         ...state,
         currentTeam: payload
       };
+    case FETCH_TRANSACT_LIST:
+      return {
+        ...state,
+        transactList: payload
+      };
     default:
       return state;
   }
-}
+};
+
+
+export const loginMiddleware = store => next => action => {
+  if (action.type === SIGN_OUT_SUCCESS) {
+    store.dispatch(clearAppList());
+  }
+  next(action);
+};
+
+

@@ -43,7 +43,6 @@ var _checkMinAndMax = components => {
       component.validate.maxOptionNumber = component.validate.minOptionNumber;
       component.validate.minOptionNumber = tmpLength;
     }
-
     return component;
   });
   return componentArray;
@@ -67,7 +66,7 @@ var _calcFormComponentLayout = formDataArray => {
     } else if (item.type === "FileUpload") {
       newHeight = 180 / 30;
     } else {
-      newHeight = domElement.offsetHeight / 30;
+      newHeight = (domElement.offsetHeight + 10) / 30;
     }
 
     newHeight = Number(newHeight.toFixed(1));
@@ -237,7 +236,6 @@ export const saveForm = (
       if ((err.response.data.code = "1002")) {
         message.error("该api已存在");
       }
-
       // }
     });
 };
@@ -257,6 +255,17 @@ export const updateForm = (
 
   formDataArray.forEach((item) => {
     item.layout.i = item.key
+
+    if (item.type == "CheckboxInput") {
+      let validate = item.validate;
+      let min = validate.minOptionNumber;
+      let max = validate.maxOptionNumber;
+      console.log(min, max)
+      if (min > max) {
+        validate.minOptionNumber = max;
+        validate.maxOptionNumber = min;
+      }
+    }
   });
 
   _calcFormComponentLayout(formDataArray);
@@ -318,7 +327,6 @@ export const updateForm = (
     }
   })
     .then(response => {
-      setIsSetApiStatus(formDataArray, tempApiStatus);
       if (type === "back") {
         message.success("保存成功", 1, () => {
           dispatch({
@@ -343,6 +351,7 @@ export const updateForm = (
       }
     })
     .catch(err => {
+      setIsSetApiStatus(formDataArray, tempApiStatus);
       // if (err.response.data === "Token Expired") {
       //   console.log("token 已过期，正在请求新的token");
       //   // mockLoginAndSetData(false, true);

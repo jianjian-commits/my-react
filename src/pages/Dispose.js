@@ -2,7 +2,8 @@ import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Layout } from "antd";
 import CommonHeader from "../components/header/CommonHeader";
-import  FormDataDetail from "../components/formBuilder/component/formData/components/formDataDetail";
+import FormDataDetail from "../components/formBuilder/component/formData/components/formDataDetail";
+import { AppManageIcon } from "../assets/icons/apps";
 
 const { Content } = Layout;
 
@@ -17,7 +18,11 @@ const navigationList = (appId, history) => [
 const getOreations = (appId, history) => [
   {
     key: "setting",
-    icon: "setting",
+    icon: (
+      <AppManageIcon
+        style={{ paddingRight: "5px", width: "17px", height: "18px" }}
+      />
+    ),
     label: "应用管理",
     onClick: () => history.push(`/app/${appId}/setting`)
   }
