@@ -139,9 +139,23 @@ export const getSubmissionData = (params) => dispatch => {
           })
         });
       }).catch(err=>{
-        callback(true);
+        message.error("数据加载失败，请重试!");
+        dispatch({
+          type: RECEIVED_FORM_DATA,
+          forms,
+          submissionDataTotal: -1,
+          formData: []
+        });
+        callback(false);
       });
   }).catch(err =>{
+    message.error("数据加载失败，请重试!");
+    dispatch({
+      type: RECEIVED_FORM_DATA,
+      forms: { components: [], name: "" },
+      submissionDataTotal: -1,
+      formData: []
+    });
     callback(true);
   });
 };
@@ -190,14 +204,35 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
             });
         }).catch(err=>{
           callback(false);
+          dispatch({
+            type: RECEIVED_FORM_DETAIL,
+            forms: currentForm,
+            formDetail: res.data.data,
+            extraProp: res.data.extraProp,
+            taskData: []
+          });
           message.error("获取审批流水失败",err.response.data.msg)
         })
       }).catch(err=>{
         callback(false);
+        dispatch({
+          type: RECEIVED_FORM_DETAIL,
+          forms: currentForm,
+          formDetail: {},
+          extraProp: {},
+          taskData: []
+        });
         message.error("获取数据详情失败",err.response.data.msg)
       });
   }).catch(err=>{
     callback(false);
+    dispatch({
+      type: RECEIVED_FORM_DETAIL,
+      forms: { components: [], name: "" },
+      formDetail: {},
+      extraProp: {},
+      taskData: []
+    });
     message.error("获取元数据失败",err.response.data.msg)
   }).catch(err=>{
     callback(false);
