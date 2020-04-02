@@ -16,6 +16,10 @@ import request from '../components/bi/utils/request';
 import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
+import {getDashboardAll} from "../components/bi/utils/dashboardUtil";
+
+import { setDashboards } from '../components/bi/redux/action';
+import { setDB } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -37,6 +41,7 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
+  const [dashboardGroup,setDashboardGroup] = React.useState([]);
   const [user, setUser] = React.useState({});
 
   let { groups, list, searchList } = mockForms;
@@ -65,6 +70,15 @@ const AppSetting = props => {
         list: newList
       });
     });
+
+    getDashboardAll(appId).then(items => {
+      let newDashboards = items.map(item => ({
+        key: item.dashboardId,
+        name: item.name,
+      })).slice(0,5);
+      setDashboardGroup(newDashboards)
+    })
+
   }, [props, appId]);
 
   const currentApp =
@@ -113,6 +127,14 @@ const AppSetting = props => {
   const formEnterHandle = e => {
     if (list[0].key !== "") {
       history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
+    }
+  };
+
+  //处理仪表盘的点击事件
+  const dashboardEnterHandle = e => {
+    if (list[0].key !== "") {
+      setDB(e.key, props.setDashboards);
+      history.push(`/app/${appId}/setting/bi/${e.key}`);
     }
   };
 
@@ -203,6 +225,15 @@ const AppSetting = props => {
               onClick={formEnterHandle}
               groups={groups}
               list={list}
+              onDrop={dragFileToFolder}
+            />
+            <hr/>
+            <p>已创建仪表盘</p>
+            <DraggableList
+              draggable={!searchKey}
+              onClick={dashboardEnterHandle}
+              groups={groups}
+              list={dashboardGroup}
               onDrop={dragFileToFolder}
             />
             <DropableWrapper
@@ -423,6 +454,8 @@ export default connect(
   }),
   {
     setAllForms,
-    newDashboard
+    newDashboard,
+    setDB,
+    setDashboards
   }
 )(AppSetting);
