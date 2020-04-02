@@ -1131,7 +1131,7 @@ class FormChildTest extends React.Component {
   componentDidUpdate() {
     const { showFormChildErr, submitDataArray, closeFormChildErr } = this.props;
     if (showFormChildErr === true) {
-      this._checkFormChildHasError(submitDataArray);
+      // this._checkFormChildHasError(submitDataArray);
       closeFormChildErr();
     }
   }
