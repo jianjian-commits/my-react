@@ -113,7 +113,7 @@ export default connect(
         if (res && res.status === "SUCCESS") {
           res.data.datas.forEach(item => {
             item.key = item.id;
-            item.lastLoginDate = new Date(item.lastLoginDate).toLocaleString();
+            item.lastLoginDate = item.lastLoginDate?new Date(item.lastLoginDate).toLocaleString():null
             item.groupName = item.group.name;
           });
           setData(res.data.datas);

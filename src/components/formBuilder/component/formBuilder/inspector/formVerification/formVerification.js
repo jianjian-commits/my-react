@@ -128,7 +128,7 @@ class FormVerification extends React.Component {
             </div>
           ))}
           <Button type="primary" onClick={this.showModal}>
-            <Icon type="plus-circle" theme="filled" />添加校验条件
+            <Icon type="plus-circle" theme="filled" style={{    position: "absolute", left: 125, top: 6.5,}}/>添加校验条件
           </Button>
         </div>
         <ConditionModal
