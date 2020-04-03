@@ -59,7 +59,9 @@ const formSubmitDataReducer = (state = initState, action) => {
     case CLEAR_FORM_DETAIL: {
       return {
         ...state,
-        formDetail: []
+        formDetail: [],
+        forms: { components: [], name: "" },
+        taskData:{}
       };
     }
     default: {
