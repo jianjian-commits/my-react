@@ -414,7 +414,7 @@ class EditFormData extends Component {
           : message.success("提交成功!");
           setTimeout(() => {
             //
-            let submissionId = null;s
+            let submissionId = null;
             let submitFlag = false;
             this.props.actionFun(submissionId, submitFlag);
             }, 1000);
