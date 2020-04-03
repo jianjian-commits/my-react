@@ -68,7 +68,8 @@ class EditFormData extends Component {
       initPureFormComponents: true,
       errorResponseMsg: {},
       currentForm: { components: [], name: "" },
-      formDetail: []
+      formDetail: [],
+      oldExtraProp: {}
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -91,6 +92,7 @@ class EditFormData extends Component {
                 config.apiUrl + `/submission/${submissionId}`,
               )
               .then(res => {
+                let oldExtraProp = res.data.extraProp;
                 let formDetail = res.data.data;
                 let formChildDataObj = {};
                 pureFormComponents.filter(item => {
@@ -106,6 +108,7 @@ class EditFormData extends Component {
                   formDetail,
                   pureFormComponents,
                   formChildDataObj,
+                  oldExtraProp,
                   initflag: false,
                   isSubmitted: false
                 })
@@ -404,7 +407,7 @@ class EditFormData extends Component {
         }
         this.setState({ isSubmitted: true,errorResponseMsg:{} });
         this.props
-          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.props.extraProp)
+          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.state.oldExtraProp)
           .then(response => {
            isMobile
           ? Toast.success("提交成功!")

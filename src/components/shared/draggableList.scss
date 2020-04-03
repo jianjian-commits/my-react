@@ -107,9 +107,11 @@
 .operate-box-delete-form-modal{
       width: 404px;
       height: 170px;
+      margin-top: -85px!important;
+      top:50% !important;
     .ant-modal-content{
       .ant-modal-body{
-        padding:26px 20px 20px 30px;
+        padding:20px;
         background: #FFFFFF;
         box-shadow: 0px 4px 20px rgba(165, 174, 183, 0.25);
         border-radius: 5px;
@@ -164,4 +166,67 @@
         }
       }
     }
+}
+.operate-box-update-form-modal{
+  width: 404px;
+  height: 170px;
+  margin-top: -85px!important;
+  top:50% !important;
+.ant-modal-content{
+  .ant-modal-body{
+    padding:20px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 20px rgba(165, 174, 183, 0.25);
+    border-radius: 5px;
+    .modal-title{
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      height: 23px;
+      span{
+        margin-left: 9.5px;
+
+        font-family: "Noto Sans SC";
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 23px;
+
+        color: #333333;
+      }
+      .ant-modal-confirm-content{
+        font-family: "Noto Sans SC";
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+
+        color: #777F97;
+                  }
+    }
+    .ant-modal-confirm-title{
+      font-family: "Noto Sans SC";
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 23px;
+      
+      color: #333333;
+    }
+    .ant-modal-confirm-content{
+      margin-top: 21px;
+      .ant-input{
+        height: 40px;
+        width: 370px;
+
+        border-radius: 3px;
+      }
+    }
+    .ant-modal-confirm-btns{
+      .ant-btn:nth-of-type(2){
+        background: #2A7FFF;
+      }
+    }
+  }
+}
 }

@@ -12,7 +12,7 @@ export default class NumberInput extends React.Component {
     render() {
         const props = {};
         props.type = 'number';
-        props.className = 'form-control';
+        props.className = 'form-control numberInput';
         props.name = this.props.data.field_name;
 
         if (this.props.mutable) {

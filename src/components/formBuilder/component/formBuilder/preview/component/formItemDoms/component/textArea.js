@@ -13,7 +13,7 @@ export default class TextArea extends React.Component {
     render() {
         const props = {};
         props.type = 'text';
-        props.className = 'form-control';
+        props.className = 'form-control textArea';
         props.name = this.props.data.field_name;
         if (this.props.mutable) {
             props.defaultValue = this.props.defaultValue;
@@ -42,7 +42,7 @@ export default class TextArea extends React.Component {
                             <Input.TextArea
                                 rows={this.props.data.rows}
                                 allowClear
-                                style={{ minHeight: "34px" }}
+                                style={{ minHeight: "34px",width:"405px" }}
                             />
                         </div>
                     </>
