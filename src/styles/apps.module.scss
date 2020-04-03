@@ -2,7 +2,7 @@
   position: relative;
   min-height: calc(100vh - 50px);
   width: 1680px;
-  background-color: #f0f2f5;
+  background-color: #f0f2f5;appearance: none;
 
   .header {
     padding: 20px 40px;
@@ -26,7 +26,7 @@
   }
 
   &:global(.ant-card) {
-    margin: 10px 30px 30px 0px;
+    margin: 10px 15px 30px 15px;
     border-radius: 5px;
     border: none;
   }
@@ -63,6 +63,7 @@
       -webkit-box-orient: vertical;
       font-size: 12px;
       margin: 0 8px;
+      word-wrap: break-word;
     }
   }
 }
@@ -300,7 +301,7 @@
 }
 
 .innerMain {
-  margin: 0 64px;
+  margin: 0 35px;
   display: block;
 
   button {
@@ -309,7 +310,7 @@
     display: inline-block;
     background-color: #fff;
     color: #333;
-    margin: 12px 30px 30px 0px;
+    margin: 12px 15px 30px 15px;
     vertical-align: top;
   }
 
@@ -332,4 +333,10 @@
       width: 100%;
     }
   }
+}
+
+.appsPanel{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
