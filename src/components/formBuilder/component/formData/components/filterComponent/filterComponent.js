@@ -196,8 +196,20 @@ class FilterItem extends Component {
     }
   };
 
-  renderInputByFiledType = (filed, value, options) => {
+  renderInputByFiledType = (filed, value, options, isDisabled) => {
     switch (filed && filed.type) {
+      case "NumberInput":
+        return (
+        <Input
+          type="number"
+          width="100%"
+          defaultValue={value !=="" ? Number(value): null}
+          placeholder="请输入值"
+          key={`${filed.key}${this.state.operator}`}
+          style={{ width: "100%" }}
+          onChange={this.changeCostomValue}
+          disabled={isDisabled || this.state.disabledCostomValue}
+        />)
       case "DateInput":
         if (this.state.operator === "IN" || this.state.operator === "NOT_IN") {
           return (
@@ -208,7 +220,7 @@ class FilterItem extends Component {
               key={`${filed.key}${this.state.operator}`}
               style={{ width: "100%" }}
               onChange={this.changeCostomValue}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
             />
           );
         } else {
@@ -228,7 +240,7 @@ class FilterItem extends Component {
           return (
             <DatePicker
               key={`${filed.key}${this.state.operator}`}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               {...options}
               showTime
               locale={locale}
@@ -252,7 +264,7 @@ class FilterItem extends Component {
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
@@ -272,7 +284,7 @@ class FilterItem extends Component {
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
@@ -298,7 +310,7 @@ class FilterItem extends Component {
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               //  getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
@@ -318,7 +330,7 @@ class FilterItem extends Component {
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
@@ -341,7 +353,7 @@ class FilterItem extends Component {
             showArrow={true}
             onChange={this.handleMulDropDown}
             key={`${filed.key}${this.state.operator}`}
-            disabled={this.state.disabledCostomValue}
+            disabled={isDisabled || this.state.disabledCostomValue}
             suffixIcon={<Icon type="caret-down" />}
           >
             {filed.values.map((item, index) => (
@@ -362,7 +374,7 @@ class FilterItem extends Component {
             showArrow={true}
             onChange={this.handleMulDropDown}
             key={`${filed.key}${this.state.operator}`}
-            disabled={this.state.disabledCostomValue}
+            disabled={isDisabled || this.state.disabledCostomValue}
             suffixIcon={<Icon type="caret-down" />}
           >
             {options.map((item, index) => (
@@ -380,7 +392,7 @@ class FilterItem extends Component {
             style={{ width: "100%" }}
             defaultValue={value}
             onChange={this.changeCostomValue}
-            disabled={this.state.disabledCostomValue}
+            disabled={isDisabled || this.state.disabledCostomValue}
           />
         );
     }
@@ -431,34 +443,14 @@ class FilterItem extends Component {
     })[0];
     this.props.setFilterAttr(
       "selectedLogicalOperator",
-      operator.operator,
+      operator,
       this.props.index
     );
-    this.props.setFilterAttr("costomValue", "", this.props.index);
-    this.props.setFilterAttr("filterType", operator.type, this.props.index);
-    this.setState(
-      {
-        disabledCostomValue:
-          operator.type === "EXISTS" || operator.type === "NOT_EXISTS"
-            ? true
-            : false,
-        operator: operator.type
-      },
-      () => {
-        this._setCostomValue("");
-      }
-    );
+    // this.props.setFilterAttr("costomValue", null, this.props.index);
   };
 
   _setCostomValue = value => {
-    if (
-      this.state.operator === "EXISTS" ||
-      this.state.operator === "NOT_EXISTS"
-    ) {
-      this.props.setFilterAttr("costomValue", "emptyValue", this.props.index);
-    } else {
       this.props.setFilterAttr("costomValue", value, this.props.index);
-    }
   };
 
   changeCostomValue = e => {
@@ -494,8 +486,12 @@ class FilterItem extends Component {
       options
     } = this.props.filter;
     const { fileds } = this.props;
-    const logicalOperator = logicalOperators.filter(logicOperator => logicOperator.type)[0]
-
+    let  isDisabled = false;
+    if(selectedLogicalOperator != void 0){
+      if(selectedLogicalOperator.type === "EXISTS" || selectedLogicalOperator.type === "NOT_EXISTS") {
+        isDisabled= true;
+      }
+    }
     return (
       <div className="filter-item">
         <Row type="flex" justify="start" gutter={[0, 19]}>
@@ -520,7 +516,7 @@ class FilterItem extends Component {
           </Col>
           <Col span={7} className="logicSymbol">
             <Select
-              defaultValue={logicalOperator ? logicalOperator.label : ""}
+              defaultValue={selectedLogicalOperator ? selectedLogicalOperator.label : null}
               style={{ width: "100%" }}
               key={this.state.filed.key}
               placeholder="运算符"
@@ -535,7 +531,7 @@ class FilterItem extends Component {
             </Select>
           </Col>
           <Col span={23} className="valueBox">
-            {this.renderInputByFiledType(field, costomValue, options)}
+            {this.renderInputByFiledType(field, costomValue, options, isDisabled)}
           </Col>
           <Col span={24}>
             <div className="filter-action">
@@ -570,10 +566,9 @@ export default class FilterComponent extends Component {
     if (this.state.filterArray.every(this.isAllFilled)) {
       const newFilter = {
         selectedFiled: "",
-        selectedLogicalOperator: "",
+        selectedLogicalOperator: null,
         logicalOperators: [],
         costomValue: "",
-        filterType: "",
         selectedFiledKey: "",
         field: {type:"", key: Math.random()},
         options: [],
@@ -596,13 +591,15 @@ export default class FilterComponent extends Component {
     } else if(index === 0 && filter.selectedFiled === ""){
       return true;
     }
-    if (filter.filterType == "EXISTS") {
-      return true;
+    if(filter.selectedLogicalOperator != void 0){
+      if (filter.selectedLogicalOperator.type === "EXISTS" || filter.selectedLogicalOperator.type === "NOT_EXISTS") {
+        return true;
+      }
     }
     return (
       filter.selectedFiledKey !== "" &&
       filter.costomValue !== "" &&
-      filter.selectedLogicalOperator !== ""
+      filter.selectedLogicalOperator !== null
     );
   };
 
@@ -624,10 +621,9 @@ export default class FilterComponent extends Component {
     }else{
       const defaultFilterArray = [{
         selectedFiled: "",
-        selectedLogicalOperator: "",
+        selectedLogicalOperator: null,
         logicalOperators: [],
         costomValue: "",
-        filterType: "",
         selectedFiledKey: "",
         field: {type:"", key: Math.random()},
         options: [],
@@ -655,7 +651,7 @@ export default class FilterComponent extends Component {
 
   _handleDateTypeData(filterArray) {
     return filterArray.map(filter=>{
-      if(filter.field.type === "DateInput"){
+      if(filter.field.type === "DateInput" && filter.costomValue.indexOf("Z") !== -1){
         let date = new Date(filter.costomValue);
         let currentTimeZoneOffsetInHours = new Date().getTimezoneOffset()/60;
         date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
@@ -672,11 +668,11 @@ export default class FilterComponent extends Component {
     let ISConditionalContradiction = this.ISConditionalContradiction();
     if (isAllFilled && !ISConditionalContradiction) {
       const filterArray = this._handleDateTypeData([...this.props.selectArray]).map(filter => {
-        switch (filter.filterType) {
+        switch (filter.selectedLogicalOperator.type) {
           case "EXISTS":
-            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator}`;
+            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}`;
           case "NOT_EXISTS":
-            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator}`;
+            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}`;
           case "EQUALS":
             return `data.${filter.selectedFiled}=${filter.costomValue}`;
           case "IN":
@@ -684,11 +680,11 @@ export default class FilterComponent extends Component {
           case "NOT_IN":
             return `data.${filter.selectedFiled}__regex=/^((?!${filter.costomValue}).)*$/`;
           case "LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           case "NOT_LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           default:
-            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
         }
       });
 
@@ -711,8 +707,8 @@ export default class FilterComponent extends Component {
       for (let i = index + 1; i < filterArray.length; i++) {
         if (
           filter.selectedFiled === filterArray[i].selectedFiled &&
-          filter.selectedLogicalOperator ===
-            filterArray[i].selectedLogicalOperator
+          filter.selectedLogicalOperator.operator ===
+            filterArray[i].selectedLogicalOperator.operator
         ) {
           return true;
         }
@@ -736,10 +732,9 @@ export default class FilterComponent extends Component {
   handleClearFilter = () => {
     const defaultFilterArray = [{
       selectedFiled: "",
-      selectedLogicalOperator: "",
+      selectedLogicalOperator: null,
       logicalOperators: [],
       costomValue: "",
-      filterType: "",
       selectedFiledKey: "",
       field: {type:"", key: Math.random()},
       options: [],
@@ -764,6 +759,7 @@ export default class FilterComponent extends Component {
         >
           <div className="filter-condition">
             <Select
+              defaultValue={this.props.connectCondition}
               placeholder="满足所有条件"
               onChange={this.handleSelectCondition}
               className="filter-condition-option"
