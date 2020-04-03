@@ -26,7 +26,7 @@
   }
 
   &:global(.ant-card) {
-    margin: 10px 30px 30px 0px;
+    margin: 10px 15px 30px 15px;
     border-radius: 5px;
     border: none;
   }
@@ -300,7 +300,7 @@
 }
 
 .innerMain {
-  margin: 0 64px;
+  margin: 0 45px;
   display: block;
 
   button {
@@ -309,7 +309,7 @@
     display: inline-block;
     background-color: #fff;
     color: #333;
-    margin: 12px 30px 30px 0px;
+    margin: 12px 15px 30px 15px;
     vertical-align: top;
   }
 
@@ -331,5 +331,14 @@
       text-align: center;
       width: 100%;
     }
+  }
+}
+
+.appsPanel{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  &::after{
+    width: 650px;
   }
 }
