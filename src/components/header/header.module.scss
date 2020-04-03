@@ -1,5 +1,13 @@
+.hideHeader {
+  width: 100vw;
+  height: 40px;
+}
+
 .homeHeader {
-  // position: absolute;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 1;
   // width: 100%;
   color: #ddd;
   .wrapper {
@@ -335,7 +343,7 @@
 .homeNav {
   & > ul {
     position: absolute;
-    left: 50px;
+    left: 60px;
     display: flex;
     align-items: center;
     height: 40px;

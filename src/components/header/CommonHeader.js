@@ -108,23 +108,25 @@ export default connect(
     props.getAppList();
   }
   return (
-    <Header className={classes.homeHeader} style={homeHeaderStyle}>
-      <div className={classes.wrapper}>
-        <div className={classes.logo}>
-          <div style={logoStyle}>{/* logo */}</div>
+    <div className={classes.hideHeader}>
+      <Header className={classes.homeHeader} style={homeHeaderStyle}>
+        <div className={classes.wrapper}>
+          <div className={classes.logo}>
+            <div style={logoStyle}>{/* logo */}</div>
+          </div>
+          <div className={classes.title}>{getTitle(props.title)}</div>
+          <div className={classes.nav}>
+            {getNavigationList(props.navigationList)}
+          </div>
+          <div className={classes.operations}>
+            {getOperations(props.operations)}
+          </div>
+          {/* <div className={classes.prompt}>{getPrompt(props.count)}</div> */}
+          <div className={classes.user}>
+            <User />
+          </div>
         </div>
-        <div className={classes.title}>{getTitle(props.title)}</div>
-        <div className={classes.nav}>
-          {getNavigationList(props.navigationList)}
-        </div>
-        <div className={classes.operations}>
-          {getOperations(props.operations)}
-        </div>
-        {/* <div className={classes.prompt}>{getPrompt(props.count)}</div> */}
-        <div className={classes.user}>
-          <User />
-        </div>
-      </div>
-    </Header>
+      </Header>
+    </div>
   );
 });
