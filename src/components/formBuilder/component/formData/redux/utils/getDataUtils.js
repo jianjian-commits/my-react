@@ -3,7 +3,7 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import {message} from "antd";
 import axios from "axios";
 
-import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA } from "../action";
+import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA, CLEAR_FORM_DETAIL } from "../action";
 
 
 // 获取提交数据总数
