@@ -5,11 +5,13 @@ import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
 import ChartToolbarBtn from "../ChartToolbarBtn";
 import request from '../../../utils/request';
+import {setDB} from '../../../utils/reqUtil';
 import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
 import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
-import { changeBind, changeChartData, setDataSource } from '../../../redux/action';
+import { changeBind, changeChartData, setDataSource ,setDashboards} from '../../../redux/action';
+import {message} from "antd";
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
@@ -103,6 +105,22 @@ const ChartContainer = props => {
             })
           })
         }
+      },
+      {
+        type:"delete",
+        click: () => {
+          request(`/bi/charts/${chartId}`,{
+            method:"DELETE"
+          })
+          .then(res => {
+            message.info("删除成功");
+            if(res && res.msg === "success"){
+              props.setDB(dashboardId,props.setDashboards);
+            }
+          }).catch(err => {
+            console.log(err);
+          });
+        }
       }
     ]
   }
@@ -151,5 +169,5 @@ export default connect(
   store => ({
     dashboards: store.bi.dashboards,
     dbMode: store.bi.dbMode}),
-    { changeBind, changeChartData, setDataSource }
+    { changeBind, changeChartData, setDataSource ,setDB,setDashboards}
   )(ChartContainer);
