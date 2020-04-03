@@ -14,7 +14,7 @@ export default class Address extends Component {
   render() {
     const props = {};
     props.type = "text";
-    props.className = "form-control";
+    props.className = "form-control address";
     props.name = this.props.data.field_name;
 
     let baseClasses = "SortableItem rfb-item";
