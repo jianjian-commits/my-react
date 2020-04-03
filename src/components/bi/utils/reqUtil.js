@@ -46,3 +46,7 @@ export const setDB = (dashboardId, setDashboards) => {
     })
   })
 }
+
+export const getDashboardAll = (appId) => {
+  return request(`/bi/dashboards`);
+};

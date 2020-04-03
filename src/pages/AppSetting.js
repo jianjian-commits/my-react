@@ -16,7 +16,7 @@ import request from '../components/bi/utils/request';
 import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
-import {getDashboardAll} from "../components/bi/utils/dashboardUtil";
+import {getDashboardAll} from "../components/bi/utils/ReqUtil";
 
 import { setDashboards } from '../components/bi/redux/action';
 import { setDB } from '../components/bi/utils/ReqUtil';
@@ -71,12 +71,14 @@ const AppSetting = props => {
       });
     });
 
-    getDashboardAll(appId).then(items => {
-      let newDashboards = items.map(item => ({
-        key: item.dashboardId,
-        name: item.name,
-      })).slice(0,5);
-      setDashboardGroup(newDashboards)
+    getDashboardAll(appId).then(res => {
+      if(res && res.msg === "success"){
+        let newDashboards = res.data.items.map(item => ({
+          key: item.dashboardId,
+          name: item.name,
+        })).slice(0,5);
+        setDashboardGroup(newDashboards)
+      }
     })
 
   }, [props, appId]);

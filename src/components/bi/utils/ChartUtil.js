@@ -69,7 +69,8 @@ export const getOption = (chartData, chartInfo) => {
         type: 'category', 
         name: titleXAxis || "", 
         axisLabel: {
-          interval:0 
+          interval:0 ,
+          rotate: 30
         }
       }],
     yAxis: {name: titleYAxis || ""},

@@ -43,12 +43,16 @@ const spec = {
     }
 
     const { bindDataArr } = props;
-    let isExisted = false, isDimExceed = false, isMeaExceed = false;
+    let isExisted = false, isDimExceed = false, isMeaExceed = false, isForbidden = false, reOrder = false;
 
     if(bindDataArr.length != 0) {
       let dimCount = item.bindType == Types.DIMENSION ? 1 : 0;
       let meaCount = item.bindType == Types.MEASURE ? 1 : 0;
       bindDataArr.forEach((each, idx) => {
+        if(item.idx && (item.idx == each.idx)) {
+          reOrder = true;
+        }
+
         if(each.bindType == Types.DIMENSION) {
           dimCount++;
         }
@@ -66,18 +70,20 @@ const spec = {
       isMeaExceed = dimCount == 1 && meaCount > 10;
     }
 
-    if(isExisted) {
-      message.warning("添加失败，同一字段不能重复添加维度！");
-      return;
-    }else if(isDimExceed){
-      message.warning("添加失败，当前暂不支持此模式！");
-      return;
-    }else if(isMeaExceed){
-      message.warning("添加失败，已超出系统限定字段数量！");
-      return;
+    if(!reOrder) {
+      if(isExisted) {
+        isForbidden = true;
+        message.warning("添加失败，同一字段不能重复添加维度！");
+      }else if(isDimExceed){
+        isForbidden = true;
+        message.warning("添加失败，当前暂不支持此模式！");
+      }else if(isMeaExceed){
+        isForbidden = true;
+        message.warning("添加失败，已超出系统限定字段数量！");
+      }
     }
 
-    component.processDrop(item);
+    component.processDrop(item, isForbidden);
   }
 }
 
@@ -160,7 +166,12 @@ class BindPane extends PureComponent {
     processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
   }
 
-  processDrop = (item) => {
+  processDrop = (item, isForbidden) => {
+    if(isForbidden) {
+      this.clearSplit();
+      return;
+    }
+
     let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
     const { splitIdx } = this.state;
 
@@ -217,6 +228,7 @@ class BindPane extends PureComponent {
   }
 
   clearSplit = () => {
+    console.log("=======clearSplit======");
     this.setState({splitIdx: -1, splitDiv: null, dragingIdx: -1});
   }
 
