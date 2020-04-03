@@ -20,6 +20,7 @@ export const ApprovalSection = props => {
 
   React.useEffect(()=>{
     props.getApproveCount(appId)
+    return props.clearApproveCount
   },[appId])
 
   const items = history => [

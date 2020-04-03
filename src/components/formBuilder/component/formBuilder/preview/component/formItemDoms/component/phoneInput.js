@@ -37,7 +37,7 @@ export default class PhoneInput extends Component {
           <>
             <ComponentHeader {...this.props} active={this.props.active} />
             <div className="form-group">
-              <Input />
+              <Input style={{ minHeight: "34px",width:"405px" }}/>
             </div>
           </>
         }

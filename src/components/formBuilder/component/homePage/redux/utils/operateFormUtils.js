@@ -3,7 +3,7 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import coverTimeUtils from "../../../../utils/coverTimeUtils";
 import config from "../../../../config/config";
 import { message } from "antd";
-import { RECIVE_FORMS, GET_APPROVE_LIST_COUNT} from "../action";
+import { RECIVE_FORMS, GET_APPROVE_LIST_COUNT, CLEAR_APPROVE_COUNT} from "../action";
 
 export const deleteForm = ( appId, formId ) => {
   return new Promise((resolve,reject)=>{
@@ -181,5 +181,11 @@ export const getApproveCount = (appId) =>dispatch =>{
         console.log(err);
         // reject(err);
       });
+  })
+}
+
+export const clearApproveCount = () => dispatch =>{
+  dispatch({
+    type: CLEAR_APPROVE_COUNT
   })
 }
