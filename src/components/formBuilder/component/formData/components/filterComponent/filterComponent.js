@@ -202,6 +202,7 @@ class FilterItem extends Component {
         if (this.state.operator === "IN" || this.state.operator === "NOT_IN") {
           return (
             <Input
+              width="100%"
               defaultValue={value}
               placeholder="请输入值"
               key={`${filed.key}${this.state.operator}`}
@@ -763,7 +764,6 @@ export default class FilterComponent extends Component {
         >
           <div className="filter-condition">
             <Select
-              style={{ width: "281px", height: "36px" }}
               placeholder="满足所有条件"
               onChange={this.handleSelectCondition}
               className="filter-condition-option"
