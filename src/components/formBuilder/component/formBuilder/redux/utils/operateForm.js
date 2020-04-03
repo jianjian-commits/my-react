@@ -248,7 +248,7 @@ export const updateForm = (
   localForm,
   errMessage,
   type,
-  callback,
+  callback = ()=>{},
   appid,
   extraProp
 ) => dispatch => {
@@ -260,7 +260,6 @@ export const updateForm = (
       let validate = item.validate;
       let min = validate.minOptionNumber;
       let max = validate.maxOptionNumber;
-      console.log(min, max)
       if (min > max) {
         validate.minOptionNumber = max;
         validate.maxOptionNumber = min;
@@ -351,6 +350,14 @@ export const updateForm = (
       }
     })
     .catch(err => {
+      let status = err.response.status;
+      callback(status);
+      if(status === 401) {
+        message.error("无权限进行此操作！");
+        window.location.reload();
+      } else {
+        message.error("发生未知错误，请重试！");
+      }
       setIsSetApiStatus(formDataArray, tempApiStatus);
       // if (err.response.data === "Token Expired") {
       //   console.log("token 已过期，正在请求新的token");
