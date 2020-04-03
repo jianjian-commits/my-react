@@ -90,7 +90,6 @@ const User = props => {
             onCancel={() => setVisible(false)}
             onOk={signOut}
             closable={false}
-            mask={false}
           >
             确定退出登录?
           </Modal>

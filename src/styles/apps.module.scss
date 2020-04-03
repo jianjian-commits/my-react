@@ -17,7 +17,7 @@
 }
 
 .appCard {
-  width: 180px;
+  width: 200px;
   height: 144px;
   display: inline-block;
   cursor: pointer;
@@ -26,7 +26,7 @@
   }
 
   &:global(.ant-card) {
-    margin: 10px 30px 30px 0px;
+    margin: 10px 28px 28px 0px;
     border-radius: 5px;
     border: none;
   }
@@ -63,6 +63,7 @@
       -webkit-box-orient: vertical;
       font-size: 12px;
       margin: 0 8px;
+      word-wrap: break-word;
     }
   }
 }
@@ -300,16 +301,16 @@
 }
 
 .innerMain {
-  margin: 0 64px;
+  margin: 0 22px 0 50px;
   display: block;
 
   button {
-    width: 180px;
+    width: 200px;
     height: 144px;
     display: inline-block;
     background-color: #fff;
     color: #333;
-    margin: 12px 30px 30px 0px;
+    margin: 12px 28px 28px 0px;
     vertical-align: top;
   }
 
