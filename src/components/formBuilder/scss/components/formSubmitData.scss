@@ -42,6 +42,9 @@
           width: 149px;
           height: 36px;
         }
+        // .ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled){
+        //     background-color: #E7F0FF
+        // }
         .logicSymbol {
           .ant-select-selection {
             width: 108px;
@@ -157,9 +160,6 @@
       background-color: transparent;
       box-shadow: none;
     }
-  }
-  .ant-table-placeholder {
-    border-top: none;
   }
 
   .ant-table-wrapper {

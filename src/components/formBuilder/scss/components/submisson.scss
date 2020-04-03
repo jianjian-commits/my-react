@@ -16,7 +16,7 @@ body {
   .Content {
     width: 870px;
     min-height: 962px;
-    margin-top: 92px;
+    margin-top: 30px;
     background: white;
     border: 1px solid $border-color;
     .submission-title {
@@ -46,15 +46,15 @@ body {
         text-align: left;
         width: 100%;
         white-space: normal;
-        margin-bottom: 10px;
-        line-height: 1;
+        margin-bottom: 8px;
+        line-height: 0;
       }
       label {
         font-size: 13px;
         font-family: $font-Family;
         font-weight: 400;
         color: $font-color;
-        line-height: 18px;
+        // line-height: 18px;
         &::after {
           content: "";
           margin: 0;
@@ -609,8 +609,9 @@ body {
               .imageItem {
                 flex-basis: 150px;
                 flex-shrink: 0;
-                width: 150px;
-                height: 116px;
+                width: 140px;
+                height: 108px;
+                margin-top: 8px;
                 margin-right: 9px;
                 margin-bottom: 7px;
                 position: relative;
@@ -625,11 +626,11 @@ body {
                 .deleteBtn {
                   z-index: 111;
                   position: absolute;
-                  top: -9px;
-                  right: 2px;
+                  top: -17px;
+                  right: -7px;
                   svg {
-                    width: 15px;
-                    height: 15px;
+                    width: 16px;
+                    height: 16px;
                     cursor: pointer;
                     &:hover path{
                       fill:#D01414;

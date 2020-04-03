@@ -18,7 +18,7 @@ const formDataThead = [
   { key: "SEARCHOWNER", value: "查看自己" },
   { key: "ADD", value: "增加" },
   { key: "REDITOWNER", value: "编辑自己" },
-  { key: "DELETE", value: "删除" },
+  { key: "DELETE", value: "删除自己" },
   { key: "SEARCHALL", value: "查看所有" },
   { key: "REDITALL", value: "编辑所有" },
   { key: "DELETEALL", value: "删除所有" }
@@ -495,7 +495,7 @@ const Top = ({
       <InnerHeader navs={navigationList} />
       {/* </div> */}
       <div className={Styles.btn}>
-        <Button onClick={enterPermission}>取消</Button>
+        <Button onClick={() => enterPermission()}>取消</Button>
         <Button
           onClick={() =>
             handleSaveButton({ state, initialData, enterPermission })

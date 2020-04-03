@@ -12,7 +12,7 @@ export default class EmailInput extends Component {
   render() {
     const props = {};
     props.type = "number";
-    props.className = "form-control";
+    props.className = "form-control emailInput";
     props.name = this.props.data.field_name;
 
     if (this.props.mutable) {
