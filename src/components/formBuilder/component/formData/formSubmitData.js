@@ -48,6 +48,17 @@ class FormSubmitData extends PureComponent {
       limitDataNumber: false,
       isFilterMode: false,
       filterArray: [],
+      selectArray:[{
+        selectedFiled: "",
+        selectedLogicalOperator: "",
+        logicalOperators: [],
+        costomValue: "",
+        filterType: "",
+        selectedFiledKey: "",
+        field: {type:"", key: Math.random()},
+        options: [],
+        key: Math.random()
+      }],
       connectCondition: "&",
       formDataDetailId: "",
       // 是否展示筛选界面,默认为false(不展示)
@@ -597,6 +608,7 @@ class FormSubmitData extends PureComponent {
   }
   render() {
     let { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
+    const { selectArray, connectCondition, isFilterMode } = this.state.filterArray;
     
     if(formData.length !== 0) {
       this.setState({formDataCache:formData});
@@ -635,7 +647,7 @@ class FormSubmitData extends PureComponent {
 
     let { sortedInfo } = this.state;
     sortedInfo = sortedInfo || {};
-    let columns = this.props.forms.components
+    let columns = this.props.forms.components ? this.props.forms.components
       .filter(item => {
         return item.type !== "Button";
       })
@@ -723,7 +735,7 @@ class FormSubmitData extends PureComponent {
           };
         }
         return resultObj;
-      });
+      }) : [];
       columns.push({
         title: "创建人",
         dataIndex: "founder",
@@ -879,6 +891,7 @@ class FormSubmitData extends PureComponent {
                 formId={this.props.formId}
                 clickCallback={()=>{this.props.actionFun(null ,true)}}
                 clickExtendCallBack = {this.showFilterComponent}
+                isFilterMode={this.state.isFilterMode}
               />
             )}
             <div
@@ -896,6 +909,11 @@ class FormSubmitData extends PureComponent {
               {this.state.showFilterBoard? 
               <FilterComponent
                 fileds={fileds}
+                selectArray = {this.state.selectArray}
+                changeFilterArray = {(selectArray)=>{this.setState({selectArray: selectArray})}}
+                connectCondition={connectCondition}
+                setConnectCondition = {(connectCondition)=>{this.setState({connectCondition: connectCondition})}}
+                isFilterMode={isFilterMode}
                 filterData={this.props.getFilterSubmissionData}
                 setFilterMode={this.setFilterMode}
                 formId={this.state.formId}
