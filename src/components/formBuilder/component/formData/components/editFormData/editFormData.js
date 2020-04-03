@@ -412,12 +412,12 @@ class EditFormData extends Component {
            isMobile
           ? Toast.success("提交成功!")
           : message.success("提交成功!");
-          // setTimeout(() => {
-          //   //
-          //   let submissionId = null;s
-          //   let submitFlag = false;
-          //   this.props.actionFun(submissionId, submitFlag);
-          //   }, 1000);
+          setTimeout(() => {
+            //
+            let submissionId = null;s
+            let submitFlag = false;
+            this.props.actionFun(submissionId, submitFlag);
+            }, 1000);
           })
           .catch(error => {
              console.log(err);
