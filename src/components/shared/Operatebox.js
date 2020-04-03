@@ -18,8 +18,6 @@ const OperateBox = (props) => {
       content: '确定要删除表单 ?',
       cancelText: "取消",
       okText: "确定",
-      mask: false,
-      sytle: { top: 425 },
       className: "operate-box-delete-form-modal",
       onOk() {
         handleDeleteForm(props.formId);
@@ -58,9 +56,7 @@ const OperateBox = (props) => {
       ,
       cancelText: "取消",
       okText: "确定",
-      mask: false,
-      sytle: { top: 425 },
-      className: "operate-box-delete-form-modal",
+      className: "operate-box-update-form-modal",
       onOk() {
         handleUpdateFormName(props.formId);
       }
