@@ -1,3 +1,8 @@
+.hideHeader {
+  width: 100vw;
+  height: 40px;
+}
+
 .homeHeader {
   position: fixed;
   top: 0;
@@ -338,7 +343,7 @@
 .homeNav {
   & > ul {
     position: absolute;
-    left: 74px;
+    left: 60px;
     display: flex;
     align-items: center;
     height: 40px;
