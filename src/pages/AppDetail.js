@@ -11,7 +11,7 @@ import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
-import { getFormsAll, getApproveCount } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
+import { getFormsAll, getApproveCount, clearApproveCount } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
@@ -184,7 +184,7 @@ const AppDetail = props => {
           style={{ background: "#fff" }}
           width="240"
         >
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount}/>
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount}/>
           <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"
@@ -281,5 +281,6 @@ export default connect(({ app, login, forms }) => ({
   userDetail: login.userDetail,
   approveListCount: forms.approveListCount
 }),{
-  getApproveCount
+  getApproveCount,
+  clearApproveCount
 })(AppDetail);
