@@ -1,3 +1,5 @@
+import ChartInfo from "../component/elements/data/ChartInfo";
+
 export const NEW_DASHBOARD = "NEW_DASHBOARD";
 export const NEW_ELEMENT = "NEW_ELEMENT";
 export const CHANGE_BIND = "CHANGE_BIND";
@@ -11,6 +13,7 @@ export const CHANGE_CHART_DATA = "CHANGE_CHART_DATA";
 export const CLEAR_BIND = "CLEAR_BIND";
 export const SET_DB_MODE = "SET_DB_MODE";
 export const SAVE_CHART_CHANGE = "SAVE_CHART_CHANGE";
+export const CHANGE_CHART_INFO = "CHANGE_CHART_INFO";
 
 export const saveChartChange = () => dispatch => {
   dispatch({
@@ -89,6 +92,7 @@ export const clearBind = (params) => dispatch => {
     dataSource: {},
     bindDataArr: [],
     chartData: {},
+    chartInfo: new ChartInfo()
   })
 }
 
@@ -96,5 +100,12 @@ export const setDBMode = (mode) => dispatch => {
   dispatch({
     type: SET_DB_MODE,
     dbMode: mode
+  });
+}
+
+export const changeChartInfo = (chartInfo) => dispatch => {
+  dispatch({
+    type: CHANGE_CHART_INFO,
+    chartInfo
   });
 }

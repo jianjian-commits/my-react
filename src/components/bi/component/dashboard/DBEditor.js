@@ -31,7 +31,7 @@ class DBEditor extends React.PureComponent {
       const data = elements[item].data;
       const element = elements[item];
       const containerObj = {isBtnBlock: false, key: item, chartData: data,
-        chartName: element.name, chartId: element.id};
+        chartName: element.name, chartId: element.id, chartInfo: element.chartTypeProp};
 
       if(idx % 2 == 0) {
         elems.push(<ChartContainer {...containerObj}/>);

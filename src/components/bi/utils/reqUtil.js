@@ -2,13 +2,14 @@ import request from './request';
 import { getChartAttrs } from './ChartUtil';
 import { ChartType } from '../component/elements/Constant';
 
-export const updateChartReq = (elementId, bindDataArr, name, type) => {
+export const updateChartReq = (elementId, bindDataArr, name, chartTypeProp) => {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
 
   return request(`/bi/charts/${elementId}`, {
     method: "PUT",
     data: {
       view: {
+        chartTypeProp,
         conditions,
         dimensions,
         formFields: [
@@ -26,7 +27,7 @@ export const updateChartReq = (elementId, bindDataArr, name, type) => {
             "status": "SUCCESS"
           }
         ],
-        type: type || ChartType.HISTOGRAM
+        type: ChartType.HISTOGRAM
       }
     }
   });

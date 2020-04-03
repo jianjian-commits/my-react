@@ -9,14 +9,14 @@ import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
 import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
-import { changeBind, changeChartData, setDataSource } from '../../../redux/action';
+import { changeBind, changeChartData, setDataSource, changeChartInfo } from '../../../redux/action';
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
-    changeBind, changeChartData, setDataSource } = props;
+    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo  } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
-  const chartOption = chartData ? getOption(chartData) : {};
+  const chartOption = chartData ? getOption(chartData, chartInfo) : {};
   const chart = <Chart chartOption={chartOption} />;
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
   const elements =
@@ -43,6 +43,7 @@ const ChartContainer = props => {
             if(res && res.msg === "success") {
               const data = res.data.view;
               const formId = data.formId;
+              const chartInfo = data.chartTypeProp;
               let bindDataArr = [];
               const dimensions = data.dimensions;
               const indexes = data.indexes;
@@ -72,6 +73,7 @@ const ChartContainer = props => {
               }
 
               changeBind(bindDataArr);
+              changeChartInfo(chartInfo);
               request(`/bi/charts/data`, {
                 method: "POST",
                 data: {
@@ -151,5 +153,5 @@ export default connect(
   store => ({
     dashboards: store.bi.dashboards,
     dbMode: store.bi.dbMode}),
-    { changeBind, changeChartData, setDataSource }
+    { changeBind, changeChartData, setDataSource, changeChartInfo }
   )(ChartContainer);

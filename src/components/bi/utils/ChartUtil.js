@@ -1,7 +1,9 @@
 import { Types } from '../component/bind/Types';
+import ChartInfo from '../component/elements/data/ChartInfo';
 
-export const getOption = (data) => {
-  const { xaxisList, legends } = data;
+export const getOption = (chartData, chartInfo) => {
+  const { xaxisList, legends } = chartData;
+  const { titleXAxis, titleYAxis, showLegend, showDataTag } = chartInfo || new ChartInfo();
 
   if(!xaxisList || (xaxisList.length == 0) || !legends || (legends.length == 0)) {
     return {};
@@ -13,14 +15,14 @@ export const getOption = (data) => {
 
   legends.forEach((each) => {
     title.push(each.legendName);
-    series.push({type: 'bar'
-      // label: {
-      //   show: true,
-      //   position: 'top',
-      //   textStyle: {
-      //     color: 'black'
-      //   }
-      // }
+    series.push({type: 'bar',
+      label: {
+        show: showDataTag,
+        position: 'top',
+        textStyle: {
+          color: 'black'
+        }
+      }
     });
   })
 
@@ -60,18 +62,17 @@ export const getOption = (data) => {
     dataset: {
       source
     },
-    legend: {y: 'top'},
+    legend: {y: 'top', show: showLegend},
     tooltip: {},
     xAxis: [
       {
         type: 'category', 
-        // name: 'x轴标题', 
+        name: titleXAxis || "", 
         axisLabel: {
           interval:0 
         }
       }],
-    yAxis: {},
-    // yAxis: {name: 'y轴标题'},
+    yAxis: {name: titleYAxis || ""},
     // color: [],
     grid: {top: '80px'},
     series

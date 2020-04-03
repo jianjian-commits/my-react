@@ -9,12 +9,14 @@ import {
   SET_FORM_DATA,
   SET_DATA_SOURCE,
   CHANGE_CHART_DATA,
+  CHANGE_CHART_INFO,
   CLEAR_BIND,
   SET_DB_MODE,
   SAVE_CHART_CHANGE,
 } from "./action";
 
 import { DBMode } from '../component/dashboard/Constant';
+import ChartInfo from '../component/elements/data/ChartInfo';
 
 const initState = {
   type: 'bar',
@@ -26,7 +28,8 @@ const initState = {
   chartData: {},
   dashboards: [],
   dbMode: DBMode.Edit,
-  isChartEdited:false
+  isChartEdited:false,
+  chartInfo: new ChartInfo()
 };
 
 export default function biReducer(state = initState, action) {
@@ -56,6 +59,7 @@ export default function biReducer(state = initState, action) {
         bindDataArr: action.bindDataArr, 
         dataSource: action.dataSource,
         chartData: action.chartData,
+        chartInfo: action.chartInfo,
         isChartEdited:false,
       };
     }
@@ -95,6 +99,13 @@ export default function biReducer(state = initState, action) {
       return {
         ...state,
         chartData: action.chartData,
+        isChartEdited:true
+      };
+    }
+    case CHANGE_CHART_INFO: {
+      return {
+        ...state,
+        chartInfo: action.chartInfo,
         isChartEdited:true
       };
     }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import {DBHeader, DBToolbar, DBEditor} from '../components/bi/component/dashboard';
 import { setDashboards } from '../components/bi/redux/action';
-import { setDB } from '../components/bi/utils/reqUtil';
+import { setDB } from '../components/bi/utils/ReqUtil';
 import classes from "../styles/bi.module.scss";
 import "../components/bi/scss/index.scss";
 
