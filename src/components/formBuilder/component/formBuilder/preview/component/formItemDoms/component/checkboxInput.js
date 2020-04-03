@@ -12,7 +12,7 @@ export default class CheckboxInput extends React.Component {
     render() {
         const props = {};
         props.type = 'text';
-        props.className = 'form-control';
+        props.className = 'form-control checkboxInput';
         props.name = this.props.data.field_name;
         if (this.props.mutable) {
             props.defaultValue = this.props.defaultValue;

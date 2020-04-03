@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
   width: 1680px;
   background-color: #f0f2f5;
 
@@ -70,7 +70,7 @@
 
 .appSider {
   border-right: 1px solid #d6d8de;
-
+  padding-right: 0 !important;
   :global(.ant-layout-sider-children) {
     height: calc(100vh - 50px);
     padding: 10px 0;

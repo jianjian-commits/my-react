@@ -387,6 +387,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             .form-group {
               margin: 0;
               width: 100%;
+              padding-top:15px;
               .ant-input-affix-wrapper.ant-input-affix-wrapper-textarea-with-clear-btn {
                 .ant-input {
                   resize: none;
@@ -647,7 +648,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
                 padding: 0;
                 color: #333333;
                 font-size: 13px;
-                font-weight: 400;
+                font-weight: 500;
                 line-height: 22px;
               }
               input[type="date"] {
@@ -664,12 +665,24 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
                 height: auto;
                 line-height: 22px;
                 word-break: break-all;
-                font-family: PingFangSC-Regular, PingFang SC;
+                font-family: "PingFangSC-Regular, PingFang SC";
                 margin-bottom: 5px;
                 font-size: 14px;
+                span{
+                  font-weight: 400;
+                }
               }
               .label-required {
                 margin-left: 5px;
+              }
+              .singleText{
+                width: 405px;
+              }
+              .numberInput{
+                width: 405px;
+              }
+              .textArea{
+                width: 405px;
               }
             }
 
