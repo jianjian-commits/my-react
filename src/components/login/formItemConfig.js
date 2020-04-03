@@ -347,6 +347,7 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
             // onClick={phone ? buttonConfirm : null}
             style={{
               height: "42px",
+              borderRadius: "6px",
               background: "#2A7FFF",
               color: "#ffffff",
               opacity: phone ? 1 : 0.5
