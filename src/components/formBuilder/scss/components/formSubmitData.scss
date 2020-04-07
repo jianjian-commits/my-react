@@ -214,17 +214,14 @@
           font-weight: bold;
           border-left: none;
           border-right: none;
+          background-clip: padding-box;
         }
-        &:last-child {
+        // &:last-child {
           // border-left: 1px solid;
-        }
+        // }
       }
     }
   }
-  // hover效果
-  // .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
-  //   background-color:#E7F0FF;
-  // }
   .ant-table-fixed-right{
     // box-shadow: 0px 0px 0px 6px #d2d4db; 水平阴影 垂直阴影 模糊距离 阴影尺寸
     box-shadow: -2px 0 6px -2px rgba(0, 0, 0, 0.15);
@@ -242,9 +239,9 @@
         font-size: 14px;
         font-weight: 400;
         border-color: #DCDEE3 !important;
-        &:last-child {
+        // &:last-child {
           // border-left: 1px solid;  // table里操作列的线
-        }
+        // }
         .formChildDiv {
           height: 56px;
           text-align: center;
