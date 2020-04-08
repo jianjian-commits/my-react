@@ -41,11 +41,15 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  const [dashboardGroup,setDashboardGroup] = React.useState([]);
+  const [dashboards,setDashboardGroup] = React.useState({
+    dbGroup: [],
+    dbList: [],
+    dbSearchList: []
+  });
   const [user, setUser] = React.useState({});
 
   let { groups, list, searchList } = mockForms;
-
+  let { dbGroup,dbList,dbSearchList } = dashboards;
   useEffect(() => {
     let newList = [];
     let { id, name } = props.userDetail;
@@ -77,7 +81,11 @@ const AppSetting = props => {
           key: item.dashboardId,
           name: item.name,
         })).slice(0,5);
-        setDashboardGroup(newDashboards)
+        setDashboardGroup({
+          dbGroup: [],
+          dbList: newDashboards,
+          dbSearchList: []
+        })
       }
     })
 
@@ -134,7 +142,7 @@ const AppSetting = props => {
 
   //处理仪表盘的点击事件
   const dashboardEnterHandle = e => {
-    if (list[0].key !== "") {
+    if (dbList[0].key !== "") {
       setDB(e.key, props.setDashboards);
       history.push(`/app/${appId}/setting/bi/${e.key}`);
     }
@@ -234,8 +242,8 @@ const AppSetting = props => {
             <DraggableList
               draggable={!searchKey}
               onClick={dashboardEnterHandle}
-              groups={groups}
-              list={dashboardGroup}
+              groups={dbGroup}
+              list={dbList}
               onDrop={dragFileToFolder}
             />
             <DropableWrapper

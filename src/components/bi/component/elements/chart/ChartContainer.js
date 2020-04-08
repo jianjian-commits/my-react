@@ -15,7 +15,7 @@ import {message} from "antd";
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
-    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo  } = props;
+    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
   const chartOption = chartData ? getOption(chartData, chartInfo) : {};
@@ -25,7 +25,6 @@ const ChartContainer = props => {
     dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
   let name = "新建图表";
   let iconBtnGroup = [];
-
   if (elementId) {
     elements.forEach(item => {
       if (item.id == elementId) {
@@ -35,7 +34,6 @@ const ChartContainer = props => {
   } else {
     name = chartName || name;
   }
-
   if(dbMode == DBMode.Edit) {
     iconBtnGroup = [
       {
@@ -117,14 +115,27 @@ const ChartContainer = props => {
           .then(res => {
             message.info("删除成功");
             if(res && res.msg === "success"){
+              if(props.handleFullChart){
+                props.handleFullChart(null);
+              }
               props.setDB(dashboardId, props.setDashboards);
             }
           }).catch(err => {
             console.log(err);
           });
         }
+      },
+      {
+        type:"fullscreen",
+        click: props.setFullChart
       }
     ]
+  }
+
+  if(props.modalNarrowBtn){
+    //如果图表放大，将放大按钮变成缩小按钮
+    iconBtnGroup = iconBtnGroup.filter(item => item.type!="fullscreen");
+    iconBtnGroup.push(props.modalNarrowBtn);
   }
 
   const handlMouseEnter = () => {
@@ -149,7 +160,7 @@ const ChartContainer = props => {
             iconBtnGroup={iconBtnGroup}
             isBtnBlock={isBtnBlock}
           />
-        )}
+         )} 
         <BlankElement />
       </div>
     );
@@ -169,7 +180,7 @@ const ChartContainer = props => {
           iconBtnGroup={iconBtnGroup}
           isBtnBlock={isBtnBlock}
         />
-      )}
+      )} 
       {chart}
     </div>
   );
