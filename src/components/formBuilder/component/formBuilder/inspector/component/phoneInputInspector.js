@@ -331,15 +331,13 @@ class PhoneInputInspector extends React.PureComponent {
             >
               必填
             </Checkbox>
-            {isInFormChild(this.props.elementParent) ? null : (
-              <Checkbox
+            <Checkbox
                 name="unique"
                 checked={unique}
                 onChange={this.handleChangeAttr}
-              >
+            >
                 不允许重复
               </Checkbox>
-            )}
             {/* <Checkbox
               name="inputMask"
               checked={formatChecks}

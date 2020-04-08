@@ -383,7 +383,6 @@ class NumberInputInspector extends React.PureComponent {
                 autoComplete="off"
               />
             </div>
-            {isInFormChild(this.props.elementParent) ? null : (
               <div className="checkbox-wrapper">
                 <Checkbox
                   name="unique"
@@ -393,7 +392,6 @@ class NumberInputInspector extends React.PureComponent {
                   不允许重复
                 </Checkbox>
               </div>
-            )}
           </div>
         </div>
       </div>
