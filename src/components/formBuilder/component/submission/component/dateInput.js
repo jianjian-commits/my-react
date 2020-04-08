@@ -13,9 +13,29 @@ import {
 import moment from "moment";
 
 class DateInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAutoInput: false
+    };
+  }
+
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
-    const { data } = item;
+    const { data, validate } = item;
+    if (validate.autoInput) {
+      const timer = setInterval(()=>{
+        form.setFieldsValue({
+          [item.key]: new moment()
+        })
+      }, 1000);
+      this.setState({
+        isAutoInput: true,
+        timer
+      });
+      return;
+    }
+
     if (data && data.type === "DataLinkage") {
       const {
         conditionId,
@@ -23,7 +43,7 @@ class DateInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -95,16 +115,18 @@ class DateInput extends React.Component {
 
   render() {
     const { getFieldDecorator, item, disabled, initData } = this.props;
+    const { isAutoInput } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
-    if(initData){
-      options.initialValue = moment(initData+"Z") 
+    if (initData) {
+      options.initialValue = moment(initData + "Z");
     }
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
           ...options,
+          initialValue: isAutoInput ? new moment() : undefined,
           rules: [
             {
               required: isValueValid(item.validate.required)
@@ -115,7 +137,7 @@ class DateInput extends React.Component {
           ]
         })(
           <DatePicker
-            disabled={disabled}
+            disabled={disabled || isAutoInput}
             showTime
             locale={locale}
             placeholder="请选择时间/日期"
@@ -127,4 +149,4 @@ class DateInput extends React.Component {
   }
 }
 
-export default withRouter(DateInput)
+export default withRouter(DateInput);

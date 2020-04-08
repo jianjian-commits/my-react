@@ -1115,8 +1115,6 @@ class Submission extends Component {
         };
       });
     }
-
-    console.log(layout)
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];
