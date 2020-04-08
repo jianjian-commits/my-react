@@ -16,3 +16,4 @@ run:
     - 105shell
   only:
     - master
+    - develop
