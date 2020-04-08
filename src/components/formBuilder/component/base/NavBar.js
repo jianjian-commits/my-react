@@ -1,8 +1,9 @@
 import React, { PureComponent } from "react";
-import { Button, Icon } from "antd";
+import { Button, Icon, Dropdown } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { submitFormDataAuth } from "../../utils/permissionUtils";
+import FilterFieldsComponents from "../formData/components/filterFields/filterFieldsComponents";
 
 class NavBar extends PureComponent {
   render() {
@@ -16,7 +17,9 @@ class NavBar extends PureComponent {
       clickCallback = () => {
         return 0;
       },
-      clickExtendCallBack
+      clickExtendCallBack,
+      handleFilterFields,
+      forms
     } = this.props;
 
     // 提交权限
@@ -33,19 +36,31 @@ class NavBar extends PureComponent {
               返回
             </Button>
           </div>
-        ) : (
-          null
-        )}
+        ) : null}
 
         <div className="headerBarTitle">
           <span>{name}</span>
         </div>
         {isShowExtraTitle ? (
           <div className="headerBarExtraTitle">
-            {/* <span> 显示字段 </span> */}
+            <Dropdown
+              overlay={
+                <FilterFieldsComponents
+                  components={forms.components}
+                  handleSetShowFields={handleFilterFields}
+                />
+              }
+              trigger={["click"]}
+            >
+              <span id="fieldsBtn"> 显示字段 </span>
+            </Dropdown>
             <span onClick={clickExtendCallBack}> 筛选条件 </span>
             {isShowBtn === true && isSubmitAuth ? (
-              <Button className="headerBarButton" type="primary" onClick={() => clickCallback()}>
+              <Button
+                className="headerBarButton"
+                type="primary"
+                onClick={() => clickCallback()}
+              >
                 {btnValue}
               </Button>
             ) : (
@@ -69,7 +84,8 @@ class NavBar extends PureComponent {
   }
 }
 
-export default connect(({ login }) => ({
+export default connect(({ login, formSubmitData }) => ({
+  forms: formSubmitData.forms,
   teamId: login.currentTeam && login.currentTeam.id,
   permissions: (login.userDetail && login.userDetail.permissions) || []
 }))(withRouter(NavBar));
