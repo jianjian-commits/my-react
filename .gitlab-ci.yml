@@ -6,13 +6,13 @@ cache:
     - node_modules/
 variables:
   PORT: 9030
-  REACT_APP_HOST_IP: http://192.168.3.103
+  REACT_APP_HOST_IP: http://192.168.3.105
   REACT_APP_HOST_PORT: 9080
 run:
   stage: run
   script:
     - docker-compose up -d --build
   tags:
-    - 103shell
+    - 105shell
   only:
     - master
