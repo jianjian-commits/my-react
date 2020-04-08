@@ -128,10 +128,10 @@ class SingleTextInput extends React.Component {
       });
       tip = `请最少填${item.validate.minLength}个字`;
     }
-    if (item.validate.maxLength !== Number.MAX_SAFE_INTEGER && item.validate.minLength !== 0) {
+    if (item.validate.isLimitLength && item.validate.maxLength !== Number.MAX_SAFE_INTEGER && item.validate.minLength !== 0) {
       tip = `输入字数在${item.validate.minLength}~${item.validate.maxLength}之间`;
     }
-    if (item.validate.maxLength === Number.MAX_SAFE_INTEGER && item.validate.minLength === 0) {
+    if (item.validate.isLimitLength && item.validate.maxLength === Number.MAX_SAFE_INTEGER && item.validate.minLength === 0) {
       tip = `字数不限`;
     }
 

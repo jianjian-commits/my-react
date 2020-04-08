@@ -291,6 +291,7 @@ class CheckboxInspector extends React.Component {
           </div>
           <div className="number-check-warper">
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="minOptionNumber"
               placeholder="不限"
               min={1}
@@ -304,6 +305,7 @@ class CheckboxInspector extends React.Component {
             />
             ~
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="maxOptionNumber"
               placeholder="不限"
               min={1}

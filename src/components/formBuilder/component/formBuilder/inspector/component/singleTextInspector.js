@@ -337,6 +337,7 @@ class SingleTextInspector extends React.Component {
             </div>
             <div className="number-check-warper">
               <InputNumber
+                disabled={!validate.isLimitLength}
                 name="minLength"
                 placeholder="不限"
                 min={1}
@@ -347,6 +348,7 @@ class SingleTextInspector extends React.Component {
               />
               ~
             <InputNumber
+                disabled={!validate.isLimitLength}
                 name="maxLength"
                 placeholder="不限"
                 min={1}

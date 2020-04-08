@@ -362,6 +362,7 @@ class NumberInputInspector extends React.PureComponent {
             </div>
             <div className="number-check-warper">
               <InputNumber
+                disabled={!validate.isLimitLength}
                 name="minLength"
                 placeholder="不限"
                 onChange={this.handleChangeAttrMin}
@@ -374,6 +375,7 @@ class NumberInputInspector extends React.PureComponent {
               />
               ~
               <InputNumber
+                disabled={!validate.isLimitLength}
                 name="max"
                 placeholder="不限"
                 onChange={this.handleChangeAttrMax}
