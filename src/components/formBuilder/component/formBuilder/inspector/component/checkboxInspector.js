@@ -202,6 +202,7 @@ class CheckboxInspector extends React.Component {
       isSetAPIName
     } = this.props.element;
     const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
+    console.log(inline)
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
@@ -269,6 +270,22 @@ class CheckboxInspector extends React.Component {
               增加选项
             </Button>
           </div>
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p>排序方式</p>
+              <div className="RadioWapper">
+                <Radio.Group
+                  name="inline"
+                  // 这里要改一下默认值
+                  defaultValue={inline}
+                  onChange={this.handleChangeAttr}
+                >
+                  <Radio value={true}>横向</Radio>
+                  <Radio value={false}>纵向</Radio>
+                </Radio.Group>
+              </div>
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">

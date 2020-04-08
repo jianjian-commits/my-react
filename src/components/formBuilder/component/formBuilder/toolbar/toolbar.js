@@ -73,7 +73,8 @@ export const basicComponentsArray = [
         label: "选项",
       }
     ],
-    icon: ["checkbox", 16]
+    icon: ["checkbox", 16],
+    inline:false
   }),
   _buildDefaultProp({
     label: "下拉单选",
