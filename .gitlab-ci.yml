@@ -14,5 +14,4 @@ run:
   tags:
     - 105shell
   only:
-    - master
     - develop
