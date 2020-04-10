@@ -118,11 +118,53 @@ const ChartContainer = props => {
               if(props.handleFullChart){
                 props.handleFullChart(null);
               }
-              props.setDB(dashboardId, props.setDashboards);
+              setDB(dashboardId, props.setDashboards);
             }
           }).catch(err => {
             console.log(err);
           });
+        }
+      },
+      {
+        type:"redo",
+        click:()=>{
+          request(`/bi/charts/${chartId}`).then((res) => {
+            if(res && res.msg === "success") {
+              const data = res.data.view;
+              const formId = data.formId;
+              const dimensions = data.dimensions;
+              const indexes = data.indexes;
+              request(`/bi/charts/data`, {
+                method: "POST",
+                data: {
+                  chartId,
+                  formId,
+                  dimensions,
+                  indexes,
+                  conditions: data.conditions,
+                  chartType: ChartType.HISTOGRAM
+                }
+              }).then((res) => {
+                if(res && res.msg === "success") {
+                  const dataObj = res.data;
+                  const data = dataObj.data;
+                  const newDashboardsItem = {
+                    name:dashboards[0].name,
+                    elements:dashboards[0].elements.map(element => {
+                      if(element.id == chartId){
+                        element.data.legends = data.legends;
+                        element.data.xaxisList = data.xaxisList;
+                      }
+                      return element;
+                    })
+                  }
+                  const newDashboards = [];
+                  newDashboards.push(newDashboardsItem);
+                  props.setDashboards(newDashboards);
+                }
+              })
+            }
+          })
         }
       },
       {
@@ -190,5 +232,5 @@ export default connect(
   store => ({
     dashboards: store.bi.dashboards,
     dbMode: store.bi.dbMode}),
-    { changeBind, changeChartData, setDataSource, changeChartInfo, setDB, setDashboards }
+    { changeBind, changeChartData, setDataSource, changeChartInfo,setDashboards }
   )(ChartContainer);

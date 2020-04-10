@@ -22,7 +22,7 @@ export default function ExitWaringTip(props) {
       footer={null}
       width={400}
       bodyStyle={{padding:0}}
-      wrapClassName="BImodal"
+      wrapClassName="BITipModal"
       centered
     >
       <div className="normalModalContainer">

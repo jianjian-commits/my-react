@@ -104,7 +104,7 @@ function DataListModal(props) {
       centered
       width={500}
       bodyStyle={{ padding: 0 }}
-      wrapClassName="BImodal"
+      wrapClassName="BIDataModal"
       handleCancel={props.handleCancel}
       handleOK={props.handleOK}
     >
