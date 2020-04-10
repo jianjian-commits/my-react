@@ -13,6 +13,7 @@ import FormDataDetailHeader from "./formDataDetailHeader";
 import { getApproveCount } from "../../homePage/redux/utils/operateFormUtils"
 import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionUtils";
 import { getTransactList } from "../../../../../store/loginReducer";
+import EditHistory from "./editHistory";
 const { TabPane } = Tabs;
 const columns = [
   {
@@ -512,6 +513,9 @@ class FormDataDetail extends PureComponent {
             >
               <TabPane tab="表单详情" key="formDetail">
                 {this._renderDataByType(formDetail, newCurrentComponents)}
+              </TabPane>
+              <TabPane tab="编辑记录" key="editHistory">
+                <EditHistory />
               </TabPane>
               {// 关联审批的才展示审批  taskData.tasks
               taskData.status ? (
