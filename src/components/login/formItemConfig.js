@@ -184,7 +184,9 @@ const password = ({
   itemName: itemName,
   options: {
     validateTrigger: "onBlur",
-    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
+    rules: [required("该项为必填"), whitespace(), 
+    // requireCharAndNum()
+  ]
   },
   component: (
     <Input
@@ -458,7 +460,7 @@ const userEmail = ({ form, payload, icon, unprefix, hasFeedback }) => {
 const submit = ({
   form,
   payload,
-  teamId,
+  companyId,
   userId,
   token,
   itemName,
@@ -491,7 +493,7 @@ const submit = ({
         {payload === "register" && "注册"}
         {payload === "resetPassword" && "重置密码"}
         {payload === "submit" && "提交"}
-        {payload === "addTeam" && "加入团队"}
+        {payload === "joinCompany" && "加入公司"}
       </Button>
     ),
     additionComponent: (
@@ -521,12 +523,6 @@ const submit = ({
             <Link to="/login">返回登录</Link>
           </div>
         )}
-        {/* {payload === "addTeam" && (
-          <div className={itemsStyles.buttonSuffix}>
-            <Link to={`/invite/${userId}/${teamId}/${token}`}>返回</Link>
-            <span></span>
-          </div>
-        )} */}
       </>
     )
   };
@@ -666,16 +662,16 @@ export const registerParameter = [
     // icon: true
     unprefix: true
   },
-  {
-    help: "register",
-    key: "companyName",
-    value: null,
-    label: "公司名",
-    hasFeedback: false,
-    colon: false,
-    // icon: true
-    unprefix: true
-  },
+  // {
+  //   help: "register",
+  //   key: "companyName",
+  //   value: null,
+  //   label: "公司名",
+  //   hasFeedback: false,
+  //   colon: false,
+  //   // icon: true
+  //   unprefix: true
+  // },
   { key: "submit", value: "register", itemName: "registerSubmit" }
 ];
 export const userDetailParameter = {
