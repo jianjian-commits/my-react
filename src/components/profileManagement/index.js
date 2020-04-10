@@ -11,7 +11,7 @@ import {
   PROFILE_MANAGEMENT_DELETE
 } from "../../auth";
 import { catchError } from "../../utils";
-import { CreateIcon } from "../../assets/icons/teams";
+import { CreateIcon } from "../../assets/icons/company";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 import clx from "classnames";

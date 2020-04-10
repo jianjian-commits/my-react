@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Input, Row, Col, List, Button, Spin, message, Popover } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
-import { getCurrentTeam, getAllTeam } from "../../../store/loginReducer";
+import { getCurrentCompany, getAllCompany } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
 import { catchError } from "../../../utils";
@@ -73,21 +73,21 @@ export default connect(
   ({ login }) => ({
     loginData: login
   }),
-  { getCurrentTeam, getAllTeam }
-)(function TeamInfo({ loginData, getCurrentTeam, getAllTeam }) {
-  const { currentTeam } = loginData;
+  { getCurrentCompany, getAllCompany }
+)(function TeamInfo({ loginData, getCurrentCompany, getAllCompany }) {
+  const { currentCompany } = loginData;
   const onClickSubmit = (key, changeStr) => {
     const params = {
       method: "PUT",
       data: {}
     };
     params.data[key] = changeStr;
-    request(`/team`, params)
+    request(`/company`, params)
       .then(res => {
         if (res && res.status === "SUCCESS") {
-          getCurrentTeam().then(res => {
+          getCurrentCompany().then(res => {
             if (key === "name") {
-              getAllTeam();
+              getAllCompany();
             }
           });
           message.success("修改成功");
@@ -98,25 +98,25 @@ export default connect(
       .catch(err => catchError(err));
   };
 
-  return currentTeam ? (
+  return currentCompany ? (
     <div className={classes.container}>
-      <div className={classes.title}>团队信息</div>
+      <div className={classes.title}>公司信息</div>
       <div className={classes.listBox}>
         <List itemLayout="horizontal" size="small">
           <List.Item>
             <EditInput
-              defaultValue={currentTeam.name}
+              defaultValue={currentCompany.companyName}
               onClickSubmit={onClickSubmit}
               lableKey="name"
-              lable="团队名称"
+              lable="公司名称"
             />
           </List.Item>
           <List.Item>
             <EditInput
-              defaultValue={currentTeam.description}
+              defaultValue={currentCompany.companyDescription}
               onClickSubmit={onClickSubmit}
               lableKey="description"
-              lable="团队介绍"
+              lable="公司介绍"
             />
           </List.Item>
           <List.Item>
@@ -126,7 +126,7 @@ export default connect(
                   创建人
                 </Col>
                 <Col span={16} className={classes.text}>
-                  {currentTeam.sysUserName}
+                  {currentCompany.sysUserName}
                 </Col>
               </Row>
             </div>
@@ -138,7 +138,7 @@ export default connect(
                   创建时间
                 </Col>
                 <Col span={16} className={classes.text}>
-                  {new Date(currentTeam.createdDate).toLocaleString()}
+                  {new Date(currentCompany.createdDate).toLocaleString()}
                 </Col>
               </Row>
             </div>

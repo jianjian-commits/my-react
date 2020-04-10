@@ -12,7 +12,7 @@ import { PROFILE_MANAGEMENT_LIST, TEAM_MANAGEMENT_LIST } from "../auth";
 import { authorityIsValid } from "../utils";
 import { Route } from "react-router-dom";
 import Authenticate from "../components/shared/Authenticate";
-import { InfoIcon, MemberIcon, ProfileIcon } from "../assets/icons/teams";
+import { InfoIcon, MemberIcon, ProfileIcon } from "../assets/icons/company";
 
 const { Sider, Content } = Layout;
 
