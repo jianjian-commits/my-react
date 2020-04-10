@@ -2,6 +2,7 @@ import React, {Fragment} from "react";
 import { connect } from "react-redux";
 import ChartContainer from '../elements/chart/ChartContainer';
 import classes from '../../scss/dashboard/editor.module.scss';
+import ChartFullModal from "../elements/modal/chartFullModal";
 
 const Column = (props) => {
   return (
@@ -14,6 +15,17 @@ const Column = (props) => {
 class DBEditor extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      fullChart:null,
+    }
+  }
+
+  handleFullChart = fullChart => {
+    if(this.state.fullChart){
+      this.setState({fullChart:null});
+    }else{
+      this.setState({fullChart});
+    }
   }
 
   getElements = (dashboards) => {
@@ -27,21 +39,28 @@ class DBEditor extends React.PureComponent {
 
     let elems = [];
     const rows = [];
-
+    
+    
     keys.forEach((item, idx) => {
       const data = elements[item].data;
       const element = elements[item];
       const containerObj = {isBtnBlock: false, key: item, chartData: data,
         chartName: element.name, chartId: element.id, chartInfo: element.chartTypeProp};
+      const modalNarrowBtn = 
+          {
+            type:"fullscreen-exit",
+            click:this.handleFullChart
+          };
+      const setFullChart = () => {this.handleFullChart(<ChartContainer modalNarrowBtn={modalNarrowBtn} handleFullChart={this.handleFullChart} {...containerObj}/>)};
 
       if(idx % 2 == 0) {
-        elems.push(<ChartContainer {...containerObj}/>);
+        elems.push(<ChartContainer {...containerObj} setFullChart={setFullChart}/>);
 
         if(idx == len - 1) {
           rows.push(<Column children={elems} key={item}/>);
         }
       } else {
-        elems.push(<ChartContainer {...containerObj} />);
+        elems.push(<ChartContainer {...containerObj} setFullChart={setFullChart}/>);
         rows.push(<Column children={elems} key={item}/>);
         elems = [];
       }
@@ -66,6 +85,7 @@ class DBEditor extends React.PureComponent {
     return (
       <Fragment>
         <div className={classes.dbEditor} style={{height}}>
+          {this.state.fullChart && <ChartFullModal chart={this.state.fullChart}/>}
           {this.getElements(dashboards)}
         </div>
       </Fragment>
@@ -75,6 +95,5 @@ class DBEditor extends React.PureComponent {
 
 export default connect(
   store => ({
-    dashboards: store.bi.dashboards}),
-    {}
+    dashboards: store.bi.dashboards}), {}
   )(DBEditor);

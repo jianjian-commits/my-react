@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "antd";
 import { GroupType } from "./Constant";
 import classNames from "classnames";
+import classes from "../../scss/bind/optionSelect.module.scss"
 const operationArr = [
   { ...GroupType.SUM },
   { ...GroupType.COUNT},
@@ -51,9 +52,9 @@ export default function FieldMeasureSelect(props) {
   const className = props.item.className;
 
   return (
-    <div className="meaContainer">
+    <div className={classes.meaContainer}>
       <div
-        className="dropDownBtn"
+        className={classes.dropDownBtn}
         onMouseEnter={handlMouseEnter} 
         onMouseLeave={handlMouseLeave}
         id={"dropDownBtn" + props.item.fieldId}
@@ -63,18 +64,20 @@ export default function FieldMeasureSelect(props) {
         }}
       >
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
-        <span className="dropDownBtnSpan">
+        <span className={classes.dropDownBtnSpan}>
           {`${props.item.label}(${operationArr[selectIndex].name})`}
         </span>
         {btnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>
       {popoverVisible && (
-        <div className="dropDownItemContainer" id={"dropDown" + props.item.fieldId}>
+        <div className={classes.dropDownItemContainer} id={"dropDown" + props.item.id}>
           {operationArr.map((operation, index) => (
             <div
-              className={classNames("dropDownItem", {
-                selectOption: selectIndex == index
-              })}
+              className={classes.dropDownItem}
+              style={selectIndex == index ? {backgroundColor: "#dfecff"} : {}}
+              // className={classNames("dropDownItem", {
+              //   selectOption: selectIndex == index
+              // })}
               onClick={() => {
                 if (selectIndex === index) {
                   setPopoverVisible(false);
@@ -86,7 +89,7 @@ export default function FieldMeasureSelect(props) {
               }}
               key={index}
             >
-              <span className="dropDownItemSpan">
+              <span className={classes.dropDownItemSpan}>
                 {operation.name}
               </span>
               {selectIndex === index && <Icon type="check"/>}

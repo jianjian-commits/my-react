@@ -1,4 +1,4 @@
-.BImodal{
+.BIDataModal {
   font-family: Microsoft YaHei;
   font-style: normal;
   font-weight: normal;
@@ -12,7 +12,7 @@
         line-height: 39px;
         padding-left: 20px;
         // box-shadow: 0px 4px 20px rgba(134, 167, 197, 0.25);
-        border-bottom: 1px solid #DCDEE3;
+        border-bottom: 1px solid #dcdee3;
         font-weight: 400;
         span {
           &:nth-child(1) {
@@ -26,21 +26,8 @@
           }
         }
       }
-      .normalModalTitle {
-        width: 400px;
-        height: 44px;
-        padding-left: 30px;
-        padding-top: 26px;
-        font-size: 15px;
-        display: flex;
-        align-items: center;
-        i {
-          color: #ffa132;
-          margin-right: 9px;
-        }
-      }
     }
-  
+
     .ant-modal-body {
       padding: 0px;
       .formChoiceModalContainer {
@@ -57,8 +44,8 @@
             border-bottom: none;
             font-weight: 400;
             color: #333333;
-            background-color: #ffffff;  
-            &:nth-child(1){
+            background-color: #ffffff;
+            &:nth-child(1) {
               margin-top: 20px;
             }
             .ant-collapse-header {
@@ -67,7 +54,7 @@
               font-size: 13px;
             }
             .ant-collapse-content-box {
-              padding: 0px ;
+              padding: 0px;
               span {
                 font-size: 13px;
                 display: block;
@@ -137,64 +124,6 @@
           }
         }
       }
-      .normalModalContainer {
-        width: 400px;
-        height: 130px;
-        .normalModalContent {
-          padding-left: 30px;
-          padding-right: 24px;
-          padding-top: 10px;
-          width: 100%;
-          height: 80px;
-          font-size: 13px;
-          color: #777f97;
-        }
-        .warningBtnGroup {
-          width: 100%;
-          height: 50px;
-          display: flex;
-          justify-content: flex-end;
-          position: relative;
-          padding-right: 10px;
-          .ant-btn {
-            width: 70px;
-            height: 30px;
-            font-size: 14px;
-            border-radius: 3px;
-            margin-right: 10px;
-            &:nth-child(1) {
-              border: 1px solid #b6b6ba;
-              color: #777f97;
-            }
-            &:nth-child(2) {
-              border: 1px solid #e22d2d;
-              color: #e22d2d;
-            }
-          }
-        }
-        .tipBtnGroup {
-          width: 100%;
-          height: 50px;
-          display: flex;
-          justify-content: flex-end;
-          position: relative;
-          padding-right: 10px;
-          .ant-btn {
-            width: 70px;
-            height: 30px;
-            font-size: 14px;
-            border-radius: 3px;
-            margin-right: 10px;
-            border: 1px solid #b6b6ba;
-            color: #777f97;
-            &:nth-child(3) {
-              background-color: #2a7fff;
-              color: #ffffff;
-            }
-          }
-        }
-      }
     }
   }
-  
 }

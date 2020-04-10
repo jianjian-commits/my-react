@@ -84,7 +84,7 @@ const RightPane = (props) => {
         </div>
       </div>
       <div className={classes.rightPaneTools}>
-        <span className="title">工具栏</span>
+        <span className={classes.title}>工具栏</span>
         <p>X轴标题</p>
         <Input value={titleXAxis} onBlur={(e) => {updateChartInfo()}} onChange={onChangeTitleXAxis}/>
         <p>Y轴标题</p>

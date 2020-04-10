@@ -17,7 +17,7 @@ export default function ChartPreservationTip(props) {
       width={400}
       bodyStyle={{padding:0}}
       handleCancel={props.handleCancel}
-      wrapClassName="BImodal"
+      wrapClassName="BITipModal"
       centered
     >
       <div className="normalModalContainer">

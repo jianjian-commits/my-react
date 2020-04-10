@@ -21,7 +21,7 @@
   position: absolute;
   right: 10px;
 
-  :global(.newChartPreview) {
+  .newChartPreview {
     width: 80px;
     height: 30px;
     border: 1px solid #2B81FF;
@@ -30,7 +30,7 @@
     border-radius: 3px;
   }
 
-  :global(.newChartSave) {
+  .newChartSave {
     width: 80px;
     height: 32px;
     background: #2B81FF;

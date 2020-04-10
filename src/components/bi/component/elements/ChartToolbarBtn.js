@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon } from "antd";
+import classes from "../../scss/elements/toolbarBtn.module.scss"
 export default function ToolbarBtns(props){
   const {iconBtnGroup , isBtnBlock} = props;
 
@@ -8,7 +9,7 @@ export default function ToolbarBtns(props){
   }
 
   return (
-    <span className="iconBtn">
+    <span className={classes.iconBtn}>
       {iconBtnGroup.map((iconBtn, index) => 
         <Icon type={iconBtn.type} key={index} onClick={iconBtn.click} />
       )}

@@ -2,7 +2,7 @@
   height: 50px;
   background-color: #2B81FF;
 
-  .ant-btn {
+  :global(.ant-btn) {
     height: 50px;
   }
 }
@@ -13,14 +13,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  .ant-btn-link {
+  :global(.ant-btn-link) {
     margin-left: 10px;
     font-size: 14px;
     font-weight: 500;
     // color: rgba(86, 92, 110, 1);
     color: #FFFFFF
   }
-  .ant-btn {
+  :global(.ant-btn) {
     padding: 0px;
   }
 }
@@ -37,7 +37,7 @@
   float: right;
   margin-right: 15px;
 
-  span {
+  :global(span) {
     color: white;
   }
 }
