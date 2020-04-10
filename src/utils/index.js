@@ -8,13 +8,9 @@ export const authorityIsValid = ({ debug, permissions, teamId, auth }) => {
 };
 
 export function catchError(err) {
-  if (
-    err.response &&
-    err.response.data &&
-    err.response.data.msg !== "未指定公司"
-  )
-    message.error(err.response.data.msg);
-  message.error("系统错误");
+  message.error(
+    (err.response && err.response.data && err.response.data.msg) || "系统错误"
+  );
 }
 // 防抖
 export const debounce = (fn, delay) => {

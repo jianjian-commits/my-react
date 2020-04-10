@@ -151,7 +151,12 @@ export const getCurrentCompany = () => async dispatch => {
       message.error(res.msg || "当前公司信息获取失败");
     }
   } catch (err) {
-    catchError(err);
+    if (
+      err.response &&
+      err.response.data &&
+      err.response.data.msg !== "未指定公司"
+    )
+      catchError(err);
   }
 };
 // 获取所有公司信息
