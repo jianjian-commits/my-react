@@ -9,7 +9,8 @@ import {
   Checkbox,
   Popover,
   Button,
-  DatePicker
+  DatePicker,
+  TimePicker
 } from "antd";
 import { withRouter } from "react-router-dom";
 import {
@@ -1005,6 +1006,66 @@ class FormChildTest extends React.Component {
                   locale={locale}
                   {...valueOption}
                   placeholder="请选择时间/日期"
+                  onChange={(value, dataString) => {
+                    item.data.time = dataString;
+                    item.data.moment = value;
+
+                    checkValueValidByType(item, value)
+                      ? (item.hasErr = false)
+                      : (item.hasErr = true);
+                    this.setState(state => ({
+                      ...state,
+                      refesh: !this.state.refesh
+                    }));
+                    this._checkFormChildHasError(submitDataArray);
+                  }}
+                />
+              </div>
+            );
+          }
+          break;
+          case "PureDate":
+          {
+            let valueOption = {};
+            if (item.data && item.data.moment) {
+              valueOption.value = moment(item.data.moment);
+            }
+            resultArray.push(
+              <div key={key} style={{ width: 200 }} className={className}>
+                <DatePicker
+                  locale={locale}
+                  {...valueOption}
+                  placeholder="请选择日期"
+                  onChange={(value, dataString) => {
+                    item.data.time = dataString;
+                    item.data.moment = value;
+
+                    checkValueValidByType(item, value)
+                      ? (item.hasErr = false)
+                      : (item.hasErr = true);
+                    this.setState(state => ({
+                      ...state,
+                      refesh: !this.state.refesh
+                    }));
+                    this._checkFormChildHasError(submitDataArray);
+                  }}
+                />
+              </div>
+            );
+          }
+          break;
+          case "PureTime":
+          {
+            let valueOption = {};
+            if (item.data && item.data.moment) {
+              valueOption.value = moment(item.data.moment);
+            }
+            resultArray.push(
+              <div key={key} style={{ width: 200 }} className={className}>
+                <TimePicker
+                  locale={locale}
+                  {...valueOption}
+                  placeholder="请选择时间"
                   onChange={(value, dataString) => {
                     item.data.time = dataString;
                     item.data.moment = value;

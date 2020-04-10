@@ -3,38 +3,40 @@ import { Form, Table, Icon, Tabs, message, Spin } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
-import {
-  getSubmissionDetail
-} from "../redux/utils/getDataUtils";
+import { getSubmissionDetail } from "../redux/utils/getDataUtils";
 import { deleteFormData } from "../redux/utils/deleteDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import { DeleteIcon, EditIcon } from "./svgIcon/index";
 import FormDataDetailHeader from "./formDataDetailHeader";
-import { getApproveCount } from "../../homePage/redux/utils/operateFormUtils"
-import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionUtils";
+import { getApproveCount } from "../../homePage/redux/utils/operateFormUtils";
+import {
+  editFormDataAuth,
+  deleteFormDataAuth,
+} from "../../../utils/permissionUtils";
 import { getTransactList } from "../../../../../store/loginReducer";
+import moment from "moment";
 const { TabPane } = Tabs;
 const columns = [
   {
     title: "审批ID",
     dataIndex: "id",
-    className: "approveCol"
+    className: "approveCol",
   },
   {
     title: "环节名称",
-    dataIndex: "name"
+    dataIndex: "name",
   },
   {
     title: "操作人",
-    dataIndex: "assignee"
+    dataIndex: "assignee",
   },
   {
     title: "状态",
-    dataIndex: "status"
+    dataIndex: "status",
   },
   {
     title: "审批意见",
-    dataIndex: "comment"
+    dataIndex: "comment",
   },
   {
     title: "日期",
@@ -45,11 +47,11 @@ const columns = [
       } else {
         return null;
       }
-    }
-  }
+    },
+  },
 ];
 
-const ApprovalStatus = props => {
+const ApprovalStatus = (props) => {
   const { approveStatus } = props;
   switch (approveStatus) {
     case "已同意":
@@ -65,19 +67,31 @@ const ApprovalStatus = props => {
   }
 };
 
-const EditApprovalButton = props => {
+const EditApprovalButton = (props) => {
   // 权限相关
   const { appId } = useParams();
-  const { permissions, teamId, id:formId, userDetail } = props;
-  const idEditAuth = editFormDataAuth(permissions, teamId, appId, formId, userDetail.id);
-  const isDeleteAuth = deleteFormDataAuth(permissions, teamId, appId, formId, userDetail.id);
+  const { permissions, teamId, id: formId, userDetail } = props;
+  const idEditAuth = editFormDataAuth(
+    permissions,
+    teamId,
+    appId,
+    formId,
+    userDetail.id
+  );
+  const isDeleteAuth = deleteFormDataAuth(
+    permissions,
+    teamId,
+    appId,
+    formId,
+    userDetail.id
+  );
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
   const { detailAuthority, dataId, actionFun, deleteFormData, ...rest } = props;
   const history = useHistory();
-  const handleDeleteSubmisson = submissionId => {
+  const handleDeleteSubmisson = (submissionId) => {
     deleteFormData("", submissionId)
-      .then(response => {
+      .then((response) => {
         if (props.enterPort === "TransctionList") {
           props.fn(props.approvalKey);
         } else if (props.enterPort === "FormSubmitData") {
@@ -86,7 +100,7 @@ const EditApprovalButton = props => {
           history.goBack();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         message.error("删除失败！", 2);
         console.log(err);
       });
@@ -128,7 +142,7 @@ class FormDataDetail extends PureComponent {
       formId: this.props.id,
       submissionId: this.props.dataId,
       tabKey: "formDetail",
-      isLoading: false
+      isLoading: false,
     };
   }
   componentDidMount() {
@@ -141,35 +155,39 @@ class FormDataDetail extends PureComponent {
           this.state.formId,
           this.state.submissionId,
           this.props.appId,
-          isLoading => {
+          (isLoading) => {
             this.setState({ isLoading });
           }
         );
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   }
 
   resetData = () => {
-    this.props.getSubmissionDetail(
-      this.state.formId,
-      this.state.submissionId,
-      this.props.appId,
-      (isLoading)=>{this.setState({isLoading})}
-    ).then(()=>{
-      if(this.props.enterPort === "TransctionList"){
-        this.props.getApproveCount(this.props.appId)
-      }
-    });
+    this.props
+      .getSubmissionDetail(
+        this.state.formId,
+        this.state.submissionId,
+        this.props.appId,
+        (isLoading) => {
+          this.setState({ isLoading });
+        }
+      )
+      .then(() => {
+        if (this.props.enterPort === "TransctionList") {
+          this.props.getApproveCount(this.props.appId);
+        }
+      });
   };
 
   componentWillUnmount() {
     this.setState = (state, callback) => {
-      return
-    }
+      return;
+    };
   }
-  _renderFileData = fileData => {
+  _renderFileData = (fileData) => {
     if (fileData.length > 0) {
       return fileData.map((item, index) => (
         <p key={index} style={{ marginBottom: 0 }}>
@@ -226,7 +244,7 @@ class FormDataDetail extends PureComponent {
       case "Address":
         let { province, county, city, detail } = submitData || {};
         let address = [province, city, county, detail]
-          .filter(item => item)
+          .filter((item) => item)
           .join("");
         return <div className="formChildData">{address}</div>;
       case "CheckboxInput":
@@ -241,12 +259,12 @@ class FormDataDetail extends PureComponent {
     }
   }
   renderChildFormTest = (data = [], components = []) => {
-    let columns = components.map(component => {
+    let columns = components.map((component) => {
       return {
         title: component.label,
         dataIndex: component.key,
         key: component.key,
-        width: 100
+        width: 100,
       };
     });
     // 一条数据里有 components 里所有组件的一个记录
@@ -254,7 +272,7 @@ class FormDataDetail extends PureComponent {
       data = [""];
     }
     let dataSource = data.map((record, index) => {
-      let oneRecord = components.map(component => {
+      let oneRecord = components.map((component) => {
         if (component.key != undefined && record[component.key] != undefined) {
           let data = {};
           data.key = Math.random();
@@ -284,8 +302,8 @@ class FormDataDetail extends PureComponent {
   };
   _renderDataByType(formDetail, components) {
     return components
-      .filter(item => item.type != "CustomValue")
-      .map(item => {
+      .filter((item) => item.type != "CustomValue")
+      .map((item) => {
         switch (item.type) {
           case "SingleText":
           case "TextArea":
@@ -312,6 +330,28 @@ class FormDataDetail extends PureComponent {
                 </p>
               </div>
             );
+          case "PureDate":
+            return (
+              <div key={item.key} className="dataDteailText">
+                <p className="dataTitle">{item.label}</p>
+                <p className="dataContent">
+                  {formDetail[item.key]
+                    ? moment(coverTimeUtils.localDate(formDetail[item.key])).format("YYYY-MM-DD")
+                    : ""}
+                </p>
+              </div>
+            );
+          case "PureTime":
+            return (
+              <div key={item.key} className="dataDteailText">
+                <p className="dataTitle">{item.label}</p>
+                <p className="dataContent">
+                  {formDetail[item.key]
+                    ? coverTimeUtils.localDate(formDetail[item.key], true).toLocaleTimeString()
+                    : ""}
+                </p>
+              </div>
+            );
           case "MultiDropDown":
           case "CheckboxInput":
             return (
@@ -327,7 +367,7 @@ class FormDataDetail extends PureComponent {
               let { province, county, city, detail } =
                 formDetail[item.key] || {};
               let address = [province, city, county, detail]
-                .filter(item => item)
+                .filter((item) => item)
                 .join("");
               return (
                 <div key={item.key} className="dataDteailText">
@@ -445,13 +485,13 @@ class FormDataDetail extends PureComponent {
       });
   }
 
-  onChangeTab = key => {
+  onChangeTab = (key) => {
     this.setState({
-      tabKey: key
+      tabKey: key,
     });
   };
 
-  setLoading = isLoading => {
+  setLoading = (isLoading) => {
     this.setState({ isLoading });
   };
 
@@ -460,7 +500,7 @@ class FormDataDetail extends PureComponent {
     const { tabKey } = this.state;
 
     let newCurrentComponents = currentForm.components.filter(
-      item => item.type != "CustomValue"
+      (item) => item.type != "CustomValue"
     );
     let operations = {};
     switch (tabKey) {
@@ -497,7 +537,7 @@ class FormDataDetail extends PureComponent {
             {...this.props}
             setLoading={this.setLoading}
             getApproveCount={this.props.getApproveCount}
-            />
+          />
           <div className="formDataDetailContainer">
             <Tabs
               defaultActiveKey="detail"
@@ -512,7 +552,7 @@ class FormDataDetail extends PureComponent {
               taskData.status ? (
                 <TabPane tab="审批流水" key="approvelFlow">
                   <Table
-                    rowKey={record => record.id + record.approveDate}
+                    rowKey={(record) => record.id + record.approveDate}
                     pagination={false}
                     columns={columns}
                     dataSource={taskData.tasks}
@@ -531,7 +571,7 @@ class FormDataDetail extends PureComponent {
 const DataDetail = Form.create()(FormDataDetail);
 
 export default connect(
-  ({ login,forms, ...store }) => ({
+  ({ login, forms, ...store }) => ({
     formDetail: store.formSubmitData.formDetail,
     currentForm: store.formSubmitData.forms,
     token: store.rootData.token,
@@ -541,12 +581,12 @@ export default connect(
     teamId: login.currentTeam && login.currentTeam.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     approveListCount: forms.approveListCount,
-    userDetail: login.userDetail
+    userDetail: login.userDetail,
   }),
   {
     getSubmissionDetail,
     deleteFormData,
     getApproveCount,
-    getTransactList
+    getTransactList,
   }
 )(DataDetail);

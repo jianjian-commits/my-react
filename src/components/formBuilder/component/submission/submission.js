@@ -55,6 +55,9 @@ import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
 import moment from 'moment'
 
+import PureTime from "./component/pureTime";
+import PureDate from "./component/pureDate";
+
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
@@ -175,24 +178,31 @@ class Submission extends Component {
     return values;
   }
 
+
   _setDateTimeVaule(values) {
     this.props.formComponent.components.map(component => {
-      if (
-        component.type === "DateInput" &&
-        values.hasOwnProperty(component.key) &&
-        values[component.key] != void 0
-      ) {
-        // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
-        if (values[component.key].constructor === Date) {
-          let date = new Date(values[component.key].setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().replace("Z","");
-        } else {
-          let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().toString().replace("Z","")
+      let type = component.type;
+      if(values.hasOwnProperty(component.key) && values[component.key] != void 0) {
+        if (type === "DateInput" || type === "PureDate" || type === "PureTime") {
+          // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
+          if (values[component.key].constructor === Date) {
+            let date = new Date(values[component.key].setUTCMilliseconds(0));
+            let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+                date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+            values[component.key] = new Date(date).toJSON().replace("Z","");
+          } else {
+            let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
+            let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+                date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+            values[component.key] = new Date(date).toJSON().toString().replace("Z","")
+          }
+        }
+  
+        if(type === "PureDate") {
+          values[component.key] = moment(values[component.key]).format("YYYY-MM-DD");
+        }
+        if(type === "PureTime") {
+          values[component.key] = moment(values[component.key]).format("HH:mm:ss.SSS");
         }
       }
     });
@@ -722,6 +732,58 @@ class Submission extends Component {
                   />
                 ) : (
                   <DateInput
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                )}
+              </div>
+            );
+            case "PureTime":
+            return (
+              <div
+                key={item.key}
+                style={{ zIndex: 300 - i }}
+                id={"Id" + item.key + "Dom"}
+              >
+                {mobile.is ? (
+                  <DateInputMobile
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                ) : (
+                  <PureTime
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                )}
+              </div>
+            );
+            case "PureDate":
+            return (
+              <div
+                key={item.key}
+                style={{ zIndex: 300 - i }}
+                id={"Id" + item.key + "Dom"}
+              >
+                {mobile.is ? (
+                  <DateInputMobile
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                ) : (
+                  <PureDate
                     forms={forms}
                     handleSetComponentEvent={this.handleSetComponentEvent}
                     getFieldDecorator={getFieldDecorator}
