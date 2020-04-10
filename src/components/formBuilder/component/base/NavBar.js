@@ -3,11 +3,8 @@ import { Button, Icon, Dropdown } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { submitFormDataAuth } from "../../utils/permissionUtils";
-<<<<<<< HEAD
 import FilterFieldsComponents from "../formData/components/filterFields/filterFieldsComponents";
-=======
 import {ReactComponent as FilterModeIcon } from "./filterModeIcon.svg"
->>>>>>> mickey-formBuilder
 
 class NavBar extends PureComponent {
   render() {
@@ -47,7 +44,6 @@ class NavBar extends PureComponent {
         </div>
         {isShowExtraTitle ? (
           <div className="headerBarExtraTitle">
-<<<<<<< HEAD
             <Dropdown
               overlay={
                 <FilterFieldsComponents
@@ -59,11 +55,8 @@ class NavBar extends PureComponent {
             >
               <span id="fieldsBtn"> 显示字段 </span>
             </Dropdown>
-            <span onClick={clickExtendCallBack}> 筛选条件 </span>
-=======
             {/* <span> 显示字段 </span> */}
             <span onClick={clickExtendCallBack}> 筛选条件 {isFilterMode ? <Icon component={FilterModeIcon} />: null}</span>
->>>>>>> mickey-formBuilder
             {isShowBtn === true && isSubmitAuth ? (
               <Button
                 className="headerBarButton"
