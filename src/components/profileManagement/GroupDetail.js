@@ -42,12 +42,6 @@ const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
   ];
   return (
     <>
-      {/* <Icon
-      type="arrow-left"
-      style={{ fontSize: "18px" }}
-      onClick={() => enterDetail()}
-    />
-    <span style={{ textIndent: "10px" }}>分组</span> */}
       <InnerHeader navs={navigationList} />
       {!disabled && (
         <>
@@ -258,11 +252,11 @@ class GroupDetail1 extends Component {
   }
 
   render() {
-    const { action, enterDetail, enterPermission, roleName } = this.props;
+    const { action, enterDetail, enterPermission, roleName,className } = this.props;
     const { editable, baseInfoBo, appManagerBos, permissions } = this.state;
     const disabled = action === "view" ? true : false;
     return (
-      <>
+      <section className={className}>
         <Top
           roleName={roleName}
           disabled={disabled}
@@ -289,7 +283,7 @@ class GroupDetail1 extends Component {
           onChange={this.onChange}
         />
         {/* <SettingModule disabled={disabled} settings={settings} /> */}
-      </>
+      </section>
     );
   }
 }

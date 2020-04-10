@@ -16,7 +16,6 @@ export default Form.create({ name: "login-form" })(function PublicForm({
     e.preventDefault();
     validateFields((err, { actionType, verificationCode, ...rest }) => {
       if (!err) {
-        console.log("Received values of form: ", actionType, rest);
         func({
           token: params.token ? params.token : null,
           rest,
@@ -32,7 +31,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
           p.key === "submit" && params.token
             ? formItems[p.key]({
                 form,
-                payload: "addTeam",
+                payload: "joinCompany",
                 itemName: p.itemName,
                 icon: p.icon,
                 setActiveKey,
@@ -72,7 +71,11 @@ export default Form.create({ name: "login-form" })(function PublicForm({
                   {helpText}
                 </div>
               ) : (
-                <span>{helpText}</span>
+                <span
+                  style={{ display: "block", height: helpText ? "32px" : 0 , lineHeight: "32px"}}
+                >
+                  {helpText}
+                </span>
               )
             }
           >

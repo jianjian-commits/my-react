@@ -10,7 +10,7 @@ import {
   ArrowLeftIcon
   // , PromptIcon
 } from "../../assets/icons/header";
-import { TeamManageIcon } from "../../assets/icons/teams";
+import { CompanyManageIcon } from "../../assets/icons/company";
 import { getTransactList } from "../../store/loginReducer";
 
 const { Header } = Layout;
@@ -89,7 +89,7 @@ export default connect(
     hides = {
       logo: false,
       menu: false,
-      teamManage: false,
+      companyManage: false,
       backArrow: "init",
       backUrl: null
     },
@@ -105,84 +105,86 @@ export default connect(
   if (!transactList) {
     getTransactList({});
     return null;
-  } 
+  }
   if (init && transactList) {
     getTransactList({});
     setInit(false);
   }
   return (
-    <Header className={classes.homeHeader} style={homeHeaderStyle}>
-      <div className={classes.wrapper}>
-        <div className={classes.logo}>
-          <Authenticate hide={hides.logo}>
-            <div style={logoStyle}>{/* logo */}</div>
-          </Authenticate>
-        </div>
-        <div style={backThunk}>
-          <Authenticate hide={hides.backArrow === "init"}>
-            <div
-              style={backImg}
-              className={classes.backImg}
-              onClick={
-                hides.backArrow === "init"
-                  ? null
-                  : () => history.push(hides.backUrl)
-              }
-            >
-              <ArrowLeftIcon style={backArrow} />
-            </div>
-            <div>
-              <span style={backTitle}>{hides.backArrow}</span>
-            </div>
-          </Authenticate>
-        </div>
-        <div className={classes.homeNav}>
-          <Authenticate hide={hides.menu}>
-            <Menu
-              style={menuStyle}
-              selectedKeys={router.location.pathname}
-              mode="horizontal"
-              // theme="dark"
-              onClick={selectHandle}
-            >
-              <Menu.Item key="/app/list">
-                <span>我的应用</span>
-              </Menu.Item>
-              <Menu.Item key="/backlog">
-                <Badge dot offset={[-8, 8]} count={transactList.total}>
-                  待办事项
-                </Badge>
-              </Menu.Item>
-            </Menu>
-          </Authenticate>
-        </div>
-        <div className={classes.operations}>
-          <Authenticate auth={TEAM_MANAGEMENT_ABLE} hide={hides.teamManage}>
-            <Button
-              type="link"
-              // ghost
-              style={ghostButton}
-              onClick={toTeamMangement}
-            >
-              <div style={ghostButtonContent}>
-                <TeamManageIcon
-                  style={{
-                    marginRight: "5px",
-                    stroke: "#2A7FFF",
-                    strokeWidth: "0.1",
-                    fill: "#fff"
-                  }}
-                />
-                团队管理
+    <div className={classes.hideHeader}>
+      <Header className={classes.homeHeader} style={homeHeaderStyle}>
+        <div className={classes.wrapper}>
+          <div className={classes.logo}>
+            <Authenticate hide={hides.logo}>
+              <div style={logoStyle}>{/* logo */}</div>
+            </Authenticate>
+          </div>
+          <div style={backThunk}>
+            <Authenticate hide={hides.backArrow === "init"}>
+              <div
+                style={backImg}
+                className={classes.backImg}
+                onClick={
+                  hides.backArrow === "init"
+                    ? null
+                    : () => history.push(hides.backUrl)
+                }
+              >
+                <ArrowLeftIcon style={backArrow} />
               </div>
-            </Button>
-          </Authenticate>
+              <div>
+                <span style={backTitle}>{hides.backArrow}</span>
+              </div>
+            </Authenticate>
+          </div>
+          <div className={classes.homeNav}>
+            <Authenticate hide={hides.menu}>
+              <Menu
+                style={menuStyle}
+                selectedKeys={router.location.pathname}
+                mode="horizontal"
+                // theme="dark"
+                onClick={selectHandle}
+              >
+                <Menu.Item key="/app/list">
+                  <span>我的应用</span>
+                </Menu.Item>
+                <Menu.Item key="/backlog">
+                  <Badge dot offset={[-8, 8]} count={transactList.total}>
+                    待办事项
+                  </Badge>
+                </Menu.Item>
+              </Menu>
+            </Authenticate>
+          </div>
+          <div className={classes.operations}>
+            <Authenticate auth={TEAM_MANAGEMENT_ABLE} hide={hides.companyManage}>
+              <Button
+                type="link"
+                // ghost
+                style={ghostButton}
+                onClick={toTeamMangement}
+              >
+                <div style={ghostButtonContent}>
+                  <CompanyManageIcon
+                    style={{
+                      marginRight: "5px",
+                      stroke: "#2A7FFF",
+                      strokeWidth: "0.1",
+                      fill: "#fff"
+                    }}
+                  />
+                  公司管理
+                </div>
+              </Button>
+            </Authenticate>
+          </div>
+          {/* <div className={classes.prompt}>{getPrompt(props.count)}</div> */}
+          <div className={classes.user}>
+            <User />
+          </div>
         </div>
-        {/* <div className={classes.prompt}>{getPrompt(props.count)}</div> */}
-        <div className={classes.user}>
-          <User />
-        </div>
-      </div>
-    </Header>
+      </Header>
+    </div>
   );
 });

@@ -12,7 +12,7 @@ export default class PhoneInput extends Component {
   render() {
     const props = {};
     props.type = "number";
-    props.className = "form-control";
+    props.className = "form-control phoneInput";
     props.name = this.props.data.field_name;
 
     if (this.props.mutable) {
@@ -37,7 +37,7 @@ export default class PhoneInput extends Component {
           <>
             <ComponentHeader {...this.props} active={this.props.active} />
             <div className="form-group">
-              <Input />
+              <Input style={{ minHeight: "34px",width:"405px" }}/>
             </div>
           </>
         }

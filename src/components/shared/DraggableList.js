@@ -1,8 +1,9 @@
 import React from "react";
 import { Menu, Icon } from "antd";
+import { useLocation,useParams } from "react-router-dom"
 import "./draggableList.scss";
 import { TableIcon } from "../../assets/icons/index"
-
+import OperateBox from "./Operatebox"
 const { SubMenu } = Menu;
 
 const DraggableWrapper = ({ draggable = false, formId, onDrop, children }) => (
@@ -29,8 +30,19 @@ const DraggableList = ({
   onDrop,
   ...props
 }) => {
+  const { pathname } = useLocation()
+  const { appId } = useParams() 
+  const [ isShowOperate, setIsShowOperate] = React.useState(false)
+
+  React.useEffect(()=>{
+    if(!pathname.includes("/detail")){
+      setIsShowOperate( true )
+    }
+  },[pathname])
+
   return (
-    <Menu {...props} className="draggable-list" selectedKeys={selected} mode="inline" theme="light">
+    <Menu {...props} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
+    >
       {groups &&
         groups.map((g, i) => {
           const dropHandle = e =>
@@ -58,9 +70,18 @@ const DraggableList = ({
                       {l.key !== -1 ? <Icon component={l.icon || TableIcon} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
-                  </Menu.Item>
-                ))}
-            </SubMenu>
+                    {isShowOperate? 
+                    <OperateBox 
+                    formId = {l.key}
+                    appId = { appId }
+                    formname = {l.name}
+                    deleteForm = { props.deleteForm }
+                    updateFormName = { props.updateFormName }
+                    isDeleteOne = { props.isDeleteOne}
+                    />:null}
+                          </Menu.Item>
+                        ))}
+                    </SubMenu>
           );
         })}
       {list &&
@@ -72,10 +93,20 @@ const DraggableList = ({
               onDrop={e => onDrop(e.dataTransfer.getData("formId"), null)}
             >
               {l.key !== "" ? <Icon component={l.icon || TableIcon} /> : ""}
-              <span>{l.name}</span>
+              <span className="draggable-menu-item-title">{l.name}</span>
             </DraggableWrapper>
+            {isShowOperate? 
+            <OperateBox 
+            formId = {l.key}
+            appId = { appId }
+            formname = {l.name}
+            deleteForm = { props.deleteForm }
+            updateFormName = { props.updateFormName }
+            isDeleteOne = { props.isDeleteOne}
+            />:null}
           </Menu.Item>
         ))}
+        
     </Menu>
   );
 };
