@@ -1,8 +1,8 @@
 .container {
   position: relative;
-  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
   width: 1680px;
-  background-color: #f0f2f5;
+  background-color: #f0f2f5;appearance: none;
 
   .header {
     padding: 20px 40px;
@@ -12,7 +12,7 @@
 :global(#root) {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  // overflow: hidden;
   height: 100%;
 }
 
@@ -26,7 +26,7 @@
   }
 
   &:global(.ant-card) {
-    margin: 10px 30px 30px 0px;
+    margin: 10px 15px 30px 15px;
     border-radius: 5px;
     border: none;
   }
@@ -63,13 +63,14 @@
       -webkit-box-orient: vertical;
       font-size: 12px;
       margin: 0 8px;
+      word-wrap: break-word;
     }
   }
 }
 
 .appSider {
   border-right: 1px solid #d6d8de;
-
+  padding-right: 0 !important;
   :global(.ant-layout-sider-children) {
     height: calc(100vh - 50px);
     padding: 10px 0;
@@ -266,8 +267,9 @@
       background-color: #E7F0FF;
     }
     svg {
-      margin-top: 10.5px;
-      margin-left: 16px;
+      width:100%;
+      margin:0 auto;
+      margin-top:12px;
     }
   }
   :global(.ant-menu-item) {
@@ -299,7 +301,7 @@
 }
 
 .innerMain {
-  margin: 0 64px;
+  margin: 0 35px;
   display: block;
 
   button {
@@ -308,7 +310,7 @@
     display: inline-block;
     background-color: #fff;
     color: #333;
-    margin: 12px 30px 30px 0px;
+    margin: 12px 15px 30px 15px;
     vertical-align: top;
   }
 
@@ -331,4 +333,10 @@
       width: 100%;
     }
   }
+}
+
+.appsPanel{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }

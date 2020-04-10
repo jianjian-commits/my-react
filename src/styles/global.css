@@ -35,3 +35,30 @@ body {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+.ant-modal-body .ant-modal-confirm-btns > button {
+  width: 70px;
+  height: 32px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.ant-modal-body .ant-modal-confirm-btns > button:nth-child(1) {
+  color: #777f97;
+  border: 1px solid #d6d8de;
+  box-shadow: 0px 4px 30px rgba(163, 170, 177, 0.25);
+}
+.ant-modal-body .ant-modal-confirm-btns > button:nth-child(1):hover {
+  background: #f3f3f3;
+  border: 1px solid #b6b6ba;
+  border-radius: 3px;
+}
+.ant-modal-body .ant-modal-confirm-btns > button:nth-child(2) {
+  background: #2a7fff;
+  color: #fff;
+  border: 1px solid #2978ff;
+}
+.ant-modal-body .ant-modal-confirm-btns > button:nth-child(2):hover {
+  background: #579aff;
+  border-radius: 3px;
+}

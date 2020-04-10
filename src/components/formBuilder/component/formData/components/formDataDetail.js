@@ -3,8 +3,10 @@ import { Form, Table, Icon, Tabs, message, Spin } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
-import { getSubmissionDetail } from "../redux/utils/getDataUtils";
-import { deleteFormData } from "../redux/utils/deleteDataUtils";
+import {
+  getSubmissionDetail
+} from "../redux/utils/getDataUtils";
+import { deleteFormData, clearFormDetail } from "../redux/utils/deleteDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import { DeleteIcon, EditIcon } from "./svgIcon/index";
 import FormDataDetailHeader from "./formDataDetailHeader";
@@ -300,6 +302,11 @@ class FormDataDetail extends PureComponent {
       </div>
     );
   };
+
+  componentWillMount() {
+    this.props.clearFormDetail()
+  }
+
   _renderDataByType(formDetail, components) {
     return components
       .filter((item) => item.type != "CustomValue")
@@ -588,5 +595,6 @@ export default connect(
     deleteFormData,
     getApproveCount,
     getTransactList,
+    clearFormDetail
   }
 )(DataDetail);
