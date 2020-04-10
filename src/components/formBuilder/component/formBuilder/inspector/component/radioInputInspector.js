@@ -93,7 +93,6 @@ class RadioInputInspector extends React.Component {
 
   addChooseItems = () => {
     const tempOptions = this.state.tempOptions;
-    console.log("tempOptions", tempOptions)
     const newItem = {
       label: `选项`,
       value: `选项`,
@@ -127,7 +126,6 @@ class RadioInputInspector extends React.Component {
   };
 
   handleOk = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });
@@ -135,7 +133,6 @@ class RadioInputInspector extends React.Component {
   };
 
   handleCancel = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });

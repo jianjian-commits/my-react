@@ -544,7 +544,6 @@ export default connect(
     taskData: store.formSubmitData.taskData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentTeam && login.currentTeam.id,
-    permissions: (login.userDetail && login.userDetail.permissions) || [],
     approveListCount: forms.approveListCount,
     userDetail: login.userDetail
   }),
