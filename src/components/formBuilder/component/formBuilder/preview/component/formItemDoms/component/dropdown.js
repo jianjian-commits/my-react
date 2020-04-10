@@ -11,7 +11,7 @@ export default class DropDown extends React.Component {
   render() {
     const props = {};
     props.type = "text";
-    props.className = "form-control";
+    props.className = "form-control dropdown";
     props.name = this.props.data.field_name;
     if (this.props.mutable) {
       props.defaultValue = this.props.defaultValue;
@@ -40,8 +40,8 @@ export default class DropDown extends React.Component {
             <div className="form-group">
               <select
                 style={{
-                  marginTop: 10,
-                  width: "100%",
+                  marginTop: 0,
+                  width: "405px",
                   height: 34,
                   color: "rgba(0, 0, 0, 0.65)",
                   fontSize: 14,

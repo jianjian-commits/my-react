@@ -11,7 +11,7 @@ import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
-import { getFormsAll, getApproveCount } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
+import { getFormsAll, getApproveCount, clearApproveCount } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
@@ -54,6 +54,8 @@ const AppDetail = props => {
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
   const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false);
+  const [searchStatus,setSearchStatus] = React.useState(true)
+
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -72,21 +74,22 @@ const AppDetail = props => {
     setUser({ user: { id, name } });
 
     // let extraProp = { user: { id, name} }
-
-    getFormsAll(appId, true).then(res => {
-      // let newList = []
-      newList = res.map(item => ({
-        key: item.id,
-        name: item.name,
-        // icon: TableIcon
-      }));
-      
-      setMockForms({
-        groups: [],
-        searchList: [],
-        list: newList
+    
+      getFormsAll(appId, true).then(res => {
+        // let newList = []
+        newList = res.map(item => ({
+          key: item.id,
+          name: item.name,
+          // icon: TableIcon
+        }));
+        
+        setMockForms({
+          groups: [],
+          searchList: [],
+          list: newList
+        });
       });
-    });
+
   }, [appId, props.userDetail]);
 
 
@@ -125,6 +128,7 @@ const AppDetail = props => {
   const searchHandle = e => {
     const { value } = e.target;
     setSearchKey(value);
+    setSearchStatus(false)
   };
 
   //根据点击菜单栏
@@ -180,7 +184,7 @@ const AppDetail = props => {
           style={{ background: "#fff" }}
           width="240"
         >
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount}/>
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount}/>
           <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"
@@ -206,11 +210,12 @@ const AppDetail = props => {
             <DraggableList
               selected={selectedForm}
               draggable={false}
-              onClick={e => {
+              onSelect={e => {
                 setSelectedForm(e.key);
                 setApprovalKey("");
                 setSubmit(false);
                 setSubmissionId(null);
+                setSearchStatus(true)
               }}
               groups={groups}
               list={list}
@@ -256,6 +261,7 @@ const AppDetail = props => {
                       }
                     }}
                     appId={appId}
+                    searchStatus = { searchStatus }
                   ></FormBuilderSubmitData>
                 )}
               </>
@@ -275,5 +281,6 @@ export default connect(({ app, login, forms }) => ({
   userDetail: login.userDetail,
   approveListCount: forms.approveListCount
 }),{
-  getApproveCount
+  getApproveCount,
+  clearApproveCount
 })(AppDetail);

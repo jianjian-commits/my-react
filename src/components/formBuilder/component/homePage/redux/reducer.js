@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { DELETE_FORM, RECIVE_FORMS, GET_APPROVE_LIST_COUNT} from "./action";
+import { DELETE_FORM, RECIVE_FORMS, GET_APPROVE_LIST_COUNT, CLEAR_APPROVE_COUNT} from "./action";
 
 const initState = {
   formArray: [],
@@ -19,6 +19,11 @@ export default function formsReducer(state = initState, action) {
       return {
         ...state,
         approveListCount: action.approveListCount
+      }
+    case CLEAR_APPROVE_COUNT:
+      return {
+        ...state,
+        approveListCount: {todos: 0, dones: 0, submits:0}
       }
     default:
       return state;

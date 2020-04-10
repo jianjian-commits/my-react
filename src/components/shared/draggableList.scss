@@ -1,17 +1,60 @@
 .draggable-list {
+
   .ant-menu-item.draggable-menu-item {
     font-size: 13px;
     height: 34px;
     line-height: 34px;
     margin-top: 0;
-    margin-bottom: 0px!important;
+    margin-bottom: 0px !important;
+    position: relative;
+    overflow: visible;
+
+    .draggable-menu-item-title {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1;
+    }
+
+    .draggable-menu-item-operate {
+      position: absolute;
+      display: inline-block;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 34px;
+      width: 44px;
+      padding-right: 20px;
+      z-index: 1;
+
+      .draggable-menu-item-operate-menu {
+        display: inline-block;
+        background-image: url(./svg/menu.svg);
+        height: 4px;
+        width: 18px;
+      }
+    }
+
+    .draggable-menu-item-operate:hover {
+      .draggable-menu-item-operate-menu {
+        background-image: url(./svg/menu_hover.svg);
+        height: 4px;
+        width: 18px;
+      }
+
+    }
+
     &.ant-menu-item-active {
       color: #777f97;
       background: rgba(42, 127, 255, 0.15);
     }
+
     &.ant-menu-item-selected {
       color: #777f97;
       background: rgba(42, 127, 255, 0.15);
+
       &::before {
         content: "";
         position: absolute;
@@ -23,9 +66,167 @@
         opacity: 1;
         border-left: 3px solid #2B81FF;
       }
+
       &::after {
         border: none !important;
       }
     }
   }
+}
+.draggable-list-operate-container{
+  .operate-box {
+    position: absolute;
+    right: -130px;
+    top: -38px;
+    height: 69px;
+    width: 130px;
+    z-index: 1;
+
+    background: #FFFFFF;
+    box-shadow: 0px 2px 6px #D2D4DB;
+
+    div {
+      height: 35px;
+      padding-left: 15px;
+
+      font-family: "Noto Sans SC";
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 35px;
+
+      color: #333333;
+      cursor: pointer;
+      &:hover{
+        color: #777f97;
+        background: rgba(42, 127, 255, 0.15);
+      }
+    }
+  }
+}
+.operate-box-delete-form-modal{
+      width: 404px;
+      height: 170px;
+      margin-top: -85px!important;
+      top:50% !important;
+    .ant-modal-content{
+      .ant-modal-body{
+        padding:20px;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 20px rgba(165, 174, 183, 0.25);
+        border-radius: 5px;
+        .modal-title{
+          line-height: 1;
+          display: flex;
+          align-items: center;
+          height: 23px;
+          span{
+            margin-left: 9.5px;
+
+            font-family: "Noto Sans SC";
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 23px;
+
+            color: #333333;
+          }
+          .ant-modal-confirm-content{
+            font-family: "Noto Sans SC";
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 20px;
+
+            color: #777F97;
+                      }
+        }
+        .ant-modal-confirm-title{
+          font-family: "Noto Sans SC";
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 23px;
+          
+          color: #333333;
+        }
+        .ant-modal-confirm-content{
+          margin-top: 21px;
+          .ant-input{
+            height: 40px;
+            width: 370px;
+
+            border-radius: 3px;
+          }
+        }
+        .ant-modal-confirm-btns{
+          .ant-btn:nth-of-type(2){
+            background: #2A7FFF;
+          }
+        }
+      }
+    }
+}
+.operate-box-update-form-modal{
+  width: 404px;
+  height: 170px;
+  margin-top: -85px!important;
+  top:50% !important;
+.ant-modal-content{
+  .ant-modal-body{
+    padding:20px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 20px rgba(165, 174, 183, 0.25);
+    border-radius: 5px;
+    .modal-title{
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      height: 23px;
+      span{
+        margin-left: 9.5px;
+
+        font-family: "Noto Sans SC";
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 23px;
+
+        color: #333333;
+      }
+      .ant-modal-confirm-content{
+        font-family: "Noto Sans SC";
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+
+        color: #777F97;
+                  }
+    }
+    .ant-modal-confirm-title{
+      font-family: "Noto Sans SC";
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 23px;
+      
+      color: #333333;
+    }
+    .ant-modal-confirm-content{
+      margin-top: 21px;
+      .ant-input{
+        height: 40px;
+        width: 370px;
+
+        border-radius: 3px;
+      }
+    }
+    .ant-modal-confirm-btns{
+      .ant-btn:nth-of-type(2){
+        background: #2A7FFF;
+      }
+    }
+  }
+}
 }

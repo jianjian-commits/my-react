@@ -12,6 +12,7 @@ import {
   DatePicker
 } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
+import moment from 'moment';
 import {
   EQUALS,
   NOT_EQUALS,
@@ -126,18 +127,19 @@ class FilterItem extends Component {
       },
       options: [],
       operator: "",
-      filterMode: false
     };
   }
 
   // 如果存在回调数组，则遍历里面的函数执行
   handleChangeDate = value => {
-    value._d.setUTCMilliseconds(0);
-    this.props.setFilterAttr(
-      "costomValue",
-      value._d.toISOString().match(/(\S*)Z/)[1],
-      this.props.index
-    );
+    if(value){
+      value._d.setUTCMilliseconds(0);
+      this.props.setFilterAttr(
+        "costomValue",
+        value._d.toISOString(),
+        this.props.index
+      );
+    }
   };
 
   getComponentSubmission = (formId, optionId) => {
@@ -145,7 +147,11 @@ class FilterItem extends Component {
     instanceAxios
       .get(
         config.apiUrl +
-          `/form/${formId}/submission?selectInclude=data.${optionId}`
+          `/form/${formId}/submission?selectInclude=data.${optionId}`,{
+            header:{
+              "isDataPage": true,
+            }
+          }
       )
       .then(res => {
         options = res.data.map(data => {
@@ -190,24 +196,52 @@ class FilterItem extends Component {
     }
   };
 
-  renderInputByFiledType = filed => {
-    switch (filed.type) {
+  renderInputByFiledType = (filed, value, options, isDisabled) => {
+    switch (filed && filed.type) {
+      case "NumberInput":
+        return (
+        <Input
+          type="number"
+          width="100%"
+          defaultValue={value !=="" ? Number(value): null}
+          placeholder="请输入值"
+          key={`${filed.key}${this.state.operator}`}
+          style={{ width: "100%" }}
+          onChange={this.changeCostomValue}
+          disabled={isDisabled || this.state.disabledCostomValue}
+        />)
       case "DateInput":
         if (this.state.operator === "IN" || this.state.operator === "NOT_IN") {
           return (
             <Input
+              width="100%"
+              defaultValue={value}
               placeholder="请输入值"
               key={`${filed.key}${this.state.operator}`}
               style={{ width: "100%" }}
               onChange={this.changeCostomValue}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
             />
           );
         } else {
+          let options = {};
+          if(value!==""){
+            let date = new Date(value);
+            if(value.indexOf("Z") === -1){
+              let currentTimeZoneOffsetInHours = new Date().getTimezoneOffset()/60;
+              date.setHours(date.getHours()-currentTimeZoneOffsetInHours);
+              options.defaultValue = moment(date);
+            }else{
+              let currentTimeZoneOffsetInHours = new Date().getTimezoneOffset()/60;
+              date.setHours(date.getHours()-currentTimeZoneOffsetInHours);
+              options.defaultValue = moment(value);
+            }
+        }
           return (
             <DatePicker
               key={`${filed.key}${this.state.operator}`}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
+              {...options}
               showTime
               locale={locale}
               placeholder="请选择时间/日期"
@@ -224,16 +258,17 @@ class FilterItem extends Component {
           return (
             <Select
               key={filed.key}
+              defaultValue={value}
               mode="multiple"
               key={`${filed.key}${this.state.operator}`}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
-              {this.state.options.map((item, index) => (
+              {options.map((item, index) => (
                 <Select.Option key={index} value={item.value}>
                   {item.label}
                 </Select.Option>
@@ -245,14 +280,15 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               key={`${filed.key}${this.state.operator}`}
+              defaultValue={value}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
-              {this.state.options.map((item, index) => (
+              {options.map((item, index) => (
                 <Select.Option key={index} value={item.value}>
                   {item.label}
                 </Select.Option>
@@ -269,11 +305,12 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               mode="multiple"
+              defaultValue={value}
               key={`${filed.key}${this.state.operator}`}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               //  getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
@@ -289,10 +326,11 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               key={`${filed.key}${this.state.operator}`}
+              defaultValue={value}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
-              disabled={this.state.disabledCostomValue}
+              disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
               // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
@@ -309,14 +347,14 @@ class FilterItem extends Component {
           <Select
             key={filed.key}
             mode="multiple"
+            defaultValue={value}
             placeholder="请选择"
             style={{ width: "100%" }}
             showArrow={true}
             onChange={this.handleMulDropDown}
             key={`${filed.key}${this.state.operator}`}
-            disabled={this.state.disabledCostomValue}
+            disabled={isDisabled || this.state.disabledCostomValue}
             suffixIcon={<Icon type="caret-down" />}
-            // getPopupContainer = {triggerNode => triggerNode.parentNode}
           >
             {filed.values.map((item, index) => (
               <Select.Option key={index} value={item.value}>
@@ -330,16 +368,16 @@ class FilterItem extends Component {
           <Select
             key={filed.key}
             mode="multiple"
+            defaultValue={value}
             placeholder="请选择"
             style={{ width: "100%" }}
             showArrow={true}
             onChange={this.handleMulDropDown}
             key={`${filed.key}${this.state.operator}`}
-            disabled={this.state.disabledCostomValue}
+            disabled={isDisabled || this.state.disabledCostomValue}
             suffixIcon={<Icon type="caret-down" />}
-            // getPopupContainer = {triggerNode => triggerNode.parentNode}
           >
-            {this.state.options.map((item, index) => (
+            {options.map((item, index) => (
               <Select.Option key={index} value={item.value}>
                 {item.label}
               </Select.Option>
@@ -352,9 +390,9 @@ class FilterItem extends Component {
             placeholder="请输入值"
             key={filed.key + this.state.operator}
             style={{ width: "100%" }}
-            // value={this.props.filter.costomValue}
+            defaultValue={value}
             onChange={this.changeCostomValue}
-            disabled={this.state.disabledCostomValue}
+            disabled={isDisabled || this.state.disabledCostomValue}
           />
         );
     }
@@ -385,62 +423,34 @@ class FilterItem extends Component {
         }
       } else {
         options = filed.data.values;
-        this.setState({
-          options
-        });
+        this.props.setFilterAttr("options", options, this.props.index);
       }
     }
-    this.setState(
-      {
-        logicalOperators,
-        filed: filed
-      },
-      () => {
-        this.props.setFilterAttr("selectedFiled", value, this.props.index);
-        this.props.setFilterAttr(
-          "selectedFiledKey",
-          filed.key,
-          this.props.index
-        );
-        this.props.setFilterAttr("costomValue", "", this.props.index);
-      }
+    this.props.setFilterAttr("field", filed, this.props.index);
+    this.props.setFilterAttr("selectedFiled", value, this.props.index);
+    this.props.setFilterAttr(
+      "selectedFiledKey",
+      filed.key,
+      this.props.index
     );
+    this.props.setFilterAttr("logicalOperators",logicalOperators,this.props.index);
+    this.props.setFilterAttr("costomValue", "", this.props.index);
   };
 
   onSelectOperator = value => {
-    const operator = this.state.logicalOperators.filter(operator => {
+    const operator = this.props.filter.logicalOperators.filter(operator => {
       return operator.label === value;
     })[0];
     this.props.setFilterAttr(
       "selectedLogicalOperator",
-      operator.operator,
+      operator,
       this.props.index
     );
-    this.props.setFilterAttr("costomValue", "", this.props.index);
-    this.props.setFilterAttr("filterType", operator.type, this.props.index);
-    this.setState(
-      {
-        disabledCostomValue:
-          operator.type === "EXISTS" || operator.type === "NOT_EXISTS"
-            ? true
-            : false,
-        operator: operator.type
-      },
-      () => {
-        this._setCostomValue("");
-      }
-    );
+    // this.props.setFilterAttr("costomValue", null, this.props.index);
   };
 
   _setCostomValue = value => {
-    if (
-      this.state.operator === "EXISTS" ||
-      this.state.operator === "NOT_EXISTS"
-    ) {
-      this.props.setFilterAttr("costomValue", "emptyValue", this.props.index);
-    } else {
       this.props.setFilterAttr("costomValue", value, this.props.index);
-    }
   };
 
   changeCostomValue = e => {
@@ -454,9 +464,6 @@ class FilterItem extends Component {
     this._setCostomValue(value);
   };
 
-  changeCondition = value => {
-    this.props.setFilterAttr("connectCondition", value, this.props.index);
-  };
 
   handleAddFilter = () => {
     // 添加一行条件
@@ -472,21 +479,30 @@ class FilterItem extends Component {
       selectedFiled,
       selectedLogicalOperator,
       costomValue,
-      connectCondition
+      connectCondition,
+      selectedFiledKey,
+      logicalOperators,
+      field,
+      options
     } = this.props.filter;
     const { fileds } = this.props;
-    const { logicalOperators } = this.state;
-
+    let  isDisabled = false;
+    if(selectedLogicalOperator != void 0){
+      if(selectedLogicalOperator.type === "EXISTS" || selectedLogicalOperator.type === "NOT_EXISTS") {
+        isDisabled= true;
+      }
+    }
     return (
       <div className="filter-item">
         <Row type="flex" justify="start" gutter={[0, 19]}>
           <Col span={12}>
             <Select
+              // value={selectedFiledKey}
+              defaultValue={selectedFiledKey}
               style={{ width: "100%" }}
               placeholder="选择字段"
               onChange={this.onSelectField}
               suffixIcon={<Icon type="caret-down" />}
-              // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
               {fileds.map(component => (
                 <Option value={component.key} key={component.id}>
@@ -498,14 +514,14 @@ class FilterItem extends Component {
           <Col span={4} className="descBox">
             的值
           </Col>
-          <Col span={6} className="logicSymbol">
+          <Col span={7} className="logicSymbol">
             <Select
+              defaultValue={selectedLogicalOperator ? selectedLogicalOperator.label : null}
               style={{ width: "100%" }}
               key={this.state.filed.key}
               placeholder="运算符"
               onChange={this.onSelectOperator}
               suffixIcon={<Icon type="caret-down" />}
-              // getPopupContainer = {triggerNode => triggerNode.parentNode}
             >
               {logicalOperators.map(operator => (
                 <Option value={operator.label} key={operator.label}>
@@ -514,8 +530,8 @@ class FilterItem extends Component {
               ))}
             </Select>
           </Col>
-          <Col span={24} className="valueBox">
-            {this.renderInputByFiledType(this.state.filed)}
+          <Col span={23} className="valueBox">
+            {this.renderInputByFiledType(field, costomValue, options, isDisabled)}
           </Col>
           <Col span={24}>
             <div className="filter-action">
@@ -541,19 +557,8 @@ export default class FilterComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filterArray: [
-        {
-          selectedFiled: "",
-          selectedLogicalOperator: "",
-          costomValue: "",
-          filterType: "",
-          selectedFiledKey: "",
-          key: Math.random()
-        }
-      ],
-      isFilter: [],
-      connectCondition: "&",
-      conditionIsAll: true
+      filterArray: props.selectArray,
+      connectCondition: "&"
     };
   }
 
@@ -561,12 +566,15 @@ export default class FilterComponent extends Component {
     if (this.state.filterArray.every(this.isAllFilled)) {
       const newFilter = {
         selectedFiled: "",
-        selectedLogicalOperator: "",
+        selectedLogicalOperator: null,
+        logicalOperators: [],
         costomValue: "",
-        filterType: "",
         selectedFiledKey: "",
+        field: {type:"", key: Math.random()},
+        options: [],
         key: Math.random()
       };
+      this.props.changeFilterArray([...this.state.filterArray, newFilter]);
       this.setState({
         filterArray: [...this.state.filterArray, newFilter]
       });
@@ -575,41 +583,55 @@ export default class FilterComponent extends Component {
 
   isAllFilled = (filter, index) => {
     if (
+      index > 0 &&
       filter.costomValue.constructor === Array &&
       filter.costomValue.length === 0
     ) {
       return false;
-    }
-    if (filter.filterType == "EXISTS") {
+    } else if(index === 0 && filter.selectedFiled === ""){
       return true;
+    }
+    if(filter.selectedLogicalOperator != void 0){
+      if (filter.selectedLogicalOperator.type === "EXISTS" || filter.selectedLogicalOperator.type === "NOT_EXISTS") {
+        return true;
+      }
     }
     return (
       filter.selectedFiledKey !== "" &&
       filter.costomValue !== "" &&
-      filter.selectedLogicalOperator !== ""
+      filter.selectedLogicalOperator !== null
     );
   };
+
+  isFilterMode = (filterArray) =>{
+    if(filterArray.length === 1 && filterArray[0].selectedFiled === ""){
+      return false
+    }
+    return true;
+  }
 
   deleteFilter = index => {
     let newFilterArray = [...this.state.filterArray];
     if (newFilterArray.length > 1) {
       newFilterArray.splice(index, 1);
+      this.props.changeFilterArray(newFilterArray);
       this.setState({
         filterArray: newFilterArray
       });
-    } else if (newFilterArray.length === 1) {
-      this.props.setFilterMode(null, null, false);
+    }else{
+      const defaultFilterArray = [{
+        selectedFiled: "",
+        selectedLogicalOperator: null,
+        logicalOperators: [],
+        costomValue: "",
+        selectedFiledKey: "",
+        field: {type:"", key: Math.random()},
+        options: [],
+        key: Math.random()
+      }]
+      this.props.changeFilterArray(defaultFilterArray);
       this.setState({
-        filterArray: [
-          {
-            selectedFiled: "",
-            selectedLogicalOperator: "",
-            costomValue: "",
-            filterType: "",
-            selectedFiledKey: "",
-            key: Math.random()
-          }
-        ]
+        filterArray: defaultFilterArray
       });
     }
   };
@@ -621,21 +643,36 @@ export default class FilterComponent extends Component {
       }
       return filter;
     });
+    this.props.changeFilterArray(newFilterArray);
     this.setState({
       filterArray: newFilterArray
     });
   };
 
+  _handleDateTypeData(filterArray) {
+    return filterArray.map(filter=>{
+      if(filter.field.type === "DateInput" && filter.costomValue.indexOf("Z") !== -1){
+        let date = new Date(filter.costomValue);
+        let currentTimeZoneOffsetInHours = new Date().getTimezoneOffset()/60;
+        date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
+        filter.costomValue = new Date(date).toJSON().replace("Z","");
+        return filter
+      }
+      return filter;
+    })
+  }
+
   filterSubmitData = () => {
-    let isAllFilled = this.state.filterArray.every(this.isAllFilled);
+    let isAllFilled = this.props.selectArray.every(this.isAllFilled);
+    let isFilterMode = this.isFilterMode(this.props.selectArray);
     let ISConditionalContradiction = this.ISConditionalContradiction();
     if (isAllFilled && !ISConditionalContradiction) {
-      const filterArray = this.state.filterArray.map(filter => {
-        switch (filter.filterType) {
+      const filterArray = this._handleDateTypeData([...this.props.selectArray]).map(filter => {
+        switch (filter.selectedLogicalOperator.type) {
           case "EXISTS":
-            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator}`;
+            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}`;
           case "NOT_EXISTS":
-            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator}`;
+            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}`;
           case "EQUALS":
             return `data.${filter.selectedFiled}=${filter.costomValue}`;
           case "IN":
@@ -643,15 +680,15 @@ export default class FilterComponent extends Component {
           case "NOT_IN":
             return `data.${filter.selectedFiled}__regex=/^((?!${filter.costomValue}).)*$/`;
           case "LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           case "NOT_LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           default:
-            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
         }
       });
 
-      this.props.setFilterMode(filterArray, this.state.connectCondition, true);
+      this.props.setFilterMode(filterArray, this.props.connectCondition, isFilterMode);
     } else if (!isAllFilled) {
       message.error("请填写完整的过滤条件", 1);
     } else if (ISConditionalContradiction) {
@@ -670,8 +707,8 @@ export default class FilterComponent extends Component {
       for (let i = index + 1; i < filterArray.length; i++) {
         if (
           filter.selectedFiled === filterArray[i].selectedFiled &&
-          filter.selectedLogicalOperator ===
-            filterArray[i].selectedLogicalOperator
+          filter.selectedLogicalOperator.operator ===
+            filterArray[i].selectedLogicalOperator.operator
         ) {
           return true;
         }
@@ -684,42 +721,34 @@ export default class FilterComponent extends Component {
     return false;
   }
 
-  onChangeConditionAnd = () => {
-    this.setState({
-      connectCondition: "&",
-      conditionIsAll: true
-    });
-  };
-
-  onChangeConditionOr = () => {
-    this.setState({
-      connectCondition: "or",
-      conditionIsAll: false
-    });
-  };
 
   handleSelectCondition = value => {
+    this.props.setConnectCondition(value);
     this.setState({
       connectCondition: value
     });
   };
 
   handleClearFilter = () => {
+    const defaultFilterArray = [{
+      selectedFiled: "",
+      selectedLogicalOperator: null,
+      logicalOperators: [],
+      costomValue: "",
+      selectedFiledKey: "",
+      field: {type:"", key: Math.random()},
+      options: [],
+      key: Math.random()
+    }]
+    this.props.setFilterMode(defaultFilterArray, this.props.connectCondition, false);
+    this.props.changeFilterArray(defaultFilterArray)
     this.setState({
-      filterArray: [{
-        selectedFiled: "",
-        selectedLogicalOperator: "",
-        costomValue: "",
-        filterType: "",
-        selectedFiledKey: "",
-        key: Math.random()
-      }]
+      filterArray: defaultFilterArray
     });
   };
 
   render() {
     const fileds = this.props.fileds;
-    const { conditionIsAll } = this.state;
 
     return (
       <>
@@ -730,7 +759,7 @@ export default class FilterComponent extends Component {
         >
           <div className="filter-condition">
             <Select
-              style={{ width: "281px", height: "36px" }}
+              defaultValue={this.props.connectCondition}
               placeholder="满足所有条件"
               onChange={this.handleSelectCondition}
               className="filter-condition-option"
@@ -744,9 +773,6 @@ export default class FilterComponent extends Component {
                 满足任一条件
               </Option>
             </Select>
-            <span className="clear-btn" onClick={this.handleClearFilter}>
-              清空
-            </span>
           </div>
           <div className="line"></div>
           {/* <Row type="flex" justify="center" gutter={19}>
@@ -761,7 +787,6 @@ export default class FilterComponent extends Component {
                   filter={filter}
                   key={filter.key}
                   index={index}
-                  showMoreFilter={true}
                   fileds={fileds}
                   addFilter={this.addFilter}
                   deleteFilter={this.deleteFilter}
@@ -778,10 +803,11 @@ export default class FilterComponent extends Component {
             <Button
               type="default"
               onClick={() => {
-                this.props.clickExtendCallBack();
+                this.handleClearFilter()
+                // this.props.clickExtendCallBack();
               }}
             >
-              取消
+              清空
             </Button>
           </div>
         </div>

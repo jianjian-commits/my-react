@@ -76,34 +76,52 @@ class Apps extends React.Component {
 
   render() {
     const { appList, sysUserName, name } = this.props;
+    const appsPanelWidth = document.getElementById("appsPanel");
+    let hideApps;
+    if (appsPanelWidth) {
+      const rowAppNum = parseInt(appsPanelWidth.clientWidth / 210);
+      hideApps = Array.from(new Array(rowAppNum).keys());
+    }
     return (
       <Layout>
         <HomeHeader />
         <Content className={commonClasses.container}>
           <header className={commonClasses.header}>
-            <span style={{ fontSize: 16,color:"#333333" }}>我的应用</span>
+            <span style={{ fontSize: 16, color: "#333333" }}>我的应用</span>
           </header>
           <Content className={classes.innerMain}>
-            {getApps(appList)}
-            <Authenticate auth={TEAM_CREATE_APP}>
-              <Button
-                type="dashed"
-                icon="plus"
-                onClick={() => this.setState({ open: true })}
-              >
-                创建应用
-              </Button>
-              {appList.length < 1 && (
-                <>
-                  <NoAppImg />
-                  <p>
-                    <span>您还没有应用</span>
-                    <br />
-                    点击"创建应用"按钮，创建您的第一个应用吧
-                  </p>
-                </>
-              )}
-            </Authenticate>
+            <div id="appsPanel" className={classes.appsPanel}>
+              {getApps(appList)}
+              <Authenticate auth={TEAM_CREATE_APP}>
+                <Button
+                  type="dashed"
+                  icon="plus"
+                  onClick={() => this.setState({ open: true })}
+                >
+                  创建应用
+                </Button>
+                {appList.length < 1 && (
+                  <>
+                    <NoAppImg />
+                    <p>
+                      <span>您还没有应用</span>
+                      <br />
+                      点击"创建应用"按钮，创建您的第一个应用吧
+                    </p>
+                  </>
+                )}
+              </Authenticate>
+              {hideApps &&
+                hideApps.map((a, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      width: "180px",
+                      margin: "10px 15px 30px 15px"
+                    }}
+                  ></div>
+                ))}
+            </div>
             {appList.length < 1 && sysUserName !== name && (
               <>
                 <NoAppImg />

@@ -47,13 +47,24 @@ class FormSubmitData extends PureComponent {
       limitDataNumber: false,
       isFilterMode: false,
       filterArray: [],
+      selectArray:[{
+        selectedFiled: "",
+        selectedLogicalOperator: null,
+        logicalOperators: [],
+        costomValue: "",
+        selectedFiledKey: "",
+        field: {type:"", key: Math.random()},
+        options: [],
+        key: Math.random()
+      }],
       connectCondition: "&",
       formDataDetailId: "",
       // 是否展示筛选界面,默认为false(不展示)
       showFilterBoard: false,
       // 判断鼠标是否已经移出筛选容器,如果已经移出,则可以点击关闭;否则,反之.
       hiddenFilterBoardCanClick: true,
-      isLoading: false // 加在数据的loading标志
+      isLoading: false, // 加在数据的loading标志,
+      formDataCache:[]
     };
   }
   showformDataDetail = id => {
@@ -152,23 +163,26 @@ class FormSubmitData extends PureComponent {
 
   componentDidMount() {
     let { formId, appId } = this.props;
-    const { pageSize, currentPage } = this.state;
-    initToken()
+    const {pageSize, currentPage} = this.state;
+
+    if(this.props.searchStatus){
+      initToken()
       .then(() => {
-        this.props.getSubmissionData({
-          appId: appId,
-          formId: formId,
-          pageSize: pageSize,
-          currentPage: currentPage,
-          total: -1,
-          callback: isLoading => {
-            this.setState({ isLoading });
-          }
-        });
+        this.props.getSubmissionData({  
+          appId: appId, 
+          formId: formId, 
+          pageSize: pageSize, 
+          currentPage: currentPage, 
+          total: -1, 
+          callback: (isLoading)=>{this.setState({isLoading})}
+          });
+          
       })
       .catch(err => {
         console.error(err);
       });
+    }
+
     this.setState({ formId: this.props.formId });
     document.querySelector("html").addEventListener(
       "click",
@@ -620,7 +634,16 @@ class FormSubmitData extends PureComponent {
   };
 
   render() {
-    const { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
+    let { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
+    const { selectArray, connectCondition, isFilterMode } = this.state.filterArray;
+    
+    if(formData.length !== 0) {
+      this.setState({formDataCache:formData});
+    }
+    if(formData.length === 0 && this.state.isFilterMode === false){
+      formData = this.state.formDataCache
+    }
+    let total = this.state.formDataCache.length===0? -1:this.props.submissionDataTotal;
     const controlCol = [
       {
         title: "操作",
@@ -817,12 +840,13 @@ class FormSubmitData extends PureComponent {
       formDataShowArray.push(obj);
     });
 
+    
     const paginationProps = {
       defaultCurrent: 1,
       position: "bottom",
       showQuickJumper: true,
       pageSize: this.state.pageSize,
-      total: this.props.submissionDataTotal,
+      total: total,
       loading: this.props.loading,
       current: this.state.currentPage,
       onChange: (current, pageSize) => {
@@ -902,11 +926,9 @@ class FormSubmitData extends PureComponent {
                 isShowBackBtn={false}
                 btnValue="提交数据"
                 formId={this.props.formId}
-                clickCallback={() => {
-                  this.props.actionFun(null, true);
-                }}
-                clickExtendCallBack={this.showFilterComponent}
-                handleFilterFields={this.handleFilterFields}
+                clickCallback={()=>{this.props.actionFun(null ,true)}}
+                clickExtendCallBack = {this.showFilterComponent}
+                isFilterMode={this.state.isFilterMode}
               />
             )}
             <div
@@ -921,25 +943,24 @@ class FormSubmitData extends PureComponent {
                 formId={this.state.formId}
                 components={this.props.forms.components}
               />
-              {this.state.showFilterBoard ? (
-                <FilterComponent
-                  fileds={fileds}
-                  filterData={this.props.getFilterSubmissionData}
-                  setFilterMode={this.setFilterMode}
-                  formId={this.state.formId}
-                  currentPage={this.state.currentPage}
-                  pageSize={this.state.pageSize}
-                  clickExtendCallBack={this.showFilterComponent}
-                  canClick={() =>
-                    this.setState({ hiddenFilterBoardCanClick: true })
-                  }
-                  canNotClick={() =>
-                    this.setState({ hiddenFilterBoardCanClick: false })
-                  }
-                />
-              ) : (
-                <></>
-              )}
+              {this.state.showFilterBoard? 
+              <FilterComponent
+                fileds={fileds}
+                selectArray = {this.state.selectArray}
+                changeFilterArray = {(selectArray)=>{this.setState({selectArray: selectArray})}}
+                connectCondition={this.state.connectCondition}
+                setConnectCondition = {(connectCondition)=>{this.setState({connectCondition: connectCondition})}}
+                isFilterMode={isFilterMode}
+                filterData={this.props.getFilterSubmissionData}
+                setFilterMode={this.setFilterMode}
+                formId={this.state.formId}
+                currentPage={this.state.currentPage}
+                pageSize={this.state.pageSize}
+                clickExtendCallBack = {this.showFilterComponent}
+                canClick = {()=> this.setState({ hiddenFilterBoardCanClick: true })}
+                canNotClick = {() =>this.setState({ hiddenFilterBoardCanClick: false })}
+              />:<></>}
+              
 
               <div className="limit-data-number-container">
                 <Dropdown
