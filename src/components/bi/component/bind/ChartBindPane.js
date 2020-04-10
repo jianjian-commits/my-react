@@ -6,12 +6,14 @@ import { Types } from './Types';
 import { ChartType } from '../elements/Constant';
 import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
-import { DimDragItem, MeaDragItem } from './DragItem';
+import DragItem from './DragItem';
+import { GroupType } from "../elements/Constant";
 import { changeBind, changeChartData } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
 import { deepClone } from '../../utils/Util';
+import classes from '../../scss/bind/bindPane.module.scss';
 import { message } from 'antd';
 
 /**
@@ -25,8 +27,12 @@ const spec = {
   hover(props, monitor, component) {
     // Calculate the position of hover bar.
     const clientOffset = monitor.getClientOffset()
-    // const isOnlyThisOne = monitor.isOver({ shallow: true })
-    // const canDrop = monitor.canDrop()
+    const isOnlyThisOne = monitor.isOver({ shallow: true })
+
+    if(component.isUnavailable(monitor.getItem())) {
+      return;
+    }
+
     let rect = (ReactDOM.findDOMNode(component)).getBoundingClientRect();
     component.reOrder(clientOffset, rect);
   },
@@ -38,16 +44,17 @@ const spec = {
 
     const item = monitor.getItem();
 
-    if(!item) {
+    if(component.isUnavailable(item)) {
       return;
     }
 
     const { bindDataArr } = props;
     let isExisted = false, isDimExceed = false, isMeaExceed = false, isForbidden = false, reOrder = false;
+    const currentType = component.getType();
 
     if(bindDataArr.length != 0) {
-      let dimCount = item.bindType == Types.DIMENSION ? 1 : 0;
-      let meaCount = item.bindType == Types.MEASURE ? 1 : 0;
+      let dimCount = currentType == Types.DIMENSION ? 1 : 0;
+      let meaCount = currentType == Types.MEASURE ? 1 : 0;
       bindDataArr.forEach((each, idx) => {
         if(item.idx && (item.idx == each.idx)) {
           reOrder = true;
@@ -61,7 +68,7 @@ const spec = {
           meaCount++;
         }
 
-        if(item.fieldId && (each.fieldId == item.fieldId) && each.bindType == Types.DIMENSION) {
+        if(item.fieldId && (each.fieldId == item.fieldId) && (each.bindType == currentType) && currentType == Types.DIMENSION) {
           isExisted = true;
         }
       })
@@ -72,27 +79,25 @@ const spec = {
 
     if(!reOrder) {
       if(isExisted) {
-        isForbidden = true;
         message.warning("添加失败，同一字段不能重复添加维度！");
       }else if(isDimExceed){
-        isForbidden = true;
         message.warning("添加失败，当前暂不支持此模式！");
       }else if(isMeaExceed){
-        isForbidden = true;
         message.warning("添加失败，已超出系统限定字段数量！");
       }
+
+      isForbidden = isExisted || isDimExceed || isMeaExceed;
     }
 
-    component.processDrop(item, isForbidden);
+    component.processDrop(item, isForbidden, currentType);
   }
 }
 
-function processBind(bindDataArr, formId, changeBind, changeChartData, chartId) {
+function processBind(bindDataArr, formId, changeBind, changeChartData) {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
     const res = request(`/bi/charts/data`, {
       method: "POST",
       data: {
-        chartId,
         formId,
         dimensions,
         indexes,
@@ -135,6 +140,12 @@ class BindPane extends PureComponent {
     }
   }
 
+  componentDidUpdate() {
+    if(!this.props.isOver) {
+      this.clearSplit();
+    }
+  }
+
   render() {
     const { label, bindType, connectDropTarget } = this.props;
     const { splitIdx, splitDiv } = this.state;
@@ -145,9 +156,9 @@ class BindPane extends PureComponent {
     }
 
     return connectDropTarget(
-      <div className="bind-line" key={label} ref={(ref)=> {this.line = ref}} >
-        <div className="bind-label" ref={(ref)=>{this.labelRef = ref}}>{label}</div>
-        <div className="bind-cols">{items}</div>
+      <div className={classes.bindLine} key={label} ref={(ref)=> {this.line = ref}} >
+        <div className={classes.bindLabel} ref={(ref)=>{this.labelRef = ref}}>{label}</div>
+        <div className={classes.bindCols}>{items}</div>
       </div>
     )
   }
@@ -157,25 +168,26 @@ class BindPane extends PureComponent {
   }
 
   removeField = (item) => {
-    let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
     
     const newArr = bindDataArr.filter((each) => {
       return item.idx != each.idx;
     })
 
-    processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
+    processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
-  processDrop = (item, isForbidden) => {
+  processDrop = (item, isForbidden, bindType) => {
     if(isForbidden) {
       this.clearSplit();
       return;
     }
 
-    let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
     const { splitIdx } = this.state;
 
     if(Number.isInteger(item.idx)) {
+      // When drag to reorder
       bindDataArr = bindDataArr.filter((each) => {
         return each.idx != item.idx;
       })
@@ -183,12 +195,14 @@ class BindPane extends PureComponent {
       bindDataArr.splice(splitIdx, 0, item);
     }
     else {
+      // when drag to add
       const obj = deepClone(item);
       obj['idx'] = Date.now();
+      obj.bindType = bindType;
       bindDataArr.splice(splitIdx, 0, obj);
     }
 
-    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elementId);
+    processBind(bindDataArr, dataSource.id, changeBind, changeChartData);
     this.clearSplit();
   }
 
@@ -196,8 +210,16 @@ class BindPane extends PureComponent {
     this.setState({dragingIdx: idx});
   }
 
+  isUnavailable = (item) => {
+    if(!item) {
+      return false;
+    }
+
+    return Types.DIMENSION == this.getType() && Types.MEASURE == item.bindType;
+  }
+
   reOrder = (pos, rect) => {
-    const splitDiv = <div className="bind-split-div" key={Date.now()}/>
+    const splitDiv = <div className={classes.bindSplitDiv} key={Date.now()}/>
     const labelRect = (ReactDOM.findDOMNode(this.labelRef)).getBoundingClientRect();
     
     const diff = pos.x - rect.x - labelRect.width;
@@ -228,26 +250,24 @@ class BindPane extends PureComponent {
   }
 
   clearSplit = () => {
-    console.log("=======clearSplit======");
     this.setState({splitIdx: -1, splitDiv: null, dragingIdx: -1});
   }
 
-  changeGroup = (currentGroup, id) => {
-    let { bindDataArr, dataSource, changeBind, changeChartData, elementId } = this.props;
+  changeGroup = (currentGroup, fieldId) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
     const newArr = bindDataArr.map((each) => {
-      if(id == each.id) {
+      if(fieldId == each.fieldId) {
         each.option.currentGroup = currentGroup
       }
       
       return each;
     })
 
-    processBind(newArr, dataSource.id, changeBind, changeChartData, elementId);
+    processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
   getItems = (bindType) => {
     let { bindDataArr } = this.props;
-    const { dragingIdx } = this.state;
     bindDataArr = bindDataArr || [];
     let cls = "bind-child-" + bindType;
     const components = [];
@@ -256,13 +276,23 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (each, idx) => {
         if(each.bindType == bindType && bindType == Types.DIMENSION) {
-          components.push(<DimDragItem ref={(ref) => { this.childRefs[idx] = ref}} item={{...each, removeField: this.removeField,
-            className: cls}} Child={FieldDimension} key={each.id + "_" + idx} processBegin={this.processBegin}/>)
+          components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref}} item={{...each, removeField: this.removeField,
+            className: cls}} Child={FieldDimension} key={each.fieldId + "_" + idx} processBegin={this.processBegin}/>)
         }
 
         if(each.bindType == bindType && bindType == Types.MEASURE) {
-          components.push(<MeaDragItem ref={(ref) => { this.childRefs[idx] = ref }} item={{...each, removeField: this.removeField,
-            changeGroup: this.changeGroup, className: cls}} Child={FieldMeasureSelect} key={each.id + "_" + idx}
+          let selectIndex = 0;
+
+          for(let key in GroupType) {
+            if(key == each.option.currentGroup.value) {
+              break;
+            }
+
+            selectIndex++;
+          }
+
+          components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref }} item={{...each, removeField: this.removeField,
+            changeGroup: this.changeGroup, className: cls, selectIndex}} Child={FieldMeasureSelect} key={each.fieldId + "_" + idx}
             processBegin={this.processBegin}/>)
         }
       }
@@ -272,32 +302,27 @@ class BindPane extends PureComponent {
   }
 }
 
-const MeaDropBindPane = DropTarget(
-  Types.MEASURE,
-  spec,
-  collect,
-)(BindPane)
-
-const DimDropBindPane = DropTarget(
-  Types.DIMENSION,
+const DropBindPane = DropTarget(
+  Types.BIND,
   spec,
   collect,
 )(BindPane)
 
 const ChartBindPane = (props)=> {
-  const { dashboardId, elementId } = useParams();
+  const { dashboardId } = useParams();
 
     return (
-      <div className="bind-pane">
-        <DimDropBindPane {...props} bindType={Types.DIMENSION} dashboardId={dashboardId} elementId={elementId} label="维度" />
-        <MeaDropBindPane {...props} bindType={Types.MEASURE} dashboardId={dashboardId} elementId={elementId} label="指标"/>
+      <div className={classes.bindPane}>
+        <DropBindPane {...props} bindType={Types.DIMENSION} dashboardId={dashboardId} label="维度" />
+        <DropBindPane {...props} bindType={Types.MEASURE} dashboardId={dashboardId} label="指标"/>
       </div>
     )
 }
 
 export default connect(store => ({
   bindDataArr: store.bi.bindDataArr,
-  dataSource: store.bi.dataSource}), {
+  dataSource: store.bi.dataSource,
+   chartType: store.bi.chartType}), {
   changeBind,
   changeChartData
 })(ChartBindPane);

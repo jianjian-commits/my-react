@@ -1,5 +1,6 @@
 export const ChartType = {
-  HISTOGRAM: "HISTOGRAM"
+  HISTOGRAM: "HISTOGRAM",
+  
 }
 
 export const GroupType = {

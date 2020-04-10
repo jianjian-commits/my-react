@@ -4,6 +4,8 @@ import { Icon, Button } from "antd";
 import { setDashboards } from '../../redux/action';
 import request from '../../utils/request';
 import { useParams, useHistory } from "react-router-dom";
+import { Input } from 'antd';
+import classes from '../../scss/dashboard/header.module.scss';
 
 const DBHeader = props => {
   const history = useHistory();
@@ -40,14 +42,14 @@ const DBHeader = props => {
 
   const value = (dashboards && dashboards.length > 0) ? dashboards[0].name : null;
   return (
-    <div className="biHeader">
-      <div className="headerBarBack">
+    <div className={classes.biHeader}>
+      <div className={classes.headerBarBack}>
         <Button onClick={handleBack} type="link">
           <Icon type="arrow-left"/>
         </Button>
       </div>
-      <input className="rename-db" value={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
-      {/* <Button onClick={saveDB} className="db-header-save" type="link">
+      <input className={classes.renameDB} value={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
+      {/* <Button onClick={saveDB} className={classes.dbHeaderSave} type="link">
         保 存
       </Button> */}
     </div>

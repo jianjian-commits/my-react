@@ -29,7 +29,7 @@ function DataListModal(props) {
   const [choiceFormId, setChoiceFormId] = useState("");
   const [choiceFormName, setChoiceFormName] = useState("");
   const history = useHistory();
-  const { appId, dashboardId } = useParams();
+  const { appId, dashboardId, elementId } = useParams();
 
   const _getFormChoice = (id, name) => {
     setChoiceFormId(id);
@@ -50,6 +50,7 @@ function DataListModal(props) {
           const data = res.data;
           const view = data.view;
           const elementId = view.id;
+
           props.setDataSource({
             id: choiceFormId,
             name: choiceFormName,
@@ -60,7 +61,7 @@ function DataListModal(props) {
         }
       },
       () => {
-        message.error("创建图标失败");
+        message.error("创建图表失败");
       }
     );
   };
@@ -86,10 +87,19 @@ function DataListModal(props) {
       setChangeVisible(false);
     },
     handleOK: e => {
-      newChart();
+      // newChart();
       props.handleOK();
       props.clearBind();
       setChangeVisible(false);
+
+      request(`/bi/forms/${choiceFormId}`).then((res) => {
+        if(res && res.msg === "success") {
+          const data = res.data;
+          props.setDataSource({id: data.formId, name: data.formName, data: data.items});
+          // history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
+          props.setDBMode(DBMode.Editing);
+        }
+      })
     }
   };
 

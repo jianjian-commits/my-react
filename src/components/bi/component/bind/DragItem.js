@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { DragSource } from 'react-dnd';
 import {Types} from './Types';
-import { Icon } from "antd";
 
 const spec = {
   // Necessary, return the pure javascript object that can be operated by monitor -- monitor.getItem().
@@ -41,18 +40,9 @@ class DragItemComp extends PureComponent {
   }
 }
 
-const DimDragItem = DragSource(Types.DIMENSION, spec, (connect, monitor) => {
+export default DragSource(Types.BIND, spec, (connect, monitor) => {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
   }
 })(DragItemComp)
-
-const MeaDragItem = DragSource(Types.MEASURE, spec, (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging(),
-  }
-})(DragItemComp)
-
-export {DimDragItem, MeaDragItem}

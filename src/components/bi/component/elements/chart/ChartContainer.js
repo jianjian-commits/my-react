@@ -12,13 +12,16 @@ import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
 import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards } from '../../../redux/action';
 import {message} from "antd";
+import { deepClone } from '../../../utils/Util';
+import ChartInfo from '../data/ChartInfo';
+import classes from '../../../scss/elements/chart.module.scss';
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
-    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo  } = props;
+    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
-  const chartOption = chartData ? getOption(chartData, chartInfo) : {};
+  const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo) : {};
   const chart = <Chart chartOption={chartOption} />;
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
   const elements =
@@ -52,7 +55,7 @@ const ChartContainer = props => {
 
               if(dimensions && dimensions.length > 0) {
                 const dimArr = dimensions.map((each, idx) => {
-                  const field = each.field;
+                  let field = each.field;
                   field["option"] = {currentGroup: each.currentGroup}
                   field["bindType"] = Types.DIMENSION;
                   field["idx"] = idx;
@@ -64,10 +67,12 @@ const ChartContainer = props => {
 
               if(indexes && indexes.length > 0) {
                 const meaArr = indexes.map((each, idx) => {
-                  const field = each.field;
-                  field["option"] = {currentGroup: each.currentGroup}
+                  const field = deepClone(each.field);
+                  const currentGroup = deepClone(each.currentGroup);
+                  field["option"] = {currentGroup};
                   field["bindType"] = Types.MEASURE;
                   field["idx"] = bindDataArr.length + idx;
+                  field["ddddd"] = {aaa: "ddddd"};
                   return field;
                 })
 
@@ -75,11 +80,10 @@ const ChartContainer = props => {
               }
 
               changeBind(bindDataArr);
-              changeChartInfo(chartInfo);
+              changeChartInfo(chartInfo || new ChartInfo());
               request(`/bi/charts/data`, {
                 method: "POST",
                 data: {
-                  chartId,
                   formId,
                   dimensions,
                   indexes,
@@ -141,7 +145,7 @@ const ChartContainer = props => {
 
   if (!chartData) {
     return (
-      <div className="chart-container" style={style} onMouseEnter={handlMouseEnter}
+      <div className={classes.chartContainer} style={style} onMouseEnter={handlMouseEnter}
         onMouseLeave={handlMouseLeave}>
         {btnVisible && (
           <ChartToolbarBtn
@@ -157,12 +161,12 @@ const ChartContainer = props => {
 
   return (
     <div
-      className="chart-container"
+      className={classes.chartContainer}
       onMouseEnter={handlMouseEnter}
       onMouseLeave={handlMouseLeave}
       style={style}
     >
-      <div className="chart-title">{name}</div>
+      <div className={classes.chartTitle}>{name}</div>
       {btnVisible && (
         <ChartToolbarBtn
           {...props}

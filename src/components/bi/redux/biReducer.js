@@ -13,13 +13,14 @@ import {
   CLEAR_BIND,
   SET_DB_MODE,
   SAVE_CHART_CHANGE,
+  SET_ELEM_TYPE
 } from "./action";
 
 import { DBMode } from '../component/dashboard/Constant';
 import ChartInfo from '../component/elements/data/ChartInfo';
 
 const initState = {
-  type: 'bar',
+  chartType: 'bar',
   dbName: "",
   elemName: "",
   formDataArr: [],
@@ -59,7 +60,7 @@ export default function biReducer(state = initState, action) {
         bindDataArr: action.bindDataArr, 
         dataSource: action.dataSource,
         chartData: action.chartData,
-        chartInfo: action.chartInfo,
+        chartInfo: new ChartInfo(),
         isChartEdited:false,
       };
     }

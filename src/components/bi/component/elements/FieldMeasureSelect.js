@@ -4,19 +4,19 @@ import { GroupType } from "./Constant";
 import classNames from "classnames";
 const operationArr = [
   { ...GroupType.SUM },
-  { ...GroupType.AVERAGE },
+  { ...GroupType.COUNT},
+  { ...GroupType.AVERAGE},
   { ...GroupType.MAX },
-  { ...GroupType.MIN },
-  { ...GroupType.COUNT }
+  { ...GroupType.MIN }
 ];
 export default function FieldMeasureSelect(props) {
-  const [selectIndex, setSelectIndex] = useState(0);
+  const [selectIndex, setSelectIndex] = useState(props.item.selectIndex);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [btnVisible,setBtnVisible] = useState(false);
   useEffect(() => {
     const dropDownEvent = event => {
       const e = event || window.event;
-      const btn = document.getElementById("dropDownBtn" + props.item.id);
+      const btn = document.getElementById("dropDownBtn" + props.item.fieldId);
       if (
         e.srcElement.parentElement &&
         !e.srcElement.parentElement.isSameNode(btn) &&
@@ -33,7 +33,7 @@ export default function FieldMeasureSelect(props) {
   }, []);
 
   const getSelectOperation = value => {
-    props.item.changeGroup(value, props.item.id);
+    props.item.changeGroup(value, props.item.fieldId);
   };
 
   const handleDeleteTarget = () => {
@@ -56,7 +56,7 @@ export default function FieldMeasureSelect(props) {
         className="dropDownBtn"
         onMouseEnter={handlMouseEnter} 
         onMouseLeave={handlMouseLeave}
-        id={"dropDownBtn" + props.item.id}
+        id={"dropDownBtn" + props.item.fieldId}
         onClick={e => {
           e.stopPropagation();
           setPopoverVisible(!popoverVisible);
@@ -69,7 +69,7 @@ export default function FieldMeasureSelect(props) {
         {btnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>
       {popoverVisible && (
-        <div className="dropDownItemContainer" id={"dropDown" + props.item.id}>
+        <div className="dropDownItemContainer" id={"dropDown" + props.item.fieldId}>
           {operationArr.map((operation, index) => (
             <div
               className={classNames("dropDownItem", {

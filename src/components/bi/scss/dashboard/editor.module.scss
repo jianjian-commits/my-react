@@ -1,0 +1,14 @@
+.dbPlaceholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.layoutColumn {
+  display: flex;
+}
+
+.dbEditor {
+  overflow-y: scroll;
+}

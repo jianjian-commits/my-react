@@ -6,9 +6,10 @@ import ChartInfo from "../elements/data/ChartInfo";
 import { changeChartInfo } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import classNames from "classnames";
+import classes from '../../scss/bind/rightPane.module.scss';
 
 const RightPane = (props) => {
-  const { chartInfo, bindDataArr, elemName, changeChartInfo } = props;
+  const { chartInfo, bindDataArr, elemName, changeChartInfo, dataSource } = props;
   const { elementId } = useParams();
   let [activeIcon, setActiveIcon] = useState("bar-chart");
   let [titleXAxis, setTitleXAxis] = useState(chartInfo.titleXAxis);
@@ -57,8 +58,8 @@ const RightPane = (props) => {
 
   const updateChartInfo = (chartInfo) => {
     chartInfo = chartInfo || getChartInfo();
-    updateChartReq(elementId, bindDataArr, elemName || "新建图表", {...chartInfo});
-    changeChartInfo(chartInfo);
+    updateChartReq(elementId, dataSource.id, bindDataArr, elemName || "新建图表", {...chartInfo});
+    changeChartInfo(chartInfo || new ChartInfo());
   }
 
   const chartGroup = [
@@ -66,14 +67,14 @@ const RightPane = (props) => {
   ]
 
   return (
-    <div className="right-pane">
-      <div className="right-pane-chart">
+    <div className={classes.rightPane}>
+      <div className={classes.rightPaneChart}>
         <span>可视化</span>
-        <div className="chart-group">
+        <div className={classes.chartGroup}>
         {chartGroup.map(chart =>
         <Tooltip key={chart.type}  title={chart.intro}>
           <div
-            className={classNames("IconBox", {activeIcon: activeIcon==chart.type})}
+            className={classNames(classes.IconBox, {activeIcon: activeIcon==chart.type})}
             onClick={()=>{handleSelectIcon(chart.type)}}
           >
             <img src={"/image/davinci/"+chart.type+".svg"}/>
@@ -82,13 +83,13 @@ const RightPane = (props) => {
         )}
         </div>
       </div>
-      <div className="right-pane-tools">
+      <div className={classes.rightPaneTools}>
         <span className="title">工具栏</span>
         <p>X轴标题</p>
         <Input value={titleXAxis} onBlur={(e) => {updateChartInfo()}} onChange={onChangeTitleXAxis}/>
         <p>Y轴标题</p>
         <Input value={titleYAxis} onBlur={(e) => {updateChartInfo()}} onChange={onChangeTitleYAxis}/>
-        <div className="checkboxGroup">
+        <div className={classes.checkboxGroup}>
           <Checkbox checked={showDataTag} onClick={onChangeShowDataTag}>显示数据标签</Checkbox>
           <Checkbox checked={showLegend} onClick={onChangeShowLegend}>显示图例</Checkbox>
         </div>
@@ -101,6 +102,7 @@ export default connect((store) => {
   return {
     chartInfo: store.bi.chartInfo,
     bindDataArr: store.bi.bindDataArr,
-    elemName: store.bi.elemName
+    elemName: store.bi.elemName,
+    dataSource: store.bi.dataSource
   }
 }, { changeChartInfo })(RightPane)

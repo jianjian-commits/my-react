@@ -1,16 +1,14 @@
-.element-header {
+.biHeader {
   height: 50px;
-  line-height: 50px;
   background-color: #2B81FF;
-  color: #fff;
 
   .ant-btn {
     height: 50px;
   }
 }
 
-.element-header-back {
-  height: 30px;
+.headerBarBack {
+  height: 50px;
   width: 2%;
   display: inline-flex;
   align-items: center;
@@ -19,38 +17,27 @@
     margin-left: 10px;
     font-size: 14px;
     font-weight: 500;
-    color: rgb(250, 251, 252);
+    // color: rgba(86, 92, 110, 1);
+    color: #FFFFFF
   }
   .ant-btn {
     padding: 0px;
   }
 }
 
-.rename-element {
+.renameDB {
   display: inline;
   border: none;
   margin-left: 10px;
   background-color: transparent;
-  color: #FFFFFF;
+  color: #FFFFFF
 }
 
-.element-header-save {
+.dbHeaderSave {
   float: right;
   margin-right: 15px;
-  span {
-    background-color: #fff;
-    color: rgb(38, 163, 240);
-    width: 60px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 6%;
-  }
-}
 
-.element-blank {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+  span {
+    color: white;
+  }
 }

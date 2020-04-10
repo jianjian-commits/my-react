@@ -6,11 +6,12 @@ import { updateChartReq, setDB } from '../../utils/ReqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
 import SaveTipModal from "../elements/modal/saveTipModal";
+import classes from '../../scss/elements/element.module.scss';
 
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode,saveChartChange ,isChartEdited} = props;
+  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited, dataSource} = props;
   let [name, setName] = useState("新建图表");
 
   const handleBack = () => {
@@ -21,7 +22,7 @@ const EditorHeader = props => {
   }
 
   const handleSave = (name) => {
-    updateChartReq(elementId, bindDataArr, name, chartInfo);
+    updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo);
     setDB(dashboardId, setDashboards);
     saveChartChange();
   }
@@ -54,15 +55,15 @@ const EditorHeader = props => {
   };
 
   return (
-    <div className="element-header">
+    <div className={classes.elementHeader}>
       <SaveTipModal {...modalProps}/>
-      <div className="element-header-back">
+      <div className={classes.elementHeaderBack}>
         <Button onClick={isChartEdited ? modalProps.showModal : handleBack} type="link">
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
-      <input className="rename-element" defaultValue={elemName ? elemName: "新建图表"} onBlur={onBlur}/>
-      <Button onClick={()=> {handleSave(name)}} className="element-header-save" type="link">
+      <input className={classes.renameElement} defaultValue={elemName ? elemName: "新建图表"} onBlur={onBlur}/>
+      <Button onClick={()=> {handleSave(name)}} className={classes.elementHeaderSave} type="link">
         保 存
       </Button>
     </div>
@@ -74,7 +75,8 @@ export default connect(
     elemName: store.bi.elemName,
     bindDataArr: store.bi.bindDataArr,
     isChartEdited:store.bi.isChartEdited,
-    chartInfo: store.bi.chartInfo
+    chartInfo: store.bi.chartInfo,
+    dataSource: store.bi.dataSource
   }),
   { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange}
 )(EditorHeader);
