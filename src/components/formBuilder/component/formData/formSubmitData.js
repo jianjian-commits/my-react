@@ -50,10 +50,9 @@ class FormSubmitData extends PureComponent {
       filterArray: [],
       selectArray:[{
         selectedFiled: "",
-        selectedLogicalOperator: "",
+        selectedLogicalOperator: null,
         logicalOperators: [],
         costomValue: "",
-        filterType: "",
         selectedFiledKey: "",
         field: {type:"", key: Math.random()},
         options: [],
@@ -613,7 +612,7 @@ class FormSubmitData extends PureComponent {
     if(formData.length !== 0) {
       this.setState({formDataCache:formData});
     }
-    if(formData.length === 0){
+    if(formData.length === 0 && this.state.isFilterMode === false){
       formData = this.state.formDataCache
     }
     let total = this.state.formDataCache.length===0? -1:this.props.submissionDataTotal;
@@ -911,7 +910,7 @@ class FormSubmitData extends PureComponent {
                 fileds={fileds}
                 selectArray = {this.state.selectArray}
                 changeFilterArray = {(selectArray)=>{this.setState({selectArray: selectArray})}}
-                connectCondition={connectCondition}
+                connectCondition={this.state.connectCondition}
                 setConnectCondition = {(connectCondition)=>{this.setState({connectCondition: connectCondition})}}
                 isFilterMode={isFilterMode}
                 filterData={this.props.getFilterSubmissionData}

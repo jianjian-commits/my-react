@@ -38,7 +38,7 @@ export default class IdCardInput extends React.Component {
                     <>
                         <ComponentHeader {...this.props} active={this.props.active} />
                         <div className="form-group">
-                            <input {...props}/>
+                            <input {...props} style={{ minHeight: "34px",width:"405px" }}/>
                         </div>
                     </>
                 }
