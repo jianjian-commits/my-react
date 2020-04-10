@@ -8,6 +8,6 @@ services:
     build:
       context: .
       args:
-        REACT_APP_HOST_IP: $REACT_APP_HOST_IP
+        - REACT_APP_HOST_IP
     ports:
       - ${PORT:-9030}:80
