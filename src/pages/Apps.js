@@ -57,14 +57,9 @@ class Apps extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  componentDidUpdate() {
-    const { allCompany, getAllCompany, getAppList, appList } = this.props;
-    if (allCompany && allCompany.length > 0) {
-      if (appList.length) return false;
-      getAppList();
-    } else {
-      getAllCompany();
-    }
+  componentDidMount() {
+    const { allCompany, getAppList } = this.props;
+    if (allCompany && allCompany.length > 0) getAppList();
   }
 
   // 完成新建
@@ -138,6 +133,7 @@ class Apps extends React.Component {
             res => {
               if (res && res.status === "SUCCESS") {
                 getAllCompany();
+                getAppList();
               } else {
                 message.error(res.msg || "创建公司失败");
               }
@@ -146,7 +142,7 @@ class Apps extends React.Component {
           );
         }
       });
-      initAllDetail()
+      initAllDetail();
       this.setState({ noCompanyModalOpen: false });
     };
     if (!allCompany || allCompany.length === 0)
