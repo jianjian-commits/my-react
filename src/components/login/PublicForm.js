@@ -9,20 +9,37 @@ export default Form.create({ name: "login-form" })(function PublicForm({
   params = {},
   marginBottom,
   setActiveKey,
-  history
+  history,
+  loginType
 }) {
   const { getFieldDecorator, validateFields, getFieldError } = form;
   const handleSubmit = e => {
     e.preventDefault();
-    validateFields((err, { actionType, verificationCode, ...rest }) => {
-      if (!err) {
-        func({
-          token: params.token ? params.token : null,
-          rest,
-          history
-        });
+    validateFields(
+      (
+        err,
+        { loginPasswordSubmit, loginPhoneSubmit, resetPasswordSubmit, ...rest }
+      ) => {
+        const newRest = loginPhoneSubmit
+          ? { username: rest.mobilePhone, code: rest.code }
+          : resetPasswordSubmit
+          ? {
+              mobilePhone: rest.mobilePhone,
+              newPassword: rest.password,
+              code: rest.code
+            }
+          : rest;
+          // if (!err && resetPasswordSubmit)
+        if (!err) {
+          func({
+            token: params.token ? params.token : null,
+            rest: newRest,
+            history,
+            loginType
+          });
+        }
       }
-    });
+    );
   };
   return (
     <Form onSubmit={e => handleSubmit(e)}>
@@ -30,6 +47,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
         const formItem =
           p.key === "submit" && params.token
             ? formItems[p.key]({
+                ...p,
                 form,
                 payload: "joinCompany",
                 itemName: p.itemName,
@@ -40,6 +58,7 @@ export default Form.create({ name: "login-form" })(function PublicForm({
                 ...params
               })
             : formItems[p.key]({
+                ...p,
                 form,
                 payload: p.value,
                 itemName: p.itemName,
@@ -72,7 +91,11 @@ export default Form.create({ name: "login-form" })(function PublicForm({
                 </div>
               ) : (
                 <span
-                  style={{ display: "block", height: helpText ? "32px" : 0 , lineHeight: "32px"}}
+                  style={{
+                    display: "block",
+                    height: helpText ? "32px" : 0,
+                    lineHeight: "32px"
+                  }}
                 >
                   {helpText}
                 </span>
