@@ -18,7 +18,7 @@ const reSetPassword = async ({ code, ...rest }) => {
     if (res && res.status === "SUCCESS") {
       history.push("/");
     } else {
-      message.error(res.msg || "账号密码信息不匹配,请重试");
+      message.error(res.msg || "密码重置失败");
     }
   } catch (err) {
     catchError(err);
