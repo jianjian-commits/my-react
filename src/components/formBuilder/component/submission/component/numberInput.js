@@ -11,11 +11,17 @@ import {
 } from "../utils/dataLinkUtils";
 
 class NumberInput extends React.Component {
-
+  constructor(props){
+    super(props);
+    this.state = {
+      step: "1"
+    }
+  }
 
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
     const { data } = item;
+    const { limitPoint, isLimitPoint } = this.props.item.validate
     if (data && data.type === "DataLinkage") {
       const {
         conditionId,
@@ -64,6 +70,17 @@ class NumberInput extends React.Component {
         });
       });
     }
+    if(isLimitPoint){
+      let newStep = (this.state.step / (Math.pow(10,limitPoint+1))).toString()
+      this.setState({
+        step:newStep
+      })
+    }else{
+      let newStep = (this.state.step / (Math.pow(10,1))).toString()
+      this.setState({
+        step:newStep
+      })
+    }
   }
 
   handleEmitChange = (value) => {
@@ -76,6 +93,7 @@ class NumberInput extends React.Component {
   }
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = ev => {
+    ev.preventDefault();
     const value = Number(ev.target.value);
     this.handleEmitChange(value);
     this.props.resetErrorMsg(this.props.item.id);
@@ -89,8 +107,11 @@ class NumberInput extends React.Component {
   };
 
   checkNumber = (rule, value, callback) => {
+    console.log(rule)
     const validateMax = this.props.item.validate.max;
     const validateMin = this.props.item.validate.min;
+    const validatePoint = this.props.item.validate.limitPoint;
+    const newNumberStr = ( value.split("."))[1];
     let defaultErrMsg = '';
     if(this.props.item.validate.isLimitLength){
       if (validateMax !== Number.MAX_VALUE && validateMin !== -Number.MAX_VALUE) {
@@ -101,15 +122,26 @@ class NumberInput extends React.Component {
         defaultErrMsg = `请输入大于或等于${validateMin}的数字`;
       }
     }
-
+    // if(this.props.item.validate.isLimitPoint){
+    //       if(validatePoint !== 0){
+    //         defaultErrMsg = `请输入小于或等于${validatePoint}位的数字`;
+    //       }
+    // }
     if (value === "") {
       callback();
-    } else if (this.props.item.validate.isLimitLength && (validateMax !== null && validateMax < Number(value)) || (validateMin !== null && validateMin > Number(value))) {
+    } else if ((this.props.item.validate.isLimitLength && (validateMax !== null && validateMax < Number(value)) || (validateMin !== null && validateMin > Number(value)))||(this.props.item.validate.isLimitPoint && (newNumberStr !== undefined))) {
+      
       let errMsg = this.props.item.validate.customMessage;
+      console.log(newNumberStr,validatePoint)
+      if(newNumberStr.length > validatePoint ){
+        defaultErrMsg = `请输入小数点后小于或等于${validatePoint}位的数字`;
+      }
+      defaultErrMsg = defaultErrMsg === ''? null : defaultErrMsg; 
       isStringValid(errMsg) ? callback(errMsg) : callback(defaultErrMsg);
-    } else {
+    } else{
       callback();
     }
+    
   };
   
   render() {
@@ -143,7 +175,7 @@ class NumberInput extends React.Component {
             }
           ],
           validateTrigger:"onBlur"
-        })(<Input type="number" disabled={disabled} autoComplete="off" onChange={this.handleChange} />)}
+        })(<Input type="number" disabled={disabled} autoComplete="off" onChange={this.handleChange} step={ this.state.step }/>)}
       </Form.Item>
     );
   }

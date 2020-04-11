@@ -128,8 +128,10 @@ export const basicComponentsArray = [
       required: false,
       customMessage: "",
       isLimitLength: false,
+      isLimitPoint:false,
       max: Number.MAX_VALUE,
-      min: -Number.MAX_VALUE
+      min: -Number.MAX_VALUE,
+      limitPoint:0
     },
     data: {
       type: 'custom'
