@@ -319,7 +319,6 @@ const buttonConfirm = (
     // }, timeOut);
   };
   sendCode(phone, codeType).then(res => {
-    console.log(1111111111111);
     if (res) {
       setTime({
         sended: true,
@@ -345,7 +344,6 @@ const verificationCode = ({
   const verificationCodeButtonRef = React.createRef();
   const phone = getFieldValue("mobilePhone");
   const err = getFieldError("mobilePhone") || [];
-  console.log(phone, err, phone && !err);
   return {
     itemName: "code",
     options: {
