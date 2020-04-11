@@ -1,8 +1,7 @@
 import { message } from "antd";
 import request from "../utils/request";
-import { getAppList } from "./appReducer";
+import { getAppList, clearAppList } from "./appReducer";
 // import { history } from "./index";
-import { clearAppList } from "./appReducer";
 import { catchError } from "../utils";
 
 export const initialState = {
@@ -305,6 +304,9 @@ export default function loginReducer(state = initialState, { type, payload }) {
 }
 
 export const loginMiddleware = store => next => action => {
+  if (action.type === FETCH_CURRENT_COMPANY) {
+    store.dispatch(getAppList());
+  }
   if (action.type === SIGN_OUT_SUCCESS) {
     store.dispatch(clearAppList());
   }
