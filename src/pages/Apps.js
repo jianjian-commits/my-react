@@ -13,7 +13,7 @@ import { catchError } from "../utils";
 import classes from "../styles/apps.module.scss";
 import { NoAppImg, NoCompany } from "../assets/images";
 import { CloseIcon } from "../assets/icons/header";
-import { getAllCompany, initAllDetail } from "../store/loginReducer";
+import { initAllDetail } from "../store/loginReducer";
 
 const { Content } = Layout;
 const { Meta } = Card;
@@ -96,7 +96,6 @@ class Apps extends React.Component {
       name,
       form,
       allCompany,
-      getAllCompany,
       initAllDetail
     } = this.props;
     const { getFieldDecorator, validateFields } = form;
@@ -132,8 +131,7 @@ class Apps extends React.Component {
           }).then(
             res => {
               if (res && res.status === "SUCCESS") {
-                getAllCompany();
-                getAppList();
+                initAllDetail();
               } else {
                 message.error(res.msg || "创建公司失败");
               }
@@ -142,7 +140,6 @@ class Apps extends React.Component {
           );
         }
       });
-      initAllDetail();
       this.setState({ noCompanyModalOpen: false });
     };
     if (!allCompany || allCompany.length === 0)
@@ -220,14 +217,9 @@ class Apps extends React.Component {
                   创建应用
                 </Button>
                 {appList.length < 1 && (
-                  <>
+                  <div className={classes.noApp}>
                     <NoAppImg />
-                    <p>
-                      <span>您还没有应用</span>
-                      <br />
-                      点击"创建应用"按钮，创建您的第一个应用吧
-                    </p>
-                  </>
+                  </div>
                 )}
               </Authenticate>
               {hideApps &&
@@ -270,7 +262,6 @@ export default Form.create({ name: "createCompany-form" })(
     }),
     {
       getAppList,
-      getAllCompany,
       initAllDetail
     }
   )(Apps)
