@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button as Btn, Icon } from "antd";
+import { Input as Inp, Button as Btn, Icon, message } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
 import { catchError } from "../../utils";
@@ -46,22 +46,26 @@ class Button extends React.Component {
 }
 
 // 发送验证码
-// async function sendVerificationCode(mobilePhone) {
-//   if (!mobilePhone) return false;
-//   try {
-//     const res = await request(`/yanzhengma${mobilePhone}`);
-//     if (res && res.status === "SUCCESS") {
-//       return true;
-//     } else {
-//       message.error(res.msg || "验证码获取失败");
-//     }
-//   } catch (err) {
-//     message.error(
-//       (err.response && err.response.data && err.response.data.msg) || "系统错误"
-//     );
-//     return false;
-//   }
-// }
+async function sendCode(mobilePhone, codeType) {
+  if (!mobilePhone) return false;
+  try {
+    const res = await request("/code", {
+      method: "post",
+      data: {
+        codeType,
+        mobilePhone
+      }
+    });
+    if (res && res.status === "SUCCESS") {
+      return true;
+    } else {
+      message.error(res.msg || "验证码获取失败");
+    }
+  } catch (err) {
+    catchError(err);
+    return false;
+  }
+}
 
 //  rules校验规则
 const required = msg => ({ required: true, message: msg });
@@ -184,9 +188,7 @@ const password = ({
   itemName: itemName,
   options: {
     validateTrigger: "onBlur",
-    rules: [required("该项为必填"), whitespace(), 
-    // requireCharAndNum()
-  ]
+    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
   },
   component: (
     <Input
@@ -280,50 +282,69 @@ const confirmPassWord = ({
   };
 };
 
-const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
+const buttonConfirm = (
+  verificationCodeButtonRef,
+  verificationCodeSpanRef,
+  phone,
+  codeType
+) => {
+  const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
+    // if (
+    //   verificationCodeButtonRef.current &&
+    //   verificationCodeButtonRef.current.buttonNode
+    // )
+    //   verificationCodeButtonRef.current.buttonNode.disabled = true;
+    // if (verificationCodeSpanRef.current && verificationCodeSpanRef.current)
+    //   verificationCodeSpanRef.current.innerHTML = sended
+    //     ? `验证码已发送，如未收到请在${initNum}s后重试`
+    //     : `验证码发送失败，请在${initNum}s后重试`;
+    // let num = initNum - 1;
+    // const int = setInterval(() => {
+    //   if (verificationCodeSpanRef.current)
+    //     verificationCodeSpanRef.current.innerHTML = sended
+    //       ? `验证码已发送，如未收到请在${num}s后重试`
+    //       : `验证码发送失败，请在${num}s后重试`;
+    //   num = num - 1;
+    // }, timeTerval);
+    // setTimeout(() => {
+    //   window.clearInterval(int);
+    //   if (
+    //     verificationCodeButtonRef.current &&
+    //     verificationCodeButtonRef.current.buttonNode
+    //   )
+    //     verificationCodeButtonRef.current.buttonNode.disabled = false;
+    //   if (verificationCodeSpanRef.current)
+    //     verificationCodeSpanRef.current.innerHTML = "";
+    //   num = initNum - 1;
+    // }, timeOut);
+  };
+  sendCode(phone, codeType).then(res => {
+    if (res) {
+      setTime({
+        sended: true,
+        initNum: 60,
+        timeOut: 60000
+      });
+    } else {
+      setTime({ sended: false, initNum: 6, timeOut: 6000 });
+    }
+  });
+};
+
+const verificationCode = ({
+  form,
+  payload,
+  icon,
+  unprefix,
+  hasFeedback,
+  codeType
+}) => {
   const { getFieldValue } = form;
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
   const phone = getFieldValue("mobilePhone");
-  // const buttonConfirm = () => {
-  //   const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
-  //     if (verificationCodeButtonRef.current)
-  //       verificationCodeButtonRef.current.buttonNode.disabled = true;
-  //     if (verificationCodeSpanRef.current)
-  //       verificationCodeSpanRef.current.innerHTML = sended
-  //         ? `验证码已发送，如未收到请在${initNum}s后重试`
-  //         : `验证码发送失败，请在${initNum}s后重试`;
-  //     let num = initNum - 1;
-  //     const int = setInterval(() => {
-  //       if (verificationCodeSpanRef.current)
-  //         verificationCodeSpanRef.current.innerHTML = sended
-  //           ? `验证码已发送，如未收到请在${num}s后重试`
-  //           : `验证码发送失败，请在${num}s后重试`;
-  //       num = num - 1;
-  //     }, timeTerval);
-  //     setTimeout(() => {
-  //       window.clearInterval(int);
-  //       if (verificationCodeButtonRef.current)
-  //         verificationCodeButtonRef.current.buttonNode.disabled = false;
-  //       if (verificationCodeSpanRef.current)
-  //         verificationCodeSpanRef.current.innerHTML = "";
-  //       num = initNum - 1;
-  //     }, timeOut);
-  //   };
-  //   sendVerificationCode(phone).then(res => {
-  //     if (res) {
-  //       setTime({
-  //         sended: true,
-  //         initNum: 60,
-  //         timeOut: 60000
-  //       });
-  //     } else {
-  //       setTime({ sended: false, initNum: 6, timeOut: 6000 });
-  //     }
-  //   });
-  // };
   return {
-    itemName: "verificationCode",
+    itemName: "code",
     options: {
       validateTrigger: "onBlur",
       rules: [required("该项为必填"), whitespace()]
@@ -345,8 +366,17 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
           <Button
             ref={verificationCodeButtonRef}
             disabled={null}
-            onClick={null}
-            // onClick={phone ? buttonConfirm : null}
+            onClick={
+              phone
+                ? () =>
+                    buttonConfirm(
+                      verificationCodeSpanRef,
+                      verificationCodeButtonRef,
+                      phone,
+                      codeType
+                    )
+                : null
+            }
             style={{
               height: "42px",
               borderRadius: "6px",
@@ -374,6 +404,7 @@ const verificationCode = ({ form, payload, icon, unprefix, hasFeedback }) => {
 };
 
 const mobilePhone = ({ form, payload, icon, unprefix, hasFeedback }) => {
+  console.log(payload)
   return {
     itemName: "mobilePhone",
     options: {
@@ -574,16 +605,21 @@ export const loginPasswordParameter = [
 ];
 export const loginPhoneParameter = [
   { key: "mobilePhone", value: "login", itemName: "mobilePhone" },
-  { key: "verificationCode", value: null, itemName: "verificationCode" },
+  {
+    key: "verificationCode",
+    value: null,
+    itemName: "verificationCode",
+    codeType: "LOGIN"
+  },
   { key: "submit", value: "login", itemName: "loginPhoneSubmit" }
 ];
 export const loginForgetPasswordParameter = [
   {
     help: "forgetPassword",
-    key: "username",
-    value: null,
-    itemName: "username",
-    label: "用户名",
+    key: "mobilePhone",
+    value: "login",
+    itemName: "mobilePhone",
+    label: "手机号",
     hasFeedback: true,
     colon: false,
     icon: true
@@ -596,7 +632,8 @@ export const loginForgetPasswordParameter = [
     label: "验证码",
     hasFeedback: true,
     colon: false,
-    icon: true
+    icon: true,
+    codeType: "RESET"
   },
   {
     help: "forgetPassword",
@@ -649,7 +686,8 @@ export const registerParameter = [
     hasFeedback: true,
     colon: false,
     // icon: true
-    unprefix: true
+    unprefix: true,
+    codeType: "REGISTER"
   },
   {
     help: "register",

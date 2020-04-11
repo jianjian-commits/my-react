@@ -192,12 +192,12 @@ export const initAllDetail = () => async dispatch => {
 };
 
 //登录用户
-export const loginUser = ({ token, rest, history }) => async dispatch => {
+export const loginUser = ({ token, rest, history, loginType }) => async dispatch => {
   await dispatch(startLogin());
   try {
     const res = await request(token ? `/login?token=${token}` : "/login", {
       method: "post",
-      data: { loginType: "PASSWORD", ...rest }
+      data: { loginType: loginType, ...rest }
     });
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("id_token", 1);

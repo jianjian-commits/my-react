@@ -15,6 +15,7 @@ export default connect(() => ({}), {
           parameter={loginForgetPasswordParameter}
           func={loginUser}
           marginBottom={24}
+          loginType={"RESET"}
         />
       </div>
     </div>

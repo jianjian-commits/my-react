@@ -65,6 +65,7 @@ function Signin({ setActiveKey, params, loginUser, history }) {
               marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
+              loginType={"PASSWORD"}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -86,6 +87,7 @@ function Signin({ setActiveKey, params, loginUser, history }) {
               marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
+              loginType={"CODE"}
             />
           </Tabs.TabPane>
         </Tabs>
@@ -105,7 +107,8 @@ export default connect(
 )(function Login({ loginUser, isLoading, history, isAuthenticated }) {
   const { userId, companyId, token, active, inviter, invitedCompany } =
     history.location.query || {};
-  const params = userId && companyId && token ? { userId, companyId, token } : {};
+  const params =
+    userId && companyId && token ? { userId, companyId, token } : {};
   const query = inviter && invitedCompany ? { inviter, invitedCompany } : {};
   const [activeKey, setActiveKey] = useState(active || "initSignin");
   if (!history.location.query && isAuthenticated) return <Redirect to="/" />;
