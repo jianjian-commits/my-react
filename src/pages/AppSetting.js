@@ -18,7 +18,7 @@ import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 
 import { setDashboards } from '../components/bi/redux/action';
-import { setDB, getDashboardAll } from '../components/bi/utils/ReqUtil';
+import { setDB, getDashboardAll } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -50,7 +50,7 @@ const AppSetting = props => {
   const [ isDeleteOne, setIsDeleteOne ] = React.useState(false)
 
   let { groups, list, searchList } = mockForms;
-  let { dbGroup,dbList,dbSearchList } = dashboards;
+  let { dbGroup,dbList } = dashboards;
   useEffect(() => {
     let newList = [];
     let { id, name } = props.userDetail;
@@ -153,7 +153,7 @@ const AppSetting = props => {
   };
 
   const createDashboard = () => {
-    const res = request("/bi/dashboards", {
+    request("/bi/dashboards", {
       method: "POST",
       data: {name: "新建仪表盘", appId}, 
       warning: "创建报表失败"
@@ -465,7 +465,7 @@ const AppSetting = props => {
 export default connect(
   ({ app, login }) => ({
     appList: app.appList,
-    teamId: login.currentTeam && login.currentTeam.id,
+    teamId: login.currentCompany && login.currentCompany.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     userDetail: login.userDetail
   }),
