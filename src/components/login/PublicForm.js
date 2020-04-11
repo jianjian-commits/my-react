@@ -10,7 +10,8 @@ export default Form.create({ name: "login-form" })(function PublicForm({
   marginBottom,
   setActiveKey,
   history,
-  loginType
+  loginType,
+  reSetPassword
 }) {
   const { getFieldDecorator, validateFields, getFieldError } = form;
   const handleSubmit = e => {
@@ -25,11 +26,11 @@ export default Form.create({ name: "login-form" })(function PublicForm({
           : resetPasswordSubmit
           ? {
               mobilePhone: rest.mobilePhone,
-              newPassword: rest.password,
+              newPassWord: rest.password,
               code: rest.code
             }
           : rest;
-          // if (!err && resetPasswordSubmit)
+        if (!err && resetPasswordSubmit) return reSetPassword(newRest);
         if (!err) {
           func({
             token: params.token ? params.token : null,

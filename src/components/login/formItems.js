@@ -343,7 +343,6 @@ const verificationCode = ({ form, payload, icon }) => {
 };
 
 const mobilePhone = ({ form, payload, icon }) => {
-  console.log(payload);
   return {
     itemName: "mobilePhone",
     options: {
@@ -501,7 +500,6 @@ const userDetailModalSubmit = ({
   const filled = values.filter(f => f);
   const allowClickButton =
     values.length === filled.length && touched ? true : false;
-  console.log(values, filled, allowClickButton, isFieldsTouched());
   return {
     itemName: "userDetailModalSubmit",
     options: {
