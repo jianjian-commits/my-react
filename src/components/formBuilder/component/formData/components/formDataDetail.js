@@ -543,7 +543,7 @@ export default connect(
     extraProp: store.formSubmitData.extraProp,
     taskData: store.formSubmitData.taskData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
-    teamId: login.currentTeam && login.currentTeam.id,
+    teamId: login.currentCompany && login.currentCompany.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     approveListCount: forms.approveListCount,
     userDetail: login.userDetail

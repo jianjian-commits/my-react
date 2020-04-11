@@ -57,9 +57,10 @@ class Apps extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  componentDidMount() {
-    const { allCompany, getAllCompany, getAppList } = this.props;
+  componentDidUpdate() {
+    const { allCompany, getAllCompany, getAppList, appList } = this.props;
     if (allCompany && allCompany.length > 0) {
+      if (appList.length) return false;
       getAppList();
     } else {
       getAllCompany();

@@ -465,7 +465,7 @@ const AppSetting = props => {
 export default connect(
   ({ app, login }) => ({
     appList: app.appList,
-    teamId: login.currentTeam && login.currentTeam.id,
+    teamId: login.currentCompany && login.currentCompany.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     userDetail: login.userDetail
   }),
