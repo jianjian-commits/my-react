@@ -365,7 +365,7 @@ const verificationCode = ({
         unprefix={unprefix}
         addonAfter={
           <Button
-            ref={verificationCodeButtonRef}
+            ref={button => verificationCodeButtonRef.current = button}
             disabled={null}
             onClick={
               err.length === 0
@@ -393,7 +393,7 @@ const verificationCode = ({
     ),
     additionComponent: (
       <span
-        ref={verificationCodeSpanRef}
+        ref={span => verificationCodeSpanRef.current = span}
         style={{
           position: "absolute",
           right: 0,
