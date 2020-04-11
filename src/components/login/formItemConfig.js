@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Input as Inp, Button as Btn, Icon, message } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
-import { catchError } from "../../utils";
+import { catchError, throttle } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 
@@ -319,6 +319,7 @@ const buttonConfirm = (
     // }, timeOut);
   };
   sendCode(phone, codeType).then(res => {
+    console.log(1111111111111);
     if (res) {
       setTime({
         sended: true,
@@ -339,10 +340,12 @@ const verificationCode = ({
   hasFeedback,
   codeType
 }) => {
-  const { getFieldValue } = form;
+  const { getFieldValue, getFieldError } = form;
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
   const phone = getFieldValue("mobilePhone");
+  const err = getFieldError("mobilePhone") || [];
+  console.log(phone, err, phone && !err);
   return {
     itemName: "code",
     options: {
@@ -367,14 +370,14 @@ const verificationCode = ({
             ref={verificationCodeButtonRef}
             disabled={null}
             onClick={
-              phone
-                ? () =>
+              err.length === 0
+                ? throttle(() =>
                     buttonConfirm(
                       verificationCodeSpanRef,
                       verificationCodeButtonRef,
                       phone,
                       codeType
-                    )
+                    ), 6000)
                 : null
             }
             style={{
@@ -404,7 +407,6 @@ const verificationCode = ({
 };
 
 const mobilePhone = ({ form, payload, icon, unprefix, hasFeedback }) => {
-  console.log(payload)
   return {
     itemName: "mobilePhone",
     options: {
