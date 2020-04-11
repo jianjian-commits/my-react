@@ -24,11 +24,12 @@ export default Form.create({ name: "login-form" })(function PublicForm({
           ? { username: rest.mobilePhone, code: rest.code }
           : resetPasswordSubmit
           ? {
-              username: rest.mobilePhone,
+              mobilePhone: rest.mobilePhone,
               newPassword: rest.password,
               code: rest.code
             }
           : rest;
+          // if (!err && resetPasswordSubmit)
         if (!err) {
           func({
             token: params.token ? params.token : null,
