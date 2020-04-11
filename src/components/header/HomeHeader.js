@@ -10,7 +10,7 @@ import {
   ArrowLeftIcon
   // , PromptIcon
 } from "../../assets/icons/header";
-import { TeamManageIcon } from "../../assets/icons/teams";
+import { CompanyManageIcon } from "../../assets/icons/company";
 import { getTransactList } from "../../store/loginReducer";
 
 const { Header } = Layout;
@@ -89,7 +89,7 @@ export default connect(
     hides = {
       logo: false,
       menu: false,
-      teamManage: false,
+      companyManage: false,
       backArrow: "init",
       backUrl: null
     },
@@ -158,7 +158,7 @@ export default connect(
             </Authenticate>
           </div>
           <div className={classes.operations}>
-            <Authenticate auth={TEAM_MANAGEMENT_ABLE} hide={hides.teamManage}>
+            <Authenticate auth={TEAM_MANAGEMENT_ABLE} hide={hides.companyManage}>
               <Button
                 type="link"
                 // ghost
@@ -166,7 +166,7 @@ export default connect(
                 onClick={toTeamMangement}
               >
                 <div style={ghostButtonContent}>
-                  <TeamManageIcon
+                  <CompanyManageIcon
                     style={{
                       marginRight: "5px",
                       stroke: "#2A7FFF",
@@ -174,7 +174,7 @@ export default connect(
                       fill: "#fff"
                     }}
                   />
-                  团队管理
+                  公司管理
                 </div>
               </Button>
             </Authenticate>

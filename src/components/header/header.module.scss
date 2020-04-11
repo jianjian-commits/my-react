@@ -192,9 +192,8 @@
   & > div {
     position: absolute;
     top: 6vw;
-    background: #ffffff;
     width: 1000px;
-    height: 306px;
+    // height: 406px;
     & > div {
       display: flex;
       justify-content: center;
@@ -209,6 +208,7 @@
     }
     & > ul {
       list-style-type: none;
+      background: #ffffff;
       & > li {
         display: flex;
         align-items: center;
@@ -239,6 +239,9 @@
           }
         }
       }
+      & > li:first-child {
+        border-top: none;
+      }
     }
   }
 }
@@ -248,7 +251,7 @@
     & input {
       width: 371px;
       height: 40px;
-      border: 1px solid #d6d8de;
+      // border: 1px solid #d6d8de;
       box-sizing: border-box;
       border-radius: 6px;
     }

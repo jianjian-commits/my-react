@@ -38,7 +38,7 @@ const DraggableList = ({
     if(!pathname.includes("/detail")){
       setIsShowOperate( true )
     }
-  },[])
+  },[pathname])
 
   return (
     <Menu {...props} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
