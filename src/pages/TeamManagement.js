@@ -98,6 +98,6 @@ const TeamManagement = props => {
 
 export default connect(({ login, debug }) => ({
   permissions: (login.userDetail && login.userDetail.permissions) || [],
-  teamId: login.currentTeam && login.currentTeam.id,
+  teamId: login.currentCompany && login.currentCompany.id,
   debug: debug.isOpen
 }))(TeamManagement);

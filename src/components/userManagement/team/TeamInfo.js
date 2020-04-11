@@ -147,6 +147,6 @@ export default connect(
       </div>
     </div>
   ) : (
-    <Spin size="large" />
-  );
+      <Spin size="large" />
+    );
 });

@@ -1,0 +1,31 @@
+.bindPane {
+  border: 10px solid transparent;
+}
+
+.bindLine {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  border-style: dotted;
+  border-color: #adb5bd;
+  border-width: thin;
+  margin-top: 5px;
+}
+
+.bindCols {
+  display: flex;
+  flex-wrap: wrap;
+}
+.bindLabel {
+  width: 60px;
+  padding-left: 10px;
+  min-height: 30px;
+  max-height: 70px;
+  line-height: 30px;
+}
+
+.bindSplitDiv {
+  height: 30px;
+  background-color: #00c59f;
+  width: 3px;
+}

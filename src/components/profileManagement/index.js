@@ -296,5 +296,5 @@ class ProfileManagement extends React.Component {
 }
 export default connect(({ login }) => ({
   userId: login.userDetail.id,
-  teamId: login.currentTeam.id
+  teamId: login.currentCompany.id
 }))(ProfileManagement);

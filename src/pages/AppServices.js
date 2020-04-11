@@ -121,7 +121,7 @@ export default connect(
   ({ app, login, debug, formBuilder }) => ({
     appList: app.appList,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
-    teamId: login.currentTeam && login.currentTeam.id,
+    teamId: login.currentCompany && login.currentCompany.id,
     debug: debug.isOpen,
     name: formBuilder.name
   }),

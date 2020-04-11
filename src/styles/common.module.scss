@@ -27,6 +27,7 @@
 }
 
 .menu {
+
   &:global(.ant-menu-item-selected) {
     ::before {
       border-left: 4px solid #1890ff;
