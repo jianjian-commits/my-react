@@ -288,33 +288,30 @@ const buttonConfirm = (
   phone,
   codeType
 ) => {
+  // const button = verificationCodeButtonRef.current;
+  // const span = verificationCodeSpanRef.current;
   const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
-    // if (
-    //   verificationCodeButtonRef.current &&
-    //   verificationCodeButtonRef.current.buttonNode
-    // )
-    //   verificationCodeButtonRef.current.buttonNode.disabled = true;
-    // if (verificationCodeSpanRef.current && verificationCodeSpanRef.current)
-    //   verificationCodeSpanRef.current.innerHTML = sended
+    // if (button) {
+    //   button.disabled = true;
+    //   button.style.opacity = 0.5;
+    // }
+    // if (span)
+    //   span.innerHTML = sended
     //     ? `验证码已发送，如未收到请在${initNum}s后重试`
     //     : `验证码发送失败，请在${initNum}s后重试`;
     // let num = initNum - 1;
     // const int = setInterval(() => {
-    //   if (verificationCodeSpanRef.current)
-    //     verificationCodeSpanRef.current.innerHTML = sended
+    //   if (span)
+    //     span.innerHTML = sended
     //       ? `验证码已发送，如未收到请在${num}s后重试`
     //       : `验证码发送失败，请在${num}s后重试`;
     //   num = num - 1;
     // }, timeTerval);
     // setTimeout(() => {
     //   window.clearInterval(int);
-    //   if (
-    //     verificationCodeButtonRef.current &&
-    //     verificationCodeButtonRef.current.buttonNode
-    //   )
-    //     verificationCodeButtonRef.current.buttonNode.disabled = false;
-    //   if (verificationCodeSpanRef.current)
-    //     verificationCodeSpanRef.current.innerHTML = "";
+    //   if (button) button.disabled = false;
+    //   button.style.opacity = 1;
+    //   if (span) span.innerHTML = "";
     //   num = initNum - 1;
     // }, timeOut);
   };
@@ -365,17 +362,20 @@ const verificationCode = ({
         unprefix={unprefix}
         addonAfter={
           <Button
-            ref={button => verificationCodeButtonRef.current = button}
+            ref={button => (verificationCodeButtonRef.current = button)}
             disabled={null}
             onClick={
-              err.length === 0
-                ? throttle(() =>
-                    buttonConfirm(
-                      verificationCodeSpanRef,
-                      verificationCodeButtonRef,
-                      phone,
-                      codeType
-                    ), 6000)
+              err.length === 0 && phone
+                ? throttle(
+                    () =>
+                      buttonConfirm(
+                        verificationCodeButtonRef,
+                        verificationCodeSpanRef,
+                        phone,
+                        codeType
+                      ),
+                    6000
+                  )
                 : null
             }
             style={{
@@ -393,7 +393,7 @@ const verificationCode = ({
     ),
     additionComponent: (
       <span
-        ref={span => verificationCodeSpanRef.current = span}
+        ref={span => (verificationCodeSpanRef.current = span)}
         style={{
           position: "absolute",
           right: 0,
