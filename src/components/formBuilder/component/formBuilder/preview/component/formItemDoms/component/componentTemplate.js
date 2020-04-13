@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Modal, Select, Checkbox, Icon } from "antd";
-import locationUtils from "../../../../../../utils/locationUtils";
+import { getDataFromUrl } from "../../../../../../utils/locationUtils";
 import ID from "../../../../../../utils/UUID";
 
 const { Option } = Select;
@@ -26,7 +26,7 @@ class ComponentTemplate extends Component {
   }
 
   componentDidMount() {
-    const formId = locationUtils.getUrlParamObj().id;
+    const formId = getDataFromUrl("formId");
     // 过滤自身表单
     const forms = this.props.forms.filter(form => form.id !== formId);
     this.setState({
@@ -57,11 +57,12 @@ class ComponentTemplate extends Component {
 
   insertTmpComponentToForm = (component, indexInArray, e) => {
     const { editModeOn, insertCard, index } = this.props;
+    const { forms, formIndex } = this.state;
     let newData = JSON.parse(JSON.stringify(component));
     let key = ID.oldUuid();
     newData.isSetAPIName = false;
     newData.id = key;
-    newData.key = "";
+    newData.key = `${forms[formIndex].path}-${component.key}`;
     newData.layout.i = key;
     newData.layout.y = 0;
     insertCard(newData, index + indexInArray);

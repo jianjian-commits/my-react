@@ -25,7 +25,7 @@ const authMappings = {
 };
 export default connect(({ login, debug }) => ({
   permissions: (login.userDetail && login.userDetail.permissions) || [],
-  teamId: login.currentTeam && login.currentTeam.id,
+  teamId: login.currentCompany && login.currentCompany.id,
   debug: debug.isOpen
 }))(({ debug, permissions, teamId }) => {
   const { url } = useRouteMatch();

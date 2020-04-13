@@ -1,0 +1,72 @@
+.leftPane {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  font-family: Noto Sans SC;
+  font-style: normal;
+  font-weight: normal;
+}
+
+.leftPaneData {
+  height: 20%;
+  border: 1px solid #adb5bd;
+  border-bottom: none;
+  padding: 0 14px;
+}
+
+.leftPaneDimension {
+  height: 40%;
+  border: 1px solid #babfc5;
+  border-top: 1px dashed #adb5bd;
+  border-bottom: none;
+}
+
+.leftPaneMeasure {
+  height: 40%;
+  border: 1px solid #adb5bd;
+  border-top: 1px dashed #adb5bd;
+}
+
+.bindItem {
+  height: 20px;
+  margin: 10px 14px;
+  overflow: hidden;
+}
+
+.bindItem:hover {
+  background-color: lightgreen;
+}
+
+.dataIcon {
+  margin-right: 10px;
+}
+
+.dataBox {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.changeDataSource {
+  cursor: pointer;
+  color: #2b81ff;
+}
+
+.dataSourceName {
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+.dataSourceName:hover {
+  background-color: lightblue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.colTitle {
+  // text-align: center;
+  list-style: none;
+  margin: 20px 14px;
+  font-size: 16px;
+  color: gray;
+}

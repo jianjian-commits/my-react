@@ -65,6 +65,7 @@ function Signin({ setActiveKey, params, loginUser, history }) {
               marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
+              loginType={"PASSWORD"}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -86,6 +87,7 @@ function Signin({ setActiveKey, params, loginUser, history }) {
               marginBottom={0}
               setActiveKey={setActiveKey}
               history={history}
+              loginType={"CODE"}
             />
           </Tabs.TabPane>
         </Tabs>
@@ -103,13 +105,13 @@ export default connect(
     loginUser
   }
 )(function Login({ loginUser, isLoading, history, isAuthenticated }) {
-  const { userId, teamId, token, active, inviter, invitedTeam } =
+  const { userId, companyId, token, active, inviter, invitedCompany } =
     history.location.query || {};
-  const params = userId && teamId && token ? { userId, teamId, token } : {};
-  const query = inviter && invitedTeam ? { inviter, invitedTeam } : {};
+  const params =
+    userId && companyId && token ? { userId, companyId, token } : {};
+  const query = inviter && invitedCompany ? { inviter, invitedCompany } : {};
   const [activeKey, setActiveKey] = useState(active || "initSignin");
   if (!history.location.query && isAuthenticated) return <Redirect to="/" />;
-
   return (
     <Loading spinning={isLoading}>
       <div className={Styles.background}>

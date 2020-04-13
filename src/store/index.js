@@ -9,6 +9,7 @@ import surveyReducer from "../components/formBuilder/component/submission/redux/
 import homeReducer from "../components/formBuilder/component/homePage/redux/reducer";
 import formSubmitDataReducer from "../components/formBuilder/component/formData/redux/reducer";
 import formBuilderReducer from "../components/formBuilder/component/formBuilder/redux/reducer";
+import biReducer from "../components/bi/redux/biReducer";
 import login, { loginMiddleware } from "./loginReducer";
 import app from "./appReducer";
 import debug from "./debugReducer";
@@ -33,6 +34,7 @@ const reducers = history =>
     survey: surveyReducer,
     formBuilder: formBuilderReducer,
     rootData: rootReducer,
+    bi: biReducer,
     router: connectRouter(history)
   });
 

@@ -2,7 +2,8 @@
   position: relative;
   min-height: calc(100vh - 50px);
   width: 1680px;
-  background-color: #f0f2f5;appearance: none;
+  background-color: #f0f2f5;
+  appearance: none;
 
   .header {
     padding: 20px 40px;
@@ -263,13 +264,13 @@
     height: 46px !important;
     line-height: 46px !important;
     width: 59px;
-    &:hover{
-      background-color: #E7F0FF;
+    &:hover {
+      background-color: #e7f0ff;
     }
     svg {
-      width:100%;
-      margin:0 auto;
-      margin-top:12px;
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 12px;
     }
   }
   :global(.ant-menu-item) {
@@ -283,7 +284,7 @@
       top: 0;
       bottom: 0;
     }
-    background-color:#DDEAFF !important;
+    background-color: #ddeaff !important;
     svg {
       g,
       polyline,
@@ -335,8 +336,14 @@
   }
 }
 
-.appsPanel{
+.appsPanel {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.noApp {
+  position: absolute;
+  top: 371px;
+  left: calc((100% - 530px)/2);
 }
