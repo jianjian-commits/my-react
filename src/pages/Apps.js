@@ -21,7 +21,7 @@ const { Meta } = Card;
 const checkCompanyName = async (rule, value, callback) => {
   if (!value) return callback();
   try {
-    const res = await request(`/company/companyName/${value}/check`);
+    const res = await request(`/company/companyName/check?name=${value}`);
     if (res && res.data === false) return callback("该公司名已被注册");
   } catch (err) {
     catchError(err);
