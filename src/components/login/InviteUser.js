@@ -7,36 +7,36 @@ import { catchError } from "../../utils";
 import registerStyles from "./style/login.module.scss";
 
 export default connect()(function InviteUser({ match, history }) {
-  const { userId, teamId, token } = match.params;
+  const { userId, companyId, token } = match.params;
   const initialState = {
     userId,
-    teamId,
+    companyId,
     token,
     //邀请人信息
     inviter: null,
-    invitedTeam: null,
+    invitedCompany: null,
     currentUserDetail: null,
     spinning: true,
-    alreadyAddTeam: false,
+    alreadyAddCompany: false,
     init: false
   };
   const [state, setState] = useState(initialState);
   if (!state.init) {
-    request(`/team/invitedToken/${token}`).then(
+    request(`/company/invitedToken/${token}`).then(
       r => {
         if (r && r.status === "SUCCESS") {
           request(`/sysUser/current`).then(
             res => {
               if (res && res.status === "SUCCESS") {
-                request(`/team/currentSysUser/all`).then(resu => {
+                request(`/company/currentSysUser/all`).then(resu => {
                   if (resu && resu.status === "SUCCESS") {
                     setState({
                       ...state,
                       init: true,
                       inviter: r.data.userName,
-                      invitedTeam: r.data.teamName,
+                      invitedCompany: r.data.companyName,
                       currentUserDetail: res.data,
-                      currentUserTeamDetail: resu.data,
+                      currentUserCompanyDetail: resu.data,
                       spinning: false
                     });
                   } else {
@@ -44,7 +44,7 @@ export default connect()(function InviteUser({ match, history }) {
                       ...state,
                       init: true,
                       inviter: r.data.userName,
-                      invitedTeam: r.data.teamName,
+                      invitedCompany: r.data.companyName,
                       currentUserDetail: res.data,
                       spinning: false
                     });
@@ -65,7 +65,7 @@ export default connect()(function InviteUser({ match, history }) {
                 ...state,
                 init: true,
                 inviter: r.data.userName,
-                invitedTeam: r.data.teamName,
+                invitedCompany: r.data.companyName,
                 spinning: false
               })
           );
@@ -74,7 +74,7 @@ export default connect()(function InviteUser({ match, history }) {
             ...state,
             init: true,
             inviter: r.data.userName,
-            invitedTeam: r.data.teamName,
+            invitedCompany: r.data.companyName,
             spinning: false
           });
         }
@@ -84,38 +84,38 @@ export default connect()(function InviteUser({ match, history }) {
   }
   const {
     inviter,
-    invitedTeam,
+    invitedCompany,
     currentUserDetail,
     spinning,
-    alreadyAddTeam,
+    alreadyAddCompany,
     init
   } = state;
 
-  //点击当前按钮加入团队
-  const handleCurrentUserAddTeam = () => {
-    request(`/sysUser/${currentUserDetail.id}/team`, {
+  //点击当前按钮加入公司
+  const handleCurrentUserAddCompany = () => {
+    request(`/sysUser/${currentUserDetail.id}/company`, {
       method: "post",
       data: {
-        newTeamId: teamId
+        newCompanyId: companyId
       }
     }).then(
       res => {
         if (res && res.status === "SUCCESS") {
-          message.success(`团队加入成功`);
+          message.success(`加入成功`);
           history.push("/");
         } else {
-          setState({ ...state, alreadyAddTeam: true });
+          setState({ ...state, alreadyAddCompany: true });
         }
       },
       err => {
         if (err.response && err.response.data && err.response.data.msg)
-          setState({ ...state, alreadyAddTeam: true });
+          setState({ ...state, alreadyAddCompany: true });
       }
     );
   };
 
   //点击注册账号加入
-  const handleRegisterAddTeam = () => {
+  const handleRegisterAddCompany = () => {
     history.push({
       pathname: `/login`,
       query: { ...state, active: "initRegister" }
@@ -123,7 +123,7 @@ export default connect()(function InviteUser({ match, history }) {
   };
 
   //点击其他账号加入
-  const handleLoginAddTeam = () => {
+  const handleLoginAddCompany = () => {
     history.push({
       pathname: `/login`,
       query: { ...state, active: "initSignin" }
@@ -142,20 +142,20 @@ export default connect()(function InviteUser({ match, history }) {
       <Loading spinning={spinning}>
         <div className={registerStyles.inviteUser}>
           <div>
-            {!alreadyAddTeam ? (
+            {!alreadyAddCompany ? (
               <>
                 <div className={registerStyles.normal}>
                   <div>
                     <span>
                       {inviter}邀请您加入-
-                      <BlueFont>{invitedTeam}</BlueFont>
+                      <BlueFont>{invitedCompany}</BlueFont>
                     </span>
                   </div>
                   <div>
                     {currentUserDetail && (
                       <>
                         <div>
-                          <Button onClick={handleCurrentUserAddTeam}>
+                          <Button onClick={handleCurrentUserAddCompany}>
                             当前账号:
                             <span style={{ color: "#73F7FF" }}>
                               {currentUserDetail.name}
@@ -166,12 +166,14 @@ export default connect()(function InviteUser({ match, history }) {
                       </>
                     )}
                     <div>
-                      <Button onClick={handleRegisterAddTeam}>
+                      <Button onClick={handleRegisterAddCompany}>
                         注册账号加入
                       </Button>
                     </div>
                     <div>
-                      <Button onClick={handleLoginAddTeam}>其他账号加入</Button>
+                      <Button onClick={handleLoginAddCompany}>
+                        其他账号加入
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -186,7 +188,7 @@ export default connect()(function InviteUser({ match, history }) {
                   </div>
                   <div>
                     <span>
-                      已经加入团队：<BlackFont>{invitedTeam}</BlackFont>
+                      已经加入公司：<BlackFont>{invitedCompany}</BlackFont>
                     </span>
                   </div>
                   <div>

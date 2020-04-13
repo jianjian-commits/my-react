@@ -370,7 +370,7 @@ $unHoverGray: #b6b6ba;
   }
   & > span > span:last-child {
     border: none;
-    padding: 0 0 0 11px;
+    padding: 0 0 0 14px;
     background-color: inherit;
   }
 }
@@ -413,28 +413,22 @@ $unHoverGray: #b6b6ba;
       height: 328px;
       & > div {
         display: flex;
+        & input {
+          width: 308px;
+          height: 40px;
+          border: 1px solid #d6d8de;
+          box-sizing: border-box;
+          border-radius: 6px;
+        }
         & > div:first-child {
           width: 81px;
         }
       }
       & > div:first-child {
-        & .input {
-          & > span {
-            width: 0;
-            & > svg {
-              width: 0;
-            }
-          }
-          & > input {
-            padding: 4px 11px;
-          }
-        }
-      }
-      & .input {
         & input {
-          width: 308px;
+          width: 260px;
           height: 40px;
-          border: 1px solid #d6d8de;
+          // border: 1px solid #d6d8de; 
           box-sizing: border-box;
           border-radius: 6px;
         }
@@ -448,6 +442,7 @@ $unHoverGray: #b6b6ba;
         & button {
           width: 104px;
           padding-left: 14px;
+          height: 40px !important;
           background: #1890ff !important;
           opacity: 0.5;
         }
@@ -456,7 +451,7 @@ $unHoverGray: #b6b6ba;
         & input {
           width: 308px;
           height: 40px;
-          border: 1px solid #d6d8de;
+          // border: 1px solid #d6d8de;
           box-sizing: border-box;
           border-radius: 6px;
         }
@@ -517,7 +512,7 @@ $unHoverGray: #b6b6ba;
     margin-left: 10px !important;
     color: #ffffff !important;
     background: #2a7fff !important;
-    opacity: 0.5 ;
+    opacity: 0.5;
   }
 }
 
@@ -529,7 +524,7 @@ $unHoverGray: #b6b6ba;
     width: 100%;
     text-align: center;
     padding: 0;
-    color: #777F97;
+    color: #777f97;
   }
   & > div:first-child {
     margin-bottom: 14.41px;

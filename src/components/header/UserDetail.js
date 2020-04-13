@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import { Modal, Form } from "antd";
 import { updateUserDetail } from "../../store/loginReducer";
 import HomeHeader from "./HomeHeader";
-import { userDetailParameter, formItems } from "../login/formItemConfig";
+import {
+  userDetailParameter,
+  formItems
+} from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
 import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
@@ -21,13 +24,14 @@ const Mete = {
 export default Form.create({ name: "reset-form" })(
   connect(
     ({ login }) => ({
-      userDetail: login.userDetail
+      userDetail: login.userDetail,
+      currentCompany: login.currentCompany
     }),
     {
       updateUserDetail
     }
   )(function UserDetail(props) {
-    const { userDetail, updateUserDetail, form } = props;
+    const { userDetail, updateUserDetail, form, currentCompany } = props;
     const {
       validateFields,
       getFieldDecorator,
@@ -72,7 +76,7 @@ export default Form.create({ name: "reset-form" })(
         key: "所在企业",
         value: "companyName",
         meter: "resetCompanyName",
-        render: meter => render(meter),
+        render: () => {},
         redit: true
       },
       {
@@ -82,6 +86,8 @@ export default Form.create({ name: "reset-form" })(
         render: meter => render(meter),
         redit: true
       },
+      { key: "职位", value: "position", render: () => {}, redit: false },
+      { key: "分组", value: "group", render: () => {}, redit: false },
       { key: "邮箱", value: "email", render: () => {}, redit: false },
       {
         key: "手机",
@@ -98,12 +104,11 @@ export default Form.create({ name: "reset-form" })(
         redit: false
       }
     ];
-    const [rest0, ...rest] = resetUser;
+    // const [rest0, ...rest] = resetUser;
     const handleSubmit = e => {
       e.preventDefault();
       validateFields((err, { actionType, verificationCode, ...rest }) => {
         if (!err) {
-          console.log("Received values of form: ", rest);
           updateUserDetail(rest).then(() => {
             setModalMeter(initModalMeter);
           });
@@ -119,7 +124,7 @@ export default Form.create({ name: "reset-form" })(
               <span>个人信息</span>
             </div>
             <ul>
-              <li>
+              {/* <li>
                 <span>{rest0.key}</span>
                 <span>
                   {userDetail[rest0.value]}
@@ -127,14 +132,16 @@ export default Form.create({ name: "reset-form" })(
                     {rest0.render(rest0.meter)}
                   </span>
                 </span>
-              </li>
-              {rest.map(r => {
+              </li> */}
+              {resetUser.map(r => {
                 return (
                   <li key={r.value}>
                     <span>{r.key}</span>
                     <span>
                       {r.value === "oldPassWord"
                         ? "********"
+                        : r.value === "companyName"
+                        ? currentCompany.companyName
                         : userDetail[r.value]}
                       <span
                         onClick={() => setModalMeter(r)}

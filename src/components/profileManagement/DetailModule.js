@@ -160,7 +160,7 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
   const checkboxList = [
     {
       key: "teamEmployerPermissions",
-      title: "团队成员管理",
+      title: "公司成员管理",
       data: [...teamEmployerPermissions]
     },
     { key: "groupPermissions", title: "分组管理", data: [...groupPermissions] }

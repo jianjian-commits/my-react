@@ -98,13 +98,14 @@ const getOperations = ops => {
 const getTitle = title => <span>{title}</span>;
 
 export default connect(
-  ({ router, app }) => ({
+  ({ router, app, login }) => ({
     router,
-    appList: app.appList
+    appList: app.appList,
+    allCompany: login.allCompany
   }),
   { getAppList }
 )(function CommonHeader(props) {
-  if (props.appList.length === 0) {
+  if (props.appList.length === 0 && props.allCompany.length !== 0) {
     props.getAppList();
   }
   return (

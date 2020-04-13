@@ -18,7 +18,6 @@ const Authenticate = props => {
     hide = false
   } = props;
 
-
   if (debug) return children;
   if (!permissions || state === "pending" || hide) return null;
   if (!authorityIsValid({ debug, permissions, teamId, auth })) {
@@ -43,7 +42,8 @@ const Authenticate = props => {
 
 const mapStatesToProps = ({ login, debug }) => ({
   permissions: (login.userDetail && login.userDetail.permissions) || [],
-  teamId: login.currentTeam && login.currentTeam.id,
+  teamId: login.currentCompany && login.currentCompany.id,
+  login: login,
   debug: debug.isOpen
 });
 
