@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout, Input } from "antd";
+import { Layout, Input, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import { getFormsAll, deleteForm ,updateFormName } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
@@ -12,8 +12,13 @@ import { setAllForms } from "../components/formBuilder/component/formBuilder/red
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
+import request from '../components/bi/utils/request';
+import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
+
+import { setDashboards } from '../components/bi/redux/action';
+import { setDB, getDashboardAll } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -35,12 +40,17 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
+  const [dashboards,setDashboardGroup] = React.useState({
+    dbGroup: [],
+    dbList: [],
+    dbSearchList: []
+  });
   const [user, setUser] = React.useState({});
   // isDeleteOne 用于判断是否删除表单
   const [ isDeleteOne, setIsDeleteOne ] = React.useState(false)
 
   let { groups, list, searchList } = mockForms;
-
+  let { dbGroup,dbList } = dashboards;
   useEffect(() => {
     let newList = [];
     let { id, name } = props.userDetail;
@@ -68,10 +78,23 @@ const AppSetting = props => {
       });
     });
 
+    getDashboardAll(appId).then(res => {
+      if(res && res.msg === "success"){
+        let newDashboards = res.data.items.map(item => ({
+          key: item.dashboardId,
+          name: item.name,
+        }));
+        setDashboardGroup({
+          dbGroup: [],
+          dbList: newDashboards,
+          dbSearchList: []
+        })
+      }
+    })
+
     // 初始化是否删除的标志
     setIsDeleteOne( false )
   }, [props, appId, isDeleteOne]);
-
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
@@ -121,17 +144,43 @@ const AppSetting = props => {
     }
   };
 
+  //处理仪表盘的点击事件
+  const dashboardEnterHandle = e => {
+    if (dbList[0].key !== "") {
+      setDB(e.key, props.setDashboards);
+      history.push(`/app/${appId}/setting/bi/${e.key}`);
+    }
+  };
+
+  const createDashboard = () => {
+    request("/bi/dashboards", {
+      method: "POST",
+      data: {name: "新建仪表盘", appId}, 
+      warning: "创建报表失败"
+    }).then(
+      (res) => {
+        if(res && res.msg === "success") {
+          const data = res.data;
+          props.newDashboard(data.id, data.name);
+          history.push(`/app/${appId}/setting/bi/${data.id}`)
+        } else {
+          message.error("创建报表失败");
+        }
+        
+      },
+      () => message.error("创建报表失败")
+    )
+  }
+
   const [visible, setVisible] = useState(false);
   const modalProps = {
     visible,
     showModal: () => {
       setVisible(true);
     },
-
     handleCancel: e => {
       setVisible(false);
     },
-
     handleOK: e => {
       setVisible(false);
     }
@@ -194,6 +243,15 @@ const AppSetting = props => {
               deleteForm={ deleteForm }
               updateFormName={ updateFormName }
               isDeleteOne={( params ) => setIsDeleteOne( params )}
+            />
+            <hr/>
+            <p>已创建仪表盘</p>
+            <DraggableList
+              draggable={!searchKey}
+              onClick={dashboardEnterHandle}
+              groups={dbGroup}
+              list={dbList}
+              onDrop={dragFileToFolder}
             />
             <DropableWrapper
               className={classes.empty}
@@ -320,7 +378,7 @@ const AppSetting = props => {
               <div
                 className={classes.newDashBoard}
                 onClick={e => {
-                  // ? 禁用新建仪表盘点击事件 功能暂未开发 modalProps.showModal();
+                  createDashboard();
                 }}
               >
                 <div className={classes.dashBoardContent}>
@@ -407,11 +465,14 @@ const AppSetting = props => {
 export default connect(
   ({ app, login }) => ({
     appList: app.appList,
-    teamId: login.currentTeam && login.currentTeam.id,
+    teamId: login.currentCompany && login.currentCompany.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     userDetail: login.userDetail
   }),
   {
-    setAllForms
+    setAllForms,
+    newDashboard,
+    setDB,
+    setDashboards
   }
 )(AppSetting);

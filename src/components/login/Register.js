@@ -15,7 +15,7 @@ export default connect()(function Register({
   query
 }) {
   const { token } = params;
-  const { inviter, invitedTeam } = history.location.query || query || {};
+  const { inviter, invitedCompany } = history.location.query || query || {};
   const [status, setStatus] = useState(null);
   const [visible, setVisible] = useState(true);
   const registerUser = async ({ actionType, rest }) => {
@@ -60,7 +60,7 @@ export default connect()(function Register({
             {token ? (
               <>
                 <BlueFont>{inviter}</BlueFont>
-                邀请您加入-<BlueFont>{invitedTeam}</BlueFont>，
+                邀请您加入-<BlueFont>{invitedCompany}</BlueFont>，
               </>
             ) : (
               "感谢您的选择，"

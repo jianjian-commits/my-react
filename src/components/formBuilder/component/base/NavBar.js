@@ -71,6 +71,6 @@ class NavBar extends PureComponent {
 }
 
 export default connect(({ login }) => ({
-  teamId: login.currentTeam && login.currentTeam.id,
+  teamId: login.currentCompany && login.currentCompany.id,
   permissions: (login.userDetail && login.userDetail.permissions) || []
 }))(withRouter(NavBar));

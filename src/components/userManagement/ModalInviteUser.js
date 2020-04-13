@@ -4,7 +4,7 @@ import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
 import classes from "./inviteUser.module.scss";
-import { CreateIcon } from "../../assets/icons/teams"
+import { CreateIcon } from "../../assets/icons/company"
 const customCss = {
   bodyStyle: {
     padding: "46px 30px 182px",
@@ -15,12 +15,12 @@ const customCss = {
 };
 
 export default function InviteUser(props) {
-  const { currentTeam, userDetail } = props;
+  const { currentCompany, userDetail } = props;
   const [visible, setVisible] = useState(false);
   const [token, setToken] = useState(null);
   async function handleInviteUserBtn() {
     try {
-      const res = await request(`/team/invitedToken`);
+      const res = await request(`/company/invitedToken`);
       if (res && res.status === "SUCCESS") {
         setToken(res.data);
         setVisible(true);
@@ -31,7 +31,7 @@ export default function InviteUser(props) {
       catchError(err);
     }
   }
-  const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentTeam.id}/${token}`;
+  const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentCompany.id}/${token}`;
   return (
     <>
       <Button
@@ -53,7 +53,7 @@ export default function InviteUser(props) {
       >
         <p className={classes.title}>邀请新成员加入</p>
         <p className={classes.text}>
-          发送以下链接给新成员，点击链接即可加入团队
+          发送以下链接给新成员，点击链接即可加入公司
         </p>
         <div style={{ display: "flex" }}>
           <Input value={inviteUrl} style={customCss.input} />

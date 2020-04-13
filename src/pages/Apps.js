@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { history } from "../store";
-import { Layout, Button, Card, message } from "antd";
+import { Layout, Button, Card, message, Modal, Input, Form } from "antd";
 import HomeHeader from "../components/header/HomeHeader";
 import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
@@ -11,10 +11,23 @@ import { TEAM_CREATE_APP, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import { catchError } from "../utils";
 import classes from "../styles/apps.module.scss";
-import { NoAppImg } from "../assets/images";
+import { NoAppImg, NoCompany } from "../assets/images";
+import { CloseIcon } from "../assets/icons/header";
+import { initAllDetail } from "../store/loginReducer";
 
 const { Content } = Layout;
 const { Meta } = Card;
+
+const checkCompanyName = async (rule, value, callback) => {
+  if (!value) return callback();
+  try {
+    const res = await request(`/company/companyName/${value}/check`);
+    if (res && res.data === false) return callback("该公司名已被注册");
+  } catch (err) {
+    catchError(err);
+  }
+  callback();
+};
 
 const getApps = list => {
   return list.map(e => {
@@ -45,7 +58,8 @@ class Apps extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getAppList();
+    const { allCompany, getAppList } = this.props;
+    if (allCompany && allCompany.length > 0) getAppList();
   }
 
   // 完成新建
@@ -70,18 +84,120 @@ class Apps extends React.Component {
   // 取消新建/关闭模态窗
   handleCancel() {
     this.setState({
-      open: false
+      open: false,
+      noCompanyModalOpen: false
     });
   }
 
   render() {
-    const { appList, sysUserName, name } = this.props;
+    const {
+      appList,
+      sysUserName,
+      name,
+      form,
+      allCompany,
+      initAllDetail
+    } = this.props;
+    const { getFieldDecorator, validateFields } = form;
     const appsPanelWidth = document.getElementById("appsPanel");
     let hideApps;
     if (appsPanelWidth) {
       const rowAppNum = parseInt(appsPanelWidth.clientWidth / 210);
       hideApps = Array.from(new Array(rowAppNum).keys());
     }
+    const noCompanyStyle = {
+      title: {
+        fontSize: "18px",
+        lineHeight: "26px",
+        color: "#000000"
+      },
+      label: {
+        fontSize: "14px",
+        lineHeight: "20px",
+        color: "#777F97"
+      },
+      image: {
+        width: "530px",
+        height: "250px"
+      }
+    };
+    const handleConfirm = e => {
+      e.preventDefault();
+      validateFields((err, { ...rest }) => {
+        if (!err) {
+          request("/company", {
+            method: "POST",
+            data: rest
+          }).then(
+            res => {
+              if (res && res.status === "SUCCESS") {
+                initAllDetail();
+              } else {
+                message.error(res.msg || "创建公司失败");
+              }
+            },
+            error => catchError(error)
+          );
+        }
+      });
+      this.setState({ noCompanyModalOpen: false });
+    };
+    if (!allCompany || allCompany.length === 0)
+      return (
+        <Layout>
+          <HomeHeader />
+          <div className={commonClasses.noCompany}>
+            <div>
+              <NoCompany />
+            </div>
+            <div>
+              <Button
+                onClick={() => this.setState({ noCompanyModalOpen: true })}
+              >
+                创建公司
+              </Button>
+            </div>
+          </div>
+          <Modal
+            closeIcon={<CloseIcon />}
+            destroyOnClose={true}
+            title={<span style={noCompanyStyle.title}>创建公司</span>}
+            visible={this.state.noCompanyModalOpen}
+            width={"610px"}
+            onCancel={() => this.setState({ noCompanyModalOpen: false })}
+            onOk={e => handleConfirm(e)}
+            wrapClassName={commonClasses.noCompanyModalFormWarp}
+          >
+            <Form>
+              <Form.Item
+                label={<span style={noCompanyStyle.label}>公司名称</span>}
+                colon={false}
+                hasFeedback={true}
+              >
+                {getFieldDecorator("companyName", {
+                  validateTrigger: "onBlur",
+                  rules: [
+                    { required: true, message: "公司名不可为空" },
+                    { validator: checkCompanyName }
+                  ]
+                })(<Input />)}
+              </Form.Item>
+              <Form.Item
+                label={<span style={noCompanyStyle.label}>公司介绍</span>}
+                colon={false}
+              >
+                {getFieldDecorator("companyDescription")(
+                  <Input.TextArea
+                    autoSize={{ minRows: 5, maxRows: 8 }}
+                    allowClear={true}
+                    placeholder={"简单描述一下你的公司吧"}
+                  />
+                )}
+              </Form.Item>
+            </Form>
+          </Modal>
+        </Layout>
+      );
     return (
       <Layout>
         <HomeHeader />
@@ -101,14 +217,9 @@ class Apps extends React.Component {
                   创建应用
                 </Button>
                 {appList.length < 1 && (
-                  <>
+                  <div className={classes.noApp}>
                     <NoAppImg />
-                    <p>
-                      <span>您还没有应用</span>
-                      <br />
-                      点击"创建应用"按钮，创建您的第一个应用吧
-                    </p>
-                  </>
+                  </div>
                 )}
               </Authenticate>
               {hideApps &&
@@ -125,7 +236,7 @@ class Apps extends React.Component {
             {appList.length < 1 && sysUserName !== name && (
               <>
                 <NoAppImg />
-                <p>您的团队还没创建应用</p>
+                <p>您的公司还没创建应用</p>
               </>
             )}
           </Content>
@@ -141,13 +252,17 @@ class Apps extends React.Component {
   }
 }
 
-export default connect(
-  ({ app, login }) => ({
-    appList: app.appList,
-    sysUserName: login.currentTeam.sysUserName,
-    name: login.userDetail.name
-  }),
-  {
-    getAppList
-  }
-)(Apps);
+export default Form.create({ name: "createCompany-form" })(
+  connect(
+    ({ app, login }) => ({
+      appList: app.appList,
+      sysUserName: login.currentCompany.sysUserName,
+      name: login.userDetail.name,
+      allCompany: login.allCompany
+    }),
+    {
+      getAppList,
+      initAllDetail
+    }
+  )(Apps)
+);
