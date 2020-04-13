@@ -4,17 +4,14 @@ import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
 import {
-  getSubmissionDetail,
-  handleStartFlowDefinition
+  getSubmissionDetail
 } from "../redux/utils/getDataUtils";
-import { deleteFormData } from "../redux/utils/deleteDataUtils";
+import { deleteFormData, clearFormDetail } from "../redux/utils/deleteDataUtils";
 import { initToken } from "../../../utils/tokenUtils";
 import { DeleteIcon, EditIcon } from "./svgIcon/index";
 import FormDataDetailHeader from "./formDataDetailHeader";
-import {
-  editFormDataAuth,
-  deleteFormDataAuth
-} from "../../../utils/permissionUtils";
+import { getApproveCount } from "../../homePage/redux/utils/operateFormUtils"
+import { editFormDataAuth, deleteFormDataAuth } from "../../../utils/permissionUtils";
 import { getTransactList } from "../../../../../store/loginReducer";
 const { TabPane } = Tabs;
 const columns = [
@@ -71,21 +68,9 @@ const ApprovalStatus = props => {
 const EditApprovalButton = props => {
   // 权限相关
   const { appId } = useParams();
-  const { userId, permissions, teamId, id: formId } = props;
-  const idEditAuth = editFormDataAuth(
-    permissions,
-    teamId,
-    appId,
-    formId,
-    userId
-  );
-  const isDeleteAuth = deleteFormDataAuth(
-    permissions,
-    teamId,
-    appId,
-    formId,
-    userId
-  );
+  const { permissions, teamId, id:formId, userDetail } = props;
+  const idEditAuth = editFormDataAuth(permissions, teamId, appId, formId, userDetail.id);
+  const isDeleteAuth = deleteFormDataAuth(permissions, teamId, appId, formId, userDetail.id);
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
   const { detailAuthority, dataId, actionFun, deleteFormData, ...rest } = props;
@@ -171,12 +156,19 @@ class FormDataDetail extends PureComponent {
       this.state.formId,
       this.state.submissionId,
       this.props.appId,
-      isLoading => {
-        this.setState({ isLoading });
+      (isLoading)=>{this.setState({isLoading})}
+    ).then(()=>{
+      if(this.props.enterPort === "TransctionList"){
+        this.props.getApproveCount(this.props.appId)
       }
-    );
+    });
   };
 
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
   _renderFileData = fileData => {
     if (fileData.length > 0) {
       return fileData.map((item, index) => (
@@ -290,6 +282,11 @@ class FormDataDetail extends PureComponent {
       </div>
     );
   };
+
+  componentWillMount() {
+    this.props.clearFormDetail()
+  }
+
   _renderDataByType(formDetail, components) {
     return components
       .filter(item => item.type != "CustomValue")
@@ -504,7 +501,8 @@ class FormDataDetail extends PureComponent {
             resetData={this.resetData}
             {...this.props}
             setLoading={this.setLoading}
-          />
+            getApproveCount={this.props.getApproveCount}
+            />
           <div className="formDataDetailContainer">
             <Tabs
               defaultActiveKey="detail"
@@ -538,7 +536,7 @@ class FormDataDetail extends PureComponent {
 const DataDetail = Form.create()(FormDataDetail);
 
 export default connect(
-  ({ login, ...store }) => ({
+  ({ login,forms, ...store }) => ({
     formDetail: store.formSubmitData.formDetail,
     currentForm: store.formSubmitData.forms,
     token: store.rootData.token,
@@ -546,12 +544,15 @@ export default connect(
     taskData: store.formSubmitData.taskData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentTeam && login.currentTeam.id,
-    permissions: (login.userDetail && login.userDetail.permissions) || []
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    approveListCount: forms.approveListCount,
+    userDetail: login.userDetail
   }),
   {
     getSubmissionDetail,
-    handleStartFlowDefinition,
     deleteFormData,
-    getTransactList
+    getApproveCount,
+    getTransactList,
+    clearFormDetail
   }
 )(DataDetail);

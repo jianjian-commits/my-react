@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Layout, Input } from "antd";
+import { Layout, Input, ConfigProvider } from "antd";
+import zhCN from 'antd/es/locale/zh_CN';
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
@@ -10,7 +11,7 @@ import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
 import EditFormData from "../components/formBuilder/component/formData/components/editFormData/editFormData";
-import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
+import { getFormsAll, getApproveCount, clearApproveCount } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
@@ -53,7 +54,8 @@ const AppDetail = props => {
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
   const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false);
-  const [todosNumber, setTodosNumber] = React.useState(null);
+  const [searchStatus,setSearchStatus] = React.useState(true)
+
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
     groups: [],
@@ -72,22 +74,24 @@ const AppDetail = props => {
     setUser({ user: { id, name } });
 
     // let extraProp = { user: { id, name} }
-
-    getFormsAll(appId, true).then(res => {
-      // let newList = []
-      newList = res.map(item => ({
-        key: item.id,
-        name: item.name,
-        // icon: TableIcon
-      }));
-      
-      setMockForms({
-        groups: [],
-        searchList: [],
-        list: newList
+    
+      getFormsAll(appId, true).then(res => {
+        // let newList = []
+        newList = res.map(item => ({
+          key: item.id,
+          name: item.name,
+          // icon: TableIcon
+        }));
+        
+        setMockForms({
+          groups: [],
+          searchList: [],
+          list: newList
+        });
       });
-    });
+
   }, [appId, props.userDetail]);
+
 
   const [approvalKey, setApprovalKey] = React.useState("myPending");
   const currentApp =
@@ -124,6 +128,7 @@ const AppDetail = props => {
   const searchHandle = e => {
     const { value } = e.target;
     setSearchKey(value);
+    setSearchStatus(false)
   };
 
   //根据点击菜单栏
@@ -154,7 +159,7 @@ const AppDetail = props => {
   };
   switch (approvalKey) {
     case "myPending":
-      TransactList = <TodoTransctionList {...transctionListOptions} setTodosNumber={setTodosNumber}/>;
+      TransactList = <TodoTransctionList {...transctionListOptions} approveListCount={props.approveListCount}/>;
       break;
     case "mySubmitted":
       TransactList = <SubmitTransctionList {...transctionListOptions} />;
@@ -179,7 +184,7 @@ const AppDetail = props => {
           style={{ background: "#fff" }}
           width="240"
         >
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} todosNumber={todosNumber}/>
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount}/>
           <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"
@@ -205,69 +210,77 @@ const AppDetail = props => {
             <DraggableList
               selected={selectedForm}
               draggable={false}
-              onClick={e => {
+              onSelect={e => {
                 setSelectedForm(e.key);
                 setApprovalKey("");
                 setSubmit(false);
                 setSubmissionId(null);
+                setSearchStatus(true)
               }}
               groups={groups}
               list={list}
             />
           </div>
         </Sider>
-        <Content className={classes.container}>
-          {// eslint-disable-next-line
-          selectedForm != void 0 ? (
-            <>
-              {submit ? (
-                submissionId ? (
-                  <FormBuilderEditFormData
-                    key={Math.random()}
-                    formId={selectedForm}
-                    submissionId={submissionId}
-                    appId={appId}
-                    extraProp={user}
-                    actionFun={(submission_id, submitFlag = false) => {
-                      setSubmissionId(submission_id);
-                      setSubmit(submitFlag);
-                    }}
-                  ></FormBuilderEditFormData>
+        <ConfigProvider locale={zhCN}>
+          <Content className={classes.container}>
+            {// eslint-disable-next-line
+            selectedForm != void 0 ? (
+              <>
+                {submit ? (
+                  submissionId ? (
+                    <FormBuilderEditFormData
+                      key={Math.random()}
+                      formId={selectedForm}
+                      submissionId={submissionId}
+                      appId={appId}
+                      extraProp={user}
+                      actionFun={(submission_id, submitFlag = false) => {
+                        setSubmissionId(submission_id);
+                        setSubmit(submitFlag);
+                      }}
+                    ></FormBuilderEditFormData>
+                  ) : (
+                    <FormBuilderSubmission
+                      key={Math.random()}
+                      formId={selectedForm}
+                      extraProp={user}
+                      appid={appId}
+                      actionFun={skipToSubmissionData}
+                    ></FormBuilderSubmission>
+                  )
                 ) : (
-                  <FormBuilderSubmission
+                  <FormBuilderSubmitData
                     key={Math.random()}
                     formId={selectedForm}
-                    extraProp={user}
-                    appid={appId}
-                    actionFun={skipToSubmissionData}
-                  ></FormBuilderSubmission>
-                )
-              ) : (
-                <FormBuilderSubmitData
-                  key={Math.random()}
-                  formId={selectedForm}
-                  actionFun={(submission_id, submitFlag = false, formId) => {
-                    setSubmit(submitFlag);
-                    setSubmissionId(submission_id);
-                    if (formId) {
-                      setSelectedForm(formId);
-                    }
-                  }}
-                  appId={appId}
-                ></FormBuilderSubmitData>
-              )}
-            </>
-          ) : approvalKey !== null ? (
-            TransactList
-          ) : null}
-        </Content>
+                    actionFun={(submission_id, submitFlag = false, formId) => {
+                      setSubmit(submitFlag);
+                      setSubmissionId(submission_id);
+                      if (formId) {
+                        setSelectedForm(formId);
+                      }
+                    }}
+                    appId={appId}
+                    searchStatus = { searchStatus }
+                  ></FormBuilderSubmitData>
+                )}
+              </>
+            ) : approvalKey !== null ? (
+              TransactList
+            ) : null}
+          </Content>
+        </ConfigProvider>
       </Layout>
     </Authenticate>
   );
 };
-export default connect(({ app, login }) => ({
+export default connect(({ app, login, forms }) => ({
   appList: app.appList,
   teamId: login.currentTeam && login.currentTeam.id,
   permissions: (login.userDetail && login.userDetail.permissions) || [],
-  userDetail: login.userDetail
-}))(AppDetail);
+  userDetail: login.userDetail,
+  approveListCount: forms.approveListCount
+}),{
+  getApproveCount,
+  clearApproveCount
+})(AppDetail);

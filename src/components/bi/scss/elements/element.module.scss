@@ -1,4 +1,4 @@
-.element-header {
+.elementHeader {
   height: 50px;
   line-height: 50px;
   background-color: #2B81FF;
@@ -9,7 +9,7 @@
   }
 }
 
-.element-header-back {
+.elementHeaderBack {
   height: 30px;
   width: 2%;
   display: inline-flex;
@@ -26,7 +26,7 @@
   }
 }
 
-.rename-element {
+.renameElement {
   display: inline;
   border: none;
   margin-left: 10px;
@@ -34,9 +34,10 @@
   color: #FFFFFF;
 }
 
-.element-header-save {
+.elementHeaderSave {
   float: right;
   margin-right: 15px;
+  top: 10px;
   span {
     background-color: #fff;
     color: rgb(38, 163, 240);
@@ -47,7 +48,7 @@
   }
 }
 
-.element-blank {
+.blankElement {
   display: flex;
   justify-content: center;
   align-items: center;

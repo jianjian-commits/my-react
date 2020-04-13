@@ -3,21 +3,24 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import coverTimeUtils from "../../../../utils/coverTimeUtils";
 import config from "../../../../config/config";
 import { message } from "antd";
-import { RECIVE_FORMS } from "../action";
+import { RECIVE_FORMS, GET_APPROVE_LIST_COUNT, CLEAR_APPROVE_COUNT} from "../action";
 
-export const deleteForm = formId => dispatch => {
-  instanceAxios({
-    url: config.apiUrl + `/form/${formId}`,
-    method: "DELETE"
-  })
-    .then(response => {
-      response.data === "ok"
-        ? (window.location.href = config.hostUrl)
-        : message.error("删除失败！", 2);
+export const deleteForm = ( appId, formId ) => {
+  return new Promise((resolve,reject)=>{
+    axios({
+      url: config.apiUrl + `/form/${formId}`,
+      method: "DELETE",
+      headers:{
+        appid:appId
+      }
     })
-    .catch(err => {
-      console.log(err);
-    });
+      .then(response => {
+        resolve(response)
+      })
+      .catch(err => {
+        reject(err)
+      });
+  })
 };
 
 let ignoreFormIdArray = ["user", "admin", "userLogin", "userRegister"];
@@ -141,3 +144,48 @@ export const getFormsByFormId = formId => {
       });
   });
 };
+
+export const updateFormName = (appId,formId,params={}) =>{
+  return new Promise((resolve,reject)=>{
+    axios({
+      url: config.apiUrl + `/form/${formId}`,
+      method: "PATCH",
+      headers:{
+        appid:appId
+      },
+      data:{...params}
+    })
+      .then(response => {
+        resolve(response)
+      })
+      .catch(err => {
+        reject(err)
+      });
+  })
+}
+export const getApproveCount = (appId) =>dispatch =>{
+  return new Promise((resolve, reject) =>{
+    axios({
+      url: config.apiUrl + "/flow/history/approval/count",
+      headers:{appid: appId},
+      method: "get"
+    })
+      .then(response => {
+        dispatch({
+          type: GET_APPROVE_LIST_COUNT,
+          approveListCount: response.data.data
+        })
+        // resolve(response.data.data);
+      })
+      .catch(err => {
+        console.log(err);
+        // reject(err);
+      });
+  })
+}
+
+export const clearApproveCount = () => dispatch =>{
+  dispatch({
+    type: CLEAR_APPROVE_COUNT
+  })
+}

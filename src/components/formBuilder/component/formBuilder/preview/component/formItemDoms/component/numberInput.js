@@ -12,7 +12,7 @@ export default class NumberInput extends React.Component {
     render() {
         const props = {};
         props.type = 'number';
-        props.className = 'form-control';
+        props.className = 'form-control numberInput';
         props.name = this.props.data.field_name;
 
         if (this.props.mutable) {
@@ -39,7 +39,7 @@ export default class NumberInput extends React.Component {
                     <>
                         <ComponentHeader {...this.props} active={this.props.active} />
                         <div className="form-group">
-                            <input {...props} />
+                            <input {...props} style={{ minHeight: "34px",width:"405px" }} />
                         </div>
                     </>
                 }

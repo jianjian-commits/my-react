@@ -12,7 +12,7 @@ export default class IdCardInput extends React.Component {
     render() {
         const props = {};
         props.type = 'text';
-        props.className = 'form-control';
+        props.className = 'form-control idCardInput';
         props.name = this.props.data.field_name;
         if (this.props.mutable) {
             props.defaultValue = this.props.defaultValue;
@@ -38,7 +38,7 @@ export default class IdCardInput extends React.Component {
                     <>
                         <ComponentHeader {...this.props} active={this.props.active} />
                         <div className="form-group">
-                            <input {...props}/>
+                            <input {...props} style={{ minHeight: "34px",width:"405px" }}/>
                         </div>
                     </>
                 }

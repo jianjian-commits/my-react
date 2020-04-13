@@ -2,7 +2,7 @@ import request from './request';
 import { getChartAttrs } from './ChartUtil';
 import { ChartType } from '../component/elements/Constant';
 
-export const updateChartReq = (elementId, bindDataArr, name, chartTypeProp) => {
+export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp) => {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
 
   return request(`/bi/charts/${elementId}`, {
@@ -20,6 +20,7 @@ export const updateChartReq = (elementId, bindDataArr, name, chartTypeProp) => {
           }
         ],
         indexes,
+        formId,
         name,
         supportChartTypes: [
           {

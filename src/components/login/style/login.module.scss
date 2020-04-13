@@ -157,8 +157,9 @@ $unHoverGray: #b6b6ba;
   width: 1016px;
   height: 510px;
   & .title {
-    padding-left: 73px;
+    padding-left: 80px;
     display: flex;
+    flex-wrap: wrap;
     & > div {
       font-style: normal;
       font-weight: normal;
@@ -299,22 +300,23 @@ $unHoverGray: #b6b6ba;
         }
       }
     }
-    & > .result {
-      & > div {
-        margin-top: 10pxpx;
-        text-align: center;
-      }
-      & > div:first-child {
-        margin-top: 76px;
-      }
-      & > div:last-child {
-        margin-top: 26px;
-        & > button {
-          width: 100px;
-          background: #2a7fff;
-        }
-      }
-    }
+    // & > .result {
+    //   display: block;
+    //   & > div {
+    //     margin-top: 10pxpx;
+    //     text-align: center;
+    //   }
+    //   & > div:first-child {
+    //     margin-top: 76px;
+    //   }
+    //   & > div:last-child {
+    //     margin-top: 26px;
+    //     & > button {
+    //       width: 100px;
+    //       background: #2a7fff;
+    //     }
+    //   }
+    // }
   }
 }
 
@@ -500,60 +502,55 @@ $unHoverGray: #b6b6ba;
 .userDetailModalButton {
   & > button {
     width: 149px !important;
-    height: 40px;
-    border-radius: 6px;
+    height: 40px !important;
+    border-radius: 6px !important;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 14px !important;
   }
   & > button:first-child {
-    color: #777f97;
-    background: #ffffff;
-    box-shadow: 0px 3px 12px rgba(108, 121, 166, 0.1);
-    border-radius: 5px;
-    border: 1px solid #b6b6ba;
+    color: #777f97 !important;
+    background: #ffffff !important;
+    box-shadow: 0px 3px 12px rgba(108, 121, 166, 0.1) !important;
+    border: 1px solid #b6b6ba !important;
   }
   & > button:last-child {
-    margin-left: 10px;
-    color: #ffffff;
-    background: #2a7fff;
-    opacity: 0.5;
-    border-radius: 6px;
+    margin-left: 10px !important;
+    color: #ffffff !important;
+    background: #2a7fff !important;
+    opacity: 0.5 ;
   }
 }
 
 .result {
-  width: 100% !important;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 !important;
+  width: 240px !important;
+  height: 127px;
+  margin: 136.5px 0 0 240px !important;
   & > div {
-    display: flex;
-    width: 176px;
-    flex-wrap: wrap;
+    width: 100%;
+    text-align: center;
     padding: 0;
-    & > div:first-child {
-      width: 35px;
-      margin-right: 14px;
-      margin-bottom: 0;
-    }
-    & > div:nth-child(2) {
-      width: 126px;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 49px;
-      color: #333333;
-      text-align: left;
-    }
-    & > div:last-child {
-      width: 175px;
-      margin-top: 27px;
-      text-align: unset;
-      & > button{
-        width: 112px;
-        height: 36px;
+    color: #777F97;
+  }
+  & > div:first-child {
+    margin-bottom: 14.41px;
+    font-size: 16px;
+  }
+  & > div:nth-child(2) {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  & > div:last-child {
+    & > a {
+      width: 240px !important;
+      height: 44px;
+      background: #2a7fff;
+      border-radius: 6px;
+      & > span {
+        font-size: 14px;
+        line-height: 40px;
+        color: #ffffff;
       }
     }
   }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Layout, Input, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
-import { getFormsAll } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
+import { getFormsAll, deleteForm ,updateFormName } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
   DropableWrapper
@@ -16,10 +16,9 @@ import request from '../components/bi/utils/request';
 import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
-import {getDashboardAll} from "../components/bi/utils/ReqUtil";
 
 import { setDashboards } from '../components/bi/redux/action';
-import { setDB } from '../components/bi/utils/ReqUtil';
+import { setDB, getDashboardAll } from '../components/bi/utils/ReqUtil';
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -47,6 +46,8 @@ const AppSetting = props => {
     dbSearchList: []
   });
   const [user, setUser] = React.useState({});
+  // isDeleteOne 用于判断是否删除表单
+  const [ isDeleteOne, setIsDeleteOne ] = React.useState(false)
 
   let { groups, list, searchList } = mockForms;
   let { dbGroup,dbList,dbSearchList } = dashboards;
@@ -54,9 +55,11 @@ const AppSetting = props => {
     let newList = [];
     let { id, name } = props.userDetail;
 
+    // 存储用户的信息
     setUser({ user: { id, name } });
     // let extraProp = { user: { id: user.id, name: user.name } }
 
+    // 通过appid获取表单列表信息
     getFormsAll(appId, false).then(res => {
       newList = res.map(item => ({
         key: item.id,
@@ -80,7 +83,7 @@ const AppSetting = props => {
         let newDashboards = res.data.items.map(item => ({
           key: item.dashboardId,
           name: item.name,
-        })).slice(0,5);
+        }));
         setDashboardGroup({
           dbGroup: [],
           dbList: newDashboards,
@@ -89,7 +92,9 @@ const AppSetting = props => {
       }
     })
 
-  }, [props, appId]);
+    // 初始化是否删除的标志
+    setIsDeleteOne( false )
+  }, [props, appId, isDeleteOne]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
@@ -123,7 +128,6 @@ const AppSetting = props => {
   }
 
   const searchHandle = e => {
-    console.log(e);
     const { value } = e.target;
     setSearchKey(value);
   };
@@ -232,10 +236,13 @@ const AppSetting = props => {
           <div className={classes.formArea}>
             <DraggableList
               draggable={!searchKey}
-              onClick={formEnterHandle}
+              onSelect={formEnterHandle}
               groups={groups}
               list={list}
               onDrop={dragFileToFolder}
+              deleteForm={ deleteForm }
+              updateFormName={ updateFormName }
+              isDeleteOne={( params ) => setIsDeleteOne( params )}
             />
             <hr/>
             <p>已创建仪表盘</p>

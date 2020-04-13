@@ -5,19 +5,19 @@ import classNames from "classnames";
 import classes from "../../scss/bind/optionSelect.module.scss";
 const operationArr = [
   { ...GroupType.SUM },
-  { ...GroupType.AVERAGE },
+  { ...GroupType.COUNT},
+  { ...GroupType.AVERAGE},
   { ...GroupType.MAX },
-  { ...GroupType.MIN },
-  { ...GroupType.COUNT }
+  { ...GroupType.MIN }
 ];
 export default function FieldMeasureSelect(props) {
-  const [selectIndex, setSelectIndex] = useState(0);
+  const [selectIndex, setSelectIndex] = useState(props.item.selectIndex);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [btnVisible, setBtnVisible] = useState(false);
   useEffect(() => {
     const dropDownEvent = event => {
       const e = event || window.event;
-      const btn = document.getElementById("dropDownBtn" + props.item.id);
+      const btn = document.getElementById("dropDownBtn" + props.item.fieldId);
       if (
         e.srcElement.parentElement &&
         !e.srcElement.parentElement.isSameNode(btn) &&
@@ -34,7 +34,7 @@ export default function FieldMeasureSelect(props) {
   }, []);
 
   const getSelectOperation = value => {
-    props.item.changeGroup(value, props.item.id);
+    props.item.changeGroup(value, props.item.fieldId);
   };
 
   const handleDeleteTarget = () => {

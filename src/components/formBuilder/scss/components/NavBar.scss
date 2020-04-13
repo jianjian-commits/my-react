@@ -58,6 +58,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       margin-right: 20px;
     cursor: pointer;
     user-select: none;
+    &:hover{
+      background: #E6E6E6
+    }
    }
   }
   .headerBarButton {

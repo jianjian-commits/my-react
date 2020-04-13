@@ -7,18 +7,27 @@ export const initialState = {
 };
 
 export const SAVE_APP_LIST = "SAVE_APP_LIST";
+export const CLEAR_APP_LIST = "CLEAR_APP_LIST";
 
 export const saveAppList = payload => ({
   type: SAVE_APP_LIST,
   payload
 });
+export const clearAppList = () => ({
+  type: CLEAR_APP_LIST
+});
 
-export default function loginReducer(state = initialState, { type, payload }) {
+export default function appReducer(state = initialState, { type, payload }) {
   switch (type) {
     case SAVE_APP_LIST:
       return {
         ...state,
         appList: payload
+      };
+    case CLEAR_APP_LIST:
+      return {
+        ...state,
+        appList: []
       };
     default:
       return state;
