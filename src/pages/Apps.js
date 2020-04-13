@@ -13,7 +13,7 @@ import { catchError } from "../utils";
 import classes from "../styles/apps.module.scss";
 import { NoAppImg, NoCompany } from "../assets/images";
 import { CloseIcon } from "../assets/icons/header";
-import { getAllCompany, initAllDetail } from "../store/loginReducer";
+import { initAllDetail } from "../store/loginReducer";
 
 const { Content } = Layout;
 const { Meta } = Card;
@@ -21,7 +21,7 @@ const { Meta } = Card;
 const checkCompanyName = async (rule, value, callback) => {
   if (!value) return callback();
   try {
-    const res = await request(`/company/companyName/${value}/check`);
+    const res = await request(`/company/companyName/check?name=${value}`);
     if (res && res.data === false) return callback("该公司名已被注册");
   } catch (err) {
     catchError(err);
@@ -58,12 +58,8 @@ class Apps extends React.Component {
   }
 
   componentDidMount() {
-    const { allCompany, getAllCompany, getAppList } = this.props;
-    if (allCompany && allCompany.length > 0) {
-      getAppList();
-    } else {
-      getAllCompany();
-    }
+    const { allCompany, getAppList } = this.props;
+    if (allCompany && allCompany.length > 0) getAppList();
   }
 
   // 完成新建
@@ -100,7 +96,6 @@ class Apps extends React.Component {
       name,
       form,
       allCompany,
-      getAllCompany,
       initAllDetail
     } = this.props;
     const { getFieldDecorator, validateFields } = form;
@@ -136,7 +131,7 @@ class Apps extends React.Component {
           }).then(
             res => {
               if (res && res.status === "SUCCESS") {
-                getAllCompany();
+                initAllDetail();
               } else {
                 message.error(res.msg || "创建公司失败");
               }
@@ -145,7 +140,6 @@ class Apps extends React.Component {
           );
         }
       });
-      initAllDetail()
       this.setState({ noCompanyModalOpen: false });
     };
     if (!allCompany || allCompany.length === 0)
@@ -223,14 +217,9 @@ class Apps extends React.Component {
                   创建应用
                 </Button>
                 {appList.length < 1 && (
-                  <>
+                  <div className={classes.noApp}>
                     <NoAppImg />
-                    <p>
-                      <span>您还没有应用</span>
-                      <br />
-                      点击"创建应用"按钮，创建您的第一个应用吧
-                    </p>
-                  </>
+                  </div>
                 )}
               </Authenticate>
               {hideApps &&
@@ -273,7 +262,6 @@ export default Form.create({ name: "createCompany-form" })(
     }),
     {
       getAppList,
-      getAllCompany,
       initAllDetail
     }
   )(Apps)

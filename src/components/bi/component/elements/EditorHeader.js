@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Icon} from "antd";
 import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange } from '../../redux/action';
-import { updateChartReq, setDB } from '../../utils/ReqUtil';
+import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
 import SaveTipModal from "../elements/modal/saveTipModal";
