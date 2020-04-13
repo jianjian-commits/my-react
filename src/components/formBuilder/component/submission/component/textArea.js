@@ -30,7 +30,6 @@ class TextArea extends React.Component {
           if (value instanceof Array) {
             index = compareEqualArray(dataArr, value);
           } else if (value instanceof Object) {
-            // 争对地址的比较
             let { county, city, province, detail } = value;
             newData = dataArr.map(item => {
               if (item) {
@@ -50,7 +49,6 @@ class TextArea extends React.Component {
             form.setFieldsValue({
               [item.key]: res
             });
-            // 多级联动
             this.handleEmitChange(res);
           } else {
             form.setFieldsValue({
@@ -71,7 +69,6 @@ class TextArea extends React.Component {
       });
     }
   }
-  // 如果存在回调数组，则遍历里面的函数执行
   handleChange = ev => {
     const value = ev.target.value;
     this.handleEmitChange(value)

@@ -1,0 +1,40 @@
+.dbToolbar {
+  height: 45px;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  color: #2B81FF;
+}
+
+.newChartIcon {
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.newChart {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.newChartButton{
+  position: absolute;
+  right: 10px;
+
+  .newChartPreview {
+    width: 80px;
+    height: 30px;
+    border: 1px solid #2B81FF;
+    margin-right: 10px;
+    box-sizing: border-box;
+    border-radius: 3px;
+  }
+
+  .newChartSave {
+    width: 80px;
+    height: 32px;
+    background: #2B81FF;
+    border-radius: 3px;
+    color: #FFFFFF;
+  }
+}

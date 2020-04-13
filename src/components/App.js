@@ -59,7 +59,7 @@ const App = ({ debug, setDebug }) => (
       <Switch>
         <PublicRoute
           exact
-          path="/invite/:userId/:teamId/:token"
+          path="/invite/:userId/:companyId/:token"
           component={InviteUser}
         />
         <PublicRoute path="/forgetPassword" component={ForgetPassword} />

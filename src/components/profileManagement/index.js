@@ -11,7 +11,7 @@ import {
   PROFILE_MANAGEMENT_DELETE
 } from "../../auth";
 import { catchError } from "../../utils";
-import { CreateIcon } from "../../assets/icons/teams";
+import { CreateIcon } from "../../assets/icons/company";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 import clx from "classnames";
@@ -296,5 +296,5 @@ class ProfileManagement extends React.Component {
 }
 export default connect(({ login }) => ({
   userId: login.userDetail.id,
-  teamId: login.currentTeam.id
+  teamId: login.currentCompany.id
 }))(ProfileManagement);
