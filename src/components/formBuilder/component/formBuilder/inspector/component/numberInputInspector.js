@@ -132,9 +132,8 @@ class NumberInputInspector extends React.PureComponent {
   // 当限定位数输入框发生变化时
 
   handleChangeAttrPoint = value =>{
-    if(Number(value) > 0){
       const { validate } = this.props.element;
-    var newValidate = {
+      var newValidate = {
       ...validate,
       limitPoint: value == void 0 ? 0 : value
     };
@@ -147,11 +146,6 @@ class NumberInputInspector extends React.PureComponent {
       );
     } else {
       this.props.setItemAttr(this.props.element, "validate", newValidate);
-    }
-    }else{
-      this.setState({
-          isNegativeNumber:true
-      })
     }
   }
   // 选择指定组件渲染
@@ -298,7 +292,6 @@ class NumberInputInspector extends React.PureComponent {
       apiNameTemp,
       APIMessage,
       isUniqueApi = true,
-      isNegativeNumber = false
     } = this.state;
     const minBoundary = -Number.MAX_VALUE === validate.min ? "" : validate.min;
     return (
@@ -429,18 +422,19 @@ class NumberInputInspector extends React.PureComponent {
                   checked={validate.isLimitPoint}
                   onChange={this.handleChangeAttr}
                 >
-                  限定小数位数
+                  限定小数位数 ( 请输入不小于0的整数 )
                 </Checkbox>
                 <div className="point-checkbox-wrapper"
                 >
                   <InputNumber 
                   name="limitPoint"
-                  placeholder="不限"
+                  placeholder="请输入"
                   onChange = { this.handleChangeAttrPoint }
+                  min={1}
+                  step="1"
                   value={validate.limitPoint === 0 ? "" : validate.limitPoint}
                   autoComplete="off"
                   />
-                  {isNegativeNumber ?  <p className="point-err">请输入大于0的整数</p>:null }
                 </div>
             </div>
           </div>
