@@ -9,7 +9,7 @@ import {
   Menu,
   Dropdown,
   Icon,
-  message
+  message,
 } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import { initToken } from "../../utils/tokenUtils";
@@ -19,7 +19,7 @@ import HeaderBar from "../../component/base/NavBar";
 import {
   getSubmissionData,
   getSubmissionDetail,
-  getFilterSubmissionData
+  getFilterSubmissionData,
 } from "./redux/utils/getDataUtils";
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
@@ -47,16 +47,18 @@ class FormSubmitData extends PureComponent {
       limitDataNumber: false,
       isFilterMode: false,
       filterArray: [],
-      selectArray:[{
-        selectedFiled: "",
-        selectedLogicalOperator: null,
-        logicalOperators: [],
-        costomValue: "",
-        selectedFiledKey: "",
-        field: {type:"", key: Math.random()},
-        options: [],
-        key: Math.random()
-      }],
+      selectArray: [
+        {
+          selectedFiled: "",
+          selectedLogicalOperator: null,
+          logicalOperators: [],
+          costomValue: "",
+          selectedFiledKey: "",
+          field: { type: "", key: Math.random() },
+          options: [],
+          key: Math.random(),
+        },
+      ],
       connectCondition: "&",
       formDataDetailId: "",
       // 是否展示筛选界面,默认为false(不展示)
@@ -64,39 +66,39 @@ class FormSubmitData extends PureComponent {
       // 判断鼠标是否已经移出筛选容器,如果已经移出,则可以点击关闭;否则,反之.
       hiddenFilterBoardCanClick: true,
       isLoading: false, // 加在数据的loading标志,
-      formDataCache:[]
+      formDataCache: [],
     };
   }
-  showformDataDetail = id => {
+  showformDataDetail = (id) => {
     this.setState({ formDataDetailId: id });
   };
 
-  showModal = submissionId => {
-    this.setState(state => ({
+  showModal = (submissionId) => {
+    this.setState((state) => ({
       ...state,
       modalVisible: true,
-      submissionId
+      submissionId,
     }));
   };
 
-  handleOk = e => {
-    this.setState(state => ({
+  handleOk = (e) => {
+    this.setState((state) => ({
       ...state,
-      modalVisible: false
+      modalVisible: false,
     }));
   };
 
-  handleCancel = e => {
-    this.setState(state => ({
+  handleCancel = (e) => {
+    this.setState((state) => ({
       ...state,
-      modalVisible: false
+      modalVisible: false,
     }));
   };
   onChangePages = (currentPage, pageSize) => {
     this.setState(
       {
         currentPage,
-        pageSize
+        pageSize,
       },
       () => {
         const {
@@ -105,7 +107,7 @@ class FormSubmitData extends PureComponent {
           showNumber,
           pageSize,
           currentPage,
-          formId
+          formId,
         } = this.state;
         const { forms, appId } = this.props;
         if (this.state.isFilterMode && !this.state.isShowTotalData) {
@@ -117,9 +119,9 @@ class FormSubmitData extends PureComponent {
             currentPage: 1,
             totalNumber: showNumber,
             appId: appId,
-            callback: isLoading => {
+            callback: (isLoading) => {
               this.setState({ isLoading });
-            }
+            },
           });
         } else if (!this.state.isFilterMode && !this.state.isShowTotalData) {
           this.props.getSubmissionData({
@@ -128,9 +130,9 @@ class FormSubmitData extends PureComponent {
             pageSize: showNumber,
             currentPage: 1,
             total: showNumber,
-            callback: isLoading => {
+            callback: (isLoading) => {
               this.setState({ isLoading });
-            }
+            },
           });
         } else if (this.state.isFilterMode && this.state.isShowTotalData) {
           this.props.getFilterSubmissionData({
@@ -141,9 +143,9 @@ class FormSubmitData extends PureComponent {
             currentPage: currentPage,
             totalNumber: showNumber,
             appId: appId,
-            callback: isLoading => {
+            callback: (isLoading) => {
               this.setState({ isLoading });
-            }
+            },
           });
         } else {
           this.props.getSubmissionData({
@@ -152,9 +154,9 @@ class FormSubmitData extends PureComponent {
             pageSize: pageSize,
             currentPage: currentPage,
             total: -1,
-            callback: isLoading => {
+            callback: (isLoading) => {
               this.setState({ isLoading });
-            }
+            },
           });
         }
       }
@@ -163,24 +165,25 @@ class FormSubmitData extends PureComponent {
 
   componentDidMount() {
     let { formId, appId } = this.props;
-    const {pageSize, currentPage} = this.state;
+    const { pageSize, currentPage } = this.state;
 
-    if(this.props.searchStatus){
+    if (this.props.searchStatus) {
       initToken()
-      .then(() => {
-        this.props.getSubmissionData({  
-          appId: appId, 
-          formId: formId, 
-          pageSize: pageSize, 
-          currentPage: currentPage, 
-          total: -1, 
-          callback: (isLoading)=>{this.setState({isLoading})}
+        .then(() => {
+          this.props.getSubmissionData({
+            appId: appId,
+            formId: formId,
+            pageSize: pageSize,
+            currentPage: currentPage,
+            total: -1,
+            callback: (isLoading) => {
+              this.setState({ isLoading });
+            },
           });
-          
-      })
-      .catch(err => {
-        console.error(err);
-      });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
 
     this.setState({ formId: this.props.formId });
@@ -193,7 +196,7 @@ class FormSubmitData extends PureComponent {
         ) {
           this.setState({
             showFilterBoard: false,
-            hiddenFilterBoardCanClick: true
+            hiddenFilterBoardCanClick: true,
           });
         }
       },
@@ -205,16 +208,16 @@ class FormSubmitData extends PureComponent {
   }
 
   // 将地址对象转化为字符串
-  AddressObjToString = address => {
+  AddressObjToString = (address) => {
     if (address) {
       let { province, county, city, detail } = address;
-      return [province, city, county, detail].filter(item => item).join("");
+      return [province, city, county, detail].filter((item) => item).join("");
     } else {
       return "";
     }
   };
 
-  _GetTextLength = value => {
+  _GetTextLength = (value) => {
     let reg = new RegExp("[\\u4E00-\\u9FFF]", "g");
     let res = String(value).match(reg);
     let length = value.length;
@@ -233,7 +236,7 @@ class FormSubmitData extends PureComponent {
     }
   }
 
-  _renderFileData = fileData => {
+  _renderFileData = (fileData) => {
     if (fileData.length > 0) {
       return (
         <span className="formChild-item">
@@ -253,7 +256,7 @@ class FormSubmitData extends PureComponent {
     }
   };
 
-  _renderImageData = fileData => {
+  _renderImageData = (fileData) => {
     if (fileData.length > 0) {
       return (
         <div className="formChild-Item image">
@@ -265,7 +268,7 @@ class FormSubmitData extends PureComponent {
     }
   };
 
-  _renderSignatureData = fileData => {
+  _renderSignatureData = (fileData) => {
     if (fileData && fileData.name) {
       return (
         <p>
@@ -284,7 +287,7 @@ class FormSubmitData extends PureComponent {
     return "";
   };
 
-  _renderAddress = addressData => {
+  _renderAddress = (addressData) => {
     return addressData !== null ? this._truncateValue(addressData.address) : "";
   };
 
@@ -294,6 +297,8 @@ class FormSubmitData extends PureComponent {
     }
     switch (component.type) {
       case "DateInput":
+      case "PureDate":
+      case "PureTime":
         return (
           <div className="formChild-item">
             {submitData.time ? submitData.time : ""}
@@ -331,15 +336,15 @@ class FormSubmitData extends PureComponent {
     switch (component.type) {
       case "FormChildTest":
         let resultDataArray = null;
-        let resultArray = component.values.map(item => {
+        let resultArray = component.values.map((item) => {
           return {
             key: item.key,
             type: item.type,
-            data: submission[item.key]
+            data: submission[item.key],
           };
         });
 
-        resultArray.forEach(item => {
+        resultArray.forEach((item) => {
           if (item.data != void 0) {
             if (resultDataArray == void 0) {
               resultDataArray = item.data;
@@ -349,7 +354,7 @@ class FormSubmitData extends PureComponent {
 
         if (
           openDataIdList.filter(
-            item => item.id === submission.id && item.key === component.key
+            (item) => item.id === submission.id && item.key === component.key
           ).length !== 1
         ) {
           return (
@@ -363,7 +368,7 @@ class FormSubmitData extends PureComponent {
                     : null
                 }
               >
-                {resultArray.map(item => {
+                {resultArray.map((item) => {
                   if (item.data == void 0) {
                     return <div className="formChild-item"></div>;
                   } else {
@@ -387,9 +392,9 @@ class FormSubmitData extends PureComponent {
                           ...this.state.openDataIdList,
                           {
                             id: submission.id,
-                            key: component.key
-                          }
-                        ]
+                            key: component.key,
+                          },
+                        ],
                       });
                     }}
                   >
@@ -409,7 +414,7 @@ class FormSubmitData extends PureComponent {
                     key={component.key + "close" + index}
                     className="formChildDiv"
                   >
-                    {resultArray.map(item => {
+                    {resultArray.map((item) => {
                       if (item.data == void 0) {
                         return <div className="formChild-item"></div>;
                       } else {
@@ -430,12 +435,12 @@ class FormSubmitData extends PureComponent {
                   onClick={() => {
                     this.setState({
                       openDataIdList: this.state.openDataIdList.filter(
-                        item =>
+                        (item) =>
                           !(
                             item.id === submission.id &&
                             item.key === component.key
                           )
-                      )
+                      ),
                     });
                   }}
                 >
@@ -485,6 +490,14 @@ class FormSubmitData extends PureComponent {
             {submitData != void 0 ? coverTimeUtils.localTime(submitData) : ""}
           </div>
         );
+      case "PureTime":
+        return (
+          <div key={component.key}>
+            {submitData != void 0
+              ? coverTimeUtils.localDate(submitData, true).toLocaleTimeString()
+              : ""}
+          </div>
+        );
       default:
         if (submitData == void 0) {
           return <></>;
@@ -493,9 +506,9 @@ class FormSubmitData extends PureComponent {
     }
   }
 
-  setColumnSort = sortedInfo => {
+  setColumnSort = (sortedInfo) => {
     this.setState({
-      sortedInfo
+      sortedInfo,
     });
   };
   _filterSorter = (type, key) => {
@@ -506,25 +519,25 @@ class FormSubmitData extends PureComponent {
           sorter: (a, b) => {
             return a[key] - b[key];
           },
-          sortDirections: ["descend", "ascend"]
+          sortDirections: ["descend", "ascend"],
         };
       default:
         return {};
     }
   };
 
-  onChangeIsShowTotalData = value => {
+  onChangeIsShowTotalData = (value) => {
     this.setState({
-      isShowTotalData: value === "all" ? true : false
+      isShowTotalData: value === "all" ? true : false,
     });
   };
 
-  onChangeNumer = event => {
+  onChangeNumer = (event) => {
     event.stopPropagation();
     if (!Number.isNaN(Math.round(event.target.value))) {
       this.setState({
         showNumber: Math.round(event.target.value),
-        limitDataNumber: false
+        limitDataNumber: false,
       });
     }
   };
@@ -534,7 +547,7 @@ class FormSubmitData extends PureComponent {
     //  这里再找产品讨论一下。。。
     this.setState(
       {
-        currentPage: 1
+        currentPage: 1,
       },
       () => {
         this.onChangePages(this.state.currentPage, this.state.pageSize);
@@ -542,7 +555,7 @@ class FormSubmitData extends PureComponent {
     );
   };
 
-  handleClickNumber = event => {
+  handleClickNumber = (event) => {
     event.stopPropagation();
   };
 
@@ -555,7 +568,7 @@ class FormSubmitData extends PureComponent {
           filterArray,
           connectCondition,
           currentPage: 1,
-          isFilterMode: true
+          isFilterMode: true,
         },
         () => {
           this.onChangePages(this.state.currentPage, this.state.pageSize);
@@ -568,7 +581,7 @@ class FormSubmitData extends PureComponent {
           filterArray: [],
           connectCondition: "&",
           isFilterMode: false,
-          currentPage: 1
+          currentPage: 1,
         },
         () => {
           this.onChangePages(this.state.currentPage, this.state.pageSize);
@@ -578,7 +591,7 @@ class FormSubmitData extends PureComponent {
   };
 
   // 过滤显示数据，争对不同字段进行渲染(将object转为String)
-  filterSubmitDataToString = value => {
+  filterSubmitDataToString = (value) => {
     if (value instanceof Object) {
       if (value.province !== undefined) {
         return this.AddressObjToString(value);
@@ -590,15 +603,15 @@ class FormSubmitData extends PureComponent {
     return value;
   };
 
-  handleDeleteSubmisson = submissionId => {
+  handleDeleteSubmisson = (submissionId) => {
     this.props
       .deleteFormData(this.state.formId, submissionId)
-      .then(response => {
+      .then((response) => {
         if (response.data === "ok") {
           if (this.props.formData.length === 1 && this.state.currentPage > 1) {
             this.setState(
               {
-                currentPage: this.state.currentPage - 1
+                currentPage: this.state.currentPage - 1,
               },
               () => {
                 this.onChangePages(this.state.currentPage, this.state.pageSize);
@@ -610,40 +623,47 @@ class FormSubmitData extends PureComponent {
         }
         this.props.actionFun(true);
       })
-      .catch(err => {
+      .catch((err) => {
         message.error("删除失败！", 2);
         console.log(err);
       });
   };
 
   // 过滤字段
-  handleFilterFields = fields => {
+  handleFilterFields = (fields) => {
     this.setState({
-      selectedFields: fields
-    })
+      selectedFields: fields,
+    });
   };
 
   // 点击按钮显示筛选界面
-  showFilterComponent = e => {
+  showFilterComponent = (e) => {
     let hiddenFilterBoard = !this.state.showFilterBoard;
 
     this.setState({
       showFilterBoard: hiddenFilterBoard,
-      hiddenFilterBoardCanClick: !this.setState.hiddenFilterBoardCanClick
+      hiddenFilterBoardCanClick: !this.setState.hiddenFilterBoardCanClick,
     });
   };
 
   render() {
     let { formData, forms, mobile = {}, mountClassNameOnRoot } = this.props;
-    const { selectArray, connectCondition, isFilterMode } = this.state.filterArray;
-    
-    if(formData.length !== 0) {
-      this.setState({formDataCache:formData});
+    const {
+      selectArray,
+      connectCondition,
+      isFilterMode,
+    } = this.state.filterArray;
+
+    if (formData.length !== 0) {
+      this.setState({ formDataCache: formData });
     }
-    if(formData.length === 0 && this.state.isFilterMode === false){
-      formData = this.state.formDataCache
+    if (formData.length === 0 && this.state.isFilterMode === false) {
+      formData = this.state.formDataCache;
     }
-    let total = this.state.formDataCache.length===0? -1:this.props.submissionDataTotal;
+    let total =
+      this.state.formDataCache.length === 0
+        ? -1
+        : this.props.submissionDataTotal;
     const controlCol = [
       {
         title: "操作",
@@ -667,8 +687,8 @@ class FormSubmitData extends PureComponent {
               appId={this.props.appId}
             />
           );
-        }
-      }
+        },
+      },
     ];
     let formChildIdArray = [];
 
@@ -676,7 +696,7 @@ class FormSubmitData extends PureComponent {
     sortedInfo = sortedInfo || {};
     let columns = this.props.forms.components
       ? this.props.forms.components
-          .filter(item => {
+          .filter((item) => {
             if (item.type === "Button") {
               return false;
             }
@@ -684,13 +704,13 @@ class FormSubmitData extends PureComponent {
               return item.values.length !== 0;
             }
             // 根据选择的字段进行过滤
-            if(this.state.selectedFields) {
+            if (this.state.selectedFields) {
               return this.state.selectedFields.includes(item.label);
             }
 
             return true;
           })
-          .map(item => {
+          .map((item) => {
             let resultObj = null;
             let sorter = {};
 
@@ -716,18 +736,18 @@ class FormSubmitData extends PureComponent {
                                 submission
                               ),
                               props: {
-                                colSpan: item.values.length
-                              }
+                                colSpan: item.values.length,
+                              },
                             };
                             if (i >= 1) {
                               obj.props.colSpan = 0;
                             }
 
                             return obj;
-                          }
+                          },
                         };
                       })
-                    : null
+                    : null,
               };
               formChildIdArray.push(item.key);
             } else if (item.type === "NumberInput") {
@@ -739,9 +759,9 @@ class FormSubmitData extends PureComponent {
                 sorter: (a, b) => a[item.key] - b[item.key],
                 sortOrder:
                   sortedInfo.columnKey === item.key && sortedInfo.order,
-                render: record => {
+                render: (record) => {
                   return this._renderComponentDataByType(item, record);
-                }
+                },
               };
             } else if (item.type === "DateInput") {
               resultObj = {
@@ -752,9 +772,9 @@ class FormSubmitData extends PureComponent {
                 sorter: (a, b) => new Date(a[item.key]) - new Date(b[item.key]),
                 sortOrder:
                   sortedInfo.columnKey === item.key && sortedInfo.order,
-                render: record => {
+                render: (record) => {
                   return this._renderComponentDataByType(item, record);
-                }
+                },
               };
             } else {
               sorter = this._filterSorter(item.type, item.key);
@@ -763,9 +783,9 @@ class FormSubmitData extends PureComponent {
                 dataIndex: item.key,
                 key: item.key,
                 width: 210,
-                render: record => {
+                render: (record) => {
                   return this._renderComponentDataByType(item, record);
-                }
+                },
               };
             }
             return resultObj;
@@ -777,7 +797,7 @@ class FormSubmitData extends PureComponent {
       key: "founder",
       width: 210,
       sorter: (a, b) => new Date(a.created) - new Date(b.created),
-      sortOrder: sortedInfo.columnKey === "founder" && sortedInfo.order
+      sortOrder: sortedInfo.columnKey === "founder" && sortedInfo.order,
     });
     columns.push({
       title: "创建时间",
@@ -786,9 +806,9 @@ class FormSubmitData extends PureComponent {
       width: 210,
       sorter: (a, b) => new Date(a.created) - new Date(b.created),
       sortOrder: sortedInfo.columnKey === "created" && sortedInfo.order,
-      render: record => {
+      render: (record) => {
         return this._renderComponentDataByType({ type: "created" }, record);
-      }
+      },
     });
     columns.push({
       title: "修改时间",
@@ -797,9 +817,9 @@ class FormSubmitData extends PureComponent {
       width: 210,
       sorter: (a, b) => new Date(a.created) - new Date(b.created),
       sortOrder: sortedInfo.columnKey === "modified" && sortedInfo.order,
-      render: record => {
+      render: (record) => {
         return this._renderComponentDataByType({ type: "modified" }, record);
-      }
+      },
     });
 
     columns = columns.concat(controlCol);
@@ -815,12 +835,12 @@ class FormSubmitData extends PureComponent {
         created: dataObj.created,
         modified: dataObj.modified,
         founder: name,
-        userId: id
+        userId: id,
       };
       let dataItem = dataObj.data;
       for (let n in dataItem) {
         if (formChildIdArray.includes(n)) {
-          dataItem[n].forEach(submitDataObj => {
+          dataItem[n].forEach((submitDataObj) => {
             for (let m in submitDataObj) {
               if (obj[m] == void 0) {
                 obj[m] = [];
@@ -840,7 +860,6 @@ class FormSubmitData extends PureComponent {
       formDataShowArray.push(obj);
     });
 
-    
     const paginationProps = {
       defaultCurrent: 1,
       position: "bottom",
@@ -858,7 +877,7 @@ class FormSubmitData extends PureComponent {
         if (pageSize != void 0 && current != void 0) {
           this.onChangePages(current, pageSize);
         }
-      }
+      },
     };
 
     let mobileProps = {};
@@ -866,11 +885,11 @@ class FormSubmitData extends PureComponent {
       mobileProps = {
         title: forms.title,
         mobile,
-        mountClassNameOnRoot
+        mountClassNameOnRoot,
       };
     }
 
-    const fileds = this.props.forms.components.filter(item => {
+    const fileds = this.props.forms.components.filter((item) => {
       return item.type !== "Button" && item.type !== "FormChildTest";
     });
     const menu = (
@@ -926,8 +945,10 @@ class FormSubmitData extends PureComponent {
                 isShowBackBtn={false}
                 btnValue="提交数据"
                 formId={this.props.formId}
-                clickCallback={()=>{this.props.actionFun(null ,true)}}
-                clickExtendCallBack = {this.showFilterComponent}
+                clickCallback={() => {
+                  this.props.actionFun(null, true);
+                }}
+                clickExtendCallBack={this.showFilterComponent}
                 isFilterMode={this.state.isFilterMode}
               />
             )}
@@ -943,24 +964,34 @@ class FormSubmitData extends PureComponent {
                 formId={this.state.formId}
                 components={this.props.forms.components}
               />
-              {this.state.showFilterBoard? 
-              <FilterComponent
-                fileds={fileds}
-                selectArray = {this.state.selectArray}
-                changeFilterArray = {(selectArray)=>{this.setState({selectArray: selectArray})}}
-                connectCondition={this.state.connectCondition}
-                setConnectCondition = {(connectCondition)=>{this.setState({connectCondition: connectCondition})}}
-                isFilterMode={isFilterMode}
-                filterData={this.props.getFilterSubmissionData}
-                setFilterMode={this.setFilterMode}
-                formId={this.state.formId}
-                currentPage={this.state.currentPage}
-                pageSize={this.state.pageSize}
-                clickExtendCallBack = {this.showFilterComponent}
-                canClick = {()=> this.setState({ hiddenFilterBoardCanClick: true })}
-                canNotClick = {() =>this.setState({ hiddenFilterBoardCanClick: false })}
-              />:<></>}
-              
+              {this.state.showFilterBoard ? (
+                <FilterComponent
+                  fileds={fileds}
+                  selectArray={this.state.selectArray}
+                  changeFilterArray={(selectArray) => {
+                    this.setState({ selectArray: selectArray });
+                  }}
+                  connectCondition={this.state.connectCondition}
+                  setConnectCondition={(connectCondition) => {
+                    this.setState({ connectCondition: connectCondition });
+                  }}
+                  isFilterMode={isFilterMode}
+                  filterData={this.props.getFilterSubmissionData}
+                  setFilterMode={this.setFilterMode}
+                  formId={this.state.formId}
+                  currentPage={this.state.currentPage}
+                  pageSize={this.state.pageSize}
+                  clickExtendCallBack={this.showFilterComponent}
+                  canClick={() =>
+                    this.setState({ hiddenFilterBoardCanClick: true })
+                  }
+                  canNotClick={() =>
+                    this.setState({ hiddenFilterBoardCanClick: false })
+                  }
+                />
+              ) : (
+                <></>
+              )}
 
               <div className="limit-data-number-container">
                 <Dropdown
@@ -974,7 +1005,7 @@ class FormSubmitData extends PureComponent {
                         style={{
                           display: "inline-block",
                           width: 98,
-                          textAlign: "left"
+                          textAlign: "left",
                         }}
                       >
                         全部
@@ -990,7 +1021,7 @@ class FormSubmitData extends PureComponent {
                           width: 50,
                           height: 22,
                           marginLeft: 3,
-                          marginRight: 3
+                          marginRight: 3,
                         }}
                         value={this.state.showNumber}
                         onChange={this.onChangeNumer}
@@ -1014,7 +1045,7 @@ class FormSubmitData extends PureComponent {
                   key={Math.random()}
                   loading={this.state.isLoading}
                   rowClassName={"tableRow"}
-                  rowKey={record => record.id}
+                  rowKey={(record) => record.id}
                   columns={columns}
                   dataSource={formDataShowArray}
                   pagination={paginationProps}
@@ -1033,17 +1064,17 @@ class FormSubmitData extends PureComponent {
 }
 
 export default connect(
-  store => ({
+  (store) => ({
     formData: store.formSubmitData.formData,
     forms: store.formSubmitData.forms,
     submissionDataTotal: store.formSubmitData.submissionDataTotal,
-    loading: store.formSubmitData.formDataLoading
+    loading: store.formSubmitData.formDataLoading,
   }),
   {
     getSubmissionData,
     getFilterSubmissionData,
     deleteFormData,
     clearFormData,
-    getSubmissionDetail
+    getSubmissionDetail,
   }
 )(withRouter(FormSubmitData));

@@ -1112,7 +1112,7 @@ class Submission extends Component {
       // }
     });
     // 如果没找到对应数据 则返回默认值
-    if (formchildData === null) {
+    if (formchildData == null) {
       formChildDataObj[key] = [rowTemplate]; //清空对应id子表单的数据
       this.setState({
         formChildDataObj

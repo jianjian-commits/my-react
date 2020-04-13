@@ -223,6 +223,21 @@ class FormDataDetail extends PureComponent {
               : ""}
           </div>
         );
+        case "PureDate":
+          return (
+            <div className="formChildData">
+              {submitData.time
+                ? moment(coverTimeUtils.localDate(submitData.time)).format("YYYY-MM-DD")
+                : ""}
+            </div>)
+        case "PureTime":
+        return (
+          <div className="formChildData">
+            {submitData.time
+              ? coverTimeUtils.localDate(submitData.time, true).toLocaleTimeString()
+              : ""}
+          </div>
+        );
       case "FileUpload":
       case "HandWrittenSignature":
         return (

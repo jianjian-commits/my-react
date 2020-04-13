@@ -1,6 +1,6 @@
 const isProd = true;
 const apiUrl = isProd
-  ? "http://192.168.3.105:9080"
+  ? "http://192.168.3.97:8092"
   : "http://192.168.3.150:8080"; // 27017
 const hostIp = isProd ? "http://192.168.3.46:8092" : "http://192.168.3.146";
 const port = "8001";

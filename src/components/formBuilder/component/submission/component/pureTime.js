@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-09 13:51:06
  * @LastEditors: komons
- * @LastEditTime: 2020-04-09 15:50:31
+ * @LastEditTime: 2020-04-10 16:23:59
  * @Description: 
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\submission\component\pureTime.js
  */
@@ -13,6 +13,7 @@ import { Form, Tooltip, Icon } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import { withRouter } from "react-router-dom";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -78,7 +79,7 @@ class PureTime extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: new moment(res)
+              [item.key]: new moment(coverTimeUtils.localDate(res, true))
             });
             // 多级联动
             this.handleEmitChange(res);

@@ -10,14 +10,14 @@ import {
   Popover,
   Button,
   DatePicker,
-  TimePicker
+  TimePicker,
 } from "antd";
 import { withRouter } from "react-router-dom";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray,
-  getResIndexArray
+  getResIndexArray,
 } from "../../utils/dataLinkUtils";
 import { getSelection } from "../../utils/filterData";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
@@ -40,11 +40,11 @@ class FormChildTest extends React.Component {
       hoverFormChildIndex: -1,
       fileData: {
         name: "",
-        url: ""
+        url: "",
       },
       refesh: true,
       hasFormChildError: false,
-      initFlag: true
+      initFlag: true,
     };
     this.handleAddRow = this.handleAddRow.bind(this);
     this.renderFormChild = this.renderFormChild.bind(this);
@@ -53,9 +53,9 @@ class FormChildTest extends React.Component {
     // 初始化子表单的数据，补齐或者填充数据
     let childComponent = item.values;
     let newSubmitDataArray = [];
-    newSubmitDataArray = submitDataArray.map(submission => {
+    newSubmitDataArray = submitDataArray.map((submission) => {
       let result = {};
-      childComponent.map(component => {
+      childComponent.map((component) => {
         result[component.key] = this._buildDefaultValueByType(
           component,
           submission
@@ -70,7 +70,7 @@ class FormChildTest extends React.Component {
     let result = {};
     let newArray = [...this.props.submitDataArray];
     let { handleSetComponentEvent } = this.props;
-    const {appId} = this.props.match.params;
+    const { appId } = this.props.match.params;
     let data =
       submission[item.key] != void 0 ? submission[item.key].data : null;
     switch (item.type) {
@@ -87,10 +87,12 @@ class FormChildTest extends React.Component {
           formType: item.type,
           data: data || item.defaultValue || null,
           validate: item.validate,
-          hasErr: false
+          hasErr: false,
         };
         break;
       case "DateInput":
+      case "PureDate":
+      case "PureTime":
         result = {
           type: item.label,
           formType: item.type,
@@ -98,8 +100,8 @@ class FormChildTest extends React.Component {
           hasErr: false,
           data: data || {
             time: null,
-            moment: null
-          }
+            moment: null,
+          },
         };
         break;
       case "RadioButtons": {
@@ -109,7 +111,7 @@ class FormChildTest extends React.Component {
           data: data || null,
           hasErr: false,
           validate: item.validate,
-          values: item.values
+          values: item.values,
         };
       }
       case "CheckboxInput": {
@@ -119,7 +121,7 @@ class FormChildTest extends React.Component {
           data: data,
           hasErr: false,
           validate: item.validate,
-          values: item.values
+          values: item.values,
         };
         break;
       }
@@ -129,10 +131,10 @@ class FormChildTest extends React.Component {
         let values = item.data.values;
         if (values.type == "otherFormData") {
           // 子表单关联其他数据
-          getSelection(appId, values.formId, values.optionId).then(res => {
-            result[item.key].dropDownOptions = res.map(data => data.value);
+          getSelection(appId, values.formId, values.optionId).then((res) => {
+            result[item.key].dropDownOptions = res.map((data) => data.value);
             this.setState({
-              refesh: !this.state.refesh
+              refesh: !this.state.refesh,
             });
           });
         } else {
@@ -145,7 +147,7 @@ class FormChildTest extends React.Component {
           hasErr: false,
           validate: item.validate,
           values,
-          dropDownOptions
+          dropDownOptions,
         };
         break;
       }
@@ -159,7 +161,7 @@ class FormChildTest extends React.Component {
           formType: item.type,
           validate: item.validate,
           hasErr: false,
-          data: data || []
+          data: data || [],
         };
         break;
       default:
@@ -172,17 +174,17 @@ class FormChildTest extends React.Component {
         conditionId, //联动条件 id(当前表单)
         linkComponentId, //联动条件 id(联动表单)
         linkDataId, //联动数据 id(联动表单)
-        linkFormId //联动表单 id
+        linkFormId, //联动表单 id
       } = item.data.values;
       // 得到id表单的所有提交数据
       const { appId } = this.props.match.params;
-      getFormAllSubmission(appId, linkFormId).then(submissions => {
+      getFormAllSubmission(appId, linkFormId).then((submissions) => {
         // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         if (item.type === "DropDown" || item.type === "MultiDropDown") {
           handleSetComponentEvent(
             conditionId,
-            value =>
+            (value) =>
               this.dataLinkCallEventForSelection({
                 value,
                 dataArr,
@@ -190,7 +192,7 @@ class FormChildTest extends React.Component {
                 linkDataId,
                 result,
                 item,
-                newArray
+                newArray,
               }),
             newArray.length - 1,
             this.props.item.key
@@ -199,7 +201,7 @@ class FormChildTest extends React.Component {
           // 为需要联动的表单添加 change事件
           handleSetComponentEvent(
             conditionId,
-            value => {
+            (value) => {
               let index = -1;
               // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
               // 如果change数据为数组 则进行深度比较
@@ -233,11 +235,11 @@ class FormChildTest extends React.Component {
     let { item, handleSetComponentEvent, submitDataArray } = this.props;
     let values = item.values;
     let newArray = [];
-    const {appId} = this.props.match.params;
+    const { appId } = this.props.match.params;
 
     submitDataArray.forEach((child, index) => {
       let result = {};
-      values.forEach(item => {
+      values.forEach((item) => {
         switch (item.type) {
           case "SingleText":
           case "TextArea":
@@ -251,16 +253,18 @@ class FormChildTest extends React.Component {
               formType: item.type,
               validate: item.validate,
               hasErr: false,
-              data: child[item.key].data
+              data: child[item.key].data,
             };
             break;
           case "DateInput":
+          case "PureDate":
+          case "PureTime":
             result[item.key] = {
               type: item.label,
               formType: item.type,
               validate: item.validate,
               hasErr: false,
-              data: child[item.key].data
+              data: child[item.key].data,
             };
             break;
           case "RadioButtons":
@@ -271,7 +275,7 @@ class FormChildTest extends React.Component {
               validate: item.validate,
               hasErr: false,
               data: child[item.key].data,
-              values: item.values
+              values: item.values,
             };
             break;
           case "MultiDropDown":
@@ -282,7 +286,7 @@ class FormChildTest extends React.Component {
               validate: item.validate,
               hasErr: false,
               data: child[item.key].data,
-              dropDownOptions: item.data.values
+              dropDownOptions: item.data.values,
             };
             break;
           case "HandWrittenSignature":
@@ -297,8 +301,8 @@ class FormChildTest extends React.Component {
               hasErr: false,
               data: {
                 name: "",
-                url: ""
-              }
+                url: "",
+              },
             };
             break;
           default:
@@ -312,16 +316,16 @@ class FormChildTest extends React.Component {
             conditionId, //联动条件 id(当前表单)
             linkComponentId, //联动条件 id(联动表单)
             linkDataId, //联动数据 id(联动表单)
-            linkFormId //联动表单 id
+            linkFormId, //联动表单 id
           } = item.data.values;
           // 得到id表单的所有提交数据
-          getFormAllSubmission(appId, linkFormId).then(submissions => {
+          getFormAllSubmission(appId, linkFormId).then((submissions) => {
             // 根据联动表单的组件id 得到对应所有数据
             let dataArr = filterSubmissionData(submissions, linkComponentId);
             if (item.type === "DropDown" || item.type === "MultiDropDown") {
               handleSetComponentEvent(
                 conditionId,
-                value =>
+                (value) =>
                   this.dataLinkCallEventForSelection({
                     value,
                     dataArr,
@@ -329,7 +333,7 @@ class FormChildTest extends React.Component {
                     linkDataId,
                     result,
                     item,
-                    newArray
+                    newArray,
                   }),
                 index,
                 this.props.item.key
@@ -338,7 +342,7 @@ class FormChildTest extends React.Component {
               // 为需要联动的表单添加 change事件
               handleSetComponentEvent(
                 conditionId,
-                value => {
+                (value) => {
                   let index = -1;
                   // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
                   // 如果change数据为数组 则进行深度比较
@@ -373,7 +377,7 @@ class FormChildTest extends React.Component {
     this.props.saveSubmitData(newArray);
   };
 
-  _buildSubmitResultSetState = isDidMountAddRow => {
+  _buildSubmitResultSetState = (isDidMountAddRow) => {
     let newArray = [...this.props.submitDataArray];
 
     if (newArray.length !== 0 && isDidMountAddRow) {
@@ -383,9 +387,9 @@ class FormChildTest extends React.Component {
     let { item, handleSetComponentEvent } = this.props;
     let values = item.values;
     let result = {};
-    const {appId} = this.props.match.params;
+    const { appId } = this.props.match.params;
 
-    values.forEach(item => {
+    values.forEach((item) => {
       switch (item.type) {
         case "SingleText":
         case "TextArea":
@@ -399,10 +403,12 @@ class FormChildTest extends React.Component {
             formType: item.type,
             data: item.defaultValue || "",
             validate: item.validate,
-            hasErr: false
+            hasErr: false,
           };
           break;
         case "DateInput":
+        case "PureDate":
+        case "PureTime":
           result[item.key] = {
             type: item.label,
             formType: item.type,
@@ -410,8 +416,8 @@ class FormChildTest extends React.Component {
             hasErr: false,
             data: {
               time: null,
-              moment: null
-            }
+              moment: null,
+            },
           };
           break;
         case "RadioButtons":
@@ -422,7 +428,7 @@ class FormChildTest extends React.Component {
             data: null,
             hasErr: false,
             validate: item.validate,
-            values: item.values
+            values: item.values,
           };
           break;
         case "MultiDropDown":
@@ -431,10 +437,10 @@ class FormChildTest extends React.Component {
           let values = item.data.values;
           if (values.type === "otherFormData") {
             // 子表单关联其他数据
-            getSelection(appId, values.formId, values.optionId).then(res => {
-              result[item.key].dropDownOptions = res.map(data => data.value);
+            getSelection(appId, values.formId, values.optionId).then((res) => {
+              result[item.key].dropDownOptions = res.map((data) => data.value);
               this.setState({
-                refesh: !this.state.refesh
+                refesh: !this.state.refesh,
               });
             });
           } else {
@@ -447,7 +453,7 @@ class FormChildTest extends React.Component {
             hasErr: false,
             validate: item.validate,
             values,
-            dropDownOptions
+            dropDownOptions,
           };
           break;
         }
@@ -461,7 +467,7 @@ class FormChildTest extends React.Component {
             formType: item.type,
             validate: item.validate,
             hasErr: false,
-            data: []
+            data: [],
           };
           break;
         default:
@@ -474,16 +480,16 @@ class FormChildTest extends React.Component {
           conditionId, //联动条件 id(当前表单)
           linkComponentId, //联动条件 id(联动表单)
           linkDataId, //联动数据 id(联动表单)
-          linkFormId //联动表单 id
+          linkFormId, //联动表单 id
         } = item.data.values;
         // 得到id表单的所有提交数据
-        getFormAllSubmission(appId, linkFormId).then(submissions => {
+        getFormAllSubmission(appId, linkFormId).then((submissions) => {
           // 根据联动表单的组件id 得到对应所有数据
           let dataArr = filterSubmissionData(submissions, linkComponentId);
           if (item.type === "DropDown" || item.type === "MultiDropDown") {
             handleSetComponentEvent(
               conditionId,
-              value =>
+              (value) =>
                 this.dataLinkCallEventForSelection({
                   value,
                   dataArr,
@@ -491,7 +497,7 @@ class FormChildTest extends React.Component {
                   linkDataId,
                   result,
                   item,
-                  newArray
+                  newArray,
                 }),
               newArray.length - 1,
               this.props.item.key
@@ -500,7 +506,7 @@ class FormChildTest extends React.Component {
             // 为需要联动的表单添加 change事件
             handleSetComponentEvent(
               conditionId,
-              value => {
+              (value) => {
                 let index = -1;
                 // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
                 // 如果change数据为数组 则进行深度比较
@@ -542,7 +548,7 @@ class FormChildTest extends React.Component {
     if (initData && this.state.initFlag) {
       this.props.saveSubmitData(this._initSubmitData(item, initData));
       this.setState({
-        initFlag: false
+        initFlag: false,
       });
     }
   }
@@ -553,7 +559,7 @@ class FormChildTest extends React.Component {
       form,
       item,
       handleSetComponentEvent,
-      handleSetFormChildData
+      handleSetFormChildData,
     } = this.props;
     const { data } = item;
     // 是否为数据联动
@@ -563,15 +569,15 @@ class FormChildTest extends React.Component {
         linkComponentId, //联动条件 id(联动表单)
         linkDataId, //联动数据 id(联动表单)
         linkFormId, //联动表单 id
-        formChildData //子表单联动数据
+        formChildData, //子表单联动数据
       } = data.values;
       // 得到id表单的所有提交数据
       const { appId } = this.props.match.params;
-      getFormAllSubmission(appId, linkFormId).then(submissions => {
+      getFormAllSubmission(appId, linkFormId).then((submissions) => {
         // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         // 为需要联动的表单添加 change事件
-        handleSetComponentEvent(conditionId, value => {
+        handleSetComponentEvent(conditionId, (value) => {
           let index = -1;
           let newData = [...dataArr];
           // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
@@ -581,7 +587,7 @@ class FormChildTest extends React.Component {
           } else if (value instanceof Object) {
             // 争对地址的比较
             let { county, city, province, detail } = value;
-            newData = dataArr.map(item => {
+            newData = dataArr.map((item) => {
               if (item) {
                 let { county, city, province, detail } = item;
                 return [province, city, county, detail].join("");
@@ -607,16 +613,16 @@ class FormChildTest extends React.Component {
   }
 
   // 如果存在回调数组，则遍历里面的函数执行
-  handleEmitChange = value => {
+  handleEmitChange = (value) => {
     const { callEventArr } = this.props.item;
     if (callEventArr) {
-      callEventArr.forEach(fnc => {
+      callEventArr.forEach((fnc) => {
         fnc && fnc(value, this);
       });
     }
   };
 
-  handleChange = ev => {
+  handleChange = (ev) => {
     const value = ev.target.value;
     this.handleEmitChange(value);
     setTimeout(() => {
@@ -641,7 +647,7 @@ class FormChildTest extends React.Component {
   handleItemChange = (value, formChildObj) => {
     const { callEventArr } = formChildObj;
     if (callEventArr) {
-      callEventArr.forEach(fnc => {
+      callEventArr.forEach((fnc) => {
         fnc && fnc(value, this);
       });
     }
@@ -658,10 +664,10 @@ class FormChildTest extends React.Component {
   }
 
   // 将地址对象转化为字符串
-  AddressObjToString = address => {
+  AddressObjToString = (address) => {
     if (address) {
       let { province, county, city, detail } = address;
-      return [province, city, county, detail].filter(item => item).join("");
+      return [province, city, county, detail].filter((item) => item).join("");
     } else {
       return "";
     }
@@ -680,33 +686,37 @@ class FormChildTest extends React.Component {
             <div key={key} className={className}>
               <div
                 className="inputContainer"
-                onClick={e => {
+                onClick={(e) => {
                   document.getElementById(key + rowIndex).focus();
-                  document.querySelectorAll(".componentContent").forEach(el => {
-                    el.classList.remove("activecontent");
-                  });
+                  document
+                    .querySelectorAll(".componentContent")
+                    .forEach((el) => {
+                      el.classList.remove("activecontent");
+                    });
                   e.target.parentNode.parentNode.classList.add("activecontent");
                 }}
-                onBlur={e => {
-                  document.querySelectorAll(".componentContent").forEach(el => {
-                    el.classList.remove("activecontent");
-                  });
+                onBlur={(e) => {
+                  document
+                    .querySelectorAll(".componentContent")
+                    .forEach((el) => {
+                      el.classList.remove("activecontent");
+                    });
                 }}
               >
                 <Input
                   id={key + rowIndex}
                   type="number"
-                  onChange={e => {
+                  onChange={(e) => {
                     let { value } = e.target;
                     item.data = value;
                   }}
-                  onBlur={e => {
+                  onBlur={(e) => {
                     let { value } = e.target;
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
                     this.setState({
-                      refesh: !this.state.refesh
+                      refesh: !this.state.refesh,
                     });
                     this._checkFormChildHasError(submitDataArray);
                     this.handleItemChange(value, item);
@@ -727,32 +737,34 @@ class FormChildTest extends React.Component {
             <div key={key} className={className}>
               <div
                 className="inputContainer"
-                onClick={e => {
+                onClick={(e) => {
                   // document.getElementById(key + rowIndex).focus();
                   // document.querySelectorAll(".componentContent").forEach(el => {
                   //   el.classList.remove("activecontent");
                   // });
                   // e.target.parentNode.parentNode.classList.add("activecontent");
                 }}
-                onBlur={e => {
-                  document.querySelectorAll(".componentContent").forEach(el => {
-                    el.classList.remove("activecontent");
-                  });
+                onBlur={(e) => {
+                  document
+                    .querySelectorAll(".componentContent")
+                    .forEach((el) => {
+                      el.classList.remove("activecontent");
+                    });
                 }}
               >
                 <Input
                   id={key + rowIndex}
-                  onChange={e => {
+                  onChange={(e) => {
                     let { value } = e.target;
                     item.data = value;
                   }}
-                  onBlur={e => {
+                  onBlur={(e) => {
                     let { value } = e.target;
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
                     this.setState({
-                      refesh: !this.state.refesh
+                      refesh: !this.state.refesh,
                     });
                     this._checkFormChildHasError(submitDataArray);
                     this.handleItemChange(value, item);
@@ -774,14 +786,14 @@ class FormChildTest extends React.Component {
                     <CheckboxInput
                       value={item.data || []}
                       item={item}
-                      onChange={value => {
+                      onChange={(value) => {
                         item.data = value;
                         checkValueValidByType(item, value)
                           ? (item.hasErr = false)
                           : (item.hasErr = true);
-                        this.setState(state => ({
+                        this.setState((state) => ({
                           ...state,
-                          refesh: !this.state.refesh
+                          refesh: !this.state.refesh,
                         }));
                         this._checkFormChildHasError(submitDataArray);
                       }}
@@ -817,14 +829,14 @@ class FormChildTest extends React.Component {
                     <MultiDropDown
                       item={item}
                       value={item.data || []}
-                      onChange={value => {
+                      onChange={(value) => {
                         item.data = value;
                         checkValueValidByType(item, value)
                           ? (item.hasErr = false)
                           : (item.hasErr = true);
-                        this.setState(state => ({
+                        this.setState((state) => ({
                           ...state,
-                          refesh: !this.state.refesh
+                          refesh: !this.state.refesh,
                         }));
                         this._checkFormChildHasError(submitDataArray);
                       }}
@@ -854,14 +866,14 @@ class FormChildTest extends React.Component {
                 content={
                   <RadioButtons
                     item={item}
-                    onChange={value => {
+                    onChange={(value) => {
                       item.data = value;
                       checkValueValidByType(item, value)
                         ? (item.hasErr = false)
                         : (item.hasErr = true);
-                      this.setState(state => ({
+                      this.setState((state) => ({
                         ...state,
-                        refesh: !this.state.refesh
+                        refesh: !this.state.refesh,
                       }));
                       this._checkFormChildHasError(submitDataArray);
                     }}
@@ -889,14 +901,14 @@ class FormChildTest extends React.Component {
                 content={
                   <DropDown
                     item={item}
-                    onChange={value => {
+                    onChange={(value) => {
                       item.data = value;
                       checkValueValidByType(item, value)
                         ? (item.hasErr = false)
                         : (item.hasErr = true);
-                      this.setState(state => ({
+                      this.setState((state) => ({
                         ...state,
-                        refesh: !this.state.refesh
+                        refesh: !this.state.refesh,
                       }));
                       this._checkFormChildHasError(submitDataArray);
                     }}
@@ -924,16 +936,16 @@ class FormChildTest extends React.Component {
                   <FileUpload
                     value={item.data || []}
                     item={item.component}
-                    onChange={value => {
+                    onChange={(value) => {
                       item.data = value;
 
                       checkValueValidByType(item, value)
                         ? (item.hasErr = false)
                         : (item.hasErr = true);
 
-                      this.setState(state => ({
+                      this.setState((state) => ({
                         ...state,
-                        refesh: !this.state.refesh
+                        refesh: !this.state.refesh,
                       }));
                       this._checkFormChildHasError(submitDataArray);
                     }}
@@ -964,14 +976,14 @@ class FormChildTest extends React.Component {
                   <ImageUpload
                     value={item.data || []}
                     item={item.component}
-                    onChange={value => {
+                    onChange={(value) => {
                       item.data = value;
                       checkValueValidByType(item, value)
                         ? (item.hasErr = false)
                         : (item.hasErr = true);
-                      this.setState(state => ({
+                      this.setState((state) => ({
                         ...state,
-                        refesh: !this.state.refesh
+                        refesh: !this.state.refesh,
                       }));
                       this._checkFormChildHasError(submitDataArray);
                     }}
@@ -1013,9 +1025,9 @@ class FormChildTest extends React.Component {
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
-                    this.setState(state => ({
+                    this.setState((state) => ({
                       ...state,
-                      refesh: !this.state.refesh
+                      refesh: !this.state.refesh,
                     }));
                     this._checkFormChildHasError(submitDataArray);
                   }}
@@ -1024,7 +1036,7 @@ class FormChildTest extends React.Component {
             );
           }
           break;
-          case "PureDate":
+        case "PureDate":
           {
             let valueOption = {};
             if (item.data && item.data.moment) {
@@ -1043,9 +1055,9 @@ class FormChildTest extends React.Component {
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
-                    this.setState(state => ({
+                    this.setState((state) => ({
                       ...state,
-                      refesh: !this.state.refesh
+                      refesh: !this.state.refesh,
                     }));
                     this._checkFormChildHasError(submitDataArray);
                   }}
@@ -1054,8 +1066,9 @@ class FormChildTest extends React.Component {
             );
           }
           break;
-          case "PureTime":
+        case "PureTime":
           {
+            console.log("PureTime");
             let valueOption = {};
             if (item.data && item.data.moment) {
               valueOption.value = moment(item.data.moment);
@@ -1073,9 +1086,9 @@ class FormChildTest extends React.Component {
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
-                    this.setState(state => ({
+                    this.setState((state) => ({
                       ...state,
-                      refesh: !this.state.refesh
+                      refesh: !this.state.refesh,
                     }));
                     this._checkFormChildHasError(submitDataArray);
                   }}
@@ -1092,14 +1105,14 @@ class FormChildTest extends React.Component {
                 content={
                   <Address
                     item={item}
-                    setAddress={value => {
+                    setAddress={(value) => {
                       item.data = value;
                       checkValueValidByType(item, value)
                         ? (item.hasErr = false)
                         : (item.hasErr = true);
 
-                      this.setState(state => ({
-                        refesh: !this.state.refesh
+                      this.setState((state) => ({
+                        refesh: !this.state.refesh,
                       }));
                       this._checkFormChildHasError(submitDataArray);
                     }}
@@ -1143,23 +1156,23 @@ class FormChildTest extends React.Component {
       linkDataId,
       result,
       item,
-      newArray
+      newArray,
     } = args;
 
     let indexArr = getResIndexArray(value, dataArr);
     if (indexArr.length > 0) {
       let data = filterSubmissionData(submissions, linkDataId);
       let res = [];
-      indexArr.forEach(i => {
+      indexArr.forEach((i) => {
         if (data[i]) {
           res.push(data[i]);
         }
       });
       // 去重
       const selections = [];
-      res.forEach(item => {
+      res.forEach((item) => {
         if (Array.isArray(item)) {
-          item.forEach(data => {
+          item.forEach((data) => {
             if (data) {
               if (selections.includes(data)) {
                 return null;
@@ -1199,7 +1212,7 @@ class FormChildTest extends React.Component {
 
   _checkFormChildHasError(submitDataArray) {
     let isFormChildErr = false;
-    submitDataArray.forEach(item => {
+    submitDataArray.forEach((item) => {
       for (let m in item) {
         if (item[m].hasErr === true) {
           isFormChildErr = true;
@@ -1271,7 +1284,7 @@ class FormChildTest extends React.Component {
                           display: "inline-block",
                           width: "25px",
                           height: "25px",
-                          lineHeight: "25px"
+                          lineHeight: "25px",
                         }}
                         onMouseEnter={() => {
                           submitDataArray.forEach((item, i) => {
@@ -1323,7 +1336,7 @@ class FormChildTest extends React.Component {
                           src="/image/icons/delete.png"
                           style={{
                             width: "25px",
-                            height: "25px"
+                            height: "25px",
                           }}
                           id={formChildKey + "Btn" + index}
                           onMouseOut={() => {
@@ -1358,14 +1371,14 @@ class FormChildTest extends React.Component {
                               ).style.display = "inline-block";
                             }
                           }}
-                          onClick={_e => {
+                          onClick={(_e) => {
                             let newArray = this.props.submitDataArray;
                             newArray.splice(index, 1);
                             this.props.saveSubmitData(newArray);
 
-                            this.setState(state => ({
+                            this.setState((state) => ({
                               ...state,
-                              refesh: !this.state.refesh
+                              refesh: !this.state.refesh,
                             }));
                           }}
                         />
