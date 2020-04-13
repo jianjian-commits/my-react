@@ -215,6 +215,7 @@ class Submission extends Component {
           delete values[component.key];
         } else {
           values[component.key].xx = address;
+          console.log("values[component.key]",values[component.id])
         }
       }
     });
@@ -997,7 +998,7 @@ class Submission extends Component {
                     getFieldDecorator={getFieldDecorator}
                     form={this.props.form}
                     showAddressErr={this.state.showAddressErr}
-                    address={this.state.addressesObj[item.id]}
+                    address={this.state.addressesObj[item.key]}
                     item={item}
                   />
                 ) : (
@@ -1009,7 +1010,7 @@ class Submission extends Component {
                     getFieldDecorator={getFieldDecorator}
                     form={this.props.form}
                     showAddressErr={this.state.showAddressErr}
-                    address={this.state.addressesObj[item.id]}
+                    address={this.state.addressesObj[item.key]}
                     item={item}
                   />
                 )}
