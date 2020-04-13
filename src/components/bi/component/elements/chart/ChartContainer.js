@@ -199,7 +199,7 @@ const ChartContainer = props => {
         {btnVisible && (
           <ChartToolbarBtn
             {...props}
-            iconBtnGroup={iconBtnGroup}
+            iconBtnGroup={iconBtnGroup.filter(item => item.type!="redo" && item.type!="fullscreen")}
             isBtnBlock={isBtnBlock}
           />
          )} 

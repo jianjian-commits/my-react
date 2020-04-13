@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Icon } from "antd";
+import { Icon, Popover } from "antd";
 import { GroupType } from "./Constant";
 import classNames from "classnames";
-import classes from "../../scss/bind/optionSelect.module.scss"
+import classes from "../../scss/bind/optionSelect.module.scss";
 const operationArr = [
   { ...GroupType.SUM },
   { ...GroupType.AVERAGE },
@@ -13,7 +13,7 @@ const operationArr = [
 export default function FieldMeasureSelect(props) {
   const [selectIndex, setSelectIndex] = useState(0);
   const [popoverVisible, setPopoverVisible] = useState(false);
-  const [btnVisible,setBtnVisible] = useState(false);
+  const [btnVisible, setBtnVisible] = useState(false);
   useEffect(() => {
     const dropDownEvent = event => {
       const e = event || window.event;
@@ -25,12 +25,12 @@ export default function FieldMeasureSelect(props) {
       ) {
         setPopoverVisible(false);
       }
-    }
+    };
     document.addEventListener("click", dropDownEvent);
     getSelectOperation(operationArr[selectIndex]);
     return () => {
       document.removeEventListener("click", dropDownEvent);
-    }
+    };
   }, []);
 
   const getSelectOperation = value => {
@@ -53,28 +53,47 @@ export default function FieldMeasureSelect(props) {
 
   return (
     <div className={classes.meaContainer}>
-      <div
-        className={classes.dropDownBtn}
-        onMouseEnter={handlMouseEnter} 
-        onMouseLeave={handlMouseLeave}
-        id={"dropDownBtn" + props.item.id}
-        onClick={e => {
-          e.stopPropagation();
-          setPopoverVisible(!popoverVisible);
-        }}
+      <Popover
+        placement="right"
+        title=""
+        overlayStyle={{ backgroundColor: "blank" }}
+        overlayClassName={classes.FieldSelectPopover}
+        content={"这是一串二级菜单"}
+        trigger="hover"
+        visible={true}
       >
-        {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
-        <span className={classes.dropDownBtnSpan}>
-          {`${props.item.label}(${operationArr[selectIndex].name})`}
-        </span>
-        {btnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
-      </div>
+        <div
+          className={classes.dropDownBtn}
+          onMouseEnter={handlMouseEnter}
+          onMouseLeave={handlMouseLeave}
+          id={"dropDownBtn" + props.item.id}
+          onClick={e => {
+            e.stopPropagation();
+            setPopoverVisible(!popoverVisible);
+          }}
+        >
+          {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
+          <span className={classes.dropDownBtnSpan}>
+            {`${props.item.label}(${operationArr[selectIndex].name})`}
+          </span>
+          {btnVisible && (
+            <Icon
+              type="close-circle"
+              onClick={handleDeleteTarget}
+              theme="filled"
+            />
+          )}
+        </div>
+      </Popover>
       {popoverVisible && (
-        <div className={classes.dropDownItemContainer} id={"dropDown" + props.item.id}>
+        <div
+          className={classes.dropDownItemContainer}
+          id={"dropDown" + props.item.id}
+        >
           {operationArr.map((operation, index) => (
             <div
               className={classes.dropDownItem}
-              style={selectIndex == index ? {backgroundColor: "#dfecff"} : {}}
+              style={selectIndex == index ? { backgroundColor: "#dfecff" } : {}}
               // className={classNames("dropDownItem", {
               //   selectOption: selectIndex == index
               // })}
@@ -89,10 +108,8 @@ export default function FieldMeasureSelect(props) {
               }}
               key={index}
             >
-              <span className={classes.dropDownItemSpan}>
-                {operation.name}
-              </span>
-              {selectIndex === index && <Icon type="check"/>}
+              <span className={classes.dropDownItemSpan}>{operation.name}</span>
+              {selectIndex === index && <Icon type="check" />}
             </div>
           ))}
         </div>
