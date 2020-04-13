@@ -80,7 +80,7 @@ class Apps extends React.Component {
       catchError(err);
     }
   }
-
+ 
   // 取消新建/关闭模态窗
   handleCancel() {
     this.setState({
