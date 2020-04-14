@@ -646,6 +646,7 @@ class FormSubmitData extends PureComponent {
 
   // 过滤字段
   handleFilterFields = (fields) => {
+    console.log(fields)
     this.setState({
       selectedFields: fields,
     });
@@ -965,6 +966,7 @@ class FormSubmitData extends PureComponent {
                 }}
                 clickExtendCallBack={this.showFilterComponent}
                 isFilterMode={this.state.isFilterMode}
+                handleFilterFields={this.handleFilterFields}
               />
             )}
             <div
