@@ -3,6 +3,7 @@ import { Modal, Form, Input } from "antd";
 import classes from "./create.module.scss";
 import classnames from "classnames";
 import MyTextArea from "./MyTextArea";
+const { TextArea } = Input;
 
 // 图标数据
 const iconDatas = [
@@ -85,7 +86,26 @@ class ModalCreation extends Component {
         component: <Input />
       }
     ];
-    const params = title === "创建应用" ? appParams : roleParams;
+    const positionParams = [
+      {
+        label: "职位名称",
+        key: "name",
+        options: { rules: [{ required: true, message: "职位名称不能为空" }] },
+        component: <Input />
+      },
+      {
+        label: "职位描述",
+        key: "description",
+        component: <TextArea rows={5} className={classes.stretch} />
+      }
+    ];
+
+    const params =
+      title === "创建应用"
+        ? appParams
+        : title === "新建职位"
+        ? positionParams
+        : roleParams;
     return (
       <Modal
         destroyOnClose={true}
