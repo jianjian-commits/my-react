@@ -13,6 +13,7 @@ import { EditIcon } from "../../../assets/icons";
 import { catchError } from "../../../utils";
 import request from "../../../utils/request";
 import ModalCreation from "../../profileManagement/modalCreate/ModalCreation";
+import PositionDel from "./PositionDel";
 const { TreeNode } = Tree;
 
 const Header = () => {
@@ -59,7 +60,10 @@ class PositionTree extends Component {
       if (res && res.status === "SUCCESS") {
         message.success("新建职位成功!");
         this.handleCancel();
-        this.getPositionTree();
+        this.setState({
+          enterD: true
+        });
+        // this.getPositionTree();
       } else {
         message.error(res.msg || "新建职位失败");
       }
@@ -72,7 +76,8 @@ class PositionTree extends Component {
   handleCancel() {
     this.setState({
       open: false,
-      selectedId: ""
+      selectedId: "",
+      enterD: false
     });
   }
 
@@ -161,7 +166,13 @@ class PositionTree extends Component {
               onClick={() => this.setState({ open: true, selectedId: item.id })}
             />
           )}
-          {item.code !== "COMPANY" && <EditIcon />}
+          {item.code !== "COMPANY" && (
+            <EditIcon
+              onClick={() => {
+                this.setState({ enterD: true });
+              }}
+            />
+          )}
           {!item.code && (
             <Popconfirm
               title="确认删除该职位？"
@@ -193,30 +204,34 @@ class PositionTree extends Component {
     return (
       <div className={classes.wrapper}>
         <Header />
-        <div className={classes.tree}>
-          <div className={classes.button}>
-            <Button type="link" onClick={() => this.unfoldArr("unfold")}>
-              全部展开
-            </Button>
-            |
-            <Button type="link" onClick={() => this.unfoldArr("collapse")}>
-              全部折叠
-            </Button>
+        {this.state.enterD ? (
+          <PositionDel />
+        ) : (
+          <div className={classes.tree}>
+            <div className={classes.button}>
+              <Button type="link" onClick={() => this.unfoldArr("unfold")}>
+                全部展开
+              </Button>
+              |
+              <Button type="link" onClick={() => this.unfoldArr("collapse")}>
+                全部折叠
+              </Button>
+            </div>
+            <Tree
+              showIcon
+              showLine
+              onExpand={expandedKeys => {
+                this.setState({
+                  expandedArr: expandedKeys
+                });
+              }}
+              className="hide-file-icon"
+              expandedKeys={this.state.expandedArr}
+            >
+              {this.renderTreeNodes(this.state.treeData)}
+            </Tree>
           </div>
-          <Tree
-            showIcon
-            showLine
-            onExpand={expandedKeys => {
-              this.setState({
-                expandedArr: expandedKeys
-              });
-            }}
-            className="hide-file-icon"
-            expandedKeys={this.state.expandedArr}
-          >
-            {this.renderTreeNodes(this.state.treeData)}
-          </Tree>
-        </div>
+        )}
         <ModalCreation
           title={"新建职位"}
           visible={this.state.open}
