@@ -1,0 +1,98 @@
+.wrapper {
+  padding: 29px 21px;
+  > p {
+    padding-top: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    span {
+      color: #333;
+      font-size: 16px;
+    }
+    svg {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
+:global {
+  .header-tooltip {
+    > div {
+      width: 314px;
+    }
+    .ant-tooltip-inner {
+      background-color: #fff;
+      color: #555;
+    }
+    .ant-tooltip-arrow::before {
+      background-color: #fff;
+    }
+  }
+}
+
+.tree {
+  height: calc(100vh - 200px);
+  margin-top: 26px;
+  background-color: #fff;
+  width: 100%;
+  ul {
+    margin: 0 20px;
+    padding: 14px 0;
+  }
+  .button {
+    position: absolute;
+    margin-left: 242px;
+    margin-top: 16px;
+    z-index: 2;
+  }
+  .title-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  :global {
+    .ant-tree-title svg {
+      display: none;
+      margin-left: 20px;
+      width: 14px;
+      height: 14px;
+    }
+    .ant-tree-node-content-wrapper:hover {
+      svg {
+        display: inline;
+      }
+    }
+    .ant-tree-node-content-wrapper {
+      // width: 24px;
+      display: inline-flex !important;
+      .ant-tree-iconEle {
+        margin: 3px 3px 0 0;
+      }
+      &.ant-tree-node-selected {
+        background: transparent !important;
+      }
+    }
+  }
+}
+
+:global {
+  .ant-tree.ant-tree-show-line.hide-file-icon li{
+    span.ant-tree-switcher-noop{
+      background: transparent;
+    }
+    .ant-tree-switcher-noop > i{
+      visibility: hidden;
+    }
+    .ant-tree-switcher-noop:after{
+      content: " ";
+      height: 12px;
+      border: 1px solid #9c9b9b;
+      width: 12px;
+      position: absolute;
+      left: 6px;
+      top: 25%;
+      margin: 0;
+    }
+  }
+}
