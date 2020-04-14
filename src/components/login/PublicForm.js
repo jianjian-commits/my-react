@@ -84,10 +84,10 @@ export default connect()(
                   hasFeedback: p.hasFeedback,
                   setActiveKey,
                   sendCode,
+                  resetAllowSendCodeState,
                   isFetchCoding,
                   fetchText,
                   allowSendCode,
-                  resetAllowSendCodeState,
                   dispatch,
                   activeKey
                   
