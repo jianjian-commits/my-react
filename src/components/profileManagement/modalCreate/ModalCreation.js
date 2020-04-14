@@ -94,9 +94,8 @@ class ModalCreation extends Component {
         component: <Input />
       },
       {
-        label: "应用描述",
+        label: "职位描述",
         key: "description",
-        options: { rules: [{ required: true, message: "描述不能为空" }] },
         component: <TextArea rows={5} className={classes.stretch} />
       }
     ];

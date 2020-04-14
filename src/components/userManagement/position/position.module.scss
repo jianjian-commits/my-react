@@ -49,14 +49,17 @@
   .title-wrap {
     display: flex;
     align-items: center;
+    :nth-child(1) {
+      width: 13px;
+    }
   }
 
   :global {
     .ant-tree-title svg {
       display: none;
       margin-left: 20px;
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
     }
     .ant-tree-node-content-wrapper:hover {
       svg {
@@ -64,7 +67,6 @@
       }
     }
     .ant-tree-node-content-wrapper {
-      // width: 24px;
       display: inline-flex !important;
       .ant-tree-iconEle {
         margin: 3px 3px 0 0;
@@ -77,14 +79,14 @@
 }
 
 :global {
-  .ant-tree.ant-tree-show-line.hide-file-icon li{
-    span.ant-tree-switcher-noop{
+  .ant-tree.ant-tree-show-line.hide-file-icon li {
+    span.ant-tree-switcher-noop {
       background: transparent;
     }
-    .ant-tree-switcher-noop > i{
+    .ant-tree-switcher-noop > i {
       visibility: hidden;
     }
-    .ant-tree-switcher-noop:after{
+    .ant-tree-switcher-noop:after {
       content: " ";
       height: 12px;
       border: 1px solid #9c9b9b;
@@ -93,6 +95,7 @@
       left: 6px;
       top: 25%;
       margin: 0;
+      box-shadow: 0 0 2px #888888;
     }
   }
 }
