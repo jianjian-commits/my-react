@@ -6,7 +6,8 @@ import {
   InputNumber,
   Tooltip,
   Select,
-  Divider
+  Divider,
+  Modal
 } from "antd";
 import { filterFormsForRelation } from "../utils/filterData";
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
@@ -23,6 +24,7 @@ import {
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
+const { TextArea } = Input;
 
 class MultiDropDownInspector extends React.Component {
   constructor(props) {
@@ -32,7 +34,10 @@ class MultiDropDownInspector extends React.Component {
       formPath: locationUtils.getUrlParamObj().path,
       isLinked: false,
       isShowDataLinkageModal: false,
-      isShowOtherDataModal: false
+      isShowOtherDataModal: false,
+      visible: false,
+      tempOptions: props.element.data.values,
+      tempContent: "",
     };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
@@ -118,6 +123,33 @@ class MultiDropDownInspector extends React.Component {
       this.props.setItemValues(this.props.element, "data", newValuesList);
     }
   }
+
+  addChooseItems = () => {
+    const tempOptions = this.state.tempOptions;
+    const newItem = {
+      label: `选项`,
+      value: `选项`,
+      shortcut: ""
+    };
+    let newValuesList;
+    if(tempOptions.length > 0){
+      newValuesList = [...tempOptions];
+    } else {
+      // 如果编辑框里的内容没有生成选项,那就只有一个选项
+      newValuesList = [newItem];
+    }
+    if (this.props.elementParent) {
+      this.props.setFormChildItemValues(
+        this.props.elementParent,
+        "data",
+        newValuesList,
+        this.props.element
+      );
+    } else {
+      this.props.setItemValues(this.props.element, "data", newValuesList);
+    }
+  }
+ 
   deleteChooseItem(item, index) {
     // let newValuesList = [...this.props.element.data.values];
     // newValuesList.pop(item);
@@ -265,6 +297,46 @@ class MultiDropDownInspector extends React.Component {
     }
   };
 
+  showModal = () => {
+    const tempContent = this.props.element.data.values.map(item => item.value).join("\n") + "\n";
+    this.setState({
+      visible: true,
+      tempContent: tempContent
+    });
+  };
+
+  handleOk = e => {
+    this.setState({
+      visible: false,
+    });
+    this.addChooseItems();
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleContent = (e) =>{
+    const newArray = this.handleArray(e.target.value.split("\n"));
+    this.setState({
+      tempOptions: newArray,
+      tempContent: e.target.value
+    })
+  }
+
+  handleArray(arr){
+    // 处理掉额外的空格 和换行符
+    return arr.map(item =>
+      item.trim())
+      .filter(item =>item !== "")
+      .map(item=>({
+        value: item,
+        label: item,
+        shortcut: ""
+      }))
+  } 
   // 选择指定组件渲染
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, isShowOtherDataModal, formId } = this.state;
@@ -279,6 +351,7 @@ class MultiDropDownInspector extends React.Component {
       // 自定义组件
       case "custom": {
         const { values } = this.props.element.data;
+        const { tempContent } = this.state;
         return (
           <div className="chooseitems">
             {values.map((item, index) => (
@@ -306,6 +379,19 @@ class MultiDropDownInspector extends React.Component {
             <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
               增加选项
             </Button>
+            <Button onClick={this.showModal}>批量编辑</Button>
+            <Modal
+              title="批量编辑"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <TextArea
+                autoSize={{ minRows: 8, maxRows: 8 }}
+                onChange={this.handleContent}
+                value={tempContent}>
+              </TextArea>
+            </Modal>
           </div>
         );
       }
@@ -511,6 +597,7 @@ class MultiDropDownInspector extends React.Component {
           </div>
           <div className="number-check-warper">
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="minOptionNumber"
               placeholder="不限"
               min={1}
@@ -522,6 +609,7 @@ class MultiDropDownInspector extends React.Component {
             />
             ~
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="maxOptionNumber"
               placeholder="不限"
               min={1}
