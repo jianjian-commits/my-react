@@ -20,13 +20,13 @@ const { Sider, Content } = Layout;
 const webs = [
   {
     path: "/company/info",
-    label: "团队信息",
+    label: "公司信息",
     icon: InfoIcon,
     component: TeamInfo
   },
   {
     path: "/company/member",
-    label: "团队成员",
+    label: "公司成员",
     auth: TEAM_MANAGEMENT_LIST,
     icon: MemberIcon,
     component: TeamMember
