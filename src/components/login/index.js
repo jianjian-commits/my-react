@@ -157,8 +157,7 @@ export default connect(
   isFetchCoding,
   fetchText,
   allowSendCode,
-  resetAllowSendCodeState,
-  dispatch
+  resetAllowSendCodeState
 }) {
   const { userId, companyId, token, active, inviter, invitedCompany } =
     history.location.query || {};
