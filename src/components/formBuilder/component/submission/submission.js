@@ -53,7 +53,10 @@ import RadioButtonsMobile from "./component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
-import moment from 'moment'
+import moment from "moment";
+
+import PureTime from "./component/pureTime";
+import PureDate from "./component/pureDate";
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -128,7 +131,6 @@ class Submission extends Component {
     }));
   }
 
-
   // 设置地址(解决只能获取单个数据)
   handleSetAddress = address => {
     const { id } = address;
@@ -168,32 +170,61 @@ class Submission extends Component {
       if (values[component.key] === "") {
         delete values[component.key];
       }
-      if (component.type === "NumberInput" && values.hasOwnProperty(component.key)) {
-        values[component.key] = Number(values[component.key])
+      if (
+        component.type === "NumberInput" &&
+        values.hasOwnProperty(component.key)
+      ) {
+        values[component.key] = Number(values[component.key]);
       }
     });
     return values;
   }
 
-  _setDateTimeVaule(values) {
-    this.props.formComponent.components.map(component => {
+  _setDateTimeVaule(values, components = this.props.formComponent.components) {
+    components.map(component => {
+      let type = component.type;
       if (
-        component.type === "DateInput" &&
         values.hasOwnProperty(component.key) &&
         values[component.key] != void 0
       ) {
-        // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
-        if (values[component.key].constructor === Date) {
-          let date = new Date(values[component.key].setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().replace("Z","");
-        } else {
-          let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().toString().replace("Z","")
+        if (
+          type === "DateInput" ||
+          type === "PureDate" ||
+          type === "PureTime"
+        ) {
+          // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
+          if (values[component.key].constructor === Date) {
+            let date = new Date(values[component.key].setUTCMilliseconds(0));
+            let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
+            date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
+            values[component.key] = new Date(date).toJSON().replace("Z", "");
+          } else {
+            let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
+            let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
+            date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
+            values[component.key] = new Date(date)
+              .toJSON()
+              .toString()
+              .replace("Z", "");
+          }
         }
+
+        if (type === "PureDate") {
+          values[component.key] = moment(values[component.key]).format(
+            "YYYY-MM-DD"
+          );
+        }
+        if (type === "PureTime") {
+          values[component.key] = moment(values[component.key]).format(
+            "HH:mm:ss.SSS"
+          );
+        }
+      }
+      if (type === "FormChildTest") {
+        console.log(component.key, values);
+        // values[component.key].forEach(item => {
+        //   this._setDateTimeVaule(item, component.values);
+        // })
       }
     });
     return values;
@@ -256,6 +287,7 @@ class Submission extends Component {
   }
 
   _iterateAllComponentToSetData(formComponentArray, customDataArray, values) {
+    debugger;
     for (let i in values) {
       let currentComponent = formComponentArray.filter(item => {
         return item.id === i;
@@ -378,11 +410,9 @@ class Submission extends Component {
   _changeErrorResponseData = componentId => {
     let errorResponseMsg = { ...this.state.errorResponseMsg };
     delete errorResponseMsg[componentId];
-    this.setState(
-      {
-        errorResponseMsg
-      }
-    );
+    this.setState({
+      errorResponseMsg
+    });
   };
   _setErrorResponseData = errorResponseData => {
     let errorResponseMsg = {};
@@ -399,12 +429,39 @@ class Submission extends Component {
     });
   };
 
-
   // 设置正确的子表单数据
   setCorrectFormChildData = (values, formChildDataObj) => {
+    let date = new Date((new Date()).setUTCMilliseconds(0));
+    let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
+    date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
+
     for (let key in values) {
       if (formChildDataObj.hasOwnProperty(key)) {
         values[key] = formChildDataObj[key];
+      }
+      if (Array.isArray(values[key])) {
+        values[key].forEach((data, index) => {
+          for (let k in data) {
+            let type = data[k].formType;
+            if (data[k].autoInput) {
+              if (type === "PureDate") {
+                data[k].data = {
+                  time: moment(date).format("YYYY-MM-DD")
+                };
+              }
+              if (type === "PureTime") {
+                data[k].data = {
+                  time: moment(date).format("HH:mm:ss.SSS")
+                };
+              }
+              if (type === "DateInput") {
+                data[k].data = {
+                  time: moment(date).format("YYYY-MM-DD HH:mm:ss.SSS")
+                };
+              }
+            }
+          }
+        });
       }
     }
   };
@@ -444,7 +501,6 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
-
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
@@ -492,34 +548,38 @@ class Submission extends Component {
         //     return false;
         // }
 
-            this.setState({ isSubmitted: true,errorResponseMsg:{} });
-            this.props
-              .submitSubmission(this.state.formId, values,this.props.appid,this.props.extraProp)
-              .then(response => {
-                if(response.data.id != void 0){
-                  isMobile
-                    ? Toast.success("提交成功!")
-                    : message.success("提交成功!");
-                  setTimeout(() => {
-                    let skipToSubmissionDataFlag = true;
-                    this.props.actionFun(skipToSubmissionDataFlag);
-                  }, 1000);
-                }
-              })
-              .catch(error => {
-                if (error.response && error.response.data.code === 9998) {
-                  this._setErrorResponseData(error.response.data);
-                  isMobile ? Toast.fail("提交失败") : message.error("提交失败");
-                }else if(error.response && error.response.data.code == 2003){
-                  // this.setState({
-                  //   isSubmitted: false
-                  // })
-                  isMobile
-                  ? Toast.fail(error.response.data.msg)
-                  : message.error(error.response.data.msg);
-                }
-              });
-      
+        this.setState({ isSubmitted: true, errorResponseMsg: {} });
+        this.props
+          .submitSubmission(
+            this.state.formId,
+            values,
+            this.props.appid,
+            this.props.extraProp
+          )
+          .then(response => {
+            if (response.data.id != void 0) {
+              isMobile
+                ? Toast.success("提交成功!")
+                : message.success("提交成功!");
+              setTimeout(() => {
+                let skipToSubmissionDataFlag = true;
+                this.props.actionFun(skipToSubmissionDataFlag);
+              }, 1000);
+            }
+          })
+          .catch(error => {
+            if (error.response && error.response.data.code === 9998) {
+              this._setErrorResponseData(error.response.data);
+              isMobile ? Toast.fail("提交失败") : message.error("提交失败");
+            } else if (error.response && error.response.data.code == 2003) {
+              // this.setState({
+              //   isSubmitted: false
+              // })
+              isMobile
+                ? Toast.fail(error.response.data.msg)
+                : message.error(error.response.data.msg);
+            }
+          });
       });
     }
   };
@@ -722,6 +782,58 @@ class Submission extends Component {
                   />
                 ) : (
                   <DateInput
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                )}
+              </div>
+            );
+          case "PureTime":
+            return (
+              <div
+                key={item.key}
+                style={{ zIndex: 300 - i }}
+                id={"Id" + item.key + "Dom"}
+              >
+                {mobile.is ? (
+                  <DateInputMobile
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                ) : (
+                  <PureTime
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                )}
+              </div>
+            );
+          case "PureDate":
+            return (
+              <div
+                key={item.key}
+                style={{ zIndex: 300 - i }}
+                id={"Id" + item.key + "Dom"}
+              >
+                {mobile.is ? (
+                  <DateInputMobile
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                ) : (
+                  <PureDate
                     forms={forms}
                     handleSetComponentEvent={this.handleSetComponentEvent}
                     getFieldDecorator={getFieldDecorator}
@@ -1050,7 +1162,7 @@ class Submission extends Component {
       // }
     });
     // 如果没找到对应数据 则返回默认值
-    if (formchildData === null) {
+    if (formchildData == null) {
       formChildDataObj[key] = [rowTemplate]; //清空对应id子表单的数据
       this.setState({
         formChildDataObj
@@ -1115,8 +1227,6 @@ class Submission extends Component {
         };
       });
     }
-
-    console.log(layout)
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];
@@ -1135,19 +1245,35 @@ class Submission extends Component {
             //   isShowExtraTitle={false}
             // />
             <div className="submissionTitle">
-                   <Breadcrumb separator={
-                     <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z" fill="#666666"/>
-                     </svg>                     
-                   }>
-                  <Breadcrumb.Item className="recordList"
-                  onClick = {()=>{
+              <Breadcrumb
+                separator={
+                  <svg
+                    width="7"
+                    height="12"
+                    viewBox="0 0 7 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z"
+                      fill="#666666"
+                    />
+                  </svg>
+                }
+              >
+                <Breadcrumb.Item
+                  className="recordList"
+                  onClick={() => {
                     let skipToSubmissionDataFlag = true;
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }}
-                  >记录列表</Breadcrumb.Item>
-                  <Breadcrumb.Item className="submitRecord">提交记录</Breadcrumb.Item>
-                  </Breadcrumb>
+                >
+                  记录列表
+                </Breadcrumb.Item>
+                <Breadcrumb.Item className="submitRecord">
+                  提交记录
+                </Breadcrumb.Item>
+              </Breadcrumb>
             </div>
           )}
           <div className={"formBuilder-Submission"}>
@@ -1179,7 +1305,7 @@ class Submission extends Component {
                       rowHeight={22}
                       width={830}
                       onLayoutChange={layout => {
-                        console.log(layout)
+                        console.log(layout);
                         this.setState({ currentLayout: layout });
                       }}
                     >
@@ -1194,7 +1320,7 @@ class Submission extends Component {
                     <Form.Item
                       style={{
                         width: "100%",
-                        textAlign: "center",
+                        textAlign: "center"
                         // marginTop: 80
                       }}
                     >
