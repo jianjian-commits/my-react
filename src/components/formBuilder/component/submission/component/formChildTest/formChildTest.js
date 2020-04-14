@@ -46,7 +46,8 @@ class FormChildTest extends React.Component {
       nowDate: new moment(),
       refesh: true,
       hasFormChildError: false,
-      initFlag: true
+      initFlag: true,
+      errorMsg: "存在不符合规范的值"
     };
     this.handleAddRow = this.handleAddRow.bind(this);
     this.renderFormChild = this.renderFormChild.bind(this);
@@ -550,12 +551,20 @@ class FormChildTest extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { initData, item } = nextProps;
+    const { initData, item, errorResponseMsg } = nextProps;
     if (initData && this.state.initFlag) {
       this.props.saveSubmitData(this._initSubmitData(item, initData));
       this.setState({
         initFlag: false
       });
+    }
+
+    if(errorResponseMsg !=void 0){
+      this.props.resetErrorMsg(item.key)
+      this.setState({
+        hasFormChildError: true,
+        errorMsg:"数据已存在"
+      })
     }
   }
 
@@ -717,6 +726,9 @@ class FormChildTest extends React.Component {
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
+                    if(typeof value =="string" && value!==""){
+                      item.data = Number(value);
+                    }
                     this.setState({
                       refesh: !this.state.refesh
                     });
@@ -1391,7 +1403,7 @@ class FormChildTest extends React.Component {
               </div>
               {hasFormChildError ? (
                 <div className="ant-form-explain" style={{ color: "red" }}>
-                  <p>存在不符合规范的值</p>
+                  <p>{this.state.errorMsg}</p>
                 </div>
               ) : (
                 <></>

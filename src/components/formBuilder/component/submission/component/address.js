@@ -47,7 +47,7 @@ class Address extends Component {
             let { initData } = that.props;
             if(initData != void 0){
               that.props.handleSetAddress({
-                id: item.id,
+                id: item.key,
                 county: initData.county || "",
                 city: initData.city || "",
                 province: initData.province || "",
@@ -65,7 +65,7 @@ class Address extends Component {
     const { handleSetErrState, handleSetAddress, item } = this.props;
     const { form, handleSetComponentEvent } = this.props;
     handleSetAddress({
-      id: item.id,
+      id: item.key,
       county: "",
       city: "",
       province: "",

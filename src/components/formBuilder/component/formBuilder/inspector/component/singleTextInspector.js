@@ -337,6 +337,7 @@ class SingleTextInspector extends React.Component {
             </div>
             <div className="number-check-warper">
               <InputNumber
+                disabled={!validate.isLimitLength}
                 name="minLength"
                 placeholder="不限"
                 min={1}
@@ -347,6 +348,7 @@ class SingleTextInspector extends React.Component {
               />
               ~
             <InputNumber
+                disabled={!validate.isLimitLength}
                 name="maxLength"
                 placeholder="不限"
                 min={1}
@@ -356,19 +358,15 @@ class SingleTextInspector extends React.Component {
                 autoComplete="off"
               />
             </div>
-            {
-              isInFormChild(this.props.elementParent)
-                ? null
-                : <div className="checkbox-wrapper">
-                  <Checkbox
-                    name="unique"
-                    checked={unique}
-                    onChange={this.handleChangeAttr}
-                  >
-                    不允许重复
-                </Checkbox>
-                </div>
-            }
+            <div className="checkbox-wrapper">
+              <Checkbox
+                name="unique"
+                checked={unique}
+                onChange={this.handleChangeAttr}
+               >
+                不允许重复
+              </Checkbox>
+            </div>
           </div>
         </div>
       </div>
