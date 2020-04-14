@@ -33,6 +33,15 @@ class ForBuilderHeader extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { match, permissions, teamId } = nextProps;
+    const { appId, formId } = match.params;
+    let isEditAuth = editFormAuth(permissions, teamId, appId, formId);
+    this.setState({
+      isEditAuth
+    });
+  }
+
   handleTitleEdit() {
     this.setState(state => ({
       ...state,
@@ -157,7 +166,7 @@ class ForBuilderHeader extends React.Component {
         </div> */}
         <div className="FormTitle">
           {this.state.isTitleCanEdit === true ? (
-            <span>{this._truncateValue(this.props.name)}</span>
+            <span>编辑表单</span>
           ) : (
             <input
               disabled={this.state.isTitleCanEdit}
@@ -182,9 +191,9 @@ class ForBuilderHeader extends React.Component {
         <div className="CreateFormStep" />
         <div className="CreateFormOperations">
           {/* <Button className="header-btn default">预览</Button> */}
-          <Button
-            disabled={!this.state.btnCanClick || !this.state.isEditAuth}
-            loading={!this.state.btnCanClick || !this.state.isEditAuth}
+          {this.state.isEditAuth ? <Button
+            disabled={!this.state.btnCanClick}
+            loading={!this.state.btnCanClick}
             className="header-btn primary"
             onClick={e => {
               const checkRes = checkAndSaveForm(this.props);
@@ -239,7 +248,7 @@ class ForBuilderHeader extends React.Component {
             type="primary"
           >
             { this.state.btnCanClick ? "保存" : "保存"}
-          </Button>
+          </Button> : null}
         </div>
       </div>
     );
@@ -255,7 +264,7 @@ export default connect(
     errMessage: store.formBuilder.errMessage,
     isFormChanged: store.formBuilder.isFormChanged,
     localForm: store.formBuilder.localForm,
-    teamId: store.login.currentTeam && store.login.currentTeam.id,
+    teamId: store.login.currentCompany && store.login.currentCompany.id,
     permissions: (store.login.userDetail && store.login.userDetail.permissions) || []
   }),
   {

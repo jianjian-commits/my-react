@@ -5,24 +5,29 @@ import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
 import ChartToolbarBtn from "../ChartToolbarBtn";
 import request from '../../../utils/request';
+import {setDB} from '../../../utils/ReqUtil';
 import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
+import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
-import { changeBind, changeChartData, setDataSource } from '../../../redux/action';
+import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType } from '../../../redux/action';
+import {message} from "antd";
+import { deepClone } from '../../../utils/Util';
+import ChartInfo from '../data/ChartInfo';
+import classes from '../../../scss/elements/chart.module.scss';
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
-    changeBind, changeChartData, setDataSource } = props;
+    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
-  const chartOption = chartData ? getOption(chartData) : {};
+  const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
   const chart = <Chart chartOption={chartOption} />;
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
   const elements =
     dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
   let name = "新建图表";
   let iconBtnGroup = [];
-
   if (elementId) {
     elements.forEach(item => {
       if (item.id == elementId) {
@@ -32,7 +37,6 @@ const ChartContainer = props => {
   } else {
     name = chartName || name;
   }
-
   if(dbMode == DBMode.Edit) {
     iconBtnGroup = [
       {
@@ -42,13 +46,14 @@ const ChartContainer = props => {
             if(res && res.msg === "success") {
               const data = res.data.view;
               const formId = data.formId;
+              const chartInfo = data.chartTypeProp;
               let bindDataArr = [];
               const dimensions = data.dimensions;
               const indexes = data.indexes;
 
               if(dimensions && dimensions.length > 0) {
                 const dimArr = dimensions.map((each, idx) => {
-                  const field = each.field;
+                  let field = each.field;
                   field["option"] = {currentGroup: each.currentGroup}
                   field["bindType"] = Types.DIMENSION;
                   field["idx"] = idx;
@@ -60,10 +65,12 @@ const ChartContainer = props => {
 
               if(indexes && indexes.length > 0) {
                 const meaArr = indexes.map((each, idx) => {
-                  const field = each.field;
-                  field["option"] = {currentGroup: each.currentGroup}
+                  const field = deepClone(each.field);
+                  const currentGroup = deepClone(each.currentGroup);
+                  field["option"] = {currentGroup};
                   field["bindType"] = Types.MEASURE;
                   field["idx"] = bindDataArr.length + idx;
+                  field["ddddd"] = {aaa: "ddddd"};
                   return field;
                 })
 
@@ -71,14 +78,16 @@ const ChartContainer = props => {
               }
 
               changeBind(bindDataArr);
+              changeChartInfo(chartInfo || new ChartInfo());
+              setElemType(elemType);
               request(`/bi/charts/data`, {
                 method: "POST",
                 data: {
-                  chartId,
                   formId,
                   dimensions,
                   indexes,
-                  conditions: data.conditions
+                  conditions: data.conditions,
+                  chartType: elemType
                 }
               }).then((res) => {
                 if(res && res.msg === "success") {
@@ -101,8 +110,79 @@ const ChartContainer = props => {
             })
           })
         }
+      },
+      {
+        type:"delete",
+        click: () => {
+          request(`/bi/charts/${chartId}`,{
+            method:"DELETE"
+          })
+          .then(res => {
+            message.info("删除成功");
+            if(res && res.msg === "success"){
+              if(props.handleFullChart){
+                props.handleFullChart(null);
+              }
+              setDB(dashboardId, props.setDashboards);
+            }
+          }).catch(err => {
+            console.log(err);
+          });
+        }
+      },
+      {
+        type:"redo",
+        click:()=>{
+          request(`/bi/charts/${chartId}`).then((res) => {
+            if(res && res.msg === "success") {
+              const data = res.data.view;
+              const formId = data.formId;
+              const dimensions = data.dimensions;
+              const indexes = data.indexes;
+              request(`/bi/charts/data`, {
+                method: "POST",
+                data: {
+                  chartId,
+                  formId,
+                  dimensions,
+                  indexes,
+                  conditions: data.conditions,
+                  chartType: ChartType.HISTOGRAM
+                }
+              }).then((res) => {
+                if(res && res.msg === "success") {
+                  const dataObj = res.data;
+                  const data = dataObj.data;
+                  const newDashboardsItem = {
+                    name:dashboards[0].name,
+                    elements:dashboards[0].elements.map(element => {
+                      if(element.id == chartId){
+                        element.data.legends = data.legends;
+                        element.data.xaxisList = data.xaxisList;
+                      }
+                      return element;
+                    })
+                  }
+                  const newDashboards = [];
+                  newDashboards.push(newDashboardsItem);
+                  props.setDashboards(newDashboards);
+                }
+              })
+            }
+          })
+        }
+      },
+      {
+        type:"fullscreen",
+        click: props.setFullChart
       }
     ]
+  }
+
+  if(props.modalNarrowBtn){
+    //如果图表放大，将放大按钮变成缩小按钮
+    iconBtnGroup = iconBtnGroup.filter(item => item.type!="fullscreen");
+    iconBtnGroup.push(props.modalNarrowBtn);
   }
 
   const handlMouseEnter = () => {
@@ -119,7 +199,15 @@ const ChartContainer = props => {
 
   if (!chartData) {
     return (
-      <div className="chart-container" style={style}>
+      <div className={classes.chartContainer} style={style} onMouseEnter={handlMouseEnter}
+        onMouseLeave={handlMouseLeave}>
+        {btnVisible && (
+          <ChartToolbarBtn
+            {...props}
+            iconBtnGroup={iconBtnGroup}
+            isBtnBlock={isBtnBlock}
+          />
+         )} 
         <BlankElement />
       </div>
     );
@@ -127,19 +215,19 @@ const ChartContainer = props => {
 
   return (
     <div
-      className="chart-container"
+      className={classes.chartContainer}
       onMouseEnter={handlMouseEnter}
       onMouseLeave={handlMouseLeave}
       style={style}
     >
-      <div className="chart-title">{name}</div>
+      <div className={classes.chartTitle}>{name}</div>
       {btnVisible && (
         <ChartToolbarBtn
           {...props}
           iconBtnGroup={iconBtnGroup}
           isBtnBlock={isBtnBlock}
         />
-      )}
+      )} 
       {chart}
     </div>
   );
@@ -148,6 +236,7 @@ const ChartContainer = props => {
 export default connect(
   store => ({
     dashboards: store.bi.dashboards,
-    dbMode: store.bi.dbMode}),
-    { changeBind, changeChartData, setDataSource }
+    dbMode: store.bi.dbMode,
+    elemType: store.bi.elemType}),
+    { changeBind, changeChartData, setDataSource, changeChartInfo,setDashboards, setElemType }
   )(ChartContainer);

@@ -19,11 +19,16 @@ class IdCardInspector extends React.Component {
   componentDidMount() {
     const { element } = this.props;
     const { key } = element;
-    const isUniqueApi = checkUniqueApi(key, this.props);
+   const {err, msg:APIMessage} = checkUniqueApi(key, this.props);
+    const isUnique = !err;
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
     this.setState({
       apiNameTemp: key,
       isUniqueApi: isUniqueApi,
-      formPath: locationUtils.getUrlParamObj().path
+      APIMessage
     });
   }
 
@@ -171,13 +176,13 @@ class IdCardInspector extends React.Component {
               </Checkbox>
             )}
 
-            <Checkbox
+            {/* <Checkbox
               name="inputMask"
               checked={formatChecks}
               onChange={this.handleChangeAttr}
             >
               格式校验
-            </Checkbox>
+            </Checkbox> */}
           </div>
         </div>
       </div>

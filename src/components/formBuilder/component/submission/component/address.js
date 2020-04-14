@@ -80,34 +80,25 @@ class Address extends Component {
     // 是否为数据联动
     if (data && data.type === "DataLinkage") {
       const {
-        conditionId, //联动条件 id(当前表单)
-        linkComponentId, //联动条件 id(联动表单)
-        linkDataId, //联动数据 id(联动表单)
-        linkFormId //联动表单 id
+        conditionId,
+        linkComponentId,
+        linkDataId,
+        linkFormId
       } = data.values;
-      // 得到id表单的所有提交数据
       const {appId} = this.props.match.params;
       getFormAllSubmission(appId ,linkFormId).then(submissions => {
-        // 根据联动表单的组件id 得到对应所有数据
         let dataArr = filterSubmissionData(submissions, linkComponentId);
-        // 为需要联动的表单添加 change事件
         handleSetComponentEvent(conditionId, value => {
           let index = -1;
-          // 比较dataArr中是否有与value相同的值，有的话返回对应的idnex
-          // 如果change数据为数组 则进行深度比较
           if (value instanceof Array) {
             index = compareEqualArray(dataArr, value);
           } else {
             index = dataArr.indexOf(value);
           }
-          // 如果存在 获得提交数据中关联字段的数据
           if (index > -1) {
             let data = filterSubmissionData(submissions, linkDataId);
-            // 根据查找的idnex取得对应的关联数据
             let res = data[index];
-            // 设置当前组件的数据为关联的数据
             this.handleSetDataLinkData(res);
-            // 多级联动 事件派发
             this.handleEmitChange(res);
           } else {
             this.handleSetDataLinkData(undefined);

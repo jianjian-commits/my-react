@@ -1,6 +1,5 @@
 import axios from 'axios';
 import config from "../../formBuilder/config/config";
-import { message } from 'antd';
 
 async function request(url, params = {}) {
   const headers = params.headers || {"Content-Type": "application/json"};

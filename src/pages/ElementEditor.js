@@ -12,7 +12,7 @@ const { Sider, Content } = Layout;
 const ElementEditor = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
-  const { chartData } = props;
+  const { chartData, chartInfo } = props;
 
   const load = (e) => {
     history.push(`/app/${appId}/setting/bi/${dashboardId}`);
@@ -25,29 +25,30 @@ const ElementEditor = props => {
     }
   })
 
-    return (
-        <Layout style={{height: document.body.scrollHeight}}>
-          <EditorHeader/>
-          <DragAndDrop>
-            <Layout>
-              <Sider style={{ background: "#fff" }}>
-                <LeftPane />
-              </Sider>
-              <Content className={classes.elemContainer}>
-                <ChartBindPane/>
-                <ChartContainer isBtnBlock={true} chartData={chartData} style={{flexGrow: 1}}/>
-              </Content>
-              <Sider style={{ background: "#fff" }}>
-                <RightPane/>
-              </Sider>
-            </Layout>
-          </DragAndDrop>
-        </Layout>
-    )
+  return (
+      <Layout style={{height: document.body.scrollHeight}}>
+        <EditorHeader/>
+        <DragAndDrop>
+          <Layout>
+            <Sider style={{ background: "#fff" }}>
+              <LeftPane />
+            </Sider>
+            <Content className={classes.elemContainer}>
+              <ChartBindPane/>
+              <ChartContainer isBtnBlock={true} chartData={chartData} chartInfo={chartInfo} style={{flexGrow: 1}}/>
+            </Content>
+            <Sider style={{ background: "#fff" }}>
+              <RightPane/>
+            </Sider>
+          </Layout>
+        </DragAndDrop>
+      </Layout>
+  )
 }
 
 export default connect(store => ({
   dataSource: store.bi.dataSource,
-  chartData: store.bi.chartData
+  chartData: store.bi.chartData,
+  chartInfo: store.bi.chartInfo
 }), {
 })(ElementEditor);
