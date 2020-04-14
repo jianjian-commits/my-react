@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-09 13:51:06
  * @LastEditors: komons
- * @LastEditTime: 2020-04-10 16:23:59
+ * @LastEditTime: 2020-04-13 12:26:23
  * @Description: 
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\submission\component\pureTime.js
  */
@@ -21,6 +21,8 @@ import {
 } from "../utils/dataLinkUtils";
 import moment from "moment";
 
+let timer = null;
+
 class PureTime extends React.Component {
   constructor(props) {
     super(props);
@@ -29,18 +31,21 @@ class PureTime extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    clearInterval(timer)
+  }
+
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
-    const { data, validate } = item;
-    if (validate.autoInput) {
-      const timer = setInterval(()=>{
+    const { data, autoInput } = item;
+    if (autoInput) {
+      timer = setInterval(()=>{
         form.setFieldsValue({
           [item.key]: new moment()
         })
       }, 1000);
       this.setState({
-        isAutoInput: true,
-        timer
+        isAutoInput: true
       });
       return;
     }

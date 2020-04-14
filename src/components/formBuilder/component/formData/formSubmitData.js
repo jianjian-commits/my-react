@@ -25,6 +25,7 @@ import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
 import FilterComponent from "./components/filterComponent/filterComponent";
 import coverTimeUtils from "../../utils/coverTimeUtils";
+import moment from "moment";
 
 // 加载数据时重写表格为空状态
 const noRenderEmpty = () => <div style={{ height: "20vh" }}></div>;
@@ -291,17 +292,31 @@ class FormSubmitData extends PureComponent {
     return addressData !== null ? this._truncateValue(addressData.address) : "";
   };
 
+  _setLocalTime = (date) => {
+    
+  }
+
   _renderFormChildComponentByType(component, submitData) {
     if (submitData == void 0) {
       return <div className="formChild-item"></div>;
     }
     switch (component.type) {
       case "DateInput":
+        return (
+          <div className="formChild-item">
+            {submitData.time ? coverTimeUtils.localTime(submitData.time) : ""}
+          </div>
+        );
       case "PureDate":
+        return (
+          <div className="formChild-item">
+            {submitData.time ? moment(coverTimeUtils.localDate(submitData.time)).format("YYYY-MM-DD") : ""}
+          </div>
+        );
       case "PureTime":
         return (
           <div className="formChild-item">
-            {submitData.time ? submitData.time : ""}
+            {submitData.time ? coverTimeUtils.localDate(submitData.time, true).toLocaleTimeString() : ""}
           </div>
         );
       case "ImageUpload":

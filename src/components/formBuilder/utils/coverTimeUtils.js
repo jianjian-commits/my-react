@@ -6,7 +6,7 @@ function localTime(time, formatString = "yyyy-MM-dd hh:mm:ss") {
   let date = new Date(time);
   // 将utc时区时间转为当前本地时间
   let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
-  date.setHours(date.getHours() - currentTimeZoneOffsetInHours);
+  date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
 
   formatString = formatString
     .replace("yyyy", date.getFullYear())
@@ -21,14 +21,11 @@ function localTime(time, formatString = "yyyy-MM-dd hh:mm:ss") {
 function localDate(date, isTime = false) {
   if(isTime) {
     date = new Date(`2016/9/3 ${date}`);
-  } else {
-    date = new Date(date);
   }
   // 将utc时区时间转为当前本地时间
   date = new Date(date);
   let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
   date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-  window.haha = date;
   return date;
 }
 

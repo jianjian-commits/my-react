@@ -12,6 +12,7 @@ import {
 } from "../utils/dataLinkUtils";
 import moment from "moment";
 
+let timer = null;
 class DateInput extends React.Component {
   constructor(props) {
     super(props);
@@ -20,18 +21,21 @@ class DateInput extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    clearInterval(timer)
+  }
+
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
-    const { data, validate } = item;
-    if (validate.autoInput) {
-      const timer = setInterval(()=>{
+    const { data, autoInput } = item;
+    if (autoInput) {
+      timer = setInterval(()=>{
         form.setFieldsValue({
           [item.key]: new moment()
         })
       }, 1000);
       this.setState({
-        isAutoInput: true,
-        timer
+        isAutoInput: true
       });
       return;
     }
