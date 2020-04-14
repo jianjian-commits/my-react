@@ -65,6 +65,12 @@ class DateInputInspector extends React.PureComponent {
         value = validate;
         break;
       }
+      case "autoInput": {
+        name = "validate";
+        validate.autoInput = checked;
+        value = validate;
+        break;
+      }
       case "inputMask": {
         checked = checked ? "true" : "";
         break;
@@ -274,6 +280,13 @@ class DateInputInspector extends React.PureComponent {
               onChange={this.handleChangeAttr}
             >
               必填
+            </Checkbox>
+            <Checkbox
+              name="autoInput"
+              checked={validate.autoInput}
+              onChange={this.handleChangeAttr}
+            >
+              仅允许填入当前时间
             </Checkbox>
           </div>
         </div>
