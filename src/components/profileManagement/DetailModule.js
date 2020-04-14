@@ -92,7 +92,7 @@ export const AppManagerModule = ({
     {
       title: "操作",
       dataIndex: "action",
-      width:"27%",
+      width: "27%",
       render: (text, record) => {
         return (
           <>
@@ -151,7 +151,8 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
     teamVisible = {},
     teamPermission = {},
     teamEmployerPermissions = [],
-    groupPermissions = []
+    groupPermissions = [],
+    positionPermissions = []
   } = permissions;
   const radioList = [
     { key: "teamVisible", ...teamVisible, option: "可见" },
@@ -163,7 +164,12 @@ export const PermissionsModule = ({ disabled, permissions, onChange }) => {
       title: "公司成员管理",
       data: [...teamEmployerPermissions]
     },
-    { key: "groupPermissions", title: "分组管理", data: [...groupPermissions] }
+    { key: "groupPermissions", title: "分组管理", data: [...groupPermissions] },
+    {
+      key: "positionPermissions",
+      title: "职位管理",
+      data: [...positionPermissions]
+    }
   ];
   return (
     <div className={classes.groupManage}>
