@@ -1,3 +1,19 @@
+/*
+ * @Author: your name
+ * @Date: 2020-04-09 15:48:47
+ * @LastEditors: komons
+ * @LastEditTime: 2020-04-13 12:25:46
+ * @Description: 
+ * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\submission\component\pureDate.js
+ */
+/*
+ * @Author: your name
+ * @Date: 2020-04-09 13:51:06
+ * @LastEditors: komons
+ * @LastEditTime: 2020-04-09 13:55:25
+ * @Description: 
+ * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\submission\component\pureTime.js
+ */
 import React from "react";
 import { DatePicker } from "antd";
 import { isValueValid, isStringValid } from "../../../utils/valueUtils";
@@ -13,14 +29,14 @@ import {
 import moment from "moment";
 
 let timer = null;
-class DateInput extends React.Component {
+
+class PureDate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isAutoInput: false
     };
   }
-
   componentWillUnmount() {
     clearInterval(timer)
   }
@@ -33,7 +49,7 @@ class DateInput extends React.Component {
         form.setFieldsValue({
           [item.key]: new moment()
         })
-      }, 1000);
+      }, 1000 * 60);
       this.setState({
         isAutoInput: true
       });
@@ -142,9 +158,8 @@ class DateInput extends React.Component {
         })(
           <DatePicker
             disabled={disabled || isAutoInput}
-            showTime
             locale={locale}
-            placeholder="请选择时间/日期"
+            placeholder="请选择日期"
             onChange={this.handleChange}
           />
         )}
@@ -153,4 +168,4 @@ class DateInput extends React.Component {
   }
 }
 
-export default withRouter(DateInput);
+export default withRouter(PureDate);

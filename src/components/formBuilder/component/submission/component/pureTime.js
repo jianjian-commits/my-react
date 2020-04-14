@@ -1,10 +1,19 @@
+/*
+ * @Author: your name
+ * @Date: 2020-04-09 13:51:06
+ * @LastEditors: komons
+ * @LastEditTime: 2020-04-13 12:26:23
+ * @Description: 
+ * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\submission\component\pureTime.js
+ */
 import React from "react";
-import { DatePicker } from "antd";
+import { TimePicker } from "antd";
 import { isValueValid, isStringValid } from "../../../utils/valueUtils";
 import { Form, Tooltip, Icon } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import { withRouter } from "react-router-dom";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -13,7 +22,8 @@ import {
 import moment from "moment";
 
 let timer = null;
-class DateInput extends React.Component {
+
+class PureTime extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,7 +84,7 @@ class DateInput extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: new moment(res)
+              [item.key]: new moment(coverTimeUtils.localDate(res, true))
             });
             // 多级联动
             this.handleEmitChange(res);
@@ -140,11 +150,10 @@ class DateInput extends React.Component {
             }
           ]
         })(
-          <DatePicker
+          <TimePicker
             disabled={disabled || isAutoInput}
-            showTime
             locale={locale}
-            placeholder="请选择时间/日期"
+            placeholder="请选择时间"
             onChange={this.handleChange}
           />
         )}
@@ -153,4 +162,4 @@ class DateInput extends React.Component {
   }
 }
 
-export default withRouter(DateInput);
+export default withRouter(PureTime);

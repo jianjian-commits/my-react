@@ -164,6 +164,7 @@ export const advancedComponentArray = [
       required: false,
       customMessage: "",
     },
+    autoInput: false,
     data: {
       type: 'custom'
     },
@@ -178,6 +179,7 @@ export const advancedComponentArray = [
       required: false,
       customMessage: "",
     },
+    autoInput: false,
     data: {
       type: 'custom'
     },
@@ -192,6 +194,7 @@ export const advancedComponentArray = [
       required: false,
       customMessage: "",
     },
+    autoInput: false,
     data: {
       type: 'custom'
     },
