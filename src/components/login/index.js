@@ -99,6 +99,7 @@ function Signin({
               history={history}
               loginType={"PASSWORD"}
               activeKey={activeKey}
+              resetAllowSendCodeState={resetAllowSendCodeState}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
