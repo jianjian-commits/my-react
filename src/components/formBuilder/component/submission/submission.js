@@ -3,6 +3,8 @@ import { withRouter } from "react-router-dom";
 import GridLayout from "react-grid-layout";
 import { Button, Form, message, Layout, Spin, Breadcrumb } from "antd";
 import {
+  startApproval,
+  getApprovalDefinition,
   submitSubmission,
   getFormComponent,
   getFormComponentByPath,
@@ -78,7 +80,8 @@ class Submission extends Component {
       showAddressErr: false,
       showFormChildErr: false,
       isSubmitted: false,
-      errorResponseMsg: {}
+      errorResponseMsg: {},
+      isShowApprovalBtn: true,
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -92,10 +95,19 @@ class Submission extends Component {
     } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
 
-    // initToken().then(res => {
     getFormComponent(this.state.formId);
-    // getFormComponentByPath(this.state.formPath);
-    // });
+    getApprovalDefinition(this.state.formId, this.props.appid)
+    .then(response => {
+      // 获取显示提交审批的按钮
+      if(response.data.status === "SUCCESS"){
+        this.setState({
+          isShowApprovalBtn: response.data.data.canSubmit
+        })
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -215,7 +227,6 @@ class Submission extends Component {
           delete values[component.key];
         } else {
           values[component.key].xx = address;
-          console.log("values[component.key]",values[component.id])
         }
       }
     });
@@ -298,7 +309,6 @@ class Submission extends Component {
     const {formChildkey, fieldKey, value, msg} = errorMsg;
     formChildDataObj[formChildkey].map(item => {
         if (value === String(item[fieldKey].data)) {
-          console.log("item", item[fieldKey])
           item[fieldKey].hasErr = true;
         }
       });
@@ -471,7 +481,7 @@ class Submission extends Component {
     // }
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e, isStartApprove=false) => {
     e.preventDefault();
     const isMobile = this.props.mobile.is;
 
@@ -498,9 +508,6 @@ class Submission extends Component {
         );
 
         let customValicate = this.props.formValidation;
-        // console.log("values", values);
-        // console.log("custom data", customDataArray);
-        // console.log("custom valicate", customValicate.validate);
 
         // let customCheckResult = customValicate.validate.reduce(
         //   (result, validateStr) => {
@@ -531,7 +538,7 @@ class Submission extends Component {
             this.props
               .submitSubmission(this.state.formId, values,this.props.appid,this.props.extraProp)
               .then(response => {
-                if(response.data.id != void 0){
+                if(isStartApprove === false && response.data.id != void 0){
                   isMobile
                     ? Toast.success("提交成功!")
                     : message.success("提交成功!");
@@ -539,8 +546,24 @@ class Submission extends Component {
                     let skipToSubmissionDataFlag = true;
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }, 1000);
+                }else if(isStartApprove === true && response.data.id != void 0) {
+                  const { data, id } =  response.data;
+                  let fieldInfos = [];
+                  for(let key in data){
+                    fieldInfos.push({name: key, value: data[key]})
+                  }
+                  const appeoveData = {
+                    dataId: id,
+                    fieldInfos: fieldInfos
+                  }
+                  this.props.startApproval(this.state.formId, this.props.appid, appeoveData, ()=>{
+                    setTimeout(() => {
+                      let skipToSubmissionDataFlag = true;
+                      this.props.actionFun(skipToSubmissionDataFlag);
+                    }, 1000);
+                  })
                 }
-              })
+                })
               .catch(error => {
                 if (error.response && error.response.data.code === 9998) {
                   this._setErrorResponseData(error.response.data);
@@ -1163,16 +1186,6 @@ class Submission extends Component {
       <>
         <Spin spinning={this.state.isSubmitted}>
           {mobile.is ? null : (
-            // <HeaderBar
-            //   backCallback={() => {
-            //     let skipToSubmissionDataFlag = true;
-            //     this.props.actionFun(skipToSubmissionDataFlag);
-            //   }}
-            //   isShowExtraTitle = {false}
-            //   // name={formComponent.name}
-            //   isShowBtn={false}
-            //   isShowExtraTitle={false}
-            // />
             <div className="submissionTitle">
                    <Breadcrumb separator={
                      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1242,10 +1255,29 @@ class Submission extends Component {
                           block={!!mobile.is}
                           htmlType="submit"
                           type="primary"
+                          style={{
+                            color: "#1890ff",
+                            background: "#fff"
+                          }}
                           // size={submitBtnObj.buttonSize}
                         >
                           提交
                         </Button>
+                        {
+                          this.state.isShowApprovalBtn
+                          ?<Button
+                          block={!!mobile.is}
+                          onClick={(e)=>{this.handleSubmit(e, true)}}
+                          type="primary"
+                          style={{
+                            marginLeft:"10px"
+                          }}
+                          // size={submitBtnObj.buttonSize}
+                        >                         
+                          提交并审批
+                        </Button>
+                        : null
+                        }
                       </div>
                     </Form.Item>
                   ) : (
@@ -1265,6 +1297,23 @@ class Submission extends Component {
                         >
                           {submitBtnObj.label}
                         </Button>
+                        {
+                          this.state.isShowApprovalBtn
+                          ?                         
+                          <Button
+                          block={!!mobile.is}
+                          onClick={(e)=>{this.handleSubmit(e, true)}}
+                          type="primary"
+                          style={{
+                            marginLeft:"10px"
+                          }}
+                          // size={submitBtnObj.buttonSize}
+                        >
+                          提交并审批
+                        </Button>
+                        : null
+                        }
+
                       </div>
                     </Form.Item>
                   )}
@@ -1291,6 +1340,8 @@ export default connect(
     getSubmissionData,
     submitSubmission,
     getFormComponent,
-    getFormComponentByPath
+    getFormComponentByPath,
+    getApprovalDefinition,
+    startApproval
   }
 )(withRouter(mobileAdoptor.data(SubmissionForm)));
