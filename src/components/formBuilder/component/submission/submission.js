@@ -257,7 +257,7 @@ class Submission extends Component {
         if (address.trim() === "") {
           delete values[component.key];
         } else {
-          values[component.key].xx = address;
+          values[component.key].completeAddress = address;
         }
       }
     });

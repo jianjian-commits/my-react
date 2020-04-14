@@ -680,9 +680,9 @@ export default class FilterComponent extends Component {
           case "NOT_IN":
             return `data.${filter.selectedFiled}__regex=/^((?!${filter.costomValue}).)*$/`;
           case "LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.completeAddress${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           case "NOT_LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.completeAddress${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           default:
             return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
         }
