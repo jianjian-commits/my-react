@@ -197,6 +197,10 @@ class FilterItem extends Component {
   };
 
   renderInputByFiledType = (filed, value, options, isDisabled) => {
+    const defaultValueOpt = {};
+    if(value !== ""){
+      defaultValueOpt.defaultValue = value
+    }
     switch (filed && filed.type) {
       case "NumberInput":
         return (
@@ -258,7 +262,7 @@ class FilterItem extends Component {
           return (
             <Select
               key={filed.key}
-              defaultValue={value}
+              {...defaultValueOpt}
               mode="multiple"
               key={`${filed.key}${this.state.operator}`}
               placeholder="请选择"
@@ -280,7 +284,7 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               key={`${filed.key}${this.state.operator}`}
-              defaultValue={value}
+              {...defaultValueOpt}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
@@ -305,10 +309,10 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               mode="multiple"
-              defaultValue={value}
+              {...defaultValueOpt}
               key={`${filed.key}${this.state.operator}`}
               placeholder="请选择"
-              style={{ width: "100%" }}
+              // style={{ width: "100%" }}
               onChange={this.handleDropDown}
               disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
@@ -326,7 +330,7 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               key={`${filed.key}${this.state.operator}`}
-              defaultValue={value}
+              {...defaultValueOpt}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
@@ -347,7 +351,7 @@ class FilterItem extends Component {
           <Select
             key={filed.key}
             mode="multiple"
-            defaultValue={value}
+            {...defaultValueOpt}
             placeholder="请选择"
             style={{ width: "100%" }}
             showArrow={true}
@@ -368,7 +372,7 @@ class FilterItem extends Component {
           <Select
             key={filed.key}
             mode="multiple"
-            defaultValue={value}
+            {...defaultValueOpt}
             placeholder="请选择"
             style={{ width: "100%" }}
             showArrow={true}
@@ -492,13 +496,22 @@ class FilterItem extends Component {
         isDisabled= true;
       }
     }
+    
+    const fieldDefaultValueOpt={};
+    if(selectedFiledKey !== ""){
+      fieldDefaultValueOpt.defaultValue = selectedFiledKey;
+    }
+    const OptDefaultValueOpt={};
+    if(selectedLogicalOperator !=  void 0 ){
+      OptDefaultValueOpt.defaultValue = selectedLogicalOperator.label;
+    }
     return (
       <div className="filter-item">
         <Row type="flex" justify="start" gutter={[0, 19]}>
           <Col span={12}>
             <Select
               // value={selectedFiledKey}
-              defaultValue={selectedFiledKey}
+              {...fieldDefaultValueOpt}
               style={{ width: "100%" }}
               placeholder="选择字段"
               onChange={this.onSelectField}
@@ -516,7 +529,7 @@ class FilterItem extends Component {
           </Col>
           <Col span={7} className="logicSymbol">
             <Select
-              defaultValue={selectedLogicalOperator ? selectedLogicalOperator.label : null}
+              {...OptDefaultValueOpt}
               style={{ width: "100%" }}
               key={this.state.filed.key}
               placeholder="运算符"
