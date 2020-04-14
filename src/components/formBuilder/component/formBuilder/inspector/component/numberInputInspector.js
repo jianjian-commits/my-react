@@ -22,7 +22,8 @@ class NumberInputInspector extends React.PureComponent {
       formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isLinked: false,
-      apiNameTemp: undefined //api name 临时值
+      apiNameTemp: undefined, //api name 临时值
+      isNegativeNumber:false
     };
   }
 
@@ -65,6 +66,11 @@ class NumberInputInspector extends React.PureComponent {
       }
       case "isLimitLength": {
         validate.isLimitLength = checked;
+        value = validate;
+        break;
+      }
+      case "isLimitPoint": {
+        validate.isLimitPoint = checked;
         value = validate;
         break;
       }
@@ -123,7 +129,25 @@ class NumberInputInspector extends React.PureComponent {
       this.props.setItemAttr(this.props.element, "validate", newValidate);
     }
   };
+  // 当限定位数输入框发生变化时
 
+  handleChangeAttrPoint = value =>{
+      const { validate } = this.props.element;
+      var newValidate = {
+      ...validate,
+      limitPoint: value == void 0 ? 0 : value
+    };
+    if (this.props.elementParent) {
+      this.props.setFormChildItemAttr(
+        this.props.elementParent,
+        "validate",
+        newValidate,
+        this.props.element
+      );
+    } else {
+      this.props.setItemAttr(this.props.element, "validate", newValidate);
+    }
+  }
   // 选择指定组件渲染
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, formId } = this.state;
@@ -267,7 +291,7 @@ class NumberInputInspector extends React.PureComponent {
       isLinked,
       apiNameTemp,
       APIMessage,
-      isUniqueApi = true
+      isUniqueApi = true,
     } = this.state;
     const minBoundary = -Number.MAX_VALUE === validate.min ? "" : validate.min;
     return (
@@ -392,6 +416,27 @@ class NumberInputInspector extends React.PureComponent {
                 </Checkbox>
               </div>
             )}
+            <div className="checkbox-wrapper">
+            <Checkbox
+                  name="isLimitPoint"
+                  checked={validate.isLimitPoint}
+                  onChange={this.handleChangeAttr}
+                >
+                  限定小数位数 ( 请输入不小于0的整数 )
+                </Checkbox>
+                <div className="point-checkbox-wrapper"
+                >
+                  <InputNumber 
+                  name="limitPoint"
+                  placeholder="请输入"
+                  onChange = { this.handleChangeAttrPoint }
+                  min={1}
+                  step="1"
+                  value={validate.limitPoint === 0 ? "" : validate.limitPoint}
+                  autoComplete="off"
+                  />
+                </div>
+            </div>
           </div>
         </div>
       </div>
