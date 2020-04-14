@@ -18,6 +18,8 @@ npm config set registry https://registry.npm.taobao.org/ && \
 npm rebuild node-sass && \
 npm --unsafe-perm install
 
+ARG REACT_APP_HOST_IP
+ENV REACT_APP_HOST_IP $REACT_APP_HOST_IP
 COPY . .
 RUN npm run build
 

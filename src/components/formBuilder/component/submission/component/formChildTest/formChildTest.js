@@ -9,7 +9,8 @@ import {
   Checkbox,
   Popover,
   Button,
-  DatePicker
+  DatePicker,
+  TimePicker
 } from "antd";
 import { withRouter } from "react-router-dom";
 import {
@@ -30,6 +31,7 @@ import CheckboxInput from "../checkboxInput/checkboxTestItem";
 import RadioButtons from "../radioInput/radioTestItem";
 import DropDown from "./components/dropDown";
 import MultiDropDown from "./components/multiDropDown";
+import DateInput from "./components/dateInput";
 import moment from "moment";
 
 class FormChildTest extends React.Component {
@@ -41,9 +43,11 @@ class FormChildTest extends React.Component {
         name: "",
         url: ""
       },
+      nowDate: new moment(),
       refesh: true,
       hasFormChildError: false,
-      initFlag: true
+      initFlag: true,
+      errorMsg: "存在不符合规范的值"
     };
     this.handleAddRow = this.handleAddRow.bind(this);
     this.renderFormChild = this.renderFormChild.bind(this);
@@ -69,7 +73,7 @@ class FormChildTest extends React.Component {
     let result = {};
     let newArray = [...this.props.submitDataArray];
     let { handleSetComponentEvent } = this.props;
-    const {appId} = this.props.match.params;
+    const { appId } = this.props.match.params;
     let data =
       submission[item.key] != void 0 ? submission[item.key].data : null;
     switch (item.type) {
@@ -90,14 +94,17 @@ class FormChildTest extends React.Component {
         };
         break;
       case "DateInput":
+      case "PureDate":
+      case "PureTime":
         result = {
           type: item.label,
           formType: item.type,
           validate: item.validate,
           hasErr: false,
+          autoInput: item.autoInput,
           data: data || {
             time: null,
-            moment: null
+            moment: new moment()
           }
         };
         break;
@@ -232,7 +239,7 @@ class FormChildTest extends React.Component {
     let { item, handleSetComponentEvent, submitDataArray } = this.props;
     let values = item.values;
     let newArray = [];
-    const {appId} = this.props.match.params;
+    const { appId } = this.props.match.params;
 
     submitDataArray.forEach((child, index) => {
       let result = {};
@@ -254,6 +261,8 @@ class FormChildTest extends React.Component {
             };
             break;
           case "DateInput":
+          case "PureDate":
+          case "PureTime": {
             result[item.key] = {
               type: item.label,
               formType: item.type,
@@ -262,6 +271,7 @@ class FormChildTest extends React.Component {
               data: child[item.key].data
             };
             break;
+          }
           case "RadioButtons":
           case "CheckboxInput":
             result[item.key] = {
@@ -382,7 +392,7 @@ class FormChildTest extends React.Component {
     let { item, handleSetComponentEvent } = this.props;
     let values = item.values;
     let result = {};
-    const {appId} = this.props.match.params;
+    const { appId } = this.props.match.params;
 
     values.forEach(item => {
       switch (item.type) {
@@ -402,10 +412,13 @@ class FormChildTest extends React.Component {
           };
           break;
         case "DateInput":
+        case "PureDate":
+        case "PureTime": {
           result[item.key] = {
             type: item.label,
             formType: item.type,
             validate: item.validate,
+            autoInput: item.autoInput,
             hasErr: false,
             data: {
               time: null,
@@ -413,6 +426,7 @@ class FormChildTest extends React.Component {
             }
           };
           break;
+        }
         case "RadioButtons":
         case "CheckboxInput":
           result[item.key] = {
@@ -537,12 +551,20 @@ class FormChildTest extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { initData, item } = nextProps;
+    const { initData, item, errorResponseMsg } = nextProps;
     if (initData && this.state.initFlag) {
       this.props.saveSubmitData(this._initSubmitData(item, initData));
       this.setState({
         initFlag: false
       });
+    }
+
+    if(errorResponseMsg !=void 0){
+      this.props.resetErrorMsg(item.key)
+      this.setState({
+        hasFormChildError: true,
+        errorMsg:"数据已存在"
+      })
     }
   }
 
@@ -704,6 +726,9 @@ class FormChildTest extends React.Component {
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
+                    if(typeof value =="string" && value!==""){
+                      item.data = Number(value);
+                    }
                     this.setState({
                       refesh: !this.state.refesh
                     });
@@ -1000,11 +1025,75 @@ class FormChildTest extends React.Component {
             }
             resultArray.push(
               <div key={key} style={{ width: 200 }} className={className}>
-                <DatePicker
+                <DateInput
+                  data={item}
                   showTime
                   locale={locale}
                   {...valueOption}
                   placeholder="请选择时间/日期"
+                  onChange={(value, dataString) => {
+                    item.data.time = dataString;
+                    item.data.moment = value;
+
+                    checkValueValidByType(item, value)
+                      ? (item.hasErr = false)
+                      : (item.hasErr = true);
+                    this.setState(state => ({
+                      ...state,
+                      refesh: !this.state.refesh
+                    }));
+                    this._checkFormChildHasError(submitDataArray);
+                  }}
+                />
+              </div>
+            );
+          }
+          break;
+        case "PureDate":
+          {
+            let valueOption = {};
+            if (item.data && item.data.moment) {
+              valueOption.value = moment(item.data.moment);
+            }
+            resultArray.push(
+              <div key={key} className={className}>
+                <DateInput
+                  data={item}
+                  disabled={item.autoInput}
+                  locale={locale}
+                  {...valueOption}
+                  placeholder="请选择日期"
+                  onChange={(value, dataString) => {
+                    item.data.time = dataString;
+                    item.data.moment = value;
+
+                    checkValueValidByType(item, value)
+                      ? (item.hasErr = false)
+                      : (item.hasErr = true);
+                    this.setState(state => ({
+                      ...state,
+                      refesh: !this.state.refesh
+                    }));
+                    this._checkFormChildHasError(submitDataArray);
+                  }}
+                />
+              </div>
+            );
+          }
+          break;
+        case "PureTime":
+          {
+            let valueOption = {};
+            if (item.data && item.data.moment) {
+              valueOption.value = moment(item.data.moment);
+            }
+            resultArray.push(
+              <div key={key} className={className}>
+                <DateInput
+                  data={item}
+                  locale={locale}
+                  {...valueOption}
+                  placeholder="请选择时间"
                   onChange={(value, dataString) => {
                     item.data.time = dataString;
                     item.data.moment = value;
@@ -1145,8 +1234,6 @@ class FormChildTest extends React.Component {
         }
       }
     });
-
-    console.log(isFormChildErr);
 
     this.setState({ hasFormChildError: isFormChildErr });
   }
@@ -1316,7 +1403,7 @@ class FormChildTest extends React.Component {
               </div>
               {hasFormChildError ? (
                 <div className="ant-form-explain" style={{ color: "red" }}>
-                  <p>存在不符合规范的值</p>
+                  <p>{this.state.errorMsg}</p>
                 </div>
               ) : (
                 <></>

@@ -28,7 +28,9 @@ const LinkFormAcceptDataType = {
   PhoneInput: ["PhoneInput"],
   IdCardInput: ["IdCardInput"],
   FormChildTest: ["FormChildTest"],
-  Address: ["Address"]
+  Address: ["Address"],
+  PureTime: ["PureTime"],
+  PureDate: ["PureDate"]
 };
 
 // 过滤自生表单

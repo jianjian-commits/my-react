@@ -195,10 +195,7 @@ class EmailInputInspector extends React.PureComponent {
           <p htmlFor="email-tip">校验</p>
           <div className="checkbox-wrapper">
             <Checkbox>必填</Checkbox>
-            {isInFormChild(this.props.elementParent) ? null : (
-              <Checkbox>不允许重复</Checkbox>
-            )}
-            {/* <Checkbox>格式校验</Checkbox> */}
+            <Checkbox>不允许重复</Checkbox>
           </div>
         </div>
       </div>

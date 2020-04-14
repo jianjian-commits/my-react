@@ -264,7 +264,7 @@ export default connect(
     errMessage: store.formBuilder.errMessage,
     isFormChanged: store.formBuilder.isFormChanged,
     localForm: store.formBuilder.localForm,
-    teamId: store.login.currentTeam && store.login.currentTeam.id,
+    teamId: store.login.currentCompany && store.login.currentCompany.id,
     permissions: (store.login.userDetail && store.login.userDetail.permissions) || []
   }),
   {
