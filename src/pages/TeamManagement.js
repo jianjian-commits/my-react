@@ -7,37 +7,44 @@ import HomeHeader from "../components/header/HomeHeader";
 import TeamInfo from "../components/userManagement/team/TeamInfo";
 import TeamMember from "../components/userManagement/team/TeamMember";
 import ProfileManagement from "../components/profileManagement";
+import PositionTree from "../components/userManagement/position/PositionTree"
 import commonClasses from "../styles/common.module.scss";
 import { PROFILE_MANAGEMENT_LIST, TEAM_MANAGEMENT_LIST } from "../auth";
 import { authorityIsValid } from "../utils";
 import { Route } from "react-router-dom";
 import Authenticate from "../components/shared/Authenticate";
-import { InfoIcon, MemberIcon, ProfileIcon } from "../assets/icons/company";
+import { InfoIcon, MemberIcon, ProfileIcon,PositionIcon } from "../assets/icons/company";
 
 const { Sider, Content } = Layout;
 
 const webs = [
   {
-    path: "/team/info",
+    path: "/company/info",
     label: "团队信息",
     icon: InfoIcon,
     component: TeamInfo
   },
   {
-    path: "/team/member",
+    path: "/company/member",
     label: "团队成员",
     auth: TEAM_MANAGEMENT_LIST,
     icon: MemberIcon,
     component: TeamMember
   },
   {
-    path: "/team/profile",
+    path: "/company/profile",
     label: "分组",
     auth: PROFILE_MANAGEMENT_LIST,
     icon: ProfileIcon,
     exact: true,
     component: ProfileManagement
-  }
+  },
+  {
+    path: "/company/position",
+    label: "职位",
+    icon: PositionIcon,
+    component: PositionTree,
+  },
 ];
 
 const TeamManagement = props => {
