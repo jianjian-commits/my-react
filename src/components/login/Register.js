@@ -11,8 +11,14 @@ import { RegisteSuccessIcon, RegisteErrorIcon } from "../../assets/icons/login";
 export default connect()(function Register({
   history,
   params,
+  activeKey,
   setActiveKey,
-  query
+  query,
+  sendCode,
+  isFetchCoding,
+  fetchText,
+  allowSendCode,
+  resetAllowSendCodeState
 }) {
   const { token } = params;
   const { inviter, invitedCompany } = history.location.query || query || {};
@@ -79,6 +85,12 @@ export default connect()(function Register({
           params={params}
           setActiveKey={setActiveKey}
           history={history}
+          sendCode={sendCode}
+          isFetchCoding={isFetchCoding}
+          fetchText={fetchText}
+          allowSendCode={allowSendCode}
+          resetAllowSendCodeState={resetAllowSendCodeState}
+          activeKey={activeKey}
         />
       </div>
     </>
@@ -99,7 +111,7 @@ export default connect()(function Register({
             type="primary"
             key={"success"}
             onClick={confirm}
-            style={{ marginLeft: status ? "31.5px" : "8.6px" }}
+            style={{ marginLeft: status ? "31.82px" : "8.6px" }}
           >
             {status ? "立即登录" : "重新注册"}
           </Button>
