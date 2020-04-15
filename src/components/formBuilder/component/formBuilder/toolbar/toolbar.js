@@ -180,12 +180,12 @@ export const advancedComponentArray = [
     data: {
       type: 'custom'
     },
-    icon: ["date", 17]
+    icon: ["puredate", 17]
   }),
   _buildDefaultProp({
     label: "时间",
     tooltip: "",
-    type: "PureTime",
+    type: "puretime",
     defaultValue: "",
     validate: {
       required: false,
