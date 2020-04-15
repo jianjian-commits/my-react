@@ -122,7 +122,7 @@ export default class CheckboxInput extends React.Component {
         }else{
           selectValuesArr.unshift(index)
         }
-        console.log(selectValuesArr)
+
         this.setState(
           state => ({
             ...state,

@@ -1177,7 +1177,6 @@ class Submission extends Component {
                       rowHeight={22}
                       width={830}
                       onLayoutChange={layout => {
-                        console.log(layout)
                         this.setState({ currentLayout: layout });
                       }}
                     >

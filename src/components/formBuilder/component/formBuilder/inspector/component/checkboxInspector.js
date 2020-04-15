@@ -235,7 +235,6 @@ class CheckboxInspector extends React.Component {
       isSetAPIName
     } = this.props.element;
     const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
-    console.log(inline)
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
