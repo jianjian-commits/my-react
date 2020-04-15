@@ -91,7 +91,6 @@ class Submission extends Component {
       mobile = {}
     } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
-
     // initToken().then(res => {
     getFormComponent(this.state.formId);
     // getFormComponentByPath(this.state.formPath);
@@ -444,7 +443,6 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
-
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
@@ -1116,7 +1114,7 @@ class Submission extends Component {
       });
     }
 
-    console.log(layout)
+    // console.log(layout)
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];

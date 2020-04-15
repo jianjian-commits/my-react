@@ -1,7 +1,7 @@
 import React from 'react';
 import ComponentBox from '../componentBox';
 import { ComponentHeader} from '../utils/commonDom';
-import {Checkbox} from 'antd';
+import {Checkbox, Input} from 'antd';
 
 export default class CheckboxInput extends React.Component {
     constructor(props) {
@@ -44,7 +44,12 @@ export default class CheckboxInput extends React.Component {
                             <Checkbox.Group className = {checkGroupLayout}>
                                 {values.map((item,index) => 
                                     <div className = "checkbox-label" key={index}>
-                                        <Checkbox >{item.value}</Checkbox>
+                                        <Checkbox >
+                                        {item.value}
+                                        {
+                                            item.isExtra?<Input className="radio-label-inputvalue"/>:null
+                                        }
+                                        </Checkbox>
                                     </div> )
                                 }
                            </Checkbox.Group>

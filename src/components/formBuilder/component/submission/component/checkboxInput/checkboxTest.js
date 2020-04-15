@@ -13,7 +13,9 @@ class CheckboxInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: undefined
+      inputValue: undefined,
+      item:this.props.item,
+      submitValueArr:[]
     };
   }
 
@@ -100,6 +102,27 @@ class CheckboxInput extends React.Component {
     }
     
   };
+  handleInputValue = value => {
+    const { setFieldsValue, getFieldsValue } = this.props.form
+    const oldSelectValueArr = getFieldsValue([this.props.item.key])[`${this.props.item.key}`];
+    let { values } = this.state.item
+    // 设置新的值
+    let newObj = {...values[values.length-1], value};
+    // 删除values中最后一项
+    values.pop();
+
+    let newValues =  [...values,newObj]
+    this.setState({
+      item:{...this.state.item,values:newValues}
+    },()=>{
+     let newSelectValueArr = JSON.parse(JSON.stringify(oldSelectValueArr));
+      
+     newSelectValueArr[oldSelectValueArr.length - 1 ] = value
+     
+     setFieldsValue({[this.props.item.key]: newSelectValueArr})
+    })
+  }
+
   render() {
     // const { inputValue } = this.state;
     const { getFieldDecorator, item, initData } = this.props;
@@ -123,7 +146,7 @@ class CheckboxInput extends React.Component {
           ],
           initialValue: initData || []
         })(
-          <CheckboxTestItem handleChange={this.handleChange} item={item} />
+          <CheckboxTestItem handleChange={this.handleChange} handleInputValue = { this.handleInputValue } inputValue = { initData } item={this.state.item} />
         )}
       </Form.Item>
     );

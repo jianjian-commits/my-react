@@ -14,7 +14,8 @@ class RadioInput extends React.Component {
     super(props);
 
     this.state = {
-      inputValue: undefined
+      inputValue: undefined,
+      item: this.props.item
     };
   }
 
@@ -53,7 +54,7 @@ class RadioInput extends React.Component {
 
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
-    console.log("fck",value)
+    // console.log("fck",value)
     const { callEventArr } = this.props.item;
     if (callEventArr) {
       callEventArr.forEach(fnc => {
@@ -61,6 +62,21 @@ class RadioInput extends React.Component {
       });
     }
   };
+  handleInputValue = value => {
+      const { setFieldsValue } = this.props.form
+      let { values } = this.state.item
+      // 设置新的值
+      let newObj = {...values[values.length-1], value};
+      // 删除values中最后一项
+      values.pop();
+
+      let newValues =  [...values,newObj]
+      this.setState({
+        item:{...this.state.item,values:newValues}
+      },()=>{
+        setFieldsValue({[this.props.item.key]:value})
+      })
+    }
   render() {
     const { getFieldDecorator, item, initData } = this.props;
     return (
@@ -79,7 +95,7 @@ class RadioInput extends React.Component {
             }
           ],
           // validateTrigger: 'onSubmit',
-        })(<RadioTestItem handleChange={this.handleChange} item={item} />)}
+        })(<RadioTestItem handleChange={this.handleChange} handleInputValue = {this.handleInputValue} inputValue = { initData } item={this.state.item}/>)}
       </Form.Item>
     );
   }
