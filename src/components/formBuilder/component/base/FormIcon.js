@@ -64,11 +64,11 @@ export default class FormIcon extends PureComponent {
         name = "/image/icons/date";
         break;
       }
-      case "puretime": {
+      case "puredate": {
         name = "/image/icons/pureDate";
         break;
       }
-      case "puredate": {
+      case "puretime": {
         name = "/image/icons/pureTime";
         break;
       }
