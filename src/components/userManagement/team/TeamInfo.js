@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Input, Row, Col, List, Button, Spin, message, Popover } from "antd";
 import request from "../../../utils/request";
 import classes from "./team.module.scss";
-import { getCurrentCompany, getAllCompany } from "../../../store/loginReducer";
+import { getcurrentCompany, getAllCompany } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
 import { catchError } from "../../../utils";
@@ -73,8 +73,8 @@ export default connect(
   ({ login }) => ({
     loginData: login
   }),
-  { getCurrentCompany, getAllCompany }
-)(function TeamInfo({ loginData, getCurrentCompany, getAllCompany }) {
+  { getcurrentCompany, getAllCompany }
+)(function TeamInfo({ loginData, getcurrentCompany, getAllCompany }) {
   const { currentCompany } = loginData;
   const onClickSubmit = (key, changeStr) => {
     const params = {
@@ -85,7 +85,7 @@ export default connect(
     request(`/company`, params)
       .then(res => {
         if (res && res.status === "SUCCESS") {
-          getCurrentCompany().then(res => {
+          getcurrentCompany().then(res => {
             if (key === "name") {
               getAllCompany();
             }

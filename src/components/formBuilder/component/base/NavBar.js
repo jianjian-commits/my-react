@@ -88,6 +88,6 @@ class NavBar extends PureComponent {
 
 export default connect(({ login, formSubmitData }) => ({
   forms: formSubmitData.forms,
-  teamId: login.currentTeam && login.currentTeam.id,
+  teamId: login.currentCompany && login.currentCompany.id,
   permissions: (login.userDetail && login.userDetail.permissions) || []
 }))(withRouter(NavBar));

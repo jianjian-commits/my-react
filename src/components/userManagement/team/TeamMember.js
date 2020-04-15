@@ -5,7 +5,7 @@ import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../../utils/request";
-import { getCurrentCompany } from "../../../store/loginReducer";
+import { getcurrentCompany } from "../../../store/loginReducer";
 import InviteUser from "../ModalInviteUser";
 import Authenticate from "../../shared/Authenticate";
 import { catchError } from "../../../utils";
@@ -20,8 +20,8 @@ export default connect(
   ({ login }) => ({
     loginData: login
   }),
-  { getCurrentCompany }
-)(function TeamMember({ loginData, getCurrentCompany }) {
+  { getcurrentCompany }
+)(function TeamMember({ loginData, getcurrentCompany }) {
   const { currentCompany } = loginData;
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState(null); //用户数据
@@ -156,7 +156,7 @@ export default connect(
           } else {
             gainData();
           }
-          getCurrentCompany();
+          getcurrentCompany();
           message.success("踢出成功");
         } else {
           message.error(res.msg || "踢出失败");
@@ -213,7 +213,7 @@ export default connect(
         .then(res => {
           if (res && res.status === "SUCCESS") {
             gainData();
-            getCurrentCompany();
+            getcurrentCompany();
             message.success("变更成功");
           } else {
             message.error(res.msg || "变更失败");
@@ -236,8 +236,8 @@ export default connect(
 
   //获取当前company只调用一次
   useEffect(() => {
-    getCurrentCompany();
-  }, [getCurrentCompany]);
+    getcurrentCompany();
+  }, [getcurrentCompany]);
   //初次改变页码获取成员
   useEffect(() => {
     gainData();

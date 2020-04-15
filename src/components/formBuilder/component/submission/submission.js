@@ -288,7 +288,6 @@ class Submission extends Component {
   }
 
   _iterateAllComponentToSetData(formComponentArray, customDataArray, values) {
-    debugger;
     for (let i in values) {
       let currentComponent = formComponentArray.filter(item => {
         return item.id === i;
