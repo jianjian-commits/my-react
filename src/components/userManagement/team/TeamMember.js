@@ -5,11 +5,11 @@ import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";
 import request from "../../../utils/request";
-import { getCurrentTeam } from "../../../store/loginReducer";
+import { getcurrentCompany } from "../../../store/loginReducer";
 import InviteUser from "../ModalInviteUser";
 import Authenticate from "../../shared/Authenticate";
 import { catchError } from "../../../utils";
-import { ReactComponent as Funnel } from "../../../assets/icons/teams/filter.svg";
+import { ReactComponent as Funnel } from "../../../assets/icons/company/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
   TEAM_MANAGEMENT_DROP,
@@ -20,9 +20,9 @@ export default connect(
   ({ login }) => ({
     loginData: login
   }),
-  { getCurrentTeam }
-)(function TeamMember({ loginData, getCurrentTeam }) {
-  const { currentTeam } = loginData;
+  { getcurrentCompany }
+)(function TeamMember({ loginData, getcurrentCompany }) {
+  const { currentCompany } = loginData;
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState(null); //用户数据
   const [total, setTotal] = React.useState(null);
@@ -38,7 +38,7 @@ export default connect(
     currentPage: 1,
     pageSize: 10
   });
-  const [filterConditions, setFilterConditions] = React.useState([])
+  const [filterConditions, setFilterConditions] = React.useState([]);
   const columns = [
     {
       title: "用户昵称",
@@ -66,42 +66,45 @@ export default connect(
       width: 200,
       render: (text, record) => {
         return text.group.name === "超级管理员" &&
-          currentTeam.groups.filter(item => {
+          currentCompany.groups.filter(item => {
             return item.name === "超级管理员";
           })[0].peopleNumber === 1 ? (
-            true
-          ) : false ? null : (
-            <span>
-              <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
-                <Button
-                  type="link"
-                  onClick={handleChange.bind(this, text)}
-                  className={classes.changeGroup}
-                >
-                  变更分组
+          true
+        ) : false ? null : (
+          <span>
+            <Authenticate auth={TEAM_MANAGEMENT_SWITCH}>
+              <Button
+                type="link"
+                onClick={handleChange.bind(this, text)}
+                className={classes.changeGroup}
+              >
+                变更分组
               </Button>
-              </Authenticate>
-              <Authenticate auth={TEAM_MANAGEMENT_DROP}>
-                <Popconfirm
-                  title="把该成员从团队中踢出?"
-                  onConfirm={confirm.bind(this, text.id)}
-                  okText="确认"
-                  cancelText="取消"
-                  placement="top"
-                >
-                  <Button type="link">踢出</Button>
-                </Popconfirm>
-              </Authenticate>
-            </span>
-          );
+            </Authenticate>
+            <Authenticate auth={TEAM_MANAGEMENT_DROP}>
+              <Popconfirm
+                title="把该成员从公司中踢出?"
+                onConfirm={confirm.bind(this, text.id)}
+                okText="确认"
+                cancelText="取消"
+                placement="top"
+              >
+                <Button type="link">踢出</Button>
+              </Popconfirm>
+            </Authenticate>
+          </span>
+        );
       }
     }
   ];
   //获取成员
   const gainData = useCallback(async () => {
-    setLoading(true)
-    const loadingTimeout = () => setTimeout(() => { setLoading(false) }, 500)
-    await request(`/sysUser/currentTeam/all`, {
+    setLoading(true);
+    const loadingTimeout = () =>
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    await request(`/sysUser/currentCompany/all`, {
       method: "POST",
       data: {
         page: pageConfig.currentPage,
@@ -113,7 +116,9 @@ export default connect(
         if (res && res.status === "SUCCESS") {
           res.data.datas.forEach(item => {
             item.key = item.id;
-            item.lastLoginDate = item.lastLoginDate?new Date(item.lastLoginDate).toLocaleString():null
+            item.lastLoginDate = item.lastLoginDate
+              ? new Date(item.lastLoginDate).toLocaleString()
+              : null;
             item.groupName = item.group.name;
           });
           setData(res.data.datas);
@@ -121,20 +126,20 @@ export default connect(
         } else {
           message.error(res.msg || "成员获取失败！");
         }
-        loadingTimeout()
+        loadingTimeout();
       })
       .catch(err => {
-        loadingTimeout()
+        loadingTimeout();
         catchError(err);
-        return currentTeam.id;
+        return currentCompany.id;
       });
-    return clearTimeout(loadingTimeout())
-  }, [pageConfig, filterConditions, currentTeam.id]);
+    return clearTimeout(loadingTimeout());
+  }, [pageConfig, filterConditions, currentCompany.id]);
   //踢出成员
   const confirm = sysUserId => {
-    request(`/sysUser/${sysUserId}/team`, {
+    request(`/sysUser/${sysUserId}/company`, {
       method: "PUT",
-      data: { oldTeamId: currentTeam.id }
+      data: { oldCompanyId: currentCompany.id }
     })
       .then(res => {
         if (res && res.status === "SUCCESS") {
@@ -151,7 +156,7 @@ export default connect(
           } else {
             gainData();
           }
-          getCurrentTeam();
+          getcurrentCompany();
           message.success("踢出成功");
         } else {
           message.error(res.msg || "踢出失败");
@@ -168,22 +173,24 @@ export default connect(
   };
   //过滤请求参数设置
   const filterData = (value, groupId) => {
-    const _fiels = []
-    _fiels[0] = value ? {
-      conditions: [
-        { negative: false, rule: 'LK', value },
-        { negative: false, rule: 'LK', value }
-      ],
-      properties: ['email', 'name']
-    } : null
-    _fiels[1] = groupId ? {
-      conditions: [
-        { negative: false, rule: 'EQ', value: groupId }
-      ],
-      properties: ['sysRoles.id']
-    } : null
-    const _newFiels = _fiels.filter(item => item !== null)
-    setFilterConditions(_newFiels)
+    const _fiels = [];
+    _fiels[0] = value
+      ? {
+          conditions: [
+            { negative: false, rule: "LK", value },
+            { negative: false, rule: "LK", value }
+          ],
+          properties: ["email", "name"]
+        }
+      : null;
+    _fiels[1] = groupId
+      ? {
+          conditions: [{ negative: false, rule: "EQ", value: groupId }],
+          properties: ["sysRoles.id"]
+        }
+      : null;
+    const _newFiels = _fiels.filter(item => item !== null);
+    setFilterConditions(_newFiels);
   };
   //变更分组
   const handleChange = (obj, e) => {
@@ -206,7 +213,7 @@ export default connect(
         .then(res => {
           if (res && res.status === "SUCCESS") {
             gainData();
-            getCurrentTeam();
+            getcurrentCompany();
             message.success("变更成功");
           } else {
             message.error(res.msg || "变更失败");
@@ -227,21 +234,20 @@ export default connect(
     });
   };
 
-
-  //获取当前team只调用一次
+  //获取当前company只调用一次
   useEffect(() => {
-    getCurrentTeam();
-  }, [getCurrentTeam]);
+    getcurrentCompany();
+  }, [getcurrentCompany]);
   //初次改变页码获取成员
   useEffect(() => {
     gainData();
   }, [gainData]);
 
-  return currentTeam ? (
+  return currentCompany ? (
     <div className={classes.container}>
       <Row type="flex" justify="space-between">
         <Col>
-          <div className={classes.title}>团队成员</div>
+          <div className={classes.title}>公司成员</div>
         </Col>
         <Col>
           <Authenticate auth={TEAM_MANAGEMENT_INVITE}>
@@ -258,7 +264,7 @@ export default connect(
         </Col>
       </Row>
       {onOff.filterSwith ? (
-        <Filter groups={currentTeam.groups} fn={filterData} />
+        <Filter groups={currentCompany.groups} fn={filterData} />
       ) : null}
       <div className={classes.tableBox}>
         <Table
@@ -275,7 +281,7 @@ export default connect(
       </div>
       {onOff.changeGroupSwitch ? (
         <ChangeGroup
-          groups={currentTeam.groups}
+          groups={currentCompany.groups}
           groupKey={key.groupKey}
           visible={onOff.changeGroupSwitch}
           fn={changeGroupCal}
@@ -283,6 +289,6 @@ export default connect(
       ) : null}
     </div>
   ) : (
-      <Spin size="large" />
-    );
+    <Spin size="large" />
+  );
 });

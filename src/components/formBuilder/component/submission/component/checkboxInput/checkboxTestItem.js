@@ -10,7 +10,7 @@ class CheckboxOption extends React.Component {
     const { label, value } = this.props.option;
     return (
       <div
-        className="checkboxOption"
+        className={classNames("checkboxOption",{checkboxInline: this.props.inline})}
         value={value}
         onClick={() => {
           this.props.handleSelect(this.props.index);
@@ -110,15 +110,16 @@ export default class CheckboxInput extends React.Component {
     }
   }
   render() {
-    const { values } = this.props.item;
+    const { values, inline } = this.props.item;
     return (
-      <div className="checkboxGroup">
+      <div className={classNames("checkboxGroup",{ checkboxGroup:inline })}>
         {values.map((item, index) => (
           <CheckboxOption
             option={item}
             isSelect={this.state.selectValues.includes(index)}
             key={index}
             index={index}
+            inline={ inline }
             handleSelect={this.handleSelect}
           />
         ))}

@@ -715,12 +715,12 @@ class FormSubmitData extends PureComponent {
             if (item.type === "Button") {
               return false;
             }
-            if (item.type === "FormChildTest") {
-              return item.values.length !== 0;
+            if (item.type === "FormChildTest" && this.state.selectedFields) {
+              return item.values.length !== 0 && this.state.selectedFields.includes(item.key);
             }
             // 根据选择的字段进行过滤
             if (this.state.selectedFields) {
-              return this.state.selectedFields.includes(item.label);
+              return this.state.selectedFields.includes(item.key);
             }
 
             return true;
@@ -965,6 +965,7 @@ class FormSubmitData extends PureComponent {
                 }}
                 clickExtendCallBack={this.showFilterComponent}
                 isFilterMode={this.state.isFilterMode}
+                handleFilterFields={this.handleFilterFields}
               />
             )}
             <div
