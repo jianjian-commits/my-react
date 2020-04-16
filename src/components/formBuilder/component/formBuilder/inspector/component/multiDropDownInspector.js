@@ -35,6 +35,7 @@ class MultiDropDownInspector extends React.Component {
       isShowOtherDataModal: false
     };
     this.addChooseItem = this.addChooseItem.bind(this);
+    this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
   }
 
@@ -116,6 +117,29 @@ class MultiDropDownInspector extends React.Component {
       );
     } else {
       this.props.setItemValues(this.props.element, "data", newValuesList);
+    }
+  }
+  addExtraChooseItem() {
+    if(this.props.element.data.values.some(item => item.isExtra)){
+
+    }else{
+      const newItem = {
+        label: `其它`,
+        value: `其它`,
+        isExtra:true,
+        shortcut: ""
+      };
+     const newValuesList = [...this.props.element.data.values, newItem];
+    if (this.props.elementParent) {
+      this.props.setFormChildItemValues(
+        this.props.elementParent,
+        "data",
+        newValuesList,
+        this.props.element
+      );
+    } else {
+      this.props.setItemValues(this.props.element, "data", newValuesList);
+    }
     }
   }
   deleteChooseItem(item, index) {
@@ -282,6 +306,16 @@ class MultiDropDownInspector extends React.Component {
         return (
           <div className="chooseitems">
             {values.map((item, index) => (
+              
+              <div key = { index }>
+                {item.isExtra ? <Input
+                key={`chooseItem${index}`}
+                type="text"
+                value="其他"
+                placeholder="其他"
+                autoComplete="off"
+                disabled={true}
+              />:
               <div className="ChooseItemWarp" key={index}>
                 <img src="/image/dragIcon.png" />
                 <Input
@@ -302,9 +336,14 @@ class MultiDropDownInspector extends React.Component {
                   />
                 </Tooltip>
               </div>
+            }
+              </div>
             ))}
             <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
               增加选项
+            </Button>
+            <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
+              增加其他选项
             </Button>
           </div>
         );
