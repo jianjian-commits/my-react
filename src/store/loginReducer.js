@@ -400,5 +400,8 @@ export const loginMiddleware = store => next => action => {
   if (action.type === SIGN_OUT_SUCCESS) {
     store.dispatch(clearAppList());
   }
+  if (action.type === LOGIN_SUCCESS) {
+    store.dispatch(initAllDetail())
+  }
   next(action);
 };
