@@ -241,7 +241,8 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
 };
 
 // 修改表单数据详情
-export const modifySubmissionDetail = (formId, submissionId, formData, appid, extraProp) => dispatch => {
+export const modifySubmissionDetail = (formId, submissionId, formData, appid, extraProp, newExtraProp) => dispatch => {
+  extraProp.updateUser = newExtraProp.user;
   return instanceAxios({
     url: config.apiUrl + `/submission/${submissionId}`,
     method: "PUT",

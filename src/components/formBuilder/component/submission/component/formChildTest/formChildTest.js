@@ -66,6 +66,10 @@ class FormChildTest extends React.Component {
           submission
         );
       });
+      if(submission.childFormDataId){
+         result["childFormDataId"] = submission.childFormDataId;
+      }
+     
       return result;
     });
     return newSubmitDataArray;
@@ -686,7 +690,6 @@ class FormChildTest extends React.Component {
   };
 
   renderFormChild(formChildObj, rowIndex, submitDataArray) {
-    const { isSetCorrectFormChildData } = this.props;
     let resultArray = [];
     for (let key in formChildObj) {
       let item = formChildObj[key];
