@@ -99,7 +99,6 @@ class Submission extends Component {
       mobile = {}
     } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
-
     getFormComponent(this.state.formId);
     getApprovalDefinition(this.state.formId, this.props.appid)
     .then(response => {
@@ -1369,7 +1368,6 @@ class Submission extends Component {
                       rowHeight={22}
                       width={830}
                       onLayoutChange={layout => {
-                        console.log(layout);
                         this.setState({ currentLayout: layout });
                       }}
                     >
