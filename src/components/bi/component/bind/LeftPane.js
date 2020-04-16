@@ -28,7 +28,10 @@ const LeftPane = props => {
     }
 
     dataArr.forEach((each, idx) => {
-      const currentGroup = {};
+      let currentGroup = {};
+      if(each.type === "NUMBER"){
+        currentGroup={name:"",value:"SUM"}
+      }
 
       if(each) {
         const item = {...each, bindType: each.type === "NUMBER" ? Types.MEASURE : Types.DIMENSION, option: {currentGroup}}

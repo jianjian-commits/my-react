@@ -64,10 +64,6 @@ export default function FieldMeasureSelect(props) {
     };
   }, [popoverVisible]);
 
-  useEffect(()=>{
-    props.item.changeGroup(operationArr[selectIndex], props.item.fieldId)
-  },[]);
-
   const handleDeleteTarget = () => {
     props.item.removeField(props.item);
   };
