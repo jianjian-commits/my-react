@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-10 15:15:00
  * @LastEditors: komons
- * @LastEditTime: 2020-04-15 10:40:57
+ * @LastEditTime: 2020-04-16 14:36:40
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\editHistory.js
  */
@@ -11,6 +11,7 @@ import { Table } from "antd";
 import axios from "axios";
 import { message } from "antd";
 import moment from "moment";
+import editHistoryUtils from "./utils/filterHistoryUtils";
 import config from "../../../config/config";
 
 const columns = [
@@ -46,11 +47,24 @@ const EditHistory = ({ submissionId }) => {
 
   const filterHistryDom = arr => {
     if (arr) {
-      let res = arr.map(item => (
-        <p>
-          修改{item.label}的值{item.beforeValue}为{item.afterValue}
-        </p>
-      ));
+      let res = arr.map((item, index) => {
+        if (item.type === "FileUpload" || item.type === "ImageUpload") {
+          let res = editHistoryUtils.FileUpload(item);
+          return res.map((r, i) =>{
+            if(i === 0) {
+              return <p key={i}>{r.content}</p>
+            } else {
+              return <p key={i} className={"file-list file-status_"+r.status}> {r.content}</p>
+            }
+          } );
+        } else {
+          return (
+            <p key={index}>
+              修改{item.label}的值{item.beforeValue}为{item.afterValue}
+            </p>
+          );
+        }
+      });
       return <div>{res}</div>;
     } else {
       return "创建记录";
@@ -59,7 +73,7 @@ const EditHistory = ({ submissionId }) => {
 
   useEffect(() => {
     axios({
-      url: config.apiUrl + `/update_record`,
+      url: config.apiUrl + `/update_records`,
       method: "get",
       params: {
         submissionId
@@ -85,6 +99,7 @@ const EditHistory = ({ submissionId }) => {
       columns={columns}
       dataSource={historyData}
       pagination={paginationProps}
+      className="edit-history-table"
     ></Table>
   );
 };
