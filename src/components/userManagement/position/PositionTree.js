@@ -61,7 +61,8 @@ class PositionTree extends Component {
         message.success("新建职位成功!");
         this.handleCancel();
         this.setState({
-          detailOpened: true
+          detailOpened: true,
+          selectedPosition: res.data
         });
         // this.getPositionTree();
       } else {
@@ -199,6 +200,7 @@ class PositionTree extends Component {
 
   returnTree = () => {
     this.setState({ detailOpened: false, selectedPosition: null });
+    this.getPositionTree();
   };
 
   render() {

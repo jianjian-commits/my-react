@@ -5,24 +5,38 @@ import request from "../../utils/request";
 import { catchError } from "../../utils";
 import { Title } from "../shared";
 
-const formMeteDataThead = [
-  { key: "TYPE", value: "类型" },
-  { key: "ADD", value: "增加" },
-  { key: "REDIT", value: "编辑" },
-  { key: "DELETE", value: "删除" },
-  { key: "ENABLE", value: "启用" }
-];
+const formMeteDataThead = {
+  formHeader: [
+    { key: "TYPE", value: "类型" },
+    { key: "ADD", value: "增加" },
+    { key: "REDIT", value: "编辑" },
+    { key: "DELETE", value: "删除" },
+    { key: "ENABLE", value: "启用" }
+  ],
+  boardHeader: [
+    { key: "TYPE", value: "类型" },
+    { key: "UPDATE", value: "编辑" },
+    { key: "DEL", value: "删除" }
+  ]
+};
 
-const formDataThead = [
-  { key: "TYPE", value: "类型" },
-  { key: "SEARCHOWNER", value: "查看自己" },
-  { key: "ADD", value: "增加" },
-  { key: "REDITOWNER", value: "编辑自己" },
-  { key: "DELETE", value: "删除自己" },
-  { key: "SEARCHALL", value: "查看所有" },
-  { key: "REDITALL", value: "编辑所有" },
-  { key: "DELETEALL", value: "删除所有" }
-];
+const formDataThead = {
+  formHeader: [
+    { key: "TYPE", value: "类型" },
+    { key: "SEARCHOWNER", value: "查看自己" },
+    { key: "ADD", value: "增加" },
+    { key: "REDITOWNER", value: "编辑自己" },
+    { key: "DELETE", value: "删除自己" },
+    { key: "SEARCHALL", value: "查看所有" },
+    { key: "REDITALL", value: "编辑所有" },
+    { key: "DELETEALL", value: "删除所有" }
+  ],
+  boardHeader: [
+    { key: "TYPE", value: "类型" },
+    { key: "UPDATE", value: "编辑" },
+    { key: "DEL", value: "删除" }
+  ]
+};
 
 const Mete = {
   VISIBLE: "是否可见",
@@ -31,10 +45,85 @@ const Mete = {
     { key: "AP", value: "审批流元数据" },
     { key: "PB", value: "自动化流程元数据" }
   ],
-  APP_SETTING: "是否显示应用管理按钮",
-  APP_CREATEFORM: "允许新建表单",
   appSetting: "可见",
-  createForm: "允许"
+  createForm: "允许",
+  createBoard: "允许",
+  order: "允许"
+};
+
+const Board = ({
+  dat,
+  filters,
+  headers,
+  permissionsValue,
+  index,
+  state,
+  setState,
+  CheckBox,
+  formId,
+  fp,
+  tableName
+}) => {
+  return (
+    <table className={Styles.table}>
+      <thead>
+        <tr>
+          {headers.map(header => (
+            <th key={header.key}>{header.value}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {headers.map(header => {
+            const Td = filters.filter(
+              f => f.value.split("_")[2] === header.key
+            );
+            if (header.key === "TYPE")
+              return <td key={header.key}>仪表盘数据</td>;
+            return (
+              <td key={header.key}>
+                {Td[0] && (
+                  <CheckBox
+                    // defaultChecked={Td[0].defaultChecked || Td[0].checked}
+                    checked={Td[0].checked}
+                    onChange={e => {
+                      dat[index][fp] = filters.map(f => {
+                        if (f.value.split("_")[2] === header.key) {
+                          return {
+                            ...f,
+                            checked: e.target.checked
+                          };
+                        }
+                        return f;
+                      });
+                      setState({
+                        ...state,
+                        state: {
+                          ...state["state"],
+                          [permissionsValue]: {
+                            ...state["state"][permissionsValue],
+                            [tableName]: dat
+                          }
+                        },
+                        data: crreteData({
+                          defaultChecked: Td[0].defaultChecked || Td[0].checked,
+                          checked: e.target.checked,
+                          state,
+                          dat: Td[0],
+                          formId
+                        })
+                      });
+                    }}
+                  />
+                )}
+              </td>
+            );
+          })}
+        </tr>
+      </tbody>
+    </table>
+  );
 };
 
 const blackSpan = value => (
@@ -52,7 +141,8 @@ const Tr = ({
   permissionsValue,
   CheckBox,
   formId,
-  fp
+  fp,
+  tableName
 }) => {
   const filte = filters.filter(f => f.label.split("_")[0] === table.key);
   return (
@@ -85,10 +175,10 @@ const Tr = ({
             {header.key === "TYPE" && <span>{table.value}</span>}
             {Td[0] && (
               <CheckBox
-                // defaultChecked={Td[0].defaultChecked || Td[0].checked}
+                defaultChecked={Td[0].defaultChecked || Td[0].checked}
                 checked={Td[0].checked}
                 disabledCheck={
-                  fp === "dataPermissions"
+                  fp === "formPermissions"
                     ? disabledCheck(Td[0].label.split("_")[1])
                     : null
                 }
@@ -130,7 +220,10 @@ const Tr = ({
                     ...state,
                     state: {
                       ...state["state"],
-                      [permissionsValue]: dat
+                      [permissionsValue]: {
+                        ...state["state"][permissionsValue],
+                        [tableName]: dat
+                      }
                     },
                     data: crreteData({
                       defaultChecked: Td[0].defaultChecked || Td[0].checked,
@@ -194,23 +287,119 @@ const Table = ({
     </table>
   );
 };
+const thunkBoard = (
+  state,
+  permissionsValue,
+  headers,
+  setState,
+  CheckBox,
+  disabled,
+  tableName,
+  fp
+) => {
+  const dat = state["state"][permissionsValue][tableName];
+  return (
+    <>
+      {dat.map((board, index) => {
+        const filters = board.boardDetailPermissions || board[fp];
+        const display = filters.filter(
+          f => f.value.split("_")[1] === "VISIBLE" || f.value.split("_")[2] === "VISIBLE"
+        );
+        const onChange = e => {
+          dat[index][fp] = filters.map(f => {
+            if (f.value.split("_")[1] === "VISIBLE" || f.value.split("_")[2] === "VISIBLE") {
+              return {
+                ...f,
+                checked: e.target.value
+              };
+            }
+            return f;
+          });
+          setState({
+            ...state,
+            state: {
+              ...state["state"],
+              [permissionsValue]: {
+                ...state["state"][permissionsValue],
+                [tableName]: dat
+              }
+            },
+            data: radioData({
+              state,
+              dat: display[0],
+              formId: board.boardId,
+              value: e.target.value
+            })
+          });
+        };
+        return (
+          <div key={board.boardId} className={Styles.form}>
+            <div>
+              <div>
+                <span>表单</span>
+              </div>
+              <span>{board.boardName}</span>
+            </div>
+            <div className={Styles.radioThunk}>
+              <div>
+                <span>
+                  {display &&
+                    display[0] &&
+                    blackSpan(Mete[display[0].value.split("_")[1]])}
+                </span>
+                <Radio.Group
+                  onChange={onChange}
+                  value={display[0].checked}
+                  style={{ color: "#333333", fontSize: "14px" }}
+                  disabled={disabled}
+                >
+                  <Radio defaultChecked={display[0].checked} value={true}>
+                    {blackSpan("可见")}
+                  </Radio>
+                  <Radio defaultChecked={display[0].checked} value={false}>
+                    {blackSpan("不可见")}
+                  </Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div>
+              {display[0].checked && (
+                <Board
+                  dat={dat}
+                  filters={filters}
+                  headers={headers}
+                  permissionsValue={permissionsValue}
+                  index={index}
+                  state={state}
+                  setState={setState}
+                  CheckBox={CheckBox}
+                  formId={board.boardId}
+                  fp={fp}
+                  tableName={tableName}
+                />
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </>
+  );
+};
 const thunkForm = (
   state,
   permissionsValue,
   headers,
   setState,
   CheckBox,
-  disabled
+  disabled,
+  tableName,
+  fp
 ) => {
-  const dat = state["state"][permissionsValue];
-  const fp =
-    permissionsValue === "formPermissions"
-      ? "formDetailPermissions"
-      : permissionsValue;
+  const dat = state["state"][permissionsValue][tableName];
   return (
     <>
       {dat.map((form, index) => {
-        const filters = form.formDetailPermissions || form.dataPermissions;
+        const filters = form.formDetailPermissions || form[fp];
         const display = filters.filter(
           f => f.value.split("_")[1] === "VISIBLE"
         );
@@ -228,7 +417,10 @@ const thunkForm = (
             ...state,
             state: {
               ...state["state"],
-              [permissionsValue]: dat
+              [permissionsValue]: {
+                ...state["state"][permissionsValue],
+                [tableName]: dat
+              }
             },
             data: radioData({
               state,
@@ -281,6 +473,7 @@ const thunkForm = (
                   CheckBox={CheckBox}
                   formId={form.formId}
                   fp={fp}
+                  tableName={tableName}
                 />
               )}
             </div>
@@ -320,7 +513,7 @@ const thunkSetting = (state, settingValue, setState, disabled, visMete) => {
     <>
       <div className={Styles.radioThunk}>
         <div style={{ borderBottom: visMete ? "none" : "1px solid #d6d8de" }}>
-          <span>{blackSpan(Mete[dat.value])}</span>
+          <span>{blackSpan(dat.label)}</span>
           <Radio.Group
             onChange={onChange}
             value={dat.checked}
@@ -432,6 +625,20 @@ const Permission = ({
   disabled
 }) => {
   const permissionsValue = value + "Permissions";
+  const displayControl = item =>
+    state["state"][item] &&
+    (state["state"]["appSetting"]["checked"] || value === "data") &&
+    settingDisplay;
+  const formControl = item => {
+    return (
+      state["state"][permissionsValue][item] &&
+      (state["state"]["appSetting"]["checked"] || value === "data")
+    );
+  };
+  const formValue =
+    value === "metaData" ? "formMetaDataPermissions" : "formDataPermissions";
+  const boardValue =
+    value === "metaData" ? "boardMetaDataPermissions" : "boardDataPermissions";
   return (
     <div className={Styles.meteData}>
       <div>
@@ -446,19 +653,33 @@ const Permission = ({
           disabled,
           !state["state"]["appSetting"]["checked"]
         )}
-      {state["state"].createForm &&
-        (state["state"]["appSetting"]["checked"] || value === "data") &&
-        settingDisplay &&
+      {displayControl("createForm") &&
         thunkSetting(state, "createForm", setState, disabled)}
-      {state["state"][permissionsValue] &&
-        (state["state"]["appSetting"]["checked"] || value === "data") &&
+      {displayControl("createBoard") &&
+        thunkSetting(state, "createBoard", setState, disabled)}
+      {displayControl("order") &&
+        thunkSetting(state, "order", setState, disabled)}
+      {formControl(formValue) &&
         thunkForm(
           state,
           permissionsValue,
-          headers,
+          headers.formHeader,
           setState,
           CheckBox,
-          disabled
+          disabled,
+          formValue,
+          value === "metaData" ? "formDetailPermissions" : "formPermissions"
+        )}
+      {formControl(boardValue) &&
+        thunkBoard(
+          state,
+          permissionsValue,
+          headers.boardHeader,
+          setState,
+          CheckBox,
+          disabled,
+          boardValue,
+          value === "metaData" ? "boardDetailPermissions" : "boardPermissions"
         )}
     </div>
   );
@@ -609,7 +830,7 @@ export default function ApplyPermissionSetting(props) {
             roleName={roleName}
           />
           <Permission
-            value={"form"}
+            value={"metaData"}
             headers={formMeteDataThead}
             state={state}
             setState={setState}
