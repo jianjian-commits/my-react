@@ -8,11 +8,13 @@ import {
 } from "recompose";
 import clx from "classnames";
 import classes from "./position.module.scss";
-import { Checkbox } from "antd";
+import { Checkbox, Input, Icon } from "antd";
 
 export default compose(
-  withProps(({ data }) => {
-    return {};
+  withProps(({ currentUsers }) => {
+    return {
+      currentUsers: currentUsers || []
+    };
   }),
   withState("open", "setOpen", false),
   withState("widageRef", "setRef", null),
@@ -22,10 +24,13 @@ export default compose(
       if (props.open) return false;
       props.setOpen(true);
     },
-    removeUser: props => i => {
-      const updatedUsers = props.elementModel.approveUsers.slice();
-      updatedUsers.splice(i, 1);
-      props.onUsersChange(updatedUsers);
+    selectUserHandler: props => (id, checked) => {
+      console.log(id, checked);
+      if (checked) {
+        props.updateSelectedKeys([...props.selectedKeys, id]);
+      } else {
+        props.updateSelectedKeys(props.selectedKeys.filter(e => e !== id));
+      }
     },
     hideDropdown: props => event => {
       if (!props.open) return false;
@@ -50,11 +55,10 @@ export default compose(
 )(
   ({
     open,
-    disabled,
     setRef,
+    selectedKeys,
     users,
-    removeUser,
-    onUsersChange,
+    selectUserHandler,
     onWidageClick
   }) => {
     const divRef = useRef(null);
@@ -74,14 +78,34 @@ export default compose(
           {open ? (
             <div className={classes.customTabs}>
               <div className={classes.customTabPane}>
-              {users.map(u => {
-                return (
-                  <div className={classes.customTabPaneRow}>
-                    <Checkbox />
-                    &nbsp;&nbsp;{u.name}
-                  </div>
-                );
-              })}
+                <Input
+                  prefix={
+                    <Icon type="search" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
+                  className={classes.search}
+                  placeholder="请输入要搜索的内容"
+                />
+                {users.map(u => {
+                  return (
+                    <div
+                      key={u.id}
+                      className={clx(
+                        classes.customTabPaneRow,
+                        u.position ? classes.disabled : null
+                      )}
+                    >
+                      <Checkbox
+                        disabled={!!u.position}
+                        checked={selectedKeys.indexOf(u.id) !== -1}
+                        onClick={e => selectUserHandler(u.id, e.target.checked)}
+                      />
+                      &nbsp;&nbsp;{u.name}
+                      {u.position && (
+                        <span>&nbsp;&nbsp; ({u.position.value} )</span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ) : null}
