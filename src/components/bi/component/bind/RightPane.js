@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Tooltip, Checkbox, Input } from 'antd';
-import { updateChartReq } from '../../utils/reqUtil';
+import { updateChartReq } from '../../utils/ReqUtil';
 import ChartInfo from "../elements/data/ChartInfo";
 import { changeChartInfo } from '../../redux/action';
 import { useParams } from "react-router-dom";

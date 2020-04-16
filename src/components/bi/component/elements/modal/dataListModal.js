@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../../../utils/request";
 import { DBMode } from "../../dashboard/Constant";
+import classes from "../../../scss/modal/dataModal.module.scss";
 import {
   setFormData,
   setDataSource,
@@ -18,7 +19,7 @@ const { Panel } = Collapse;
 
 function ModalTitle() {
   return (
-    <div className="formchoiceModalTitle">
+    <div className={classes.formchoiceModalTitle}>
       <span>添加数据源</span>
       <span>选择图表数据源</span>
     </div>
@@ -114,12 +115,12 @@ function DataListModal(props) {
       centered
       width={500}
       bodyStyle={{ padding: 0 }}
-      wrapClassName="BIDataModal"
+      wrapClassName={classes.BIDataModal}
       handleCancel={props.handleCancel}
       handleOK={props.handleOK}
     >
-      <div className="formChoiceModalContainer">
-        <div className="formGroups">
+      <div className={classes.formChoiceModalContainer}>
+        <div className={classes.formGroups}>
           <Collapse
             bordered={false}
             activeKey={"formList"}
@@ -134,9 +135,8 @@ function DataListModal(props) {
                     _getFormChoice(form.formId, form.formName);
                   }}
                   key={form.formId}
-                  className={classNames({
-                    activeSpan: form.id == choiceFormId
-                  })}
+                  className={form.id == choiceFormId ? {backgroundColor: 'rgba(43, 129, 255, 0.1)'} : {}
+                  }
                 >
                   <Icon type="profile" style={{ color: "orange" }} />
                   {form.formName}
@@ -150,7 +150,7 @@ function DataListModal(props) {
             </Panel>
           </Collapse>
         </div>
-        <div className="footBtnGroups">
+        <div className={classes.footBtnGroups}>
           <Button onClick={props.handleCancel}>取消</Button>
           <Button onClick={onConfirm}>确定</Button>
         </div>

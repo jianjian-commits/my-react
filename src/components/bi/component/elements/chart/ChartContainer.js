@@ -5,7 +5,7 @@ import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
 import ChartToolbarBtn from "../ChartToolbarBtn";
 import request from '../../../utils/request';
-import {setDB} from '../../../utils/reqUtil';
+import {setDB} from '../../../utils/ReqUtil';
 import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
 import { ChartType } from '../Constant';

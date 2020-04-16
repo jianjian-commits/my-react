@@ -11,8 +11,33 @@ export const GroupType = {
   MIN: {name: "最小", value: "MIN"},
 }
 
-export const SortType = {
-  DESC: "DESC",
-  ASC: "ASC",
-  DESC: "DESC"
-}
+export const SortTypeArr = [
+  {
+    name:"默认",
+    value:"DEFAULT"
+  },{
+    name:"降序",
+    value:"DESC"
+  },{
+    name:"升序",
+    value:"ASC"
+  },
+]
+export const TimeSumTypeArr = [
+  {
+    name:"年",
+    value:"YEAR"
+  },{
+    name:"年-季",
+    value:"QUARTER"
+  },{
+    name:"年-月",
+    value:"MONTH"
+  },{
+    name:"年-周",
+    value:"WEEK"
+  },{
+    name:"年-月-日",
+    value:"DAY"
+  }
+]

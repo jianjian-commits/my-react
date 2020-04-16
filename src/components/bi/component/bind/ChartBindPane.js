@@ -111,7 +111,6 @@ function processBind(bindDataArr, formId, changeBind, changeChartData) {
         changeChartData(data);
       }
     })
-
     changeBind(bindDataArr);
 }
 
@@ -169,11 +168,9 @@ class BindPane extends PureComponent {
 
   removeField = (item) => {
     let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
-    
     const newArr = bindDataArr.filter((each) => {
       return item.idx != each.idx;
     })
-
     processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
@@ -259,10 +256,22 @@ class BindPane extends PureComponent {
       if(fieldId == each.fieldId) {
         each.option.currentGroup = currentGroup
       }
-      
       return each;
     })
+    processBind(newArr, dataSource.id, changeBind, changeChartData);
+  }
 
+  changeSortType = (sortType, fieldId) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    const newArr = bindDataArr.map((each) => {
+      if(fieldId == each.fieldId) {
+        each.option.sort = {
+          "fieldId": fieldId,
+          ...sortType
+        }
+      }
+      return each;
+    })
     processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
@@ -277,7 +286,7 @@ class BindPane extends PureComponent {
       (each, idx) => {
         if(each.bindType == bindType && bindType == Types.DIMENSION) {
           components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref}} item={{...each, removeField: this.removeField,
-            className: cls}} Child={FieldDimension} key={each.fieldId + "_" + idx} processBegin={this.processBegin}/>)
+            className: cls,changeGroup: this.changeGroup,changeSortType:this.changeSortType}} Child={FieldDimension} key={each.fieldId + "_" + idx} processBegin={this.processBegin}/>)
         }
 
         if(each.bindType == bindType && bindType == Types.MEASURE) {
@@ -292,7 +301,7 @@ class BindPane extends PureComponent {
           }
 
           components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref }} item={{...each, removeField: this.removeField,
-            changeGroup: this.changeGroup, className: cls, selectIndex}} Child={FieldMeasureSelect} key={each.fieldId + "_" + idx}
+            changeGroup: this.changeGroup, className: cls, selectIndex,changeSortType:this.changeSortType}} Child={FieldMeasureSelect} key={each.fieldId + "_" + idx}
             processBegin={this.processBegin}/>)
         }
       }

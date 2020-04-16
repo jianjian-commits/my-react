@@ -18,7 +18,7 @@ import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 
 import { setDashboards } from '../components/bi/redux/action';
-import { setDB, getDashboardAll } from '../components/bi/utils/reqUtil';
+import { setDB, getDashboardAll } from '../components/bi/utils/ReqUtil';
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [

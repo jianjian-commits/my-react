@@ -86,14 +86,17 @@ export const getOption = (chartData, chartInfo) => {
 export const getChartAttrs = (bindDataArr) => {
   bindDataArr = bindDataArr || [];
   let dimensions = [], indexes = [];
-  const groups = [{ name: "", value: "COUNT" }];
-  const sort = { fieldId: "", value: "DESC" };
+  const groups = [];
+  let sort = { fieldId: "", value: "DEFAULT" };
   const conditions = [];
 
   bindDataArr.forEach((each) => {
     const field = Object.assign({}, each);
     const option = field.option;
     const currentGroup = option.currentGroup;
+    if(option.sort){
+      sort = option.sort;
+    }
     delete field.bindType;
     delete field.option;
 
