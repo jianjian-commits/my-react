@@ -223,7 +223,7 @@ class Submission extends Component {
         }
       }
       if (type === "FormChildTest") {
-        console.log(component.key, values);
+        // console.log(component.key, values);
         // values[component.key].forEach(item => {
         //   this._setDateTimeVaule(item, component.values);
         // })
@@ -485,34 +485,34 @@ class Submission extends Component {
     for (let key in values) {
       if (formChildDataObj.hasOwnProperty(key)) {
         values[key] = formChildDataObj[key];
-      }
-      if (Array.isArray(values[key])) {
-        values[key].forEach((data, index) => {
-          console.log("data", data);
-          if (!data["childFormDataId"]) {
-            data["childFormDataId"] = ID.oldUuid();
-          }
-          for (let k in data) {
-            let type = data[k].formType;
-            if (data[k].autoInput) {
-              if (type === "PureDate") {
-                data[k].data = {
-                  time: moment(date).format("YYYY-MM-DD")
-                };
-              }
-              if (type === "PureTime") {
-                data[k].data = {
-                  time: moment(date).format("HH:mm:ss.SSS")
-                };
-              }
-              if (type === "DateInput") {
-                data[k].data = {
-                  time: moment(date).format("YYYY-MM-DD HH:mm:ss.SSS")
-                };
+
+        if (Array.isArray(values[key])) {
+          values[key].forEach((data, index) => {
+            // if (!data["childFormDataId"]) {
+            //   data["childFormDataId"] = ID.oldUuid();
+            // }
+            for (let k in data) {
+              let type = data[k].formType;
+              if (data[k].autoInput) {
+                if (type === "PureDate") {
+                  data[k].data = {
+                    time: moment(date).format("YYYY-MM-DD")
+                  };
+                }
+                if (type === "PureTime") {
+                  data[k].data = {
+                    time: moment(date).format("HH:mm:ss.SSS")
+                  };
+                }
+                if (type === "DateInput") {
+                  data[k].data = {
+                    time: moment(date).format("YYYY-MM-DD HH:mm:ss.SSS")
+                  };
+                }
               }
             }
-          }
-        });
+          });
+        }
       }
     }
   };

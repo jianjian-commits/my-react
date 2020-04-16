@@ -33,6 +33,7 @@ import DropDown from "./components/dropDown";
 import MultiDropDown from "./components/multiDropDown";
 import DateInput from "./components/dateInput";
 import moment from "moment";
+import ID from "../../../../utils/UUID";
 
 class FormChildTest extends React.Component {
   constructor(props) {
@@ -541,6 +542,7 @@ class FormChildTest extends React.Component {
         });
       }
     });
+    result["childFormDataId"] = ID.oldUuid();
     newArray.push(result);
 
     this.props.saveSubmitData(newArray);

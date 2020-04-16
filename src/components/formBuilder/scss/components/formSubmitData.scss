@@ -575,3 +575,18 @@
 // .ant-select-dropdown-menu-item {
 //   font-size: 12px;
 // }
+
+.edit-history-table {
+  .file-list {
+    margin-left: 15px;
+  }
+  .file-status_0 {
+    color: #f9a825;
+  }
+  .file-status_1 {
+    color: #64dd17;
+  }
+  .file-status_-1 {
+    color: #e64a19;
+  }
+}
