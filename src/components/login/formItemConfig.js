@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button as Btn, Icon, message } from "antd";
+import { Input as Inp, Button as Btn, Icon } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
 import { catchError, throttle } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
+import { allowSendCode } from "../../store/loginReducer";
 
 const meteImg = {
   username: <UserNameIcon style={{ marginLeft: "10px" }} />,
@@ -45,28 +46,6 @@ class Button extends React.Component {
   }
 }
 
-// 发送验证码
-async function sendCode(mobilePhone, codeType) {
-  if (!mobilePhone) return false;
-  try {
-    const res = await request("/code", {
-      method: "post",
-      data: {
-        codeType,
-        mobilePhone
-      }
-    });
-    if (res && res.status === "SUCCESS") {
-      return true;
-    } else {
-      message.error(res.msg || "验证码获取失败");
-    }
-  } catch (err) {
-    catchError(err);
-    return false;
-  }
-}
-
 //  rules校验规则
 const required = msg => ({ required: true, message: msg });
 const whitespace = () => ({ whitespace: true, message: "不允许出现空格" });
@@ -86,14 +65,19 @@ const email = () => ({
   message: "请输入正确邮箱格式"
 });
 // 自定义校验
-const checkphone = actionType => {
-  const bol = actionType === "login";
+const checkphone = (activeKey, dispatch) => {
+  const bol = activeKey === "initSignin" || activeKey === "signin";
   const context = bol ? "该手机号未注册" : "该手机号已被注册";
   const phone = async (rule, value, callback) => {
     if (!value) return callback();
     try {
       const res = await request(`/sysUser/mobilePhone/${value}/check`);
-      if (res && res.data === bol) return callback(context);
+      if (res && res.data === !bol) {
+        dispatch(allowSendCode());
+      }
+      if (res && res.data === bol) {
+        return callback(context);
+      }
     } catch (err) {
       catchError(err);
     }
@@ -101,6 +85,7 @@ const checkphone = actionType => {
   };
   return phone;
 };
+
 const checkEmail = async (rule, value, callback) => {
   if (!value) return callback();
   try {
@@ -282,65 +267,22 @@ const confirmPassWord = ({
   };
 };
 
-const buttonConfirm = (
-  verificationCodeButtonRef,
-  verificationCodeSpanRef,
-  phone,
-  codeType
-) => {
-  // const button = verificationCodeButtonRef.current;
-  // const span = verificationCodeSpanRef.current;
-  const setTime = ({ sended, initNum, timeTerval = 1000, timeOut }) => {
-    // if (button) {
-    //   button.disabled = true;
-    //   button.style.opacity = 0.5;
-    // }
-    // if (span)
-    //   span.innerHTML = sended
-    //     ? `验证码已发送，如未收到请在${initNum}s后重试`
-    //     : `验证码发送失败，请在${initNum}s后重试`;
-    // let num = initNum - 1;
-    // const int = setInterval(() => {
-    //   if (span)
-    //     span.innerHTML = sended
-    //       ? `验证码已发送，如未收到请在${num}s后重试`
-    //       : `验证码发送失败，请在${num}s后重试`;
-    //   num = num - 1;
-    // }, timeTerval);
-    // setTimeout(() => {
-    //   window.clearInterval(int);
-    //   if (button) button.disabled = false;
-    //   button.style.opacity = 1;
-    //   if (span) span.innerHTML = "";
-    //   num = initNum - 1;
-    // }, timeOut);
-  };
-  sendCode(phone, codeType).then(res => {
-    if (res) {
-      setTime({
-        sended: true,
-        initNum: 60,
-        timeOut: 60000
-      });
-    } else {
-      setTime({ sended: false, initNum: 6, timeOut: 6000 });
-    }
-  });
-};
-
 const verificationCode = ({
   form,
   payload,
   icon,
   unprefix,
   hasFeedback,
-  codeType
+  codeType,
+  sendCode,
+  isFetchCoding,
+  fetchText,
+  allowSendCode
 }) => {
-  const { getFieldValue, getFieldError } = form;
+  const { getFieldValue } = form;
   const verificationCodeSpanRef = React.createRef();
   const verificationCodeButtonRef = React.createRef();
   const phone = getFieldValue("mobilePhone");
-  const err = getFieldError("mobilePhone") || [];
   return {
     itemName: "code",
     options: {
@@ -363,19 +305,10 @@ const verificationCode = ({
         addonAfter={
           <Button
             ref={button => (verificationCodeButtonRef.current = button)}
-            disabled={null}
+            disabled={isFetchCoding}
             onClick={
-              err.length === 0 && phone
-                ? throttle(
-                    () =>
-                      buttonConfirm(
-                        verificationCodeButtonRef,
-                        verificationCodeSpanRef,
-                        phone,
-                        codeType
-                      ),
-                    6000
-                  )
+              allowSendCode
+                ? throttle(() => sendCode(phone, codeType), 6000)
                 : null
             }
             style={{
@@ -383,10 +316,11 @@ const verificationCode = ({
               borderRadius: "6px",
               background: "#2A7FFF",
               color: "#ffffff",
-              opacity: phone ? 1 : 0.5
+              opacity: allowSendCode ? (isFetchCoding ? 0.5 : 1) : 0.5,
+              width: "130px"
             }}
           >
-            发送验证码
+            {fetchText ? fetchText : "发送验证码"}
           </Button>
         }
       />
@@ -404,7 +338,16 @@ const verificationCode = ({
   };
 };
 
-const mobilePhone = ({ form, payload, icon, unprefix, hasFeedback }) => {
+const mobilePhone = ({
+  form,
+  payload,
+  icon,
+  unprefix,
+  hasFeedback,
+  resetAllowSendCodeState,
+  dispatch,
+  activeKey
+}) => {
   return {
     itemName: "mobilePhone",
     options: {
@@ -413,7 +356,7 @@ const mobilePhone = ({ form, payload, icon, unprefix, hasFeedback }) => {
         required("该项为必填"),
         whitespace(),
         number(),
-        { validator: checkphone(payload) },
+        { validator: checkphone(activeKey, dispatch) },
         { len: 11, message: "请输入正确手机号" }
       ]
     },
@@ -422,7 +365,10 @@ const mobilePhone = ({ form, payload, icon, unprefix, hasFeedback }) => {
         placeholder={"请填写手机号"}
         addonBefore={<span>+86</span>}
         prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,0.25)" }} />}
-        onChange={() => form.setFields({ mobilePhone: { errors: null } })}
+        onChange={() => {
+          resetAllowSendCodeState();
+          form.setFields({ mobilePhone: { errors: null } });
+        }}
         icon={icon}
         unprefix={unprefix}
       />
@@ -495,7 +441,8 @@ const submit = ({
   userId,
   token,
   itemName,
-  setActiveKey
+  setActiveKey,
+  resetAllowSendCodeState
 }) => {
   const { getFieldsValue, isFieldsTouched } = form;
   const touched = isFieldsTouched();
@@ -535,7 +482,15 @@ const submit = ({
             style={{ width: "100%", marginLeft: "0px", textAlign: "right" }}
           >
             <Link to="/forgetPassword">忘记密码</Link>&nbsp;&nbsp;|&nbsp;&nbsp;
-            <span onClick={() => setActiveKey("register")}>注册</span>
+            <span
+              onClick={() => {
+                resetAllowSendCodeState();
+                form.resetFields();
+                setActiveKey("register");
+              }}
+            >
+              注册
+            </span>
           </div>
         )}
         {payload === "register" && (
@@ -543,7 +498,11 @@ const submit = ({
             已有账号?直接
             <span
               style={{ color: "#096dd9", cursor: "pointer" }}
-              onClick={() => setActiveKey("signin")}
+              onClick={() => {
+                resetAllowSendCodeState();
+                form.resetFields();
+                setActiveKey("signin");
+              }}
             >
               登录
             </span>

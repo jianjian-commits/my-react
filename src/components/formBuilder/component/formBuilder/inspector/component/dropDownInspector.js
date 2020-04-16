@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Checkbox, Button, Tooltip, Select, Divider } from "antd";
+import { Input, Checkbox, Button, Tooltip, Select, Divider, Modal } from "antd";
 import { connect } from "react-redux";
 import locationUtils from "../../../../utils/locationUtils";
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
@@ -17,7 +17,7 @@ import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
 const { Option } = Select;
-
+const { TextArea } = Input;
 class DropdownInspector extends React.Component {
   constructor(props) {
     super(props);
@@ -28,7 +28,10 @@ class DropdownInspector extends React.Component {
         "custom",
       formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
-      isShowOtherDataModal: false
+      isShowOtherDataModal: false,
+      visible: false,
+      tempOptions: props.element.data.values,
+      tempContent: "",
     };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
@@ -122,6 +125,32 @@ class DropdownInspector extends React.Component {
         shortcut: ""
       };
      const newValuesList = [...this.props.element.data.values, newItem];
+     if (this.props.elementParent) {
+      this.props.setFormChildItemValues(
+        this.props.elementParent,
+        "data",
+        newValuesList,
+        this.props.element
+      );
+    } else {
+      this.props.setItemValues(this.props.element, "data", newValuesList);
+    }
+  }
+}
+  addChooseItems = () => {
+    const tempOptions = this.state.tempOptions;
+    const newItem = {
+      label: `选项`,
+      value: `选项`,
+      shortcut: ""
+    };
+    let newValuesList;
+    if(tempOptions.length > 0){
+      newValuesList = [...tempOptions];
+    } else {
+      // 如果编辑框里的内容没有生成选项,那就只有一个选项
+      newValuesList = [newItem];
+    }
     if (this.props.elementParent) {
       this.props.setFormChildItemValues(
         this.props.elementParent,
@@ -132,9 +161,8 @@ class DropdownInspector extends React.Component {
     } else {
       this.props.setItemValues(this.props.element, "data", newValuesList);
     }
-    }
   }
-
+ 
   deleteChooseItem(item, index) {
     if (this.props.element.data.values.length === 1) return null;
     let newValuesList = this.props.element.data.values.filter(
@@ -171,6 +199,47 @@ class DropdownInspector extends React.Component {
     } else {
       this.props.setItemValues(this.props.element, "data", newValuesList);
     }
+  }
+
+  showModal = () => {
+    const tempContent = this.props.element.data.values.map(item => item.value).join("\n") + "\n";
+    this.setState({
+      visible: true,
+      tempContent: tempContent
+    });
+  };
+
+  handleOk = e => {
+    this.setState({
+      visible: false,
+    });
+    this.addChooseItems();
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleContent = (e) =>{
+    const newArray = this.handleArray(e.target.value.split("\n"));
+    this.setState({
+      tempOptions: newArray,
+      tempContent: e.target.value
+    })
+  }
+
+  handleArray(arr){
+    // 处理掉额外的空格 和换行符
+    return arr.map(item =>
+      item.trim())
+      .filter(item =>item !== "")
+      .map(item=>({
+        value: item,
+        label: item,
+        shortcut: ""
+      }))
   }
 
   handleSelectChange = value => {
@@ -269,6 +338,7 @@ class DropdownInspector extends React.Component {
       // 自定义组件
       case "custom": {
         const { values } = element.data;
+        const { tempContent } = this.state;
         return (
           <div className="chooseitems">
             {values.map((item, index) => (
@@ -312,6 +382,19 @@ class DropdownInspector extends React.Component {
             <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
               增加其他选项
             </Button>
+            <Button onClick={this.showModal}>批量编辑</Button>
+            <Modal
+              title="批量编辑"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <TextArea
+                autoSize={{ minRows: 8, maxRows: 8 }}
+                onChange={this.handleContent}
+                value={tempContent}>
+              </TextArea>
+            </Modal>
           </div>
         );
       }

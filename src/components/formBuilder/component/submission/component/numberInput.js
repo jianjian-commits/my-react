@@ -96,7 +96,7 @@ class NumberInput extends React.Component {
     ev.preventDefault();
     const value = Number(ev.target.value);
     this.handleEmitChange(value);
-    this.props.resetErrorMsg(this.props.item.id);
+    this.props.resetErrorMsg(this.props.item.key);
     setTimeout(()=>{
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;

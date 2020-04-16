@@ -127,6 +127,8 @@ export default class Inspector extends React.Component {
           />
         );
       case "DateInput":
+      case "PureTime":
+      case "PureDate":
         return (
           <DateInputInspector
             key={editElement.id}

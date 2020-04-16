@@ -1,19 +1,55 @@
+/*
+ * @Author: your name
+ * @Date: 2020-04-09 13:51:06
+ * @LastEditors: komons
+ * @LastEditTime: 2020-04-13 12:26:23
+ * @Description: 
+ * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\submission\component\pureTime.js
+ */
 import React from "react";
+import { TimePicker } from "antd";
+import { isValueValid, isStringValid } from "../../../utils/valueUtils";
+import { Form, Tooltip, Icon } from "antd";
+import locale from "antd/lib/date-picker/locale/zh_CN";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
-import { isValueValid } from "../../../utils/valueUtils";
-import { Input, Form } from "antd";
 import { withRouter } from "react-router-dom";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
 import {
   getFormAllSubmission,
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
+import moment from "moment";
 
-class TextArea extends React.Component {
+let timer = null;
+
+class PureTime extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAutoInput: false
+    };
+  }
+
+  componentWillUnmount() {
+    clearInterval(timer)
+  }
 
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
-    const { data } = item;
+    const { data, autoInput } = item;
+    if (autoInput) {
+      timer = setInterval(()=>{
+        form.setFieldsValue({
+          [item.key]: new moment()
+        })
+      }, 1000);
+      this.setState({
+        isAutoInput: true
+      });
+      return;
+    }
+
     if (data && data.type === "DataLinkage") {
       const {
         conditionId,
@@ -21,7 +57,7 @@ class TextArea extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -30,6 +66,7 @@ class TextArea extends React.Component {
           if (value instanceof Array) {
             index = compareEqualArray(dataArr, value);
           } else if (value instanceof Object) {
+            // 争对地址的比较
             let { county, city, province, detail } = value;
             newData = dataArr.map(item => {
               if (item) {
@@ -47,13 +84,11 @@ class TextArea extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: res
+              [item.key]: new moment(coverTimeUtils.localDate(res, true))
             });
+            // 多级联动
             this.handleEmitChange(res);
           } else {
-            form.setFieldsValue({
-              [item.key]: undefined
-            });
             this.handleEmitChange(undefined);
           }
         });
@@ -61,79 +96,64 @@ class TextArea extends React.Component {
     }
   }
 
-  handleEmitChange = (value) => {
+  handleEmitChange = value => {
     const { callEventArr } = this.props.item;
     if (callEventArr) {
       callEventArr.forEach(fnc => {
         fnc && fnc(value, this);
       });
     }
-  }
-  handleChange = ev => {
-    const value = ev.target.value;
-    this.handleEmitChange(value)
-    setTimeout(()=>{
+  };
+
+  // 如果存在回调数组，则遍历里面的函数执行
+  handleChange = value => {
+    this.handleEmitChange(value);
+    setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if (
+        !Object.is(
+          document
+            .querySelector(`#Id${key}Dom`)
+            .querySelector(".ant-form-explain"),
+          null
+        )
+      ) {
+        document
+          .querySelector(`#Id${key}Dom`)
+          .querySelector(".ant-form-explain")
+          .setAttribute("title", customMessage);
       }
-    },300)
+    }, 300);
   };
 
   render() {
     const { getFieldDecorator, item, disabled, initData } = this.props;
+    const { isAutoInput } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
-    let tip = "";
-    let rules = [];
-    if (item.validate.isLimitLength && item.validate.maxLength !== Number.MAX_SAFE_INTEGER) {
-      rules.push({
-        max: item.validate.maxLength,
-        message:
-          errMsg.trim().length > 0
-            ? errMsg
-            : `输入字符个数不要超过${item.validate.maxLength}`
-      });
-      tip = `请最多填${item.validate.maxLength}个字`;
+    let options = {};
+    if (initData) {
+      options.initialValue = moment(initData + "Z");
     }
-    if (item.validate.isLimitLength && item.validate.minLength !== 0) {
-      rules.push({
-        min: item.validate.minLength,
-        message:
-          errMsg.trim().length > 0
-            ? errMsg
-            : `输入字符个数不要少于${item.validate.minLength}`
-      });
-      tip = `请最少填${item.validate.minLength}个字`;
-    }
-    if (item.validate.isLimitLength && item.validate.maxLength !== Number.MAX_SAFE_INTEGER && item.validate.minLength !== 0) {
-      tip = `输入字数在${item.validate.minLength}~${item.validate.maxLength}之间`;
-    }
-    if (item.validate.isLimitLength && item.validate.maxLength === Number.MAX_SAFE_INTEGER && item.validate.minLength === 0) {
-      tip = `字数不限`;
-    }
-
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
-          initialValue: initData || item.defaultValue,
+          ...options,
+          initialValue: isAutoInput ? new moment() : undefined,
           rules: [
-            ...rules,
             {
               required: isValueValid(item.validate.required)
                 ? item.validate.required
                 : false,
-              message:
-                errMsg.trim().length > 0 ? errMsg : `${item.label}不能为空`
+              message: isStringValid(errMsg) ? errMsg : "此项不能为空！"
             }
-          ],
-          validateTrigger:"onBlur"
+          ]
         })(
-          <Input.TextArea
-            disabled={disabled}
-            rows={item.rows}
-            allowClear
+          <TimePicker
+            disabled={disabled || isAutoInput}
+            locale={locale}
+            placeholder="请选择时间"
             onChange={this.handleChange}
           />
         )}
@@ -141,4 +161,5 @@ class TextArea extends React.Component {
     );
   }
 }
-export default withRouter(TextArea)
+
+export default withRouter(PureTime);

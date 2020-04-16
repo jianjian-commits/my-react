@@ -164,6 +164,37 @@ export const advancedComponentArray = [
       required: false,
       customMessage: "",
     },
+    autoInput: false,
+    data: {
+      type: 'custom'
+    },
+    icon: ["date", 17]
+  }),
+  _buildDefaultProp({
+    label: "日期",
+    tooltip: "",
+    type: "PureDate",
+    defaultValue: "",
+    validate: {
+      required: false,
+      customMessage: "",
+    },
+    autoInput: false,
+    data: {
+      type: 'custom'
+    },
+    icon: ["date", 17]
+  }),
+  _buildDefaultProp({
+    label: "时间",
+    tooltip: "",
+    type: "PureTime",
+    defaultValue: "",
+    validate: {
+      required: false,
+      customMessage: "",
+    },
+    autoInput: false,
     data: {
       type: 'custom'
     },

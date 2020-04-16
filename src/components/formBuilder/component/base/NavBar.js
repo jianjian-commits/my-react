@@ -1,8 +1,9 @@
 import React, { PureComponent } from "react";
-import { Button, Icon } from "antd";
+import { Button, Icon, Dropdown } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { submitFormDataAuth } from "../../utils/permissionUtils";
+import FilterFieldsComponents from "../formData/components/filterFields/filterFieldsComponents";
 import {ReactComponent as FilterModeIcon } from "./filterModeIcon.svg"
 
 class NavBar extends PureComponent {
@@ -17,7 +18,9 @@ class NavBar extends PureComponent {
       clickCallback = () => {
         return 0;
       },
-      clickExtendCallBack
+      clickExtendCallBack,
+      handleFilterFields,
+      forms
     } = this.props;
 
     // 提交权限
@@ -34,19 +37,32 @@ class NavBar extends PureComponent {
               返回
             </Button>
           </div>
-        ) : (
-          null
-        )}
+        ) : null}
 
         <div className="headerBarTitle">
           <span>{name}</span>
         </div>
         {isShowExtraTitle ? (
           <div className="headerBarExtraTitle">
+            <Dropdown
+              overlay={
+                <FilterFieldsComponents
+                  components={forms.components}
+                  handleSetShowFields={handleFilterFields}
+                />
+              }
+              trigger={["click"]}
+            >
+              <span id="fieldsBtn"> 显示字段 </span>
+            </Dropdown>
             {/* <span> 显示字段 </span> */}
             <span onClick={clickExtendCallBack}> 筛选条件 {isFilterMode ? <Icon component={FilterModeIcon} />: null}</span>
             {isShowBtn === true && isSubmitAuth ? (
-              <Button className="headerBarButton" type="primary" onClick={() => clickCallback()}>
+              <Button
+                className="headerBarButton"
+                type="primary"
+                onClick={() => clickCallback()}
+              >
                 {btnValue}
               </Button>
             ) : (
@@ -70,7 +86,8 @@ class NavBar extends PureComponent {
   }
 }
 
-export default connect(({ login }) => ({
-  teamId: login.currentCompany && login.currentCompany.id,
+export default connect(({ login, formSubmitData }) => ({
+  forms: formSubmitData.forms,
+  teamId: login.currentTeam && login.currentTeam.id,
   permissions: (login.userDetail && login.userDetail.permissions) || []
 }))(withRouter(NavBar));

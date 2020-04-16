@@ -6,7 +6,8 @@ import {
   Button,
   Tooltip,
   InputNumber,
-  Divider
+  Divider,
+  Modal
 } from "antd";
 import { connect } from "react-redux";
 import isInFormChild from "../utils/isInFormChild";
@@ -18,11 +19,15 @@ import {
 
 import locationUtils from "../../../../utils/locationUtils";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+const { TextArea } = Input;
 class CheckboxInspector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formPath: locationUtils.getUrlParamObj().path
+      formPath: locationUtils.getUrlParamObj().path,
+      visible: false,
+      tempOptions: props.element.values,
+      tempContent: "",
     };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
@@ -134,6 +139,32 @@ class CheckboxInspector extends React.Component {
     }
   }
 
+  addChooseItems = () => {
+    const tempOptions = this.state.tempOptions;
+    const newItem = {
+      label: `选项`,
+      value: `选项`,
+      shortcut: ""
+    };
+    let newValuesList;
+    if(tempOptions.length > 0){
+      newValuesList = [...tempOptions];
+    } else {
+      // 如果编辑框里的内容没有生成选项,那就只有一个选项
+      newValuesList = [newItem];
+    }
+    if (this.props.elementParent) {
+      this.props.setFormChildItemAttr(
+        this.props.elementParent,
+        "values",
+        newValuesList,
+        this.props.element
+      );
+    } else {
+      this.props.setItemAttr(this.props.element, "values", newValuesList);
+    }
+  }
+
   deleteChooseItem(item, index) {
     if (this.props.element.values.length === 1) return null;
     let newValuesList = this.props.element.values.filter(
@@ -170,6 +201,47 @@ class CheckboxInspector extends React.Component {
     } else {
       this.props.setItemAttr(this.props.element, "values", newValuesList);
     }
+  }
+
+  showModal = () => {
+    const tempContent = this.props.element.values.map(item => item.value).join("\n") + "\n";
+    this.setState({
+      visible: true,
+      tempContent: tempContent
+    });
+  };
+
+  handleOk = e => {
+    this.setState({
+      visible: false,
+    });
+    this.addChooseItems();
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleContent = (e) =>{
+    const newArray = this.handleArray(e.target.value.split("\n"));
+    this.setState({
+      tempOptions: newArray,
+      tempContent: e.target.value
+    })
+  }
+
+  handleArray(arr){
+    // 处理掉额外的空格 和换行符
+    return arr.map(item =>
+      item.trim())
+      .filter(item =>item !== "")
+      .map(item=>({
+        value: item,
+        label: item,
+        shortcut: ""
+      }))
   }
 
   handleChangeAttrMinLength = value => {
@@ -235,6 +307,7 @@ class CheckboxInspector extends React.Component {
       isSetAPIName
     } = this.props.element;
     const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage, tempContent } = this.state;
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
@@ -316,6 +389,19 @@ class CheckboxInspector extends React.Component {
             <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
               增加其他选项
             </Button>
+            <Button onClick={this.showModal}>批量编辑</Button>
+            <Modal
+              title="批量编辑"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <TextArea
+                autoSize={{ minRows: 8, maxRows: 8 }}
+                onChange={this.handleContent}
+                value={tempContent}>
+              </TextArea>
+            </Modal>
           </div>
           {isInFormChild(this.props.elementParent) ? null : (
             <>
@@ -355,6 +441,7 @@ class CheckboxInspector extends React.Component {
           </div>
           <div className="number-check-warper">
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="minOptionNumber"
               placeholder="不限"
               min={1}
@@ -368,6 +455,7 @@ class CheckboxInspector extends React.Component {
             />
             ~
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="maxOptionNumber"
               placeholder="不限"
               min={1}

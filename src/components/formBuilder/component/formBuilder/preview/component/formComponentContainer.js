@@ -24,6 +24,9 @@ import Address from "./formItemDoms/component/Address";
 import ComponentTemplate from "./formItemDoms/component/componentTemplate";
 import SubmitButton from "./formItemDoms/component/button";
 
+import PureTime from "./formItemDoms/component/pureTime";
+import PureDate from "./formItemDoms/component/pureDate";
+
 const FormElements = {};
 
 FormElements.Button = FormComponent(SubmitButton);
@@ -52,5 +55,8 @@ FormElements.GetLocalPosition = FormComponent(GetLocalPosition);
 FormElements.FormChildTest = FormComponent(FormChildTest);
 FormElements.Address = FormComponent(Address);
 FormElements.ComponentTemplate = FormComponent(ComponentTemplate);
+
+FormElements.PureTime = FormComponent(PureTime);
+FormElements.PureDate = FormComponent(PureDate);
 
 export default FormElements;

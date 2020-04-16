@@ -1,22 +1,35 @@
 function formatTime(time) {
   return time < 10 ? "0" + time : time;
-};
+}
 // 参数 时间字符串, 格式化的样式
-function localTime(time, formatString="yyyy-MM-dd hh:mm:ss"){
+function localTime(time, formatString = "yyyy-MM-dd hh:mm:ss") {
   let date = new Date(time);
   // 将utc时区时间转为当前本地时间
-  let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-  date.setHours(date.getHours()-currentTimeZoneOffsetInHours)
+  let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
+  date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
 
-  formatString = formatString.replace("yyyy",date.getFullYear())
-                  .replace("MM", date.getMonth() + 1)
-                  .replace("dd", formatTime(date.getDate()))
-                  .replace("hh", formatTime(date.getHours()))
-                  .replace("mm", formatTime(date.getMinutes()))
-                  .replace("ss", formatTime(date.getSeconds()));
+  formatString = formatString
+    .replace("yyyy", date.getFullYear())
+    .replace("MM", date.getMonth() + 1)
+    .replace("dd", formatTime(date.getDate()))
+    .replace("hh", formatTime(date.getHours()))
+    .replace("mm", formatTime(date.getMinutes()))
+    .replace("ss", formatTime(date.getSeconds()));
   return formatString;
-};
+}
+
+function localDate(date, isTime = false) {
+  if(isTime) {
+    date = new Date(`2016/9/3 ${date}`);
+  }
+  // 将utc时区时间转为当前本地时间
+  date = new Date(date);
+  let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
+  date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
+  return date;
+}
 
 export default {
-  localTime: localTime
+  localDate,
+  localTime: localTime,
 };

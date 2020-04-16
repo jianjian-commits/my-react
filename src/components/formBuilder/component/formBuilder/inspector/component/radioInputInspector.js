@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Radio, Checkbox, Button, Tooltip, Divider } from "antd";
+import { Input, Radio, Checkbox, Button, Tooltip, Divider, Modal } from "antd";
 import { connect } from "react-redux";
 import {
   setItemAttr,
@@ -7,12 +7,16 @@ import {
   setFormChildItemAttr
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
-import locationUtils from "../../../../utils/locationUtils";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+const { TextArea } = Input;
 class RadioInputInspector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      visible: false,
+      tempOptions: props.element.values,
+      tempContent: "",
+    };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
@@ -118,6 +122,73 @@ class RadioInputInspector extends React.Component {
     }
   }
 
+  addChooseItems = () => {
+    const tempOptions = this.state.tempOptions;
+    const newItem = {
+      label: `选项`,
+      value: `选项`,
+      shortcut: ""
+    };
+    let newValuesList;
+    if(tempOptions.length > 0){
+      newValuesList = [...tempOptions];
+    } else {
+      // 如果编辑框里的内容没有生成选项,那就只有一个选项
+      newValuesList = [newItem];
+    }
+    if (this.props.elementParent) {
+      this.props.setFormChildItemAttr(
+        this.props.elementParent,
+        "values",
+        newValuesList,
+        this.props.element
+      );
+    } else {
+      this.props.setItemAttr(this.props.element, "values", newValuesList);
+    }
+  }
+
+  showModal = () => {
+    const tempContent = this.props.element.values.map(item => item.value).join("\n") + "\n";
+    this.setState({
+      visible: true,
+      tempContent: tempContent
+    });
+  };
+
+  handleOk = e => {
+    this.setState({
+      visible: false,
+    });
+    this.addChooseItems();
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleContent = (e) =>{
+    const newArray = this.handleArray(e.target.value.split("\n"));
+    this.setState({
+      tempOptions: newArray,
+      tempContent: e.target.value
+    })
+  }
+
+  handleArray(arr){
+    // 处理掉额外的空格 和换行符
+    return arr.map(item =>
+      item.trim())
+      .filter(item =>item !== "")
+      .map(item=>({
+        value: item,
+        label: item,
+        shortcut: ""
+      }))
+  }
+
   deleteChooseItem(item, index) {
     if (this.props.element.values.length === 1) return null;
     let newValuesList = this.props.element.values.filter(
@@ -157,21 +228,6 @@ class RadioInputInspector extends React.Component {
     }
   }
 
-  // componentDidUpdate() {
-  //   if (this.props.isCalcLayout) {
-  //     let domElement = document.getElementById(this.props.element.key);
-
-  //     const newLayout = {
-  //       ...this.props.element.layout,
-  //       h: Math.floor((domElement.offsetHeight) / 30)
-  //     }
-  //     this.props.setItemAttr(this.props.element, "layout", newLayout);
-
-  //     this.props.setCalcLayout(false);
-  //   }
-
-  // }
-
   // API change
    handleChangeAPI = ev => {
     const { value } = ev.target;
@@ -198,7 +254,7 @@ class RadioInputInspector extends React.Component {
       tooltip,
       isSetAPIName
     } = this.props.element;
-    const { apiNameTemp, isUniqueApi = true, APIMessage, } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage, tempContent } = this.state;
     return (
       <div className="radio-input-inspactor">
         <div className="costom-info-card">
@@ -280,9 +336,25 @@ class RadioInputInspector extends React.Component {
             <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
               增加选项
             </Button>
+<<<<<<< HEAD
             <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
               增加其他选项
             </Button>
+=======
+            <Button onClick={this.showModal}>批量编辑</Button>
+            <Modal
+              title="批量编辑"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <TextArea
+                autoSize={{ minRows: 8, maxRows: 8 }}
+                onChange={this.handleContent}
+                value={tempContent}>
+              </TextArea>
+            </Modal>
+>>>>>>> mickey-formBuilder
           </div>
           {isInFormChild(this.props.elementParent) ? null : (
             <>
