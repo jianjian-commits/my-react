@@ -1,35 +1,37 @@
-function formatTime(time) {
-  return time < 10 ? "0" + time : time;
-}
-// 参数 时间字符串, 格式化的样式
-function localTime(time, formatString = "yyyy-MM-dd hh:mm:ss") {
-  let date = new Date(time);
+import moment from 'moment'
+
+function localDate(date, componentType) {
   // 将utc时区时间转为当前本地时间
-  let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
-  date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-
-  formatString = formatString
-    .replace("yyyy", date.getFullYear())
-    .replace("MM", date.getMonth() + 1)
-    .replace("dd", formatTime(date.getDate()))
-    .replace("hh", formatTime(date.getHours()))
-    .replace("mm", formatTime(date.getMinutes()))
-    .replace("ss", formatTime(date.getSeconds()));
-  return formatString;
-}
-
-function localDate(date, isTime = false) {
-  if(isTime) {
-    date = new Date(`2016/9/3 ${date}`);
+  switch(componentType){
+    case "DateInput":break;
+    case "PureTime":
+      if(!moment(date).isValid()){
+        // 是否在组件内使用
+        date = `2016/9/3 ${date}`
+      };break;
+    case "PureDate":break;
+    default: return moment.utc(date+"Z").local().format("YYYY-MM-DD HH:mm:ss")
   }
-  // 将utc时区时间转为当前本地时间
-  date = new Date(date);
-  let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
-  date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-  return date;
+  if(moment(date).isValid()){
+    return moment.utc(date).local();
+  }
+  return ;
+}
+
+function utcDate(date, componentType){
+  // 将本地时间转为utc时间
+  switch(componentType){
+    case "DateInput":
+      return moment(date).utc().format().replace("Z","");
+    case "PureTime":
+      return moment(date).utc().format("HH:mm:ss.SSS")
+    case "PureDate":
+      return moment(date).utc().format("YYYY-MM-DD")
+  }
+  return ;
 }
 
 export default {
   localDate,
-  localTime: localTime,
+  utcDate
 };

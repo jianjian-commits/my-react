@@ -9,7 +9,8 @@ import {
   message,
   Row,
   Col,
-  DatePicker
+  DatePicker,
+  TimePicker
 } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import moment from 'moment';
@@ -45,6 +46,17 @@ const numberLogicalOperators = [
     label: "小于等于"
   }
 ];
+
+const pureTimeLogicalOperators =[
+  { type: "EQUALS", operator: EQUALS, label: "等于" },
+  { type: "NOT_EQUALS", operator: NOT_EQUALS, label: "不等于" },
+  { type: "GREATER_THAN", operator: GREATER_THAN, label: "大于" },
+  { type: "LESS_THAN", operator: LESS_THAN, label: "小于" },
+  { type: "NOT_EXISTS", operator: `__regex=/^\\S/i`, label: "不为空" },
+  { type: "EXISTS", operator: NOT_EXISTS, label: "为空" },
+  { type: "IN", operator: `__regex=`, label: "包含" },
+  { type: "NOT_IN", operator: NOT_IN, label: "不包含" },
+]
 
 const stringLogicalOperators = [
   // 非空和空这里有问题 如果是空 是空字符串
@@ -191,6 +203,9 @@ class FilterItem extends Component {
         return formChildLogicalOperators;
       case "GetLocalPosition":
         return stringLogicalOperators;
+      case "PureTime":
+      case "PureDate":
+        return pureTimeLogicalOperators;
       default:
         return stringLogicalOperators;
     }
@@ -254,6 +269,32 @@ class FilterItem extends Component {
             />
           );
         }
+      case "PureTime":
+        return(
+          <TimePicker
+          key={`${filed.key}${this.state.operator}`}
+          disabled={isDisabled || this.state.disabledCostomValue}
+          {...options}
+          showTime
+          locale={locale}
+          placeholder="请选择时间/日期"
+          onChange={this.handleChangeDate}
+          style={{ width: "100%" }}
+        />
+        )
+      case "PureDate":
+        return(
+          <DatePicker
+          key={`${filed.key}${this.state.operator}`}
+          disabled={isDisabled || this.state.disabledCostomValue}
+          {...options}
+          showTime
+          locale={locale}
+          placeholder="请选择时间/日期"
+          onChange={this.handleChangeDate}
+          style={{ width: "100%" }}
+        />
+        )
       case "DropDown":
         if (
           this.state.operator === "RADIO_IN" ||
@@ -671,6 +712,12 @@ export default class FilterComponent extends Component {
         filter.costomValue = new Date(date).toJSON().replace("Z","");
         return filter
       }
+      if(filter.field.type === "PureTime" && filter.costomValue.indexOf("Z") !== -1){
+        let date = new Date(filter.costomValue);
+        const startIndex = filter.costomValue.indexOf("T")+1;
+        filter.costomValue = filter.costomValue.substring(startIndex, filter.costomValue.length-1)
+        return filter
+      }
       return filter;
     })
   }
@@ -788,11 +835,6 @@ export default class FilterComponent extends Component {
             </Select>
           </div>
           <div className="line"></div>
-          {/* <Row type="flex" justify="center" gutter={19}>
-            <Col span={8}>字段</Col>
-            <Col span={7}>类型</Col>
-            <Col span={7}>值</Col>
-          </Row> */}
           <div className="filter-item-container">
             {this.state.filterArray.map((filter, index) => {
               return (
@@ -816,8 +858,7 @@ export default class FilterComponent extends Component {
             <Button
               type="default"
               onClick={() => {
-                this.handleClearFilter()
-                // this.props.clickExtendCallBack();
+                this.handleClearFilter();
               }}
             >
               清空

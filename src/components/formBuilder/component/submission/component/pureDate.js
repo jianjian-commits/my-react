@@ -42,17 +42,19 @@ class PureDate extends React.Component {
   }
 
   componentDidMount() {
-    const { form, item, handleSetComponentEvent } = this.props;
+    const { form, item, handleSetComponentEvent, isEditData } = this.props;
     const { data, autoInput } = item;
-    if (autoInput) {
+    if(autoInput){
+      this.setState({
+        isAutoInput: true
+      });
+    }
+    if (autoInput && !isEditData) {
       timer = setInterval(()=>{
         form.setFieldsValue({
           [item.key]: new moment()
         })
       }, 1000 * 60);
-      this.setState({
-        isAutoInput: true
-      });
       return;
     }
 
@@ -140,13 +142,13 @@ class PureDate extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if (initData) {
-      options.initialValue = moment(initData + "Z");
+      options.initialValue = moment(initData);
     }
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
-          ...options,
           initialValue: isAutoInput ? new moment() : undefined,
+          ...options,
           rules: [
             {
               required: isValueValid(item.validate.required)

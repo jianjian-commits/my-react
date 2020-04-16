@@ -56,6 +56,7 @@ import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
 import moment from "moment";
+import coverTimeUtils from "../../utils/coverTimeUtils";
 
 import PureTime from "./component/pureTime";
 import PureDate from "./component/pureDate";
@@ -87,6 +88,7 @@ class Submission extends Component {
       isSubmitted: false,
       errorResponseMsg: {},
       isShowApprovalBtn: true,
+      isSetCorrectFormChildData: false
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -101,17 +103,17 @@ class Submission extends Component {
     mobile.is && mountClassNameOnRoot(mobile.className);
     getFormComponent(this.state.formId);
     getApprovalDefinition(this.state.formId, this.props.appid)
-    .then(response => {
-      // 获取显示提交审批的按钮
-      if(response.data.status === "SUCCESS"){
-        this.setState({
-          isShowApprovalBtn: response.data.data.canSubmit
-        })
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    });
+      .then(response => {
+        // 获取显示提交审批的按钮
+        if (response.data.status === "SUCCESS") {
+          this.setState({
+            isShowApprovalBtn: response.data.data.canSubmit
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -207,18 +209,15 @@ class Submission extends Component {
         ) {
           // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
           if (values[component.key].constructor === Date) {
-            let date = new Date(values[component.key].setUTCMilliseconds(0));
-            let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
-            date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-            values[component.key] = new Date(date).toJSON().replace("Z", "");
+            values[component.key] = coverTimeUtils.utcDate(
+              new Date(values[component.key]),
+              "DateInput"
+            );
           } else {
-            let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
-            let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
-            date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-            values[component.key] = new Date(date)
-              .toJSON()
-              .toString()
-              .replace("Z", "");
+            values[component.key] = coverTimeUtils.utcDate(
+              values[component.key],
+              type
+            );
           }
         }
 
@@ -341,10 +340,10 @@ class Submission extends Component {
     const { formChildDataObj } = this.state;
     const { formChildkey, fieldKey, value, msg } = errorMsg;
     formChildDataObj[formChildkey].map(item => {
-        if (value === String(item[fieldKey].data)) {
-          item[fieldKey].hasErr = true;
-        }
-      });
+      if (value === String(item[fieldKey].data)) {
+        item[fieldKey].hasErr = true;
+      }
+    });
     this.setState({
       showFormChildErr: true
     });
@@ -448,7 +447,6 @@ class Submission extends Component {
         // arr[0]表示子表单id,arr[1]表示组件id,arr[2]表示组件的值
         const arr = info.fieldName.split(".");
         var value = info.fieldName.substring(arr[0].length + arr[1].length + 2);
-        console.log("value", value);
         //  这里有问题最后的值不能用.分割
         const infoMsg = {
           formChildkey: arr[0],
@@ -494,29 +492,28 @@ class Submission extends Component {
     for (let key in values) {
       if (formChildDataObj.hasOwnProperty(key)) {
         values[key] = formChildDataObj[key];
-
         if (Array.isArray(values[key])) {
           values[key].forEach((data, index) => {
-            // if (!data["childFormDataId"]) {
-            //   data["childFormDataId"] = ID.oldUuid();
-            // }
             for (let k in data) {
               let type = data[k].formType;
               if (data[k].autoInput) {
                 if (type === "PureDate") {
-                  data[k].data = {
-                    time: moment(date).format("YYYY-MM-DD")
-                  };
+                  data[k].data = moment(date).format("YYYY-MM-DD");
                 }
                 if (type === "PureTime") {
-                  data[k].data = {
-                    time: moment(date).format("HH:mm:ss.SSS")
-                  };
+                  data[k].data = moment(date).format("HH:mm:ss.SSS");
                 }
                 if (type === "DateInput") {
-                  data[k].data = {
-                    time: moment(date).format("YYYY-MM-DD HH:mm:ss.SSS")
-                  };
+                  let dateString = moment(date).format();
+                  data[k].data = dateString.substring(
+                    dateString.indexOf("+"),
+                    -1
+                  );
+                }
+              } else {
+                const dateTypes = ["PureDate", "PureTime", "DateInput"];
+                if (dateTypes.includes(type) && data[k].data) {
+                  data[k].data = coverTimeUtils.utcDate(data[k].data, type);
                 }
               }
             }
@@ -553,7 +550,7 @@ class Submission extends Component {
     // }
   };
 
-  handleSubmit = (e, isStartApprove=false) => {
+  handleSubmit = (e, isStartApprove = false) => {
     e.preventDefault();
     const isMobile = this.props.mobile.is;
 
@@ -605,50 +602,59 @@ class Submission extends Component {
         //     return false;
         // }
 
-            this.setState({ isSubmitted: true,errorResponseMsg:{} });
-            this.props
-              .submitSubmission(this.state.formId, values,this.props.appid,this.props.extraProp)
-              .then(response => {
-                if(isStartApprove === false && response.data.id != void 0){
-                  isMobile
-                    ? Toast.success("提交成功!")
-                    : message.success("提交成功!");
+        this.setState({ isSubmitted: true, errorResponseMsg: {} });
+        this.props
+          .submitSubmission(
+            this.state.formId,
+            values,
+            this.props.appid,
+            this.props.extraProp
+          )
+          .then(response => {
+            if (isStartApprove === false && response.data.id != void 0) {
+              isMobile
+                ? Toast.success("提交成功!")
+                : message.success("提交成功!");
+              setTimeout(() => {
+                let skipToSubmissionDataFlag = true;
+                this.props.actionFun(skipToSubmissionDataFlag);
+              }, 1000);
+            } else if (isStartApprove === true && response.data.id != void 0) {
+              const { data, id } = response.data;
+              let fieldInfos = [];
+              for (let key in data) {
+                fieldInfos.push({ name: key, value: data[key] });
+              }
+              const appeoveData = {
+                dataId: id,
+                fieldInfos: fieldInfos
+              };
+              this.props.startApproval(
+                this.state.formId,
+                this.props.appid,
+                appeoveData,
+                () => {
                   setTimeout(() => {
                     let skipToSubmissionDataFlag = true;
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }, 1000);
-                }else if(isStartApprove === true && response.data.id != void 0) {
-                  const { data, id } =  response.data;
-                  let fieldInfos = [];
-                  for(let key in data){
-                    fieldInfos.push({name: key, value: data[key]})
-                  }
-                  const appeoveData = {
-                    dataId: id,
-                    fieldInfos: fieldInfos
-                  }
-                  this.props.startApproval(this.state.formId, this.props.appid, appeoveData, ()=>{
-                    setTimeout(() => {
-                      let skipToSubmissionDataFlag = true;
-                      this.props.actionFun(skipToSubmissionDataFlag);
-                    }, 1000);
-                  })
                 }
-                })
-              .catch(error => {
-                if (error.response && error.response.data.code === 9998) {
-                  this._setErrorResponseData(error.response.data);
-                  isMobile ? Toast.fail("提交失败") : message.error("提交失败");
-                }else if(error.response && error.response.data.code == 2003){
-                  // this.setState({
-                  //   isSubmitted: false
-                  // })
-                  isMobile
-                  ? Toast.fail(error.response.data.msg)
-                  : message.error(error.response.data.msg);
-                }
-              });
-      
+              );
+            }
+          })
+          .catch(error => {
+            if (error.response && error.response.data.code === 9998) {
+              this._setErrorResponseData(error.response.data);
+              isMobile ? Toast.fail("提交失败") : message.error("提交失败");
+            } else if (error.response && error.response.data.code == 2003) {
+              // this.setState({
+              //   isSubmitted: false
+              // })
+              isMobile
+                ? Toast.fail(error.response.data.msg)
+                : message.error(error.response.data.msg);
+            }
+          });
       });
     }
   };
@@ -1399,21 +1405,21 @@ class Submission extends Component {
                         >
                           提交
                         </Button>
-                        {
-                          this.state.isShowApprovalBtn
-                          ?<Button
-                          block={!!mobile.is}
-                          onClick={(e)=>{this.handleSubmit(e, true)}}
-                          type="primary"
-                          style={{
-                            marginLeft:"10px"
-                          }}
-                          // size={submitBtnObj.buttonSize}
-                        >                         
-                          提交并审批
-                        </Button>
-                        : null
-                        }
+                        {this.state.isShowApprovalBtn ? (
+                          <Button
+                            block={!!mobile.is}
+                            onClick={e => {
+                              this.handleSubmit(e, true);
+                            }}
+                            type="primary"
+                            style={{
+                              marginLeft: "10px"
+                            }}
+                            // size={submitBtnObj.buttonSize}
+                          >
+                            提交并审批
+                          </Button>
+                        ) : null}
                       </div>
                     </Form.Item>
                   ) : (
@@ -1433,23 +1439,21 @@ class Submission extends Component {
                         >
                           {submitBtnObj.label}
                         </Button>
-                        {
-                          this.state.isShowApprovalBtn
-                          ?                         
+                        {this.state.isShowApprovalBtn ? (
                           <Button
-                          block={!!mobile.is}
-                          onClick={(e)=>{this.handleSubmit(e, true)}}
-                          type="primary"
-                          style={{
-                            marginLeft:"10px"
-                          }}
-                          // size={submitBtnObj.buttonSize}
-                        >
-                          提交并审批
-                        </Button>
-                        : null
-                        }
-
+                            block={!!mobile.is}
+                            onClick={e => {
+                              this.handleSubmit(e, true);
+                            }}
+                            type="primary"
+                            style={{
+                              marginLeft: "10px"
+                            }}
+                            // size={submitBtnObj.buttonSize}
+                          >
+                            提交并审批
+                          </Button>
+                        ) : null}
                       </div>
                     </Form.Item>
                   )}
