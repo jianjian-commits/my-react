@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import request from "../../utils/request";
-import { Button, message, Breadcrumb } from "antd";
+import { Button, message } from "antd";
 import {
   BaseInfoModule,
   AppManagerModule,
@@ -9,31 +9,7 @@ import {
   // SettingModule
 } from "./DetailModule";
 import { catchError } from "../../utils";
-import clx from "classnames";
-import classes from "./profile.module.scss";
-import { BreadRight } from "../../assets/icons";
-
-export const InnerHeader = ({ navs }) => {
-  return (
-    <>
-      <Breadcrumb separator={<BreadRight />}>
-        {navs.map(n => (
-          <Breadcrumb.Item
-            key={n.key}
-            className={clx({
-              [classes.breadcrumbItem]: true,
-              [classes.disabled]: n.disabled,
-              [classes.active]: !n.disabled
-            })}
-            onClick={n.onClick}
-          >
-            {n.label}
-          </Breadcrumb.Item>
-        ))}
-      </Breadcrumb>
-    </>
-  );
-};
+import { Title } from "../shared";
 
 const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
   const navigationList = [
@@ -42,7 +18,7 @@ const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
   ];
   return (
     <>
-      <InnerHeader navs={navigationList} />
+      <Title navs={navigationList} />
       {!disabled && (
         <>
           <Button
