@@ -61,7 +61,7 @@ class DataDetailModal extends React.Component {
       case "DateInput":
         return (
           <div className="formChildData">
-            {submitData.time ? submitData.time : ""}
+            {submitData ? submitData : ""}
           </div>
         );
       case "FileUpload":
@@ -192,7 +192,7 @@ class DataDetailModal extends React.Component {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key] != void 0
-                    ? coverTimeUtils.localTime(formDetail[item.key])
+                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>

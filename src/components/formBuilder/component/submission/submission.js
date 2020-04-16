@@ -56,6 +56,7 @@ import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
 import moment from "moment";
+import coverTimeUtils from '../../utils/coverTimeUtils'
 
 import PureTime from "./component/pureTime";
 import PureDate from "./component/pureDate";
@@ -85,6 +86,7 @@ class Submission extends Component {
       isSubmitted: false,
       errorResponseMsg: {},
       isShowApprovalBtn: true,
+      isSetCorrectFormChildData: false,
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -206,37 +208,12 @@ class Submission extends Component {
         ) {
           // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
           if (values[component.key].constructor === Date) {
-            let date = new Date(values[component.key].setUTCMilliseconds(0));
-            let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
-            date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-            values[component.key] = new Date(date).toJSON().replace("Z", "");
+            values[component.key] = coverTimeUtils.utcDate(new Date(values[component.key]), "DateInput");
           } else {
-            let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
-            let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
-            date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-            values[component.key] = new Date(date)
-              .toJSON()
-              .toString()
-              .replace("Z", "");
+            values[component.key] = coverTimeUtils.utcDate(values[component.key], type);
           }
         }
 
-        if (type === "PureDate") {
-          values[component.key] = moment(values[component.key]).format(
-            "YYYY-MM-DD"
-          );
-        }
-        if (type === "PureTime") {
-          values[component.key] = moment(values[component.key]).format(
-            "HH:mm:ss.SSS"
-          );
-        }
-      }
-      if (type === "FormChildTest") {
-        console.log(component.key, values);
-        // values[component.key].forEach(item => {
-        //   this._setDateTimeVaule(item, component.values);
-        // })
       }
     });
     return values;
@@ -299,7 +276,6 @@ class Submission extends Component {
   }
 
   _iterateAllComponentToSetData(formComponentArray, customDataArray, values) {
-    debugger;
     for (let i in values) {
       let currentComponent = formComponentArray.filter(item => {
         return item.id === i;
@@ -447,7 +423,6 @@ class Submission extends Component {
         // arr[0]表示子表单id,arr[1]表示组件id,arr[2]表示组件的值
         const arr = info.fieldName.split(".");
         var value = info.fieldName.substring(arr[0].length+arr[1].length+2); 
-        console.log("value", value);
         //  这里有问题最后的值不能用.分割
         const infoMsg = {formChildkey:arr[0], fieldKey: arr[1], value: value, msg: info.msg};
         this._resetFormChildErrorMsg(infoMsg);
@@ -490,19 +465,19 @@ class Submission extends Component {
             let type = data[k].formType;
             if (data[k].autoInput) {
               if (type === "PureDate") {
-                data[k].data = {
-                  time: moment(date).format("YYYY-MM-DD")
-                };
+                data[k].data = moment(date).format("YYYY-MM-DD")
               }
               if (type === "PureTime") {
-                data[k].data = {
-                  time: moment(date).format("HH:mm:ss.SSS")
-                };
+                data[k].data = moment(date).format("HH:mm:ss.SSS")
               }
               if (type === "DateInput") {
-                data[k].data = {
-                  time: moment(date).format("YYYY-MM-DD HH:mm:ss.SSS")
-                };
+                let dateString = moment(date).format();
+                data[k].data = dateString.substring(dateString.indexOf("+"), -1);
+              }
+            }else{
+              const dateTypes = ["PureDate", "PureTime", "DateInput"];
+              if (dateTypes.includes(type) && data[k].data) {
+                  data[k].data = coverTimeUtils.utcDate(data[k].data, type);
               }
             }
           }
