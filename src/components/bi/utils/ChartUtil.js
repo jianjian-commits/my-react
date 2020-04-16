@@ -82,7 +82,23 @@ export const getBarChartOption = (chartData, chartInfo) => {
   } 
 }
 
-export const getIndexChartOption = (chartData, chartInfo) => {}
+export const getIndexChartOption = (chartData, chartInfo) => {
+  const { headItem, items } = chartData;
+  let indexData = [];
+
+  if(!headItem || (headItem.length == 0) || !items || (items.length == 0)) {
+    return {};
+  }
+
+  indexData.push(headItem);
+  if(items.length > 1){
+    items.forEach(item=>{
+      indexData.push(item);
+    })
+  }
+
+  return indexData;
+}
 
 
 export const getPieChartOption = (chartData, chartInfo) => {

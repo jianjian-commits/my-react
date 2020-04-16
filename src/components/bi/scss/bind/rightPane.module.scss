@@ -38,7 +38,7 @@
       height: 40px;
     }
   }
-  .activeIcon {
+  :global(.activeIcon) {
     background-color: rgba(43, 129, 255, 0.1);
     border: 2px solid #169bd5;
   }
@@ -72,6 +72,7 @@
   height: 30%;
   border-top: 1px solid #adb5bd;
   padding: 16px 10px 0px 10px;
+  display: block;
  
   .title {
     color: #333333;
@@ -113,4 +114,7 @@
   .hideXYTitle{
     display: none;
   }
+}
+.hideRightPaneTools{
+  display: none;
 }

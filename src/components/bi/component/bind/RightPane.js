@@ -21,6 +21,7 @@ const RightPane = (props) => {
   let [showLegend, setShowLegend] = useState(chartInfo.showLegend);
   let [showDataTag, setShowDataTag] = useState(chartInfo.showDataTag);
   let showRightPaneToolsTitle = true;
+  let showRightPaneTools = true;
 
   let ChartAvailableList = getChartAvailableList(bindDataArr);
   changeChartAvailable(ChartAvailableList);
@@ -76,6 +77,10 @@ const RightPane = (props) => {
     showRightPaneToolsTitle = false;
   }else{
     showRightPaneToolsTitle = true;
+  }
+
+  if(elemType == 'INDEX_DIAGRAM'){
+    showRightPaneTools = false;
   }
 
   return (

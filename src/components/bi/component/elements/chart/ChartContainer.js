@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Chart from './Chart';
+import IndexChart from '../IndexChart'
 import { connect } from "react-redux";
 import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
@@ -22,7 +23,12 @@ const ChartContainer = props => {
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
   const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
-  const chart = <Chart chartOption={chartOption} />;
+  let chart = '';
+  if( elemType == "INDEX_DIAGRAM"){
+    chart = <IndexChart chartOption={chartOption} />;
+  }else {
+    chart = <Chart chartOption={chartOption} />;
+  }
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
   const elements =
     dashboards && dashboards.length > 0 ? dashboards[0].elements : [];

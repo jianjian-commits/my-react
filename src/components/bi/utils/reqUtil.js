@@ -51,7 +51,7 @@ export const setDB = (dashboardId, setDashboards) => {
 export const processBind = (bindDataArr, formId, changeBind, changeChartData, elemType, setElemType) => {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
   setElemType(elemType);
-  // console.log(elemType)
+  // console.log("----------------process",elemType)
     const res = request(`/bi/charts/data`, {
       method: "POST",
       data: {
@@ -65,6 +65,7 @@ export const processBind = (bindDataArr, formId, changeBind, changeChartData, el
       if(res && res.msg === "success") {
         const dataObj = res.data;
         const data = dataObj.data;
+        // console.log("----------------process",data)
         changeChartData(data);
       }
     })
