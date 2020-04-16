@@ -26,8 +26,26 @@
   font-weight: 700;
 }
 
-.menu {
+.breadcrumbItem {
+  font-size: 16px;
+  color: #666666;
+  display: inline-block;
+  padding: 4px 0 41px 0;
 
+  &.active {
+    cursor: pointer;
+
+    &:hover {
+      color: #333333;
+    }
+  }
+
+  &.disabled {
+    color: #333333;
+  }
+}
+
+.menu {
   &:global(.ant-menu-item-selected) {
     ::before {
       border-left: 4px solid #1890ff;

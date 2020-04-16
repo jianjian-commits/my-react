@@ -3,7 +3,7 @@ import { Button, Checkbox, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
-import { InnerHeader } from "../profileManagement/GroupDetail";
+import { Title } from "../shared";
 
 const formMeteDataThead = [
   { key: "TYPE", value: "类型" },
@@ -486,14 +486,7 @@ const Top = ({
   ];
   return (
     <div className={Styles.top}>
-      {/* <div className={Styles.back} onClick={enterPermission}> */}
-      {/* <span>
-          <Icon type="arrow-left" />
-        </span>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <span>应用权限设置</span> */}
-      <InnerHeader navs={navigationList} />
-      {/* </div> */}
+      <Title navs={navigationList} />
       <div className={Styles.btn}>
         <Button onClick={() => enterPermission()}>取消</Button>
         <Button
