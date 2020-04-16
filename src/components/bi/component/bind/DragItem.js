@@ -1,12 +1,17 @@
 import React, { PureComponent } from 'react';
 import { DragSource } from 'react-dnd';
 import {Types} from './Types';
-import { Icon } from "antd";
 
 const spec = {
   // Necessary, return the pure javascript object that can be operated by monitor -- monitor.getItem().
   beginDrag(props, monitor, component) {
-    return props.item;
+    const item = props.item;
+
+    if(props.processBegin && item) {
+      props.processBegin(item.idx);
+    }
+
+    return item;
   },
   canDrag(props) {
     return true;
@@ -24,7 +29,7 @@ const spec = {
   },
 }
 
-class DragItem extends PureComponent {
+class DragItemComp extends PureComponent {
   render() {
     const { isDragging, connectDragSource, item, Child } = this.props;
     return connectDragSource(
@@ -36,8 +41,8 @@ class DragItem extends PureComponent {
 }
 
 export default DragSource(Types.BIND, spec, (connect, monitor) => {
-    return {
-      connectDragSource: connect.dragSource(),
-      isDragging: monitor.isDragging(),
-    }
-})(DragItem)
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
+  }
+})(DragItemComp)

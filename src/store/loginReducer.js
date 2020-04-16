@@ -1,17 +1,17 @@
 import { message } from "antd";
 import request from "../utils/request";
-import { getAppList } from "./appReducer";
-import { history } from "./index";
+import { getAppList, clearAppList } from "./appReducer";
+// import { history } from "./index";
 import { catchError } from "../utils";
 
 export const initialState = {
   isLoading: false,
   loginData: null,
   isAuthenticated: !!localStorage.getItem("id_token"),
-  currentTeam: {},
   userDetail: {},
   fetchRequestSent: false,
-  allTeam: [],
+  allCompany: [],
+  currentCompany: {},
   error: null,
   isSpinning: false
 };
@@ -19,15 +19,16 @@ export const initialState = {
 export const START_SPINNING = "Login/START_SPINNING";
 export const START_LOGIN = "Login/START_LOGIN";
 export const LOGIN_SUCCESS = "Login/LOGIN_SUCCESS";
-const FETCH_REQUEST_SENT = "Login/FETCH_REQUEST_SENT"
+export const FETCH_REQUEST_SENT = "Login/FETCH_REQUEST_SENT";
 export const LOGIN_FAILURE = "Login/LOGIN_FAILURE";
 export const RESET_ERROR = "Login/RESET_ERROR";
 export const LOGIN_USER = "Login/LOGIN_USER";
 export const SIGN_OUT_SUCCESS = "Login/SIGN_OUT_SUCCESS";
-export const FETCH_ALL_TEAM = "Login/FETCH_ALL_TEAM";
-export const FETCH_CURRENT_TEAM = "Login/FETCH_CURRENT_TEAM";
+export const FETCH_ALL_COMPANY = "Login/FETCH_ALL_COMPANY";
+export const FETCH_CURRENT_COMPANY = "Login/FETCH_CURRENT_COMPANY";
 export const FETCH_USER_DETAIL = "Login/FETCH_USER_DETAIL";
 export const FETCH_TRANSACT_LIST = "Login/FETCH_TRANSACT_LIST";
+export const CLEAR_USER_DATA = "Login/CLEAR_USER_DATA";
 
 export const startSpinning = () => ({
   type: START_SPINNING
@@ -48,17 +49,14 @@ export const loginFailure = () => ({
 export const resetError = () => ({
   type: RESET_ERROR
 });
-
-export const fetchAllTeam = payload => ({
-  type: FETCH_ALL_TEAM,
+export const fetchAllCompany = payload => ({
+  type: FETCH_ALL_COMPANY,
   payload
 });
-
-export const fetchCurrentTeam = payload => ({
-  type: FETCH_CURRENT_TEAM,
+export const fetchCurrentCompany = payload => ({
+  type: FETCH_CURRENT_COMPANY,
   payload
 });
-
 export const fetchUserDetail = payload => ({
   type: FETCH_USER_DETAIL,
   payload
@@ -86,23 +84,6 @@ export const getTransactList = ({
       dispatch(fetchTransactList(res.data));
     } else {
       message.error(res.msg || "待办列表获取失败");
-    }
-  } catch (err) {
-    catchError(err);
-  }
-};
-
-//转换当前团队
-export const switchCurrentTeam = teamId => async dispatch => {
-  try {
-    const res = await request(`/team/${teamId}/currentTeam`, { method: "put" });
-    if (res && res.status === "SUCCESS") {
-      history.push("/app/list");
-      dispatch(getCurrentTeam());
-      dispatch(getUserDetail());
-      dispatch(getAppList());
-    } else {
-      message.error(res.msg || "团队转换失败");
     }
   } catch (err) {
     catchError(err);
@@ -141,28 +122,50 @@ export const getUserDetail = () => async dispatch => {
   }
 };
 
-//获取当前团队信息
-export const getCurrentTeam = () => async dispatch => {
+//转换当前公司
+export const switchCurrentCompany = companyId => async dispatch => {
   try {
-    const res = await request(`/team/current`);
+    const res = await request(`/company/${companyId}/currentCompany`, {
+      method: "put"
+    });
     if (res && res.status === "SUCCESS") {
-      dispatch(fetchCurrentTeam(res.data));
+      // history.push("/app/list");
+      dispatch(getCurrentCompany());
+      dispatch(getUserDetail());
+      dispatch(getAppList());
     } else {
-      message.error(res.msg || "团队信息获取失败");
+      message.error(res.msg || "公司切换失败");
     }
   } catch (err) {
     catchError(err);
   }
 };
-
-//获取所有团队信息
-export const getAllTeam = () => async dispatch => {
+//获取当前公司信息
+export const getCurrentCompany = () => async dispatch => {
   try {
-    const res = await request(`/team/currentSysUser/all`);
+    const res = await request(`/company/current`);
     if (res && res.status === "SUCCESS") {
-      dispatch(fetchAllTeam(res.data));
+      dispatch(fetchCurrentCompany(res.data));
     } else {
-      message.error(res.msg || "获取全部团队信息失败");
+      message.error(res.msg || "当前公司信息获取失败");
+    }
+  } catch (err) {
+    if (
+      err.response &&
+      err.response.data &&
+      err.response.data.msg !== "未指定公司"
+    )
+      catchError(err);
+  }
+};
+// 获取所有公司信息
+export const getAllCompany = () => async dispatch => {
+  try {
+    const res = await request(`/company/currentSysUser/all`);
+    if (res && res.status === "SUCCESS") {
+      dispatch(fetchAllCompany(res.data));
+    } else {
+      message.error(res.msg || "获取全部公司信息失败");
     }
   } catch (err) {
     catchError(err);
@@ -171,12 +174,13 @@ export const getAllTeam = () => async dispatch => {
 
 //初始化所有信息
 export const initAllDetail = () => async dispatch => {
-  dispatch({ type: FETCH_REQUEST_SENT})
+  dispatch({ type: FETCH_REQUEST_SENT });
+  dispatch({ type: CLEAR_USER_DATA });
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
-      await getAllTeam(res.data.id)(dispatch);
-      getCurrentTeam()(dispatch);
+      await getAllCompany(res.data.id)(dispatch);
+      getCurrentCompany()(dispatch);
       dispatch(fetchUserDetail(res.data));
     } else {
       message.error(res.msg || "获取当前用户信息失败");
@@ -187,17 +191,16 @@ export const initAllDetail = () => async dispatch => {
 };
 
 //登录用户
-export const loginUser = ({ token, rest, history }) => async dispatch => {
+export const loginUser = ({ token, rest, history, loginType }) => async dispatch => {
   await dispatch(startLogin());
   try {
     const res = await request(token ? `/login?token=${token}` : "/login", {
       method: "post",
-      data: { loginType: "PASSWORD", ...rest }
+      data: { loginType: loginType, ...rest }
     });
     if (res && res.status === "SUCCESS") {
       localStorage.setItem("id_token", 1);
       dispatch(loginSuccess());
-      dispatch(initAllDetail());
       history.push("/");
     } else {
       dispatch(loginFailure());
@@ -229,6 +232,14 @@ export const signOut = () => async dispatch => {
 
 export default function loginReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case CLEAR_USER_DATA:
+      return {
+        ...state,
+        currentCompany: {},
+        userDetail: {},
+        fetchRequestSent: true,
+        allCompany: []
+      };
     case START_SPINNING:
       return {
         ...state,
@@ -272,15 +283,15 @@ export default function loginReducer(state = initialState, { type, payload }) {
         ...state,
         userDetail: payload
       };
-    case FETCH_ALL_TEAM:
+    case FETCH_ALL_COMPANY:
       return {
         ...state,
-        allTeam: payload
+        allCompany: payload
       };
-    case FETCH_CURRENT_TEAM:
+    case FETCH_CURRENT_COMPANY:
       return {
         ...state,
-        currentTeam: payload
+        currentCompany: payload
       };
     case FETCH_TRANSACT_LIST:
       return {
@@ -291,3 +302,13 @@ export default function loginReducer(state = initialState, { type, payload }) {
       return state;
   }
 }
+
+export const loginMiddleware = store => next => action => {
+  if (action.type === FETCH_CURRENT_COMPANY) {
+    store.dispatch(getAppList());
+  }
+  if (action.type === SIGN_OUT_SUCCESS) {
+    store.dispatch(clearAppList());
+  }
+  next(action);
+};

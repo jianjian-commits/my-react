@@ -1,0 +1,43 @@
+.biHeader {
+  height: 50px;
+  background-color: #2B81FF;
+
+  :global(.ant-btn) {
+    height: 50px;
+  }
+}
+
+.headerBarBack {
+  height: 50px;
+  width: 2%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  :global(.ant-btn-link) {
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    // color: rgba(86, 92, 110, 1);
+    color: #FFFFFF
+  }
+  :global(.ant-btn) {
+    padding: 0px;
+  }
+}
+
+.renameDB {
+  display: inline;
+  border: none;
+  margin-left: 10px;
+  background-color: transparent;
+  color: #FFFFFF
+}
+
+.dbHeaderSave {
+  float: right;
+  margin-right: 15px;
+
+  :global(span) {
+    color: white;
+  }
+}

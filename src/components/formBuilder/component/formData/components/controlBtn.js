@@ -43,6 +43,6 @@ function ControlBtn(props) {
 
 export default connect(({login})=>({
   permissions: (login.userDetail && login.userDetail.permissions) || [],
-  teamId: login.currentTeam && login.currentTeam.id,
+  teamId: login.currentCompany && login.currentCompany.id,
   permissions: (login.userDetail && login.userDetail.permissions) || []
 }))(withRouter(ControlBtn));

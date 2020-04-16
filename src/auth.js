@@ -40,6 +40,7 @@
 export const SUPER_ADMINISTRATOR = "*:*:*:*:*";
 
 export const TEAM_MANAGEMENT_ABLE = "?:?:?:?:TMV";
+export const TEAM_CREATE_APP = "?:?:?:?:CAC";
 
 const PROFILE_MANAGEMENT_PREFIX =
   "?:class#com.wctsoft.davinci.shiro.entity.SysRole:?:?:";

@@ -35,10 +35,16 @@ class PhoneInputInspector extends React.PureComponent {
       });
     }
     const { key } = this.props.element;
-    const isUniqueApi = checkUniqueApi(key, this.props);
+    const {err, msg:APIMessage} = checkUniqueApi(key, this.props);
+    const isUnique = !err;
+    let isUniqueApi = true;
+    if (!isUnique) {
+      isUniqueApi = false;
+    }
     this.setState({
       apiNameTemp: key,
-      isUniqueApi: isUniqueApi
+      isUniqueApi: isUniqueApi,
+      APIMessage
     });
   }
 
@@ -334,13 +340,13 @@ class PhoneInputInspector extends React.PureComponent {
                 不允许重复
               </Checkbox>
             )}
-            <Checkbox
+            {/* <Checkbox
               name="inputMask"
               checked={formatChecks}
               onChange={this.handleChangeAttr}
             >
               格式校验
-            </Checkbox>
+            </Checkbox> */}
           </div>
         </div>
       </div>

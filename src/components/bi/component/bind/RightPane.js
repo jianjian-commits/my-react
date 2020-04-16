@@ -1,63 +1,129 @@
-import React, {PureComponent} from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Icon,Tooltip, Checkbox, Input } from 'antd';
+import { Tooltip, Checkbox, Input } from 'antd';
+import { updateChartReq, processBind } from '../../utils/ReqUtil';
+import ChartInfo from "../elements/data/ChartInfo";
+import { changeBind, changeChartData, changeChartInfo, setElemType, changeChartAvailable } from '../../redux/action';
+import { useParams } from "react-router-dom";
 import classNames from "classnames";
+import classes from '../../scss/bind/rightPane.module.scss';
+import { chartGroup } from "../elements/ElemType";
+import { ChartType } from "../elements/Constant";
+import Item from "antd/lib/list/Item";
+import { getChartAvailableList } from '../../utils/ChartUtil';
 
-export default class RightPane extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeIcon:"bar-chart",
-      seriesCheck: true,
-      dataCheck: false
-    };
+const RightPane = (props) => {
+  const { changeBind, changeChartData, chartInfo, bindDataArr, elemName, changeChartInfo, dataSource, setElemType, elemType, chartAvailableList, changeChartAvailable } = props;
+  const { elementId } = useParams();
+  let [activeIcon, setActiveIcon] = useState(elemType || "HISTOGRAM");
+  let [titleXAxis, setTitleXAxis] = useState(chartInfo.titleXAxis);
+  let [titleYAxis, setTitleYAxis] = useState(chartInfo.titleYAxis);
+  let [showLegend, setShowLegend] = useState(chartInfo.showLegend);
+  let [showDataTag, setShowDataTag] = useState(chartInfo.showDataTag);
+  let showRightPaneToolsTitle = true;
+  let showRightPaneTools = true;
+
+  let ChartAvailableList = getChartAvailableList(bindDataArr);
+  changeChartAvailable(ChartAvailableList);
+
+  const onChangeShowLegend = () => {
+    let show = !showLegend;
+    setShowLegend(show);
+    let info = getChartInfo();
+    info.showLegend = show
+    updateChartInfo(info);
   }
 
-  showSeries = () => {
-    this.setState({seriesCheck: !this.state.seriesCheck});
+  const onChangeShowDataTag = () => {
+    let show = !showDataTag;
+    setShowDataTag(show);
+    let info = getChartInfo();
+    info.showDataTag = show;
+    updateChartInfo(info);
   }
 
-  showDataTag = () => {
-    this.setState({dataCheck: !this.state.dataCheck});
+  const handleSelectIcon = chartIcon => {
+    setActiveIcon(chartIcon);
+    setElemType(chartIcon);
+    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, chartIcon, setElemType);
   }
 
-  handleSelectIcon = chartIcon => {
-    this.setState({activeIcon:chartIcon});
+  const onChangeTitleXAxis = (e) => {
+    e.persist();
+    setTitleXAxis(e.target.value);
   }
 
-  render() {
-    const chartGroup = [
-      {type:"barChart",intro:"条形图"},
-    ]
-    return (
-      <div className="right-pane">
-        <div className="right-pane-chart">
-          <span>可视化</span>
-          <div className="chart-group">
-          {chartGroup.map(chart =>
-          <Tooltip key={chart.type}  title={chart.intro}>
-            <div
-              className={classNames("IconBox",{activeIcon:this.state.activeIcon==chart.type})}
-              onClick={()=>{this.handleSelectIcon(chart.type)}}
-            >
-              <img src={"/image/davinci/"+chart.type+".svg"}/>
-            </div>
-          </Tooltip>
-          )}
+  const onChangeTitleYAxis = (e) => {
+    e.persist();
+    setTitleYAxis(e.target.value);
+  }
+
+  const getChartInfo = () => {
+    let chartInfo = new ChartInfo();
+    chartInfo.titleXAxis = titleXAxis;
+    chartInfo.titleYAxis = titleYAxis;
+    chartInfo.showLegend = showLegend;
+    chartInfo.showDataTag = showDataTag;
+    return chartInfo;
+  }
+
+  const updateChartInfo = (chartInfo) => {
+    chartInfo = chartInfo || getChartInfo();
+    updateChartReq(elementId, dataSource.id, bindDataArr, elemName || "新建图表", {...chartInfo});
+    changeChartInfo(chartInfo || new ChartInfo());
+  }
+
+  if(elemType == 'AREA_CHART'){
+    showRightPaneToolsTitle = false;
+  }else{
+    showRightPaneToolsTitle = true;
+  }
+
+  if(elemType == 'INDEX_DIAGRAM'){
+    showRightPaneTools = false;
+  }
+
+  return (
+    <div className={classes.rightPane}>
+      <div className={classes.rightPaneChart}>
+        <span>可视化</span>
+        <div className={classes.chartGroup}>
+        {chartGroup.map(chart =>
+        <Tooltip key={chart.type}  title={chart.intro}>
+          <div
+            className={chartAvailableList.indexOf(chart.type)==-1?classNames(classes.unavailable):classNames(classes.IconBox, {activeIcon: activeIcon==chart.type})}
+            onClick={()=>{handleSelectIcon(chart.type)}}
+          >
+            <img src={"/image/davinci/"+chart.type+".svg"}/>
           </div>
-        </div>
-        <div className="right-pane-tools">
-          <span className="title">工具栏</span>
-          <p>X轴标题</p>
-          <Input />
-          <p>Y轴标题</p>
-          <Input />
-          <div className="checkboxGroup">
-            <Checkbox checked={this.state.dataCheck} onClick={this.showDataTag}>显示数据标签</Checkbox>
-            <Checkbox checked={this.state.seriesCheck} onClick={this.showSeries}>显示图例</Checkbox>
-          </div>
+        </Tooltip>
+        )}
         </div>
       </div>
-    )
-  }
+      <div className={classes.rightPaneTools}>
+        <span className={classes.title}>工具栏</span>
+        <div className={showRightPaneToolsTitle?classNames(classes.showXYTitle):classNames(classes.hideXYTitle)}>
+          <p>X轴标题</p>
+          <Input value={titleXAxis} onBlur={(e) => {updateChartInfo()}} onChange={onChangeTitleXAxis}/>
+          <p>Y轴标题</p>
+          <Input value={titleYAxis} onBlur={(e) => {updateChartInfo()}} onChange={onChangeTitleYAxis}/>
+        </div>
+        <div className={classes.checkboxGroup}>
+          <Checkbox checked={showDataTag} onClick={onChangeShowDataTag}>显示数据标签</Checkbox>
+          <Checkbox checked={showLegend} onClick={onChangeShowLegend}>显示图例</Checkbox>
+        </div>
+      </div>
+    </div>
+  )
 }
+
+export default connect((store) => {
+  return {
+    chartInfo: store.bi.chartInfo,
+    bindDataArr: store.bi.bindDataArr,
+    elemName: store.bi.elemName,
+    dataSource: store.bi.dataSource,
+    elemType: store.bi.elemType,
+    chartAvailableList: store.bi.chartAvailableList
+  }
+}, { changeBind, changeChartData, changeChartInfo, setElemType, changeChartAvailable })(RightPane)

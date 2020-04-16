@@ -2,21 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "antd";
 import { GroupType } from "./Constant";
 import classNames from "classnames";
+import classes from "../../scss/bind/optionSelect.module.scss"
 const operationArr = [
   { ...GroupType.SUM },
-  { ...GroupType.AVERAGE },
+  { ...GroupType.COUNT},
+  { ...GroupType.AVERAGE},
   { ...GroupType.MAX },
-  { ...GroupType.MIN },
-  { ...GroupType.COUNT }
+  { ...GroupType.MIN }
 ];
 export default function FieldMeasureSelect(props) {
-  const [selectIndex, setSelectIndex] = useState(0);
+  const [selectIndex, setSelectIndex] = useState(props.item.selectIndex);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [btnVisible,setBtnVisible] = useState(false);
   useEffect(() => {
     const dropDownEvent = event => {
       const e = event || window.event;
-      const btn = document.getElementById("dropDownBtn" + props.item.id);
+      const btn = document.getElementById("dropDownBtn" + props.item.fieldId);
       if (
         e.srcElement.parentElement &&
         !e.srcElement.parentElement.isSameNode(btn) &&
@@ -33,7 +34,7 @@ export default function FieldMeasureSelect(props) {
   }, []);
 
   const getSelectOperation = value => {
-    props.item.changeGroup(value, props.item.id);
+    props.item.changeGroup(value, props.item.fieldId);
   };
 
   const handleDeleteTarget = () => {
@@ -51,30 +52,32 @@ export default function FieldMeasureSelect(props) {
   const className = props.item.className;
 
   return (
-    <div className="meaContainer">
+    <div className={classes.meaContainer}>
       <div
-        className="dropDownBtn"
+        className={classes.dropDownBtn}
         onMouseEnter={handlMouseEnter} 
         onMouseLeave={handlMouseLeave}
-        id={"dropDownBtn" + props.item.id}
+        id={"dropDownBtn" + props.item.fieldId}
         onClick={e => {
           e.stopPropagation();
           setPopoverVisible(!popoverVisible);
         }}
       >
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
-        <span className="dropDownBtnSpan">
+        <span className={classes.dropDownBtnSpan}>
           {`${props.item.label}(${operationArr[selectIndex].name})`}
         </span>
         {btnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>
       {popoverVisible && (
-        <div className="dropDownItemContainer" id={"dropDown" + props.item.id}>
+        <div className={classes.dropDownItemContainer} id={"dropDown" + props.item.id}>
           {operationArr.map((operation, index) => (
             <div
-              className={classNames("dropDownItem", {
-                selectOption: selectIndex == index
-              })}
+              className={classes.dropDownItem}
+              style={selectIndex == index ? {backgroundColor: "#dfecff"} : {}}
+              // className={classNames("dropDownItem", {
+              //   selectOption: selectIndex == index
+              // })}
               onClick={() => {
                 if (selectIndex === index) {
                   setPopoverVisible(false);
@@ -86,7 +89,7 @@ export default function FieldMeasureSelect(props) {
               }}
               key={index}
             >
-              <span className="dropDownItemSpan">
+              <span className={classes.dropDownItemSpan}>
                 {operation.name}
               </span>
               {selectIndex === index && <Icon type="check"/>}

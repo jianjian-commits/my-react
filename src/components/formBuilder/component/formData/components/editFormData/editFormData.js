@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import GridLayout from "react-grid-layout";
-import { Button, Form, message, Spin } from "antd";
+import { Button, Form, message, Spin, Breadcrumb } from "antd";
 import axios from 'axios'
 import config from '../../../../config/config'
 import { modifySubmissionDetail } from "../../redux/utils/getDataUtils";
@@ -68,7 +68,8 @@ class EditFormData extends Component {
       initPureFormComponents: true,
       errorResponseMsg: {},
       currentForm: { components: [], name: "" },
-      formDetail: []
+      formDetail: [],
+      oldExtraProp: {}
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -91,6 +92,7 @@ class EditFormData extends Component {
                 config.apiUrl + `/submission/${submissionId}`,
               )
               .then(res => {
+                let oldExtraProp = res.data.extraProp;
                 let formDetail = res.data.data;
                 let formChildDataObj = {};
                 pureFormComponents.filter(item => {
@@ -106,6 +108,7 @@ class EditFormData extends Component {
                   formDetail,
                   pureFormComponents,
                   formChildDataObj,
+                  oldExtraProp,
                   initflag: false,
                   isSubmitted: false
                 })
@@ -186,10 +189,20 @@ class EditFormData extends Component {
       ) {
         // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
         if (values[component.key].constructor === Date) {
-          values[component.key] = new Date(values[component.key].setUTCMilliseconds(0)).toJSON().replace("Z","");
+          let date = new Date(values[component.key].setUTCMilliseconds(0));
+          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+          values[component.key] = new Date(date).toJSON().replace("Z","");
         } else {
-          values[component.key] = new Date(values[component.key]._d.setUTCMilliseconds(0)).toJSON().toString().replace("Z","")
+          let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
+          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
+              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
+          values[component.key] = new Date(date).toJSON().toString().replace("Z","")
         }
+      } else if( component.type === "DateInput" &&
+      values.hasOwnProperty(component.key) &&
+      values[component.key] == null) {
+        delete values[component.key];
       }
     });
     return values;
@@ -238,7 +251,7 @@ class EditFormData extends Component {
   _iterateAllComponentToSetData(formComponentArray, customDataArray, values) {
     for (let i in values) {
       let currentComponent = formComponentArray.filter(item => {
-        return item.id == i;
+        return item.key == i;
       })[0];
       currentComponent || (currentComponent = {});
 
@@ -394,7 +407,7 @@ class EditFormData extends Component {
         }
         this.setState({ isSubmitted: true,errorResponseMsg:{} });
         this.props
-          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.props.extraProp)
+          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.state.oldExtraProp)
           .then(response => {
            isMobile
           ? Toast.success("提交成功!")
@@ -440,6 +453,7 @@ class EditFormData extends Component {
           form: this.props.form,
           initData: formDetail[item.key],
           errorResponseMsg: errorResponseMsg[item.key],
+          isEditData: true,
           resetErrorMsg: this._changeErrorResponseData
         }
         switch (item.type) {
@@ -912,15 +926,30 @@ class EditFormData extends Component {
       <>
         <Spin spinning={this.state.isSubmitted}>
           {mobile.is ? null : (
-            <HeaderBar
-              backCallback={() => {
-                let skipToSubmissionDataFlag = false;
-                this.props.actionFun(skipToSubmissionDataFlag);
-              }}
-              // name={currentForm.name}
-              isShowBtn={ false }
-              isShowExtraTitle ={ false }
-            />
+            // <HeaderBar
+            //   backCallback={() => {
+            //     let skipToSubmissionDataFlag = false;
+            //     this.props.actionFun(skipToSubmissionDataFlag);
+            //   }}
+            //   // name={currentForm.name}
+            //   isShowBtn={ false }
+            //   isShowExtraTitle ={ false }
+            // />
+            <div className="submissionTitle">
+              <Breadcrumb separator={
+                <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z" fill="#666666"/>
+                     </svg>                     
+                   }>
+                  <Breadcrumb.Item className="recordList"
+                  onClick = {()=>{
+                    let skipToSubmissionDataFlag = false;
+                    this.props.actionFun(skipToSubmissionDataFlag);
+                  }}
+                 >记录列表</Breadcrumb.Item>
+                <Breadcrumb.Item className="submitRecord">提交记录</Breadcrumb.Item>
+              </Breadcrumb>
+            </div>
           )}
           <div className={"formBuilder-Submission"}>
             <div className="Content">

@@ -1,7 +1,11 @@
 import { Types } from '../component/bind/Types';
+import ChartInfo from '../component/elements/data/ChartInfo';
+import { setElemType } from '../redux/action'
+import { AllType, PieType, BarType, BarIndexType } from '../component/elements/Constant'
 
-export const getOption = (data) => {
-  const { xaxisList, legends } = data;
+export const getBarChartOption = (chartData, chartInfo) => {
+  const { xaxisList, legends } = chartData;
+  const { titleXAxis, titleYAxis, showLegend, showDataTag } = chartInfo || new ChartInfo();
 
   if(!xaxisList || (xaxisList.length == 0) || !legends || (legends.length == 0)) {
     return {};
@@ -13,14 +17,14 @@ export const getOption = (data) => {
 
   legends.forEach((each) => {
     title.push(each.legendName);
-    series.push({type: 'bar'
-      // label: {
-      //   show: true,
-      //   position: 'top',
-      //   textStyle: {
-      //     color: 'black'
-      //   }
-      // }
+    series.push({type: 'bar',
+      label: {
+        show: showDataTag,
+        position: 'top',
+        textStyle: {
+          color: 'black'
+        }
+      }
     });
   })
 
@@ -60,22 +64,136 @@ export const getOption = (data) => {
     dataset: {
       source
     },
-    legend: {y: 'top'},
+    legend: {y: 'top', show: showLegend},
     tooltip: {},
     xAxis: [
       {
         type: 'category', 
-        // name: 'x轴标题', 
+        name: titleXAxis || "", 
         axisLabel: {
-          interval:0 
+          interval:0 ,
+          rotate: 30
         }
       }],
-    yAxis: {},
-    // yAxis: {name: 'y轴标题'},
+    yAxis: {name: titleYAxis || ""},
     // color: [],
     grid: {top: '80px'},
     series
   } 
+}
+
+export const getIndexChartOption = (chartData, chartInfo) => {
+  const { headItem, items } = chartData;
+  let indexData = [];
+
+  if(!headItem || (headItem.length == 0) || !items || (items.length == 0)) {
+    return {};
+  }
+
+  indexData.push(headItem);
+  if(items.length > 1){
+    items.forEach(item=>{
+      indexData.push(item);
+    })
+  }
+
+  return indexData;
+}
+
+
+export const getPieChartOption = (chartData, chartInfo) => {
+  const { sectorItems, legends } = chartData;
+  const { showDataTag, showLegend } = chartInfo || new ChartInfo();
+
+  if(!sectorItems || (sectorItems.length == 0) || !legends || (legends.length == 0)) {
+    return {};
+  }
+
+  const source = [];
+  const series = [];
+
+  if( legends.length == sectorItems.length ){
+    sectorItems.forEach((item) => {
+      series.push({type: "pie",
+        label: {
+          show: showDataTag,
+          position: 'top',
+          textStyle: {
+            color: 'gray'
+          }
+        }
+      });
+      let row = [];
+      const legend = item.legend;
+      legends.forEach((each) => {
+        if(each.legendName == legend.legendName){
+          row.push(each.legendName);
+          row.push(item.count);
+        }
+      })
+      source.push(row);
+    })
+  }
+    
+
+  // console.log(source)
+  return  {
+    dataset: {
+      source
+    },
+    radius : '55%', 
+    center: ['50%', '50%'], 
+    legend: {y: "top", show: showLegend},
+    tooltip: {
+      trigger: 'item',
+      formatter: '{c}<br/>({d}%)'
+    },
+    label:{ 
+      show: true, 
+      formatter: '{c} ({d}%)'
+    }, 
+    labelLine :{show:true},
+    grid: {
+      top: '40%',
+    },
+    series
+  } 
+}
+
+
+export const getOption = (chartData, chartInfo, elemType) => {
+
+  switch(elemType){
+    case "HISTOGRAM": 
+      return getBarChartOption(chartData, chartInfo);
+    case "INDEX_DIAGRAM": 
+      return getIndexChartOption(chartData, chartInfo); 
+    case "AREA_CHART": 
+      return getPieChartOption(chartData, chartInfo);
+    default:
+      break;
+  }
+}
+
+
+export const getChartAvailableList = (bindDataArr) => {
+  let dimCount = 0;
+  let meaCount = 0;
+  bindDataArr.forEach((each) => {
+    if(each.bindType == Types.DIMENSION) {
+      dimCount++;
+    }
+
+    if(each.bindType == Types.MEASURE) {
+      meaCount++;
+    }
+  })
+
+  if((dimCount == 1 && meaCount > 1) || (dimCount == 2 && meaCount == 1) || (dimCount == 2 && meaCount == 0) || (dimCount > 1 && meaCount == 0) || (dimCount == 0 && meaCount > 1)){
+    return BarType;
+  } else {
+    return AllType;
+  }
 }
 
 /**

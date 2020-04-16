@@ -10,7 +10,7 @@ import homeReducer from "../components/formBuilder/component/homePage/redux/redu
 import formSubmitDataReducer from "../components/formBuilder/component/formData/redux/reducer";
 import formBuilderReducer from "../components/formBuilder/component/formBuilder/redux/reducer";
 import biReducer from "../components/bi/redux/biReducer";
-import login from "./loginReducer";
+import login, { loginMiddleware } from "./loginReducer";
 import app from "./appReducer";
 import debug from "./debugReducer";
 import { Process, Approval } from "componentized-process";
@@ -43,6 +43,7 @@ const configureStore = preloadedState => {
     thunk,
     processMiddleware,
     approvalMiddleware,
+    loginMiddleware,
     routerMiddleware(history)
   ];
   const middlewareEnhancer = applyMiddleware(...middlewares);

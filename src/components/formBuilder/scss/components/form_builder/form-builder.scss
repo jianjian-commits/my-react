@@ -161,8 +161,9 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     width: 70%;
     flex: initial;
     padding-top: 49px;
-    background: #F7F7F8;
-    overflow-y: auto;
+    background: #FFF;
+    overflow:auto;
+    overflow-x:hidden;
     .react-form-builder-preview {
       min-height: 100%;
       max-width: 870px;
@@ -386,6 +387,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             .form-group {
               margin: 0;
               width: 100%;
+              padding-top:15px;
               .ant-input-affix-wrapper.ant-input-affix-wrapper-textarea-with-clear-btn {
                 .ant-input {
                   resize: none;
@@ -646,7 +648,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
                 padding: 0;
                 color: #333333;
                 font-size: 13px;
-                font-weight: 400;
+                font-weight: 500;
                 line-height: 22px;
               }
               input[type="date"] {
@@ -663,12 +665,24 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
                 height: auto;
                 line-height: 22px;
                 word-break: break-all;
-                font-family: PingFangSC-Regular, PingFang SC;
+                font-family: "PingFangSC-Regular, PingFang SC";
                 margin-bottom: 5px;
                 font-size: 14px;
+                span{
+                  font-weight: 400;
+                }
               }
               .label-required {
                 margin-left: 5px;
+              }
+              .singleText{
+                width: 405px;
+              }
+              .numberInput{
+                width: 405px;
+              }
+              .textArea{
+                width: 405px;
               }
             }
 
@@ -893,9 +907,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             width: 130px;
             margin-bottom: 26px;
             border-radius: 0px;
-          }
-          .err-input {
-            border: 1px solid red;
           }
           .checkbox-wrapper {
             display: flex;
@@ -1365,9 +1376,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
             margin-bottom: 26px;
             border-radius: 0px;
           }
-          .err-input {
-            border: 1px solid red;
-          }
           .checkbox-wrapper {
             display: flex;
             flex-direction: column;
@@ -1691,6 +1699,12 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
               }
             }
           }
+        }
+      }
+      .err-input {
+        border: 1px solid red;
+        &:focus {
+          box-shadow: 0 0 0 2px rgba(245,34,45,.2);
         }
       }
 

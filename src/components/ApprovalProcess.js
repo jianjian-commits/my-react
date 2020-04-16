@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { ConfigProvider } from "antd";
+import zhCN from "antd/es/locale/zh_CN";
 import { Switch, useRouteMatch } from "react-router-dom";
 import { history } from "../store";
 import { PrivateRoute } from "./shared";
@@ -23,7 +25,7 @@ const authMappings = {
 };
 export default connect(({ login, debug }) => ({
   permissions: (login.userDetail && login.userDetail.permissions) || [],
-  teamId: login.currentTeam && login.currentTeam.id,
+  teamId: login.currentCompany && login.currentCompany.id,
   debug: debug.isOpen
 }))(({ debug, permissions, teamId }) => {
   const { url } = useRouteMatch();
@@ -53,6 +55,7 @@ export default connect(({ login, debug }) => ({
     to: "/app/list"
   };
   return (
+    <ConfigProvider locale={zhCN}>
     <Switch>
       <PrivateRoute
         path={`${url}/list`}
@@ -72,5 +75,6 @@ export default connect(({ login, debug }) => ({
         options={{ config }}
       />
     </Switch>
+    </ConfigProvider>
   );
 });
