@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-08 15:05:30
  * @LastEditors: komons
- * @LastEditTime: 2020-04-08 16:34:28
+ * @LastEditTime: 2020-04-14 15:21:05
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\filterFields\filterFieldsComponents.js
  */
@@ -25,9 +25,13 @@ const FilterFieldsComponents = ({
   };
 
   useEffect(() => {
-    let fields = components.map(item => item.label);
+    let res = [];
+    let fields = components.map(item => {
+      res.push(item.key);
+      return {label:item.label, value: item.key}
+    });
     setFields(fields);
-    setSelectedFields(fields);
+    setSelectedFields(res);
   }, [components]);
 
   return (

@@ -60,6 +60,8 @@ import moment from "moment";
 import PureTime from "./component/pureTime";
 import PureDate from "./component/pureDate";
 
+import ID from "../../utils/UUID";
+
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
@@ -299,7 +301,6 @@ class Submission extends Component {
   }
 
   _iterateAllComponentToSetData(formComponentArray, customDataArray, values) {
-    debugger;
     for (let i in values) {
       let currentComponent = formComponentArray.filter(item => {
         return item.id === i;
@@ -336,9 +337,10 @@ class Submission extends Component {
       }
     }
   }
-  _resetFormChildErrorMsg(errorMsg){
+
+  _resetFormChildErrorMsg(errorMsg) {
     const { formChildDataObj } = this.state;
-    const {formChildkey, fieldKey, value, msg} = errorMsg;
+    const { formChildkey, fieldKey, value, msg } = errorMsg;
     formChildDataObj[formChildkey].map(item => {
         if (value === String(item[fieldKey].data)) {
           item[fieldKey].hasErr = true;
@@ -441,20 +443,30 @@ class Submission extends Component {
   _setErrorResponseData = errorResponseData => {
     let errorResponseMsg = {};
     errorResponseData.infos.map(info => {
-      if(info.fieldName.indexOf(".") !== -1){
+      if (info.fieldName.indexOf(".") !== -1) {
         // 子表单
         // 子表单id.组件id.组件的值
         // arr[0]表示子表单id,arr[1]表示组件id,arr[2]表示组件的值
         const arr = info.fieldName.split(".");
-        var value = info.fieldName.substring(arr[0].length+arr[1].length+2); 
+        var value = info.fieldName.substring(arr[0].length + arr[1].length + 2);
         console.log("value", value);
         //  这里有问题最后的值不能用.分割
-        const infoMsg = {formChildkey:arr[0], fieldKey: arr[1], value: value, msg: info.msg};
+        const infoMsg = {
+          formChildkey: arr[0],
+          fieldKey: arr[1],
+          value: value,
+          msg: info.msg
+        };
         this._resetFormChildErrorMsg(infoMsg);
-        if(errorResponseMsg[infoMsg.formChildkey] != void 0 && errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] != void 0){
-          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey].push(infoMsg);
-        } else if(errorResponseMsg[infoMsg.formChildkey] == void 0){
-          errorResponseMsg[infoMsg.formChildkey]={};
+        if (
+          errorResponseMsg[infoMsg.formChildkey] != void 0 &&
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] != void 0
+        ) {
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey].push(
+            infoMsg
+          );
+        } else if (errorResponseMsg[infoMsg.formChildkey] == void 0) {
+          errorResponseMsg[infoMsg.formChildkey] = {};
           errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] = [infoMsg];
         } else {
           errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] = [infoMsg];
@@ -463,7 +475,7 @@ class Submission extends Component {
         // 普通组件
         if (errorResponseMsg[info.fieldName] != void 0) {
           errorResponseMsg[info.fieldName].push(info.msg);
-        } else{
+        } else {
           errorResponseMsg[info.fieldName] = [info.msg];
         }
       }
@@ -476,7 +488,7 @@ class Submission extends Component {
 
   // 设置正确的子表单数据
   setCorrectFormChildData = (values, formChildDataObj) => {
-    let date = new Date((new Date()).setUTCMilliseconds(0));
+    let date = new Date(new Date().setUTCMilliseconds(0));
     let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
     date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
 
@@ -486,6 +498,10 @@ class Submission extends Component {
       }
       if (Array.isArray(values[key])) {
         values[key].forEach((data, index) => {
+          console.log("data", data);
+          if (!data["childFormDataId"]) {
+            data["childFormDataId"] = ID.oldUuid();
+          }
           for (let k in data) {
             let type = data[k].formType;
             if (data[k].autoInput) {
@@ -557,11 +573,11 @@ class Submission extends Component {
         values = this._setDateTimeVaule(values);
         values = this._setAddressValue(values);
         this.setCorrectFormChildData(values, this.state.formChildDataObj);
-        this._iterateAllComponentToSetData(
-          formComponentArray,
-          customDataArray,
-          values
-        );
+        // this._iterateAllComponentToSetData(
+        //   formComponentArray,
+        //   customDataArray,
+        //   values
+        // );
 
         let customValicate = this.props.formValidation;
 
