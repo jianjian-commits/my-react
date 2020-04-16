@@ -8,7 +8,6 @@ import request from "../../../utils/request";
 import { catchError } from "../../../utils";
 import RelateWidage from "./RelateWidage";
 
-const noop = () => ({});
 
 export const BaseInfo = ({
   positionInfo,
@@ -110,7 +109,14 @@ const userButtonStyle = {
   marginRight: 10
 };
 
-const RelateModal = ({ visible, onOk, onCancel, users }) => {
+const RelateModal = ({
+  visible,
+  onOk,
+  onCancel,
+  users,
+  selectedKeys,
+  updateSelectedKeys
+}) => {
   return (
     <Modal
       destroyOnClose={true}
@@ -125,12 +131,23 @@ const RelateModal = ({ visible, onOk, onCancel, users }) => {
       // className={classes.appModalStyles}
       closable={false}
     >
-      <RelateWidage users={users}/>
+      <RelateWidage
+        users={users}
+        selectedKeys={selectedKeys}
+        updateSelectedKeys={updateSelectedKeys}
+      />
     </Modal>
   );
 };
 
-const UserRelation = ({ open, openHandle, users }) => {
+const UserRelation = ({
+  open,
+  openHandle,
+  onOK,
+  users,
+  selectedKeys,
+  updateSelectedKeys
+}) => {
   return (
     <div>
       <div style={userSectionStyle}>
@@ -156,8 +173,10 @@ const UserRelation = ({ open, openHandle, users }) => {
       <RelateModal
         visible={open}
         users={users}
-        onOk={noop}
+        onOk={onOK}
         onCancel={() => openHandle(false)}
+        updateSelectedKeys={updateSelectedKeys}
+        selectedKeys={selectedKeys}
       />
     </div>
   );
@@ -178,7 +197,8 @@ class PositionDetail extends Component {
         description: false
       },
       users: [],
-      modalOpen: false
+      modalOpen: false,
+      modalSelectedKeys: []
     };
   }
   updateEditing = (key, value) => {
@@ -255,13 +275,33 @@ class PositionDetail extends Component {
       catchError(e);
     }
   };
+  modalConfirmHandle = async () => {
+    const { modalSelectedKeys } = this.state;
+    try {
+      const res = await request(`/position/${this.props.position.id}/user`, {
+        method: "PUT",
+        data: {
+          userIds: modalSelectedKeys
+        }
+      });
+      if (res && res.status === "SUCCESS") {
+        console.log(res);
+        // this.props.returnTree();
+        message.success("保存成功");
+      } else {
+        message.error(res.msg || "保存失败");
+      }
+    } catch (e) {
+      catchError(e);
+    }
+  };
   fetchAllUsers = async () => {
     try {
       const res = await request("/sysUser/currentCompany/all", {
         method: "POST",
         data: {
           page: 0,
-          size: 1000000,
+          size: 1000000
           // sorts: [
           //   {
           //     order: "ASC",
@@ -286,7 +326,13 @@ class PositionDetail extends Component {
   }
   render() {
     const { returnTree, position } = this.props;
-    const { positionInfo, editing, modalOpen, users } = this.state;
+    const {
+      positionInfo,
+      editing,
+      modalOpen,
+      users,
+      modalSelectedKeys
+    } = this.state;
     const navigationList = [
       { key: 0, label: "职位", onClick: returnTree },
       { key: 1, label: position.value, disabled: true }
@@ -313,6 +359,9 @@ class PositionDetail extends Component {
           open={modalOpen}
           users={users}
           openHandle={this.updateTargetState("modalOpen")}
+          onOK={this.modalConfirmHandle}
+          selectedKeys={modalSelectedKeys}
+          updateSelectedKeys={this.updateTargetState("modalSelectedKeys")}
         />
       </>
     );
