@@ -306,7 +306,6 @@ class CheckboxInspector extends React.Component {
       tooltip,
       isSetAPIName
     } = this.props.element;
-    const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
     const { apiNameTemp, isUniqueApi = true, APIMessage, tempContent } = this.state;
     return (
       <div className="multidropdown-inspector">

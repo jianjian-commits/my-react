@@ -336,11 +336,9 @@ class RadioInputInspector extends React.Component {
             <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
               增加选项
             </Button>
-<<<<<<< HEAD
             <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
               增加其他选项
             </Button>
-=======
             <Button onClick={this.showModal}>批量编辑</Button>
             <Modal
               title="批量编辑"
@@ -354,7 +352,6 @@ class RadioInputInspector extends React.Component {
                 value={tempContent}>
               </TextArea>
             </Modal>
->>>>>>> mickey-formBuilder
           </div>
           {isInFormChild(this.props.elementParent) ? null : (
             <>
