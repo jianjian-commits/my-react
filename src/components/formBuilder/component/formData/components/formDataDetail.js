@@ -16,6 +16,7 @@ import {
   deleteFormDataAuth,
 } from "../../../utils/permissionUtils";
 import { getTransactList } from "../../../../../store/loginReducer";
+import EditHistory from "./editHistory";
 import moment from "moment";
 const { TabPane } = Tabs;
 const columns = [
@@ -570,6 +571,9 @@ class FormDataDetail extends PureComponent {
               <TabPane tab="表单详情" key="formDetail">
                 {this._renderDataByType(formDetail, newCurrentComponents)}
               </TabPane>
+              <TabPane tab="编辑记录" key="editHistory">
+                <EditHistory submissionId={this.state.submissionId} />
+              </TabPane>
               {// 关联审批的才展示审批  taskData.tasks
               taskData.status ? (
                 <TabPane tab="审批流水" key="approvelFlow">
@@ -600,7 +604,7 @@ export default connect(
     extraProp: store.formSubmitData.extraProp,
     taskData: store.formSubmitData.taskData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
-    teamId: login.currentTeam && login.currentTeam.id,
+    teamId: login.currentCompany && login.currentCompany.id,
     approveListCount: forms.approveListCount,
     userDetail: login.userDetail,
   }),

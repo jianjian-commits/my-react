@@ -8,7 +8,7 @@ import {
   CreateIcon,
   RemoveIcon
 } from "../../../assets/icons/company";
-import { getCurrentCompany } from "../../../store/loginReducer";
+
 import { EditIcon } from "../../../assets/icons";
 import { catchError } from "../../../utils";
 import request from "../../../utils/request";
@@ -247,6 +247,5 @@ export default connect(
   ({ login }) => ({
     id: login.currentCompany && login.currentCompany.id,
     companyName: login.currentCompany && login.currentCompany.companyName
-  }),
-  { getCurrentCompany }
+  })
 )(PositionTree);
