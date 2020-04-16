@@ -98,10 +98,11 @@ class FormChildTest extends React.Component {
         case "GetLocalPosition":
           return this.renderComponentIcon("location", item, i, parentId);
         case "DateInput":
+          return this.renderComponentIcon("date", item, i, parentId);
         case "PureDate":
-          return this.renderComponentIcon("date", item, i, parentId);
+          return this.renderComponentIcon("puredate", item, i, parentId);
         case "PureTime":
-          return this.renderComponentIcon("date", item, i, parentId);
+          return this.renderComponentIcon("puretime", item, i, parentId);
         case "Address":
           return this.renderComponentIcon("address", item, i, parentId);
         // return (

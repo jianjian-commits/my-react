@@ -13,7 +13,8 @@ export const initialState = {
   allCompany: [],
   currentCompany: {},
   error: null,
-  isSpinning: false
+  isSpinning: false,
+  isFetchCoding: false
 };
 
 export const START_SPINNING = "Login/START_SPINNING";
@@ -29,6 +30,12 @@ export const FETCH_CURRENT_COMPANY = "Login/FETCH_CURRENT_COMPANY";
 export const FETCH_USER_DETAIL = "Login/FETCH_USER_DETAIL";
 export const FETCH_TRANSACT_LIST = "Login/FETCH_TRANSACT_LIST";
 export const CLEAR_USER_DATA = "Login/CLEAR_USER_DATA";
+export const FETCH_CODE_START = "Login/FETCH_CODE_START";
+export const FETCH_CODING = "Login/FETCH_CODING";
+export const FETCH_CODE_END = "Login/FETCH_CODE_END";
+export const ALLOW_SEND_CODE = "Login/ALLOW_SEND_CODE";
+export const RESET_ALLOW_SEND_CODE = "Login/RESET_ALLOW_SEND_CODE";
+export const RESET_SEND_CODE = "Login/RESET_SEND_CODE";
 
 export const startSpinning = () => ({
   type: START_SPINNING
@@ -61,11 +68,62 @@ export const fetchUserDetail = payload => ({
   type: FETCH_USER_DETAIL,
   payload
 });
-
 export const fetchTransactList = payload => ({
   type: FETCH_TRANSACT_LIST,
   payload
 });
+export const fetchCodeStart = () => ({
+  type: FETCH_CODE_START
+});
+export const fetchCoding = payload => ({
+  type: FETCH_CODING,
+  payload
+});
+export const fetchCodeEnd = () => ({
+  type: FETCH_CODE_END
+});
+export const allowSendCode = () => ({
+  type: ALLOW_SEND_CODE
+});
+export const resetAllowSendCode = () => ({
+  type: RESET_ALLOW_SEND_CODE
+});
+
+//重置发送验证码按钮状态
+export const resetAllowSendCodeState = () => async dispatch => {
+  dispatch(resetAllowSendCode());
+};
+
+// 发送验证码
+export const sendCode = (mobilePhone, codeType) => async dispatch => {
+  dispatch(fetchCodeStart());
+  if (!mobilePhone) return dispatch(fetchCoding());
+  try {
+    const res = await request("/code", {
+      method: "post",
+      data: {
+        codeType,
+        mobilePhone
+      }
+    });
+    if (res && res.status === "SUCCESS") {
+      let num = 59;
+      const int = setInterval(() => {
+        dispatch(fetchCoding(`重新发送（${num}s）`));
+        num = num - 1;
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(int);
+        dispatch(fetchCodeEnd());
+      }, 60000);
+    } else {
+      message.error(res.msg || "验证码发送失败，请重试");
+    }
+  } catch (err) {
+    message.error("验证码发送失败，请重试");
+    catchError(err);
+  }
+};
 
 //获取我的待办
 export const getTransactList = ({
@@ -191,7 +249,12 @@ export const initAllDetail = () => async dispatch => {
 };
 
 //登录用户
-export const loginUser = ({ token, rest, history, loginType }) => async dispatch => {
+export const loginUser = ({
+  token,
+  rest,
+  history,
+  loginType
+}) => async dispatch => {
   await dispatch(startLogin());
   try {
     const res = await request(token ? `/login?token=${token}` : "/login", {
@@ -297,6 +360,33 @@ export default function loginReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         transactList: payload
+      };
+    case FETCH_CODE_START:
+      return {
+        ...state,
+        isFetchCoding: true,
+        fetchText: `重新发送（60s）`
+      };
+    case FETCH_CODING:
+      return {
+        ...state,
+        fetchText: payload
+      };
+    case FETCH_CODE_END:
+      return {
+        ...state,
+        isFetchCoding: false,
+        fetchText: null
+      };
+    case ALLOW_SEND_CODE:
+      return {
+        ...state,
+        allowSendCode: true
+      };
+    case RESET_ALLOW_SEND_CODE:
+      return {
+        ...state,
+        allowSendCode: false
       };
     default:
       return state;

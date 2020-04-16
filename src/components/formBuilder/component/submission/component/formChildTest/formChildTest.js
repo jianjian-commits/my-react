@@ -802,6 +802,7 @@ class FormChildTest extends React.Component {
                       item={item}
                       onChange={value => {
                         item.data = value;
+                        console.log(value)
                         checkValueValidByType(item, value)
                           ? (item.hasErr = false)
                           : (item.hasErr = true);
@@ -880,6 +881,7 @@ class FormChildTest extends React.Component {
                 content={
                   <RadioButtons
                     item={item}
+                    // ? 待解决,异步更新问题
                     onChange={value => {
                       item.data = value;
                       checkValueValidByType(item, value)
@@ -1259,7 +1261,7 @@ class FormChildTest extends React.Component {
               </div>
               <div className="formChildAddBtn">
                 <Button type="link" onClick={this.handleAddRow}>
-                  <Icon type="plus" /> 添加
+                  <Icon type="plus" /> 添加 
                 </Button>
               </div>
             </div>
