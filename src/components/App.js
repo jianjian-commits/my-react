@@ -11,6 +11,7 @@ import Login from "./login";
 import ForgetPassword from "./login/ForgetPassword";
 import InviteUser from "./login/InviteUser";
 import { setDebug } from "../store/debugReducer";
+import { signOut } from "../store/loginReducer";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
@@ -53,7 +54,7 @@ const AppInsideRouter = () => {
   );
 };
 
-const App = ({ debug, setDebug }) => (
+const App = ({ debug, setDebug, signOut }) => (
   <ErrorBoundary error={<ErrorPage />}>
     <ConnectedRouter history={history}>
       <Switch>
@@ -75,6 +76,12 @@ const App = ({ debug, setDebug }) => (
       >
         {debug ? "贤者模式" : "找bug模式"}
       </Button>
+      <Button
+        style={{ position: "fixed", bottom: 0, left: "100px" }}
+        onClick={() => signOut()}
+      >
+        临时退出
+      </Button>
     </ConnectedRouter>
   </ErrorBoundary>
 );
@@ -84,5 +91,5 @@ export default connect(
     isAuthenticated: login.isAuthenticated,
     debug: debug.isOpen
   }),
-  { setDebug }
+  { setDebug, signOut }
 )(App);
