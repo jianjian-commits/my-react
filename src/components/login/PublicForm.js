@@ -3,7 +3,9 @@ import { Form } from "antd";
 import { connect } from "react-redux";
 import { formItems } from "./formItemConfig";
 
-export default connect()(
+export default connect(({ login }) => ({
+  timeout: login.timeout
+}))(
   Form.create({ name: "login-form" })(function PublicForm({
     form,
     parameter,
@@ -20,7 +22,8 @@ export default connect()(
     allowSendCode,
     resetAllowSendCodeState,
     dispatch,
-    activeKey
+    activeKey,
+    timeout
   }) {
     const { getFieldDecorator, validateFields, getFieldError } = form;
     const handleSubmit = e => {
@@ -72,6 +75,12 @@ export default connect()(
                   hasFeedback: p.hasFeedback,
                   sendCode: sendCode,
                   resetAllowSendCodeState,
+                  isFetchCoding,
+                  fetchText,
+                  allowSendCode,
+                  dispatch,
+                  activeKey,
+                  timeout,
                   ...params
                 })
               : formItems[p.key]({
@@ -89,8 +98,8 @@ export default connect()(
                   fetchText,
                   allowSendCode,
                   dispatch,
-                  activeKey
-                  
+                  activeKey,
+                  timeout
                 });
           const helpText = getFieldError(formItem.itemName);
           return (
