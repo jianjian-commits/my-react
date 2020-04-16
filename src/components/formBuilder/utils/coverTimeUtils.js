@@ -22,11 +22,11 @@ function utcDate(date, componentType){
   // 将本地时间转为utc时间
   switch(componentType){
     case "DateInput":
-      return moment(date).utc().format().replace("Z","");
+      return moment(date).utc().millisecond(0).format().replace("Z","");
     case "PureTime":
-      return moment(date).utc().format("HH:mm:ss.SSS")
+      return moment(date).utc().millisecond(0).format("HH:mm:ss.SSS")
     case "PureDate":
-      return moment(date).utc().format("YYYY-MM-DD")
+      return moment(date).utc().millisecond(0).format("YYYY-MM-DD")
   }
   return ;
 }
