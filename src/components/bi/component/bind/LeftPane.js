@@ -28,10 +28,8 @@ const LeftPane = props => {
     }
 
     dataArr.forEach((each, idx) => {
-      const currentGroup = GroupType.SUM;
-
       if(each) {
-        const item = {...each, bindType: each.type === "NUMBER" ? Types.MEASURE : Types.DIMENSION, option: {currentGroup}}
+        const item = {...each, bindType: each.type === "NUMBER" ? Types.MEASURE : Types.DIMENSION}
         const arr = each.type === "NUMBER" ? meaArr : dimArr;
         const comp = <DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>;
         arr.push(comp);

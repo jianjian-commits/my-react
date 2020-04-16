@@ -4,3 +4,7 @@
 export const deepClone = Obj => {
   return JSON.parse(JSON.stringify(Obj));
 };
+
+export const findKey = (value, obj, compare = (a, b) => a === b) => {
+  return Object.keys(obj).find(k => compare(obj[k], value))
+  }

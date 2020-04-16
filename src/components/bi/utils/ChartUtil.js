@@ -1,5 +1,8 @@
 import { Types } from '../component/bind/Types';
 import ChartInfo from '../component/elements/data/ChartInfo';
+import Field from '../component/elements/data/Field';
+import FilterCondition from '../component/elements/data/FilterCondition';
+import { deepClone } from '../utils/Util';
 
 export const getOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
@@ -86,16 +89,22 @@ export const getOption = (chartData, chartInfo) => {
 export const getChartAttrs = (bindDataArr) => {
   bindDataArr = bindDataArr || [];
   let dimensions = [], indexes = [];
-  const groups = [{ name: "", value: "COUNT" }];
+  const groups = [];
   const sort = { fieldId: "", value: "DESC" };
   const conditions = [];
 
   bindDataArr.forEach((each) => {
-    const field = Object.assign({}, each);
-    const option = field.option;
-    const currentGroup = option.currentGroup;
+    if(each.bindType == Types.FILTER) {
+      const field = new Field(each.fieldId, each.label, each.type);
+      let condition = new FilterCondition(field, each.value, each.symbol);
+      conditions.push(condition);
+      return; // continue
+    }
+
+    const field = deepClone(each);
+    const currentGroup = field.currentGroup;
     delete field.bindType;
-    delete field.option;
+    delete field.currentGroup;
 
     switch(each.bindType) {
       case Types.DIMENSION:

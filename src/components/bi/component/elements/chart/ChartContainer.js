@@ -48,15 +48,14 @@ const ChartContainer = props => {
               const formId = data.formId;
               const chartInfo = data.chartTypeProp;
               let bindDataArr = [];
-              const dimensions = data.dimensions;
-              const indexes = data.indexes;
+              const { dimensions, indexes, conditions } = data;
 
               if(dimensions && dimensions.length > 0) {
                 const dimArr = dimensions.map((each, idx) => {
                   let field = each.field;
-                  field["option"] = {currentGroup: each.currentGroup}
+                  field["currentGroup"] =each.currentGroup;
                   field["bindType"] = Types.DIMENSION;
-                  field["idx"] = idx;
+                  field["idx"] = Date.now();
                   return field;
                 })
 
@@ -65,16 +64,26 @@ const ChartContainer = props => {
 
               if(indexes && indexes.length > 0) {
                 const meaArr = indexes.map((each, idx) => {
-                  const field = deepClone(each.field);
-                  const currentGroup = deepClone(each.currentGroup);
-                  field["option"] = {currentGroup};
+                  const field = each.field;
+                  field["currentGroup"] = each.currentGroup;
                   field["bindType"] = Types.MEASURE;
-                  field["idx"] = bindDataArr.length + idx;
-                  field["ddddd"] = {aaa: "ddddd"};
+                  field["idx"] = Date.now();
                   return field;
                 })
 
                 bindDataArr = bindDataArr.concat(meaArr);
+              }
+
+              if(conditions && conditions.length > 0) {
+                const filterArr = conditions.map((each, idx) => {
+                  const field = each.field;
+                  field["value"] = each.value;
+                  field["symbol"] = each.symbol;
+                  field["idx"] = Date.now();
+                  return field;
+                })
+
+                bindDataArr = bindDataArr.concat(filterArr);
               }
 
               changeBind(bindDataArr);

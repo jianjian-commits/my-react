@@ -6,6 +6,7 @@ import { Types } from './Types';
 import { ChartType } from '../elements/Constant';
 import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
+import FilterField from '../bind/field/FilterField';
 import DragItem from './DragItem';
 import { GroupType } from "../elements/Constant";
 import { changeBind, changeChartData } from '../../redux/action';
@@ -13,6 +14,8 @@ import { useParams } from "react-router-dom";
 import request from '../../utils/request';
 import { getChartAttrs } from '../../utils/ChartUtil';
 import { deepClone } from '../../utils/Util';
+import FilterModal from '../modal/FilterModal';
+import { OPERATORS } from '../elements/Constant';
 import classes from '../../scss/bind/bindPane.module.scss';
 import { message } from 'antd';
 
@@ -49,32 +52,35 @@ const spec = {
     }
 
     const { bindDataArr } = props;
-    let isExisted = false, isDimExceed = false, isMeaExceed = false, isForbidden = false, reOrder = false;
+    let isExisted = false, isDimExceed = false, isFilterExceed = false, isMeaExceed = false, isForbidden = false, reOrder = false;
     const currentType = component.getType();
+
+    preProcessDrop(item, currentType, component);
 
     if(bindDataArr.length != 0) {
       let dimCount = currentType == Types.DIMENSION ? 1 : 0;
       let meaCount = currentType == Types.MEASURE ? 1 : 0;
+      let filterCount = currentType == Types.FILTER ? 1 : 0;
       bindDataArr.forEach((each, idx) => {
+        const fieldExisted = item.fieldId && (each.fieldId == item.fieldId);
         if(item.idx && (item.idx == each.idx)) {
           reOrder = true;
         }
 
         if(each.bindType == Types.DIMENSION) {
+          isExisted = fieldExisted && (currentType == Types.DIMENSION)
           dimCount++;
-        }
-
-        if(each.bindType == Types.MEASURE) {
+        } else if(each.bindType == Types.MEASURE) {
           meaCount++;
-        }
-
-        if(item.fieldId && (each.fieldId == item.fieldId) && (each.bindType == currentType) && currentType == Types.DIMENSION) {
-          isExisted = true;
+        } else if(each.bindType == Types.FILTER) {
+          filterCount++;
+          isExisted = fieldExisted && (currentType == Types.FILTER)
         }
       })
 
       isDimExceed = dimCount > 2 || (dimCount == 2 && meaCount > 1);
       isMeaExceed = dimCount == 1 && meaCount > 10;
+      isFilterExceed = filterCount > 10;
     }
 
     if(!reOrder) {
@@ -82,18 +88,32 @@ const spec = {
         message.warning("添加失败，同一字段不能重复添加维度！");
       }else if(isDimExceed){
         message.warning("添加失败，当前暂不支持此模式！");
-      }else if(isMeaExceed){
+      }else if(isMeaExceed || isFilterExceed) {
         message.warning("添加失败，已超出系统限定字段数量！");
       }
 
-      isForbidden = isExisted || isDimExceed || isMeaExceed;
+      isForbidden = isExisted || isDimExceed || isMeaExceed || isFilterExceed;
     }
 
-    component.processDrop(item, isForbidden, currentType);
+    component.processDrop(item, isForbidden, currentType, component);
   }
 }
 
-function processBind(bindDataArr, formId, changeBind, changeChartData) {
+function preProcessDrop(item, currentType, component) {
+  if(currentType == Types.MEASURE) {
+    item["currentGroup"] = item.bindType == Types.MEASURE ? GroupType.SUM : GroupType.COUNT;
+  }
+  else if (currentType == Types.FILTER) {
+    item.bindType = Types.FILTER;
+    item["symbol"] = OPERATORS.EQUALS;
+    item["value"] = "";
+  }
+  else if(currentType == Types.DIMENSION) {
+    item["currentGroup"] = GroupType.DEFAULT;
+  }
+}
+
+function processBind(bindDataArr, formId,  changeBind, changeChartData) {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
     const res = request(`/bi/charts/data`, {
       method: "POST",
@@ -136,7 +156,9 @@ class BindPane extends PureComponent {
     this.state = {
       splitDiv: null,
       splitIdx: -1,
-      dragingIdx: -1
+      dragingIdx: -1,
+      visible: false,
+      filterItem: {}
     }
   }
 
@@ -146,9 +168,43 @@ class BindPane extends PureComponent {
     }
   }
 
+  changeModalVisible = (visible) => {
+    this.setState({visible});
+    // this.setFilterItem(null);
+  }
+
+  setFilterItem = (filterItem) => {
+    this.setState({filterItem});
+  }
+
+  changeFilter = (fieldId, symbol, value) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    const newArr = bindDataArr.map((each) => {
+      if(fieldId == each.fieldId && each.bindType == Types.FILTER) {
+        each["symbol"] = symbol;
+        each["value"] = value;  
+      }
+
+      return each;
+    })
+
+    processBind(newArr, dataSource.id, changeBind, changeChartData);
+  }
+
+  setFilterAlias = (fieldId, filterLabel) => {
+    let { bindDataArr} = this.props;
+    bindDataArr.map((each) => {
+      if(fieldId == each.fieldId && each.bindType == Types.FILTER) {
+        each["alias"] = each.label + filterLabel;
+      }
+
+      return each;
+    })
+  }
+
   render() {
     const { label, bindType, connectDropTarget } = this.props;
-    const { splitIdx, splitDiv } = this.state;
+    const { splitIdx, splitDiv, visible, filterItem } = this.state;
     let items = this.getItems(bindType);
 
     if(splitIdx != -1) {
@@ -157,6 +213,8 @@ class BindPane extends PureComponent {
 
     return connectDropTarget(
       <div className={classes.bindLine} key={label} ref={(ref)=> {this.line = ref}} >
+        <FilterModal key="FilterModal" visible={visible} setVisible={this.changeModalVisible}
+          item={filterItem} changeFilter={this.changeFilter} setFilterAlias={this.setFilterAlias}/>
         <div className={classes.bindLabel} ref={(ref)=>{this.labelRef = ref}}>{label}</div>
         <div className={classes.bindCols}>{items}</div>
       </div>
@@ -177,7 +235,7 @@ class BindPane extends PureComponent {
     processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
-  processDrop = (item, isForbidden, bindType) => {
+  processDrop = (item, isForbidden, bindType, component) => {
     if(isForbidden) {
       this.clearSplit();
       return;
@@ -200,6 +258,12 @@ class BindPane extends PureComponent {
       obj['idx'] = Date.now();
       obj.bindType = bindType;
       bindDataArr.splice(splitIdx, 0, obj);
+
+      if(bindType == Types.FILTER) {
+        component.changeModalVisible(true);
+        component.setFilterItem(item);
+        return;
+      }
     }
 
     processBind(bindDataArr, dataSource.id, changeBind, changeChartData);
@@ -256,44 +320,63 @@ class BindPane extends PureComponent {
   changeGroup = (currentGroup, fieldId) => {
     let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
     const newArr = bindDataArr.map((each) => {
-      if(fieldId == each.fieldId) {
-        each.option.currentGroup = currentGroup
+      if(fieldId == each.fieldId && each.bindType != Types.FILTER) {
+        each.currentGroup = currentGroup
       }
-      
+
       return each;
     })
 
     processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
+  handleFilter = (type, item) => {
+    if(type == "remove") {
+      this.setFilterItem({});
+    }
+    else if(type == "modify") {
+      this.setFilterItem(item);
+      this.changeModalVisible(true);
+    }
+  }
+
   getItems = (bindType) => {
     let { bindDataArr } = this.props;
     bindDataArr = bindDataArr || [];
-    let cls = "bind-child-" + bindType;
     const components = [];
     this.childRefs = [];
 
     bindDataArr.forEach(
       (each, idx) => {
-        if(each.bindType == bindType && bindType == Types.DIMENSION) {
-          components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref}} item={{...each, removeField: this.removeField,
-            className: cls}} Child={FieldDimension} key={each.fieldId + "_" + idx} processBegin={this.processBegin}/>)
-        }
+        if(each.bindType == bindType) {
+          const item = {...each, removeField: this.removeField};
+          const key = each.fieldId + "_" + idx;
+          
+          if(bindType == Types.DIMENSION) {
+            components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref}} item={item} key={key} Child={FieldDimension}
+              processBegin={this.processBegin}/>)
+          }
+          else if(bindType == Types.MEASURE) {
+            let selectIndex = 0;
+  
+            for(let key in GroupType) {
+              if(key == each.currentGroup.value) {
+                break;
+              }
 
-        if(each.bindType == bindType && bindType == Types.MEASURE) {
-          let selectIndex = 0;
-
-          for(let key in GroupType) {
-            if(key == each.option.currentGroup.value) {
-              break;
+              selectIndex++;
             }
 
-            selectIndex++;
+            item['changeGroup'] = this.changeGroup;
+            item['selectIndex'] = selectIndex;
+            components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref }} item={item} key={key} Child={FieldMeasureSelect} 
+              processBegin={this.processBegin}/>)
           }
-
-          components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref }} item={{...each, removeField: this.removeField,
-            changeGroup: this.changeGroup, className: cls, selectIndex}} Child={FieldMeasureSelect} key={each.fieldId + "_" + idx}
-            processBegin={this.processBegin}/>)
+          else if(bindType == Types.FILTER) {
+            item['handleFilter'] = this.handleFilter;
+            components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref}} item={item} key={key} Child={FilterField}
+              processBegin={this.processBegin}/>)
+          }
         }
       }
     )
@@ -315,6 +398,7 @@ const ChartBindPane = (props)=> {
       <div className={classes.bindPane}>
         <DropBindPane {...props} bindType={Types.DIMENSION} dashboardId={dashboardId} label="维度" />
         <DropBindPane {...props} bindType={Types.MEASURE} dashboardId={dashboardId} label="指标"/>
+        <DropBindPane {...props} bindType={Types.FILTER} dashboardId={dashboardId} label="过滤条件"/>
       </div>
     )
 }

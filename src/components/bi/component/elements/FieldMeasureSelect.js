@@ -27,13 +27,14 @@ export default function FieldMeasureSelect(props) {
       }
     }
     document.addEventListener("click", dropDownEvent);
-    getSelectOperation(operationArr[selectIndex]);
+    // getSelectOperation(operationArr[selectIndex]);
     return () => {
       document.removeEventListener("click", dropDownEvent);
     }
   }, []);
 
   const getSelectOperation = value => {
+
     props.item.changeGroup(value, props.item.fieldId);
   };
 
@@ -48,9 +49,7 @@ export default function FieldMeasureSelect(props) {
   const handlMouseLeave = () => {
     setBtnVisible(false);
   };
-
-  const className = props.item.className;
-
+console.log();
   return (
     <div className={classes.meaContainer}>
       <div
@@ -75,9 +74,6 @@ export default function FieldMeasureSelect(props) {
             <div
               className={classes.dropDownItem}
               style={selectIndex == index ? {backgroundColor: "#dfecff"} : {}}
-              // className={classNames("dropDownItem", {
-              //   selectOption: selectIndex == index
-              // })}
               onClick={() => {
                 if (selectIndex === index) {
                   setPopoverVisible(false);
