@@ -6,8 +6,8 @@ function localDate(date, componentType) {
     case "DateInput":break;
     case "PureTime":
       if(!moment(date).isValid()){
-        // 是否在组件内使用
-        date = `2016/9/3 ${date}`
+        // 是否在组件内使用 2020-04-17T03:37:01.633
+        date =  new Date(`2016-09-03T${date}Z`)
       };break;
     case "PureDate":break;
     default: return moment.utc(date+"Z").local().format("YYYY-MM-DD HH:mm:ss")
