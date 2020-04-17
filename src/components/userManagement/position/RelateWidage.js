@@ -25,7 +25,6 @@ export default compose(
       props.setOpen(true);
     },
     selectUserHandler: props => (id, checked) => {
-      console.log(id, checked);
       if (checked) {
         props.updateSelectedKeys([...props.selectedKeys, id]);
       } else {
@@ -88,8 +87,6 @@ export default compose(
                 />
                 {allUsers.map(u => {
                   const disabled = !!u.position && u.position.id !== positionId;
-                  console.log(selectedKeys, selectedKeys.indexOf(u.id) !== -1)
-                  console.log(u.position && u.position.id, positionId)
                   return (
                     <div
                       key={u.id}
