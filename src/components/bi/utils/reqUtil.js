@@ -3,7 +3,7 @@ import { getChartAttrs, getChartAvailableList } from './ChartUtil';
 
 export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp, elemType) => {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
-console.log("==========elemType========", elemType);
+
   return request(`/bi/charts/${elementId}`, {
     method: "PUT",
     data: {
@@ -11,13 +11,7 @@ console.log("==========elemType========", elemType);
         chartTypeProp,
         conditions,
         dimensions,
-        formFields: [
-          {
-            id: "string",
-            label: "string",
-            type: "string"
-          }
-        ],
+        formFields: [],
         indexes,
         formId,
         name,

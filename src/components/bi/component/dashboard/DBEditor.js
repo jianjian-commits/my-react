@@ -44,7 +44,7 @@ class DBEditor extends React.PureComponent {
     keys.forEach((item, idx) => {
       const data = elements[item].data;
       const element = elements[item];
-      const containerObj = {isBtnBlock: false, key: item, chartData: data,
+      const containerObj = {isBtnBlock: false, key: item, chartData: data, elemType: element.type,
         chartName: element.name, chartId: element.id, chartInfo: element.chartTypeProp};
       const modalNarrowBtn = 
           {

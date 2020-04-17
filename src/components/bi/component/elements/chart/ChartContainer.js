@@ -22,19 +22,16 @@ const ChartContainer = props => {
     changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
+
   const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
-  let chart = '';
-  if( elemType == ChartType.INDEX_DIAGRAM){
-    chart = <IndexChart chartOption={chartOption} />;
-  }else {
-    chart = <Chart chartOption={chartOption} />;
-  }
+  let chart = elemType == ChartType.INDEX_DIAGRAM ? <IndexChart chartOption={chartOption} /> :
+    <Chart chartOption={chartOption} />;
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
-  const elements =
-    dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
+  const elements = dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
   let name = "新建图表";
   let iconBtnGroup = [];
-  if (elementId) {
+
+  if(elementId) {
     elements.forEach(item => {
       if (item.id == elementId) {
         name = item.name;
@@ -43,6 +40,7 @@ const ChartContainer = props => {
   } else {
     name = chartName || name;
   }
+
   if(dbMode == DBMode.Edit) {
     iconBtnGroup = [
       {
@@ -251,7 +249,6 @@ const ChartContainer = props => {
 export default connect(
   store => ({
     dashboards: store.bi.dashboards,
-    dbMode: store.bi.dbMode,
-    elemType: store.bi.elemType}),
+    dbMode: store.bi.dbMode}),
     { changeBind, changeChartData, setDataSource, changeChartInfo,setDashboards, setElemType }
   )(ChartContainer);
