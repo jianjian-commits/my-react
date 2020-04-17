@@ -13,7 +13,7 @@ import { EditIcon } from "../../../assets/icons";
 import { catchError } from "../../../utils";
 import request from "../../../utils/request";
 import ModalCreation from "../../profileManagement/modalCreate/ModalCreation";
-import PositionDel from "./PositionDel";
+import PositionDel from "./PositionDetail";
 const { TreeNode } = Tree;
 
 const Header = () => {
@@ -37,7 +37,7 @@ class PositionTree extends Component {
     super(props);
     this.state = {
       treeData: [],
-      selectedId: ""
+      selectedPosition: null
     };
     this.handleCreate = this.handleCreate.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -51,7 +51,7 @@ class PositionTree extends Component {
         dataShare: false,
         description: data.description,
         name: data.name,
-        superior: this.state.selectedId
+        superior: this.state.selectedPosition.id
       };
       const res = await request("/position", {
         method: "POST",
@@ -61,7 +61,8 @@ class PositionTree extends Component {
         message.success("新建职位成功!");
         this.handleCancel();
         this.setState({
-          enterD: true
+          detailOpened: true,
+          selectedPosition: res.data
         });
         // this.getPositionTree();
       } else {
@@ -76,8 +77,8 @@ class PositionTree extends Component {
   handleCancel() {
     this.setState({
       open: false,
-      selectedId: "",
-      enterD: false
+      selectedPosition: null,
+      detailOpened: false
     });
   }
 
@@ -133,25 +134,25 @@ class PositionTree extends Component {
     }
   }
 
-  unfoldArr(opera) {
-    const expandedArr = [];
+  operateTree(command) {
+    const expandedKeys = [];
     function filterArray(arr) {
       return arr.map(i => {
-        expandedArr.push(i.id);
+        expandedKeys.push(i.id);
         if (i.children.length > 0) {
           filterArray(i.children);
         }
-        return expandedArr;
+        return expandedKeys;
       });
     }
     const treeData = [...this.state.treeData];
-    if (opera === "unfold") {
+    if (command === "unfold") {
       filterArray(treeData);
     } else {
       filterArray([]);
     }
     this.setState({
-      expandedArr
+      expandedKeys
     });
   }
 
@@ -163,13 +164,13 @@ class PositionTree extends Component {
           {item.value}
           {item.code !== "COMPANY" && (
             <CreateIcon
-              onClick={() => this.setState({ open: true, selectedId: item.id })}
+              onClick={() => this.setState({ open: true, selectedPosition: item })}
             />
           )}
           {item.code !== "COMPANY" && (
             <EditIcon
               onClick={() => {
-                this.setState({ enterD: true });
+                this.setState({ detailOpened: true, selectedPosition: item });
               }}
             />
           )}
@@ -186,7 +187,6 @@ class PositionTree extends Component {
           )}
         </div>
       );
-      // if (item.children) {
       return (
         <TreeNode
           title={title}
@@ -196,41 +196,50 @@ class PositionTree extends Component {
           {this.renderTreeNodes(item.children)}
         </TreeNode>
       );
-      // }
-      // return <TreeNode title={item.value} key={item.id} />;
     });
 
+  returnTree = () => {
+    this.setState({ detailOpened: false, selectedPosition: null });
+    this.getPositionTree();
+  };
+
   render() {
+    const { detailOpened, selectedPosition } = this.state;
     return (
       <div className={classes.wrapper}>
-        <Header />
-        {this.state.enterD ? (
-          <PositionDel />
+        {detailOpened ? (
+          <PositionDel
+            position={selectedPosition}
+            returnTree={this.returnTree}
+          />
         ) : (
-          <div className={classes.tree}>
-            <div className={classes.button}>
-              <Button type="link" onClick={() => this.unfoldArr("unfold")}>
-                全部展开
-              </Button>
-              |
-              <Button type="link" onClick={() => this.unfoldArr("collapse")}>
-                全部折叠
-              </Button>
+          <>
+            <Header />
+            <div className={classes.tree}>
+              <div className={classes.button}>
+                <Button type="link" onClick={() => this.operateTree("unfold")}>
+                  全部展开
+                </Button>
+                |
+                <Button type="link" onClick={() => this.operateTree("collapse")}>
+                  全部折叠
+                </Button>
+              </div>
+              <Tree
+                showIcon
+                showLine
+                onExpand={expandedKeys => {
+                  this.setState({
+                    expandedKeys: expandedKeys
+                  });
+                }}
+                className="hide-file-icon"
+                expandedKeys={this.state.expandedKeys}
+              >
+                {this.renderTreeNodes(this.state.treeData)}
+              </Tree>
             </div>
-            <Tree
-              showIcon
-              showLine
-              onExpand={expandedKeys => {
-                this.setState({
-                  expandedArr: expandedKeys
-                });
-              }}
-              className="hide-file-icon"
-              expandedKeys={this.state.expandedArr}
-            >
-              {this.renderTreeNodes(this.state.treeData)}
-            </Tree>
-          </div>
+          </>
         )}
         <ModalCreation
           title={"新建职位"}

@@ -442,7 +442,8 @@ const submit = ({
   token,
   itemName,
   setActiveKey,
-  resetAllowSendCodeState
+  resetAllowSendCodeState,
+  timeout
 }) => {
   const { getFieldsValue, isFieldsTouched } = form;
   const touched = isFieldsTouched();
@@ -481,9 +482,20 @@ const submit = ({
             className={itemsStyles.buttonSuffix}
             style={{ width: "100%", marginLeft: "0px", textAlign: "right" }}
           >
-            <Link to="/forgetPassword">忘记密码</Link>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <Link
+              to="/forgetPassword"
+              onClick={() => {
+                timeout && timeout.int && timeout.clear(0);
+                resetAllowSendCodeState();
+                form.resetFields();
+              }}
+            >
+              忘记密码
+            </Link>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
             <span
               onClick={() => {
+                timeout && timeout.int && timeout.clear(0);
                 resetAllowSendCodeState();
                 form.resetFields();
                 setActiveKey("register");
@@ -499,6 +511,7 @@ const submit = ({
             <span
               style={{ color: "#096dd9", cursor: "pointer" }}
               onClick={() => {
+                timeout && timeout.int && timeout.clear(0);
                 resetAllowSendCodeState();
                 form.resetFields();
                 setActiveKey("signin");
@@ -510,7 +523,16 @@ const submit = ({
         )}
         {payload === "resetPassword" && (
           <div className={itemsStyles.buttonSuffix}>
-            <Link to="/login">返回登录</Link>
+            <Link
+              to="/login"
+              onClick={() => {
+                timeout && timeout.int && timeout.clear(0);
+                resetAllowSendCodeState();
+                form.resetFields();
+              }}
+            >
+              返回登录
+            </Link>
           </div>
         )}
       </>
