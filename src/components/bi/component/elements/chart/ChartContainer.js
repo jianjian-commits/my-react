@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Chart from './Chart';
+import IndexChart from '../IndexChart'
 import { connect } from "react-redux";
 import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
@@ -10,7 +11,7 @@ import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
 import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
-import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards } from '../../../redux/action';
+import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType } from '../../../redux/action';
 import {message} from "antd";
 import { deepClone } from '../../../utils/Util';
 import ChartInfo from '../data/ChartInfo';
@@ -18,11 +19,16 @@ import classes from '../../../scss/elements/chart.module.scss';
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
-    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo } = props;
+    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
-  const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo) : {};
-  const chart = <Chart chartOption={chartOption} />;
+  const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
+  let chart = '';
+  if( elemType == ChartType.INDEX_DIAGRAM){
+    chart = <IndexChart chartOption={chartOption} />;
+  }else {
+    chart = <Chart chartOption={chartOption} />;
+  }
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
   const elements =
     dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
@@ -88,6 +94,7 @@ const ChartContainer = props => {
 
               changeBind(bindDataArr);
               changeChartInfo(chartInfo || new ChartInfo());
+              setElemType(elemType);
               request(`/bi/charts/data`, {
                 method: "POST",
                 data: {
@@ -95,7 +102,7 @@ const ChartContainer = props => {
                   dimensions,
                   indexes,
                   conditions: data.conditions,
-                  chartType: ChartType.HISTOGRAM
+                  chartType: elemType
                 }
               }).then((res) => {
                 if(res && res.msg === "success") {
@@ -244,6 +251,7 @@ const ChartContainer = props => {
 export default connect(
   store => ({
     dashboards: store.bi.dashboards,
-    dbMode: store.bi.dbMode}),
-    { changeBind, changeChartData, setDataSource, changeChartInfo,setDashboards }
+    dbMode: store.bi.dbMode,
+    elemType: store.bi.elemType}),
+    { changeBind, changeChartData, setDataSource, changeChartInfo,setDashboards, setElemType }
   )(ChartContainer);

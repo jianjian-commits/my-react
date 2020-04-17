@@ -9,15 +9,14 @@ import FieldDimension from "../elements/FieldDimension";
 import FilterField from '../bind/field/FilterField';
 import DragItem from './DragItem';
 import { GroupType } from "../elements/Constant";
-import { changeBind, changeChartData } from '../../redux/action';
+import { changeBind, changeChartData, setElemType } from '../../redux/action';
 import { useParams } from "react-router-dom";
-import request from '../../utils/request';
-import { getChartAttrs } from '../../utils/ChartUtil';
 import { deepClone } from '../../utils/Util';
 import FilterModal from '../modal/FilterModal';
 import { OPERATORS } from '../elements/Constant';
 import classes from '../../scss/bind/bindPane.module.scss';
 import { message } from 'antd';
+import { processBind } from "../../utils/reqUtil";
 
 /**
  * Specifies the drop target contract.
@@ -113,27 +112,6 @@ function preProcessDrop(item, currentType, component) {
   }
 }
 
-function processBind(bindDataArr, formId,  changeBind, changeChartData) {
-  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
-    const res = request(`/bi/charts/data`, {
-      method: "POST",
-      data: {
-        formId,
-        dimensions,
-        indexes,
-        conditions,
-        chartType: ChartType.HISTOGRAM
-      }
-    }).then((res) => {
-      if(res && res.msg === "success") {
-        const dataObj = res.data;
-        const data = dataObj.data;
-        changeChartData(data);
-      }
-    })
-    changeBind(bindDataArr);
-}
-
 /**
  * Specifies which props to inject into your component.
  */
@@ -177,7 +155,7 @@ class BindPane extends PureComponent {
   }
 
   changeFilter = (fieldId, symbol, value) => {
-    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType} = this.props;
     const newArr = bindDataArr.map((each) => {
       if(fieldId == each.fieldId && each.bindType == Types.FILTER) {
         each["symbol"] = symbol;
@@ -187,7 +165,7 @@ class BindPane extends PureComponent {
       return each;
     })
 
-    processBind(newArr, dataSource.id, changeBind, changeChartData);
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
   setFilterAlias = (fieldId, filterLabel) => {
@@ -225,11 +203,12 @@ class BindPane extends PureComponent {
   }
 
   removeField = (item) => {
-    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
+    
     const newArr = bindDataArr.filter((each) => {
       return item.idx != each.idx;
     })
-    processBind(newArr, dataSource.id, changeBind, changeChartData);
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
   processDrop = (item, isForbidden, bindType, component) => {
@@ -238,7 +217,7 @@ class BindPane extends PureComponent {
       return;
     }
 
-    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
     const { splitIdx } = this.state;
 
     if(Number.isInteger(item.idx)) {
@@ -263,7 +242,7 @@ class BindPane extends PureComponent {
       }
     }
 
-    processBind(bindDataArr, dataSource.id, changeBind, changeChartData);
+    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
     this.clearSplit();
   }
 
@@ -315,7 +294,7 @@ class BindPane extends PureComponent {
   }
 
   changeGroup = (currentGroup, fieldId) => {
-    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData,  elemType, setElemType } = this.props;
     const newArr = bindDataArr.map((each) => {
       if(fieldId == each.fieldId && each.bindType != Types.FILTER) {
         each.currentGroup = currentGroup
@@ -323,11 +302,12 @@ class BindPane extends PureComponent {
 
       return each;
     })
-    processBind(newArr, dataSource.id, changeBind, changeChartData);
+
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
   changeSortType = (sortType, fieldId) => {
-    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
     const newArr = bindDataArr.map((each) => {
       if(fieldId == each.fieldId) {
         each.sort = {
@@ -337,7 +317,7 @@ class BindPane extends PureComponent {
       }
       return each;
     })
-    processBind(newArr, dataSource.id, changeBind, changeChartData);
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
   handleFilter = (type, item) => {
@@ -415,7 +395,8 @@ const ChartBindPane = (props)=> {
 export default connect(store => ({
   bindDataArr: store.bi.bindDataArr,
   dataSource: store.bi.dataSource,
-   chartType: store.bi.chartType}), {
+  elemType: store.bi.elemType}), {
   changeBind,
-  changeChartData
+  changeChartData,
+  setElemType
 })(ChartBindPane);

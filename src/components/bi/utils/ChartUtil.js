@@ -1,10 +1,11 @@
 import { Types } from '../component/bind/Types';
 import ChartInfo from '../component/elements/data/ChartInfo';
-import Field from '../component/elements/data/Field';
+import { ChartType, AllType, BarType } from '../component/elements/Constant'
 import FilterCondition from '../component/elements/data/FilterCondition';
-import { deepClone } from '../utils/Util';
+import Field from '../component/elements/data/Field';
+import { deepClone } from './Util';
 
-export const getOption = (chartData, chartInfo) => {
+export const getBarChartOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
   const { titleXAxis, titleYAxis, showLegend, showDataTag } = chartInfo || new ChartInfo();
 
@@ -83,6 +84,117 @@ export const getOption = (chartData, chartInfo) => {
   } 
 }
 
+export const getIndexChartOption = (chartData, chartInfo) => {
+  const { headItem, items } = chartData;
+  let indexData = [];
+
+  if(!headItem || (headItem.length == 0) || !items || (items.length == 0)) {
+    return {};
+  }
+
+  indexData.push(headItem);
+  if(items.length > 1){
+    items.forEach(item=>{
+      indexData.push(item);
+    })
+  }
+
+  return indexData;
+}
+
+
+export const getPieChartOption = (chartData, chartInfo) => {
+  const { sectorItems, legends } = chartData;
+  const { showDataTag, showLegend } = chartInfo || new ChartInfo();
+
+  if(!sectorItems || (sectorItems.length == 0) || !legends || (legends.length == 0)) {
+    return {};
+  }
+
+  const source = [];
+  const series = [];
+
+  if( legends.length == sectorItems.length ){
+    sectorItems.forEach((item) => {
+      series.push({type: "pie",
+        label: {
+          show: showDataTag,
+          position: 'top',
+          textStyle: {
+            color: 'gray'
+          }
+        }
+      });
+      let row = [];
+      const legend = item.legend;
+      legends.forEach((each) => {
+        if(each.legendName == legend.legendName){
+          row.push(each.legendName);
+          row.push(item.count);
+        }
+      })
+      source.push(row);
+    })
+  }
+    
+  return  {
+    dataset: {
+      source
+    },
+    radius : '55%', 
+    center: ['50%', '50%'], 
+    legend: {y: "top", show: showLegend},
+    tooltip: {
+      trigger: 'item',
+      formatter: '{c}<br/>({d}%)'
+    },
+    label:{ 
+      show: true, 
+      formatter: '{c} ({d}%)'
+    }, 
+    labelLine :{show:true},
+    grid: {
+      top: '40%',
+    },
+    series
+  } 
+}
+
+
+export const getOption = (chartData, chartInfo, elemType) => {
+
+  switch(elemType){
+    case ChartType.HISTOGRAM: 
+      return getBarChartOption(chartData, chartInfo);
+    case ChartType.INDEX_DIAGRAM: 
+      return getIndexChartOption(chartData, chartInfo); 
+    case ChartType.AREA_CHART: 
+      return getPieChartOption(chartData, chartInfo);
+    default:
+      break;
+  }
+}
+
+export const getChartAvailableList = (bindDataArr) => {
+  if(!bindDataArr) {
+    return AllType;
+  }
+
+  let dimCount = 0;
+  let meaCount = 0;
+  bindDataArr.forEach((each) => {
+    if(each.bindType == Types.DIMENSION) {
+      dimCount++;
+    }
+
+    if(each.bindType == Types.MEASURE) {
+      meaCount++;
+    }
+  })
+
+  return dimCount > 1 || meaCount > 1 ? BarType : AllType;
+}
+
 /**
  * Get chart attributes for req.
  */
@@ -107,7 +219,7 @@ export const getChartAttrs = (bindDataArr) => {
     if(field.sort) {
       sort = field.sort;
     }
-console.log("=======sort=========", field.sort, sort);
+
     delete field.bindType;
     delete field.currentGroup;
 

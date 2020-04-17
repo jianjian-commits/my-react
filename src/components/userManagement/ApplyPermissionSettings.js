@@ -175,7 +175,7 @@ const Tr = ({
             {header.key === "TYPE" && <span>{table.value}</span>}
             {Td[0] && (
               <CheckBox
-                defaultChecked={Td[0].defaultChecked || Td[0].checked}
+                // defaultChecked={Td[0].defaultChecked || Td[0].checked}
                 checked={Td[0].checked}
                 disabledCheck={
                   fp === "formPermissions"

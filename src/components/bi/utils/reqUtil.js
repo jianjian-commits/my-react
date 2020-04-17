@@ -1,10 +1,9 @@
 import request from './request';
-import { getChartAttrs } from './ChartUtil';
-import { ChartType } from '../component/elements/Constant';
+import { getChartAttrs, getChartAvailableList } from './ChartUtil';
 
-export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp) => {
+export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp, elemType) => {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
-
+console.log("==========elemType========", elemType);
   return request(`/bi/charts/${elementId}`, {
     method: "PUT",
     data: {
@@ -28,7 +27,7 @@ export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypePr
             "status": "SUCCESS"
           }
         ],
-        type: ChartType.HISTOGRAM
+        type: elemType
       }
     }
   });
@@ -50,4 +49,34 @@ export const setDB = (dashboardId, setDashboards) => {
 
 export const getDashboardAll = (appId) => {
   return request(`/bi/dashboards?appId=${appId}`);
-};
+}
+
+export const processBind = (bindDataArr, formId, changeBind, changeChartData, elemType, setElemType) => {
+  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+  const availableList = getChartAvailableList(bindDataArr);
+  let type = elemType
+
+  if(!availableList.includes(elemType)) {
+    type = availableList[0];
+    setElemType(type);
+  }
+
+  request(`/bi/charts/data`, {
+    method: "POST",
+    data: {
+      formId,
+      dimensions,
+      indexes,
+      conditions,
+      chartType: type
+    }
+  }).then((res) => {
+    if(res && res.msg === "success") {
+      const dataObj = res.data;
+      const data = dataObj.data;
+      changeChartData(data);
+    }
+  })
+
+  changeBind(bindDataArr);
+}

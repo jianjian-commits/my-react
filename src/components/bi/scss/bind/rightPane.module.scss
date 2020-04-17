@@ -38,9 +38,33 @@
       height: 40px;
     }
   }
-  .activeIcon {
+  :global(.activeIcon) {
     background-color: rgba(43, 129, 255, 0.1);
     border: 2px solid #169bd5;
+  }
+  .unavailable{
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    cursor: not-allowed;
+    // pointer-events: none;
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+    &:hover {
+      background-color: rgba(43, 129, 255, 0.1);
+    }
+    img {
+      width: 40px;
+      height: 40px;
+    }
   }
 }
 
@@ -48,6 +72,7 @@
   height: 30%;
   border-top: 1px solid #adb5bd;
   padding: 16px 10px 0px 10px;
+  display: block;
  
   .title {
     color: #333333;
@@ -83,4 +108,13 @@
       }
     }
   }
+  .showXYTitle{
+    display: block;
+  }
+  .hideXYTitle{
+    display: none;
+  }
+}
+.hideRightPaneTools{
+  display: none;
 }
