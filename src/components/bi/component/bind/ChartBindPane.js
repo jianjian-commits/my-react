@@ -131,7 +131,6 @@ function processBind(bindDataArr, formId,  changeBind, changeChartData) {
         changeChartData(data);
       }
     })
-
     changeBind(bindDataArr);
 }
 
@@ -227,11 +226,9 @@ class BindPane extends PureComponent {
 
   removeField = (item) => {
     let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
-    
     const newArr = bindDataArr.filter((each) => {
       return item.idx != each.idx;
     })
-
     processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
@@ -326,7 +323,20 @@ class BindPane extends PureComponent {
 
       return each;
     })
+    processBind(newArr, dataSource.id, changeBind, changeChartData);
+  }
 
+  changeSortType = (sortType, fieldId) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData } = this.props;
+    const newArr = bindDataArr.map((each) => {
+      if(fieldId == each.fieldId) {
+        each.sort = {
+          "fieldId": fieldId,
+          ...sortType
+        }
+      }
+      return each;
+    })
     processBind(newArr, dataSource.id, changeBind, changeChartData);
   }
 
@@ -349,7 +359,7 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (each, idx) => {
         if(each.bindType == bindType) {
-          const item = {...each, removeField: this.removeField};
+          const item = {...each, removeField: this.removeField, changeGroup: this.changeGroup, changeSortType: this.changeSortType};
           const key = each.fieldId + "_" + idx;
           
           if(bindType == Types.DIMENSION) {
@@ -367,7 +377,6 @@ class BindPane extends PureComponent {
               selectIndex++;
             }
 
-            item['changeGroup'] = this.changeGroup;
             item['selectIndex'] = selectIndex;
             components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref }} item={item} key={key} Child={FieldMeasureSelect} 
               processBegin={this.processBegin}/>)

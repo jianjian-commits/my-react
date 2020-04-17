@@ -2,8 +2,8 @@
   font-family: Microsoft YaHei;
   font-style: normal;
   font-weight: normal;
-  .ant-modal {
-    .ant-modal-header {
+  :global(.ant-modal){
+    :global(.ant-modal-header) {
       padding: 0px;
       border-bottom: none;
       .formchoiceModalTitle {
@@ -28,7 +28,7 @@
       }
     }
 
-    .ant-modal-body {
+    :global(.ant-modal-body){
       padding: 0px;
       .formChoiceModalContainer {
         width: 500px;
@@ -40,7 +40,7 @@
           &::-webkit-scrollbar {
             width: 6px;
           }
-          .ant-collapse-item {
+          :global(.ant-collapse-item){
             border-bottom: none;
             font-weight: 400;
             color: #333333;
@@ -48,12 +48,12 @@
             &:nth-child(1) {
               margin-top: 20px;
             }
-            .ant-collapse-header {
+            :global(.ant-collapse-header){
               padding: 4px 16px;
               padding-left: 40px;
               font-size: 13px;
             }
-            .ant-collapse-content-box {
+            :global(.ant-collapse-content-box){
               padding: 0px;
               span {
                 font-size: 13px;
@@ -91,7 +91,7 @@
           display: flex;
           position: relative;
           align-items: center;
-          .ant-btn {
+          :global(.ant-btn){
             width: 87px;
             height: 36px;
             font-weight: 400;

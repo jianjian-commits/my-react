@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "antd";
-
+import classes from "../../../scss/modal/chartModal.module.scss";
 export default function ChartFullScreenModal(props) {
   return (
     <Modal
@@ -10,10 +10,10 @@ export default function ChartFullScreenModal(props) {
       width={"100%"}
       height={"100%"}
       bodyStyle={{padding:0}}
-      wrapClassName="BIChartModal"
+      wrapClassName={classes.BIChartModal}
       centered
     >
-      <div className="modalChartContainer">
+      <div className={classes.modalChartContainer}>
         {props.chart}
       </div>
     </Modal>

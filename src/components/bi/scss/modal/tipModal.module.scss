@@ -2,8 +2,8 @@
     font-family: Microsoft YaHei;
     font-style: normal;
     font-weight: normal;
-    .ant-modal {
-      .ant-modal-header {
+    :global(.ant-modal){
+      :global(.ant-modal-header){
         padding: 0px;
         border-bottom: none;
         .normalModalTitle {
@@ -21,7 +21,7 @@
         }
       }
     
-      .ant-modal-body {
+      :global(.ant-modal-body){
         padding: 0px;
         .normalModalContainer {
           width: 400px;
@@ -42,7 +42,7 @@
             justify-content: flex-end;
             position: relative;
             padding-right: 10px;
-            .ant-btn {
+            :global(.ant-btn){
               width: 70px;
               height: 30px;
               font-size: 14px;
@@ -65,7 +65,7 @@
             justify-content: flex-end;
             position: relative;
             padding-right: 10px;
-            .ant-btn {
+            :global(.ant-btn){
               width: 70px;
               height: 30px;
               font-size: 14px;

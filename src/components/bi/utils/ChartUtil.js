@@ -90,7 +90,7 @@ export const getChartAttrs = (bindDataArr) => {
   bindDataArr = bindDataArr || [];
   let dimensions = [], indexes = [];
   const groups = [];
-  const sort = { fieldId: "", value: "DESC" };
+  let sort = { fieldId: "", value: "DESC" };
   const conditions = [];
 
   bindDataArr.forEach((each) => {
@@ -103,6 +103,11 @@ export const getChartAttrs = (bindDataArr) => {
 
     const field = deepClone(each);
     const currentGroup = field.currentGroup;
+
+    if(field.sort) {
+      sort = field.sort;
+    }
+console.log("=======sort=========", field.sort, sort);
     delete field.bindType;
     delete field.currentGroup;
 
