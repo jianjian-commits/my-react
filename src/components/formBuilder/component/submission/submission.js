@@ -87,8 +87,8 @@ class Submission extends Component {
       showFormChildErr: false,
       isSubmitted: false,
       errorResponseMsg: {},
-      isShowApprovalBtn: true,
-      isSetCorrectFormChildData: false
+      isShowApprovalBtn: false,
+      isSetCorrectFormChildData: false,
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -220,18 +220,6 @@ class Submission extends Component {
             );
           }
         }
-
-        if (type === "PureDate") {
-          values[component.key] = moment(values[component.key]).format(
-            "YYYY-MM-DD"
-          );
-        }
-        // if (type === "PureTime") {
-        //   console.log(values[component.key])
-        //   values[component.key] = moment(values[component.key]).format(
-        //     "HH:mm:ss.SSS"
-        //   );
-        // }
       }
     });
     return values;
@@ -335,10 +323,10 @@ class Submission extends Component {
     const { formChildDataObj } = this.state;
     const { formChildkey, fieldKey, value, msg } = errorMsg;
     formChildDataObj[formChildkey].map(item => {
-      if (value === String(item[fieldKey].data)) {
-        item[fieldKey].hasErr = true;
-      }
-    });
+        if (value === String(item[fieldKey].data)) {
+          item[fieldKey].hasErr = true;
+        }
+      });
     this.setState({
       showFormChildErr: true
     });
@@ -441,7 +429,7 @@ class Submission extends Component {
         // 子表单id.组件id.组件的值
         // arr[0]表示子表单id,arr[1]表示组件id,arr[2]表示组件的值
         const arr = info.fieldName.split(".");
-        var value = info.fieldName.substring(arr[0].length + arr[1].length + 2);
+        var value = info.fieldName.substring(arr[0].length+arr[1].length + 2); 
         //  这里有问题最后的值不能用.分割
         const infoMsg = {
           formChildkey: arr[0],
@@ -487,33 +475,30 @@ class Submission extends Component {
     for (let key in values) {
       if (formChildDataObj.hasOwnProperty(key)) {
         values[key] = formChildDataObj[key];
-        if (Array.isArray(values[key])) {
-          values[key].forEach((data, index) => {
-            for (let k in data) {
-              let type = data[k].formType;
-              if (data[k].autoInput) {
-                if (type === "PureDate") {
-                  data[k].data = moment(date).format("YYYY-MM-DD");
-                }
-                if (type === "PureTime") {
-                  data[k].data = moment(date).format("HH:mm:ss.SSS");
-                }
-                if (type === "DateInput") {
-                  let dateString = moment(date).format();
-                  data[k].data = dateString.substring(
-                    dateString.indexOf("+"),
-                    -1
-                  );
-                }
-              } else {
-                const dateTypes = ["PureDate", "PureTime", "DateInput"];
-                if (dateTypes.includes(type) && data[k].data) {
+      }
+      if (Array.isArray(values[key])) {
+        values[key].forEach((data, index) => {
+          for (let k in data) {
+            let type = data[k].formType;
+            if (data[k].autoInput) {
+              if (type === "PureDate") {
+                data[k].data = moment(date).format("YYYY-MM-DD")
+              }
+              if (type === "PureTime") {
+                data[k].data = moment(date).format("HH:mm:ss.SSS")
+              }
+              if (type === "DateInput") {
+                let dateString = moment(date).format();
+                data[k].data = dateString.substring(dateString.indexOf("+"), -1);
+              }
+            }else{
+              const dateTypes = ["PureDate", "PureTime", "DateInput"];
+              if (dateTypes.includes(type) && data[k].data) {
                   data[k].data = coverTimeUtils.utcDate(data[k].data, type);
-                }
               }
             }
-          });
-        }
+          }
+        });
       }
     }
   };

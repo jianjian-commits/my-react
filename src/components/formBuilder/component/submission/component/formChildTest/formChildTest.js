@@ -33,8 +33,8 @@ import DropDown from "./components/dropDown";
 import MultiDropDown from "./components/multiDropDown";
 import DateInput from "./components/dateInput";
 import moment from "moment";
-import ID from "../../../../utils/UUID";
 import coverTimeUtils from '../../../../utils/coverTimeUtils'
+import ID from "../../../../utils/UUID";
 
 class FormChildTest extends React.Component {
   constructor(props) {
@@ -66,6 +66,10 @@ class FormChildTest extends React.Component {
           submission
         );
       });
+      if(submission.childFormDataId){
+         result["childFormDataId"] = submission.childFormDataId;
+      }
+     
       return result;
     });
     return newSubmitDataArray;
@@ -686,7 +690,6 @@ class FormChildTest extends React.Component {
   };
 
   renderFormChild(formChildObj, rowIndex, submitDataArray) {
-    const { isSetCorrectFormChildData } = this.props;
     let resultArray = [];
     for (let key in formChildObj) {
       let item = formChildObj[key];

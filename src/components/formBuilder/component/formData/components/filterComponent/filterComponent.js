@@ -14,6 +14,7 @@ import {
 } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import moment from 'moment';
+import coverTimeUtils from "../../../../utils/coverTimeUtils"
 import {
   EQUALS,
   NOT_EQUALS,
@@ -705,17 +706,9 @@ export default class FilterComponent extends Component {
 
   _handleDateTypeData(filterArray) {
     return filterArray.map(filter=>{
-      if(filter.field.type === "DateInput" && filter.costomValue.indexOf("Z") !== -1){
-        let date = new Date(filter.costomValue);
-        let currentTimeZoneOffsetInHours = new Date().getTimezoneOffset()/60;
-        date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-        filter.costomValue = new Date(date).toJSON().replace("Z","");
-        return filter
-      }
-      if(filter.field.type === "PureTime" && filter.costomValue.indexOf("Z") !== -1){
-        let date = new Date(filter.costomValue);
-        const startIndex = filter.costomValue.indexOf("T")+1;
-        filter.costomValue = filter.costomValue.substring(startIndex, filter.costomValue.length-1)
+      const dateTypes = ["DateInput", "PureTime", "PureDate"]
+      if(dateTypes.includes(filter.field.type)){
+        filter.costomValue = coverTimeUtils.utcDate(filter.costomValue, filter.field.type)
         return filter
       }
       return filter;

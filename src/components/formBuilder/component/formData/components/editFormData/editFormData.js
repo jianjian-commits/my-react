@@ -450,7 +450,7 @@ class EditFormData extends Component {
         }
         this.setState({ isSubmitted: true,errorResponseMsg:{} });
         this.props
-          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.state.oldExtraProp)
+          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.state.oldExtraProp, this.props.extraProp)
           .then(response => {
            isMobile
           ? Toast.success("提交成功!")
