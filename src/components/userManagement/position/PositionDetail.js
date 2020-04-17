@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Button, Input, Radio, Table, message, Modal } from "antd";
+import { Button, Input, Radio, Table, message, Modal, Popconfirm } from "antd";
+import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
 import proClass from "../../profileManagement/profile.module.scss";
@@ -7,7 +8,6 @@ import { Title } from "../../shared";
 import request from "../../../utils/request";
 import { catchError } from "../../../utils";
 import RelateWidage from "./RelateWidage";
-
 
 export const BaseInfo = ({
   positionInfo,
@@ -113,7 +113,8 @@ const RelateModal = ({
   visible,
   onOk,
   onCancel,
-  users,
+  positionId,
+  allUsers,
   selectedKeys,
   updateSelectedKeys
 }) => {
@@ -132,7 +133,8 @@ const RelateModal = ({
       closable={false}
     >
       <RelateWidage
-        users={users}
+        positionId={positionId}
+        allUsers={allUsers}
         selectedKeys={selectedKeys}
         updateSelectedKeys={updateSelectedKeys}
       />
@@ -140,14 +142,54 @@ const RelateModal = ({
   );
 };
 
+
+
 const UserRelation = ({
   open,
   openHandle,
   onOK,
+  onCancel,
   users,
+  positionId,
+  allUsers,
   selectedKeys,
-  updateSelectedKeys
+  updateSelectedKeys,
+  removeUser
 }) => {
+  const columns = [
+    {
+      title: "姓名",
+      dataIndex: "name",
+      key: "name"
+    },
+    {
+      title: "邮箱",
+      dataIndex: "email",
+      key: "email"
+    },
+    {
+      title: "加入时间",
+      dataIndex: "entryDate",
+      key: "entryDate"
+    },
+    {
+      title: "操作",
+      key: "action",
+      render: (text, record) => (
+        <div>
+          <Popconfirm
+            title="把该成员从公司中踢出?"
+            onConfirm={() => removeUser(record.id)}
+            okText="确认"
+            cancelText="取消"
+            placement="top"
+          >
+            <Button type="link">踢出</Button>
+          </Popconfirm>
+        </div>
+      )
+    }
+  ];
   return (
     <div>
       <div style={userSectionStyle}>
@@ -165,16 +207,17 @@ const UserRelation = ({
         </div>
       </div>
       <Table
-        columns={[]}
+        columns={columns}
         loading={false}
-        dataSource={[]}
-        rowKey="roleId"
+        dataSource={users}
+        rowKey="id"
       ></Table>
       <RelateModal
         visible={open}
-        users={users}
+        positionId={positionId}
+        allUsers={allUsers}
         onOk={onOK}
-        onCancel={() => openHandle(false)}
+        onCancel={onCancel}
         updateSelectedKeys={updateSelectedKeys}
         selectedKeys={selectedKeys}
       />
@@ -245,7 +288,11 @@ class PositionDetail extends Component {
       const res = await request(`/position/${this.props.position.id}/user`);
       if (res && res.status === "SUCCESS") {
         this.setState({
-          users: res.data || []
+          users: (res.data || []).map(e => ({
+            ...e,
+            entryDate: moment(e.entryDate).format("YYYY/MM/DD H:mm")
+          })),
+          modalSelectedKeys: (res.data || []).map(e => e.id)
         });
       } else {
         message.error(res.msg || "获取职位用户列表失败");
@@ -280,14 +327,14 @@ class PositionDetail extends Component {
     try {
       const res = await request(`/position/${this.props.position.id}/user`, {
         method: "PUT",
-        data: {
-          userIds: modalSelectedKeys
-        }
+        data: modalSelectedKeys
       });
       if (res && res.status === "SUCCESS") {
-        console.log(res);
-        // this.props.returnTree();
         message.success("保存成功");
+        this.setState({ modalOpen: false });
+        this.fetchRelateUsers();
+        this.fetchAllUsers();
+
       } else {
         message.error(res.msg || "保存失败");
       }
@@ -295,6 +342,10 @@ class PositionDetail extends Component {
       catchError(e);
     }
   };
+  modalCancelHandle = () => {
+    this.setState({ modalOpen: false });
+    this.fetchRelateUsers();
+  }
   fetchAllUsers = async () => {
     try {
       const res = await request("/sysUser/currentCompany/all", {
@@ -302,16 +353,10 @@ class PositionDetail extends Component {
         data: {
           page: 0,
           size: 1000000
-          // sorts: [
-          //   {
-          //     order: "ASC",
-          //     property: "name"
-          //   }
-          // ]
         }
       });
       if (res && res.status === "SUCCESS") {
-        this.setState({ users: res.data.datas });
+        this.setState({ allUsers: res.data.datas });
       } else {
         message.error(res.msg || "获取公司数据出错");
       }
@@ -319,6 +364,24 @@ class PositionDetail extends Component {
       catchError(e);
     }
   };
+  removeUser = async userId => {
+    const { id } = this.state.positionInfo;
+    try {
+      const res = await request(`/position/${id}/user/${userId}`, {
+        method: "DELETE"
+      });
+      if (res && res.status === "SUCCESS") {
+        message.success("踢出成功");
+        this.fetchRelateUsers();
+        this.fetchAllUsers();
+      } else {
+        message.error(res.msg || "踢出失败");
+      }
+    } catch (e) {
+      catchError(e);
+    }
+
+  }
   componentDidMount() {
     this.fetchBaseInfo();
     this.fetchRelateUsers();
@@ -331,6 +394,7 @@ class PositionDetail extends Component {
       editing,
       modalOpen,
       users,
+      allUsers,
       modalSelectedKeys
     } = this.state;
     const navigationList = [
@@ -358,10 +422,14 @@ class PositionDetail extends Component {
         <UserRelation
           open={modalOpen}
           users={users}
+          positionId={position.id}
+          allUsers={allUsers}
           openHandle={this.updateTargetState("modalOpen")}
           onOK={this.modalConfirmHandle}
+          onCancel={this.modalCancelHandle}
           selectedKeys={modalSelectedKeys}
           updateSelectedKeys={this.updateTargetState("modalSelectedKeys")}
+          removeUser={this.removeUser}
         />
       </>
     );
