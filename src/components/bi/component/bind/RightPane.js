@@ -82,7 +82,7 @@ const RightPane = (props) => {
         {chartGroup.map(chart =>
         <Tooltip key={chart.type}  title={chart.intro}>
           <div
-            className={chartAvailableList.include(chart.type)? (classes.IconBox, {activeIcon: activeIcon==chart.type}) : classes.unavailable }
+            className={chartAvailableList.includes(chart.type)? classNames(classes.IconBox, {activeIcon: activeIcon==chart.type}) : classes.unavailable }
             onClick={()=>{handleSelectIcon(chart.type)}}
           >
             <img src={"/image/davinci/"+chart.type+".svg"}/>
