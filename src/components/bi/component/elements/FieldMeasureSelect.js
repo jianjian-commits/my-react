@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Icon, Popover, Input, Button } from "antd";
-import { GroupType ,SortTypeArr} from "./Constant";
+import { GroupType, SortTypeArr } from "./Constant";
 import classes from "../../scss/bind/optionSelect.module.scss";
 const operationArr = [
   { ...GroupType.SUM },
   { ...GroupType.COUNT },
   { ...GroupType.AVERAGE },
   { ...GroupType.MAX },
-  { ...GroupType.MIN }
+  { ...GroupType.MIN },
 ];
 
-export const FieldSecondMenus = props => {
+export const FieldSecondMenus = (props) => {
   //二级菜单组件{菜单列表，选中索引，方法回调}
-  const {list,selectIndex,click} = props;
+  const { list, selectIndex, click } = props;
   return (
     <Popover
       placement="rightTop"
@@ -46,14 +46,15 @@ export const FieldSecondMenus = props => {
 };
 
 export default function FieldMeasureSelect(props) {
-  const [selectIndex, setSelectIndex] = useState(0);
-  const [sortTypeIndex,setSortTypeIndex] = useState(0);
+  const [selectIndex, setSelectIndex] = useState(props.item.selectIndex);
+  const [sortTypeIndex, setSortTypeIndex] = useState(0);
   const [popoverVisible, setPopoverVisible] = useState(false);
-  const [nameInputVisible,setNameInputVisible] = useState(false);
-  const [deleteBtnVisible,setDeleteBtnVisible] = useState(false);
+  const [nameInputVisible, setNameInputVisible] = useState(false);
+  const [deleteBtnVisible, setDeleteBtnVisible] = useState(false);
+  console.log(props);
   const dropDownBtn = useRef(null);
   useEffect(() => {
-    const dropDownEvent = event => {
+    const dropDownEvent = (event) => {
       if (popoverVisible) {
         setPopoverVisible(false);
       }
@@ -63,6 +64,16 @@ export default function FieldMeasureSelect(props) {
       document.removeEventListener("click", dropDownEvent);
     };
   }, [popoverVisible]);
+
+  useEffect(() => {
+    if (props.item.option.sort) {
+      SortTypeArr.map((sortType,i) => {
+        if(props.item.option.sort.value == sortType.value){
+          setSortTypeIndex(i);
+        }
+      })
+    }
+  }, [props]);
 
   const handleDeleteTarget = () => {
     props.item.removeField(props.item);
@@ -81,41 +92,43 @@ export default function FieldMeasureSelect(props) {
       name: "修改显示名",
       click: () => {
         setNameInputVisible(true);
-      }
-    },{
+      },
+    },
+    {
       name: "数据格式",
-      click: () => {}
-    },{
+      click: () => {},
+    },
+    {
       name: "删除字段",
       click: () => {
         handleDeleteTarget();
-      }
-    }
+      },
+    },
   ];
 
-  const secondMenuSumFunc = index => {
+  const secondMenuSumFunc = (index) => {
     setSelectIndex(index);
     props.item.changeGroup(operationArr[index], props.item.fieldId);
     setPopoverVisible(false);
-  }
+  };
 
   //二级菜单字段排序回调
-  const secondMenuSortFunc = index => {
+  const secondMenuSortFunc = (index) => {
     setSortTypeIndex(index);
     props.item.changeSortType(SortTypeArr[index], props.item.fieldId);
     setPopoverVisible(false);
-  }
+  };
 
   return (
-    <div 
+    <div
       className={classes.meaContainer}
-      onMouseEnter={handlMouseEnter} 
+      onMouseEnter={handlMouseEnter}
       onMouseLeave={handlMouseLeave}
     >
       <div
         className={classes.dropDownBtn}
         ref={dropDownBtn}
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           setPopoverVisible(!popoverVisible);
         }}
@@ -124,16 +137,34 @@ export default function FieldMeasureSelect(props) {
         <span className={classes.dropDownBtnSpan}>
           {`${props.item.label}(${operationArr[selectIndex].name})`}
         </span>
-        {deleteBtnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
+        {deleteBtnVisible && (
+          <Icon
+            type="close-circle"
+            onClick={handleDeleteTarget}
+            theme="filled"
+          />
+        )}
       </div>
       {nameInputVisible && (
         <div className={classes.nameInputContainer}>
           <div className={classes.inputBox}>
-            <Input/>
+            <Input />
           </div>
           <div className={classes.btnBox}>
-            <Button onClick={()=>{setNameInputVisible(false)}}>取消</Button>
-            <Button onClick={()=>{setNameInputVisible(false)}}>确定</Button>
+            <Button
+              onClick={() => {
+                setNameInputVisible(false);
+              }}
+            >
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                setNameInputVisible(false);
+              }}
+            >
+              确定
+            </Button>
           </div>
         </div>
       )}
@@ -145,14 +176,15 @@ export default function FieldMeasureSelect(props) {
             list={SortTypeArr}
             label={"排序方式"}
           />
-          {props.item.type == "NUMBER" && 
+          {props.item.type == "NUMBER" && (
             <FieldSecondMenus
-            selectIndex={selectIndex}
-            click={secondMenuSumFunc}
-            list={operationArr}
-            label={"汇总方式"}
-          />}
-          {operationList.map(operation => (
+              selectIndex={selectIndex}
+              click={secondMenuSumFunc}
+              list={operationArr}
+              label={"汇总方式"}
+            />
+          )}
+          {operationList.map((operation) => (
             <div
               className={classes.dropDownItem}
               onClick={() => {

@@ -10,7 +10,6 @@ export default function FieldDimensionSelect(props) {
   //字段排序和字段汇总方式
   const [sortTypeIndex,setSortTypeIndex] = useState(0);
   const [sumTypeIndex,setSumTypeIndex] = useState(4);
-
   const dropDownBtn = useRef(null);
   useEffect(() => {
     const dropDownEvent = event => {
@@ -23,6 +22,23 @@ export default function FieldDimensionSelect(props) {
       document.removeEventListener("click", dropDownEvent);
     };
   }, [popoverVisible]);
+
+  useEffect(() => {
+    if (props.item.option.sort) {
+      SortTypeArr.map((sortType,i) => {
+        if(props.item.option.sort.value == sortType.value){
+          setSortTypeIndex(i);
+        }
+      })
+    }
+    if(props.item.option.currentGroup.value){
+      TimeSumTypeArr.map((sumType,j) => {
+        if(props.item.option.currentGroup.value == sumType.value){
+          setSumTypeIndex(j);
+        }
+      })
+    }
+  }, [props]);
 
   //二级菜单根据时间汇总回调
   const secondMenuSumFunc = index => {
@@ -109,7 +125,7 @@ export default function FieldDimensionSelect(props) {
             label={"排序方式"}
           />
           {
-            props.item.type=="DATATIME" &&
+            props.item.type=="DATETIME" &&
             <FieldSecondMenus
             selectIndex={sumTypeIndex}
             click={secondMenuSumFunc}

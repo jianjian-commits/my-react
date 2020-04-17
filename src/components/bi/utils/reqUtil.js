@@ -13,11 +13,11 @@ export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypePr
         conditions,
         dimensions,
         formFields: [
-          {
-            id: "string",
-            label: "string",
-            type: "string"
-          }
+          // {
+          //   id: "string",
+          //   label: "string",
+          //   type: "string"
+          // }
         ],
         indexes,
         formId,

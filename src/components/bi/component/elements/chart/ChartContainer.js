@@ -54,7 +54,10 @@ const ChartContainer = props => {
               if(dimensions && dimensions.length > 0) {
                 const dimArr = dimensions.map((each, idx) => {
                   let field = each.field;
-                  field["option"] = {currentGroup: each.currentGroup}
+                  const currentGroup = deepClone(each.currentGroup);
+                  const groups = deepClone(each.groups);
+                  const sort = deepClone(each.sort);  
+                  field["option"] = {currentGroup,groups,sort};
                   field["bindType"] = Types.DIMENSION;
                   field["idx"] = idx;
                   return field;
@@ -66,8 +69,10 @@ const ChartContainer = props => {
               if(indexes && indexes.length > 0) {
                 const meaArr = indexes.map((each, idx) => {
                   const field = deepClone(each.field);
-                  const currentGroup = deepClone(each.currentGroup);
-                  field["option"] = {currentGroup};
+                  const currentGroup = deepClone(each.currentGroup);  
+                  const groups = deepClone(each.groups);
+                  const sort = deepClone(each.sort);  
+                  field["option"] = {currentGroup,groups,sort};
                   field["bindType"] = Types.MEASURE;
                   field["idx"] = bindDataArr.length + idx;
                   field["ddddd"] = {aaa: "ddddd"};

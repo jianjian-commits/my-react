@@ -7,12 +7,12 @@
         border-radius: 0px;
         :global(.ant-modal-body) {
           padding: 0px;
-          :global(.modalChartContainer){
+          .modalChartContainer{
             width: 100%;
             height: 100%;
             background-color: white;
             position: relative;
-            :global(.chart-container){
+            :global(.chartContainer){
               margin-top: 0px;
               height: 700px;
             }

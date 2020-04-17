@@ -89,7 +89,6 @@ export const getChartAttrs = (bindDataArr) => {
   const groups = [];
   let sort = { fieldId: "", value: "DEFAULT" };
   const conditions = [];
-
   bindDataArr.forEach((each) => {
     const field = Object.assign({}, each);
     const option = field.option;

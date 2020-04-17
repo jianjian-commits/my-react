@@ -269,6 +269,11 @@ class BindPane extends PureComponent {
           "fieldId": fieldId,
           ...sortType
         }
+      }else{
+        each.option.sort = {
+          "fieldId": fieldId,
+          value:"DEFAULT"
+        }
       }
       return each;
     })
