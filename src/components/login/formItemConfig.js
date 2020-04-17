@@ -620,7 +620,7 @@ export const loginForgetPasswordParameter = [
     help: "forgetPassword",
     key: "password",
     value: null,
-    label: "密码",
+    label: "新密码",
     hasFeedback: true,
     colon: false,
     itemName: "password",
