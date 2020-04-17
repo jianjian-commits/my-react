@@ -11,6 +11,7 @@ import {
   getAllForms
 } from "./redux/utils/operateSubmissionUtils";
 import { getSubmissionData } from "../formData/redux/utils/getDataUtils";
+import { getApproveCount } from "../homePage/redux/utils/operateFormUtils";
 
 import { connect } from "react-redux";
 import HeaderBar from "../base/NavBar";
@@ -601,6 +602,7 @@ class Submission extends Component {
                   }
                   this.props.startApproval(this.state.formId, this.props.appid, appeoveData, ()=>{
                     setTimeout(() => {
+                      this.props.getApproveCount(this.props.appid);
                       let skipToSubmissionDataFlag = true;
                       this.props.actionFun(skipToSubmissionDataFlag);
                     }, 1000);
@@ -1450,6 +1452,7 @@ export default connect(
     getFormComponent,
     getFormComponentByPath,
     getApprovalDefinition,
-    startApproval
+    startApproval,
+    getApproveCount
   }
 )(withRouter(mobileAdoptor.data(SubmissionForm)));
