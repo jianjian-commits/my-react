@@ -142,8 +142,6 @@ const RelateModal = ({
   );
 };
 
-
-
 const UserRelation = ({
   open,
   openHandle,
@@ -211,6 +209,7 @@ const UserRelation = ({
         loading={false}
         dataSource={users}
         rowKey="id"
+        pagination={false}
       ></Table>
       <RelateModal
         visible={open}
@@ -334,7 +333,6 @@ class PositionDetail extends Component {
         this.setState({ modalOpen: false });
         this.fetchRelateUsers();
         this.fetchAllUsers();
-
       } else {
         message.error(res.msg || "保存失败");
       }
@@ -343,9 +341,12 @@ class PositionDetail extends Component {
     }
   };
   modalCancelHandle = () => {
-    this.setState({ modalOpen: false });
-    this.fetchRelateUsers();
-  }
+    this.setState(state => ({
+      ...state,
+      modalOpen: false,
+      modalSelectedKeys: state.users.map(e => e.id)
+    }));
+  };
   fetchAllUsers = async () => {
     try {
       const res = await request("/sysUser/currentCompany/all", {
@@ -364,7 +365,7 @@ class PositionDetail extends Component {
       catchError(e);
     }
   };
-  removeUser = async userId => {
+  removeUserHandle = async userId => {
     const { id } = this.state.positionInfo;
     try {
       const res = await request(`/position/${id}/user/${userId}`, {
@@ -380,8 +381,7 @@ class PositionDetail extends Component {
     } catch (e) {
       catchError(e);
     }
-
-  }
+  };
   componentDidMount() {
     this.fetchBaseInfo();
     this.fetchRelateUsers();
@@ -429,7 +429,7 @@ class PositionDetail extends Component {
           onCancel={this.modalCancelHandle}
           selectedKeys={modalSelectedKeys}
           updateSelectedKeys={this.updateTargetState("modalSelectedKeys")}
-          removeUser={this.removeUser}
+          removeUser={this.removeUserHandle}
         />
       </>
     );
