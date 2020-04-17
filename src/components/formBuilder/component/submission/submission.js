@@ -226,17 +226,12 @@ class Submission extends Component {
             "YYYY-MM-DD"
           );
         }
-        if (type === "PureTime") {
-          values[component.key] = moment(values[component.key]).format(
-            "HH:mm:ss.SSS"
-          );
-        }
-      }
-      if (type === "FormChildTest") {
-        // console.log(component.key, values);
-        // values[component.key].forEach(item => {
-        //   this._setDateTimeVaule(item, component.values);
-        // })
+        // if (type === "PureTime") {
+        //   console.log(values[component.key])
+        //   values[component.key] = moment(values[component.key]).format(
+        //     "HH:mm:ss.SSS"
+        //   );
+        // }
       }
     });
     return values;

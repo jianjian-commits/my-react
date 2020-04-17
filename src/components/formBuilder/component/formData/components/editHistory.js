@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-10 15:15:00
  * @LastEditors: komons
- * @LastEditTime: 2020-04-16 14:36:40
+ * @LastEditTime: 2020-04-17 09:45:20
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\editHistory.js
  */
@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import axios from "axios";
 import { message } from "antd";
-import moment from "moment";
 import editHistoryUtils from "./utils/filterHistoryUtils";
 import config from "../../../config/config";
 
@@ -50,13 +49,26 @@ const EditHistory = ({ submissionId }) => {
       let res = arr.map((item, index) => {
         if (item.type === "FileUpload" || item.type === "ImageUpload") {
           let res = editHistoryUtils.FileUpload(item);
-          return res.map((r, i) =>{
-            if(i === 0) {
-              return <p key={i}>{r.content}</p>
+          return res.map((r, i) => {
+            if (i === 0) {
+              return <p key={i}>{r.content}</p>;
             } else {
-              return <p key={i} className={"file-list file-status_"+r.status}> {r.content}</p>
+              return (
+                <p key={i} className={"file-list file-status_" + r.status}>
+                  {" "}
+                  {r.content}
+                </p>
+              );
             }
-          } );
+          });
+        } else if (["DateInput", "PureDate", "PureTime"].includes(item.type)) {
+          let [beforeValue, afterValue] = editHistoryUtils["DateInput"](item);
+          console.log(beforeValue, afterValue)
+          return (
+            <p key={index}>
+              修改{item.label}的值{beforeValue}为{afterValue}
+            </p>
+          );
         } else {
           return (
             <p key={index}>
