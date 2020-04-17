@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-10 15:15:00
  * @LastEditors: komons
- * @LastEditTime: 2020-04-17 09:45:20
+ * @LastEditTime: 2020-04-17 11:18:07
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\editHistory.js
  */
@@ -63,12 +63,14 @@ const EditHistory = ({ submissionId }) => {
           });
         } else if (["DateInput", "PureDate", "PureTime"].includes(item.type)) {
           let [beforeValue, afterValue] = editHistoryUtils["DateInput"](item);
-          console.log(beforeValue, afterValue)
+          console.log(beforeValue, afterValue);
           return (
             <p key={index}>
               修改{item.label}的值{beforeValue}为{afterValue}
             </p>
           );
+        } else if (item.type === "FormChildTest") {
+          return "修改子表单";
         } else {
           return (
             <p key={index}>
@@ -97,7 +99,8 @@ const EditHistory = ({ submissionId }) => {
       }
       setHistoryData(
         res.data.map(item => ({
-          editor: item.extraProp.updateUser,
+          editor:
+            item.extraProp.updateUser && item.extraProp.updateUser["name"],
           date: new Date(item.updateTime).toLocaleString(),
           content: filterHistryDom(item.changeFieldUpdateRecords),
           key: item.updateTime
