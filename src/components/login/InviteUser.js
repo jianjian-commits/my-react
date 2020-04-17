@@ -180,7 +180,7 @@ export default connect()(function InviteUser({ match, history }) {
               </>
             ) : (
               <>
-                <div className={registerStyles.result}>
+                <div className={registerStyles.results}>
                   <div>
                     <span>
                       您的账号-<BlueFont>{currentUserDetail.name}</BlueFont>

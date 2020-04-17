@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-16 10:56:48
  * @LastEditors: komons
- * @LastEditTime: 2020-04-17 09:48:23
+ * @LastEditTime: 2020-04-17 12:49:33
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\utils\filterHistoryUtils.js
  */
@@ -15,13 +15,13 @@ const filterHistory = {
       afterValue = DateUtils.localDate(record.afterValue, type);
       switch(type) {
           case "DateInput": {
-              return [beforeValue.format("YYYY-MM-DD HH:mm:ss"), afterValue.format("YYYY-MM-DD HH:mm:ss")]
+              return [beforeValue ? beforeValue.format("YYYY-MM-DD HH:mm:ss") : "", afterValue ? afterValue.format("YYYY-MM-DD HH:mm:ss") : ""]
           }
           case "PureDate": {
-            return [beforeValue.format("YYYY-MM-DD"), afterValue.format("YYYY-MM-DD")]
+            return [beforeValue ? beforeValue.format("YYYY-MM-DD") : "", afterValue ? afterValue.format("YYYY-MM-DD") : ""]
           }
           case "PureTime": {
-            return [beforeValue.format("HH:mm:ss"), afterValue.format("HH:mm:ss")]
+            return [beforeValue ? beforeValue.format("HH:mm:ss") : "", afterValue ? afterValue.format("HH:mm:ss") : ""]
           }
           default: return ["",""];
       }

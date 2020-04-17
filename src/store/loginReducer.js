@@ -2,7 +2,7 @@ import { message } from "antd";
 import request from "../utils/request";
 import { getAppList, clearAppList } from "./appReducer";
 // import { history } from "./index";
-import { catchError } from "../utils";
+import { catchError, ScheduleCreate} from "../utils";
 
 export const initialState = {
   isLoading: false,
@@ -36,6 +36,7 @@ export const FETCH_CODE_END = "Login/FETCH_CODE_END";
 export const ALLOW_SEND_CODE = "Login/ALLOW_SEND_CODE";
 export const RESET_ALLOW_SEND_CODE = "Login/RESET_ALLOW_SEND_CODE";
 export const RESET_SEND_CODE = "Login/RESET_SEND_CODE";
+export const SCHEDULE = "Login/SCHEDULE";
 
 export const startSpinning = () => ({
   type: START_SPINNING
@@ -107,15 +108,14 @@ export const sendCode = (mobilePhone, codeType) => async dispatch => {
       }
     });
     if (res && res.status === "SUCCESS") {
-      let num = 59;
-      const int = setInterval(() => {
-        dispatch(fetchCoding(`重新发送（${num}s）`));
-        num = num - 1;
-      }, 1000);
-      setTimeout(() => {
-        clearInterval(int);
-        dispatch(fetchCodeEnd());
-      }, 60000);
+      const timeout = new ScheduleCreate({
+        dispatch: dispatch,
+        fetchCoding: fetchCoding,
+        fetchCodeEnd: fetchCodeEnd
+      });
+      dispatch({ type: SCHEDULE, payload: timeout });
+      timeout.interval(1000);
+      timeout.clear(60000);
     } else {
       message.error(res.msg || "验证码发送失败，请重试");
     }
@@ -388,6 +388,11 @@ export default function loginReducer(state = initialState, { type, payload }) {
         ...state,
         allowSendCode: false
       };
+    case SCHEDULE:
+      return {
+        ...state,
+        timeout: payload
+      };
     default:
       return state;
   }
@@ -399,6 +404,9 @@ export const loginMiddleware = store => next => action => {
   }
   if (action.type === SIGN_OUT_SUCCESS) {
     store.dispatch(clearAppList());
+  }
+  if (action.type === LOGIN_SUCCESS) {
+    store.dispatch(initAllDetail())
   }
   next(action);
 };
