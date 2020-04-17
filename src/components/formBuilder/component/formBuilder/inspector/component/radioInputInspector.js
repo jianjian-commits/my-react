@@ -18,6 +18,7 @@ class RadioInputInspector extends React.Component {
       tempContent: "",
     };
     this.addChooseItem = this.addChooseItem.bind(this);
+    this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
   }
 
@@ -73,12 +74,19 @@ class RadioInputInspector extends React.Component {
   }
 
   addChooseItem() {
+    let extraObj = null
     const newItem = {
       label: `选项`,
       value: `选项`,
       shortcut: ""
     };
-    const newValuesList = [...this.props.element.values, newItem];
+    this.props.element.values.forEach((item)=>{
+      if(item.isExtra){
+        extraObj = item;
+      }
+    })
+    const newFilterValues = this.props.element.values.filter((item)=> !item.isExtra );
+    const newValuesList = extraObj === null ? [...newFilterValues, newItem]:[...newFilterValues, newItem, extraObj];
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
@@ -88,6 +96,29 @@ class RadioInputInspector extends React.Component {
       );
     } else {
       this.props.setItemAttr(this.props.element, "values", newValuesList);
+    }
+  }
+  addExtraChooseItem() {
+    if(this.props.element.values.some(item => item.isExtra)){
+
+    }else{
+      const newItem = {
+        label: `其它`,
+        value: `其它`,
+        isExtra:true,
+        shortcut: ""
+      };
+      const newValuesList = [...this.props.element.values, newItem];
+      if (this.props.elementParent) {
+        this.props.setFormChildItemAttr(
+          this.props.elementParent,
+          "values",
+          newValuesList,
+          this.props.element
+        );
+      } else {
+        this.props.setItemAttr(this.props.element, "values", newValuesList);
+      }
     }
   }
 
@@ -267,31 +298,46 @@ class RadioInputInspector extends React.Component {
           <div className="chooseitems" key={"chooseRadioItem"}>
             {values.map((item, index) => {
               return (
-                <div className="ChooseItemWarp" key={index}>
-                  <img src="/image/dragIcon.png" />
+                <div key={index}>
+                  {item.isExtra ?
                   <Input
-                    key={`chooseItem${index}`}
-                    type="text"
-                    onChange={ev => {
-                      this.changeChooseItem(item, ev);
+                  key={`chooseItem${index}`}
+                  type="text"
+                  value="其他"
+                  placeholder="其他"
+                  autoComplete="off"
+                  disabled={true}
+                />
+                  :
+                <div className="ChooseItemWarp" key={index}>
+                <img src="/image/dragIcon.png" />
+                <Input
+                  key={`chooseItem${index}`}
+                  type="text"
+                  onChange={ev => {
+                    this.changeChooseItem(item, ev);
+                  }}
+                  value={item.value}
+                  placeholder="选项"
+                  autoComplete="off"
+                />
+                <Tooltip title="删除">
+                  <img
+                    src="/image/deleteIcon.png"
+                    onClick={() => {
+                      this.deleteChooseItem(item, index);
                     }}
-                    value={item.value}
-                    placeholder="选项"
-                    autoComplete="off"
                   />
-                  <Tooltip title="删除">
-                    <img
-                      src="/image/deleteIcon.png"
-                      onClick={() => {
-                        this.deleteChooseItem(item, index);
-                      }}
-                    />
-                  </Tooltip>
+                </Tooltip>
+                </div>}
                 </div>
               );
             })}
             <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
               增加选项
+            </Button>
+            <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
+              增加其他选项
             </Button>
             <Button onClick={this.showModal}>批量编辑</Button>
             <Modal
