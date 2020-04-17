@@ -485,7 +485,7 @@ const submit = ({
             <Link
               to="/forgetPassword"
               onClick={() => {
-                timeout.clear(0);
+                timeout && timeout.int && timeout.clear(0);
                 resetAllowSendCodeState();
                 form.resetFields();
               }}
@@ -495,7 +495,7 @@ const submit = ({
             &nbsp;&nbsp;|&nbsp;&nbsp;
             <span
               onClick={() => {
-                timeout.clear(0);
+                timeout && timeout.int && timeout.clear(0);
                 resetAllowSendCodeState();
                 form.resetFields();
                 setActiveKey("register");
@@ -511,7 +511,7 @@ const submit = ({
             <span
               style={{ color: "#096dd9", cursor: "pointer" }}
               onClick={() => {
-                timeout.clear(0);
+                timeout && timeout.int && timeout.clear(0);
                 resetAllowSendCodeState();
                 form.resetFields();
                 setActiveKey("signin");
@@ -526,7 +526,7 @@ const submit = ({
             <Link
               to="/login"
               onClick={() => {
-                timeout.clear(0);
+                timeout && timeout.int && timeout.clear(0);
                 resetAllowSendCodeState();
                 form.resetFields();
               }}
@@ -620,7 +620,7 @@ export const loginForgetPasswordParameter = [
     help: "forgetPassword",
     key: "password",
     value: null,
-    label: "密码",
+    label: "新密码",
     hasFeedback: true,
     colon: false,
     itemName: "password",
