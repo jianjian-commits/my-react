@@ -48,6 +48,7 @@ const AppSetting = props => {
   const [user, setUser] = React.useState({});
   // isDeleteOne 用于判断是否删除表单
   const [ isDeleteOne, setIsDeleteOne ] = React.useState(false)
+  const [ isChangeSequence, setIsChangeSequence ] = React.useState(false)
 
   let { groups, list, searchList } = mockForms;
   let { dbGroup,dbList } = dashboards;
@@ -133,6 +134,8 @@ const AppSetting = props => {
   };
 
   // const addFolder = () => alert("没用的");
+
+  // 拖动进入文件
   const dragFileToFolder = (formId, groupId) => {
     alert(formId + " 放进 " + groupId);
   };
@@ -252,13 +255,18 @@ const AppSetting = props => {
               groups={dbGroup}
               list={dbList}
               onDrop={dragFileToFolder}
+              isChangeSequence = { ( params ) => setIsChangeSequence( params )}
             />
-            <DropableWrapper
-              className={classes.empty}
-              onDrop={e =>
-                dragFileToFolder(e.dataTransfer.getData("formId"), null)
+            {/* <DropableWrapper
+              className = {classes.empty}
+              draggable = { true }
+
+              onDrop = {
+                
+                 e => e.dataTransfer.setData("formId", formId)
+                
               }
-            ></DropableWrapper>
+            ></DropableWrapper> */}
           </div>
           {/* <div className={classes.addFolder} 
           // ? 禁用点击新建文件夹功能,功能暂未开发 onClick={addFolder}
