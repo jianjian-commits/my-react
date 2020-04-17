@@ -13,7 +13,6 @@ import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
 import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType } from '../../../redux/action';
 import {message} from "antd";
-import { deepClone } from '../../../utils/Util';
 import ChartInfo from '../data/ChartInfo';
 import classes from '../../../scss/elements/chart.module.scss';
 
