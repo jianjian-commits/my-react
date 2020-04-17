@@ -15,13 +15,12 @@ import { getChartAvailableList } from '../../utils/ChartUtil';
 const RightPane = (props) => {
   const { changeBind, changeChartData, chartInfo, bindDataArr, elemName, changeChartInfo, dataSource, setElemType, elemType, chartAvailableList, changeChartAvailable } = props;
   const { elementId } = useParams();
-  let [activeIcon, setActiveIcon] = useState(elemType || "HISTOGRAM");
+  let [activeIcon, setActiveIcon] = useState(elemType || ChartType.HISTOGRAM);
   let [titleXAxis, setTitleXAxis] = useState(chartInfo.titleXAxis);
   let [titleYAxis, setTitleYAxis] = useState(chartInfo.titleYAxis);
   let [showLegend, setShowLegend] = useState(chartInfo.showLegend);
   let [showDataTag, setShowDataTag] = useState(chartInfo.showDataTag);
-  let showRightPaneToolsTitle = true;
-  let showRightPaneTools = true;
+  let showRPTTitle = true;
 
   let ChartAvailableList = getChartAvailableList(bindDataArr);
   changeChartAvailable(ChartAvailableList);
@@ -73,15 +72,7 @@ const RightPane = (props) => {
     changeChartInfo(chartInfo || new ChartInfo());
   }
 
-  if(elemType == 'AREA_CHART'){
-    showRightPaneToolsTitle = false;
-  }else{
-    showRightPaneToolsTitle = true;
-  }
-
-  if(elemType == 'INDEX_DIAGRAM'){
-    showRightPaneTools = false;
-  }
+  showRPTTitle = elemType != ChartType.AREA_CHART;
 
   return (
     <div className={classes.rightPane}>
@@ -91,7 +82,7 @@ const RightPane = (props) => {
         {chartGroup.map(chart =>
         <Tooltip key={chart.type}  title={chart.intro}>
           <div
-            className={chartAvailableList.indexOf(chart.type)==-1?classNames(classes.unavailable):classNames(classes.IconBox, {activeIcon: activeIcon==chart.type})}
+            className={chartAvailableList.include(chart.type)? (classes.IconBox, {activeIcon: activeIcon==chart.type}) : classes.unavailable }
             onClick={()=>{handleSelectIcon(chart.type)}}
           >
             <img src={"/image/davinci/"+chart.type+".svg"}/>
@@ -102,7 +93,7 @@ const RightPane = (props) => {
       </div>
       <div className={classes.rightPaneTools}>
         <span className={classes.title}>工具栏</span>
-        <div className={showRightPaneToolsTitle?classNames(classes.showXYTitle):classNames(classes.hideXYTitle)}>
+        <div className={showRPTTitle? classes.showXYTitle : classes.hideXYTitle}>
           <p>X轴标题</p>
           <Input value={titleXAxis} onBlur={(e) => {updateChartInfo()}} onChange={onChangeTitleXAxis}/>
           <p>Y轴标题</p>

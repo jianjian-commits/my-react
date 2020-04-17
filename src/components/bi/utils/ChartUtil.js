@@ -1,7 +1,7 @@
 import { Types } from '../component/bind/Types';
 import ChartInfo from '../component/elements/data/ChartInfo';
 import { setElemType } from '../redux/action'
-import { AllType, PieType, BarType, BarIndexType } from '../component/elements/Constant'
+import { ChartType, AllType, PieType, BarType, BarIndexType } from '../component/elements/Constant'
 
 export const getBarChartOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
@@ -135,8 +135,6 @@ export const getPieChartOption = (chartData, chartInfo) => {
     })
   }
     
-
-  // console.log(source)
   return  {
     dataset: {
       source
@@ -164,11 +162,11 @@ export const getPieChartOption = (chartData, chartInfo) => {
 export const getOption = (chartData, chartInfo, elemType) => {
 
   switch(elemType){
-    case "HISTOGRAM": 
+    case ChartType.HISTOGRAM: 
       return getBarChartOption(chartData, chartInfo);
-    case "INDEX_DIAGRAM": 
+    case ChartType.INDEX_DIAGRAM: 
       return getIndexChartOption(chartData, chartInfo); 
-    case "AREA_CHART": 
+    case ChartType.AREA_CHART: 
       return getPieChartOption(chartData, chartInfo);
     default:
       break;
