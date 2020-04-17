@@ -58,6 +58,8 @@ const ChartContainer = props => {
                 const dimArr = dimensions.map((each, idx) => {
                   let field = each.field;
                   field["currentGroup"] =each.currentGroup;
+                  field["groups"] =each.groups;
+                  field["sort"] =each.sort;
                   field["bindType"] = Types.DIMENSION;
                   field["idx"] = Date.now();
                   return field;
@@ -70,6 +72,8 @@ const ChartContainer = props => {
                 const meaArr = indexes.map((each, idx) => {
                   const field = each.field;
                   field["currentGroup"] = each.currentGroup;
+                  field["groups"] = each.groups;
+                  field["sort"] = each.sort;
                   field["bindType"] = Types.MEASURE;
                   field["idx"] = Date.now();
                   return field;

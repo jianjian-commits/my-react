@@ -204,7 +204,6 @@ export const getChartAttrs = (bindDataArr) => {
   const groups = [];
   let sort = { fieldId: "", value: "DESC" };
   const conditions = [];
-
   bindDataArr.forEach((each) => {
     if(each.bindType == Types.FILTER) {
       const field = new Field(each.fieldId, each.label, each.type);
