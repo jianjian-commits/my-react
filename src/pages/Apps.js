@@ -11,7 +11,7 @@ import { TEAM_CREATE_APP, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import { catchError } from "../utils";
 import classes from "../styles/apps.module.scss";
-import { NoAppImg, NoCompany } from "../assets/images";
+import { NoAppImg, NoCompany, NoAppUnSysImg } from "../assets/images";
 import { CloseIcon } from "../assets/icons/header";
 import { initAllDetail } from "../store/loginReducer";
 
@@ -235,8 +235,7 @@ class Apps extends React.Component {
             </div>
             {appList.length < 1 && sysUserName !== name && (
               <>
-                <NoAppImg />
-                <p>您的公司还没创建应用</p>
+                <NoAppUnSysImg />
               </>
             )}
           </Content>
