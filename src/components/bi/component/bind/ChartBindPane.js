@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
-import { ChartType } from '../elements/Constant';
+import { DataType } from '../elements/Constant';
 import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
 import FilterField from '../bind/field/FilterField';
@@ -54,7 +54,7 @@ const spec = {
     let isExisted = false, isDimExceed = false, isFilterExceed = false, isMeaExceed = false, isForbidden = false, reOrder = false;
     const currentType = component.getType();
 
-    preProcessDrop(item, currentType, component);
+    preProcessDrop(item, currentType);
 
     if(bindDataArr.length != 0) {
       let dimCount = currentType == Types.DIMENSION ? 1 : 0;
@@ -98,7 +98,7 @@ const spec = {
   }
 }
 
-function preProcessDrop(item, currentType, component) {
+function preProcessDrop(item, currentType) {
   if(currentType == Types.MEASURE) {
     item["currentGroup"] = item.bindType == Types.MEASURE ? GroupType.SUM : GroupType.COUNT;
   }
@@ -109,6 +109,10 @@ function preProcessDrop(item, currentType, component) {
   }
   else if(currentType == Types.DIMENSION) {
     item["currentGroup"] = GroupType.DEFAULT;
+  }
+
+  if(item.type == DataType.DATETIME && currentType != Types.FILTER) {
+    item["currentGroup"] = {name:"", value:"DAY"};
   }
 }
 
