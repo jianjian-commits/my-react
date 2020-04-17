@@ -18,10 +18,10 @@ import {
 
 import { DBMode } from '../component/dashboard/Constant';
 import ChartInfo from '../component/elements/data/ChartInfo';
-import { AllType } from "../component/elements/Constant";
+import { ChartType, AllType } from "../component/elements/Constant";
 
 const initState = {
-  elemType: 'HISTOGRAM',
+  elemType: ChartType.HISTOGRAM,
   dbName: "",
   elemName: "",
   formDataArr: [],

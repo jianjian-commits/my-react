@@ -1,5 +1,5 @@
 import ChartInfo from "../component/elements/data/ChartInfo";
-import { AllType } from "../component/elements/Constant";
+import { ChartType, AllType } from "../component/elements/Constant";
 import { getChartAvailableList } from "../utils/ChartUtil"
 
 export const NEW_DASHBOARD = "NEW_DASHBOARD";
@@ -97,7 +97,7 @@ export const clearBind = (params) => dispatch => {
     dataSource: {},
     bindDataArr: [],
     chartData: {},
-    elemType: 'HISTOGRAM',
+    elemType: ChartType.HISTOGRAM,
     chartInfo: new ChartInfo(),
     chartAvailableList: AllType
   })

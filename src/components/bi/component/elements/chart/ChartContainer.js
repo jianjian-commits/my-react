@@ -24,7 +24,7 @@ const ChartContainer = props => {
   const history = useHistory();
   const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
   let chart = '';
-  if( elemType == "INDEX_DIAGRAM"){
+  if( elemType == ChartType.INDEX_DIAGRAM){
     chart = <IndexChart chartOption={chartOption} />;
   }else {
     chart = <Chart chartOption={chartOption} />;
