@@ -57,7 +57,8 @@ export default compose(
     open,
     setRef,
     selectedKeys,
-    users,
+    positionId,
+    allUsers,
     selectUserHandler,
     onWidageClick
   }) => {
@@ -85,22 +86,25 @@ export default compose(
                   className={classes.search}
                   placeholder="请输入要搜索的内容"
                 />
-                {users.map(u => {
+                {allUsers.map(u => {
+                  const disabled = !!u.position && u.position.id !== positionId;
+                  console.log(selectedKeys, selectedKeys.indexOf(u.id) !== -1)
+                  console.log(u.position && u.position.id, positionId)
                   return (
                     <div
                       key={u.id}
                       className={clx(
                         classes.customTabPaneRow,
-                        u.position ? classes.disabled : null
+                        disabled ? classes.disabled : null
                       )}
                     >
                       <Checkbox
-                        disabled={!!u.position}
+                        disabled={disabled}
                         checked={selectedKeys.indexOf(u.id) !== -1}
                         onClick={e => selectUserHandler(u.id, e.target.checked)}
                       />
                       &nbsp;&nbsp;{u.name}
-                      {u.position && (
+                      {disabled && (
                         <span>&nbsp;&nbsp; ({u.position.value} )</span>
                       )}
                     </div>
