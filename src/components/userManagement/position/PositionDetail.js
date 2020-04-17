@@ -229,10 +229,10 @@ class PositionDetail extends Component {
     super(props);
     this.state = {
       positionInfo: {
-        value: "恐慌感",
-        superiorValue: "开户行",
+        value: "",
+        superiorValue: "",
         dataShare: false,
-        description: "科技化能发挥离开举报"
+        description: ""
       },
       editing: {
         value: false,
