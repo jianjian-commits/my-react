@@ -87,7 +87,7 @@ class Submission extends Component {
       showFormChildErr: false,
       isSubmitted: false,
       errorResponseMsg: {},
-      isShowApprovalBtn: true,
+      isShowApprovalBtn: false,
       isSetCorrectFormChildData: false,
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
