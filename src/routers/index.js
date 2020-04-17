@@ -1,6 +1,6 @@
 import AppList from "../pages/Apps";
 import Backlog from "../pages/Backlog";
-import TeamManagement from "../pages/TeamManagement";
+import CompanyManagement from "../pages/CompanyManagement";
 
 import AppDetail from "../pages/AppDetail";
 // import Submission from "../components/formBuilder/component/submission/submission";
@@ -28,10 +28,10 @@ export const main = [
     component: Backlog
   },
   {
-    key: "team",
-    label: "团队管理",
+    key: "company",
+    label: "公司管理",
     path: "/company",
-    component: TeamManagement
+    component: CompanyManagement
   },
   {
     key: "userDetail",
