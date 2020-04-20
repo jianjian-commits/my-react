@@ -95,7 +95,7 @@ class FormChildTest extends React.Component {
           type: item.label,
           formType: item.type,
           data: data || item.defaultValue || null,
-          validate: item.validate,
+          validate: {unique: item.unique, ...item.validate},
           hasErr: false
         };
         break;
@@ -258,7 +258,7 @@ class FormChildTest extends React.Component {
             result[item.key] = {
               type: item.label,
               formType: item.type,
-              validate: item.validate,
+              validate: {unique: item.unique, ...item.validate},
               hasErr: false,
               data: child[item.key].data
             };
@@ -410,7 +410,7 @@ class FormChildTest extends React.Component {
             type: item.label,
             formType: item.type,
             data: item.defaultValue || "",
-            validate: item.validate,
+            validate: {unique: item.unique, ...item.validate},
             hasErr: false
           };
           break;
@@ -561,12 +561,23 @@ class FormChildTest extends React.Component {
     }
 
     if(errorResponseMsg !=void 0){
-      this.props.resetErrorMsg(item.key)
+      let errorArr = [];
+      for(let key in errorResponseMsg){
+        errorResponseMsg[key].map(errorMsg => errorArr.push(errorMsg.msg))
+      }
       this.setState({
         hasFormChildError: true,
-        errorMsg:"数据已存在"
+        errorMsg: errorArr.join(";")
       })
     }
+  }
+
+  _getErrorMsgValue(componentKey){
+    const errorResponseMsg = this.props.errorResponseMsg;
+    if(errorResponseMsg && errorResponseMsg.hasOwnProperty(componentKey)){
+      return errorResponseMsg[componentKey].map( errorMsg => errorMsg.value);
+    }
+      return []
   }
 
   componentDidMount() {
@@ -693,6 +704,7 @@ class FormChildTest extends React.Component {
     let resultArray = [];
     for (let key in formChildObj) {
       let item = formChildObj[key];
+      const errorValues = this._getErrorMsgValue(key); // 重复的值
       let className = item.hasErr
         ? "componentContent has-value-error"
         : "componentContent";
@@ -724,7 +736,7 @@ class FormChildTest extends React.Component {
                   }}
                   onBlur={e => {
                     let { value } = e.target;
-                    checkValueValidByType(item, value)
+                    checkValueValidByType(item, value, errorValues)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
                     if(typeof value =="string" && value!==""){
@@ -773,7 +785,7 @@ class FormChildTest extends React.Component {
                   }}
                   onBlur={e => {
                     let { value } = e.target;
-                    checkValueValidByType(item, value)
+                    checkValueValidByType(item, value, errorValues)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
                     this.setState({
@@ -1228,6 +1240,8 @@ class FormChildTest extends React.Component {
   }
 
   _checkFormChildHasError(submitDataArray) {
+    const errorResponseMsg = this.props.errorResponseMsg;
+    const parentItem = this.props.item;
     let isFormChildErr = false;
     submitDataArray.forEach(item => {
       for (let m in item) {
@@ -1237,6 +1251,9 @@ class FormChildTest extends React.Component {
       }
     });
 
+    if(isFormChildErr === false){
+      this.props.resetErrorMsg(parentItem.key)
+    }
     this.setState({ hasFormChildError: isFormChildErr });
   }
 
