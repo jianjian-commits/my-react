@@ -92,31 +92,19 @@ export const getFormsAll = (appId, isDataPage , extraProp) => {
   }
   return new Promise((resolve, reject) => {
     axios({
-      url: config.apiUrl + `/form?desc=createdTime`,
-      method: "get",
+      url: config.apiUrl + `/formAndDashboard/list`,
+      method: "post",
       headers: headerObj,
       params:paramsObj
     })
       .then(response => {
-        const forms = response.data
-          .filter(item => {
-            return !ignoreFormIdArray.includes(item.name);
-          })
+        const forms = response.data.data
           .map(item => {
             return {
               key: item.id,
-              created: coverTimeUtils.localTime(
-                item.createdTime,
-                "yyyy-MM-dd hh:mm"
-              ),
-              modified: coverTimeUtils.localTime(
-                item.updateTime,
-                "yyyy-MM-dd hh:mm"
-              ),
               name: item.name,
               id: item.id,
-              path: item.path,
-              components: item.components
+              type: item.type
             };
           });
         resolve(forms);
