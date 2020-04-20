@@ -95,7 +95,10 @@ const AppSetting = props => {
 
     // 初始化是否删除的标志
     setIsDeleteOne( false )
-  }, [props, appId, isDeleteOne]);
+    // 初始化是否更改列表的顺序
+
+    setIsChangeSequence( false )
+  }, [props, appId, isDeleteOne,isChangeSequence]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
@@ -246,6 +249,8 @@ const AppSetting = props => {
               deleteForm={ deleteForm }
               updateFormName={ updateFormName }
               isDeleteOne={( params ) => setIsDeleteOne( params )}
+              appId = {appId}
+              isChangeSequence = { ( params ) => setIsChangeSequence( params )}
             />
             <hr/>
             <p>已创建仪表盘</p>

@@ -2,8 +2,10 @@ import React from "react";
 import { Menu, Icon } from "antd";
 import { useLocation,useParams } from "react-router-dom"
 import "./draggableList.scss";
-import { TableIcon } from "../../assets/icons/index"
-import OperateBox from "./Operatebox"
+import { TableIcon } from "../../assets/icons/index";
+import OperateBox from "./Operatebox";
+import { updateList } from "./utils/operateDraggable";
+
 const { SubMenu } = Menu;
 
 const DraggableWrapper = ({ draggable = false, formId, index, onDragStart, onDrop, onDrag, onDragEnd,  onDragEnter, onDragLeave, children }) => (
@@ -50,7 +52,6 @@ const DraggableList = ({
   React.useEffect(()=>{
 
     setOriginlist(list)
-
     if(!pathname.includes("/detail")){
       setIsShowOperate( true )
     }
@@ -73,45 +74,33 @@ const onDragEnterFun = e =>{
   if(targetDom.className === 'drag-target'){
     let targetDomParent = targetDom.parentNode;
     targetDomParent.style.border = "1px dotted red";
-    // console.log(targetDomParent)
   }
   }
 
 //4拖动结束
 const onDragLeaveFun = e =>{
   let targetDom = e.target;
-  if(targetDom.className === 'drag-target'){
     let targetDomParent = targetDom.parentNode;
     targetDomParent.style.border = "";
-    // console.log(targetDomParent)
-  }
 }
 
 const onDropFun = e =>{
-  let originIndex = e.dataTransfer.getData("formIndex");
+  let targetDom = e.target;
+  let originId = e.dataTransfer.getData("formId");
   let targetIndex = e.target.parentNode.dataset.index;
-  let newListArr = ChangeSecquence(list,originIndex,targetIndex);
-  console.log(originIndex,targetIndex)
-  console.log(list)
-  console.log(newListArr)
-}
-
-//5
-const ChangeSecquence = ( originListArr=[], originIndex, targetIndex ) =>{
-      let newListArr = [];
-      let originMiddleList = JSON.parse(JSON.stringify(originListArr));
-      if(originIndex && targetIndex && originIndex !== targetIndex){
-        let originValueObj = originListArr[ originIndex ];
-        let tartgetValueObj = originListArr[ targetIndex ];
-        console.log(originValueObj,tartgetValueObj)
-        originMiddleList.splice(originIndex,1,tartgetValueObj);
-        originMiddleList.splice(targetIndex,1,originValueObj);
-        newListArr = originMiddleList;
-      }else{
-        newListArr = originMiddleList;
+  console.log(targetIndex)
+  if( targetIndex){
+    let newTargetIndex = "" + (1 * targetIndex + 1) ;
+    updateList(originId,newTargetIndex,appId).then(res=>{
+      if(res.status === "SUCCESS"){
+        props.isChangeSequence(true);
+        targetDom.parentNode.style.border = "";
       }
-
-      return newListArr;
+    })
+  }else{
+    targetDom.parentNode.style.border = "";
+  }
+  
 }
   return (
     <Menu {...props} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
@@ -159,7 +148,7 @@ const ChangeSecquence = ( originListArr=[], originIndex, targetIndex ) =>{
         })}
       {list &&
         list.map((l, n) => (
-          <Menu.Item data-index={n} key={l.key || n} className="draggable-menu-item">
+          <Menu.Item  data-index={n} key={l.key || n} className="draggable-menu-item">
             <DraggableWrapper
               draggable={draggable}
               formId={l.key}
