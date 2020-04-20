@@ -23,8 +23,8 @@ import {
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+import BatchEditingModal from "../batchEditingModal/batchEditingModal"
 const { Option } = Select;
-const { TextArea } = Input;
 
 class MultiDropDownInspector extends React.Component {
   constructor(props) {
@@ -35,9 +35,7 @@ class MultiDropDownInspector extends React.Component {
       isLinked: false,
       isShowDataLinkageModal: false,
       isShowOtherDataModal: false,
-      visible: false,
-      tempOptions: props.element.data.values,
-      tempContent: "",
+      isShowBatchEditingModal: false,
     };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
@@ -148,8 +146,7 @@ class MultiDropDownInspector extends React.Component {
   }
 }
 
-  addChooseItems = () => {
-    const tempOptions = this.state.tempOptions;
+  addChooseItems = (tempOptions) => {
     const newItem = {
       label: `选项`,
       value: `选项`,
@@ -321,46 +318,12 @@ class MultiDropDownInspector extends React.Component {
     }
   };
 
-  showModal = () => {
-    const tempContent = this.props.element.data.values.map(item => item.value).join("\n") + "\n";
+  changeModalVisible = (isVisible) =>{
     this.setState({
-      visible: true,
-      tempContent: tempContent
+      isShowBatchEditingModal: isVisible,
     });
   };
-
-  handleOk = e => {
-    this.setState({
-      visible: false,
-    });
-    this.addChooseItems();
-  };
-
-  handleCancel = e => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleContent = (e) =>{
-    const newArray = this.handleArray(e.target.value.split("\n"));
-    this.setState({
-      tempOptions: newArray,
-      tempContent: e.target.value
-    })
-  }
-
-  handleArray(arr){
-    // 处理掉额外的空格 和换行符
-    return arr.map(item =>
-      item.trim())
-      .filter(item =>item !== "")
-      .map(item=>({
-        value: item,
-        label: item,
-        shortcut: ""
-      }))
-  } 
+ 
   // 选择指定组件渲染
   renderOptionDataFrom = type => {
     const { isShowDataLinkageModal, isShowOtherDataModal, formId } = this.state;
@@ -375,7 +338,6 @@ class MultiDropDownInspector extends React.Component {
       // 自定义组件
       case "custom": {
         const { values } = this.props.element.data;
-        const { tempContent } = this.state;
         return (
           <div className="chooseitems">
             {values.map((item, index) => (
@@ -418,19 +380,13 @@ class MultiDropDownInspector extends React.Component {
             <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
               增加其他选项
             </Button>
-            <Button onClick={this.showModal}>批量编辑</Button>
-            <Modal
-              title="批量编辑"
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              <TextArea
-                autoSize={{ minRows: 8, maxRows: 8 }}
-                onChange={this.handleContent}
-                value={tempContent}>
-              </TextArea>
-            </Modal>
+            <Button onClick={()=>{this.changeModalVisible(true)}}>批量编辑</Button>
+            <BatchEditingModal 
+              visible={this.state.isShowBatchEditingModal}
+              changeModalVisible={this.changeModalVisible}
+              addChooseItems={this.addChooseItems}
+              options={this.props.element.data.values}
+            />
           </div>
         );
       }

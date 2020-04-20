@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Radio, Checkbox, Button, Tooltip, Divider, Modal } from "antd";
+import { Input, Radio, Checkbox, Button, Tooltip, Divider } from "antd";
 import { connect } from "react-redux";
 import {
   setItemAttr,
@@ -8,14 +8,13 @@ import {
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
-const { TextArea } = Input;
+import BatchEditingModal from "../batchEditingModal/batchEditingModal"
+
 class RadioInputInspector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
-      tempOptions: props.element.values,
-      tempContent: "",
+      isShowBatchEditingModal: false,
     };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
@@ -122,8 +121,7 @@ class RadioInputInspector extends React.Component {
     }
   }
 
-  addChooseItems = () => {
-    const tempOptions = this.state.tempOptions;
+  addChooseItems = (tempOptions) => {
     const newItem = {
       label: `选项`,
       value: `选项`,
@@ -148,46 +146,13 @@ class RadioInputInspector extends React.Component {
     }
   }
 
-  showModal = () => {
-    const tempContent = this.props.element.values.map(item => item.value).join("\n") + "\n";
+  changeModalVisible = (isVisible) =>{
     this.setState({
-      visible: true,
-      tempContent: tempContent
+      isShowBatchEditingModal: isVisible,
     });
-  };
-
-  handleOk = e => {
-    this.setState({
-      visible: false,
-    });
-    this.addChooseItems();
-  };
-
-  handleCancel = e => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleContent = (e) =>{
-    const newArray = this.handleArray(e.target.value.split("\n"));
-    this.setState({
-      tempOptions: newArray,
-      tempContent: e.target.value
-    })
   }
 
-  handleArray(arr){
-    // 处理掉额外的空格 和换行符
-    return arr.map(item =>
-      item.trim())
-      .filter(item =>item !== "")
-      .map(item=>({
-        value: item,
-        label: item,
-        shortcut: ""
-      }))
-  }
+
 
   deleteChooseItem(item, index) {
     if (this.props.element.values.length === 1) return null;
@@ -339,19 +304,13 @@ class RadioInputInspector extends React.Component {
             <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
               增加其他选项
             </Button>
-            <Button onClick={this.showModal}>批量编辑</Button>
-            <Modal
-              title="批量编辑"
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              <TextArea
-                autoSize={{ minRows: 8, maxRows: 8 }}
-                onChange={this.handleContent}
-                value={tempContent}>
-              </TextArea>
-            </Modal>
+            <Button onClick={()=>{this.changeModalVisible(true)}}>批量编辑</Button>
+            <BatchEditingModal 
+              visible={this.state.isShowBatchEditingModal}
+              changeModalVisible={this.changeModalVisible}
+              addChooseItems={this.addChooseItems}
+              options={this.props.element.values}
+            />
           </div>
           {isInFormChild(this.props.elementParent) ? null : (
             <>
