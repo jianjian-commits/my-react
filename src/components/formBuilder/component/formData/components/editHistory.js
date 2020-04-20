@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-10 15:15:00
  * @LastEditors: komons
- * @LastEditTime: 2020-04-17 15:16:07
+ * @LastEditTime: 2020-04-20 16:08:56
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\editHistory.js
  */
@@ -12,7 +12,6 @@ import axios from "axios";
 import { message } from "antd";
 import editHistoryUtils from "./utils/filterHistoryUtils";
 import config from "../../../config/config";
-import coverTimeUtils from "../../../utils/coverTimeUtils";
 import moment from "moment";
 
 const columns = [
@@ -20,14 +19,14 @@ const columns = [
     title: "编辑人",
     dataIndex: "editor",
     key: "editor",
-    align: "center",
+    className: "editor",
     width: "20%"
   },
   {
     title: "编辑时间",
     dataIndex: "date",
     key: "date",
-    align: "center",
+    align: "left",
     width: "20%"
   },
   {
@@ -38,8 +37,9 @@ const columns = [
 ];
 const paginationProps = {
   defaultCurrent: 1,
-  position: "center",
-  hideOnSinglePage: true
+  hideOnSinglePage: true,
+  defaultPageSize: 5,
+
 };
 
 const EditHistory = ({ submissionId }) => {
@@ -65,25 +65,24 @@ const EditHistory = ({ submissionId }) => {
           });
         } else if (["DateInput", "PureDate", "PureTime"].includes(item.type)) {
           let [beforeValue, afterValue] = editHistoryUtils["DateInput"](item);
-          console.log(beforeValue, afterValue);
           return (
             <p key={index}>
-              修改{item.label}的值{beforeValue}为{afterValue}
+              修改{item.label}的值 <span className="before-value">{beforeValue}</span> 为 <span className="after-value">{afterValue}</span>
             </p>
           );
         } else if (item.type === "FormChildTest") {
-          return `修改${item.label}的值`;
+          return <p key={index}>修改 {item.label} 的值</p>;
         } else {
           return (
             <p key={index}>
-              修改{item.label}的值{item.beforeValue}为{item.afterValue}
+              修改{item.label}的值 <span className="before-value">{item.beforeValue}</span> 为 <span className="after-value">{item.afterValue}</span>
             </p>
           );
         }
       });
       return <div>{res}</div>;
     } else {
-      return "创建记录";
+      return <p>创建记录</p>;
     }
   };
 
