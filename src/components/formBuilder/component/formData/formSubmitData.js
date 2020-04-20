@@ -300,19 +300,19 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD HH:mm:ss") : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
         return (
           <div className="formChild-item">
-            {submitData ? moment(coverTimeUtils.localDate(submitData, component.type)).format("YYYY-MM-DD") : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureTime":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type).format("HH:mm:ss") : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "ImageUpload":
@@ -498,20 +498,20 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div key={component.key}>
-            {submitData != void 0 ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD HH:mm:ss") : ""}
+            {submitData != void 0 ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
           return (
             <div className="formChild-item">
-              {submitData ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD") : ""}
+              {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
             </div>
       );
       case "PureTime":
         return (
           <div key={component.key}>
             {submitData != void 0
-              ? coverTimeUtils.localDate(submitData, component.type).format("HH:mm:ss")
+              ? coverTimeUtils.localDate(submitData, component.type)
               : ""}
           </div>
         );

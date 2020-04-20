@@ -86,7 +86,7 @@ class PureTime extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: coverTimeUtils.localDate(res, item.type).format("HH:mm:ss.SSS")
+              [item.key]: coverTimeUtils.localDate(res, item.type)
             });
             // 多级联动
             this.handleEmitChange(res);
