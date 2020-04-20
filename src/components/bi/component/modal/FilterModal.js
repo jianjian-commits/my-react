@@ -3,9 +3,8 @@ import { Modal, TreeSelect, Select, DatePicker } from "antd";
 import { useState } from "react";
 import { connect } from "react-redux";
 import moment from 'moment';
-import { TextOptions, NumberOptions, DateOptions, OPERATORS, DataType, OPERATOR_LABELS } from "../elements/Constant";
+import { TextOptions, NumberOptions, DateOptions, OPERATORS, DataType } from "../elements/Constant";
 import request from '../../utils/request';
-import { findKey } from '../../utils/Util';
 import classes from '../../scss/modal/filterModal.module.scss';
 const { SHOW_PARENT } = TreeSelect;
 const { Option } = Select;
@@ -15,7 +14,7 @@ const COMPLICATED_SYMBOLS = [OPERATORS.EQUALS_TO_ANY_ONE, OPERATORS.NOT_EQUALS_T
 const NULL_SYMBOLS = [OPERATORS.IS_NULL, OPERATORS.IS_NOT_NULL];
 
 const FilterModal = (props) => {
-  const { visible, setVisible, item, changeFilter, dataSource, setFilterAlias } = props;
+  const { visible, setVisible, item, changeFilter, dataSource } = props;
   const dataType = item.type;
   const initValue = getValue(item.value, item.symbol);
   const [symbol, setSymbol] = useState(item.symbol || OPERATORS.EQUALS);
@@ -25,42 +24,35 @@ const FilterModal = (props) => {
   const [singleOption, setSingleOption] = useState([]);
   const [multiOption, setMultiOption] = useState([]);
 
-  const handleCancel = () => {
-    setVisible(false);
-    setFilterAlias(item.fieldId, getContent());
-  }
-  
-
-  const handleOK = () => {
+  const getCommitValue = () => {
     let commitValue = value;
 
-    if(dataType == DataType.DATETIME || dataType == "DATATIME") {
+    if(dataType == DataType.DATETIME) {
       commitValue = symbol == OPERATORS.RANGE ? [transDate(min), transDate(max)] : transDate(value);
     }
-
+  
     if(isNull(symbol)) {
       commitValue = null;
     }
-    
-
+  
     if(dataType == DataType.NUMBER) {
-      commitValue = symbol == OPERATORS.RANGE ? [parseFloat(min), parseFloat(max)] : parseFloat(commitValue)
+      commitValue = symbol == OPERATORS.RANGE ? [parseNumber(min), parseNumber(max)] : parseNumber(commitValue)
     }
 
+    return commitValue;
+  }
+
+  const handleCancel = () => {
+    let commitValue = getCommitValue();
+    setVisible(false);
+  }
+
+  const handleOK = () => {
+    let commitValue = getCommitValue();
     changeFilter(item.fieldId, symbol, commitValue);
     setVisible(false);
-    setFilterAlias(item.fieldId, getContent(commitValue));
   }
 
-  const getContent = (value) => {
-    if(symbol == OPERATORS.RANGE) {
-      const minVal = dataType == DataType.NUMBER ? parseFloat(min) : transDate(min);
-      const maxVal = dataType == DataType.NUMBER ? parseFloat(max) : transDate(max);
-      return " 在" + minVal + "到" + maxVal + "之间";
-    }
-
-    return " " + OPERATOR_LABELS[findKey(symbol, OPERATORS)] + " " + value;
-  }
 
   const getTitle = () => {
     return <span className={classes.title}>设置筛选条件</span>
@@ -73,7 +65,6 @@ const FilterModal = (props) => {
       case DataType.NUMBER:
         return NumberOptions;
       case DataType.DATETIME:
-      case "DATATIME":
         return DateOptions;
       default:
         return [];
@@ -116,7 +107,6 @@ const FilterModal = (props) => {
       case DataType.NUMBER:
         return getNumberCondition();
       case DataType.DATETIME:
-      case "DATATIME":
         return getDateCondition();
     }
   }
@@ -139,8 +129,8 @@ const FilterModal = (props) => {
     }
   }
 
-  const onSearch = () => {
-    // onSear
+  const getDateValue = (value) => {
+    return typeof(value) === "object" ?  value : (value === "" ? null : new moment(value)); 
   }
 
   const requestData = (set) => {
@@ -160,7 +150,6 @@ const FilterModal = (props) => {
         defaultValue={value}
         optionFilterProp="children"
         onChange={onChangeValue}
-        // onSearch={onSearch}
         onFocus={setSingle}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -184,7 +173,6 @@ const FilterModal = (props) => {
         treeCheckable: true,
         dropdownClassName:"dropdownClassName",
         showSearch: true,
-        onSearch: onSearch,
         showCheckedStrategy: SHOW_PARENT,
         style: {
           width: "350px", marginLeft: '20px'
@@ -222,16 +210,18 @@ const FilterModal = (props) => {
         symbol == OPERATORS.GRATER_OR_EQUAL_TO || symbol == OPERATORS.LESS_OR_EQUAL_TO)
     {
       return <div className={classes.singleDateContainer}>
-        <DatePicker className={classes.singleDate} value={value} onChange={onChangeValue}/>
+        <DatePicker className={classes.singleDate} value={getDateValue(value)} onChange={onChangeValue}/>
         </div>
     }
     else if(symbol == OPERATORS.RANGE) {
       return <div className={classes.dateRange}>
         <div className={classes.doubleDateContainer}>
-          <DatePicker className={classes.doubleDate} placeholder={"设置开始时间"} value={min} onChange={onChangeMin}/>
+          <DatePicker className={classes.doubleDate} placeholder={"设置开始时间"} value={getDateValue(min)}
+            onChange={onChangeMin}/>
         </div>
         <div className={classes.doubleDateContainer}>
-          <DatePicker className={classes.doubleDate} placeholder={"设置结束时间"}  value={max} onChange={onChangeMax}/>
+          <DatePicker className={classes.doubleDate} placeholder={"设置结束时间"}  value={getDateValue(max)}
+            onChange={onChangeMax}/>
         </div>
       </div>
     }
@@ -292,6 +282,11 @@ function isNull(symbol) {
 
 function transDate(value) {
   return moment(value).format('YYYY-MM-DD')
+}
+
+function parseNumber(value) {
+  let val = parseFloat(value);
+  return isNaN(val) ? "" : val;
 }
 
 function getValue(val, symbol) {

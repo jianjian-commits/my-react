@@ -86,6 +86,7 @@ const ChartContainer = props => {
                   const field = each.field;
                   field["value"] = each.value;
                   field["symbol"] = each.symbol;
+                  field["bindType"] = Types.FILTER;
                   field["idx"] = Date.now();
                   return field;
                 })
