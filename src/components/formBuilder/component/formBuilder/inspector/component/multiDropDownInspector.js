@@ -338,6 +338,7 @@ class MultiDropDownInspector extends React.Component {
       // 自定义组件
       case "custom": {
         const { values } = this.props.element.data;
+        const hasExtraOption = values.some(item => item.isExtra);
         return (
           <div className="chooseitems">
             {values.map((item, index) => (
@@ -374,13 +375,15 @@ class MultiDropDownInspector extends React.Component {
             }
               </div>
             ))}
-            <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
+            <span className="addOptionBtn" onClick={this.addChooseItem} name="chooseItems">
               增加选项
-            </Button>
-            <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
-              增加其他选项
-            </Button>
-            <Button onClick={()=>{this.changeModalVisible(true)}}>批量编辑</Button>
+            </span>
+            <span className="divider">|</span>
+            <span className={hasExtraOption? "addOptionBtn hasExtraOption":"addOptionBtn"} onClick={this.addExtraChooseItem} name="chooseItems">
+               添加“其他”选项
+            </span>
+            <span className="divider">|</span>
+            <span className="addOptionBtn" onClick={()=>{this.changeModalVisible(true)}}>批量编辑</span>
             <BatchEditingModal 
               visible={this.state.isShowBatchEditingModal}
               changeModalVisible={this.changeModalVisible}

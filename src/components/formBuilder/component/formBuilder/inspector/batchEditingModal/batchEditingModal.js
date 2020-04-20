@@ -15,6 +15,7 @@ export default class BatchEditingModal extends Component {
     // 典型用法（不要忘记比较 props）：
     if (this.props.options !== prevProps.options) {
       this.setState({
+        tempOptions: this.props.options,
         tempContent: this.props.options.map(item => item.value).join("\n") + "\n",
       })
     }

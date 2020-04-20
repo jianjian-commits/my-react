@@ -271,6 +271,7 @@ class CheckboxInspector extends React.Component {
       isSetAPIName
     } = this.props.element;
     const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
+    const hasExtraOption = this.props.element.values.some(item => item.isExtra);
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
@@ -346,13 +347,15 @@ class CheckboxInspector extends React.Component {
               }
               </div>
             ))}
-            <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
+            <span className="addOptionBtn" onClick={this.addChooseItem} name="chooseItems">
               增加选项
-            </Button>
-            <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
-              增加其他选项
-            </Button>
-            <Button onClick={()=>{this.changeModalVisible(true)}}>批量编辑</Button>
+            </span>
+            <span className="divider">|</span>
+            <span class={hasExtraOption? "addOptionBtn hasExtraOption":"addOptionBtn"} onClick={this.addExtraChooseItem} name="chooseItems">
+               添加“其他”选项
+            </span>
+            <span className="divider">|</span>
+            <span className="addOptionBtn" onClick={()=>{this.changeModalVisible(true)}}>批量编辑</span>
             <BatchEditingModal 
               visible={this.state.isShowBatchEditingModal}
               changeModalVisible={this.changeModalVisible}

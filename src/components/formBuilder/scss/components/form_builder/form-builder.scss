@@ -1447,6 +1447,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .addOptionBtn {
+            color: #2A7FFF;
+            margin-left: 8px;
+            margin-right: 8px;
+          }
+          .hasExtraOption,.divider{
+            color: #777F97;
+          }
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1536,9 +1544,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           line-height: 20px;
           margin-bottom: 8px;
           font-weight: initial;
-          // &:nth-last-of-type(-n + 2) {
-          //   margin-top: 26px;
-          // }
         }
         .ant-input {
           color: #565c6e;
@@ -1550,6 +1555,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .addOptionBtn {
+            color: #2A7FFF;
+            margin-left: 8px;
+            margin-right: 8px;
+          }
+          .hasExtraOption,.divider{
+            color: #777F97;
+          }
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
