@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-10 15:15:00
  * @LastEditors: komons
- * @LastEditTime: 2020-04-17 11:18:07
+ * @LastEditTime: 2020-04-17 15:16:07
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\editHistory.js
  */
@@ -12,6 +12,8 @@ import axios from "axios";
 import { message } from "antd";
 import editHistoryUtils from "./utils/filterHistoryUtils";
 import config from "../../../config/config";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
+import moment from "moment";
 
 const columns = [
   {
@@ -70,7 +72,7 @@ const EditHistory = ({ submissionId }) => {
             </p>
           );
         } else if (item.type === "FormChildTest") {
-          return "修改子表单";
+          return `修改${item.label}的值`;
         } else {
           return (
             <p key={index}>
@@ -101,7 +103,7 @@ const EditHistory = ({ submissionId }) => {
         res.data.map(item => ({
           editor:
             item.extraProp.updateUser && item.extraProp.updateUser["name"],
-          date: new Date(item.updateTime).toLocaleString(),
+          date: moment.utc(item.updateTime).local().format("YYYY-MM-DD HH:mm:ss"),
           content: filterHistryDom(item.changeFieldUpdateRecords),
           key: item.updateTime
         }))
