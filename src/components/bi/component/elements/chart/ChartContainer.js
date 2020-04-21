@@ -13,10 +13,12 @@ import EditAction from '../action/EditAction';
 import classes from '../../../scss/elements/chart.module.scss';
 import DeleteAction from '../action/DeleteAction';
 import RefreshAction from '../action/RefreshAction';
+import FullScreenAction from '../action/FullScreenAction';
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
-    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType, setDashboards } = props;
+    changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType,
+    setDashboards } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
 
@@ -40,23 +42,17 @@ const ChartContainer = props => {
 
   if(dbMode == DBMode.Edit) {
     iconBtnGroup = [
-      new EditAction("edit", elemType, chartId, () => {history.push(`/app/${appId}/setting/bi/${dashboardId}/${chartId}`)},
+      new EditAction(elemType, chartId, () => {history.push(`/app/${appId}/setting/bi/${dashboardId}/${chartId}`)},
       {changeBind, changeChartData, setDataSource, changeChartInfo, setElemType}),
-      new DeleteAction("delete", dashboardId, chartId, {setDashboards}),
-      new RefreshAction("redo", elemType, chartId, dashboards, {setDashboards}),
-      {
-        type:"fullscreen",
-        click: props.setFullChart
-      }
+      new DeleteAction(dashboardId, chartId, {setDashboards}),
+      new RefreshAction(elemType, chartId, dashboards, {setDashboards}),
+      new FullScreenAction(props.setFullChart)
     ]
   }
   else if(dbMode == DBMode.Visit) {
     iconBtnGroup = [
-      new RefreshAction("redo", elemType, chartId, dashboards, {setDashboards}),
-      {
-        type:"fullscreen",
-        click: props.setFullChart
-      }
+      new RefreshAction(elemType, chartId, dashboards, {setDashboards}),
+      new FullScreenAction(props.setFullChart)
     ]
   }
 

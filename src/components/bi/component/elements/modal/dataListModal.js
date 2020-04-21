@@ -29,6 +29,7 @@ function ModalTitle() {
 function DataListModal(props) {
   const [choiceFormId, setChoiceFormId] = useState("");
   const [choiceFormName, setChoiceFormName] = useState("");
+  const { setVisible } = props;
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
 
@@ -36,6 +37,14 @@ function DataListModal(props) {
     setChoiceFormId(id);
     setChoiceFormName(name);
   };
+
+  const handleCancel = e => {
+    setVisible(false);
+  }
+
+  const handleOK = e => {
+    setVisible(false);
+  }
 
   const newChart = () => {
     const res = request(`/bi/charts`, {
@@ -70,7 +79,7 @@ function DataListModal(props) {
   const onConfirm = () => {
     if (props.type == "create") {
       newChart();
-      props.handleOK();
+      handleOK();
       props.clearBind();
     } else {
       setChangeVisible(true);
@@ -84,12 +93,12 @@ function DataListModal(props) {
       setChangeVisible(true);
     },
     handleCancel: e => {
-      props.handleOK();
+      handleOK();
       setChangeVisible(false);
     },
     handleOK: e => {
       // newChart();
-      props.handleOK();
+      handleOK();
       props.clearBind();
       setChangeVisible(false);
 
@@ -116,8 +125,8 @@ function DataListModal(props) {
       width={500}
       bodyStyle={{ padding: 0 }}
       wrapClassName={classes.BIDataModal}
-      handleCancel={props.handleCancel}
-      handleOK={props.handleOK}
+      handleCancel={handleCancel}
+      handleOK={handleOK}
     >
       <div className={classes.formChoiceModalContainer}>
         <div className={classes.formGroups}>
@@ -151,7 +160,7 @@ function DataListModal(props) {
           </Collapse>
         </div>
         <div className={classes.footBtnGroups}>
-          <Button onClick={props.handleCancel}>取消</Button>
+          <Button onClick={handleCancel}>取消</Button>
           <Button onClick={onConfirm}>确定</Button>
         </div>
       </div>

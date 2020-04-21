@@ -3,8 +3,8 @@ import {setDB} from '../../../utils/reqUtil';
 import {message} from "antd";
 
 export default class DeleteAction {
-  constructor(type, dashboardId, chartId, options) {
-    this.type = type;
+  constructor(dashboardId, chartId, options) {
+    this.type = "delete";
     this.dashboardId = dashboardId;
     this.chartId = chartId;
     this.options = options;
