@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Icon} from "antd";
 import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange } from '../../redux/action';
-import { updateChartReq, setDB } from '../../utils/ReqUtil';
+import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
 import SaveTipModal from "../elements/modal/saveTipModal";
@@ -11,7 +11,8 @@ import classes from '../../scss/elements/element.module.scss';
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited, dataSource} = props;
+  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited,
+    dataSource, elemType} = props;
   let [name, setName] = useState("新建图表");
 
   const handleBack = () => {
@@ -22,7 +23,7 @@ const EditorHeader = props => {
   }
 
   const handleSave = (name) => {
-    updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo);
+    updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo, elemType);
     setDB(dashboardId, setDashboards);
     saveChartChange();
   }
@@ -76,7 +77,8 @@ export default connect(
     bindDataArr: store.bi.bindDataArr,
     isChartEdited:store.bi.isChartEdited,
     chartInfo: store.bi.chartInfo,
-    dataSource: store.bi.dataSource
+    dataSource: store.bi.dataSource,
+    elemType: store.bi.elemType
   }),
   { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange}
 )(EditorHeader);

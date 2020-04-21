@@ -1,8 +1,7 @@
 import request from './request';
-import { getChartAttrs } from './ChartUtil';
-import { ChartType } from '../component/elements/Constant';
+import { getChartAttrs, getChartAvailableList } from './ChartUtil';
 
-export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp) => {
+export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp, elemType) => {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
 
   return request(`/bi/charts/${elementId}`, {
@@ -12,13 +11,7 @@ export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypePr
         chartTypeProp,
         conditions,
         dimensions,
-        formFields: [
-          {
-            id: "string",
-            label: "string",
-            type: "string"
-          }
-        ],
+        formFields: [],
         indexes,
         formId,
         name,
@@ -28,7 +21,7 @@ export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypePr
             "status": "SUCCESS"
           }
         ],
-        type: ChartType.HISTOGRAM
+        type: elemType
       }
     }
   });
@@ -48,28 +41,36 @@ export const setDB = (dashboardId, setDashboards) => {
   })
 }
 
-export const processBind = (bindDataArr, formId, changeBind, changeChartData, elemType, setElemType) => {
-  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
-  setElemType(elemType);
-    const res = request(`/bi/charts/data`, {
-      method: "POST",
-      data: {
-        formId,
-        dimensions,
-        indexes,
-        conditions,
-        chartType: elemType
-      }
-    }).then((res) => {
-      if(res && res.msg === "success") {
-        const dataObj = res.data;
-        const data = dataObj.data;
-        changeChartData(data);
-      }
-    })
-    changeBind(bindDataArr);
+export const getDashboardAll = (appId) => {
+  return request(`/bi/dashboards?appId=${appId}`);
 }
 
-export const getDashboardAll = (appId) => {
-  return request(`/bi/dashboards`);
-};
+export const processBind = (bindDataArr, formId, changeBind, changeChartData, elemType, setElemType) => {
+  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+  const availableList = getChartAvailableList(bindDataArr);
+  let type = elemType
+
+  if(!availableList.includes(elemType)) {
+    type = availableList[0];
+    setElemType(type);
+  }
+
+  request(`/bi/charts/data`, {
+    method: "POST",
+    data: {
+      formId,
+      dimensions,
+      indexes,
+      conditions,
+      chartType: type
+    }
+  }).then((res) => {
+    if(res && res.msg === "success") {
+      const dataObj = res.data;
+      const data = dataObj.data;
+      changeChartData(data);
+    }
+  })
+
+  changeBind(bindDataArr);
+}

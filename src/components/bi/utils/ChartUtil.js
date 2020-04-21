@@ -1,7 +1,9 @@
 import { Types } from '../component/bind/Types';
 import ChartInfo from '../component/elements/data/ChartInfo';
-import { setElemType } from '../redux/action'
-import { ChartType, AllType, PieType, BarType, BarIndexType } from '../component/elements/Constant'
+import { ChartType, AllType, BarType } from '../component/elements/Constant'
+import FilterCondition from '../component/elements/data/FilterCondition';
+import Field from '../component/elements/data/Field';
+import { deepClone } from './Util';
 
 export const getBarChartOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
@@ -41,7 +43,7 @@ export const getBarChartOption = (chartData, chartInfo) => {
     }
     else { // tow dimensions, one measure
       legends.forEach((legend) => {
-        let count = 0
+        let count = "";
 
         items.forEach((item)=> {
           if(item.legend.legendName == legend.legendName) {
@@ -76,7 +78,7 @@ export const getBarChartOption = (chartData, chartInfo) => {
         }
       }],
     yAxis: {name: titleYAxis || ""},
-    // color: [],
+    color: ['#4398E2','#6FB3EE','#F57243','#FFA585','#8D84E0','#BBB5F0','#FA5F84','#FE91BA','#1FB4BD','#94E2C7','#C2864F','#E6B181','#65B440','#9DDA81','#FCA036','#FFB966','#888E9D','#B9BCC7','#DA6ED5','#F3A9EE'],
     grid: {top: '80px'},
     series
   } 
@@ -121,7 +123,8 @@ export const getPieChartOption = (chartData, chartInfo) => {
           textStyle: {
             color: 'gray'
           }
-        }
+        },
+        center: ['50%','60%']
       });
       let row = [];
       const legend = item.legend;
@@ -151,9 +154,7 @@ export const getPieChartOption = (chartData, chartInfo) => {
       formatter: '{c} ({d}%)'
     }, 
     labelLine :{show:true},
-    grid: {
-      top: '40%',
-    },
+    color: ['#4398E2','#6FB3EE','#F57243','#FFA585','#8D84E0','#BBB5F0','#FA5F84','#FE91BA','#1FB4BD','#94E2C7','#C2864F','#E6B181','#65B440','#9DDA81','#FCA036','#FFB966','#888E9D','#B9BCC7','#DA6ED5','#F3A9EE'],
     series
   } 
 }
@@ -173,8 +174,11 @@ export const getOption = (chartData, chartInfo, elemType) => {
   }
 }
 
-
 export const getChartAvailableList = (bindDataArr) => {
+  if(!bindDataArr) {
+    return AllType;
+  }
+
   let dimCount = 0;
   let meaCount = 0;
   bindDataArr.forEach((each) => {
@@ -187,11 +191,7 @@ export const getChartAvailableList = (bindDataArr) => {
     }
   })
 
-  if((dimCount == 1 && meaCount > 1) || (dimCount == 2 && meaCount == 1) || (dimCount == 2 && meaCount == 0) || (dimCount > 1 && meaCount == 0) || (dimCount == 0 && meaCount > 1)){
-    return BarType;
-  } else {
-    return AllType;
-  }
+  return dimCount > 1 || meaCount > 1 ? BarType : AllType;
 }
 
 /**
@@ -200,16 +200,26 @@ export const getChartAvailableList = (bindDataArr) => {
 export const getChartAttrs = (bindDataArr) => {
   bindDataArr = bindDataArr || [];
   let dimensions = [], indexes = [];
-  const groups = [{ name: "", value: "COUNT" }];
-  const sort = { fieldId: "", value: "DESC" };
+  const groups = [];
+  let sort = { fieldId: "", value: "DESC" };
   const conditions = [];
-
   bindDataArr.forEach((each) => {
-    const field = Object.assign({}, each);
-    const option = field.option;
-    const currentGroup = option.currentGroup;
+    if(each.bindType == Types.FILTER) {
+      const field = new Field(each.fieldId, each.label, each.type);
+      let condition = new FilterCondition(field, each.value, each.symbol);
+      conditions.push(condition);
+      return; // continue
+    }
+
+    const field = deepClone(each);
+    const currentGroup = field.currentGroup;
+
+    if(field.sort) {
+      sort = field.sort;
+    }
+
     delete field.bindType;
-    delete field.option;
+    delete field.currentGroup;
 
     switch(each.bindType) {
       case Types.DIMENSION:

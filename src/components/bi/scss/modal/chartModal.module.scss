@@ -1,0 +1,23 @@
+.BIChartModal{
+    :global(.ant-modal){
+      padding-bottom: 0px;
+      padding-top: 0px;
+      :global(.ant-modal-content){
+        height: 100%;
+        border-radius: 0px;
+        :global(.ant-modal-body) {
+          padding: 0px;
+          .modalChartContainer{
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            position: relative;
+            :global(.chartContainer){
+              margin-top: 0px;
+              height: 700px;
+            }
+          }
+        }
+      }
+    }
+  }

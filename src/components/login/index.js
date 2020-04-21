@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Tabs } from "antd";
 import Styles from "./style/login.module.scss";
-import { loginUser } from "../../store/loginReducer";
+import {
+  loginUser,
+  sendCode,
+  resetAllowSendCodeState
+} from "../../store/loginReducer";
 import PublicForm from "./PublicForm";
 import Loading from "../../pages/Loading";
 import { loginPasswordParameter, loginPhoneParameter } from "./formItemConfig";
@@ -11,7 +15,18 @@ import { SigninImage, RegisterImage } from "../../assets/icons/login";
 import Register from "./Register";
 import { Redirect } from "react-router";
 
-function Registe({ params, history, setActiveKey, query }) {
+function Registe({
+  params,
+  history,
+  activeKey,
+  setActiveKey,
+  query,
+  sendCode,
+  isFetchCoding,
+  fetchText,
+  allowSendCode,
+  resetAllowSendCodeState
+}) {
   return (
     <>
       <div>
@@ -21,15 +36,32 @@ function Registe({ params, history, setActiveKey, query }) {
         <Register
           params={params}
           history={history}
+          activeKey={activeKey}
           setActiveKey={setActiveKey}
           query={query}
+          sendCode={sendCode}
+          isFetchCoding={isFetchCoding}
+          fetchText={fetchText}
+          allowSendCode={allowSendCode}
+          resetAllowSendCodeState={resetAllowSendCodeState}
         />
       </div>
     </>
   );
 }
 
-function Signin({ setActiveKey, params, loginUser, history }) {
+function Signin({
+  activeKey,
+  setActiveKey,
+  params,
+  loginUser,
+  history,
+  sendCode,
+  isFetchCoding,
+  fetchText,
+  allowSendCode,
+  resetAllowSendCodeState
+}) {
   const [activeTab, setActiveTab] = useState("1");
   return (
     <>
@@ -66,6 +98,8 @@ function Signin({ setActiveKey, params, loginUser, history }) {
               setActiveKey={setActiveKey}
               history={history}
               loginType={"PASSWORD"}
+              activeKey={activeKey}
+              resetAllowSendCodeState={resetAllowSendCodeState}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -88,6 +122,12 @@ function Signin({ setActiveKey, params, loginUser, history }) {
               setActiveKey={setActiveKey}
               history={history}
               loginType={"CODE"}
+              sendCode={sendCode}
+              isFetchCoding={isFetchCoding}
+              fetchText={fetchText}
+              allowSendCode={allowSendCode}
+              resetAllowSendCodeState={resetAllowSendCodeState}
+              activeKey={activeKey}
             />
           </Tabs.TabPane>
         </Tabs>
@@ -99,12 +139,27 @@ function Signin({ setActiveKey, params, loginUser, history }) {
 export default connect(
   ({ login }) => ({
     isLoading: login.isLoading,
-    isAuthenticated: login.isAuthenticated
+    isAuthenticated: login.isAuthenticated,
+    isFetchCoding: login.isFetchCoding,
+    fetchText: login.fetchText,
+    allowSendCode: login.allowSendCode
   }),
   {
-    loginUser
+    loginUser,
+    sendCode,
+    resetAllowSendCodeState
   }
-)(function Login({ loginUser, isLoading, history, isAuthenticated }) {
+)(function Login({
+  loginUser,
+  isLoading,
+  history,
+  isAuthenticated,
+  sendCode,
+  isFetchCoding,
+  fetchText,
+  allowSendCode,
+  resetAllowSendCodeState
+}) {
   const { userId, companyId, token, active, inviter, invitedCompany } =
     history.location.query || {};
   const params =
@@ -133,6 +188,11 @@ export default connect(
                   params={params}
                   loginUser={loginUser}
                   history={history}
+                  sendCode={sendCode}
+                  isFetchCoding={isFetchCoding}
+                  fetchText={fetchText}
+                  allowSendCode={allowSendCode}
+                  resetAllowSendCodeState={resetAllowSendCodeState}
                 />
                 // )
               }
@@ -143,8 +203,14 @@ export default connect(
                 <Registe
                   history={history}
                   params={params}
+                  activeKey={activeKey}
                   setActiveKey={setActiveKey}
                   query={query}
+                  sendCode={sendCode}
+                  isFetchCoding={isFetchCoding}
+                  fetchText={fetchText}
+                  allowSendCode={allowSendCode}
+                  resetAllowSendCodeState={resetAllowSendCodeState}
                 />
                 // )
               }

@@ -30,7 +30,7 @@ export const main = [
   {
     key: "team",
     label: "团队管理",
-    path: "/team",
+    path: "/company",
     component: TeamManagement
   },
   {

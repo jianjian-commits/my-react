@@ -41,7 +41,6 @@ export const newElement = (dashboardId, dbName) => dispatch => {
 }
 
 export const changeBind = (bindDataArr) => dispatch => {
-  getChartAvailableList(bindDataArr);
   dispatch({
       type: CHANGE_BIND,
       bindDataArr,
@@ -121,12 +120,5 @@ export const setElemType = (elemType) => dispatch => {
   dispatch({
     type: SET_ELEM_TYPE,
     elemType
-  });
-}
-
-export const changeChartAvailable = (chartAvailableList) => dispatch => {
-  dispatch({
-    type: CHANGE_CHART_AVAILABLE,
-    chartAvailableList
   });
 }

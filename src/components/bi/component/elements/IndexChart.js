@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import classes from '../../scss/elements/element.module.scss';
+import { DataType } from "./Constant";
 
 class IndexChart extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class IndexChart extends React.Component {
       return(
         <div className={classes.indexChart}>
           {chartdata.map(data=>
-            <div className={classes.indexTable}>
+            <div key={data.name + data.count} className={classes.indexTable}>
               <span>{data.name}</span>
               <span>{data.count}</span>
             </div>

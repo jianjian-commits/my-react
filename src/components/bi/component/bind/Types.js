@@ -1,5 +1,6 @@
 export const Types = {
   BIND: 'bind',
   DIMENSION: 'dim',
-  MEASURE: 'mea'
+  MEASURE: 'mea',
+  FILTER: 'filter'
 }

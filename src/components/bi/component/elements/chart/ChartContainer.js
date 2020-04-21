@@ -6,7 +6,7 @@ import { getOption } from '../../../utils/ChartUtil';
 import BlankElement from '../BlankElement';
 import ChartToolbarBtn from "../ChartToolbarBtn";
 import request from '../../../utils/request';
-import {setDB} from '../../../utils/ReqUtil';
+import {setDB} from '../../../utils/reqUtil';
 import { DBMode } from '../../dashboard/Constant';
 import { Types } from '../../bind/Types';
 import { ChartType } from '../Constant';
@@ -22,19 +22,16 @@ const ChartContainer = props => {
     changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
+
   const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
-  let chart = '';
-  if( elemType == ChartType.INDEX_DIAGRAM){
-    chart = <IndexChart chartOption={chartOption} />;
-  }else {
-    chart = <Chart chartOption={chartOption} />;
-  }
+  let chart = elemType == ChartType.INDEX_DIAGRAM ? <IndexChart chartOption={chartOption} /> :
+    <Chart chartOption={chartOption} />;
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
-  const elements =
-    dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
+  const elements = dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
   let name = "新建图表";
   let iconBtnGroup = [];
-  if (elementId) {
+
+  if(elementId) {
     elements.forEach(item => {
       if (item.id == elementId) {
         name = item.name;
@@ -43,6 +40,7 @@ const ChartContainer = props => {
   } else {
     name = chartName || name;
   }
+
   if(dbMode == DBMode.Edit) {
     iconBtnGroup = [
       {
@@ -54,15 +52,16 @@ const ChartContainer = props => {
               const formId = data.formId;
               const chartInfo = data.chartTypeProp;
               let bindDataArr = [];
-              const dimensions = data.dimensions;
-              const indexes = data.indexes;
+              const { dimensions, indexes, conditions } = data;
 
               if(dimensions && dimensions.length > 0) {
                 const dimArr = dimensions.map((each, idx) => {
                   let field = each.field;
-                  field["option"] = {currentGroup: each.currentGroup}
+                  field["currentGroup"] =each.currentGroup;
+                  field["groups"] =each.groups;
+                  field["sort"] =each.sort;
                   field["bindType"] = Types.DIMENSION;
-                  field["idx"] = idx;
+                  field["idx"] = Date.now();
                   return field;
                 })
 
@@ -71,16 +70,28 @@ const ChartContainer = props => {
 
               if(indexes && indexes.length > 0) {
                 const meaArr = indexes.map((each, idx) => {
-                  const field = deepClone(each.field);
-                  const currentGroup = deepClone(each.currentGroup);
-                  field["option"] = {currentGroup};
+                  const field = each.field;
+                  field["currentGroup"] = each.currentGroup;
+                  field["groups"] = each.groups;
+                  field["sort"] = each.sort;
                   field["bindType"] = Types.MEASURE;
-                  field["idx"] = bindDataArr.length + idx;
-                  field["ddddd"] = {aaa: "ddddd"};
+                  field["idx"] = Date.now();
                   return field;
                 })
 
                 bindDataArr = bindDataArr.concat(meaArr);
+              }
+
+              if(conditions && conditions.length > 0) {
+                const filterArr = conditions.map((each, idx) => {
+                  const field = each.field;
+                  field["value"] = each.value;
+                  field["symbol"] = each.symbol;
+                  field["idx"] = Date.now();
+                  return field;
+                })
+
+                bindDataArr = bindDataArr.concat(filterArr);
               }
 
               changeBind(bindDataArr);
@@ -210,7 +221,7 @@ const ChartContainer = props => {
         {btnVisible && (
           <ChartToolbarBtn
             {...props}
-            iconBtnGroup={iconBtnGroup}
+            iconBtnGroup={iconBtnGroup.filter(item => item.type!="redo" && item.type!="fullscreen")}
             isBtnBlock={isBtnBlock}
           />
          )} 
@@ -242,7 +253,6 @@ const ChartContainer = props => {
 export default connect(
   store => ({
     dashboards: store.bi.dashboards,
-    dbMode: store.bi.dbMode,
-    elemType: store.bi.elemType}),
+    dbMode: store.bi.dbMode}),
     { changeBind, changeChartData, setDataSource, changeChartInfo,setDashboards, setElemType }
   )(ChartContainer);

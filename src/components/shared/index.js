@@ -1,6 +1,10 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import Authenticate from "../shared/Authenticate";
+import { BreadRight } from "../../assets/icons";
+import { Breadcrumb } from "antd";
+import clx from "classnames";
+import comClasses from "../../styles/common.module.scss";
 
 export const PrivateRoute = ({
   auth,
@@ -35,3 +39,25 @@ export const PrivateRoute = ({
 export const PublicRoute = ({ component, props, ...rest }) => (
   <Route {...rest} render={props => React.createElement(component, props)} />
 );
+
+export const Title = ({ navs }) => {
+  return (
+    <>
+      <Breadcrumb separator={<BreadRight />}>
+        {navs.map(n => (
+          <Breadcrumb.Item
+            key={n.key}
+            className={clx({
+              [comClasses.breadcrumbItem]: true,
+              [comClasses.disabled]: n.disabled,
+              [comClasses.active]: !n.disabled
+            })}
+            onClick={n.onClick}
+          >
+            {n.label}
+          </Breadcrumb.Item>
+        ))}
+      </Breadcrumb>
+    </>
+  );
+};

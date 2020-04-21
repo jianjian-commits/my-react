@@ -83,7 +83,7 @@ export default connect(
   const selectHandle = e => {
     history.push(e.key);
   };
-  const toTeamMangement = () => history.push("/team/info");
+  const toTeamMangement = () => history.push("/company/info");
   const {
     router,
     hides = {
