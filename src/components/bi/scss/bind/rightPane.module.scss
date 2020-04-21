@@ -92,10 +92,10 @@
   }
   .checkboxGroup {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     :global(.ant-checkbox-wrapper) {
       margin-left: 0px;
-      margin-bottom: 8px;
+      margin-right: 2px;
 
       :global(.ant-checkbox) {
         width: 12px;
@@ -104,6 +104,15 @@
       :global(span) {
         font-size: 12px;
         color: #777f97;
+      }
+      :global(.ant-checkbox-inner) {
+        background-color: transparent;
+      }
+      :global(.ant-checkbox-inner::after){
+        border-color: #1890ff;
+      }
+      :global(.ant-checkbox-checked::after){
+        border: none;
       }
     }
   }
@@ -114,6 +123,19 @@
     display: none;
   }
 }
+
 .hideRightPaneTools{
   display: none;
+}
+
+.TooltipBox{
+  :global(.ant-tooltip-arrow::before){
+    background-color: #fff;
+  }
+  :global(.ant-tooltip-inner){
+    background-color: #fff;
+    color: #000;
+    height: 100px;
+    width: 180px;
+  }
 }

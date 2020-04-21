@@ -71,7 +71,7 @@
 }
 
 .indexChart{
-  width: 90%;
+  width: 96%;
   height: 490px;
   margin: auto;
   box-sizing: border-box;
@@ -80,15 +80,18 @@
   .indexTable{
     height: 40px;
     line-height: 40px;
-    padding: 0 10px;
+    padding-left: 21px;
+    padding-right: 84px;
     display: flex;
     justify-content: space-between;
-    &:nth-child(2n+1){
-      background-color: rgba(43, 129, 255, 0.1);
-    }
+    border: 1px solid #DCDEE3;
+    border-bottom: none;
     &:first-child{
       color: #2B81FF;
       font-weight: bold;
+    }
+    &:last-child{
+      border-bottom: 1px solid #DCDEE3;
     }
   }
 }

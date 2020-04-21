@@ -78,7 +78,7 @@ const RightPane = (props) => {
         <span>可视化</span>
         <div className={classes.chartGroup}>
         {chartGroup.map(chart =>
-        <Tooltip key={chart.type}  title={chart.intro}>
+        <Tooltip key={chart.type}  title={chart.intro} placement="left" overlayClassName={classes.TooltipBox}>
           <div
             className={chartAvailableList.includes(chart.type) ? classNames(classes.IconBox, {activeIcon: activeIcon==chart.type}) : classes.unavailable }
             onClick={()=>{handleSelectIcon(chart.type)}}
