@@ -31,7 +31,6 @@ export default connect(({ login, debug }) => ({
   const { url } = useRouteMatch();
   const { appId, formId } = useParams();
   const configAuth = Object.keys(authMappings).reduce((acc, key) => {
-    console.log(authMappings[key](appId, formId));
     const result = authorityIsValid({
       debug,
       permissions,
