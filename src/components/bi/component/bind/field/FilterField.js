@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "antd";
+import { OPERATORS, OPERATOR_LABELS } from "../../elements/Constant";
+import { findKey } from '../../../utils/Util';
 import classes from "../../../scss/bind/FilterField.module.scss"
 const operationArr = [
   {label: "修改筛选条件", type: 'modify'},
@@ -44,6 +46,18 @@ const FilterField = (props) => {
     setBtnVisible(false);
   };
 
+  const getLabel = () => {
+    const {symbol, value, label} = item;
+    let symbolLabel = " " + OPERATOR_LABELS[findKey(symbol, OPERATORS)] + " " + value;
+
+    if(symbol == OPERATORS.RANGE) {
+      symbolLabel = Array.isArray(value) && (value.length == 2) ? " 在" + value[0] + "到" + value[1] + "之间" :
+        " 在 "  + "到" + value[1] + " 之间";
+    }
+
+    return label + symbolLabel;
+  }
+
   return (
     <div className={classes.FilterContainer}>
       <div
@@ -56,7 +70,7 @@ const FilterField = (props) => {
       >
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
         <span className={classes.dropDownBtnSpan}>
-          {item.alias ? item.alias : item.label}
+          {getLabel()}
         </span>
         {btnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>

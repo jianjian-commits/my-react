@@ -14,9 +14,9 @@ import { useParams } from "react-router-dom";
 import { deepClone } from '../../utils/Util';
 import FilterModal from '../modal/FilterModal';
 import { OPERATORS } from '../elements/Constant';
-import classes from '../../scss/bind/bindPane.module.scss';
 import { message } from 'antd';
 import { processBind } from "../../utils/reqUtil";
+import classes from '../../scss/bind/bindPane.module.scss';
 
 /**
  * Specifies the drop target contract.
@@ -163,24 +163,13 @@ class BindPane extends PureComponent {
     const newArr = bindDataArr.map((each) => {
       if(fieldId == each.fieldId && each.bindType == Types.FILTER) {
         each["symbol"] = symbol;
-        each["value"] = value;  
+        each["value"] = value;
       }
 
       return each;
     })
 
     processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
-  }
-
-  setFilterAlias = (fieldId, filterLabel) => {
-    let { bindDataArr} = this.props;
-    bindDataArr.map((each) => {
-      if(fieldId == each.fieldId && each.bindType == Types.FILTER) {
-        each["alias"] = each.label + filterLabel;
-      }
-
-      return each;
-    })
   }
 
   render() {
@@ -194,8 +183,8 @@ class BindPane extends PureComponent {
 
     return connectDropTarget(
       <div className={classes.bindLine} key={label} ref={(ref)=> {this.line = ref}} >
-        <FilterModal key="FilterModal" visible={visible} setVisible={this.changeModalVisible}
-          item={filterItem} changeFilter={this.changeFilter} setFilterAlias={this.setFilterAlias}/>
+        {visible ? <FilterModal key="FilterModal" visible={visible} setVisible={this.changeModalVisible}
+          item={filterItem} changeFilter={this.changeFilter} /> : null}
         <div className={classes.bindLabel} ref={(ref)=>{this.labelRef = ref}}>{label}</div>
         <div className={classes.bindCols}>{items}</div>
       </div>

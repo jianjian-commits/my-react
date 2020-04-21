@@ -4,25 +4,23 @@
   border-radius: 15px;
   position: relative;
   cursor: pointer;
-  background-color: #00c59f;
-  // margin-left: 10px;
+  background-color: #F0F0F0;
   margin: 3px;
   .dropDownBtn {
     height: 26px;
     line-height: 26px;
     position: relative;
     text-align: center;
-    color: #ffffff;
     .dropDownBtnSpan {
       padding: 0px 24px;
       width: auto;
       min-width: 80px;
-      max-width: 160px;
       text-align: center;
       display: inline-block;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      color: #777F97;
     }
     i {
       position: absolute;
