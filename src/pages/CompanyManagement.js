@@ -83,7 +83,7 @@ const TeamManagement = props => {
           logo: true,
           menu: true,
           teamManage: true,
-          backArrow: "团队管理",
+          backArrow: "公司管理",
           backUrl: "/"
         }}
       />

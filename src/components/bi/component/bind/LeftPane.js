@@ -1,4 +1,4 @@
-import React, {PureComponent, useState} from "react";
+import React, {useState} from "react";
 import DragItem from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';

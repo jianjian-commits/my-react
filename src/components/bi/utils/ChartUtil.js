@@ -43,7 +43,7 @@ export const getBarChartOption = (chartData, chartInfo) => {
     }
     else { // tow dimensions, one measure
       legends.forEach((legend) => {
-        let count = 0
+        let count = "";
 
         items.forEach((item)=> {
           if(item.legend.legendName == legend.legendName) {
