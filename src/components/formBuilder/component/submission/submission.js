@@ -496,6 +496,7 @@ class Submission extends Component {
         values[key] = formChildDataObj[key];
       }
       if (Array.isArray(values[key])) {
+        console.log(values[key])
         values[key].forEach((data, index) => {
           console.log("data", data);
           if (!data["childFormDataId"]) {
