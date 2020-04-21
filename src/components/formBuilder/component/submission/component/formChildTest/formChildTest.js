@@ -567,7 +567,7 @@ class FormChildTest extends React.Component {
       }
       this.setState({
         hasFormChildError: true,
-        errorMsg: errorArr.join(";")
+        // errorMsg: errorArr.join(";")
       })
     }
   }
@@ -704,7 +704,7 @@ class FormChildTest extends React.Component {
     let resultArray = [];
     for (let key in formChildObj) {
       let item = formChildObj[key];
-      const errorValues = this._getErrorMsgValue(key); // 重复的值
+      // const errorValues = this._getErrorMsgValue(key); // 重复的值
       let className = item.hasErr
         ? "componentContent has-value-error"
         : "componentContent";
@@ -736,7 +736,7 @@ class FormChildTest extends React.Component {
                   }}
                   onBlur={e => {
                     let { value } = e.target;
-                    checkValueValidByType(item, value, errorValues)
+                    checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
                     if(typeof value =="string" && value!==""){
@@ -785,7 +785,7 @@ class FormChildTest extends React.Component {
                   }}
                   onBlur={e => {
                     let { value } = e.target;
-                    checkValueValidByType(item, value, errorValues)
+                    checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
                     this.setState({

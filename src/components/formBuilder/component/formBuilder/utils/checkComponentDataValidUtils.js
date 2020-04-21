@@ -16,7 +16,7 @@ export const checkValueValidByType = (item, data, errorValues=[]) => {
         }
       }
       reg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
-      return reg.test(data) && checkUnique(item.validate.unique, errorValues, data);
+      return reg.test(data);
     case "SingleText":
       if (item.validate.required === false) {
         if (data === "") {
@@ -28,7 +28,7 @@ export const checkValueValidByType = (item, data, errorValues=[]) => {
         validate.minLength,
         validate.maxLength,
         data.length
-      ) && checkUnique(item.validate.unique, errorValues, data);
+      ) 
     case "TextArea":
       if (item.validate.required === false) {
         if (data === "") {
@@ -52,7 +52,7 @@ export const checkValueValidByType = (item, data, errorValues=[]) => {
         validate.min,
         validate.max,
         Number(data)
-      ) && checkUnique(item.validate.unique, errorValues, data);
+      );
     case "IdCardInput":
       if (item.validate.required === false) {
         if (data === "") {
@@ -60,7 +60,7 @@ export const checkValueValidByType = (item, data, errorValues=[]) => {
         }
       }
       reg = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
-      return reg.test(data) && checkUnique(item.validate.unique, errorValues, data);
+      return reg.test(data);
     case "EmailInput":
       if (item.validate.required === false) {
         if (data === "") {
@@ -68,7 +68,7 @@ export const checkValueValidByType = (item, data, errorValues=[]) => {
         }
       }
       reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-      return reg.test(data) && checkUnique(item.validate.unique, errorValues, data);
+      return reg.test(data);
     case "CheckboxInput":
       if (item.validate.required === false) {
         if (data.length === 0) {
@@ -132,10 +132,10 @@ function checkMaxAndMin(isLimitLength, min, max, value) {
   } else {
     return true;
   }
+  return false;
 }
 
 function checkUnique(unique, errorValues, value){
-  // console.log("errorValues", errorValues)
   if(unique === true && errorValues.includes(value)){
     return false
   }
