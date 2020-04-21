@@ -88,7 +88,7 @@ const onDropFun = e =>{
   let targetDom = e.target;
   let originId = e.dataTransfer.getData("formId");
   let targetIndex = e.target.parentNode.dataset.index;
-  console.log(targetIndex)
+  // console.log(targetIndex)
   if( targetIndex){
     let newTargetIndex = "" + (1 * targetIndex + 1) ;
     updateList(originId,newTargetIndex,appId).then(res=>{
