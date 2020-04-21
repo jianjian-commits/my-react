@@ -8,7 +8,7 @@ import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
 import Login from "./login";
-import ForgetPassword from "./login/ForgetPassword";
+import ForgetPassword from "./login/forgetPassword";
 import InviteUser from "./login/InviteUser";
 import { setDebug } from "../store/debugReducer";
 import { signOut } from "../store/loginReducer";

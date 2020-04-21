@@ -16,7 +16,7 @@ import {message} from "antd";
 import { deepClone } from '../../../utils/Util';
 import ChartInfo from '../data/ChartInfo';
 import classes from '../../../scss/elements/chart.module.scss';
-
+import FieldSortModal from "../modal/fieldSortModal";
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
     changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType } = props;
@@ -27,6 +27,7 @@ const ChartContainer = props => {
   let chart = elemType == ChartType.INDEX_DIAGRAM ? <IndexChart chartOption={chartOption} /> :
     <Chart chartOption={chartOption} />;
   const [btnVisible, setBtnVisible] = useState(isBtnBlock);
+  const [modalVisible,setModalVisible] = useState(false);
   const elements = dashboards && dashboards.length > 0 ? dashboards[0].elements : [];
   let name = "新建图表";
   let iconBtnGroup = [];
@@ -192,6 +193,12 @@ const ChartContainer = props => {
       {
         type:"fullscreen",
         click: props.setFullChart
+      },
+      {
+        type:"swap",
+        click:()=>{
+          setModalVisible(true);
+        }
       }
     ]
   }
@@ -238,6 +245,15 @@ const ChartContainer = props => {
       style={style}
     >
       <div className={classes.chartTitle}>{name}</div>
+      {
+        modalVisible && (
+          <FieldSortModal 
+            chartName={chartName} 
+            chartId={chartId} 
+            handleCancel={()=>{setModalVisible(false)}}
+          />
+        )
+      }
       {btnVisible && (
         <ChartToolbarBtn
           {...props}

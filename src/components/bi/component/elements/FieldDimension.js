@@ -1,9 +1,12 @@
 import React ,{ useState, useEffect, useRef }from "react";
 import { Icon, Input, Button } from "antd";
-import {TimeSumTypeArr,SortTypeArr, DataType} from "./Constant";
+import {TimeSumType,SortType, DataType} from "./Constant";
 import classes from "../../scss/bind/optionSelect.module.scss";
-import {FieldSecondMenus} from "./FieldMeasureSelect";
+import {FieldSecondMenus,transforObjIntoArr} from "./FieldMeasureSelect";
+import FieldNameModal from "../elements/modal/fieldNameModal";
 export default function FieldDimensionSelect(props) {
+  const SortTypeArr = transforObjIntoArr(SortType);
+  const TimeSumTypeArr = transforObjIntoArr(TimeSumType);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [nameInputVisible,setNameInputVisible] = useState(false);
   const [deleteBtnVisible,setDeleteBtnVisible] = useState(false);
@@ -65,8 +68,6 @@ export default function FieldDimensionSelect(props) {
     setDeleteBtnVisible(false);
   };
 
-  
-
   const operationList = [
     {
       name: "修改显示名",
@@ -85,6 +86,14 @@ export default function FieldDimensionSelect(props) {
       }
     }
   ];
+  
+  const handleOK = name => {
+    props.item.changeFieldName(name, props.item.fieldId);
+    setNameInputVisible(false);
+  }
+  const handleCancel = () => {
+    setNameInputVisible(false);
+  }
   return (
     <div 
       className={classes.dimContainer}
@@ -105,17 +114,7 @@ export default function FieldDimensionSelect(props) {
         </span>
         {deleteBtnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>
-      {nameInputVisible && (
-        <div className={classes.nameInputContainer}>
-          <div className={classes.inputBox}>
-            <Input/>
-          </div>
-          <div className={classes.btnBox}>
-            <Button onClick={()=>{setNameInputVisible(false)}}>取消</Button>
-            <Button onClick={()=>{setNameInputVisible(false)}}>确定</Button>
-          </div>
-        </div>
-      )}
+      {nameInputVisible && <FieldNameModal label={props.item.label} handleOK={handleOK} handleCancel={handleCancel}/>}
       {popoverVisible && (
         <div className={classes.dropDownItemContainer}>
           <FieldSecondMenus

@@ -495,7 +495,7 @@ const submit = ({
             &nbsp;&nbsp;|&nbsp;&nbsp;
             <span
               onClick={() => {
-                timeout.clear(0);
+                // timeout.clear(0);
                 resetAllowSendCodeState();
                 form.resetFields();
                 setActiveKey("register");

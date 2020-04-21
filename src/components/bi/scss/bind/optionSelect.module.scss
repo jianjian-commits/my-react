@@ -110,7 +110,6 @@
       :global(.ant-popover-inner-content) {
         padding: 0px;
         width: 80px;
-        min-height: 80px;
         height: auto;
         .popoverSelectionGroup {
           .selectionBox {
@@ -118,7 +117,6 @@
             line-height: 26px;
             padding-left: 16px;
             font-size: 12px;
-            border-bottom: 1px solid #f3f4f5;
             position: relative;
             cursor: pointer;
             i {

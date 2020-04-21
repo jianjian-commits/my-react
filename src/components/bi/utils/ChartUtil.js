@@ -202,7 +202,7 @@ export const getChartAttrs = (bindDataArr) => {
   bindDataArr = bindDataArr || [];
   let dimensions = [], indexes = [];
   const groups = [];
-  let sort = { fieldId: "", value: "DESC" };
+  let sort = { fieldId: "", value: "DEFAULT" };
   const conditions = [];
   bindDataArr.forEach((each) => {
     if(each.bindType == Types.FILTER) {
