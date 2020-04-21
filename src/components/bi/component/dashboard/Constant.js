@@ -1,5 +1,5 @@
 export const DBMode = {
   Editing: "Editing",
-  View: "View",
+  Visit: "Visit",
   Edit: "Edit"
 }
