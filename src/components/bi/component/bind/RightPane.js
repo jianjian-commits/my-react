@@ -20,6 +20,7 @@ const RightPane = (props) => {
   let [showLegend, setShowLegend] = useState(chartInfo.showLegend);
   let [showDataTag, setShowDataTag] = useState(chartInfo.showDataTag);
   let showRPTTitle = true;
+  let showRPTools = true;
 
   const onChangeShowLegend = () => {
     let show = !showLegend;
@@ -69,6 +70,7 @@ const RightPane = (props) => {
   }
 
   showRPTTitle = elemType != ChartType.AREA_CHART;
+  showRPTools = elemType != ChartType.INDEX_DIAGRAM;
 
   return (
     <div className={classes.rightPane}>
@@ -87,7 +89,7 @@ const RightPane = (props) => {
         )}
         </div>
       </div>
-      <div className={classes.rightPaneTools}>
+      <div className={showRPTools? classes.rightPaneTools : classes.hideRightPaneTools}>
         <span className={classes.title}>工具栏</span>
         <div className={showRPTTitle? classes.showXYTitle : classes.hideXYTitle}>
           <p>X轴标题</p>
