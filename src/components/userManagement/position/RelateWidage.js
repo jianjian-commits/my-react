@@ -18,7 +18,6 @@ export default compose(
   }),
   withState("open", "setOpen", false),
   withState("widageRef", "setRef", null),
-  // withState("rolesOrder", "setRolesOrder", "alphabet"),
   withHandlers({
     onWidageClick: props => () => {
       if (props.open) return false;
@@ -69,10 +68,10 @@ export default compose(
     return (
       <div
         ref={div => (divRef.current = div)}
-        className={classes.customWidageWrapper}
+        className={classes.customWidgetWrapper}
       >
         <div
-          className={clx(classes.customWidage, open ? classes.active : null)}
+          className={clx(classes.customWidget, open ? classes.active : null)}
           onClick={onWidageClick}
         >
           {open ? (

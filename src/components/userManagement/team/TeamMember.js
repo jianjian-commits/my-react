@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from "react";
 import { connect } from "react-redux";
-import { Button, Row, Col, Table, Popconfirm, message, Spin } from "antd";
+import { Button, Row, Col, Popconfirm, message, Spin } from "antd";
+import { Table } from "../../shared/customWidget";
 import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
 import classes from "./team.module.scss";

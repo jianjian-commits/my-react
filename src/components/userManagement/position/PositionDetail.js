@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Button, Input, Radio, Table, message, Modal, Popconfirm } from "antd";
+import { Button, Input, Radio, message, Modal, Popconfirm } from "antd";
+import { Table } from "../../shared/customWidget";
 import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
