@@ -115,3 +115,31 @@ export const getAllForms = () => dispatch => {
       console.log(err);
     });
 };
+
+export const getApprovalDefinition = (formid, appid) =>{
+  return instanceAxios.get(config.apiUrl + "/flow/approval/definition",{
+    headers:{
+      appid:appid,
+      formid: formid
+    }
+  })
+}
+
+export const startApproval = (formid, appid, data, callback) =>{
+  instanceAxios.post(config.apiUrl+"/flow/approval/start",
+          data,
+          {
+            headers:{
+              appid:appid,
+              formid: formid
+            }
+          }).then((res)=>{
+            if(res.data.status === "SUCCESS"){
+              message.success("保存并提交审批成功!");
+              callback()
+            }
+          }).catch(err=>{
+             message.error("提交失败");
+             callback()
+          });
+}

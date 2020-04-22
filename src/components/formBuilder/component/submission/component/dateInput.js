@@ -11,11 +11,38 @@ import {
   compareEqualArray
 } from "../utils/dataLinkUtils";
 import moment from "moment";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
 
+let timer = null;
 class DateInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAutoInput: false
+    };
+  }
+
+  componentWillUnmount() {
+    clearInterval(timer)
+  }
+
   componentDidMount() {
-    const { form, item, handleSetComponentEvent } = this.props;
-    const { data } = item;
+    const { form, item, handleSetComponentEvent, isEditData } = this.props;
+    const { data, autoInput } = item;
+    if(autoInput){
+      this.setState({
+        isAutoInput: true
+      });
+    }
+    if (autoInput  && !isEditData) {
+      timer = setInterval(()=>{
+        form.setFieldsValue({
+          [item.key]: new moment()
+        })
+      }, 1000);
+      return;
+    }
+
     if (data && data.type === "DataLinkage") {
       const {
         conditionId,
@@ -23,7 +50,7 @@ class DateInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -50,7 +77,7 @@ class DateInput extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: new moment(res)
+              [item.key]: coverTimeUtils.localDate(res, item.type)
             });
             // 多级联动
             this.handleEmitChange(res);
@@ -95,15 +122,19 @@ class DateInput extends React.Component {
 
   render() {
     const { getFieldDecorator, item, disabled, initData } = this.props;
+    const { isAutoInput } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
-    if(initData){
-      options.initialValue = moment(initData+"Z") 
+    if (initData) {
+      options.initialValue = coverTimeUtils.localDate(initData, item.type);
+    } else if(isAutoInput) {
+      options.initialValue = new moment();
     }
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
+          initialValue: isAutoInput ? new moment() : undefined,
           ...options,
           rules: [
             {
@@ -115,7 +146,7 @@ class DateInput extends React.Component {
           ]
         })(
           <DatePicker
-            disabled={disabled}
+            disabled={disabled || isAutoInput}
             showTime
             locale={locale}
             placeholder="请选择时间/日期"
@@ -127,4 +158,4 @@ class DateInput extends React.Component {
   }
 }
 
-export default withRouter(DateInput)
+export default withRouter(DateInput);

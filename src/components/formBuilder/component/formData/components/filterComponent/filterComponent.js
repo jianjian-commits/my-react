@@ -9,10 +9,12 @@ import {
   message,
   Row,
   Col,
-  DatePicker
+  DatePicker,
+  TimePicker
 } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import moment from 'moment';
+import coverTimeUtils from "../../../../utils/coverTimeUtils"
 import {
   EQUALS,
   NOT_EQUALS,
@@ -45,6 +47,17 @@ const numberLogicalOperators = [
     label: "小于等于"
   }
 ];
+
+const pureTimeLogicalOperators =[
+  { type: "EQUALS", operator: EQUALS, label: "等于" },
+  { type: "NOT_EQUALS", operator: NOT_EQUALS, label: "不等于" },
+  { type: "GREATER_THAN", operator: GREATER_THAN, label: "大于" },
+  { type: "LESS_THAN", operator: LESS_THAN, label: "小于" },
+  { type: "NOT_EXISTS", operator: `__regex=/^\\S/i`, label: "不为空" },
+  { type: "EXISTS", operator: NOT_EXISTS, label: "为空" },
+  { type: "IN", operator: `__regex=`, label: "包含" },
+  { type: "NOT_IN", operator: NOT_IN, label: "不包含" },
+]
 
 const stringLogicalOperators = [
   // 非空和空这里有问题 如果是空 是空字符串
@@ -191,12 +204,19 @@ class FilterItem extends Component {
         return formChildLogicalOperators;
       case "GetLocalPosition":
         return stringLogicalOperators;
+      case "PureTime":
+      case "PureDate":
+        return pureTimeLogicalOperators;
       default:
         return stringLogicalOperators;
     }
   };
 
   renderInputByFiledType = (filed, value, options, isDisabled) => {
+    const defaultValueOpt = {};
+    if(value !== ""){
+      defaultValueOpt.defaultValue = value
+    }
     switch (filed && filed.type) {
       case "NumberInput":
         return (
@@ -250,6 +270,32 @@ class FilterItem extends Component {
             />
           );
         }
+      case "PureTime":
+        return(
+          <TimePicker
+          key={`${filed.key}${this.state.operator}`}
+          disabled={isDisabled || this.state.disabledCostomValue}
+          {...options}
+          showTime
+          locale={locale}
+          placeholder="请选择时间/日期"
+          onChange={this.handleChangeDate}
+          style={{ width: "100%" }}
+        />
+        )
+      case "PureDate":
+        return(
+          <DatePicker
+          key={`${filed.key}${this.state.operator}`}
+          disabled={isDisabled || this.state.disabledCostomValue}
+          {...options}
+          showTime
+          locale={locale}
+          placeholder="请选择时间/日期"
+          onChange={this.handleChangeDate}
+          style={{ width: "100%" }}
+        />
+        )
       case "DropDown":
         if (
           this.state.operator === "RADIO_IN" ||
@@ -258,7 +304,7 @@ class FilterItem extends Component {
           return (
             <Select
               key={filed.key}
-              defaultValue={value}
+              {...defaultValueOpt}
               mode="multiple"
               key={`${filed.key}${this.state.operator}`}
               placeholder="请选择"
@@ -280,7 +326,7 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               key={`${filed.key}${this.state.operator}`}
-              defaultValue={value}
+              {...defaultValueOpt}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
@@ -305,10 +351,10 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               mode="multiple"
-              defaultValue={value}
+              {...defaultValueOpt}
               key={`${filed.key}${this.state.operator}`}
               placeholder="请选择"
-              style={{ width: "100%" }}
+              // style={{ width: "100%" }}
               onChange={this.handleDropDown}
               disabled={isDisabled || this.state.disabledCostomValue}
               suffixIcon={<Icon type="caret-down" />}
@@ -326,7 +372,7 @@ class FilterItem extends Component {
             <Select
               key={filed.key}
               key={`${filed.key}${this.state.operator}`}
-              defaultValue={value}
+              {...defaultValueOpt}
               placeholder="请选择"
               style={{ width: "100%" }}
               onChange={this.handleDropDown}
@@ -347,7 +393,7 @@ class FilterItem extends Component {
           <Select
             key={filed.key}
             mode="multiple"
-            defaultValue={value}
+            {...defaultValueOpt}
             placeholder="请选择"
             style={{ width: "100%" }}
             showArrow={true}
@@ -368,7 +414,7 @@ class FilterItem extends Component {
           <Select
             key={filed.key}
             mode="multiple"
-            defaultValue={value}
+            {...defaultValueOpt}
             placeholder="请选择"
             style={{ width: "100%" }}
             showArrow={true}
@@ -492,13 +538,22 @@ class FilterItem extends Component {
         isDisabled= true;
       }
     }
+    
+    const fieldDefaultValueOpt={};
+    if(selectedFiledKey !== ""){
+      fieldDefaultValueOpt.defaultValue = selectedFiledKey;
+    }
+    const OptDefaultValueOpt={};
+    if(selectedLogicalOperator !=  void 0 ){
+      OptDefaultValueOpt.defaultValue = selectedLogicalOperator.label;
+    }
     return (
       <div className="filter-item">
         <Row type="flex" justify="start" gutter={[0, 19]}>
           <Col span={12}>
             <Select
               // value={selectedFiledKey}
-              defaultValue={selectedFiledKey}
+              {...fieldDefaultValueOpt}
               style={{ width: "100%" }}
               placeholder="选择字段"
               onChange={this.onSelectField}
@@ -516,7 +571,7 @@ class FilterItem extends Component {
           </Col>
           <Col span={7} className="logicSymbol">
             <Select
-              defaultValue={selectedLogicalOperator ? selectedLogicalOperator.label : null}
+              {...OptDefaultValueOpt}
               style={{ width: "100%" }}
               key={this.state.filed.key}
               placeholder="运算符"
@@ -651,11 +706,9 @@ export default class FilterComponent extends Component {
 
   _handleDateTypeData(filterArray) {
     return filterArray.map(filter=>{
-      if(filter.field.type === "DateInput" && filter.costomValue.indexOf("Z") !== -1){
-        let date = new Date(filter.costomValue);
-        let currentTimeZoneOffsetInHours = new Date().getTimezoneOffset()/60;
-        date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
-        filter.costomValue = new Date(date).toJSON().replace("Z","");
+      const dateTypes = ["DateInput", "PureTime", "PureDate"]
+      if(dateTypes.includes(filter.field.type)){
+        filter.costomValue = coverTimeUtils.utcDate(filter.costomValue, filter.field.type)
         return filter
       }
       return filter;
@@ -680,9 +733,9 @@ export default class FilterComponent extends Component {
           case "NOT_IN":
             return `data.${filter.selectedFiled}__regex=/^((?!${filter.costomValue}).)*$/`;
           case "LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.completeAddress${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           case "NOT_LIKE":
-            return `data.${filter.selectedFiled}.xx${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
+            return `data.${filter.selectedFiled}.completeAddress${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
           default:
             return `data.${filter.selectedFiled}${filter.selectedLogicalOperator.operator}=${filter.costomValue}`;
         }
@@ -775,11 +828,6 @@ export default class FilterComponent extends Component {
             </Select>
           </div>
           <div className="line"></div>
-          {/* <Row type="flex" justify="center" gutter={19}>
-            <Col span={8}>字段</Col>
-            <Col span={7}>类型</Col>
-            <Col span={7}>值</Col>
-          </Row> */}
           <div className="filter-item-container">
             {this.state.filterArray.map((filter, index) => {
               return (
@@ -803,8 +851,7 @@ export default class FilterComponent extends Component {
             <Button
               type="default"
               onClick={() => {
-                this.handleClearFilter()
-                // this.props.clickExtendCallBack();
+                this.handleClearFilter();
               }}
             >
               清空

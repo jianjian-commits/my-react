@@ -3,12 +3,15 @@ import { withRouter } from "react-router-dom";
 import GridLayout from "react-grid-layout";
 import { Button, Form, message, Layout, Spin, Breadcrumb } from "antd";
 import {
+  startApproval,
+  getApprovalDefinition,
   submitSubmission,
   getFormComponent,
   getFormComponentByPath,
   getAllForms
 } from "./redux/utils/operateSubmissionUtils";
 import { getSubmissionData } from "../formData/redux/utils/getDataUtils";
+import { getApproveCount } from "../homePage/redux/utils/operateFormUtils";
 
 import { connect } from "react-redux";
 import HeaderBar from "../base/NavBar";
@@ -53,7 +56,13 @@ import RadioButtonsMobile from "./component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
-import moment from 'moment'
+import moment from "moment";
+import coverTimeUtils from "../../utils/coverTimeUtils";
+
+import PureTime from "./component/pureTime";
+import PureDate from "./component/pureDate";
+
+import ID from "../../utils/UUID";
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -78,7 +87,9 @@ class Submission extends Component {
       showAddressErr: false,
       showFormChildErr: false,
       isSubmitted: false,
-      errorResponseMsg: {}
+      errorResponseMsg: {},
+      isShowApprovalBtn: false,
+      isSetCorrectFormChildData: false,
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -91,11 +102,19 @@ class Submission extends Component {
       mobile = {}
     } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
-
-    // initToken().then(res => {
     getFormComponent(this.state.formId);
-    // getFormComponentByPath(this.state.formPath);
-    // });
+    getApprovalDefinition(this.state.formId, this.props.appid)
+      .then(response => {
+        // 获取显示提交审批的按钮
+        if (response.data.status === "SUCCESS") {
+          this.setState({
+            isShowApprovalBtn: response.data.data.canSubmit
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -127,7 +146,6 @@ class Submission extends Component {
       fileUrlList: { ...this.fileUrlList, ...fileUrlItem }
     }));
   }
-
 
   // 设置地址(解决只能获取单个数据)
   handleSetAddress = address => {
@@ -168,31 +186,40 @@ class Submission extends Component {
       if (values[component.key] === "") {
         delete values[component.key];
       }
-      if (component.type === "NumberInput" && values.hasOwnProperty(component.key)) {
-        values[component.key] = Number(values[component.key])
+      if (
+        component.type === "NumberInput" &&
+        values.hasOwnProperty(component.key)
+      ) {
+        values[component.key] = Number(values[component.key]);
       }
     });
     return values;
   }
 
-  _setDateTimeVaule(values) {
-    this.props.formComponent.components.map(component => {
+  _setDateTimeVaule(values, components = this.props.formComponent.components) {
+    components.map(component => {
+      let type = component.type;
       if (
-        component.type === "DateInput" &&
         values.hasOwnProperty(component.key) &&
         values[component.key] != void 0
       ) {
-        // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
-        if (values[component.key].constructor === Date) {
-          let date = new Date(values[component.key].setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().replace("Z","");
-        } else {
-          let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().toString().replace("Z","")
+        if (
+          type === "DateInput" ||
+          type === "PureDate" ||
+          type === "PureTime"
+        ) {
+          // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
+          if (values[component.key].constructor === Date) {
+            values[component.key] = coverTimeUtils.utcDate(
+              new Date(values[component.key]),
+              "DateInput"
+            );
+          } else {
+            values[component.key] = coverTimeUtils.utcDate(
+              values[component.key],
+              type
+            );
+          }
         }
       }
     });
@@ -214,7 +241,7 @@ class Submission extends Component {
         if (address.trim() === "") {
           delete values[component.key];
         } else {
-          values[component.key].xx = address;
+          values[component.key].completeAddress = address;
         }
       }
     });
@@ -291,6 +318,19 @@ class Submission extends Component {
         });
       }
     }
+  }
+
+  _resetFormChildErrorMsg(errorMsg) {
+    const { formChildDataObj } = this.state;
+    const { formChildkey, fieldKey, value, msg } = errorMsg;
+    formChildDataObj[formChildkey].map(item => {
+        if (value === String(item[fieldKey].data)) {
+          item[fieldKey].hasErr = true;
+        }
+      });
+    this.setState({
+      showFormChildErr: true
+    });
   }
 
   _checkComponentValid(err, formComponentArray) {
@@ -378,19 +418,47 @@ class Submission extends Component {
   _changeErrorResponseData = componentId => {
     let errorResponseMsg = { ...this.state.errorResponseMsg };
     delete errorResponseMsg[componentId];
-    this.setState(
-      {
-        errorResponseMsg
-      }
-    );
+    this.setState({
+      errorResponseMsg
+    });
   };
   _setErrorResponseData = errorResponseData => {
     let errorResponseMsg = {};
     errorResponseData.infos.map(info => {
-      if (errorResponseMsg[info.fieldName] != void 0) {
-        errorResponseMsg[info.fieldName].push(info.msg);
+      if (info.fieldName.indexOf(".") !== -1) {
+        // 子表单
+        // 子表单id.组件id.组件的值
+        // arr[0]表示子表单id,arr[1]表示组件id,arr[2]表示组件的值
+        const arr = info.fieldName.split(".");
+        var value = info.fieldName.substring(arr[0].length+arr[1].length + 2); 
+        //  这里有问题最后的值不能用.分割
+        const infoMsg = {
+          formChildkey: arr[0],
+          fieldKey: arr[1],
+          value: value,
+          msg: info.msg
+        };
+        this._resetFormChildErrorMsg(infoMsg);
+        if (
+          errorResponseMsg[infoMsg.formChildkey] != void 0 &&
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] != void 0
+        ) {
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey].push(
+            infoMsg
+          );
+        } else if (errorResponseMsg[infoMsg.formChildkey] == void 0) {
+          errorResponseMsg[infoMsg.formChildkey] = {};
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] = [infoMsg];
+        } else {
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] = [infoMsg];
+        }
       } else {
-        errorResponseMsg[info.fieldName] = [info.msg];
+        // 普通组件
+        if (errorResponseMsg[info.fieldName] != void 0) {
+          errorResponseMsg[info.fieldName].push(info.msg);
+        } else {
+          errorResponseMsg[info.fieldName] = [info.msg];
+        }
       }
     });
     this.setState({
@@ -399,12 +467,40 @@ class Submission extends Component {
     });
   };
 
-
   // 设置正确的子表单数据
   setCorrectFormChildData = (values, formChildDataObj) => {
+    let date = new Date(new Date().setUTCMilliseconds(0));
+    let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
+    date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
+
     for (let key in values) {
       if (formChildDataObj.hasOwnProperty(key)) {
         values[key] = formChildDataObj[key];
+      }
+      if (Array.isArray(values[key])) {
+        console.log(values[key])
+        values[key].forEach((data, index) => {
+          for (let k in data) {
+            let type = data[k].formType;
+            if (data[k].autoInput) {
+              if (type === "PureDate") {
+                data[k].data = moment(date).format("YYYY-MM-DD")
+              }
+              if (type === "PureTime") {
+                data[k].data = moment(date).format("HH:mm:ss.SSS")
+              }
+              if (type === "DateInput") {
+                let dateString = moment(date).format();
+                data[k].data = dateString.substring(dateString.indexOf("+"), -1);
+              }
+            }else{
+              const dateTypes = ["PureDate", "PureTime", "DateInput"];
+              if (dateTypes.includes(type) && data[k].data) {
+                  data[k].data = coverTimeUtils.utcDate(data[k].data, type);
+              }
+            }
+          }
+        });
       }
     }
   };
@@ -436,7 +532,7 @@ class Submission extends Component {
     // }
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e, isStartApprove = false) => {
     e.preventDefault();
     const isMobile = this.props.mobile.is;
 
@@ -444,7 +540,6 @@ class Submission extends Component {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
         let customDataArray = [];
-
 
         if (this._checkComponentValid(err, formComponentArray) === false) {
           return;
@@ -456,16 +551,13 @@ class Submission extends Component {
         values = this._setDateTimeVaule(values);
         values = this._setAddressValue(values);
         this.setCorrectFormChildData(values, this.state.formChildDataObj);
-        this._iterateAllComponentToSetData(
-          formComponentArray,
-          customDataArray,
-          values
-        );
+        // this._iterateAllComponentToSetData(
+        //   formComponentArray,
+        //   customDataArray,
+        //   values
+        // );
 
         let customValicate = this.props.formValidation;
-        // console.log("values", values);
-        // console.log("custom data", customDataArray);
-        // console.log("custom valicate", customValicate.validate);
 
         // let customCheckResult = customValicate.validate.reduce(
         //   (result, validateStr) => {
@@ -492,20 +584,43 @@ class Submission extends Component {
         //     return false;
         // }
 
-            this.setState({ isSubmitted: true,errorResponseMsg:{} });
-            this.props
-              .submitSubmission(this.state.formId, values,this.props.appid,this.props.extraProp)
-              .then(response => {
-                if(response.data.id != void 0){
-                  isMobile
-                    ? Toast.success("提交成功!")
-                    : message.success("提交成功!");
+        this.setState({ isSubmitted: true, errorResponseMsg: {} });
+        this.props
+          .submitSubmission(
+            this.state.formId,
+            values,
+            this.props.appid,
+            this.props.extraProp
+          )
+          .then(response => {
+            if (isStartApprove === false && response.data.id != void 0) {
+              isMobile
+                ? Toast.success("提交成功!")
+                : message.success("提交成功!");
+              setTimeout(() => {
+                let skipToSubmissionDataFlag = true;
+                this.props.actionFun(skipToSubmissionDataFlag);
+              }, 1000);
+            } else if (isStartApprove === true && response.data.id != void 0) {
+              const { data, id } = response.data;
+              let fieldInfos = [];
+              for (let key in data) {
+                fieldInfos.push({ name: key, value: data[key] });
+              }
+              const appeoveData = {
+                dataId: id,
+                fieldInfos: fieldInfos
+              };
+              this.props.startApproval(
+                this.state.formId,
+                this.props.appid,
+                appeoveData,
+                () => {
                   setTimeout(() => {
                     let skipToSubmissionDataFlag = true;
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }, 1000);
-                }
-              })
+                })
               .catch(error => {
                 if (error.response && error.response.data.code === 9998) {
                   this._setErrorResponseData(error.response.data);
@@ -519,7 +634,21 @@ class Submission extends Component {
                   : message.error(error.response.data.msg);
                 }
               });
-      
+          }
+        })
+          .catch(error => {
+            if (error.response && error.response.data.code === 9998) {
+              this._setErrorResponseData(error.response.data);
+              isMobile ? Toast.fail("提交失败") : message.error("提交失败");
+            } else if (error.response && error.response.data.code == 2003) {
+              // this.setState({
+              //   isSubmitted: false
+              // })
+              isMobile
+                ? Toast.fail(error.response.data.msg)
+                : message.error(error.response.data.msg);
+            }
+          });
       });
     }
   };
@@ -731,6 +860,58 @@ class Submission extends Component {
                 )}
               </div>
             );
+          case "PureTime":
+            return (
+              <div
+                key={item.key}
+                style={{ zIndex: 300 - i }}
+                id={"Id" + item.key + "Dom"}
+              >
+                {mobile.is ? (
+                  <DateInputMobile
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                ) : (
+                  <PureTime
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                )}
+              </div>
+            );
+          case "PureDate":
+            return (
+              <div
+                key={item.key}
+                style={{ zIndex: 300 - i }}
+                id={"Id" + item.key + "Dom"}
+              >
+                {mobile.is ? (
+                  <DateInputMobile
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                ) : (
+                  <PureDate
+                    forms={forms}
+                    handleSetComponentEvent={this.handleSetComponentEvent}
+                    getFieldDecorator={getFieldDecorator}
+                    form={this.props.form}
+                    item={item}
+                  />
+                )}
+              </div>
+            );
           case "HandWrittenSignature":
             return (
               <div
@@ -902,6 +1083,8 @@ class Submission extends Component {
                     key={`${item.key}${i}`}
                     getFieldDecorator={getFieldDecorator}
                     item={item}
+                    errorResponseMsg={errorResponseMsg[item.key]}
+                    resetErrorMsg={this._changeErrorResponseData}
                     showFormChildErr={this.state.showFormChildErr}
                     forms={forms}
                     form={this.props.form}
@@ -921,6 +1104,8 @@ class Submission extends Component {
                     key={`${item.key}${i}`}
                     getFieldDecorator={getFieldDecorator}
                     item={item}
+                    errorResponseMsg={errorResponseMsg[item.key]}
+                    resetErrorMsg={this._changeErrorResponseData}
                     showFormChildErr={this.state.showFormChildErr}
                     forms={forms}
                     form={this.props.form}
@@ -959,7 +1144,7 @@ class Submission extends Component {
                     getFieldDecorator={getFieldDecorator}
                     form={this.props.form}
                     showAddressErr={this.state.showAddressErr}
-                    address={this.state.addressesObj[item.id]}
+                    address={this.state.addressesObj[item.key]}
                     item={item}
                   />
                 ) : (
@@ -971,7 +1156,7 @@ class Submission extends Component {
                     getFieldDecorator={getFieldDecorator}
                     form={this.props.form}
                     showAddressErr={this.state.showAddressErr}
-                    address={this.state.addressesObj[item.id]}
+                    address={this.state.addressesObj[item.key]}
                     item={item}
                   />
                 )}
@@ -1050,7 +1235,7 @@ class Submission extends Component {
       // }
     });
     // 如果没找到对应数据 则返回默认值
-    if (formchildData === null) {
+    if (formchildData == null) {
       formChildDataObj[key] = [rowTemplate]; //清空对应id子表单的数据
       this.setState({
         formChildDataObj
@@ -1115,8 +1300,6 @@ class Submission extends Component {
         };
       });
     }
-
-    console.log(layout)
     let submitBtnObj = this.props.formComponent.components.filter(
       component => component.type === "Button"
     )[0];
@@ -1124,30 +1307,36 @@ class Submission extends Component {
       <>
         <Spin spinning={this.state.isSubmitted}>
           {mobile.is ? null : (
-            // <HeaderBar
-            //   backCallback={() => {
-            //     let skipToSubmissionDataFlag = true;
-            //     this.props.actionFun(skipToSubmissionDataFlag);
-            //   }}
-            //   isShowExtraTitle = {false}
-            //   // name={formComponent.name}
-            //   isShowBtn={false}
-            //   isShowExtraTitle={false}
-            // />
             <div className="submissionTitle">
-                   <Breadcrumb separator={
-                     <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z" fill="#666666"/>
-                     </svg>                     
-                   }>
-                  <Breadcrumb.Item className="recordList"
-                  onClick = {()=>{
+              <Breadcrumb
+                separator={
+                  <svg
+                    width="7"
+                    height="12"
+                    viewBox="0 0 7 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z"
+                      fill="#666666"
+                    />
+                  </svg>
+                }
+              >
+                <Breadcrumb.Item
+                  className="recordList"
+                  onClick={() => {
                     let skipToSubmissionDataFlag = true;
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }}
-                  >记录列表</Breadcrumb.Item>
-                  <Breadcrumb.Item className="submitRecord">提交记录</Breadcrumb.Item>
-                  </Breadcrumb>
+                >
+                  记录列表
+                </Breadcrumb.Item>
+                <Breadcrumb.Item className="submitRecord">
+                  提交记录
+                </Breadcrumb.Item>
+              </Breadcrumb>
             </div>
           )}
           <div className={"formBuilder-Submission"}>
@@ -1179,7 +1368,6 @@ class Submission extends Component {
                       rowHeight={22}
                       width={830}
                       onLayoutChange={layout => {
-                        console.log(layout)
                         this.setState({ currentLayout: layout });
                       }}
                     >
@@ -1194,7 +1382,7 @@ class Submission extends Component {
                     <Form.Item
                       style={{
                         width: "100%",
-                        textAlign: "center",
+                        textAlign: "center"
                         // marginTop: 80
                       }}
                     >
@@ -1203,10 +1391,29 @@ class Submission extends Component {
                           block={!!mobile.is}
                           htmlType="submit"
                           type="primary"
+                          style={{
+                            color: "#1890ff",
+                            background: "#fff"
+                          }}
                           // size={submitBtnObj.buttonSize}
                         >
                           提交
                         </Button>
+                        {this.state.isShowApprovalBtn ? (
+                          <Button
+                            block={!!mobile.is}
+                            onClick={e => {
+                              this.handleSubmit(e, true);
+                            }}
+                            type="primary"
+                            style={{
+                              marginLeft: "10px"
+                            }}
+                            // size={submitBtnObj.buttonSize}
+                          >
+                            提交并审批
+                          </Button>
+                        ) : null}
                       </div>
                     </Form.Item>
                   ) : (
@@ -1226,6 +1433,21 @@ class Submission extends Component {
                         >
                           {submitBtnObj.label}
                         </Button>
+                        {this.state.isShowApprovalBtn ? (
+                          <Button
+                            block={!!mobile.is}
+                            onClick={e => {
+                              this.handleSubmit(e, true);
+                            }}
+                            type="primary"
+                            style={{
+                              marginLeft: "10px"
+                            }}
+                            // size={submitBtnObj.buttonSize}
+                          >
+                            提交并审批
+                          </Button>
+                        ) : null}
                       </div>
                     </Form.Item>
                   )}
@@ -1252,6 +1474,9 @@ export default connect(
     getSubmissionData,
     submitSubmission,
     getFormComponent,
-    getFormComponentByPath
+    getFormComponentByPath,
+    getApprovalDefinition,
+    startApproval,
+    getApproveCount
   }
 )(withRouter(mobileAdoptor.data(SubmissionForm)));

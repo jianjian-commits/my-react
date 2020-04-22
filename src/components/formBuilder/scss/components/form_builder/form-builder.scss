@@ -1131,6 +1131,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .extraWrap{
+            .ant-input {
+              width: 91%;
+              height: 34px;
+              margin-right: 16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+          }
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1224,6 +1232,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .extraWrap{
+            .ant-input {
+              width: 88%;
+              height: 34px;
+              margin-right:16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+          }
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1447,6 +1463,23 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .addOptionBtn {
+            color: #2A7FFF;
+            margin-left: 8px;
+            margin-right: 8px;
+          }
+          .hasExtraOption,.divider{
+            color: #777F97;
+          }
+          .extraWrap{
+            .ant-input {
+              width: 91%;
+              height: 34px;
+              margin-right:16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+          }
+          
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1536,9 +1569,6 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           line-height: 20px;
           margin-bottom: 8px;
           font-weight: initial;
-          // &:nth-last-of-type(-n + 2) {
-          //   margin-top: 26px;
-          // }
         }
         .ant-input {
           color: #565c6e;
@@ -1550,6 +1580,22 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .addOptionBtn {
+            color: #2A7FFF;
+            margin-left: 8px;
+            margin-right: 8px;
+          }
+          .hasExtraOption,.divider{
+            color: #777F97;
+          }
+          .extraWrap{
+            .ant-input {
+              width: 88%;
+              height: 34px;
+              margin-right:16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+          }
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1747,6 +1793,47 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
   }
 }
 
+.BatchEditingModalStyle {
+  .ant-modal-header{
+    padding: 14px 20px 0px 20px;
+    border-bottom: none;
+    color: #000;
+    font-size: 18px;
+  }
+  .ant-modal-content{
+    width: 580px;
+    height: 438px;
+  }
+  .ant-modal-body{
+    padding: 20px;
+    p,textArea{
+      color: #000;
+    }
+    textarea{
+      height: 273px;
+      resize: none;
+    }
+  }
+  .ant-modal-footer {
+    border-top: 0;
+    margin-top: 0;
+    padding: 0 20px 25px 20px;
+    button {
+      width: 87px;
+    }
+    button:first-child{
+      border: 1px solid #D6D8DE;
+      &:hover{
+        border: 1px solid #B6B6BA !important;
+        color: #777F97;
+        background: #F3F3F3;
+      }
+    }
+    button:last-child:hover{
+      background: #579AFF;
+    }
+  }
+}
 .image-upload-preview {
   border: 4px solid #fff;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
@@ -1926,6 +2013,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     margin: 0 9px 0 3px;
   }
 }
+
 
 // 设置弹出框的样式
 // .ant-modal-content {

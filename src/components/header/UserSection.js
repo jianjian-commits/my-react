@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   signOut,
   initAllDetail,
-  switchCurrentCompany
+  switchcurrentCompany
 } from "../../store/loginReducer";
 import Styles from "./header.module.scss";
 import {
@@ -69,7 +69,7 @@ const MenuItems = ({
   </>
 );
 const User = props => {
-  const { signOut, login, initAllDetail, switchCurrentCompany } = props;
+  const { signOut, login, initAllDetail, switchcurrentCompany } = props;
   const { userDetail, fetchRequestSent, allCompany, currentCompany } = login;
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -81,7 +81,7 @@ const User = props => {
     companyId: null
   });
   const handleSwitchCompanyConfirm = async () => {
-    await switchCurrentCompany(switchCompany.companyId);
+    await switchcurrentCompany(switchCompany.companyId);
     await initAllDetail();
     setSwitchCompany({
       companyName: null,
@@ -99,7 +99,7 @@ const User = props => {
           setSwitchCompany,
           allCompany,
           currentCompany,
-          switchCurrentCompany
+          switchcurrentCompany
         })}
       >
         <span
@@ -159,6 +159,6 @@ export default connect(
   {
     signOut,
     initAllDetail,
-    switchCurrentCompany
+    switchcurrentCompany
   }
 )(User);
