@@ -21,7 +21,6 @@ const ChartContainer = props => {
     setDashboards } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
-
   const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
   let chart = elemType == ChartType.INDEX_DIAGRAM ? <IndexChart chartOption={chartOption} /> :
     <Chart chartOption={chartOption} />;

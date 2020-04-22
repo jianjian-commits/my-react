@@ -46,19 +46,11 @@ const LeftPane = props => {
 
   const { dataSource } = props;
 
-  const [ listVisible,setListVisible] = useState(false); 
+  const [ listVisible, setListVisible] = useState(false); 
   const listModalProps = {
     visible:listVisible,
     type:"change",
-    showModal: () => {
-      setListVisible(true);
-    },
-    handleCancel: e => {
-      setListVisible(false);
-    },
-    handleOK: e => {
-      setListVisible(false);
-    }
+    setVisible: setListVisible
   };
   return (
     <div className={classes.leftPane}>
@@ -67,7 +59,7 @@ const LeftPane = props => {
           <div>数据</div>
           <div>
             <DataListModal key={Math.random()} {...listModalProps}/>
-            <div className={classes.changeDataSource} onClick={listModalProps.showModal}>更改数据源</div>
+            <div className={classes.changeDataSource} onClick={() => setListVisible(true)}>更改数据源</div>
           </div>
         </div>
         <div>

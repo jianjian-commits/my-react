@@ -6,6 +6,7 @@ import moment from 'moment';
 import { TextOptions, NumberOptions, DateOptions, OPERATORS, DataType } from "../elements/Constant";
 import request from '../../utils/request';
 import classes from '../../scss/modal/filterModal.module.scss';
+import locale from 'antd/es/date-picker/locale/zh_CN';
 const { SHOW_PARENT } = TreeSelect;
 const { Option } = Select;
 const SIMPLE_SYMBOLS = [OPERATORS.EQUALS, OPERATORS.NOT_EQUALS, OPERATORS.INCLUDE, OPERATORS.NOT_INCLUDE, 
@@ -176,7 +177,8 @@ const FilterModal = (props) => {
         showCheckedStrategy: SHOW_PARENT,
         style: {
           width: "350px", marginLeft: '20px'
-        }
+        },
+        dropdownStyle: {height: '300px'}
       };
 
       return <TreeSelect  {...tProps} />;
@@ -210,17 +212,17 @@ const FilterModal = (props) => {
         symbol == OPERATORS.GRATER_OR_EQUAL_TO || symbol == OPERATORS.LESS_OR_EQUAL_TO)
     {
       return <div className={classes.singleDateContainer}>
-        <DatePicker className={classes.singleDate} value={getDateValue(value)} onChange={onChangeValue}/>
+        <DatePicker className={classes.singleDate} locale={locale} value={getDateValue(value)} onChange={onChangeValue}/>
         </div>
     }
     else if(symbol == OPERATORS.RANGE) {
       return <div className={classes.dateRange}>
         <div className={classes.doubleDateContainer}>
-          <DatePicker className={classes.doubleDate} placeholder={"设置开始时间"} value={getDateValue(min)}
+          <DatePicker className={classes.doubleDate} locale={locale} value={getDateValue(min)} placeholder={"设置开始时间"}
             onChange={onChangeMin}/>
         </div>
         <div className={classes.doubleDateContainer}>
-          <DatePicker className={classes.doubleDate} placeholder={"设置结束时间"}  value={getDateValue(max)}
+          <DatePicker className={classes.doubleDate} locale={locale} value={getDateValue(max)} placeholder={"设置结束时间"}
             onChange={onChangeMax}/>
         </div>
       </div>
