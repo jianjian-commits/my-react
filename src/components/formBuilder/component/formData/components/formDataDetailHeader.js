@@ -1,7 +1,9 @@
-import React from "react";
-import { Button, Row, Col, Icon, Modal, Breadcrumb, message } from "antd";
+import React,{useEffect} from "react";
+import { Button, Row, Col, Icon, Modal, Breadcrumb, message, Input,Select } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import request from "../../../../../utils/request";
+import ApproverModal from "./ApproverModal"
+
 
 const StartApprovalButton = (props) =>{
   async function startApprovelBtnClick(){
@@ -30,6 +32,9 @@ const StartApprovalButton = (props) =>{
       });
       if (res && res.status === "SUCCESS") {
         message.success("提交审批成功");
+        // 是否允许设置审批人
+        props.setTaskId(res.data.taskId);
+        props.setApproverModalVisible(res.data.shouldSetApprover);
         props.resetData();
       } else {
         props.setLoading(false)
@@ -123,6 +128,8 @@ const ApprovalProcessButtons = props => {
         }
       );
       if (res && res.status === "SUCCESS") {
+        props.setTaskId(res.data.taskId);
+        props.setApproverModalVisible(res.data.shouldSetApprover);
         props.resetData();
         message.success("提交审批意见成功");
       } else {
@@ -205,6 +212,29 @@ const ReSubmitApprovalButton = props => {
 const FormDataDetailHeader = props => {
   const appId = useParams().appId || props.appId;
   const history = useHistory();
+  const [approverList, setApproverList] = React.useState([]);
+  const [isApproverModalVisible, setApproverModalVisible] = React.useState(false);
+  const [taskId, setTaskId] = React.useState(false);
+  useEffect(() => {
+    getUserList()
+  },[props.currentForm.id])
+  async function getUserList(){
+    try{
+      const { currentForm, appId } = props;
+      const res = await request(`/user/list`,{
+        headers:{
+          appid: appId,
+          formid: currentForm.id,
+        },
+        method: "get"
+      });
+      if (res && res.status === "SUCCESS") {
+        setApproverList(res.data);
+      }
+    }catch(err){
+      message.error("选择审批人失败")
+    }
+  }
   const onClickBack = () => {
     if (props.enterPort === "TransctionList") {
       props.fn(props.approvalKey);
@@ -255,6 +285,8 @@ const FormDataDetailHeader = props => {
             <StartApprovalButton
               canSubmit={canSubmit}
               appId={appId}
+              setTaskId={setTaskId}
+              setApproverModalVisible={setApproverModalVisible}
               {...props}
             />
             <ReSubmitApprovalButton
@@ -275,6 +307,14 @@ const FormDataDetailHeader = props => {
               appId={appId}
               {...props}
             />
+            <ApproverModal 
+              visible={isApproverModalVisible} 
+              taskId={taskId || currentTaskId}
+              setVisible={setApproverModalVisible} 
+              formId={props.currentForm.id}
+              appId={props.appId}
+              approverList={approverList}
+              setApproverList={setApproverList}/>
           </div>
         </Col>
       </Row>
