@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2020-04-09 13:51:06
  * @LastEditors: komons
- * @LastEditTime: 2020-04-13 12:26:23
+ * @LastEditTime: 2020-04-17 09:27:56
  * @Description: 
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\submission\component\pureTime.js
  */
@@ -36,17 +36,19 @@ class PureTime extends React.Component {
   }
 
   componentDidMount() {
-    const { form, item, handleSetComponentEvent } = this.props;
+    const { form, item, handleSetComponentEvent, isEditData } = this.props;
     const { data, autoInput } = item;
-    if (autoInput) {
+    if(autoInput){
+      this.setState({
+        isAutoInput: true
+      });
+    }
+    if (autoInput && !isEditData) {
       timer = setInterval(()=>{
         form.setFieldsValue({
           [item.key]: new moment()
         })
       }, 1000);
-      this.setState({
-        isAutoInput: true
-      });
       return;
     }
 
@@ -84,7 +86,7 @@ class PureTime extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: new moment(coverTimeUtils.localDate(res, true))
+              [item.key]: coverTimeUtils.localDate(res, item.type).format("HH:mm:ss.SSS")
             });
             // 多级联动
             this.handleEmitChange(res);
@@ -107,6 +109,7 @@ class PureTime extends React.Component {
 
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
+    console.log(value)
     this.handleEmitChange(value);
     setTimeout(() => {
       let key = this.props.item.key;
@@ -128,19 +131,20 @@ class PureTime extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator, item, disabled, initData } = this.props;
+    const { getFieldDecorator, item, disabled, initData, isEditData } = this.props;
     const { isAutoInput } = this.state;
 
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
-    if (initData) {
-      options.initialValue = moment(initData + "Z");
+    if (initData && isEditData) {
+      options.initialValue = coverTimeUtils.localDate(initData, item.type);
+    } else if(isAutoInput) {
+      options.initialValue = new moment();
     }
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
           ...options,
-          initialValue: isAutoInput ? new moment() : undefined,
           rules: [
             {
               required: isValueValid(item.validate.required)

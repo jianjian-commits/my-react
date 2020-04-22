@@ -33,6 +33,8 @@ import DropDown from "./components/dropDown";
 import MultiDropDown from "./components/multiDropDown";
 import DateInput from "./components/dateInput";
 import moment from "moment";
+import coverTimeUtils from '../../../../utils/coverTimeUtils'
+import ID from "../../../../utils/UUID";
 
 class FormChildTest extends React.Component {
   constructor(props) {
@@ -64,6 +66,10 @@ class FormChildTest extends React.Component {
           submission
         );
       });
+      if(submission.childFormDataId){
+         result["childFormDataId"] = submission.childFormDataId;
+      }
+     
       return result;
     });
     return newSubmitDataArray;
@@ -102,10 +108,7 @@ class FormChildTest extends React.Component {
           validate: item.validate,
           hasErr: false,
           autoInput: item.autoInput,
-          data: data || {
-            time: null,
-            moment: new moment()
-          }
+          data: coverTimeUtils.localDate(data,item.type) || null
         };
         break;
       case "RadioButtons": {
@@ -420,10 +423,7 @@ class FormChildTest extends React.Component {
             validate: item.validate,
             autoInput: item.autoInput,
             hasErr: false,
-            data: {
-              time: null,
-              moment: null
-            }
+            data: null
           };
           break;
         }
@@ -541,6 +541,7 @@ class FormChildTest extends React.Component {
         });
       }
     });
+    result["childFormDataId"] = ID.oldUuid();
     newArray.push(result);
 
     this.props.saveSubmitData(newArray);
@@ -1022,8 +1023,9 @@ class FormChildTest extends React.Component {
         case "DateInput":
           {
             let valueOption = {};
-            if (item.data && item.data.moment) {
-              valueOption.value = moment(item.data.moment);
+            if(item.data) {
+              const tempDate = coverTimeUtils.localDate(item.data, item.formType);
+              valueOption.value = tempDate;
             }
             resultArray.push(
               <div key={key} style={{ width: 200 }} className={className}>
@@ -1034,8 +1036,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择时间/日期"
                   onChange={(value, dataString) => {
-                    item.data.time = dataString;
-                    item.data.moment = value;
+                    item.data = value;
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1054,8 +1055,8 @@ class FormChildTest extends React.Component {
         case "PureDate":
           {
             let valueOption = {};
-            if (item.data && item.data.moment) {
-              valueOption.value = moment(item.data.moment);
+            if(item.data) {
+              valueOption.value = moment(coverTimeUtils.localDate(item.data, item.formType));
             }
             resultArray.push(
               <div key={key} className={className}>
@@ -1066,8 +1067,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择日期"
                   onChange={(value, dataString) => {
-                    item.data.time = dataString;
-                    item.data.moment = value;
+                    item.data = value;
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1086,8 +1086,9 @@ class FormChildTest extends React.Component {
         case "PureTime":
           {
             let valueOption = {};
-            if (item.data && item.data.moment) {
-              valueOption.value = moment(item.data.moment);
+            if(item.data) {
+              const tmpMoment = coverTimeUtils.localDate(item.data, item.formType);
+              valueOption.value = tmpMoment;
             }
             resultArray.push(
               <div key={key} className={className}>
@@ -1097,8 +1098,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择时间"
                   onChange={(value, dataString) => {
-                    item.data.time = dataString;
-                    item.data.moment = value;
+                    item.data = value;
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)

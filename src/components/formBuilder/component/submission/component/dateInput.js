@@ -11,6 +11,7 @@ import {
   compareEqualArray
 } from "../utils/dataLinkUtils";
 import moment from "moment";
+import coverTimeUtils from "../../../utils/coverTimeUtils";
 
 let timer = null;
 class DateInput extends React.Component {
@@ -26,17 +27,19 @@ class DateInput extends React.Component {
   }
 
   componentDidMount() {
-    const { form, item, handleSetComponentEvent } = this.props;
+    const { form, item, handleSetComponentEvent, isEditData } = this.props;
     const { data, autoInput } = item;
-    if (autoInput) {
+    if(autoInput){
+      this.setState({
+        isAutoInput: true
+      });
+    }
+    if (autoInput  && !isEditData) {
       timer = setInterval(()=>{
         form.setFieldsValue({
           [item.key]: new moment()
         })
       }, 1000);
-      this.setState({
-        isAutoInput: true
-      });
       return;
     }
 
@@ -74,7 +77,7 @@ class DateInput extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: new moment(res)
+              [item.key]: coverTimeUtils.localDate(res, item.type)
             });
             // 多级联动
             this.handleEmitChange(res);
@@ -124,13 +127,15 @@ class DateInput extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if (initData) {
-      options.initialValue = moment(initData + "Z");
+      options.initialValue = coverTimeUtils.localDate(initData, item.type);
+    } else if(isAutoInput) {
+      options.initialValue = new moment();
     }
     return (
       <Form.Item label={<LabelUtils data={item} />}>
         {getFieldDecorator(item.key, {
-          ...options,
           initialValue: isAutoInput ? new moment() : undefined,
+          ...options,
           rules: [
             {
               required: isValueValid(item.validate.required)
