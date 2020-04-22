@@ -575,3 +575,40 @@
 // .ant-select-dropdown-menu-item {
 //   font-size: 12px;
 // }
+
+.edit-history-table {
+  color: #333333;
+  p {
+    margin: 12px 0;
+    line-height: 1;
+  }
+  .file-list {
+    margin-left: 0;
+  }
+  .file-status_0 {
+    color: #FFA728;
+  }
+  .file-status_1 {
+    color: #00C59F;
+  }
+  .file-status_-1 {
+    color: #F03F3F;
+  }
+  .editor {
+    padding-left: 30px!important;
+  }
+  .ant-spin-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .ant-table {
+      width: 100%;
+      .before-value {
+        color: #b1b2b6;
+      }
+      .after-value {
+        font-weight: bold;
+      }
+    }
+  }
+}

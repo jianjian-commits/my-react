@@ -48,13 +48,11 @@ export const getForms = (pageSize, currentPage) => dispatch => {
           .map(item => {
             return {
               key: item.id,
-              created: coverTimeUtils.localTime(
-                item.createdTime,
-                "yyyy-MM-dd hh:mm"
+              created: coverTimeUtils.localDate(
+                item.createdTime
               ),
-              modified: coverTimeUtils.localTime(
-                item.updateTime,
-                "yyyy-MM-dd hh:mm"
+              modified: coverTimeUtils.localDate(
+                item.updateTime
               ),
               name: item.name,
               id: item.id,

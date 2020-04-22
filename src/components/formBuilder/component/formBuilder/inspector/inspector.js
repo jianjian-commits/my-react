@@ -196,7 +196,6 @@ export default class Inspector extends React.Component {
   }
 
   render() {
-    console.log("12ww", this.props.editElement)
     return (
       <div className="react-form-builder-inspector">
         <Tabs defaultActiveKey="1" className="tab-bar">

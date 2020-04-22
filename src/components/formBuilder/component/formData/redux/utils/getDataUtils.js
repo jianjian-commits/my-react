@@ -200,7 +200,10 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
               forms: currentForm,
               formDetail: res.data.data,
               extraProp: res.data.extraProp,
-              taskData: response.data.data
+              taskData: response.data.data,
+              createdTime: res.data.createdTime,
+              updateTime: res.data.updateTime,
+              creator: res.data.extraProp.user.name
             });
         }).catch(err=>{
           callback(false);
@@ -241,7 +244,8 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
 };
 
 // 修改表单数据详情
-export const modifySubmissionDetail = (formId, submissionId, formData, appid, extraProp) => dispatch => {
+export const modifySubmissionDetail = (formId, submissionId, formData, appid, extraProp, newExtraProp) => dispatch => {
+  extraProp.updateUser = newExtraProp.user;
   return instanceAxios({
     url: config.apiUrl + `/submission/${submissionId}`,
     method: "PUT",
