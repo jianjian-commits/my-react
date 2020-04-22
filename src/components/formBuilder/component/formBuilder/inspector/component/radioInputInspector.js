@@ -266,14 +266,24 @@ class RadioInputInspector extends React.Component {
               return (
                 <div key={index}>
                   {item.isExtra ?
-                  <Input
-                  key={`chooseItem${index}`}
-                  type="text"
-                  value="其他"
-                  placeholder="其他"
-                  autoComplete="off"
-                  disabled={true}
-                />
+                 <div className="extraWrap">
+                 <Input
+                 key={`chooseItem${index}`}
+                 type="text"
+                 value="其它"
+                 placeholder="其它"
+                 autoComplete="off"
+                 disabled={true}
+                 />
+                 <Tooltip title="删除">
+                 <img
+                   src="/image/deleteIcon.png"
+                   onClick={() => {
+                     this.deleteChooseItem(item, index);
+                   }}
+                 />
+                 </Tooltip>
+               </div>
                   :
                 <div className="ChooseItemWarp" key={index}>
                 <img src="/image/dragIcon.png" />

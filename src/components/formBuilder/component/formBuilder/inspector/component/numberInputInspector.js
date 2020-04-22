@@ -416,7 +416,6 @@ class NumberInputInspector extends React.PureComponent {
                   不允许重复
                 </Checkbox>
               </div>
-            )}
             <div className="checkbox-wrapper">
             <Checkbox
                   name="isLimitPoint"

@@ -1131,6 +1131,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .extraWrap{
+            .ant-input {
+              width: 91%;
+              height: 34px;
+              margin-right: 16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+          }
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1224,6 +1232,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           height: auto;
           text-align: center;
           margin-bottom: 26px;
+          .extraWrap{
+            .ant-input {
+              width: 88%;
+              height: 34px;
+              margin-right:16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+          }
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1455,6 +1471,15 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           .hasExtraOption,.divider{
             color: #777F97;
           }
+          .extraWrap{
+            .ant-input {
+              width: 91%;
+              height: 34px;
+              margin-right:16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
+          }
+          
           .ChooseItemWarp {
             // width: 260px;
             height: 34px;
@@ -1562,6 +1587,14 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           }
           .hasExtraOption,.divider{
             color: #777F97;
+          }
+          .extraWrap{
+            .ant-input {
+              width: 88%;
+              height: 34px;
+              margin-right:16px;
+              border: 1px solid rgba(214, 216, 222, 1);
+            }
           }
           .ChooseItemWarp {
             // width: 260px;
