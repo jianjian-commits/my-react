@@ -3,19 +3,29 @@ import moment from 'moment'
 function localDate(date, componentType) {
   // 将utc时区时间转为当前本地时间
   switch(componentType){
-    case "DateInput":break;
+    case "DateInput":
+      if(moment(date).isValid()){
+        return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
+      }
+    break;
     case "PureTime":
       if(!moment(date).isValid()){
-        // 是否在组件内使用
-        date = `2016/9/3 ${date}`
-      };break;
-    case "PureDate":break;
+        // 是否在组件内使用 2020-04-17T03:37:01.633
+        date =  new Date(`2016-09-03T${date}Z`)
+      };
+      if(moment(date).isValid()){
+        return moment.utc(date).local().format("HH:mm:ss");
+      }
+      break;
+    case "PureDate":
+      if(moment(date).isValid()){
+        return moment.utc(date).local().format("YYYY-MM-DD");
+      }
+      break;
     default: return moment.utc(date+"Z").local().format("YYYY-MM-DD HH:mm:ss")
   }
-  if(moment(date).isValid()){
-    return moment.utc(date).local();
-  }
-  return ;
+
+  return "";
 }
 
 function utcDate(date, componentType){

@@ -16,8 +16,8 @@ import config from "../../../../config/config";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+import BatchEditingModal from "../batchEditingModal/batchEditingModal"
 const { Option } = Select;
-const { TextArea } = Input;
 class DropdownInspector extends React.Component {
   constructor(props) {
     super(props);
@@ -29,9 +29,7 @@ class DropdownInspector extends React.Component {
       formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isShowOtherDataModal: false,
-      visible: false,
-      tempOptions: props.element.data.values,
-      tempContent: "",
+      isShowBatchEditingModal: false
     };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
@@ -137,8 +135,7 @@ class DropdownInspector extends React.Component {
     }
   }
 }
-  addChooseItems = () => {
-    const tempOptions = this.state.tempOptions;
+  addChooseItems = (tempOptions) => {
     const newItem = {
       label: `选项`,
       value: `选项`,
@@ -200,47 +197,11 @@ class DropdownInspector extends React.Component {
       this.props.setItemValues(this.props.element, "data", newValuesList);
     }
   }
-
-  showModal = () => {
-    const tempContent = this.props.element.data.values.map(item => item.value).join("\n") + "\n";
+  changeModalVisible = (isVisible) =>{
     this.setState({
-      visible: true,
-      tempContent: tempContent
+      isShowBatchEditingModal: isVisible
     });
   };
-
-  handleOk = e => {
-    this.setState({
-      visible: false,
-    });
-    this.addChooseItems();
-  };
-
-  handleCancel = e => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleContent = (e) =>{
-    const newArray = this.handleArray(e.target.value.split("\n"));
-    this.setState({
-      tempOptions: newArray,
-      tempContent: e.target.value
-    })
-  }
-
-  handleArray(arr){
-    // 处理掉额外的空格 和换行符
-    return arr.map(item =>
-      item.trim())
-      .filter(item =>item !== "")
-      .map(item=>({
-        value: item,
-        label: item,
-        shortcut: ""
-      }))
-  }
 
   handleSelectChange = value => {
     switch (value) {
@@ -338,7 +299,7 @@ class DropdownInspector extends React.Component {
       // 自定义组件
       case "custom": {
         const { values } = element.data;
-        const { tempContent } = this.state;
+        const hasExtraOption = values.some(item => item.isExtra);
         return (
           <div className="chooseitems">
             {values.map((item, index) => (
@@ -386,25 +347,21 @@ class DropdownInspector extends React.Component {
               }
              </div>
             ))}
-            <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
+            <span className="addOptionBtn" onClick={this.addChooseItem} name="chooseItems">
               增加选项
-            </Button>
-            <Button onClick={this.addExtraChooseItem} name="chooseItems" icon="plus">
-              增加其他选项
-            </Button>
-            <Button onClick={this.showModal}>批量编辑</Button>
-            <Modal
-              title="批量编辑"
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              <TextArea
-                autoSize={{ minRows: 8, maxRows: 8 }}
-                onChange={this.handleContent}
-                value={tempContent}>
-              </TextArea>
-            </Modal>
+            </span>
+            <span className="divider">|</span>
+            <span className={hasExtraOption? "addOptionBtn hasExtraOption":"addOptionBtn"} onClick={this.addExtraChooseItem} name="chooseItems">
+               添加“其他”选项
+            </span>
+            <span className="divider">|</span>
+            <span className="addOptionBtn" onClick={()=>{this.changeModalVisible(true)}}>批量编辑</span>
+            <BatchEditingModal 
+              visible={this.state.isShowBatchEditingModal}
+              changeModalVisible={this.changeModalVisible}
+              addChooseItems={this.addChooseItems}
+              options={this.props.element.data.values}
+            />
           </div>
         );
       }
