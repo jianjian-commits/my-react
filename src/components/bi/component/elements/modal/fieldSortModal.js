@@ -30,7 +30,7 @@ function FieldSortModal(props) {
         setIndexes(indexes);
       }
     });
-  }, [props]);
+  }, []);
   const showFieldArr = () => {
     if(dimensions.length == 1){
       return [].concat(dimensions).concat(indexes);

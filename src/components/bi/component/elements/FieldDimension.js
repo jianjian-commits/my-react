@@ -5,6 +5,7 @@ import classes from "../../scss/bind/optionSelect.module.scss";
 import {FieldSecondMenus,transforObjIntoArr} from "./FieldMeasureSelect";
 import FieldNameModal from "../elements/modal/fieldNameModal";
 export default function FieldDimensionSelect(props) {
+  const {sort,currentGroup} = props.item;
   const SortTypeArr = transforObjIntoArr(SortType);
   const TimeSumTypeArr = transforObjIntoArr(TimeSumType);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -27,16 +28,16 @@ export default function FieldDimensionSelect(props) {
   }, [popoverVisible]);
 
   useEffect(() => {
-    if (props.item.sort) {
+    if (sort) {
       SortTypeArr.map((sortType,i) => {
-        if(props.item.sort.value == sortType.value){
+        if(sort.value == sortType.value){
           setSortTypeIndex(i);
         }
       })
     }
-    if(props.item.currentGroup.value){
+    if(currentGroup.value){
       TimeSumTypeArr.map((sumType,j) => {
-        if(props.item.currentGroup.value == sumType.value){
+        if(currentGroup.value == sumType.value){
           setSumTypeIndex(j);
         }
       })
@@ -94,6 +95,15 @@ export default function FieldDimensionSelect(props) {
   const handleCancel = () => {
     setNameInputVisible(false);
   }
+
+  const showSortIcon = () => {
+    const sortImgArr = [SortType.ASC.value,SortType.DESC.value];
+    if(sort && sortImgArr.includes(sort.value)){
+        return <img src={"/image/davinci/"+sort.value+".svg"}/>
+    }else{
+        return null;
+    }
+  }
   return (
     <div 
       className={classes.dimContainer}
@@ -110,7 +120,8 @@ export default function FieldDimensionSelect(props) {
       >
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
         <span className={classes.dropDownBtnSpan}>
-          {props.item.label}
+          {props.item.type==DataType.DATETIME ? props.item.label+`(${TimeSumType[currentGroup.value].name})` :props.item.label}
+          {showSortIcon()}
         </span>
         {deleteBtnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>

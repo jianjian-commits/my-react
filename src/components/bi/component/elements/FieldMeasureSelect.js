@@ -51,6 +51,7 @@ export const FieldSecondMenus = (props) => {
 };
 
 export default function FieldMeasureSelect(props) {
+  const {sort,currentGroup} = props.item
   const operationArr = transforObjIntoArr(GroupType);
   const SortTypeArr = transforObjIntoArr(SortType);
   const [selectIndex, setSelectIndex] = useState(0);
@@ -72,16 +73,16 @@ export default function FieldMeasureSelect(props) {
   }, [popoverVisible]);
 
   useEffect(() => {
-    if (props.item.sort) {
+    if (sort) {
       SortTypeArr.map((sortType,i) => {
-        if(props.item.sort.value == sortType.value){
+        if(sort.value == sortType.value){
           setSortTypeIndex(i);
         }
       })
     }
-    if(props.item.currentGroup){
+    if(currentGroup){
       operationArr.map((operationType,i) => {
-        if(props.item.currentGroup.value == operationType.value){
+        if(currentGroup.value == operationType.value){
           setSelectIndex(i);
         }
       })
@@ -139,6 +140,14 @@ export default function FieldMeasureSelect(props) {
   const handleCancel = () => {
     setNameInputVisible(false);
   }
+  const showSortIcon = () => {
+    const sortImgArr = [SortType.ASC.value,SortType.DESC.value];
+    if(sort && sortImgArr.includes(sort.value)){
+        return <img src={"/image/davinci/"+sort.value+".svg"}/>
+    }else{
+        return null;
+    }
+  }
   return (
     <div
       className={classes.meaContainer}
@@ -156,6 +165,7 @@ export default function FieldMeasureSelect(props) {
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
         <span className={classes.dropDownBtnSpan}>
           {`${props.item.label}(${operationArr[selectIndex].name})`}
+          {showSortIcon()}
         </span>
         {deleteBtnVisible && (
           <Icon

@@ -111,7 +111,7 @@ function preProcessDrop(item, currentType) {
     item["currentGroup"] = GroupType.DEFAULT;
   }
 
-  if(item.type == DataType.DATETIME && currentType != Types.FILTER) {
+  if(item.type == DataType.DATETIME && currentType != Types.FILTER && item.bindType == Types.MEASURE) {
     item["currentGroup"] = {name:"", value:"DAY"};
   }
 }
@@ -329,8 +329,7 @@ class BindPane extends PureComponent {
         }
         return each;
       })
-    }
-    if(dimFiledCount > 1){
+    }else{
       newArr = bindDataArr.map((each) => {
         if(fieldId == each.fieldId) {
           each.sort = {

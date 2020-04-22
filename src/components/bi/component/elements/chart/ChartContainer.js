@@ -11,6 +11,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType } from '../../../redux/action';
 import EditAction from '../action/EditAction';
 import classes from '../../../scss/elements/chart.module.scss';
+import fullScreenClasses from '../../../scss/modal/chartModal.module.scss';
 import FieldSortModal from "../modal/fieldSortModal";
 import DeleteAction from '../action/DeleteAction';
 import RefreshAction from '../action/RefreshAction';
@@ -94,12 +95,12 @@ const ChartContainer = props => {
 
   if (!chartData) {
     return (
-      <div className={classes.chartContainer} style={style} onMouseEnter={handlMouseEnter}
+      <div className={props.modalNarrowBtn ? fullScreenClasses.chartContainer : classes.chartContainer} style={style} onMouseEnter={handlMouseEnter}
         onMouseLeave={handlMouseLeave}>
         {btnVisible && (
           <ChartToolbarBtn
             {...props}
-            iconBtnGroup={iconBtnGroup.filter(item => item.type!="redo" && item.type!="fullscreen")}
+            iconBtnGroup={iconBtnGroup.filter(item => item.type!="redo" && item.type!="fullscreen" && item.type!="swap")}
             isBtnBlock={isBtnBlock}
           />
          )} 
@@ -110,7 +111,7 @@ const ChartContainer = props => {
 
   return (
     <div
-      className={classes.chartContainer}
+      className={props.modalNarrowBtn ? fullScreenClasses.chartContainer : classes.chartContainer}
       onMouseEnter={handlMouseEnter}
       onMouseLeave={handlMouseLeave}
       style={style}
