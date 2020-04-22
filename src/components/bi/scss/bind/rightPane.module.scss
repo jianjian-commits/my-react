@@ -137,5 +137,16 @@
     color: #000;
     height: 100px;
     width: 180px;
+    padding: 16px 15px;
+  }
+}
+
+.tooltipTitle{
+  color: #777F97;
+  font-size: 12px;
+  &:first-child{
+    color: #333333;
+    margin-bottom: 8px;
+    font-size: 14px;
   }
 }
