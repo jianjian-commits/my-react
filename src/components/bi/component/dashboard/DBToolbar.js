@@ -39,9 +39,9 @@ const DBToolbar = props => {
       />
       <div className={classes.newChart} onClick={() => setVisible(true)}>新建图表</div>
       <div className={classes.newChartButton}>
-        <Button className={classes.newChartPreview} type="link">
+        {/* <Button className={classes.newChartPreview} type="link">
           预 览
-        </Button>
+        </Button> */}
         <Button className={classes.newChartSave} type="link">
           保 存
         </Button>

@@ -3,7 +3,7 @@ import ChartInfo from '../component/elements/data/ChartInfo';
 import { ChartType, AllType, BarType } from '../component/elements/Constant'
 import FilterCondition from '../component/elements/data/FilterCondition';
 import Field from '../component/elements/data/Field';
-import { deepClone } from './Util';
+import { deepClone, equals } from './Util';
 
 export const getBarChartOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
@@ -165,8 +165,10 @@ export const getPieChartOption = (chartData, chartInfo) => {
   } 
 }
 
-
 export const getOption = (chartData, chartInfo, elemType) => {
+  if(equals(chartData, {})) {
+    return {};
+  }
 
   switch(elemType){
     case ChartType.HISTOGRAM: 
