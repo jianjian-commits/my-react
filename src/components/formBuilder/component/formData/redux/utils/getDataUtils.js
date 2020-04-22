@@ -3,7 +3,7 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import {message} from "antd";
 import axios from "axios";
 
-import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA, CLEAR_FORM_DETAIL } from "../action";
+import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA, CLEAR_FORM_DETAIL, GET_USER_LIST } from "../action";
 
 
 // 获取提交数据总数
@@ -273,5 +273,26 @@ export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
       formid: formId,
       "isDataPage": true,
     }
+  })
+}
+
+export const getUserList = (appId, formId) =>dispatch =>{
+  return instanceAxios({
+    url: config.apiUrl + `/user/list`,
+    method: "GET",
+    headers: {
+      appid: appId,
+      formid: formId,
+    }
+  }).then(res=>{
+    if(res.data.status === "SUCCESS"){
+      dispatch({
+        type: GET_USER_LIST,
+        userList: res.data.data
+      })
+    }
+  })
+  .catch(err=>{
+    console.log(err)
   })
 }

@@ -225,29 +225,8 @@ const ReSubmitApprovalButton = (props) => {
 const FormDataDetailHeader = (props) => {
   const appId = useParams().appId || props.appId;
   const history = useHistory();
-  const [approverList, setApproverList] = React.useState([]);
   const [isApproverModalVisible, setApproverModalVisible] = React.useState(false);
   const [taskId, setTaskId] = React.useState(false);
-  useEffect(() => {
-    getUserList()
-  },[props.currentForm.id])
-  async function getUserList(){
-    try{
-      const { currentForm, appId } = props;
-      const res = await request(`/user/list`,{
-        headers:{
-          appid: appId,
-          formid: currentForm.id,
-        },
-        method: "get"
-      });
-      if (res && res.status === "SUCCESS") {
-        setApproverList(res.data);
-      }
-    }catch(err){
-      message.error("选择审批人失败")
-    }
-  }
   const onClickBack = () => {
     if (props.enterPort === "TransctionList") {
       props.fn(props.approvalKey);
@@ -276,7 +255,7 @@ const FormDataDetailHeader = (props) => {
     backSpanText = "我的待办";
   }
 
-  const { taskData, currentForm, creator, createdTime, updateTime } = props;
+  const { taskData, currentForm, creator, createdTime, updateTime, userList } = props;
   const {
     canSubmit,
     canResubimit,
@@ -356,9 +335,8 @@ const FormDataDetailHeader = (props) => {
               taskId={taskId || currentTaskId}
               setVisible={setApproverModalVisible} 
               formId={props.currentForm.id}
-              appId={props.appId}
-              approverList={approverList}
-              setApproverList={setApproverList}/>
+              appId={appId}
+              approverList={userList}/>
           </div>
         </Col>
       </Row>
@@ -370,4 +348,5 @@ export default connect(({formSubmitData}) => ({
   createdTime: formSubmitData.createdTime,
   updateTime: formSubmitData.updateTime,
   creator: formSubmitData.creator,
+  userList: formSubmitData.userList
 }))(FormDataDetailHeader);
