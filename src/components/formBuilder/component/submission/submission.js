@@ -620,37 +620,38 @@ class Submission extends Component {
                 this.props.appid,
                 appeoveData,
                 (shouldSetApprover,taskId) => {
-                  this.setState({
-                    isApproverModalVisible: shouldSetApprover,
-                    currentTaskId: taskId
-                  })
+                  if(taskId != void 0){
+                    this.setState({
+                      isApproverModalVisible: shouldSetApprover,
+                      currentTaskId: taskId
+                    })
+                  }
+                  if(shouldSetApprover === false){
+                    this.props.getApproveCount(this.props.appid)
+                    setTimeout(() => {
+                      let skipToSubmissionDataFlag = true;
+                      this.props.actionFun(skipToSubmissionDataFlag);
+                    }, 1000);
+                  }
                 })
               .catch(error => {
-                if (error.response && error.response.data.code === 9998) {
-                  this._setErrorResponseData(error.response.data);
-                  isMobile ? Toast.fail("提交失败") : message.error("提交失败");
-                }else if(error.response && error.response.data.code == 2003){
-                  // this.setState({
-                  //   isSubmitted: false
-                  // })
-                  isMobile
-                  ? Toast.fail(error.response.data.msg)
-                  : message.error(error.response.data.msg);
-                }
+                message.error("提交审批失败");
               });
           }
         })
           .catch(error => {
+            this.setState({
+              isSubmitted: false
+            })
             if (error.response && error.response.data.code === 9998) {
               this._setErrorResponseData(error.response.data);
               isMobile ? Toast.fail("提交失败") : message.error("提交失败");
             } else if (error.response && error.response.data.code == 2003) {
-              // this.setState({
-              //   isSubmitted: false
-              // })
               isMobile
                 ? Toast.fail(error.response.data.msg)
                 : message.error(error.response.data.msg);
+            } else if(error.response && error.response.data.code == 2004) {
+              message.error(this.props.formValidation.errMessage)
             }
           });
       });

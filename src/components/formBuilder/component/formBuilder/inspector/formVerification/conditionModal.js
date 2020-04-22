@@ -31,7 +31,7 @@ class ConditionModal extends React.Component {
 
   componentWillMount() {
     let resultArray = [];
-    let excludeComponentType = ["RadioButtons","CheckboxInput","DropDown","MultiDropDown","DateInput","GetLocalPosition","ImageUpload","FileUpload","HandWrittenSignature","Address","ComponentTemplate","Button"]
+    let excludeComponentType = ["RadioButtons","CheckboxInput","DropDown","MultiDropDown","DateInput","GetLocalPosition","ImageUpload","FileUpload","HandWrittenSignature","Address","ComponentTemplate","Button","PureDate","PureTime"]
 
     this.props.data.forEach(item => {
       if (item.type == "FormChildTest") {
@@ -39,14 +39,14 @@ class ConditionModal extends React.Component {
           if(excludeComponentType.indexOf(childItem.type) === -1){
             resultArray.push({
               label: item.label + "." + childItem.label,
-              id: item.id + "_"+ childItem.id
+              key: item.key + "_"+ childItem.key
             });
           }
         });
       } else if(excludeComponentType.indexOf(item.type) === -1){
         resultArray.push({
           label: item.label,
-          id: item.id
+          key: item.key
         });
       }
     });
@@ -112,7 +112,7 @@ class ConditionModal extends React.Component {
           if(startIndex < endIndex){
             valueStr += verificationStr.substring(startIndex, endIndex)
           }
-            valueStr += field.id;
+            valueStr += field.key;
             verificationStr = verificationStr.slice(endIndex + field.label.length)
         }
     })
@@ -124,7 +124,7 @@ class ConditionModal extends React.Component {
 
   addFromData(field) {
     let value = field.label;
-    let id = field.id;
+    let key = field.key;
     let textAreaInput = this.textAreaInput;
     let cursorIndex = this.getCursortPosition(
       document.querySelector(".custom")
@@ -320,7 +320,7 @@ class ConditionModal extends React.Component {
                   {fieldInputValue
                     ? searchFieldArray.map(item => (
                       <p
-                        key={item.id}
+                        key={item.key}
                         onClick={_e => {
                           this.addFromData(item);
                         }}
@@ -330,7 +330,7 @@ class ConditionModal extends React.Component {
                     ))
                     : this.state.componentLabelArray.map(item => (
                       <p
-                        key={item.id}
+                        key={item.key}
                         onClick={_e => {
                           this.addFromData(item);
                         }}
