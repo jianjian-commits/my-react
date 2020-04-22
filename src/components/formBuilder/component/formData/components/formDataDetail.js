@@ -571,7 +571,7 @@ class FormDataDetail extends PureComponent {
               <TabPane tab="表单详情" key="formDetail">
                 {this._renderDataByType(formDetail, newCurrentComponents)}
               </TabPane>
-              <TabPane tab="编辑记录" key="editHistory">
+              <TabPane tab="数据日志" key="editHistory">
                 <EditHistory submissionId={this.state.submissionId} />
               </TabPane>
               {// 关联审批的才展示审批  taskData.tasks

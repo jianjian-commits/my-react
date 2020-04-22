@@ -200,7 +200,10 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
               forms: currentForm,
               formDetail: res.data.data,
               extraProp: res.data.extraProp,
-              taskData: response.data.data
+              taskData: response.data.data,
+              createdTime: res.data.createdTime,
+              updateTime: res.data.updateTime,
+              creator: res.data.extraProp.user.name
             });
         }).catch(err=>{
           callback(false);
