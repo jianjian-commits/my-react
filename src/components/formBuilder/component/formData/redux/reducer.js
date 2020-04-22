@@ -3,7 +3,7 @@ import {
   CLEAR_FORM_DATA,
   CLEAR_FORM_DETAIL,
   RECEIVED_FORM_DETAIL,
-  Filter_FORM_DATA
+  Filter_FORM_DATA,
 } from "./action";
 
 const initState = {
@@ -15,7 +15,7 @@ const initState = {
   formDetailLoading: false,
   submissionDataTotal: -1,
   extraProp: null,
-  taskData:{}
+  taskData: {},
 };
 
 const formSubmitDataReducer = (state = initState, action) => {
@@ -36,13 +36,13 @@ const formSubmitDataReducer = (state = initState, action) => {
         formDataLoading: false,
         token: action.token,
         formData: action.formData,
-        submissionDataTotal: action.submissionDataTotal
+        submissionDataTotal: action.submissionDataTotal,
       };
     }
     case CLEAR_FORM_DATA: {
       return {
         ...state,
-        formData: []
+        formData: [],
       };
     }
 
@@ -52,7 +52,10 @@ const formSubmitDataReducer = (state = initState, action) => {
         formDetail: action.formDetail,
         forms: action.forms,
         extraProp: action.extraProp,
-        taskData: action.taskData
+        taskData: action.taskData,
+        createdTime: action.createdTime,
+        updateTime: action.updateTime,
+        creator: action.creator,
       };
     }
 
@@ -61,7 +64,7 @@ const formSubmitDataReducer = (state = initState, action) => {
         ...state,
         formDetail: [],
         forms: { components: [], name: "" },
-        taskData:{}
+        taskData: {},
       };
     }
     default: {

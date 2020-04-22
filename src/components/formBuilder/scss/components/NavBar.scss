@@ -42,31 +42,76 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       }
     }
   }
-  .headerBarExtraTitle{
+  .headerBarExtraTitle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color:  #2A7FFF;
-   >span{
-     display: block;
-     width: 104px;
-     height: 36px;
-     line-height: 36px;
-     text-align: center;
-     background-color: #fff;
+    color: #2a7fff;
+    > span {
+      display: block;
+      width: 104px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      background-color: #fff;
       border-radius: 3px;
       margin-right: 20px;
-    cursor: pointer;
-    user-select: none;
-    &:hover{
-      background: #E6E6E6
+      cursor: pointer;
+      user-select: none;
+      &:hover {
+        background: #e6e6e6;
+      }
     }
-   }
   }
   .headerBarButton {
     &.ant-btn {
       width: 104px;
       height: 36px;
     }
+  }
+}
+
+// 过滤字段样式
+.fields-wraper {
+  width: 160px !important;
+  background: #ffffff;
+  box-shadow: 0px 2px 6px #d2d4db;
+  border-radius: 3px;
+  color: #333333;
+  margin-top: 9px;
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #d4d5d7;
+    box-shadow: none;
+  }
+  // :hover {
+  //   &::-webkit-scrollbar-thumb {
+  //     background-color: #D4D5D7;
+  //     box-shadow: none;
+  //   }
+  // }
+  .fields-checkbox {
+    display: flex;
+    flex-direction: column;
+    max-height: 210px;
+    padding: 10px 0 10px 20px;
+    border-bottom: 1px solid #d6d8de;
+    overflow: auto;
+    .ant-checkbox-group-item {
+      margin: 9px 0;
+      >span:last-child {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 120px;
+        vertical-align: bottom;
+        white-space: nowrap;
+      }
+    }
+  }
+  .fields-btn {
+    height: 40px;
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Spin, Icon, Popover } from "antd";
+import { Spin, Icon, Popover, Input } from "antd";
 import classNames from "classnames";
 export default class MultiDropDownItem extends React.Component {
   constructor(props) {
@@ -7,17 +7,25 @@ export default class MultiDropDownItem extends React.Component {
     let { item } = this.props;
     const indexs = item.dropDownOptions.map(item => item.value);
     let selectValues = [];
+    let inputEditValue = "";
+    console.log(item)
     if(item.data){
       item.data.forEach(value => {
         let index = indexs.indexOf(value);
         if (index > -1) {
           selectValues.push(index);
+        }else{
+          selectValues.push(item.data.length - 1);
+          inputEditValue = value
         }
       });
     }
     this.state = {
       selectIndexArr: selectValues,
-      isPopoverVisible: false
+      selectValueArr:[],
+      isPopoverVisible: false,
+      isShowExtra:false,
+      inputValue:inputEditValue === ""? '其他': inputEditValue
     };
   }
 
@@ -39,6 +47,10 @@ export default class MultiDropDownItem extends React.Component {
                 .filter((element, i) => this.state.selectIndexArr.includes(i))
                 .map(item => item.value);
               onChange(dataArr);
+              this.setState({
+                isShowExtra:true,
+                selectValueArr:dataArr
+              })
             });
           }}
         >
@@ -63,7 +75,17 @@ export default class MultiDropDownItem extends React.Component {
                         this.state.selectIndexArr.includes(i)
                       )
                       .map(item => item.value);
+
+                      this.setState({
+                        selectValueArr: dataArr
+                      })
+
                     onChange(dataArr);
+
+                    this.setState({
+                      isShowExtra:false,
+                      isInputValue:false
+                    })
                   }
                 );
               } else {
@@ -77,7 +99,23 @@ export default class MultiDropDownItem extends React.Component {
                         this.state.selectIndexArr.includes(i)
                       )
                       .map(item => item.value);
+
                     onChange(dataArr);
+
+                    this.setState({
+                      selectValueArr:dataArr
+                    })
+
+                    if(item.isExtra) {
+                      this.setState({isShowExtra:true})
+                    }else{
+                      if(this.state.inputValue === "其他"){
+
+                      }else{
+                        this.setState({isShowExtra:false})
+                      }
+                    }
+
                   }
                 );
               }
@@ -88,6 +126,41 @@ export default class MultiDropDownItem extends React.Component {
             {selectIndexArr.includes(index) ? <Icon type="check" /> : ""}
           </div>
         ))}
+        {
+                this.state.isShowExtra ? <Input 
+                  onChange = {
+                    e =>{
+                      e.preventDefault();
+                      e.stopPropagation();
+                      let { value } = e.target;
+                      this.setState({
+                        inputValue: value
+                      })
+                    }
+                  }
+                  onBlur = {
+                    // 当失去焦点是时候触发,提交数据的更新
+                    e =>{
+                      e.preventDefault();
+                      e.stopPropagation();
+                      this.setState({
+                        isShowExtra:false
+                      },()=>{
+                        let selectMiddleArr = this.state.selectValueArr;
+                        selectMiddleArr.pop();
+                        let newValue = this.state.inputValue === "其他" ? '': this.state.inputValue
+                        let newSelectArr = [...selectMiddleArr,newValue]
+                        onChange(newSelectArr)
+                        this.setState({
+                        selectValueArr:newSelectArr,
+                        isInputValue:true
+                        })
+                      })
+                    }
+                  }
+                  defaultValue = { this.state.inputValue === "其他" ? '':this.state.inputValue}
+                /> : null
+              }
       </div>
     );
   }

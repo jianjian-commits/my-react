@@ -12,6 +12,9 @@ import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+import ConditionModal from "../formVerification/conditionModal";
+import { handleFormulaSubmit } from "../utils/handleFormulaUtils";
+
 const { Option } = Select;
 
 class SingleTextInspector extends React.Component {
@@ -21,8 +24,10 @@ class SingleTextInspector extends React.Component {
       optionType: this.props.element.data.type || "custom",
       formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
+      isShowEditFormulaModal: false,
       isLinked: false,
-      apiNameTemp: undefined //api name 临时值
+      apiNameTemp: undefined, //api name 临时值
+      verificationStr: ""
     };
   }
 
@@ -35,7 +40,7 @@ class SingleTextInspector extends React.Component {
       });
     }
     const { key } = element;
-    const {err, msg:APIMessage} = checkUniqueApi(key, this.props);
+    const { err, msg: APIMessage } = checkUniqueApi(key, this.props);
     const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
@@ -46,6 +51,12 @@ class SingleTextInspector extends React.Component {
       isUniqueApi: isUniqueApi,
       APIMessage
     });
+
+    if (element.data.type == "EditFormula") {
+      this.setState({
+        verificationStr: element.data.values.verificationStr
+      })
+    }
   }
 
   handleChangeAttr = ev => {
@@ -125,7 +136,7 @@ class SingleTextInspector extends React.Component {
 
   // 选择指定组件渲染
   renderOptionDataFrom = type => {
-    const { isShowDataLinkageModal, formId } = this.state;
+    const { isShowDataLinkageModal, isShowEditFormulaModal, formId } = this.state;
     const { forms, element, elementParent } = this.props;
     let isLinkError = false;
     const { data, errorComponentIndex } = this.props;
@@ -177,6 +188,50 @@ class SingleTextInspector extends React.Component {
           </>
         );
       }
+      case "EditFormula": {
+        return (
+          <>
+            <Button
+              className="data-link-set"
+              onClick={() => {
+                this.setState({
+                  isShowEditFormulaModal: true
+                })
+              }}
+            >
+              {element.data.type == "EditFormula" ? "已设置公式" : "编辑公式"}
+            </Button>
+
+            <ConditionModal
+              visible={isShowEditFormulaModal}
+              verificationStr={this.state.verificationStr}
+              currentItem={element}
+              currentItemParent={elementParent}
+              index={this.state.index}
+              handleOk={(str) => {
+                console.log("ffc", str);
+                // handleFormulaSubmit(str, element, elementParent, data, {
+                //   setFormChildItemAttr: this.props.setFormChildItemAttr,
+                //   setItemValues: this.props.setItemValues,
+                // });
+
+                this.setState({
+                  index: -1,
+                  isShowEditFormulaModal: false,
+                  verificationStr: str
+                })
+              }}
+              handleCancel={() => {
+                this.setState({
+                  index: -1,
+                  isShowEditFormulaModal: false
+                })
+              }}
+            />
+
+          </>
+        );
+      }
       default: {
         return;
       }
@@ -208,6 +263,12 @@ class SingleTextInspector extends React.Component {
         });
         break;
       }
+      case "EditFormula": {
+        this.setState({
+          optionType: "EditFormula"
+        });
+        break;
+      }
       default: {
         return;
       }
@@ -217,7 +278,7 @@ class SingleTextInspector extends React.Component {
   // API change
   handleChangeAPI = ev => {
     const { value } = ev.target;
-    const {err, msg:APIMessage} = checkUniqueApi(value, this.props);
+    const { err, msg: APIMessage } = checkUniqueApi(value, this.props);
     const isUnique = !err;
     let isUniqueApi = true;
     if (!isUnique) {
@@ -311,6 +372,7 @@ class SingleTextInspector extends React.Component {
                   >
                     <Option value="custom">自定义</Option>
                     <Option value="DataLinkage">数据联动</Option>
+                    <Option value="EditFormula">公式编辑</Option>
                   </Select>
                   {this.renderOptionDataFrom(optionType)}
                 </>
@@ -337,6 +399,7 @@ class SingleTextInspector extends React.Component {
             </div>
             <div className="number-check-warper">
               <InputNumber
+                disabled={!validate.isLimitLength}
                 name="minLength"
                 placeholder="不限"
                 min={1}
@@ -347,6 +410,7 @@ class SingleTextInspector extends React.Component {
               />
               ~
             <InputNumber
+                disabled={!validate.isLimitLength}
                 name="maxLength"
                 placeholder="不限"
                 min={1}
@@ -356,19 +420,15 @@ class SingleTextInspector extends React.Component {
                 autoComplete="off"
               />
             </div>
-            {
-              isInFormChild(this.props.elementParent)
-                ? null
-                : <div className="checkbox-wrapper">
-                  <Checkbox
-                    name="unique"
-                    checked={unique}
-                    onChange={this.handleChangeAttr}
-                  >
-                    不允许重复
-                </Checkbox>
-                </div>
-            }
+            <div className="checkbox-wrapper">
+              <Checkbox
+                name="unique"
+                checked={unique}
+                onChange={this.handleChangeAttr}
+              >
+                不允许重复
+              </Checkbox>
+            </div>
           </div>
         </div>
       </div>

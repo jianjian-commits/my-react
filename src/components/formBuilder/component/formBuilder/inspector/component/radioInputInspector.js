@@ -7,13 +7,17 @@ import {
   setFormChildItemAttr
 } from "../../redux/utils/operateFormComponent";
 import isInFormChild from "../utils/isInFormChild";
-import locationUtils from "../../../../utils/locationUtils";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+import BatchEditingModal from "../batchEditingModal/batchEditingModal"
+
 class RadioInputInspector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isShowBatchEditingModal: false,
+    };
     this.addChooseItem = this.addChooseItem.bind(this);
+    this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
   }
 
@@ -69,12 +73,19 @@ class RadioInputInspector extends React.Component {
   }
 
   addChooseItem() {
+    let extraObj = null
     const newItem = {
       label: `选项`,
       value: `选项`,
       shortcut: ""
     };
-    const newValuesList = [...this.props.element.values, newItem];
+    this.props.element.values.forEach((item)=>{
+      if(item.isExtra){
+        extraObj = item;
+      }
+    })
+    const newFilterValues = this.props.element.values.filter((item)=> !item.isExtra );
+    const newValuesList = extraObj === null ? [...newFilterValues, newItem]:[...newFilterValues, newItem, extraObj];
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
@@ -86,6 +97,62 @@ class RadioInputInspector extends React.Component {
       this.props.setItemAttr(this.props.element, "values", newValuesList);
     }
   }
+  addExtraChooseItem() {
+    if(this.props.element.values.some(item => item.isExtra)){
+
+    }else{
+      const newItem = {
+        label: `其它`,
+        value: `其它`,
+        isExtra:true,
+        shortcut: ""
+      };
+      const newValuesList = [...this.props.element.values, newItem];
+      if (this.props.elementParent) {
+        this.props.setFormChildItemAttr(
+          this.props.elementParent,
+          "values",
+          newValuesList,
+          this.props.element
+        );
+      } else {
+        this.props.setItemAttr(this.props.element, "values", newValuesList);
+      }
+    }
+  }
+
+  addChooseItems = (tempOptions) => {
+    const newItem = {
+      label: `选项`,
+      value: `选项`,
+      shortcut: ""
+    };
+    let newValuesList;
+    if(tempOptions.length > 0){
+      newValuesList = [...tempOptions];
+    } else {
+      // 如果编辑框里的内容没有生成选项,那就只有一个选项
+      newValuesList = [newItem];
+    }
+    if (this.props.elementParent) {
+      this.props.setFormChildItemAttr(
+        this.props.elementParent,
+        "values",
+        newValuesList,
+        this.props.element
+      );
+    } else {
+      this.props.setItemAttr(this.props.element, "values", newValuesList);
+    }
+  }
+
+  changeModalVisible = (isVisible) =>{
+    this.setState({
+      isShowBatchEditingModal: isVisible,
+    });
+  }
+
+
 
   deleteChooseItem(item, index) {
     if (this.props.element.values.length === 1) return null;
@@ -126,21 +193,6 @@ class RadioInputInspector extends React.Component {
     }
   }
 
-  // componentDidUpdate() {
-  //   if (this.props.isCalcLayout) {
-  //     let domElement = document.getElementById(this.props.element.key);
-
-  //     const newLayout = {
-  //       ...this.props.element.layout,
-  //       h: Math.floor((domElement.offsetHeight) / 30)
-  //     }
-  //     this.props.setItemAttr(this.props.element, "layout", newLayout);
-
-  //     this.props.setCalcLayout(false);
-  //   }
-
-  // }
-
   // API change
    handleChangeAPI = ev => {
     const { value } = ev.target;
@@ -167,7 +219,8 @@ class RadioInputInspector extends React.Component {
       tooltip,
       isSetAPIName
     } = this.props.element;
-    const { apiNameTemp, isUniqueApi = true, APIMessage, } = this.state;
+    const { apiNameTemp, isUniqueApi = true, APIMessage, tempContent } = this.state;
+    const hasExtraOption = this.props.element.values.some(item => item.isExtra);
     return (
       <div className="radio-input-inspactor">
         <div className="costom-info-card">
@@ -211,32 +264,66 @@ class RadioInputInspector extends React.Component {
           <div className="chooseitems" key={"chooseRadioItem"}>
             {values.map((item, index) => {
               return (
+                <div key={index}>
+                  {item.isExtra ?
+                 <div className="extraWrap">
+                 <Input
+                 key={`chooseItem${index}`}
+                 type="text"
+                 value="其它"
+                 placeholder="其它"
+                 autoComplete="off"
+                 disabled={true}
+                 />
+                 <Tooltip title="删除">
+                 <img
+                   src="/image/deleteIcon.png"
+                   onClick={() => {
+                     this.deleteChooseItem(item, index);
+                   }}
+                 />
+                 </Tooltip>
+               </div>
+                  :
                 <div className="ChooseItemWarp" key={index}>
-                  <img src="/image/dragIcon.png" />
-                  <Input
-                    key={`chooseItem${index}`}
-                    type="text"
-                    onChange={ev => {
-                      this.changeChooseItem(item, ev);
+                <img src="/image/dragIcon.png" />
+                <Input
+                  key={`chooseItem${index}`}
+                  type="text"
+                  onChange={ev => {
+                    this.changeChooseItem(item, ev);
+                  }}
+                  value={item.value}
+                  placeholder="选项"
+                  autoComplete="off"
+                />
+                <Tooltip title="删除">
+                  <img
+                    src="/image/deleteIcon.png"
+                    onClick={() => {
+                      this.deleteChooseItem(item, index);
                     }}
-                    value={item.value}
-                    placeholder="选项"
-                    autoComplete="off"
                   />
-                  <Tooltip title="删除">
-                    <img
-                      src="/image/deleteIcon.png"
-                      onClick={() => {
-                        this.deleteChooseItem(item, index);
-                      }}
-                    />
-                  </Tooltip>
+                </Tooltip>
+                </div>}
                 </div>
               );
             })}
-            <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
+            <span className="addOptionBtn" onClick={this.addChooseItem} name="chooseItems">
               增加选项
-            </Button>
+            </span>
+            <span className="divider">|</span>
+            <span class={hasExtraOption? "addOptionBtn hasExtraOption":"addOptionBtn"} onClick={this.addExtraChooseItem} name="chooseItems">
+               添加“其他”选项
+            </span>
+            <span className="divider">|</span>
+            <span className="addOptionBtn" onClick={()=>{this.changeModalVisible(true)}}>批量编辑</span>
+            <BatchEditingModal 
+              visible={this.state.isShowBatchEditingModal}
+              changeModalVisible={this.changeModalVisible}
+              addChooseItems={this.addChooseItems}
+              options={this.props.element.values}
+            />
           </div>
           {isInFormChild(this.props.elementParent) ? null : (
             <>

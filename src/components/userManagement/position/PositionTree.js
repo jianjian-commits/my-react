@@ -8,7 +8,7 @@ import {
   CreateIcon,
   RemoveIcon
 } from "../../../assets/icons/company";
-import { getCurrentCompany } from "../../../store/loginReducer";
+// import { getCurrentCompany } from "../../../store/loginReducer";
 import { EditIcon } from "../../../assets/icons";
 import { catchError } from "../../../utils";
 import request from "../../../utils/request";
@@ -213,34 +213,34 @@ class PositionTree extends Component {
             isTop={isTop}
           />
         ) : (
-          <>
-            <Header />
-            <div className={classes.tree}>
-              <div className={classes.button}>
-                <Button type="link" onClick={() => this.operateTree("unfold")}>
-                  全部展开
+            <>
+              <Header />
+              <div className={classes.tree}>
+                <div className={classes.button}>
+                  <Button type="link" onClick={() => this.operateTree("unfold")}>
+                    全部展开
                 </Button>
-                |
+                  |
                 <Button type="link" onClick={() => this.operateTree("collapse")}>
-                  全部折叠
+                    全部折叠
                 </Button>
+                </div>
+                <Tree
+                  showIcon
+                  showLine
+                  onExpand={expandedKeys => {
+                    this.setState({
+                      expandedKeys: expandedKeys
+                    });
+                  }}
+                  className="hide-file-icon"
+                  expandedKeys={this.state.expandedKeys}
+                >
+                  {this.renderTreeNodes(this.state.treeData)}
+                </Tree>
               </div>
-              <Tree
-                showIcon
-                showLine
-                onExpand={expandedKeys => {
-                  this.setState({
-                    expandedKeys: expandedKeys
-                  });
-                }}
-                className="hide-file-icon"
-                expandedKeys={this.state.expandedKeys}
-              >
-                {this.renderTreeNodes(this.state.treeData)}
-              </Tree>
-            </div>
-          </>
-        )}
+            </>
+          )}
         <ModalCreation
           title={"新建职位"}
           visible={this.state.positionModalOpen}
@@ -257,5 +257,7 @@ export default connect(
     id: login.currentCompany && login.currentCompany.id,
     companyName: login.currentCompany && login.currentCompany.companyName
   }),
-  { getCurrentCompany }
+  {
+    // getCurrentCompany 
+  }
 )(PositionTree);

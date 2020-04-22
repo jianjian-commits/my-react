@@ -6,7 +6,8 @@ import {
   Button,
   Tooltip,
   InputNumber,
-  Divider
+  Divider,
+  Modal
 } from "antd";
 import { connect } from "react-redux";
 import isInFormChild from "../utils/isInFormChild";
@@ -16,16 +17,21 @@ import {
   setCalcLayout
 } from "../../redux/utils/operateFormComponent";
 
+import BatchEditingModal from "../batchEditingModal/batchEditingModal"
+
 import locationUtils from "../../../../utils/locationUtils";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+const { TextArea } = Input;
 class CheckboxInspector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formPath: locationUtils.getUrlParamObj().path
+      formPath: locationUtils.getUrlParamObj().path,
+      isShowBatchEditingModal: false
     };
     this.addChooseItem = this.addChooseItem.bind(this);
     this.handleChangeAttr = this.handleChangeAttr.bind(this);
+    this.addExtraChooseItem = this.addExtraChooseItem.bind(this);
   }
 
   componentDidMount() {
@@ -84,12 +90,19 @@ class CheckboxInspector extends React.Component {
     }
   }
   addChooseItem() {
+    let extraObj = null;
     const newItem = {
       label: `选项`,
       value: `选项`,
       shortcut: ""
     };
-    const newValuesList = [...this.props.element.values, newItem];
+    this.props.element.values.forEach((item)=>{
+      if(item.isExtra){
+        extraObj = item
+      }
+    })
+    const newFilterValues = this.props.element.values.filter((item)=> !item.isExtra );
+    const newValuesList = extraObj===null? [...newFilterValues, newItem]:[...newFilterValues, newItem, extraObj];
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,
@@ -101,6 +114,56 @@ class CheckboxInspector extends React.Component {
       this.props.setItemAttr(this.props.element, "values", newValuesList);
     }
   }
+
+  addExtraChooseItem() {
+    if(this.props.element.values.some(item => item.isExtra)){
+      
+    }else{
+      const newItem = {
+        label: `其它`,
+        value: `其它`,
+        isExtra:true,
+        shortcut: ""
+      };
+      const newValuesList = [...this.props.element.values, newItem];
+      if (this.props.elementParent) {
+        this.props.setFormChildItemAttr(
+          this.props.elementParent,
+          "values",
+          newValuesList,
+          this.props.element
+        );
+      } else {
+        this.props.setItemAttr(this.props.element, "values", newValuesList);
+      }
+    }
+  }
+
+  addChooseItems = (tempOptions) => {
+    const newItem = {
+      label: `选项`,
+      value: `选项`,
+      shortcut: ""
+    };
+    let newValuesList;
+    if(tempOptions.length > 0){
+      newValuesList = [...tempOptions];
+    } else {
+      // 如果编辑框里的内容没有生成选项,那就只有一个选项
+      newValuesList = [newItem];
+    }
+    if (this.props.elementParent) {
+      this.props.setFormChildItemAttr(
+        this.props.elementParent,
+        "values",
+        newValuesList,
+        this.props.element
+      );
+    } else {
+      this.props.setItemAttr(this.props.element, "values", newValuesList);
+    }
+  }
+
   deleteChooseItem(item, index) {
     if (this.props.element.values.length === 1) return null;
     let newValuesList = this.props.element.values.filter(
@@ -138,6 +201,12 @@ class CheckboxInspector extends React.Component {
       this.props.setItemAttr(this.props.element, "values", newValuesList);
     }
   }
+
+  changeModalVisible = (isVisible) =>{
+    this.setState({
+      isShowBatchEditingModal: isVisible,
+    });
+  };
 
   handleChangeAttrMinLength = value => {
     const { validate } = this.props.element;
@@ -202,6 +271,7 @@ class CheckboxInspector extends React.Component {
       isSetAPIName
     } = this.props.element;
     const { apiNameTemp, isUniqueApi = true, APIMessage } = this.state;
+    const hasExtraOption = this.props.element.values.some(item => item.isExtra);
     return (
       <div className="multidropdown-inspector">
         <div className="costom-info-card">
@@ -244,6 +314,27 @@ class CheckboxInspector extends React.Component {
           <p>选项</p>
           <div className="chooseitems">
             {values.map((item, index) => (
+              <div key={index}>
+                {item.isExtra ? 
+                <div className="extraWrap">
+                  <Input
+                  key={`chooseItem${index}`}
+                  type="text"
+                  value="其它"
+                  placeholder="其它"
+                  autoComplete="off"
+                  disabled={true}
+                  />
+                  <Tooltip title="删除">
+                  <img
+                    src="/image/deleteIcon.png"
+                    onClick={() => {
+                      this.deleteChooseItem(item, index);
+                    }}
+                  />
+                  </Tooltip>
+                </div>
+                :
               <div className="ChooseItemWarp" key={index}>
                 <img src="/image/dragIcon.png" />
                 <Input
@@ -264,11 +355,41 @@ class CheckboxInspector extends React.Component {
                   />
                 </Tooltip>
               </div>
+              }
+              </div>
             ))}
-            <Button onClick={this.addChooseItem} name="chooseItems" icon="plus">
+            <span className="addOptionBtn" onClick={this.addChooseItem} name="chooseItems">
               增加选项
-            </Button>
+            </span>
+            <span className="divider">|</span>
+            <span class={hasExtraOption? "addOptionBtn hasExtraOption":"addOptionBtn"} onClick={this.addExtraChooseItem} name="chooseItems">
+               添加“其他”选项
+            </span>
+            <span className="divider">|</span>
+            <span className="addOptionBtn" onClick={()=>{this.changeModalVisible(true)}}>批量编辑</span>
+            <BatchEditingModal 
+              visible={this.state.isShowBatchEditingModal}
+              changeModalVisible={this.changeModalVisible}
+              addChooseItems={this.addChooseItems}
+              options={this.props.element.values}
+            />
           </div>
+          {isInFormChild(this.props.elementParent) ? null : (
+            <>
+              <p>排序方式</p>
+              <div className="RadioWapper">
+                <Radio.Group
+                  name="inline"
+                  // 这里要改一下默认值
+                  defaultValue={inline}
+                  onChange={this.handleChangeAttr}
+                >
+                  <Radio value={true}>横向</Radio>
+                  <Radio value={false}>纵向</Radio>
+                </Radio.Group>
+              </div>
+            </>
+          )}
         </div>
         <Divider />
         <div className="costom-info-card">
@@ -291,6 +412,7 @@ class CheckboxInspector extends React.Component {
           </div>
           <div className="number-check-warper">
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="minOptionNumber"
               placeholder="不限"
               min={1}
@@ -304,6 +426,7 @@ class CheckboxInspector extends React.Component {
             />
             ~
             <InputNumber
+              disabled={!validate.isLimitLength}
               name="maxOptionNumber"
               placeholder="不限"
               min={1}
