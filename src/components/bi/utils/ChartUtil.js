@@ -67,7 +67,12 @@ export const getBarChartOption = (chartData, chartInfo) => {
       source
     },
     legend: {y: 'top', show: showLegend},
-    tooltip: {},
+    tooltip: {
+      backgroundColor: 'rgba(255,255,255,0.9)',
+      textStyle: {
+        color: '#777F97'
+      }
+    },
     xAxis: [
       {
         type: 'category', 
@@ -124,7 +129,8 @@ export const getPieChartOption = (chartData, chartInfo) => {
             color: 'gray'
           }
         },
-        center: ['50%','60%']
+        center: ['50%','60%'],
+        hoverAnimation:false
       });
       let row = [];
       const legend = item.legend;

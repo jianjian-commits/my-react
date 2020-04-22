@@ -69,6 +69,16 @@ const RightPane = (props) => {
     changeChartInfo(chartInfo || new ChartInfo());
   }
 
+  const chartTitle = (intro)=> {
+    return (
+      <div>
+        {intro.map(item=>
+          <div className={classes.tooltipTitle}>{item}</div>
+        )}
+      </div>
+    )  
+  }
+
   showRPTTitle = elemType != ChartType.AREA_CHART;
   showRPTools = elemType != ChartType.INDEX_DIAGRAM;
 
@@ -78,7 +88,7 @@ const RightPane = (props) => {
         <span>可视化</span>
         <div className={classes.chartGroup}>
         {chartGroup.map(chart =>
-        <Tooltip key={chart.type}  title={chart.intro}>
+        <Tooltip key={chart.type}  title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} >
           <div
             className={chartAvailableList.includes(chart.type) ? classNames(classes.IconBox, {activeIcon: activeIcon==chart.type}) : classes.unavailable }
             onClick={()=>{handleSelectIcon(chart.type)}}
