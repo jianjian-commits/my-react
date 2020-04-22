@@ -292,10 +292,6 @@ class FormSubmitData extends PureComponent {
     return addressData !== null ? this._truncateValue(addressData.address) : "";
   };
 
-  _setLocalTime = (date) => {
-    
-  }
-
   _renderFormChildComponentByType(component, submitData) {
     if (submitData == void 0) {
       return <div className="formChild-item"></div>;
@@ -304,19 +300,19 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div className="formChild-item">
-            {submitData.time ? coverTimeUtils.localTime(submitData.time) : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD HH:mm:ss") : ""}
           </div>
         );
       case "PureDate":
         return (
           <div className="formChild-item">
-            {submitData.time ? moment(coverTimeUtils.localDate(submitData.time)).format("YYYY-MM-DD") : ""}
+            {submitData ? moment(coverTimeUtils.localDate(submitData, component.type)).format("YYYY-MM-DD") : ""}
           </div>
         );
       case "PureTime":
         return (
           <div className="formChild-item">
-            {submitData.time ? coverTimeUtils.localDate(submitData.time, true).toLocaleTimeString() : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type).format("HH:mm:ss") : ""}
           </div>
         );
       case "ImageUpload":
@@ -491,7 +487,7 @@ class FormSubmitData extends PureComponent {
         if (submitData == void 0) {
           return <></>;
         }
-        return coverTimeUtils.localTime(submitData);
+        return coverTimeUtils.localDate(submitData);
       case "MultiDropDown":
       case "CheckboxInput":
         return (
@@ -502,14 +498,20 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div key={component.key}>
-            {submitData != void 0 ? coverTimeUtils.localTime(submitData) : ""}
+            {submitData != void 0 ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD HH:mm:ss") : ""}
           </div>
         );
+      case "PureDate":
+          return (
+            <div className="formChild-item">
+              {submitData ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD") : ""}
+            </div>
+      );
       case "PureTime":
         return (
           <div key={component.key}>
             {submitData != void 0
-              ? coverTimeUtils.localDate(submitData, true).toLocaleTimeString()
+              ? coverTimeUtils.localDate(submitData, component.type).format("HH:mm:ss")
               : ""}
           </div>
         );
