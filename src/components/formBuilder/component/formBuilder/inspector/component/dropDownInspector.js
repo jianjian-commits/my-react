@@ -344,14 +344,24 @@ class DropdownInspector extends React.Component {
             {values.map((item, index) => (
              <div key={index}>
                {item.isExtra ?
+                  <div className="extraWrap">
                   <Input
                   key={`chooseItem${index}`}
                   type="text"
-                  value="其他"
-                  placeholder="其他"
+                  value="其它"
+                  placeholder="其它"
                   autoComplete="off"
                   disabled={true}
-                />
+                  />
+                  <Tooltip title="删除">
+                  <img
+                    src="/image/deleteIcon.png"
+                    onClick={() => {
+                      this.deleteChooseItem(item, index);
+                    }}
+                  />
+                  </Tooltip>
+                </div>
                   :
                 <div className="ChooseItemWarp">
                 <img src="/image/dragIcon.png" />
