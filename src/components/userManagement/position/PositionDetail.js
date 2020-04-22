@@ -323,6 +323,8 @@ class PositionDetail extends Component {
   };
   modalConfirmHandle = async () => {
     const { modalSelectedKeys } = this.state;
+    const { isTop } = this.props;
+    if(isTop && modalSelectedKeys.length > 1) return message.error("顶级职位只能关联一位用户");
     try {
       const res = await request(`/position/${this.props.position.id}/user`, {
         method: "PUT",

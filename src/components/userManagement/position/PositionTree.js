@@ -13,7 +13,7 @@ import { EditIcon } from "../../../assets/icons";
 import { catchError } from "../../../utils";
 import request from "../../../utils/request";
 import ModalCreation from "../../profileManagement/modalCreate/ModalCreation";
-import PositionDel from "./PositionDetail";
+import PositionDetail from "./PositionDetail";
 const { TreeNode } = Tree;
 
 const Header = () => {
@@ -37,7 +37,8 @@ class PositionTree extends Component {
     super(props);
     this.state = {
       treeData: [],
-      selectedPosition: null
+      selectedPosition: null,
+      isTop: false
     };
     this.handleCreate = this.handleCreate.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -76,7 +77,7 @@ class PositionTree extends Component {
   // 关闭模态窗
   handleCancel() {
     this.setState({
-      open: false,
+      positionModalOpen: false,
       selectedPosition: null,
       detailOpened: false
     });
@@ -123,9 +124,7 @@ class PositionTree extends Component {
             children: [...res.data]
           }
         ];
-        this.setState({
-          treeData
-        });
+        this.setState({ treeData });
       } else {
         message.error(res.msg || "获取职位树失败");
       }
@@ -164,13 +163,13 @@ class PositionTree extends Component {
           {item.value}
           {item.code !== "COMPANY" && (
             <CreateIcon
-              onClick={() => this.setState({ open: true, selectedPosition: item })}
+              onClick={() => this.setState({ positionModalOpen: true, selectedPosition: item })}
             />
           )}
           {item.code !== "COMPANY" && (
             <EditIcon
               onClick={() => {
-                this.setState({ detailOpened: true, selectedPosition: item });
+                this.setState({ detailOpened: true, selectedPosition: item, isTop: !item.superiorId });
               }}
             />
           )}
@@ -199,18 +198,19 @@ class PositionTree extends Component {
     });
 
   returnTree = () => {
-    this.setState({ detailOpened: false, selectedPosition: null });
+    this.setState({ detailOpened: false, selectedPosition: null, isTop: null });
     this.getPositionTree();
   };
 
   render() {
-    const { detailOpened, selectedPosition } = this.state;
+    const { detailOpened, selectedPosition, isTop } = this.state;
     return (
       <div className={classes.wrapper}>
         {detailOpened ? (
-          <PositionDel
+          <PositionDetail
             position={selectedPosition}
             returnTree={this.returnTree}
+            isTop={isTop}
           />
         ) : (
           <>
@@ -243,7 +243,7 @@ class PositionTree extends Component {
         )}
         <ModalCreation
           title={"新建职位"}
-          visible={this.state.open}
+          visible={this.state.positionModalOpen}
           onOk={data => this.handleCreate(data)}
           onCancel={this.handleCancel}
         />
