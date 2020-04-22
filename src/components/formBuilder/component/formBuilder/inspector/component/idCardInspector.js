@@ -166,15 +166,13 @@ class IdCardInspector extends React.Component {
             >
               必填
             </Checkbox>
-            {isInFormChild(this.props.elementParent) ? null : (
-              <Checkbox
+            <Checkbox
                 name="unique"
                 checked={unique}
                 onChange={this.handleChangeAttr}
               >
                 不允许重复
-              </Checkbox>
-            )}
+            </Checkbox>
 
             {/* <Checkbox
               name="inputMask"

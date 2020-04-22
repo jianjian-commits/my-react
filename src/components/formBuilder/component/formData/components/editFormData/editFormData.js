@@ -4,6 +4,8 @@ import { Button, Form, message, Spin, Breadcrumb } from "antd";
 import axios from 'axios'
 import config from '../../../../config/config'
 import { modifySubmissionDetail } from "../../redux/utils/getDataUtils";
+import moment from "moment";
+import coverTimeUtils from '../../../../utils/coverTimeUtils'
 
 import { connect } from "react-redux";
 import HeaderBar from "../../../base/NavBar";
@@ -43,6 +45,8 @@ import FormChildMobile from "../../../submission/component/mobile/formChildMobil
 import RadioButtonsMobile from "../../../submission/component/radioInput/radioTestMobile";
 import MultiDropDownMobile from "../../../submission/component/mobile/multiDropDownMobile";
 import DropDownMobile from "../../../submission/component/mobile/dropDownMobile";
+import PureTime from "../../../submission/component/pureTime";
+import PureDate from "../../../submission/component/pureDate";
 
 class EditFormData extends Component {
   constructor(props) {
@@ -180,29 +184,26 @@ class EditFormData extends Component {
     return values;
   }
 
-  _setDateTimeVaule(values) {
-    this.state.pureFormComponents.map(component => {
+  _setDateTimeVaule(values, components = this.state.pureFormComponents) {
+    components.map(component => {
+      let type = component.type;
       if (
-        component.type === "DateInput" &&
         values.hasOwnProperty(component.key) &&
         values[component.key] != void 0
       ) {
-        // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
-        if (values[component.key].constructor === Date) {
-          let date = new Date(values[component.key].setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().replace("Z","");
-        } else {
-          let date = new Date(values[component.key]._d.setUTCMilliseconds(0));
-          let currentTimeZoneOffsetInHours = date.getTimezoneOffset()/60;
-              date.setHours(date.getHours()+currentTimeZoneOffsetInHours);
-          values[component.key] = new Date(date).toJSON().toString().replace("Z","")
+        if (
+          type === "DateInput" ||
+          type === "PureDate" ||
+          type === "PureTime"
+        ) {
+          // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
+          if (values[component.key].constructor === Date) {
+            values[component.key] = coverTimeUtils.utcDate(new Date(values[component.key]), "DateInput");
+          } else {
+            values[component.key] = coverTimeUtils.utcDate(values[component.key], type);
+          }
         }
-      } else if( component.type === "DateInput" &&
-      values.hasOwnProperty(component.key) &&
-      values[component.key] == null) {
-        delete values[component.key];
+
       }
     });
     return values;
@@ -223,7 +224,7 @@ class EditFormData extends Component {
         if (address.trim() === "") {
           delete values[component.key];
         } else {
-          values[component.key].xx = address;
+          values[component.key].completeAddress = address;
         }
       }
     });
@@ -284,6 +285,19 @@ class EditFormData extends Component {
         });
       }
     }
+  }
+
+  _resetFormChildErrorMsg(errorMsg){
+    const { formChildDataObj } = this.state;
+    const {formChildkey, fieldKey, value, msg} = errorMsg;
+    formChildDataObj[formChildkey].map(item => {
+        if (value === String(item[fieldKey].data)) {
+          item[fieldKey].hasErr = true;
+        }
+      });
+    this.setState({
+      showFormChildErr: true
+    });
   }
 
   _checkComponentValid(err, formComponentArray) {
@@ -367,13 +381,41 @@ class EditFormData extends Component {
     }
   }
     // 设置正确的子表单数据
-    setCorrectFormChildData = (values, formChildDataObj) => {
-      for (let key in values) {
-        if (formChildDataObj.hasOwnProperty(key)) {
-          values[key] = formChildDataObj[key];
-        }
+  setCorrectFormChildData = (values, formChildDataObj) => {
+    let date = new Date((new Date()).setUTCMilliseconds(0));
+    let currentTimeZoneOffsetInHours = date.getTimezoneOffset() / 60;
+    date.setHours(date.getHours() + currentTimeZoneOffsetInHours);
+
+    for (let key in values) {
+      if (formChildDataObj.hasOwnProperty(key)) {
+        values[key] = formChildDataObj[key];
       }
-    };
+      if (Array.isArray(values[key])) {
+        values[key].forEach((data, index) => {
+          for (let k in data) {
+            let type = data[k].formType;
+            if (data[k].autoInput) {
+              if (type === "PureDate") {
+                data[k].data = moment(date).format("YYYY-MM-DD")
+              }
+              if (type === "PureTime") {
+                data[k].data = moment(date).format("HH:mm:ss.SSS")
+              }
+              if (type === "DateInput") {
+                let dateString = moment(date).format();
+                data[k].data = dateString.substring(dateString.indexOf("+"), -1);
+              }
+            }else{
+              const dateTypes = ["PureDate", "PureTime", "DateInput"];
+              if (dateTypes.includes(type) && data[k].data) {
+                  data[k].data = coverTimeUtils.utcDate(data[k].data, type);
+              }
+            }
+          }
+        });
+      }
+    }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -393,6 +435,7 @@ class EditFormData extends Component {
         values = this._setNumberValue(values);
         values = this._setDateTimeVaule(values);
         values = this._setAddressValue(values);
+        this.setCorrectFormChildData(values, this.state.formChildDataObj);
         this._iterateAllComponentToSetData(
           formComponentArray,
           customDataArray,
@@ -407,7 +450,7 @@ class EditFormData extends Component {
         }
         this.setState({ isSubmitted: true,errorResponseMsg:{} });
         this.props
-          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.state.oldExtraProp)
+          .modifySubmissionDetail(this.state.currentForm.id, this.state.submissionId, values, this.props.appId, this.state.oldExtraProp, this.props.extraProp)
           .then(response => {
            isMobile
           ? Toast.success("提交成功!")
@@ -568,6 +611,38 @@ class EditFormData extends Component {
                   )}
               </div>
             );
+            case "PureTime":
+              return (
+                <div
+                {...componentDIVOptions}
+                >
+                  {mobile.is ? (
+                    <DateInputMobile
+                    {...componentCommonOptions}
+                    />
+                  ) : (
+                    <PureTime
+                    {...componentCommonOptions}
+                    />
+                  )}
+                </div>
+              );
+            case "PureDate":
+              return (
+                <div
+                {...componentDIVOptions}
+                >
+                  {mobile.is ? (
+                    <DateInputMobile
+                    {...componentCommonOptions}
+                    />
+                  ) : (
+                    <PureDate
+                    {...componentCommonOptions}
+                    />
+                  )}
+                </div>
+              );
           case "HandWrittenSignature":
             return (
               <div
@@ -683,6 +758,8 @@ class EditFormData extends Component {
                   <FormChildMobile
                     key={`${item.key}${i}`}
                     getFieldDecorator={getFieldDecorator}
+                    errorResponseMsg={errorResponseMsg[item.key]}
+                    resetErrorMsg={this._changeErrorResponseData}
                     item={item}
                     showFormChildErr={this.state.showFormChildErr}
                     forms={currentForm}
@@ -703,6 +780,9 @@ class EditFormData extends Component {
                     <FormChildTest
                       key={`${item.key}${i}`}
                       getFieldDecorator={getFieldDecorator}
+                      errorResponseMsg={errorResponseMsg[item.key]}
+                      resetErrorMsg={this._changeErrorResponseData}
+                      isEditData={true}
                       item={item}
                       initData = {formDetail[item.key]}
                       showFormChildErr={this.state.showFormChildErr}
@@ -872,10 +952,30 @@ class EditFormData extends Component {
   _setErrorResponseData = errorResponseData => {
     let errorResponseMsg = {};
     errorResponseData.infos.map(info => {
-      if (errorResponseMsg[info.fieldName] != void 0) {
-        errorResponseMsg[info.fieldName].push(info.msg);
+      if(info.fieldName.indexOf(".") !== -1){
+        // 子表单
+        // 子表单id.组件id.组件的值
+        // arr[0]表示子表单id,arr[1]表示组件id,arr[2]表示组件的值
+        const arr = info.fieldName.split(".");
+        var value = info.fieldName.substring(arr[0].length+arr[1].length+2); 
+        //  这里有问题最后的值不能用.分割
+        const infoMsg = {formChildkey:arr[0], fieldKey: arr[1], value: value, msg: info.msg};
+        this._resetFormChildErrorMsg(infoMsg);
+        if(errorResponseMsg[infoMsg.formChildkey] != void 0 && errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] != void 0){
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey].push(infoMsg);
+        } else if(errorResponseMsg[infoMsg.formChildkey] == void 0){
+          errorResponseMsg[infoMsg.formChildkey]={};
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] = [infoMsg];
+        } else {
+          errorResponseMsg[infoMsg.formChildkey][infoMsg.fieldKey] = [infoMsg];
+        }
       } else {
-        errorResponseMsg[info.fieldName] = [info.msg];
+        // 普通组件
+        if (errorResponseMsg[info.fieldName] != void 0) {
+          errorResponseMsg[info.fieldName].push(info.msg);
+        } else{
+          errorResponseMsg[info.fieldName] = [info.msg];
+        }
       }
     });
     this.setState({

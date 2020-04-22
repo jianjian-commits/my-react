@@ -61,7 +61,7 @@ export const fetchAllCompany = payload => ({
   type: FETCH_ALL_COMPANY,
   payload
 });
-export const fetchCurrentCompany = payload => ({
+export const fetchcurrentCompany = payload => ({
   type: FETCH_CURRENT_COMPANY,
   payload
 });
@@ -181,14 +181,14 @@ export const getUserDetail = () => async dispatch => {
 };
 
 //转换当前公司
-export const switchCurrentCompany = companyId => async dispatch => {
+export const switchcurrentCompany = companyId => async dispatch => {
   try {
     const res = await request(`/company/${companyId}/currentCompany`, {
       method: "put"
     });
     if (res && res.status === "SUCCESS") {
       // history.push("/app/list");
-      dispatch(getCurrentCompany());
+      dispatch(getcurrentCompany());
       dispatch(getUserDetail());
       dispatch(getAppList());
     } else {
@@ -199,11 +199,11 @@ export const switchCurrentCompany = companyId => async dispatch => {
   }
 };
 //获取当前公司信息
-export const getCurrentCompany = () => async dispatch => {
+export const getcurrentCompany = () => async dispatch => {
   try {
     const res = await request(`/company/current`);
     if (res && res.status === "SUCCESS") {
-      dispatch(fetchCurrentCompany(res.data));
+      dispatch(fetchcurrentCompany(res.data));
     } else {
       message.error(res.msg || "当前公司信息获取失败");
     }
@@ -238,7 +238,7 @@ export const initAllDetail = () => async dispatch => {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
       await getAllCompany(res.data.id)(dispatch);
-      getCurrentCompany()(dispatch);
+      getcurrentCompany()(dispatch);
       dispatch(fetchUserDetail(res.data));
     } else {
       message.error(res.msg || "获取当前用户信息失败");

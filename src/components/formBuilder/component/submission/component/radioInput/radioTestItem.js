@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import { Input } from "antd";
 
 class RadioOption extends React.Component {
   constructor(props) {
@@ -7,13 +8,14 @@ class RadioOption extends React.Component {
     this.state = {};
   }
   render() {
-    const { label, value } = this.props.option;
+    const { label, value, isExtra } = this.props.option;
+    const { inputValue } = this.props
     return (
+      <div>
       <div
         className={classNames('radioOption', { radioInline: this.props.inline })}
         value={value}
         onClick={() => {
-          console.log(this.props.index)
           this.props.handleSelect(this.props.index);
         }}
       >
@@ -21,6 +23,10 @@ class RadioOption extends React.Component {
           <i className={classNames('inner_i', { selectOption: this.props.isSelect })} />
         </i>
         <span>{label}</span>
+      </div>
+        {
+          isExtra?<Input type="text" disabled={!this.props.isSelect} defaultValue={ inputValue } onChange= { this.props.handleSelectInput }  className="radio-label-inputvalue"/>:null
+        }
       </div>
     );
   }
@@ -37,19 +43,32 @@ export default class RadioTest extends React.Component {
       index = this.setDefaultSetected(item.data, item.values);
     }
     this.state = {
-      selectValue: index
+      selectValue: index,
+      childInputValue:''
     };
     this.handleSelect = this.handleSelect.bind(this);
+    this.setInputSetected = this.setInputSetected.bind(this);
   }
 
     // 设置默认的选中值
   setDefaultSetected(selectedValues, allvalues=[]) {
-    const indexs = allvalues.map(item => item.value);
-    const index = indexs.indexOf(selectedValues);
+    let index,indexs;
+    indexs = allvalues.map(item => item.value);
+    index = indexs.indexOf(selectedValues) === -1? allvalues.length - 1: indexs.indexOf(selectedValues);
     return index;
   };
 
-
+    // 设置输入框的值
+  setInputSetected(e){
+    let { value } = e.target;
+    if(value && this.props.handleInputValue){
+      this.props.handleInputValue(value);
+    }else{
+      this.setState({
+        childInputValue:value
+      })
+    }
+  }
   // componentWillReceiveProps(nextProps) {
   //   if (!this.state.hasClicked) {
   //     const {item, value} = nextProps;
@@ -63,7 +82,8 @@ export default class RadioTest extends React.Component {
   
   handleSelect(index) {
     const { onChange } = this.props;
-    console.log(this.state.selectValue, index)
+    let childInputValue = this.state.childInputValue;
+    // console.log(this.state.selectValue, index)
     if (this.state.selectValue === index) {
       this.setState(
         state => ({
@@ -84,7 +104,11 @@ export default class RadioTest extends React.Component {
         }),
         () => {
           if (onChange) {
-            onChange(this.props.item.values[index].value);
+            if(this.props.item.values[index].isExtra){
+              onChange(childInputValue)
+            }else{
+              onChange(this.props.item.values[index].value);
+            }
           }
         }
       );
@@ -95,9 +119,7 @@ export default class RadioTest extends React.Component {
   }
   render() {
     const { values, inline } = this.props.item;
-
-    console.log(values)
-
+    const { inputValue } = this.props
     return (
       <div className={classNames('radioGroup', { radioGroupInline: inline })}>
         {values.map((item, index) => (
@@ -108,6 +130,9 @@ export default class RadioTest extends React.Component {
             index={index}
             inline={inline}
             handleSelect={this.handleSelect}
+            handleSelectInput={this.setInputSetected}
+            setChildInputValue = { this.setChildInputValue }
+            inputValue = { inputValue }
           />
         ))}
       </div>

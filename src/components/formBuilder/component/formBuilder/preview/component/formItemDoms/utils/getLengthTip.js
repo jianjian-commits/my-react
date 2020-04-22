@@ -18,8 +18,6 @@ export const lengthTip = (data) =>{
       } else {
         return "(字数不限)";
       }
-    } else {
-      return "(字数不限)";
     }
   } 
   if(data.type === "NumberInput") {
@@ -34,9 +32,7 @@ export const lengthTip = (data) =>{
       } else {
         return  "(数字大小不限)";
       } 
-    } else {
-      return  "(数字大小不限)";
-    } 
+    }
   }
 
   if(data.type === "MultiDropDown" ||data.type === "CheckboxInput") {
@@ -51,8 +47,6 @@ export const lengthTip = (data) =>{
       } else {
         return  "(选择个数不限)"
       }
-    } else {
-      return  "(选择个数不限)"
     }
   }
   if(data.type === "FileUpload"||data.type === "ImageUpload"){

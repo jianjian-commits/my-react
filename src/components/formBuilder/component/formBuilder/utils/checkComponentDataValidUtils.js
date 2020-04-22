@@ -1,4 +1,4 @@
-export const checkValueValidByType = (item, data) => {
+export const checkValueValidByType = (item, data, errorValues=[]) => {
   let reg = null;
   const { formType, validate } = item;
 
@@ -28,7 +28,7 @@ export const checkValueValidByType = (item, data) => {
         validate.minLength,
         validate.maxLength,
         data.length
-      );
+      ) 
     case "TextArea":
       if (item.validate.required === false) {
         if (data === "") {
@@ -132,4 +132,12 @@ function checkMaxAndMin(isLimitLength, min, max, value) {
   } else {
     return true;
   }
+  return false;
+}
+
+function checkUnique(unique, errorValues, value){
+  if(unique === true && errorValues.includes(value)){
+    return false
+  }
+  return true;
 }
