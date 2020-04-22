@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import Authenticate from "../shared/Authenticate";
-import { Button, Table, message, Popconfirm } from "antd";
+import { Button, message, Popconfirm } from "antd";
+import { Table } from "../shared/customWidget";
 import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
 import PermissionSetting from "../userManagement/ApplyPermissionSettings";
@@ -16,6 +17,7 @@ import classes from "./profile.module.scss";
 import request from "../../utils/request";
 import clx from "classnames";
 
+console.log(Table)
 function GroupList(props) {
   const {
     handleClick,
