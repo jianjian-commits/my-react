@@ -20,6 +20,7 @@ const RightPane = (props) => {
   let [showLegend, setShowLegend] = useState(chartInfo.showLegend);
   let [showDataTag, setShowDataTag] = useState(chartInfo.showDataTag);
   let showRPTTitle = true;
+  let showRPTools = true;
 
   const onChangeShowLegend = () => {
     let show = !showLegend;
@@ -68,7 +69,18 @@ const RightPane = (props) => {
     changeChartInfo(chartInfo || new ChartInfo());
   }
 
+  const chartTitle = (intro)=> {
+    return (
+      <div>
+        {intro.map(item=>
+          <div className={classes.tooltipTitle}>{item}</div>
+        )}
+      </div>
+    )  
+  }
+
   showRPTTitle = elemType != ChartType.AREA_CHART;
+  showRPTools = elemType != ChartType.INDEX_DIAGRAM;
 
   return (
     <div className={classes.rightPane}>
@@ -76,7 +88,7 @@ const RightPane = (props) => {
         <span>可视化</span>
         <div className={classes.chartGroup}>
         {chartGroup.map(chart =>
-        <Tooltip key={chart.type}  title={chart.intro}>
+        <Tooltip key={chart.type}  title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} >
           <div
             className={chartAvailableList.includes(chart.type) ? classNames(classes.IconBox, {activeIcon: activeIcon==chart.type}) : classes.unavailable }
             onClick={()=>{handleSelectIcon(chart.type)}}
@@ -87,7 +99,7 @@ const RightPane = (props) => {
         )}
         </div>
       </div>
-      <div className={classes.rightPaneTools}>
+      <div className={showRPTools? classes.rightPaneTools : classes.hideRightPaneTools}>
         <span className={classes.title}>工具栏</span>
         <div className={showRPTTitle? classes.showXYTitle : classes.hideXYTitle}>
           <p>X轴标题</p>

@@ -3,7 +3,7 @@ import ChartInfo from '../component/elements/data/ChartInfo';
 import { ChartType, AllType, BarType } from '../component/elements/Constant'
 import FilterCondition from '../component/elements/data/FilterCondition';
 import Field from '../component/elements/data/Field';
-import { deepClone } from './Util';
+import { deepClone, equals } from './Util';
 
 export const getBarChartOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
@@ -67,7 +67,12 @@ export const getBarChartOption = (chartData, chartInfo) => {
       source
     },
     legend: {y: 'top', show: showLegend},
-    tooltip: {},
+    tooltip: {
+      backgroundColor: 'rgba(255,255,255,0.9)',
+      textStyle: {
+        color: '#777F97'
+      }
+    },
     xAxis: [
       {
         type: 'category', 
@@ -78,7 +83,7 @@ export const getBarChartOption = (chartData, chartInfo) => {
         }
       }],
     yAxis: {name: titleYAxis || ""},
-    // color: [],
+    color: ['#4398E2','#6FB3EE','#F57243','#FFA585','#8D84E0','#BBB5F0','#FA5F84','#FE91BA','#1FB4BD','#94E2C7','#C2864F','#E6B181','#65B440','#9DDA81','#FCA036','#FFB966','#888E9D','#B9BCC7','#DA6ED5','#F3A9EE'],
     grid: {top: '80px'},
     series
   } 
@@ -123,7 +128,9 @@ export const getPieChartOption = (chartData, chartInfo) => {
           textStyle: {
             color: 'gray'
           }
-        }
+        },
+        center: ['50%','60%'],
+        hoverAnimation:false
       });
       let row = [];
       const legend = item.legend;
@@ -153,15 +160,15 @@ export const getPieChartOption = (chartData, chartInfo) => {
       formatter: '{c} ({d}%)'
     }, 
     labelLine :{show:true},
-    grid: {
-      top: '40%',
-    },
+    color: ['#4398E2','#6FB3EE','#F57243','#FFA585','#8D84E0','#BBB5F0','#FA5F84','#FE91BA','#1FB4BD','#94E2C7','#C2864F','#E6B181','#65B440','#9DDA81','#FCA036','#FFB966','#888E9D','#B9BCC7','#DA6ED5','#F3A9EE'],
     series
   } 
 }
 
-
 export const getOption = (chartData, chartInfo, elemType) => {
+  if(equals(chartData, {})) {
+    return {};
+  }
 
   switch(elemType){
     case ChartType.HISTOGRAM: 

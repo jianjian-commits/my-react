@@ -1,8 +1,8 @@
 import request from '../../../utils/request';
 
 export default class RefreshAction {
-  constructor(type, elemType, chartId, dashboards, options) {
-    this.type = type;
+  constructor(elemType, chartId, dashboards, options) {
+    this.type = "redo";
     this.elemType = elemType
     this.chartId = chartId;
     this.dashboards = dashboards;

@@ -4,8 +4,8 @@ import ChartInfo from '../data/ChartInfo';
 import { Types } from '../../bind/Types';
 
 export default class EditAction {
-  constructor(type, elemType, chartId, callback, options) {
-    this.type = type;
+  constructor(elemType, chartId, callback, options) {
+    this.type = "edit";
     this.elemType = elemType;
     this.chartId = chartId;
     this.callback = callback;

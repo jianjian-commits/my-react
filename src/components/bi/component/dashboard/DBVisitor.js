@@ -12,7 +12,7 @@ const Column = (props) => {
   )
 }
 
-class DBEditor extends React.PureComponent {
+class DBVisitor extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,17 +59,7 @@ class DBEditor extends React.PureComponent {
 
   render() {
     const { height, dashboards } = this.props;
-    const { fullScrenObj } = this.state; 
-
-    if(!dashboards || (dashboards.length == 0) || dashboards[0].elements.length == 0) {
-      return (
-        <Fragment>
-          <div className={classes.dbPlaceholder} style={{height}}>
-            <div>点击新建图表创建仪表盘</div>
-          </div>
-        </Fragment>
-      )
-    }
+    const { fullScrenObj } = this.state;
 
     return (
       <Fragment>
@@ -85,4 +75,4 @@ class DBEditor extends React.PureComponent {
 export default connect(
   store => ({
     dashboards: store.bi.dashboards}), {}
-  )(DBEditor);
+  )(DBVisitor);
