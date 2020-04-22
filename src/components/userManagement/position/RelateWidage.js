@@ -17,6 +17,7 @@ export default compose(
     };
   }),
   withState("open", "setOpen", false),
+  withState("searchText", "setSearchText", null),
   withState("widageRef", "setRef", null),
   withHandlers({
     onWidageClick: props => () => {
@@ -54,6 +55,8 @@ export default compose(
   ({
     open,
     setRef,
+    searchText,
+    setSearchText,
     selectedKeys,
     positionId,
     allUsers,
@@ -65,6 +68,9 @@ export default compose(
       setRef(divRef);
       return () => {};
     }, [divRef, setRef]);
+    let filterUsers;
+    if (!searchText) filterUsers =  allUsers;
+    else filterUsers = allUsers.filter(u => u.name.indexOf(searchText) !== -1 );
     return (
       <div
         ref={div => (divRef.current = div)}
@@ -83,8 +89,10 @@ export default compose(
                   }
                   className={classes.search}
                   placeholder="请输入要搜索的内容"
+                  value={searchText}
+                  onChange={e => setSearchText(e.target.value)}
                 />
-                {allUsers.map(u => {
+                {filterUsers.map(u => {
                   const disabled = !!u.position && u.position.id !== positionId;
                   return (
                     <div
