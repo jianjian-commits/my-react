@@ -203,6 +203,11 @@ class FormSubmitData extends PureComponent {
       },
       false
     );
+    if(this.state.formDataCache.length !== 0){
+      this.setState({
+        formDataCache:[]
+      })
+    }
   }
   componentWillUnmount() {
     this.props.clearFormData();
@@ -670,17 +675,21 @@ class FormSubmitData extends PureComponent {
       connectCondition,
       isFilterMode,
     } = this.state.filterArray;
+    console.log()
+    if(this.props.searchStatus){
 
-    if (formData.length !== 0) {
-      this.setState({ formDataCache: formData });
-    }
-    if (formData.length === 0 && this.state.isFilterMode === false) {
-      formData = this.state.formDataCache;
+    }else{
+      if (formData.length !== 0) {
+        this.setState({ formDataCache: formData });
+      }
+      if (formData.length === 0 && this.state.isFilterMode === false) {
+        formData = this.state.formDataCache;
+      }
     }
     let total =
-      this.state.formDataCache.length === 0
-        ? -1
-        : this.props.submissionDataTotal;
+       this.state.formDataCache.length === 0 && !this.props.searchStatus
+         ? -1
+         : this.props.submissionDataTotal;
     const controlCol = [
       {
         title: "操作",
