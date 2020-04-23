@@ -28,6 +28,7 @@
     height: 50px;
     margin: 10px;
     display: flex;
+    cursor: pointer;
     align-items: center;
     justify-content: center;
     border: 2px solid #fff;
@@ -52,6 +53,8 @@
     justify-content: center;
     border: 2px solid #fff;
     cursor: not-allowed;
+    // pointer-events: none;
+    opacity: .5;
     -webkit-filter: grayscale(100%);
     -moz-filter: grayscale(100%);
     -ms-filter: grayscale(100%);
