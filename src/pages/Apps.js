@@ -146,7 +146,7 @@ class Apps extends React.Component {
       return (
         <Layout>
           <HomeHeader />
-          <div className={commonClasses.noCompany}>
+          <div className={classes.noCompany}>
             <div>
               <NoCompany />
             </div>
@@ -166,7 +166,7 @@ class Apps extends React.Component {
             width={"610px"}
             onCancel={() => this.setState({ noCompanyModalOpen: false })}
             onOk={e => handleConfirm(e)}
-            wrapClassName={commonClasses.noCompanyModalFormWarp}
+            wrapClassName={classes.noCompanyModalFormWarp}
           >
             <Form>
               <Form.Item
