@@ -17,7 +17,6 @@ import classes from "./profile.module.scss";
 import request from "../../utils/request";
 import clx from "classnames";
 
-console.log(Table)
 function GroupList(props) {
   const {
     handleClick,
