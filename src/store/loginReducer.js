@@ -249,7 +249,6 @@ export const initAllDetail = () => async dispatch => {
       dispatch(fetchUserDetail(res.data)),
       dispatch(getAppList())])
         .then(() => {
-          console.log(123123123)
           dispatch(setFetchingNecessary(false));
         })
     } else {
