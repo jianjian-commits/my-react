@@ -5,7 +5,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { getFormsAll, deleteForm ,updateFormName } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
-  DropableWrapper
+  // DropableWrapper
 } from "../components/shared/DraggableList";
 import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
 
