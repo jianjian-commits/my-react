@@ -57,11 +57,6 @@ class Apps extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  componentDidMount() {
-    const { allCompany, getAppList } = this.props;
-    if (allCompany && allCompany.length > 0) getAppList();
-  }
-
   // 完成新建
   async handleCreate(data) {
     try {
@@ -71,7 +66,7 @@ class Apps extends React.Component {
       });
       if (res && res.status === "SUCCESS") {
         message.success("创建应用成功");
-        this.props.getAppList();
+        this.props.initAllDetail();
         this.handleCancel();
       } else {
         message.error(res.msg || "创建应用失败");
@@ -96,7 +91,8 @@ class Apps extends React.Component {
       name,
       form,
       allCompany,
-      initAllDetail
+      initAllDetail,
+      fetchingNecessary
     } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const appsPanelWidth = document.getElementById("appsPanel");
@@ -142,7 +138,8 @@ class Apps extends React.Component {
       });
       this.setState({ noCompanyModalOpen: false });
     };
-    if (!allCompany || allCompany.length === 0)
+    if (fetchingNecessary) return <HomeHeader />;
+    if (!fetchingNecessary && (!allCompany || allCompany.length === 0))
       return (
         <Layout>
           <HomeHeader />
@@ -257,7 +254,8 @@ export default Form.create({ name: "createCompany-form" })(
       appList: app.appList,
       sysUserName: login.currentCompany.sysUserName,
       name: login.userDetail.name,
-      allCompany: login.allCompany
+      allCompany: login.allCompany,
+      fetchingNecessary: login.fetchingNecessary
     }),
     {
       getAppList,
