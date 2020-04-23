@@ -7,7 +7,7 @@ import {
   sendCode,
   resetAllowSendCodeState
 } from "../../store/loginReducer";
-import PublicForm from "./publicForm";
+import PublicForm from "./PublicForm";
 import Loading from "../../pages/Loading";
 import { loginPasswordParameter, loginPhoneParameter } from "./formItemConfig";
 import clx from "classnames";
