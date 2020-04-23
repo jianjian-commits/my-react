@@ -128,7 +128,11 @@ const AppDetail = props => {
   const searchHandle = e => {
     const { value } = e.target;
     setSearchKey(value);
-    setSearchStatus(false)
+    if(value){
+      setSearchStatus(false)
+    }else{
+      setSearchStatus(true)
+    }
   };
 
   //根据点击菜单栏
