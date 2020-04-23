@@ -14,7 +14,7 @@
   }
 
   :global(.ant-table-thead > tr > th) {
-    padding:0 16px;
+    padding: 0 16px;
     height: 50px;
     background: #fff;
     border-bottom: 1px solid #dcdee3;
@@ -29,7 +29,7 @@
   }
 
   :global(.ant-table-tbody > tr > td) {
-    padding:0 16px;
+    padding: 0 16px;
     height: 50px;
     border-bottom: 1px solid #dcdee3;
   }
@@ -48,5 +48,32 @@
     color: #333333;
     font-weight: bold;
     font-size: 15px;
+  }
+}
+
+.customCheckbox {
+  :global(.ant-checkbox-inner) {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border: 1px solid #2a7fff;
+  }
+
+  :global(.ant-checkbox-checked .ant-checkbox-inner) {
+    background-color: transparent;
+  }
+
+  :global(.ant-checkbox-checked .ant-checkbox-inner::after) {
+    border: 2px solid #2a7fff;
+    border-top: 0;
+    border-left: 0;
+    height: 12px;
+    width: 7px;
+    top: 45%;
+    left: 20%;
+  }
+  :global(.ant-checkbox-disabled.ant-checkbox-checked
+      .ant-checkbox-inner::after) {
+    border-color: #00000040;
   }
 }
