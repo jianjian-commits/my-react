@@ -72,8 +72,8 @@ const RightPane = (props) => {
   const chartTitle = (intro)=> {
     return (
       <div>
-        {intro.map(item=>
-          <div className={classes.tooltipTitle}>{item}</div>
+        {intro.map((item, idx)=>
+          <div className={classes.tooltipTitle} key={item + idx}>{item}</div>
         )}
       </div>
     )  

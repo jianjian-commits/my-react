@@ -41,6 +41,22 @@ export const setDB = (dashboardId, setDashboards) => {
   })
 }
 
+export const deleteDB = (id) => {
+  return request(`/bi/dashboards/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export const renameDB = (id, name) => {
+  return request(`/bi/dashboards/${id}`, {
+    method: "PUT",
+    data: {
+      name
+    }
+  });
+}
+
+
 export const getDashboardAll = (appId) => {
   return request(`/bi/dashboards?appId=${appId}`);
 }
