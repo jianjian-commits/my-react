@@ -111,7 +111,7 @@ function preProcessDrop(item, currentType) {
     item["currentGroup"] = GroupType.DEFAULT;
   }
 
-  if(item.type == DataType.DATETIME && currentType != Types.FILTER) {
+  if(item.type == DataType.DATETIME && currentType != Types.FILTER && item.bindType == Types.MEASURE) {
     item["currentGroup"] = {name:"", value:"DAY"};
   }
 }
@@ -234,7 +234,17 @@ class BindPane extends PureComponent {
         return;
       }
     }
-
+    if(bindDataArr.filter(item => item.bindType == "dim").length > 1){
+      bindDataArr = bindDataArr.map(each => {
+        if(each.bindType == "mea"){
+          each.sort = {
+            ...each.sort,
+            value:"DEFAULT"
+          }
+        }
+        return each;
+      })
+    }
     processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
     this.clearSplit();
   }
@@ -301,20 +311,49 @@ class BindPane extends PureComponent {
 
   changeSortType = (sortType, fieldId) => {
     let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
-    const newArr = bindDataArr.map((each) => {
-      if(fieldId == each.fieldId) {
-        each.sort = {
-          "fieldId": fieldId,
-          ...sortType
+    const meaFiledCount = bindDataArr.filter(item => item.bindType == "mea").length;
+    const dimFiledCount = bindDataArr.filter(item => item.bindType == "dim").length;
+    let newArr = [];
+    if(meaFiledCount > 0 && dimFiledCount == 1){
+      newArr = bindDataArr.map((each) => {
+        if(fieldId == each.fieldId) {
+          each.sort = {
+            "fieldId": fieldId,
+            ...sortType
+          }
+        }else{
+          each.sort = {
+            "fieldId": fieldId,
+            value:"DEFAULT"
+          }
         }
-      }else{
-        each.sort = {
-          "fieldId": fieldId,
-          value:"DEFAULT"
+        return each;
+      })
+    }else{
+      newArr = bindDataArr.map((each) => {
+        if(fieldId == each.fieldId) {
+          each.sort = {
+            "fieldId": fieldId,
+            ...sortType
         }
       }
-      return each;
-    })
+        return each;
+      })
+    }
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
+  }
+
+  changeFieldName = (fieldName , fieldId) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
+    const newArr = bindDataArr.map((each) => {
+        if(fieldId == each.fieldId) {
+          each = {
+            ...each,
+            alias:fieldName
+          }
+        }
+        return each;
+      })
     processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
@@ -333,11 +372,12 @@ class BindPane extends PureComponent {
     bindDataArr = bindDataArr || [];
     const components = [];
     this.childRefs = [];
-
+    const meaFiledCount = bindDataArr.filter(item => item.bindType == "mea").length;
+    const dimFiledCount = bindDataArr.filter(item => item.bindType == "dim").length;
     bindDataArr.forEach(
       (each, idx) => {
         if(each.bindType == bindType) {
-          const item = {...each, removeField: this.removeField, changeGroup: this.changeGroup, changeSortType: this.changeSortType};
+          const item = {...each, changeFieldName:this.changeFieldName,removeField: this.removeField, changeGroup: this.changeGroup, changeSortType: this.changeSortType,dimFiledCount};
           const key = each.fieldId + "_" + idx;
           
           if(bindType == Types.DIMENSION) {
@@ -345,17 +385,6 @@ class BindPane extends PureComponent {
               processBegin={this.processBegin}/>)
           }
           else if(bindType == Types.MEASURE) {
-            let selectIndex = 0;
-  
-            for(let key in GroupType) {
-              if(key == each.currentGroup.value) {
-                break;
-              }
-
-              selectIndex++;
-            }
-
-            item['selectIndex'] = selectIndex;
             components.push(<DragItem ref={(ref) => { this.childRefs[idx] = ref }} item={item} key={key} Child={FieldMeasureSelect} 
               processBegin={this.processBegin}/>)
           }

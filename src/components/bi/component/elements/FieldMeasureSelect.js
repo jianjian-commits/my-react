@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Icon, Popover, Input, Button } from "antd";
-import { GroupType, SortTypeArr } from "./Constant";
+import { GroupType, SortType, DataType} from "./Constant";
 import classes from "../../scss/bind/optionSelect.module.scss";
-const operationArr = [
-  { ...GroupType.SUM },
-  { ...GroupType.COUNT },
-  { ...GroupType.AVERAGE },
-  { ...GroupType.MAX },
-  { ...GroupType.MIN },
-];
+import FieldNameModal from "../elements/modal/fieldNameModal";
+export const transforObjIntoArr = obj => {
+  let arr = [];
+  for (let i in obj) {
+    arr.push({...obj[i]}); 
+  }
+  return arr;
+}
 
 export const FieldSecondMenus = (props) => {
-  //二级菜单组件{菜单列表，选中索引，方法回调}
-  const { list, selectIndex, click } = props;
+  //二级菜单组件{菜单列表，选中索引，方法回调,是否禁用}
+  const { list, selectIndex, click ,disabled=false} = props;
   return (
     <Popover
       placement="rightTop"
@@ -20,12 +21,16 @@ export const FieldSecondMenus = (props) => {
       overlayStyle={{ paddingLeft: 0 }}
       overlayClassName={classes.FieldSelectPopover}
       content={
-        <div className={classes.popoverSelectionGroup}>
+        <div className={classes.popoverSelectionGroup} style={disabled ? {backgroundColor:"#e9ecef"} : {}}>
           {list.map((item, index) => (
             <div
               key={index}
               onClick={() => {
-                click(index);
+                if(disabled){
+                  return false;
+                }else{
+                  click(index);
+                }
               }}
               className={classes.selectionBox}
             >
@@ -46,7 +51,10 @@ export const FieldSecondMenus = (props) => {
 };
 
 export default function FieldMeasureSelect(props) {
-  const [selectIndex, setSelectIndex] = useState(props.item.selectIndex);
+  const {sort,currentGroup} = props.item
+  const operationArr = transforObjIntoArr(GroupType);
+  const SortTypeArr = transforObjIntoArr(SortType);
+  const [selectIndex, setSelectIndex] = useState(0);
   const [sortTypeIndex, setSortTypeIndex] = useState(0);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [nameInputVisible, setNameInputVisible] = useState(false);
@@ -65,10 +73,17 @@ export default function FieldMeasureSelect(props) {
   }, [popoverVisible]);
 
   useEffect(() => {
-    if (props.item.sort) {
+    if (sort) {
       SortTypeArr.map((sortType,i) => {
-        if(props.item.sort.value == sortType.value){
+        if(sort.value == sortType.value){
           setSortTypeIndex(i);
+        }
+      })
+    }
+    if(currentGroup){
+      operationArr.map((operationType,i) => {
+        if(currentGroup.value == operationType.value){
+          setSelectIndex(i);
         }
       })
     }
@@ -118,6 +133,21 @@ export default function FieldMeasureSelect(props) {
     setPopoverVisible(false);
   };
 
+  const handleOK = name => {
+    props.item.changeFieldName(name, props.item.fieldId);
+    setNameInputVisible(false);
+  }
+  const handleCancel = () => {
+    setNameInputVisible(false);
+  }
+  const showSortIcon = () => {
+    const sortImgArr = [SortType.ASC.value,SortType.DESC.value];
+    if(sort && sortImgArr.includes(sort.value)){
+        return <img src={"/image/davinci/"+sort.value+".svg"}/>
+    }else{
+        return null;
+    }
+  }
   return (
     <div
       className={classes.meaContainer}
@@ -135,6 +165,7 @@ export default function FieldMeasureSelect(props) {
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
         <span className={classes.dropDownBtnSpan}>
           {`${props.item.label}(${operationArr[selectIndex].name})`}
+          {showSortIcon()}
         </span>
         {deleteBtnVisible && (
           <Icon
@@ -144,38 +175,17 @@ export default function FieldMeasureSelect(props) {
           />
         )}
       </div>
-      {nameInputVisible && (
-        <div className={classes.nameInputContainer}>
-          <div className={classes.inputBox}>
-            <Input />
-          </div>
-          <div className={classes.btnBox}>
-            <Button
-              onClick={() => {
-                setNameInputVisible(false);
-              }}
-            >
-              取消
-            </Button>
-            <Button
-              onClick={() => {
-                setNameInputVisible(false);
-              }}
-            >
-              确定
-            </Button>
-          </div>
-        </div>
-      )}
+      {nameInputVisible && <FieldNameModal label={props.item.label} handleOK={handleOK} handleCancel={handleCancel}/>}
       {popoverVisible && (
         <div className={classes.dropDownItemContainer}>
           <FieldSecondMenus
             selectIndex={sortTypeIndex}
             click={secondMenuSortFunc}
             list={SortTypeArr}
+            disabled={props.item.dimFiledCount>1}
             label={"排序方式"}
           />
-          {props.item.type == "NUMBER" && (
+          {props.item.type == DataType.NUMBER && (
             <FieldSecondMenus
               selectIndex={selectIndex}
               click={secondMenuSumFunc}
