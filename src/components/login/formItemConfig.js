@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button as Btn, Icon } from "antd";
+import { Input as Inp, Button as Btn, Icon, message } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
 import { catchError, throttle } from "../../utils";
