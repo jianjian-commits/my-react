@@ -37,6 +37,12 @@
     }
   }
 }
+:global(.ant-breadcrumb) {
+  display: inline-block;
+  svg {
+    margin-left: 8px;
+  }
+}
 
 .moduleTitle {
   font-size: 15px;
