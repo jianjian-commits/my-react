@@ -220,7 +220,7 @@ class FormDataDetail extends PureComponent {
         return (
           <div className="formChildData">
             {submitData
-              ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD HH:mm:ss")
+              ? coverTimeUtils.localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -228,14 +228,14 @@ class FormDataDetail extends PureComponent {
           return (
             <div className="formChildData">
               {submitData
-                ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD")
+                ? coverTimeUtils.localDate(submitData, component.type)
                 : ""}
             </div>)
         case "PureTime":
         return (
           <div className="formChildData">
             {submitData
-              ? coverTimeUtils.localDate(submitData, component.type).format("HH:mm:ss")
+              ? coverTimeUtils.localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -348,7 +348,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type).format("YYYY-MM-DD HH:mm:ss")
+                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -359,7 +359,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type).format("YYYY-MM-DD")
+                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -370,7 +370,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type).format("HH:mm:ss")
+                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>

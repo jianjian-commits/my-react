@@ -11,6 +11,7 @@ import {
   getAllForms
 } from "./redux/utils/operateSubmissionUtils";
 import { getSubmissionData } from "../formData/redux/utils/getDataUtils";
+import { getApproveCount } from "../homePage/redux/utils/operateFormUtils";
 
 import { connect } from "react-redux";
 import HeaderBar from "../base/NavBar";
@@ -619,10 +620,22 @@ class Submission extends Component {
                     let skipToSubmissionDataFlag = true;
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }, 1000);
+                })
+              .catch(error => {
+                if (error.response && error.response.data.code === 9998) {
+                  this._setErrorResponseData(error.response.data);
+                  isMobile ? Toast.fail("提交失败") : message.error("提交失败");
+                }else if(error.response && error.response.data.code == 2003){
+                  // this.setState({
+                  //   isSubmitted: false
+                  // })
+                  isMobile
+                  ? Toast.fail(error.response.data.msg)
+                  : message.error(error.response.data.msg);
                 }
-              );
-            }
-          })
+              });
+          }
+        })
           .catch(error => {
             if (error.response && error.response.data.code === 9998) {
               this._setErrorResponseData(error.response.data);
@@ -1463,6 +1476,7 @@ export default connect(
     getFormComponent,
     getFormComponentByPath,
     getApprovalDefinition,
-    startApproval
+    startApproval,
+    getApproveCount
   }
 )(withRouter(mobileAdoptor.data(SubmissionForm)));

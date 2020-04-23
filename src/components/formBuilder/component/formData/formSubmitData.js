@@ -203,6 +203,11 @@ class FormSubmitData extends PureComponent {
       },
       false
     );
+    if(this.state.formDataCache.length !== 0){
+      this.setState({
+        formDataCache:[]
+      })
+    }
   }
   componentWillUnmount() {
     this.props.clearFormData();
@@ -300,19 +305,19 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD HH:mm:ss") : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
         return (
           <div className="formChild-item">
-            {submitData ? moment(coverTimeUtils.localDate(submitData, component.type)).format("YYYY-MM-DD") : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureTime":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type).format("HH:mm:ss") : ""}
+            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "ImageUpload":
@@ -498,20 +503,20 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div key={component.key}>
-            {submitData != void 0 ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD HH:mm:ss") : ""}
+            {submitData != void 0 ? coverTimeUtils.localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
           return (
             <div className="formChild-item">
-              {submitData ? coverTimeUtils.localDate(submitData, component.type).format("YYYY-MM-DD") : ""}
+              {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
             </div>
       );
       case "PureTime":
         return (
           <div key={component.key}>
             {submitData != void 0
-              ? coverTimeUtils.localDate(submitData, component.type).format("HH:mm:ss")
+              ? coverTimeUtils.localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -670,17 +675,21 @@ class FormSubmitData extends PureComponent {
       connectCondition,
       isFilterMode,
     } = this.state.filterArray;
+    console.log()
+    if(this.props.searchStatus){
 
-    if (formData.length !== 0) {
-      this.setState({ formDataCache: formData });
-    }
-    if (formData.length === 0 && this.state.isFilterMode === false) {
-      formData = this.state.formDataCache;
+    }else{
+      if (formData.length !== 0) {
+        this.setState({ formDataCache: formData });
+      }
+      if (formData.length === 0 && this.state.isFilterMode === false) {
+        formData = this.state.formDataCache;
+      }
     }
     let total =
-      this.state.formDataCache.length === 0
-        ? -1
-        : this.props.submissionDataTotal;
+       this.state.formDataCache.length === 0 && !this.props.searchStatus
+         ? -1
+         : this.props.submissionDataTotal;
     const controlCol = [
       {
         title: "操作",
