@@ -80,7 +80,7 @@ export const filterComponentsExceptSelf = (
   });
 };
 
-export const filterAcceptComponent = (components, type) => {
+export const filterAcceptComponent = (components = [], type) => {
   // 过滤可用组件
   return components.filter(component => {
     if (
