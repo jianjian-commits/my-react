@@ -193,6 +193,7 @@ const AppSetting = props => {
   };
 
   const { permissions, teamId } = props;
+  console.log(permissions, teamId, appId);
   const isShowNewFormBtn = newFormAuth(permissions, teamId, appId);
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>

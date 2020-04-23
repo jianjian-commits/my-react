@@ -136,7 +136,8 @@ export const startApproval = (formid, appid, data, callback) =>{
           }).then((res)=>{
             if(res.data.status === "SUCCESS"){
               message.success("保存并提交审批成功!");
-              callback()
+              const{ shouldSetApprover, taskId} = res.data.data
+              callback(shouldSetApprover,taskId)
             }
           }).catch(err=>{
              message.error("提交失败");
