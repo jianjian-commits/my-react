@@ -303,11 +303,16 @@ const thunkBoard = (
       {dat.map((board, index) => {
         const filters = board.boardDetailPermissions || board[fp];
         const display = filters.filter(
-          f => f.value.split("_")[1] === "VISIBLE" || f.value.split("_")[2] === "VISIBLE"
+          f =>
+            f.value.split("_")[1] === "VISIBLE" ||
+            f.value.split("_")[2] === "VISIBLE"
         );
         const onChange = e => {
           dat[index][fp] = filters.map(f => {
-            if (f.value.split("_")[1] === "VISIBLE" || f.value.split("_")[2] === "VISIBLE") {
+            if (
+              f.value.split("_")[1] === "VISIBLE" ||
+              f.value.split("_")[2] === "VISIBLE"
+            ) {
               return {
                 ...f,
                 checked: e.target.value
@@ -748,7 +753,8 @@ function handleSaveButton({ state, initialData, enterPermission }) {
 function fetchPermissionsDetail({ roleId, appId, setState, state }) {
   request(`/sysRole/appPermission`, {
     method: "post",
-    data: { roleId, appId }
+    data: { roleId },
+    headers: { appId }
   }).then(
     res => {
       if (res && res.status === "SUCCESS") {
