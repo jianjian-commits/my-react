@@ -696,7 +696,8 @@ const Top = ({
   disabled,
   initialData,
   enterPermission,
-  enterDetail
+  enterDetail,
+  appId
 }) => {
   const navigationList = [
     {
@@ -717,7 +718,7 @@ const Top = ({
         <Button onClick={() => enterPermission()}>取消</Button>
         <Button
           onClick={() =>
-            handleSaveButton({ state, initialData, enterPermission })
+            handleSaveButton({ state, initialData, enterPermission,appId })
           }
           disabled={disabled}
         >
@@ -728,7 +729,7 @@ const Top = ({
   );
 };
 
-function handleSaveButton({ state, initialData, enterPermission }) {
+function handleSaveButton({ state, initialData, enterPermission,appId }) {
   request(`/sysRole/saveAppPermission`, {
     method: "put",
     data: {
@@ -736,7 +737,8 @@ function handleSaveButton({ state, initialData, enterPermission }) {
       appPermissionUpdateDetailBos: state.data,
       permissionAllTrue: state.permissionAllTrue,
       permissionTrueToFalse: state.permissionTrueToFalse
-    }
+    },
+    headers: { appId }
   }).then(
     res => {
       if (res && res.status === "SUCCESS") {
@@ -782,7 +784,6 @@ export default function ApplyPermissionSetting(props) {
   } = props;
   const initialData = {
     roleId: roleId,
-    appId: appId,
     permissionAllTrue: [],
     permissionTrueToFalse: [],
     appPermissionUpdateDetailBos: []
@@ -834,6 +835,7 @@ export default function ApplyPermissionSetting(props) {
             enterPermission={enterPermission}
             enterDetail={enterDetail}
             roleName={roleName}
+            appId={appId}
           />
           <Permission
             value={"metaData"}
