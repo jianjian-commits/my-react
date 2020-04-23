@@ -266,7 +266,7 @@ class ConditionModal extends React.Component {
               ? this.props.addVerification(this.state.verificationStr, verificationValue)
               : this.props.editVerification(
                 this.state.verificationStr,
-                this.state.verificationValue,
+                verificationValue,
                 this.props.index
               );
             this.setState(state => ({

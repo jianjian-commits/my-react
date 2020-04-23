@@ -640,19 +640,20 @@ class Submission extends Component {
           }
         })
           .catch(error => {
-            // this.setState({
-            //   isSubmitted: false
-            // })
+
             if (error.response && error.response.data.code === 9998) {
               this._setErrorResponseData(error.response.data);
               isMobile ? Toast.fail("提交失败") : message.error("提交失败");
-            } else if (error.response && error.response.data.code == 2003) {
+            } else if (error.response && (error.response.data.code == 2003 || error.response.data.code == 2005)) {
               isMobile
                 ? Toast.fail(error.response.data.msg)
                 : message.error(error.response.data.msg);
             } else if(error.response && error.response.data.code == 2004) {
               message.error(this.props.formValidation.errMessage)
             }
+            this.setState({
+              isSubmitted: false
+            })
           });
       });
     }
