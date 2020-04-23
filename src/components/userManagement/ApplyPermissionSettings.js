@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button, Checkbox, message, Radio } from "antd";
+import { Button, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
 import { Title } from "../shared";
+import { Checkbox } from "../shared/customWidget";
 
 const formMeteDataThead = {
   formHeader: [
@@ -809,7 +810,6 @@ export default function ApplyPermissionSetting(props) {
         checked={checked}
         onChange={onChange}
         disabled={disabledCheck || disabled}
-        className={Styles.checkBox}
         {...args}
       />
     );

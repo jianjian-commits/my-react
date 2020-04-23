@@ -8,7 +8,8 @@ import {
 } from "recompose";
 import clx from "classnames";
 import classes from "./position.module.scss";
-import { Checkbox, Input, Icon } from "antd";
+import { Input, Icon } from "antd";
+import { Checkbox } from "../../shared/customWidget";
 
 export default compose(
   withProps(({ currentUsers }) => {
