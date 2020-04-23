@@ -98,12 +98,9 @@ export default function FieldDimensionSelect(props) {
 
   const showSortIcon = () => {
     const sortImgArr = [SortType.ASC.value,SortType.DESC.value];
-    if(sort && sortImgArr.includes(sort.value)){
-        return <img src={"/image/davinci/"+sort.value+".svg"}/>
-    }else{
-        return null;
-    }
+    return (sort && sortImgArr.includes(sort.value)) ? <img src={"/image/davinci/"+sort.value+".svg"}/> : null;
   }
+  const fieldName = props.item.alias||props.item.label;
   return (
     <div 
       className={classes.dimContainer}
@@ -120,12 +117,12 @@ export default function FieldDimensionSelect(props) {
       >
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
         <span className={classes.dropDownBtnSpan}>
-          {props.item.type==DataType.DATETIME ? props.item.label+`(${TimeSumType[currentGroup.value].name})` :props.item.label}
+          {props.item.type==DataType.DATETIME ? fieldName + `(${TimeSumType[currentGroup.value].name})`:fieldName}
           {showSortIcon()}
         </span>
         {deleteBtnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
       </div>
-      {nameInputVisible && <FieldNameModal label={props.item.label} handleOK={handleOK} handleCancel={handleCancel}/>}
+      {nameInputVisible && <FieldNameModal label={props.item.alias} handleOK={handleOK} handleCancel={handleCancel}/>}
       {popoverVisible && (
         <div className={classes.dropDownItemContainer}>
           <FieldSecondMenus

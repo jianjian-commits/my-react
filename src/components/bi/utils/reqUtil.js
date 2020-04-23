@@ -35,7 +35,8 @@ export const setDB = (appId, dashboardId, setDashboards) => {
       return res.data.name;
     }
   }).then((name) => {
-    request(`/bi/charts?dashboardId=${dashboardId}`).then((res) => {
+    const response =  request(`/bi/charts?dashboardId=${dashboardId}`);
+    response.then((res) => {
       if(res && res.msg === "success") {
         setDashboards([{name, elements: res.data.items}])
       }

@@ -187,7 +187,7 @@ const AppDetail = props => {
   const openDBVistor = id => {
     if(list[0].key !== "") {
       setDB(appId, id, props.setDashboards);
-      setDBMode(DBMode.Visit);
+      // props.setDBMode(DBMode.Visit)
       history.push(`/app/${appId}/setting/bi/${id}`);
     }
   };

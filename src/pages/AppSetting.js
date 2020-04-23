@@ -8,7 +8,6 @@ import DraggableList, {
   DropableWrapper
 } from "../components/shared/DraggableList";
 import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
-import { DBMode } from '../components/bi/component/dashboard/Constant';
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
@@ -17,7 +16,7 @@ import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 
-import { setDashboards, setDBMode } from '../components/bi/redux/action';
+import { setDashboards } from '../components/bi/redux/action';
 import { setDB, deleteDB, renameDB, newDB } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
 
@@ -136,7 +135,6 @@ const AppSetting = props => {
   const openDashboard = id => {
     if(list[0].key !== "") {
       setDB(appId, id, props.setDashboards);
-      setDBMode(DBMode.Edit);
       history.push(`/app/${appId}/setting/bi/${id}`);
     }
   };
@@ -504,7 +502,6 @@ export default connect(
     setAllForms,
     newDashboard,
     setDB,
-    setDashboards,
-    setDBMode
+    setDashboards
   }
 )(AppSetting);

@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
-import { DataType } from '../elements/Constant';
+import { DataType, TimeSumType } from '../elements/Constant';
 import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
 import FilterField from '../bind/field/FilterField';
 import DragItem from './DragItem';
-import { GroupType } from "../elements/Constant";
+import { GroupType,SortType } from "../elements/Constant";
 import { changeBind, changeChartData, setElemType } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import { deepClone } from '../../utils/Util';
@@ -111,8 +111,8 @@ function preProcessDrop(item, currentType) {
     item["currentGroup"] = GroupType.DEFAULT;
   }
 
-  if(item.type == DataType.DATETIME && currentType != Types.FILTER && item.bindType == Types.MEASURE) {
-    item["currentGroup"] = {name:"", value:"DAY"};
+  if(item.type == DataType.DATETIME && currentType != Types.FILTER) {
+    item["currentGroup"] = currentType === Types.MEASURE ? GroupType.COUNT : TimeSumType.DAY;
   }
 }
 
@@ -225,6 +225,7 @@ class BindPane extends PureComponent {
       // when drag to add
       const obj = deepClone(item);
       obj['idx'] = Date.now();
+      obj.alias = obj.label;
       obj.bindType = bindType;
       bindDataArr.splice(splitIdx, 0, obj);
 
@@ -311,20 +312,20 @@ class BindPane extends PureComponent {
 
   changeSortType = (sortType, fieldId) => {
     let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
-    const meaFiledCount = bindDataArr.filter(item => item.bindType == "mea").length;
-    const dimFiledCount = bindDataArr.filter(item => item.bindType == "dim").length;
+    const meaFiledCount = bindDataArr.filter(item => item.bindType == Types.MEASURE).length;
+    const dimFiledCount = bindDataArr.filter(item => item.bindType == Types.DIMENSION).length;
     let newArr = [];
-    if(meaFiledCount > 0 && dimFiledCount == 1){
+    if(dimFiledCount <= 1){
       newArr = bindDataArr.map((each) => {
         if(fieldId == each.fieldId) {
           each.sort = {
-            "fieldId": fieldId,
+            fieldId,
             ...sortType
           }
         }else{
           each.sort = {
-            "fieldId": fieldId,
-            value:"DEFAULT"
+            fieldId,
+            value:SortType.DEFAULT.value
           }
         }
         return each;
@@ -333,7 +334,7 @@ class BindPane extends PureComponent {
       newArr = bindDataArr.map((each) => {
         if(fieldId == each.fieldId) {
           each.sort = {
-            "fieldId": fieldId,
+            fieldId,
             ...sortType
         }
       }
