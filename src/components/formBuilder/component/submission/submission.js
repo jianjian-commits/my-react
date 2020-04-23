@@ -640,9 +640,9 @@ class Submission extends Component {
           }
         })
           .catch(error => {
-            this.setState({
-              isSubmitted: false
-            })
+            // this.setState({
+            //   isSubmitted: false
+            // })
             if (error.response && error.response.data.code === 9998) {
               this._setErrorResponseData(error.response.data);
               isMobile ? Toast.fail("提交失败") : message.error("提交失败");
@@ -1466,6 +1466,7 @@ class Submission extends Component {
                   approverList={userList}
                   afterApproverModal={()=>{
                     setTimeout(() => {
+                      this.props.getApproveCount(this.props.appid)
                       let skipToSubmissionDataFlag = true;
                       this.props.actionFun(skipToSubmissionDataFlag);
                     }, 1000);

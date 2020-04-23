@@ -41,7 +41,9 @@ const StartApprovalButton = (props) => {
         // 是否允许设置审批人
         props.setTaskId(res.data.taskId);
         props.setApproverModalVisible(res.data.shouldSetApprover);
-        props.resetData();
+        if(res.data.shouldSetApprover === false){
+          props.resetData();
+        }
       } else {
         props.setLoading(false);
         message.error("提交审批失败");
@@ -137,7 +139,9 @@ const ApprovalProcessButtons = (props) => {
       if (res && res.status === "SUCCESS") {
         props.setTaskId(res.data.taskId);
         props.setApproverModalVisible(res.data.shouldSetApprover);
-        props.resetData();
+        if(res.data.shouldSetApprover === false){
+          props.resetData();
+        }
         message.success("提交审批意见成功");
       } else {
         props.setLoading(false);
@@ -336,7 +340,10 @@ const FormDataDetailHeader = (props) => {
               setVisible={setApproverModalVisible} 
               formId={props.currentForm.id}
               appId={appId}
-              approverList={userList}/>
+              approverList={userList}
+              afterApproverModal={()=>{
+                props.resetData();
+              }}/>
           </div>
         </Col>
       </Row>
