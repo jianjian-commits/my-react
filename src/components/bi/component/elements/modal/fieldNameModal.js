@@ -25,14 +25,14 @@ export default function FieldNameModal(props) {
           />
         </div>
         <div className={classes.footBtns}>
+          <Button onClick={props.handleCancel}>取消</Button>
           <Button
             onClick={() => {
               props.handleOK(fieldName);
             }}
           >
-            取消
+            确定
           </Button>
-          <Button onClick={props.handleCancel}>确定</Button>
         </div>
       </div>
     </Modal>

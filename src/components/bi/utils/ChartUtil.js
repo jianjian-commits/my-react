@@ -5,6 +5,8 @@ import FilterCondition from '../component/elements/data/FilterCondition';
 import Field from '../component/elements/data/Field';
 import { deepClone, equals } from './Util';
 
+const _setFieldName = field => field.alias||field.legendName
+
 export const getBarChartOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
   const { titleXAxis, titleYAxis, showLegend, showDataTag } = chartInfo || new ChartInfo();
@@ -18,7 +20,7 @@ export const getBarChartOption = (chartData, chartInfo) => {
   const title = ["名称"];
 
   legends.forEach((each) => {
-    title.push(each.legendName);
+    title.push(_setFieldName(each));
     series.push({type: 'bar',
       label: {
         show: showDataTag,
@@ -136,7 +138,7 @@ export const getPieChartOption = (chartData, chartInfo) => {
       const legend = item.legend;
       legends.forEach((each) => {
         if(each.legendName == legend.legendName){
-          row.push(each.legendName);
+          row.push(_setFieldName(each));
           row.push(item.count);
         }
       })
@@ -228,13 +230,23 @@ export const getChartAttrs = (bindDataArr) => {
 
     delete field.bindType;
     delete field.currentGroup;
-
+    const dataFormat = {
+      "custom": {
+        "format": "string"
+      },
+      "predefine": {
+        "decimals": 0,
+        "percent": true,
+        "thousandSymbols": true
+      },
+      "selectType": "PREDEFINE"
+    };
     switch(each.bindType) {
       case Types.DIMENSION:
-        dimensions.push({ field, currentGroup, groups, sort });
+        dimensions.push({ field, currentGroup, groups, sort});
         break;
       case Types.MEASURE:
-        indexes.push({ field, currentGroup, groups, sort });
+        indexes.push({ field, currentGroup, groups, sort ,dataFormat});
         break;
       default:
         console.log("wrong type!");

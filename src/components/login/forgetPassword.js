@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import signinStyles from "./style/login.module.scss";
 import { sendCode, resetAllowSendCodeState } from "../../store/loginReducer";
-import PublicForm from "./PublicForm";
+import PublicForm from "./publicForm";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
 import { message } from "antd";

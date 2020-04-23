@@ -58,7 +58,7 @@ export const renameDB = (id, name) => {
 
 
 export const getDashboardAll = (appId) => {
-  return request(`/bi/dashboards?appId=${appId}`);
+  return request(`/bi/dashboards`,{headers:{appid:appId}});
 }
 
 export const processBind = (bindDataArr, formId, changeBind, changeChartData, elemType, setElemType) => {
