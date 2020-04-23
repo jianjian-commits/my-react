@@ -41,9 +41,10 @@ export const setDB = (dashboardId, setDashboards) => {
   })
 }
 
-export const deleteDB = (id) => {
+export const deleteDB = (appId, id) => {
   return request(`/bi/dashboards/${id}`, {
     method: "DELETE",
+    headers: {appId, "Content-Type": "application/json"}
   });
 }
 

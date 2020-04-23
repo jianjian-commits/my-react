@@ -146,7 +146,7 @@ const AppSetting = props => {
   const onDelete = (id, type) => {
     switch(type) {
       case "DASHBOARD":
-        return deleteDB(id);
+        return deleteDB(appId, id);
         break;
       case "FORM":
         return deleteForm(appId, id);
