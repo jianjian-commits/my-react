@@ -7,6 +7,9 @@ import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
+import { setDashboards, setDBMode } from '../components/bi/redux/action';
+import { DBMode } from '../components/bi/component/dashboard/Constant';
+import { setDB } from '../components/bi/utils/reqUtil';
 
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
@@ -80,6 +83,7 @@ const AppDetail = props => {
         newList = res.map(item => ({
           key: item.id,
           name: item.name,
+          type: item.type
           // icon: TableIcon
         }));
         
@@ -171,6 +175,39 @@ const AppDetail = props => {
       break;
     // return <></>;
   }
+
+  const handleSelectForm = (id) => {
+    setSelectedForm(id);
+    setApprovalKey("");
+    setSubmit(false);
+    setSubmissionId(null);
+    setSearchStatus(true)
+  }
+
+  const openDBVistor = id => {
+    if(list[0].key !== "") {
+      setDB(appId, id, props.setDashboards);
+      setDBMode(DBMode.Visit);
+      history.push(`/app/${appId}/setting/bi/${id}`);
+    }
+  };
+
+    /**
+   * On select dashboard or form.
+   */
+  const onClickList = (id, type) => {
+    switch(type) {
+      case "DASHBOARD":
+        openDBVistor(id);
+        break;
+      case "FORM":
+        handleSelectForm(id);
+        break;
+      default:
+        console.log("Wrong type!");
+    }
+  }
+  
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
@@ -210,13 +247,7 @@ const AppDetail = props => {
             <DraggableList
               selected={selectedForm}
               draggable={false}
-              onSelect={e => {
-                setSelectedForm(e.key);
-                setApprovalKey("");
-                setSubmit(false);
-                setSubmissionId(null);
-                setSearchStatus(true)
-              }}
+              onClickList={onClickList}
               groups={groups}
               list={list}
             />
@@ -282,5 +313,7 @@ export default connect(({ app, login, forms }) => ({
   approveListCount: forms.approveListCount
 }),{
   getApproveCount,
-  clearApproveCount
+  clearApproveCount,
+  setDashboards,
+  setDBMode
 })(AppDetail);

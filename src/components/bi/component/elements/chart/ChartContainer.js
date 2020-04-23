@@ -48,7 +48,7 @@ const ChartContainer = props => {
       new EditAction(elemType, chartId, () => {history.push(`/app/${appId}/setting/bi/${dashboardId}/${chartId}`)},
       {changeBind, changeChartData, setDataSource, changeChartInfo, setElemType}),
       new SetSortAction(()=>{setModalVisible(true)}),
-      new DeleteAction(dashboardId, chartId, {setDashboards}),
+      new DeleteAction(dashboardId, chartId, appId, {setDashboards}),
       new RefreshAction(elemType, chartId, dashboards, {setDashboards}),
       new FullScreenAction(props.setFullChart)
     ]

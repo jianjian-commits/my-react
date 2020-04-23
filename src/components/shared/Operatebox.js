@@ -70,7 +70,7 @@ const OperateBox = (props) => {
 
   const handleDelete = (params, type) => {
     props.onDelete(params, type).then(res => {
-      if (res.status === 200) {
+      if (res.status === 200 || res.msg === "success") {
         props.isDeleteOne(true)
         message.success('删除成功');
       }
@@ -79,7 +79,7 @@ const OperateBox = (props) => {
 
   const handleRename = (id, type) => {
     props.onRename(id, type, { name: formName }).then(res => {
-      if (res.status === 200) {
+      if (res.status === 200 || res.msg === "success") {
         props.isDeleteOne(true)
         message.success('修改成功');
       }

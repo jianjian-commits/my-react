@@ -11,11 +11,11 @@ import "../components/bi/scss/index.scss";
 const BI = props => {
   const HEADER_HEIGHT = 50;
   const TOOLBAR_HEIGHT = 45;
-  const { dashboardId } = useParams();
+  const { dashboardId, appId } = useParams();
   const { formDataArr, dbMode } = props;
 
   if(!formDataArr || formDataArr.length === 0) {
-    setDB(dashboardId, props.setDashboards);
+    setDB(appId, dashboardId, props.setDashboards);
   }
 
   return (

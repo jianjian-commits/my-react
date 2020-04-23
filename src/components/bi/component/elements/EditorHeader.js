@@ -24,7 +24,7 @@ const EditorHeader = props => {
 
   const handleSave = (name) => {
     updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo, elemType);
-    setDB(dashboardId, setDashboards);
+    setDB(appId, dashboardId, setDashboards);
     saveChartChange();
   }
 

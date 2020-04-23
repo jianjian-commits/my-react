@@ -17,7 +17,7 @@ const DBHeader = props => {
   }
 
   const onBlur = (e) => {
-    renameDB(dashboardId, e.target.value);
+    renameDB(appId, dashboardId, e.target.value);
   }
 
   const onChange = (e) => {

@@ -27,8 +27,10 @@ export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypePr
   });
 }
 
-export const setDB = (dashboardId, setDashboards) => {
-  request(`/bi/dashboards/${dashboardId}`).then((res) => {
+export const setDB = (appId, dashboardId, setDashboards) => {
+  request(`/bi/dashboards/${dashboardId}`, {
+    headers: {appId, "Content-Type": "application/json"}
+  }).then((res) => {
     if(res && res.msg === "success") {
       return res.data.name;
     }
@@ -48,18 +50,21 @@ export const deleteDB = (appId, id) => {
   });
 }
 
-export const renameDB = (id, name) => {
+export const renameDB = (appId, id, name) => {
   return request(`/bi/dashboards/${id}`, {
     method: "PUT",
-    data: {
-      name
-    }
+    headers: {appId, "Content-Type": "application/json"},
+    data: { name }
   });
 }
 
-
-export const getDashboardAll = (appId) => {
-  return request(`/bi/dashboards?appId=${appId}`);
+export const newDB = (appId) => {
+  return request(`/bi/dashboards/`, {
+    method: "POST",
+    headers: {appId, "Content-Type": "application/json"},
+    data: {name: "新建仪表盘", appid: appId}, 
+    warning: "创建报表失败"
+  });
 }
 
 export const processBind = (bindDataArr, formId, changeBind, changeChartData, elemType, setElemType) => {

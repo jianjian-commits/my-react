@@ -1,5 +1,5 @@
 
-export default class DeleteAction {
+export default class SortAction {
   constructor(callback) {
     this.type = "swap";
     this.callback=callback;

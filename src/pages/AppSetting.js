@@ -8,17 +8,17 @@ import DraggableList, {
   DropableWrapper
 } from "../components/shared/DraggableList";
 import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
+import { DBMode } from '../components/bi/component/dashboard/Constant';
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
-import request from '../components/bi/utils/request';
 import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 
-import { setDashboards } from '../components/bi/redux/action';
-import { setDB, deleteDB, renameDB } from '../components/bi/utils/reqUtil';
+import { setDashboards, setDBMode } from '../components/bi/redux/action';
+import { setDB, deleteDB, renameDB, newDB } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -135,7 +135,8 @@ const AppSetting = props => {
   //处理仪表盘的点击事件
   const openDashboard = id => {
     if(list[0].key !== "") {
-      setDB(id, props.setDashboards);
+      setDB(appId, id, props.setDashboards);
+      setDBMode(DBMode.Edit);
       history.push(`/app/${appId}/setting/bi/${id}`);
     }
   };
@@ -178,7 +179,7 @@ const AppSetting = props => {
   const onRename = (id, type, params) => {
     switch(type) {
       case "DASHBOARD":
-        return renameDB(id, params.name);
+        return renameDB(appId, id, params.name);
         break;
       case "FORM":
         return updateFormName(appId, id, params);
@@ -189,12 +190,7 @@ const AppSetting = props => {
   }
 
   const createDashboard = () => {
-    request(`/bi/dashboards/`, {
-      method: "POST",
-      headers: {appId, "Content-Type": "application/json"},
-      data: {name: "新建仪表盘", appid: appId}, 
-      warning: "创建报表失败"
-    }).then(
+    newDB(appId).then(
       (res) => {
         if(res && res.msg === "success") {
           const data = res.data;
@@ -508,6 +504,7 @@ export default connect(
     setAllForms,
     newDashboard,
     setDB,
-    setDashboards
+    setDashboards,
+    setDBMode
   }
 )(AppSetting);

@@ -122,7 +122,6 @@ const DraggableList = ({
                   </span>
                 </DropableWrapper>
               }
-              onTitleClick={() => {console.log("======onTitleClick====");}}
             >
               {g.list &&
                 g.list.map((l, n) => (
