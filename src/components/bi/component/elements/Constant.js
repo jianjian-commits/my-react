@@ -15,16 +15,6 @@ export const PieType = ["AREA_CHART"];
 export const BarType = ["HISTOGRAM"];
 export const BarIndexType = ["HISTOGRAM","INDEX_DIAGRAM"];
 
-
-export const GroupType = {
-  SUM: {name: "总计", value: "SUM"},
-  COUNT: {name: "计数", value: "COUNT"},
-  AVERAGE: {name: "平均", value: "AVERAGE"},
-  MAX: {name: "最大", value: "MAX"},
-  MIN: {name: "最小", value: "MIN"},
-  DEFAULT: {name: "", value: null},
-}
-
 export const OPERATORS = {
   EQUALS: "EQ",
   NOT_EQUALS: "NE",
@@ -90,33 +80,49 @@ export const DateOptions = [
   { value: OPERATORS.IS_NOT_NULL, label: OPERATOR_LABELS.IS_NOT_NULL }
 ]
 
-export const SortTypeArr = [
-  {
+
+export const GroupType = {
+  SUM: {name: "总计", value: "SUM"},
+  COUNT: {name: "计数", value: "COUNT"},
+  AVERAGE: {name: "平均", value: "AVERAGE"},
+  MAX: {name: "最大", value: "MAX"},
+  MIN: {name: "最小", value: "MIN"},
+  DEFAULT: {name: "", value: null},
+}
+
+export const SortType = {
+  DEFAULT:{
     name:"默认",
     value:"DEFAULT"
-  },{
+  },
+  DESC:{
     name:"降序",
     value:"DESC"
-  },{
+  },
+  ASC:{
     name:"升序",
     value:"ASC"
   },
-]
-export const TimeSumTypeArr = [
-  {
+}
+export const TimeSumType = {
+  YEAR:{
     name:"年",
     value:"YEAR"
-  },{
+  },
+  QUARTER:{
     name:"年-季",
     value:"QUARTER"
-  },{
+  },
+  MONTH:{
     name:"年-月",
     value:"MONTH"
-  },{
+  },
+  WEEK:{
     name:"年-周",
     value:"WEEK"
-  },{
+  },
+  DAY:{
     name:"年-月-日",
     value:"DAY"
   }
-]
+}
