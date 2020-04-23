@@ -4,3 +4,4 @@ export const CLEAR_FORM_DETAIL = "CLEAR_FORM_DETAIL";
 export const RECEIVED_FORM_DETAIL = "RECEIVED_FORM_DETAIL";
 export const DELETE_FORM_DATA = "DELETE_FORM_DATA";
 export const Filter_FORM_DATA = "Filter_FORM_DATA";
+export const GET_USER_LIST = "GET_USER_LIST";
