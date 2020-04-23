@@ -142,11 +142,7 @@ export default function FieldMeasureSelect(props) {
   }
   const showSortIcon = () => {
     const sortImgArr = [SortType.ASC.value,SortType.DESC.value];
-    if(sort && sortImgArr.includes(sort.value)){
-        return <img src={"/image/davinci/"+sort.value+".svg"}/>
-    }else{
-        return null;
-    }
+    return (sort && sortImgArr.includes(sort.value)) ? <img src={"/image/davinci/"+sort.value+".svg"}/> : null;
   }
   return (
     <div
@@ -164,7 +160,7 @@ export default function FieldMeasureSelect(props) {
       >
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
         <span className={classes.dropDownBtnSpan}>
-          {`${props.item.label}(${operationArr[selectIndex].name})`}
+          {`${props.item.alias||props.item.label}(${operationArr[selectIndex].name})`}
           {showSortIcon()}
         </span>
         {deleteBtnVisible && (
@@ -175,7 +171,7 @@ export default function FieldMeasureSelect(props) {
           />
         )}
       </div>
-      {nameInputVisible && <FieldNameModal label={props.item.label} handleOK={handleOK} handleCancel={handleCancel}/>}
+      {nameInputVisible && <FieldNameModal label={props.item.alias} handleOK={handleOK} handleCancel={handleCancel}/>}
       {popoverVisible && (
         <div className={classes.dropDownItemContainer}>
           <FieldSecondMenus

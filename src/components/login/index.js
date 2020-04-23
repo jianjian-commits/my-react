@@ -12,7 +12,7 @@ import Loading from "../../pages/Loading";
 import { loginPasswordParameter, loginPhoneParameter } from "./formItemConfig";
 import clx from "classnames";
 import { SigninImage, RegisterImage } from "../../assets/icons/login";
-import Register from "./Register";
+import Register from "./register";
 import { Redirect } from "react-router";
 
 function Registe({

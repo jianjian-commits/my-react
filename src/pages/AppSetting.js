@@ -155,8 +155,11 @@ const AppSetting = props => {
   const createDashboard = () => {
     request("/bi/dashboards", {
       method: "POST",
-      data: {name: "新建仪表盘", appId}, 
-      warning: "创建报表失败"
+      data: {name: "新建仪表盘",appId}, 
+      warning: "创建报表失败",
+      headers:{
+        appid:appId
+      },
     }).then(
       (res) => {
         if(res && res.msg === "success") {
