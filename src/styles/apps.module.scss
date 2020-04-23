@@ -337,13 +337,85 @@
 }
 
 .appsPanel {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  // display: flex;
+  // flex-wrap: wrap;
+  // justify-content: space-between;
 }
 
 .noApp {
   position: absolute;
   top: 371px;
   left: calc((100% - 530px)/2);
+}
+
+.noCompany {
+  width: 100%;
+  padding-top: 273px;
+  text-align: center;
+  & > div {
+    margin-top: 20.2px;
+    & button {
+      width: 130px;
+      height: 40px;
+      border: 1px solid #2a7fff;
+      box-sizing: border-box;
+      border-radius: 3px;
+      font-size: 14px;
+      line-height: 20px;
+      color: #2a7fff;
+      &:hover {
+        background: #2a7fff !important;
+        color: #ffffff !important;
+      }
+    }
+  }
+}
+
+.noCompanyModalFormWarp {
+  background: rgba(191, 197, 203, 0.5);
+  opacity: 0.9;
+  :global(.ant-modal-body) {
+    & input {
+      order: 1px solid #dcdee3;
+      box-sizing: border-box;
+      border-radius: 3px;
+      ::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        font-size: 14px;
+        line-height: 20px;
+        color: #b6b6ba;
+      }
+      :-moz-placeholder {
+        /* Mozilla Firefox 4 ~ 18 */
+        font-size: 14px;
+        line-height: 20px;
+        color: #b6b6ba;
+      }
+      ::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        font-size: 14px;
+        line-height: 20px;
+        color: #b6b6ba;
+      }
+      :-ms-input-placeholder {
+        /* Internet Explorer 10 ~ 11 */
+        font-size: 14px;
+        line-height: 20px;
+        color: #b6b6ba;
+      }
+      ::-ms-input-placeholder {
+        /* Microsoft Edge */
+        font-size: 14px;
+        line-height: 20px;
+        color: #b6b6ba;
+      }
+
+      ::placeholder {
+        /* 大部分现代浏览器 */
+        font-size: 14px;
+        line-height: 20px;
+        color: #b6b6ba;
+      }
+    }
+  }
 }

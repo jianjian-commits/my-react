@@ -110,6 +110,7 @@ class NumberInput extends React.Component {
     const validateMax = this.props.item.validate.max;
     const validateMin = this.props.item.validate.min;
     const validatePoint = this.props.item.validate.limitPoint;
+    let errMsg = this.props.item.validate.customMessage;
     const newNumberStr = ( value.split("."))[1];
     let defaultErrMsg = '';
     if(this.props.item.validate.isLimitLength){
@@ -128,24 +129,23 @@ class NumberInput extends React.Component {
     // }
     if (value === "") {
       callback();
-    } else if ((this.props.item.validate.isLimitLength && (validateMax !== null && validateMax < Number(value)) || (validateMin !== null && validateMin > Number(value)))||(this.props.item.validate.isLimitPoint && (newNumberStr !== undefined))) {
+    } else if (this.props.item.validate.isLimitLength 
+      && (validateMax !== null && validateMax < Number(value)) 
+      || (validateMin !== null && validateMin > Number(value)))
+      {
       
-      let errMsg = this.props.item.validate.customMessage;
+        isStringValid(errMsg) ? callback(errMsg) : callback(defaultErrMsg);
+    } else if(this.props.item.validate.isLimitPoint && (newNumberStr !== undefined)){
       if(newNumberStr.length > validatePoint ){
         defaultErrMsg = `请输入小数点后小于或等于${validatePoint}位的数字`;
-      }
-      console.log(5,defaultErrMsg)
-      if(defaultErrMsg === ''){
-        callback();
-      }else{
         isStringValid(errMsg) ? callback(errMsg) : callback(defaultErrMsg);
       }
-    } else{
-      callback();
+    } else {
+      callback()
     }
     
   };
-  
+
   render() {
     const { getFieldDecorator, item, disabled, initData } = this.props;
 

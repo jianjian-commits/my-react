@@ -48,15 +48,15 @@ const DraggableList = ({
   const { pathname } = useLocation();
   const { appId } = useParams();
   const [ isShowOperate, setIsShowOperate] = React.useState(false);
-  const [ originlist, setOriginlist ] = React.useState([]);
+  // const [ originlist, setOriginlist ] = React.useState([]);
 
   React.useEffect(()=>{
 
-    setOriginlist(list)
+    // setOriginlist(list)
     if(!pathname.includes("/detail")){
       setIsShowOperate( true )
     }
-  },[pathname])
+  },[pathname, list])
   //针对于拖动盒子本身
 
   //1

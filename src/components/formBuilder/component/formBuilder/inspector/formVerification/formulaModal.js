@@ -1,10 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Modal, Input, Tabs, Collapse } from "antd";
-import {
-  addVerification,
-  editVerification
-} from "../../redux/utils/operateVerification";
 import { ruleList } from "./verificationRule";
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -31,28 +27,28 @@ class ConditionModal extends React.Component {
 
   componentWillMount() {
     let resultArray = [];
-    let excludeComponentType = ["RadioButtons","CheckboxInput","DropDown","MultiDropDown","DateInput","GetLocalPosition","ImageUpload","FileUpload","HandWrittenSignature","Address","ComponentTemplate","Button","PureDate","PureTime"]
+    let excludeComponentType = ["RadioButtons", "CheckboxInput", "DropDown", "MultiDropDown", "DateInput", "GetLocalPosition", "ImageUpload", "FileUpload", "HandWrittenSignature", "Address", "ComponentTemplate", "Button"]
 
     this.props.data.forEach(item => {
       if (item.type == "FormChildTest") {
         item.values.forEach(childItem => {
-          if(excludeComponentType.indexOf(childItem.type) === -1){
+          if (excludeComponentType.indexOf(childItem.type) === -1) {
             resultArray.push({
               label: item.label + "." + childItem.label,
-              key: item.key + "_"+ childItem.key
+              id: item.id + "_" + childItem.id
             });
           }
         });
-      } else if(excludeComponentType.indexOf(item.type) === -1){
+      } else if (excludeComponentType.indexOf(item.type) === -1) {
         resultArray.push({
           label: item.label,
-          key: item.key
+          id: item.id
         });
       }
     });
 
-    this.setState({ 
-      componentLabelArray: resultArray ,
+    this.setState({
+      componentLabelArray: resultArray,
       verificationStr: this.props.verificationStr,
       verificationValue: this.props.verificationValue
     });
@@ -73,10 +69,10 @@ class ConditionModal extends React.Component {
   }
   handleOnchange(e) {
     var newStr = e.target.value;
-    if(newStr === ""){
+    if (newStr === "") {
       this.setState({
-        verificationValue : "",
-        selectedComponent : []
+        verificationValue: "",
+        selectedComponent: []
       })
     }
     this.setState(state => {
@@ -88,7 +84,7 @@ class ConditionModal extends React.Component {
   }
 
 
-  insertStr(oldstr, newStr ,cursorIndex) {
+  insertStr(oldstr, newStr, cursorIndex) {
     let result = "";
     if (cursorIndex === 0) {
       result = newStr + oldstr;
@@ -102,21 +98,21 @@ class ConditionModal extends React.Component {
 
 
   buildVerificationValue() {
-    let {verificationStr, selectedComponent } = this.state;
+    let { verificationStr, selectedComponent } = this.state;
     let valueStr = "";
     let startIndex = 0;
     let endIndex = 0;
-    selectedComponent.map(field =>{
+    selectedComponent.map(field => {
       endIndex = verificationStr.indexOf(field.label, startIndex);
-        if(endIndex !== -1){
-          if(startIndex < endIndex){
-            valueStr += verificationStr.substring(startIndex, endIndex)
-          }
-            valueStr += field.key;
-            verificationStr = verificationStr.slice(endIndex + field.label.length)
+      if (endIndex !== -1) {
+        if (startIndex < endIndex) {
+          valueStr += verificationStr.substring(startIndex, endIndex)
         }
+        valueStr += field.id;
+        verificationStr = verificationStr.slice(endIndex + field.label.length)
+      }
     })
-    if(verificationStr.length !== 0){
+    if (verificationStr.length !== 0) {
       valueStr += verificationStr
     }
     return valueStr
@@ -124,7 +120,7 @@ class ConditionModal extends React.Component {
 
   addFromData(field) {
     let value = field.label;
-    let key = field.key;
+    let id = field.id;
     let textAreaInput = this.textAreaInput;
     let cursorIndex = this.getCursortPosition(
       document.querySelector(".custom")
@@ -134,7 +130,7 @@ class ConditionModal extends React.Component {
     this.setState(
       state => {
         let result = this.insertStr(state.verificationStr, value, cursorIndex);
-        let selectedComponent = [...state.selectedComponent,field]
+        let selectedComponent = [...state.selectedComponent, field]
         return {
           ...state,
           verificationStr: result,
@@ -253,27 +249,20 @@ class ConditionModal extends React.Component {
       formulaInputValue,
       searchFormulaArray
     } = this.state;
-    
+
     return (
       <Modal
         title="校验条件"
         visible={this.props.visible}
         onOk={() => {
-          this.props.handleOk();
+          this.props.handleOk(this.state.verificationStr);
           let verificationValue = this.buildVerificationValue();
           if (this.state.verificationStr) {
-            this.props.index == -1
-              ? this.props.addVerification(this.state.verificationStr, verificationValue)
-              : this.props.editVerification(
-                this.state.verificationStr,
-                verificationValue,
-                this.props.index
-              );
             this.setState(state => ({
               ...state,
               verificationStr: "",
               verificationValue: "",
-              selectedComponent:[]
+              selectedComponent: []
             }));
           }
 
@@ -320,7 +309,7 @@ class ConditionModal extends React.Component {
                   {fieldInputValue
                     ? searchFieldArray.map(item => (
                       <p
-                        key={item.key}
+                        key={item.id}
                         onClick={_e => {
                           this.addFromData(item);
                         }}
@@ -330,7 +319,7 @@ class ConditionModal extends React.Component {
                     ))
                     : this.state.componentLabelArray.map(item => (
                       <p
-                        key={item.key}
+                        key={item.id}
                         onClick={_e => {
                           this.addFromData(item);
                         }}
@@ -409,8 +398,5 @@ export default connect(
   store => ({
     data: store.formBuilder.data
   }),
-  {
-    addVerification,
-    editVerification
-  }
+  {}
 )(ConditionModal);

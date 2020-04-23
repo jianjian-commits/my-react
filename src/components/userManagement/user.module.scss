@@ -266,28 +266,3 @@
     }
   }
 }
-
-.checkBox {
-  & > span {
-    & > span {
-      width: 20px;
-      height: 20px;
-      border: 1px solid #2a7fff;
-      box-sizing: border-box;
-      border-radius: 3px;
-      background-color: #ffffff !important;
-      &::after {
-        top: 46%;
-        left: 24%;
-        table-layout: fixed;
-        width: 2px;
-        height: 11px;
-      }
-    }
-  }
-  :global(.ant-checkbox-disabled) {
-    :global(.ant-checkbox-inner)::after {
-      border-color: rgba(0, 0, 0, 0.25) !important;
-    }
-  }
-}

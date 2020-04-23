@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Button, Input, Radio, Table, message, Modal, Popconfirm } from "antd";
+import { Button, Input, Radio, message, Modal, Popconfirm } from "antd";
+import { Table } from "../../shared/customWidget";
 import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
@@ -229,10 +230,10 @@ class PositionDetail extends Component {
     super(props);
     this.state = {
       positionInfo: {
-        value: "恐慌感",
-        superiorValue: "开户行",
+        value: "",
+        superiorValue: "",
         dataShare: false,
-        description: "科技化能发挥离开举报"
+        description: ""
       },
       editing: {
         value: false,
@@ -323,6 +324,8 @@ class PositionDetail extends Component {
   };
   modalConfirmHandle = async () => {
     const { modalSelectedKeys } = this.state;
+    const { isTop } = this.props;
+    if(isTop && modalSelectedKeys.length > 1) return message.error("顶级职位只能关联一位用户");
     try {
       const res = await request(`/position/${this.props.position.id}/user`, {
         method: "PUT",
