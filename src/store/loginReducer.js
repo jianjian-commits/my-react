@@ -1,14 +1,15 @@
 import { message } from "antd";
 import request from "../utils/request";
 import { getAppList, clearAppList } from "./appReducer";
-// import { history } from "./index";
-import { catchError, ScheduleCreate} from "../utils";
+import { history } from "./index";
+import { catchError, ScheduleCreate } from "../utils";
 
 export const initialState = {
   isLoading: false,
   loginData: null,
   isAuthenticated: !!localStorage.getItem("id_token"),
   userDetail: {},
+  fetchingNecessary: true,
   fetchRequestSent: false,
   allCompany: [],
   currentCompany: {},
@@ -21,6 +22,7 @@ export const START_SPINNING = "Login/START_SPINNING";
 export const START_LOGIN = "Login/START_LOGIN";
 export const LOGIN_SUCCESS = "Login/LOGIN_SUCCESS";
 export const FETCH_REQUEST_SENT = "Login/FETCH_REQUEST_SENT";
+export const SET_FETCHING_NECESSARY = "Login/SET_FETCHING_NECESSARY";
 export const LOGIN_FAILURE = "Login/LOGIN_FAILURE";
 export const RESET_ERROR = "Login/RESET_ERROR";
 export const LOGIN_USER = "Login/LOGIN_USER";
@@ -54,6 +56,10 @@ export const loginFailure = () => ({
   type: LOGIN_FAILURE
 });
 
+export const setFetchingNecessary = payload => ({
+  type: SET_FETCHING_NECESSARY,
+  payload
+})
 export const resetError = () => ({
   type: RESET_ERROR
 });
@@ -61,7 +67,7 @@ export const fetchAllCompany = payload => ({
   type: FETCH_ALL_COMPANY,
   payload
 });
-export const fetchCurrentCompany = payload => ({
+export const fetchcurrentCompany = payload => ({
   type: FETCH_CURRENT_COMPANY,
   payload
 });
@@ -181,14 +187,13 @@ export const getUserDetail = () => async dispatch => {
 };
 
 //转换当前公司
-export const switchCurrentCompany = companyId => async dispatch => {
+export const switchcurrentCompany = companyId => async dispatch => {
   try {
     const res = await request(`/company/${companyId}/currentCompany`, {
       method: "put"
     });
     if (res && res.status === "SUCCESS") {
-      // history.push("/app/list");
-      dispatch(getCurrentCompany());
+      dispatch(getcurrentCompany());
       dispatch(getUserDetail());
       dispatch(getAppList());
     } else {
@@ -199,11 +204,11 @@ export const switchCurrentCompany = companyId => async dispatch => {
   }
 };
 //获取当前公司信息
-export const getCurrentCompany = () => async dispatch => {
+export const getcurrentCompany = () => async dispatch => {
   try {
     const res = await request(`/company/current`);
     if (res && res.status === "SUCCESS") {
-      dispatch(fetchCurrentCompany(res.data));
+      dispatch(fetchcurrentCompany(res.data));
     } else {
       message.error(res.msg || "当前公司信息获取失败");
     }
@@ -232,18 +237,25 @@ export const getAllCompany = () => async dispatch => {
 
 //初始化所有信息
 export const initAllDetail = () => async dispatch => {
+  dispatch(setFetchingNecessary(true));
   dispatch({ type: FETCH_REQUEST_SENT });
   dispatch({ type: CLEAR_USER_DATA });
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
-      await getAllCompany(res.data.id)(dispatch);
-      getCurrentCompany()(dispatch);
-      dispatch(fetchUserDetail(res.data));
+      Promise.all([getAllCompany(res.data.id)(dispatch),
+      getcurrentCompany()(dispatch),
+      dispatch(fetchUserDetail(res.data)),
+      dispatch(getAppList())])
+        .then(() => {
+          dispatch(setFetchingNecessary(false));
+        })
     } else {
       message.error(res.msg || "获取当前用户信息失败");
+      dispatch(setFetchingNecessary(false));
     }
   } catch (err) {
+    dispatch(setFetchingNecessary(false));
     catchError(err);
   }
 };
@@ -283,6 +295,7 @@ export const signOut = () => async dispatch => {
   try {
     const res = await request(`/logout`, { method: "post", data: {} });
     if (res && res.status === "SUCCESS") {
+      history.push("/login");
       localStorage.removeItem("id_token");
       dispatch(signOutSuccess());
     } else {
@@ -325,6 +338,11 @@ export default function loginReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         fetchRequestSent: true
+      };
+    case SET_FETCHING_NECESSARY:
+      return {
+        ...state,
+        fetchingNecessary: payload
       };
     case LOGIN_FAILURE:
       return {

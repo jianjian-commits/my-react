@@ -72,8 +72,8 @@ const RightPane = (props) => {
   const chartTitle = (intro)=> {
     return (
       <div>
-        {intro.map(item=>
-          <div className={classes.tooltipTitle}>{item}</div>
+        {intro.map((item, idx)=>
+          <div className={classes.tooltipTitle} key={item + idx}>{item}</div>
         )}
       </div>
     )  
@@ -88,10 +88,10 @@ const RightPane = (props) => {
         <span>可视化</span>
         <div className={classes.chartGroup}>
         {chartGroup.map(chart =>
-        <Tooltip key={chart.type}  title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} >
+        <Tooltip key={chart.type}  title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} mouseLeaveDelay={0}>
           <div
             className={chartAvailableList.includes(chart.type) ? classNames(classes.IconBox, {activeIcon: activeIcon==chart.type}) : classes.unavailable }
-            onClick={()=>{handleSelectIcon(chart.type)}}
+            onClick={()=>{handleSelectIcon(chartAvailableList.includes(chart.type) ? chart.type : ChartType.HISTOGRAM)}}
           >
             <img src={"/image/davinci/"+chart.type+".svg"}/>
           </div>

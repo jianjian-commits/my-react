@@ -5,20 +5,20 @@ import { useParams, useHistory } from "react-router-dom";
 import { getFormsAll, deleteForm ,updateFormName } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
 import DraggableList, {
-  DropableWrapper
+  // DropableWrapper
 } from "../components/shared/DraggableList";
 import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
 
 import classes from "../styles/apps.module.scss";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
-import request from '../components/bi/utils/request';
 import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 
-import { setDashboards } from '../components/bi/redux/action';
-import { setDB, getDashboardAll } from '../components/bi/utils/reqUtil';
+import { setDashboards, setDBMode } from '../components/bi/redux/action';
+import { DBMode } from '../components/bi/component/dashboard/Constant';
+import { setDB, deleteDB, renameDB, newDB } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
 
 const navigationList = (history, appId, appName) => [
@@ -40,17 +40,13 @@ const AppSetting = props => {
     list: [],
     searchList: []
   });
-  const [dashboards,setDashboardGroup] = React.useState({
-    dbGroup: [],
-    dbList: [],
-    dbSearchList: []
-  });
+
   const [user, setUser] = React.useState({});
   // isDeleteOne 用于判断是否删除表单
   const [ isDeleteOne, setIsDeleteOne ] = React.useState(false)
+  const [ isChangeSequence, setIsChangeSequence ] = React.useState(false)
 
   let { groups, list, searchList } = mockForms;
-  let { dbGroup,dbList } = dashboards;
   useEffect(() => {
     let newList = [];
     let { id, name } = props.userDetail;
@@ -64,7 +60,8 @@ const AppSetting = props => {
       newList = res.map(item => ({
         key: item.id,
         name: item.name,
-        path: item.path
+        path: item.path,
+        type: item.type
       }));
 
       props.setAllForms(res);
@@ -78,23 +75,12 @@ const AppSetting = props => {
       });
     });
 
-    getDashboardAll(appId).then(res => {
-      if(res && res.msg === "success"){
-        let newDashboards = res.data.items.map(item => ({
-          key: item.dashboardId,
-          name: item.name,
-        }));
-        setDashboardGroup({
-          dbGroup: [],
-          dbList: newDashboards,
-          dbSearchList: []
-        })
-      }
-    })
-
     // 初始化是否删除的标志
     setIsDeleteOne( false )
-  }, [props, appId, isDeleteOne]);
+    // 初始化是否更改列表的顺序
+
+    setIsChangeSequence( false )
+  }, [props, appId, isDeleteOne,isChangeSequence]);
 
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
@@ -133,34 +119,74 @@ const AppSetting = props => {
   };
 
   // const addFolder = () => alert("没用的");
+
+  // 拖动进入文件
   const dragFileToFolder = (formId, groupId) => {
     alert(formId + " 放进 " + groupId);
   };
 
   // 处理点击表单名字事件
-  const formEnterHandle = e => {
+  const openForm = (id) => {
     if (list[0].key !== "") {
-      history.push(`/app/${appId}/setting/form/${e.key}/edit?formId=${e.key}`);
+      history.push(`/app/${appId}/setting/form/${id}/edit?formId=${id}`);
     }
   };
 
   //处理仪表盘的点击事件
-  const dashboardEnterHandle = e => {
-    if (dbList[0].key !== "") {
-      setDB(e.key, props.setDashboards);
-      history.push(`/app/${appId}/setting/bi/${e.key}`);
+  const openDashboard = id => {
+    if(list[0].key !== "") {
+      setDB(appId, id, props.setDashboards);
+      props.setDBMode(DBMode.Edit)
+      history.push(`/app/${appId}/setting/bi/${id}`);
     }
   };
 
+  /**
+   * On delete dashboard or form.
+   */
+  const onDelete = (id, type) => {
+    switch(type) {
+      case "DASHBOARD":
+        return deleteDB(appId, id);
+      case "FORM":
+        return deleteForm(appId, id);
+      default:
+        console.log("Wrong type!");
+    }
+  }
+
+  /**
+   * On select dashboard or form.
+   */
+  const onClickList = (id, type) => {
+    switch(type) {
+      case "DASHBOARD":
+        openDashboard(id);
+        break;
+      case "FORM":
+        openForm(id);
+        break;
+      default:
+        console.log("Wrong type!");
+    }
+  }
+
+  /**
+   * On rename the dashboard or form.
+   */
+  const onRename = (id, type, params) => {
+    switch(type) {
+      case "DASHBOARD":
+        return renameDB(appId, id, params.name);
+      case "FORM":
+        return updateFormName(appId, id, params);
+      default:
+        console.log("Wrong type!");
+    }
+  }
+
   const createDashboard = () => {
-    request("/bi/dashboards", {
-      method: "POST",
-      data: {name: "新建仪表盘",appId}, 
-      warning: "创建报表失败",
-      headers:{
-        appid:appId
-      },
-    }).then(
+    newDB(appId).then(
       (res) => {
         if(res && res.msg === "success") {
           const data = res.data;
@@ -191,6 +217,7 @@ const AppSetting = props => {
 
   const { permissions, teamId } = props;
   const isShowNewFormBtn = newFormAuth(permissions, teamId, appId);
+
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
       <ForInfoModal
@@ -239,29 +266,26 @@ const AppSetting = props => {
           <div className={classes.formArea}>
             <DraggableList
               draggable={!searchKey}
-              onSelect={formEnterHandle}
+              onClickList={onClickList}
               groups={groups}
               list={list}
               onDrop={dragFileToFolder}
-              deleteForm={ deleteForm }
-              updateFormName={ updateFormName }
+              onDelete={ onDelete }
+              onRename={ onRename }
               isDeleteOne={( params ) => setIsDeleteOne( params )}
+              appId = {appId}
+              isChangeSequence = { ( params ) => setIsChangeSequence( params )}
             />
-            <hr/>
-            <p>已创建仪表盘</p>
-            <DraggableList
-              draggable={!searchKey}
-              onClick={dashboardEnterHandle}
-              groups={dbGroup}
-              list={dbList}
-              onDrop={dragFileToFolder}
-            />
-            <DropableWrapper
-              className={classes.empty}
-              onDrop={e =>
-                dragFileToFolder(e.dataTransfer.getData("formId"), null)
+            {/* <DropableWrapper
+              className = {classes.empty}
+              draggable = { true }
+
+              onDrop = {
+                
+                 e => e.dataTransfer.setData("formId", formId)
+                
               }
-            ></DropableWrapper>
+            ></DropableWrapper> */}
           </div>
           {/* <div className={classes.addFolder} 
           // ? 禁用点击新建文件夹功能,功能暂未开发 onClick={addFolder}
@@ -476,6 +500,7 @@ export default connect(
     setAllForms,
     newDashboard,
     setDB,
-    setDashboards
+    setDashboards,
+    setDBMode
   }
 )(AppSetting);

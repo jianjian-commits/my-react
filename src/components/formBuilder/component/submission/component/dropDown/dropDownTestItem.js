@@ -1,5 +1,5 @@
 import React from "react";
-import { Spin, Icon, Popover } from "antd";
+import { Spin, Icon, Popover, Input } from "antd";
 import classNames from "classnames";
 export default class DropDownTestItem extends React.Component {
   // 这个的数据编辑是否有问题。。。。
@@ -8,7 +8,9 @@ export default class DropDownTestItem extends React.Component {
     this.state = {
       selectIndex: -1,
       isPopoverVisible: false,
-      initFlag: true
+      initFlag: true,
+      isShowExtra:false,
+      inputValue:'其他'
     };
   }
 
@@ -45,14 +47,17 @@ export default class DropDownTestItem extends React.Component {
       });
     }else if(nextProps.item.data.values instanceof Array && nextProps.isEditData && this.state.initFlag){
       let selectIndex = nextProps.item.data.values.map(item =>item.value).indexOf(nextProps.value)
-          this.setState({selectIndex,initFlag: false})
+       if( selectIndex !== -1 ){
+         this.setState({selectIndex,initFlag: false})
+       }else{
+         this.setState({selectIndex:(selections.length - 1),inputValue:nextProps.value,initFlag:false})
+       }
       }
   }
 
   render() {
     const { item, onChange } = this.props;
     let { selections } = this.props;
-
     let { selectIndex, isPopoverVisible } = this.state;
     return (
       <div className="dropDownContainer">
@@ -69,7 +74,16 @@ export default class DropDownTestItem extends React.Component {
             className="dropDownBtnSpan"
             style={selectIndex == -1 ? { color: "rgba(170,170,170,1)" } : {}}
           >
-            {selectIndex == -1 ? "请选择" : selections[selectIndex].value}
+            {selectIndex == -1 ? "请选择" : 
+
+            <>
+            {
+              (selectIndex !== (selections.length - 1)) ? selections[selectIndex].value : this.state.inputValue
+            }
+            </>
+            
+            
+            }
           </span>
           {isPopoverVisible === false ? (
             <Icon type="down" />
@@ -80,15 +94,18 @@ export default class DropDownTestItem extends React.Component {
         {isPopoverVisible == true ? (
           <div className="dropDownItemContainer" id={"dropDown" + item.id}>
             {this.props.selections.map((item, index) => (
+              <div key={index}>
               <div
                 className={classNames("dropDownItem", {
                   selectOption: selectIndex == index
                 })}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   const { callEventArr } = this.props.item;
                   if (selectIndex === index) {
-                    this.setState({ selectIndex: -1, isPopoverVisible: false });
+                    this.setState({ selectIndex: -1, isPopoverVisible: false , isShowExtra:false});
                     onChange("");
+
                     if (callEventArr) {
                       callEventArr.forEach(fnc => {
                         fnc(undefined, this);
@@ -100,6 +117,11 @@ export default class DropDownTestItem extends React.Component {
                       isPopoverVisible: false
                     });
                     onChange(selections[index].value);
+                    if(item.isExtra) {
+                      this.setState({isShowExtra:true})
+                    }else{
+                      this.setState({isShowExtra:false})
+                    }
                     if (callEventArr) {
                       callEventArr.forEach(fnc => {
                         fnc(selections[index].value, this);
@@ -109,13 +131,39 @@ export default class DropDownTestItem extends React.Component {
                 }}
                 key={index}
               >
-                <span className="dropDownItemSpan">{item.label}</span>
+                <span className="dropDownItemSpan">{item.label} </span>
+              </div>
               </div>
             ))}
           </div>
         ) : (
           ""
         )}
+        {this.state.isShowExtra? 
+        <Input onChange={e => 
+          {
+            let { value } = e.target
+            this.setState({
+              inputValue: value
+            })
+          }
+        } 
+         onBlur = {
+          (e)=>{
+            e.preventDefault();
+            e.stopPropagation()
+          this.setState({
+            isShowExtra:false
+          },()=>{
+            onChange(this.state.inputValue)
+          })
+          
+          }
+
+        }
+        defaultValue = { this.state.inputValue == '其他' ? '': this.state.inputValue}
+        />:null
+        }
       </div>
     );
   }

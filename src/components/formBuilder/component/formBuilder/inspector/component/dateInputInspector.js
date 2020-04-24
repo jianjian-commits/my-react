@@ -208,6 +208,7 @@ class DateInputInspector extends React.PureComponent {
       tooltip,
       defaultValue,
       validate,
+      autoInput,
       unique = false,
       inputMask,
       isSetAPIName
@@ -274,6 +275,13 @@ class DateInputInspector extends React.PureComponent {
               onChange={this.handleChangeAttr}
             >
               必填
+            </Checkbox>
+            <Checkbox
+              name="autoInput"
+              checked={autoInput}
+              onChange={this.handleChangeAttr}
+            >
+              仅允许填入当前时间
             </Checkbox>
           </div>
         </div>

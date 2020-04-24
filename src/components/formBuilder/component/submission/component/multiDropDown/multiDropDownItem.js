@@ -1,13 +1,17 @@
 import React from "react";
-import { Spin, Icon, Popover } from "antd";
+import { Spin, Icon, Popover, Input } from "antd";
 import classNames from "classnames";
 export default class MultiDropDownItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectIndexArr: [],
+      selectValueArr:[],
       isPopoverVisible: false,
-      initFlag: true
+      initFlag: true,
+      isShowExtta: false,
+      isInputValue:false,
+      inputValue: "其他"
     };
   }
 
@@ -60,14 +64,23 @@ export default class MultiDropDownItem extends React.Component {
       });
     } else if(nextProps.isEditData && this.state.initFlag &&nextProps.value instanceof Array){
       let selectIndexArr = []
+      let selectMiddleArr = nextProps.value
+      console.log(nextProps)
       nextProps.value.map( value =>{
         nextProps.item.data.values.map((item,index) => {
           if(item.value === value){
             selectIndexArr.push(index)
+          }else{
+            selectIndexArr.push( nextProps.value.length - 1)
           }
         })
       })
+      let selectMiddleStr = selectMiddleArr.pop()
+      if(nextProps.item.data.values.includes(selectMiddleStr)){
       this.setState({ selectIndexArr, initFlag:false });
+      }else{
+        this.setState({isInputValue:true,inputValue:selectMiddleStr,isShowExtra:true, selectIndexArr, initFlag:false });
+      }
     }
   }
 
@@ -95,10 +108,28 @@ export default class MultiDropDownItem extends React.Component {
           >
             {selectIndexArr.length === 0
               ? "请选择"
-              : selections
+              : 
+              <>
+                {this.state.isInputValue? 
+                  selections
+                  .filter((item, i) => selectIndexArr.includes(i))
+                  .map((item,index) => 
+                    {
+                      if(index === (selections.length - 1)){
+                      return this.state.inputValue
+                      }
+                      return item.value
+                  }
+                    )
+                  .join(",")
+                  :
+                selections
                   .filter((item, i) => selectIndexArr.includes(i))
                   .map(item => item.value)
-                  .join(",")}
+                  .join(",")
+              }
+              </>
+              }
           </span>
           {isPopoverVisible === false ? (
             <Icon type="down" />
@@ -124,6 +155,10 @@ export default class MultiDropDownItem extends React.Component {
                     )
                     .map(item => item.value);
                   onChange(dataArr);
+                  this.setState({
+                    isShowExtra:true,
+                    selectValueArr:dataArr
+                  })
                   if (callEventArr) {
                     callEventArr.forEach(fnc => {
                       fnc([...dataArr], this);
@@ -155,7 +190,14 @@ export default class MultiDropDownItem extends React.Component {
                             this.state.selectIndexArr.includes(i)
                           )
                           .map(item => item.value);
+                          this.setState({
+                            selectValueArr: dataArr
+                          })
                         onChange(dataArr);
+                        this.setState({
+                          isShowExtra:false,
+                          isInputValue:false
+                        })
                         if (callEventArr) {
                           callEventArr.forEach(fnc => {
                             fnc([...dataArr], this);
@@ -175,7 +217,21 @@ export default class MultiDropDownItem extends React.Component {
                             this.state.selectIndexArr.includes(i)
                           )
                           .map(item => item.value);
+                        this.setState({
+                          selectValueArr: dataArr
+                        })
                         onChange(dataArr);
+
+                        if(item.isExtra) {
+                          this.setState({isShowExtra:true})
+                        }else{
+                          if(this.state.inputValue === "其他"){
+
+                          }else{
+                            this.setState({isShowExtra:false})
+                          }
+                        }
+
                         if (callEventArr) {
                           callEventArr.forEach(fnc => {
                             fnc([...dataArr], this);
@@ -195,6 +251,39 @@ export default class MultiDropDownItem extends React.Component {
         ) : (
           ""
         )}
+        {this.state.isShowExtra? 
+        <Input onChange={e => 
+          {
+            let { value } = e.target
+            this.setState({
+              inputValue: value
+            })
+          }
+        } 
+         onBlur = {
+          (e)=>{
+            e.preventDefault();
+            e.stopPropagation()
+          this.setState({
+            isShowExtra:false
+          },()=>{
+            let selectMiddleArr = this.state.selectValueArr;
+            selectMiddleArr.pop();
+            let newValue = this.state.inputValue === "其他" ? '': this.state.inputValue
+            let newSelectArr = [...selectMiddleArr,newValue]
+            onChange(newSelectArr)
+            this.setState({
+              selectValueArr:newSelectArr,
+              isInputValue:true
+            })
+          })
+          
+          }
+
+        }
+        defaultValue = { this.state.inputValue == '其他' ? '': this.state.inputValue}
+        />:null
+        }
       </div>
     );
   }

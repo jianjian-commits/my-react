@@ -2,9 +2,8 @@ import React, {useState} from "react";
 import { connect } from "react-redux";
 import { Icon, Button } from "antd";
 import { setDashboards } from '../../redux/action';
-import request from '../../utils/request';
 import { useParams, useHistory } from "react-router-dom";
-import { Input } from 'antd';
+import { renameDB } from "../../utils/reqUtil";
 import classes from '../../scss/dashboard/header.module.scss';
 
 const DBHeader = props => {
@@ -18,20 +17,7 @@ const DBHeader = props => {
   }
 
   const onBlur = (e) => {
-    updateDB(e.target.value);
-  }
-
-  const saveDB = () => {
-    // history.push(`/app/${appId}/setting`);
-  }
-
-  const updateDB = (dbName) => {
-    request(`/bi/dashboards/${dashboardId}`, {
-      method: "PUT",
-      data: {
-        name: dbName
-      }
-    });
+    renameDB(appId, dashboardId, e.target.value);
   }
 
   const onChange = (e) => {

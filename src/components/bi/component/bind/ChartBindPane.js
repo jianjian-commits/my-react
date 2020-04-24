@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from "react-redux";
 import { DropTarget } from 'react-dnd';
 import { Types } from './Types';
-import { DataType } from '../elements/Constant';
+import { DataType, TimeSumType } from '../elements/Constant';
 import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
 import FilterField from '../bind/field/FilterField';
@@ -16,6 +16,7 @@ import FilterModal from '../modal/FilterModal';
 import { OPERATORS } from '../elements/Constant';
 import { message } from 'antd';
 import { processBind } from "../../utils/reqUtil";
+import { getUUID } from "../../utils/Util";
 import classes from '../../scss/bind/bindPane.module.scss';
 
 /**
@@ -122,11 +123,8 @@ function preProcessDrop(item, currentType) {
     item["currentGroup"] = GroupType.DEFAULT;
   }
 
-  if(item.type == DataType.DATETIME && currentType != Types.FILTER && currentType == Types.DIMENSION) {
-    item["currentGroup"] = TimeSumType.DAY;
-  }
-  if(item.type == DataType.DATETIME && currentType != Types.FILTER && currentType == Types.MEASURE) {
-    item["currentGroup"] = GroupType.COUNT;
+  if(item.type == DataType.DATETIME && currentType != Types.FILTER) {
+    item["currentGroup"] = currentType === Types.MEASURE ? GroupType.COUNT : TimeSumType.DAY;
   }
 }
 
@@ -165,7 +163,7 @@ class BindPane extends PureComponent {
 
   changeModalVisible = (visible) => {
     this.setState({visible});
-    // this.setFilterItem(null);
+    this.setFilterItem({});
   }
 
   setFilterItem = (filterItem) => {
@@ -211,10 +209,11 @@ class BindPane extends PureComponent {
 
   removeField = (item) => {
     let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
-    
+
     const newArr = bindDataArr.filter((each) => {
       return item.idx != each.idx;
     })
+
     processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
@@ -238,7 +237,7 @@ class BindPane extends PureComponent {
     else {
       // when drag to add
       const obj = deepClone(item);
-      obj['idx'] = Date.now();
+      obj['idx'] = getUUID();
       obj.alias = obj.label;
       obj.bindType = bindType;
       bindDataArr.splice(splitIdx, 0, obj);
@@ -328,7 +327,7 @@ class BindPane extends PureComponent {
     const meaFiledCount = bindDataArr.filter(item => item.bindType == Types.MEASURE).length;
     const dimFiledCount = bindDataArr.filter(item => item.bindType == Types.DIMENSION).length;
     let newArr = [];
-    if(dimFiledCount == 1 || dimFiledCount == 0){
+    if(dimFiledCount <= 1){
       newArr = bindDataArr.map((each) => {
         if(fieldId == each.fieldId) {
           each.sort = {
@@ -385,6 +384,7 @@ class BindPane extends PureComponent {
   handleFilter = (type, item) => {
     if(type == "remove") {
       this.setFilterItem({});
+      this.removeField(item);
     }
     else if(type == "modify") {
       this.setFilterItem(item);
@@ -397,7 +397,6 @@ class BindPane extends PureComponent {
     bindDataArr = bindDataArr || [];
     const components = [];
     this.childRefs = [];
-    const meaFiledCount = bindDataArr.filter(item => item.bindType == "mea").length;
     const dimFiledCount = bindDataArr.filter(item => item.bindType == "dim").length;
     bindDataArr.forEach(
       (each, idx) => {

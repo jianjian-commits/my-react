@@ -25,6 +25,10 @@ class DBVisitor extends React.PureComponent {
   }
 
   getElements = (dashboards) => {
+    if(!dashboards || (dashboards.length == 0) || dashboards[0].elements.length == 0) {
+      return null;
+    }
+
     const elements = dashboards[0].elements;
     const keys = Object.keys(elements);
     const len = keys.length;

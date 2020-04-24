@@ -11,19 +11,19 @@ import "../components/bi/scss/index.scss";
 const BI = props => {
   const HEADER_HEIGHT = 50;
   const TOOLBAR_HEIGHT = 45;
-  const { dashboardId } = useParams();
+  const { dashboardId, appId } = useParams();
   const { formDataArr, dbMode } = props;
 
   if(!formDataArr || formDataArr.length === 0) {
-    setDB(dashboardId, props.setDashboards);
+    setDB(appId, dashboardId, props.setDashboards);
   }
 
   return (
     <div className={classes.biContainer}>
-      {dbMode == DBMode.Edit ? <DBHeader/> : <VisitorHeader/>}
-      {dbMode == DBMode.Edit && <DBToolbar/>}
+      {dbMode === DBMode.Edit ? <DBHeader/> : <VisitorHeader/>}
+      {dbMode === DBMode.Edit && <DBToolbar/>}
       <div className={classes.biBody}>
-        {dbMode == DBMode.Edit ? <DBEditor height={document.body.scrollHeight - HEADER_HEIGHT - TOOLBAR_HEIGHT}/> :
+        {dbMode === DBMode.Edit ? <DBEditor height={document.body.scrollHeight - HEADER_HEIGHT - TOOLBAR_HEIGHT}/> :
         <DBVisitor height={document.body.scrollHeight - HEADER_HEIGHT}/>}
       </div>
     </div>

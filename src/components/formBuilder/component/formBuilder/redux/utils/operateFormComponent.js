@@ -37,7 +37,8 @@ const _attrArray = [
   "minLength",
   "required",
   "isLimitLength",
-  "isLimitOrientationRange"
+  "isLimitOrientationRange",
+  "isLimitPoint"
 ];
 export const setItemAttr = (element, attr, value) => {
   if (_attrArray.includes(attr)) {

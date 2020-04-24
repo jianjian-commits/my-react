@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Result, message } from "antd";
 import request from "../../utils/request";
-import PublicForm from "./publicForm";
+import PublicForm from "./PublicForm";
 import { registerParameter } from "./formItemConfig";
 import Styles from "./style/login.module.scss";
 import { catchError } from "../../utils";

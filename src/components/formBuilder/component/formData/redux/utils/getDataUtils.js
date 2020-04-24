@@ -3,7 +3,7 @@ import { instanceAxios } from "../../../../utils/tokenUtils";
 import {message} from "antd";
 import axios from "axios";
 
-import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA, CLEAR_FORM_DETAIL } from "../action";
+import { RECEIVED_FORM_DATA, RECEIVED_FORM_DETAIL, Filter_FORM_DATA, CLEAR_FORM_DETAIL, GET_USER_LIST } from "../action";
 
 
 // 获取提交数据总数
@@ -200,7 +200,10 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
               forms: currentForm,
               formDetail: res.data.data,
               extraProp: res.data.extraProp,
-              taskData: response.data.data
+              taskData: response.data.data,
+              createdTime: res.data.createdTime,
+              updateTime: res.data.updateTime,
+              creator: res.data.extraProp.user.name
             });
         }).catch(err=>{
           callback(false);
@@ -241,7 +244,8 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
 };
 
 // 修改表单数据详情
-export const modifySubmissionDetail = (formId, submissionId, formData, appid, extraProp) => dispatch => {
+export const modifySubmissionDetail = (formId, submissionId, formData, appid, extraProp, newExtraProp) => dispatch => {
+  extraProp.updateUser = newExtraProp.user;
   return instanceAxios({
     url: config.apiUrl + `/submission/${submissionId}`,
     method: "PUT",
@@ -269,5 +273,26 @@ export const handleStartFlowDefinition = (formId, appId, data) => dispatch =>{
       formid: formId,
       "isDataPage": true,
     }
+  })
+}
+
+export const getUserList = (appId, formId) =>dispatch =>{
+  return instanceAxios({
+    url: config.apiUrl + `/user/list`,
+    method: "GET",
+    headers: {
+      appid: appId,
+      formid: formId,
+    }
+  }).then(res=>{
+    if(res.data.status === "SUCCESS"){
+      dispatch({
+        type: GET_USER_LIST,
+        userList: res.data.data
+      })
+    }
+  })
+  .catch(err=>{
+    console.log(err)
   })
 }

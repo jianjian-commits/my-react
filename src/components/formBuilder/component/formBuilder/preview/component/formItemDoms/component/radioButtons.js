@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Radio } from 'antd';
+import { Radio, Input } from 'antd';
 import ComponentBox from '../componentBox';
 import { ComponentHeader } from '../utils/commonDom';
 
@@ -40,6 +40,9 @@ export default class RadioButtons extends React.Component {
                                           value={option.value}
                                         >
                                             {option.label}
+                                            {
+                                                option.isExtra?<Input className="radio-label-inputvalue"/>:null
+                                            }
                                         </Radio>)}
                             </Radio.Group>
                         </div>

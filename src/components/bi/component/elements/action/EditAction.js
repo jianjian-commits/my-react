@@ -1,7 +1,7 @@
-import { changeBind, changeChartData, setDataSource, changeChartInfo, setElemType } from '../../../redux/action';
 import request from '../../../utils/request';
 import ChartInfo from '../data/ChartInfo';
 import { Types } from '../../bind/Types';
+import { getUUID } from '../../../utils/Util';
 
 export default class EditAction {
   constructor(elemType, chartId, callback, options) {
@@ -28,7 +28,7 @@ export default class EditAction {
             field["groups"] =each.groups;
             field["sort"] =each.sort;
             field["bindType"] = Types.DIMENSION;
-            field["idx"] = Date.now();
+            field["idx"] = getUUID();
             return field;
           })
 
@@ -43,7 +43,7 @@ export default class EditAction {
             field["dataFormat"] =each.dataFormat;
             field["sort"] = each.sort;
             field["bindType"] = Types.MEASURE;
-            field["idx"] = Date.now();
+            field["idx"] = getUUID() 
             return field;
           })
 
@@ -56,7 +56,7 @@ export default class EditAction {
             field["value"] = each.value;
             field["symbol"] = each.symbol;
             field["bindType"] = Types.FILTER;
-            field["idx"] = Date.now();
+            field["idx"] = getUUID()
             return field;
           })
 
@@ -90,7 +90,6 @@ export default class EditAction {
         if(res && res.msg === "success") {
           const data = res.data;
           this.options.setDataSource({id: data.formId, name: data.formName, data: data.items});
-          // history.push(`/app/${appId}/setting/bi/${this.dashboardId}/${this.chartId}`);
         }
       })
     })

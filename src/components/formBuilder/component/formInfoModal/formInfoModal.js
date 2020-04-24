@@ -30,8 +30,8 @@ class FormInforModal extends React.Component {
         this.props.saveForm(
           this.props.submissionAccess,
           values.formName,
-          this.props.verificationList,
-          this.props.errMessage,
+          [],//创建表单的时候公式校验为空数组
+          "",//创建表单的时候公式校验提示信息为空字符串
           //   this.props.submitBtnObj,
           values.formPath,
           values.formInfo,

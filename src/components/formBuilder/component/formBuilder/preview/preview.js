@@ -280,7 +280,7 @@ class Preview extends React.Component {
         return x.type !== "CustomValue";
       });
     }
-    console.log("builder", data)
+    // console.log("builder", data)
     const items = data.map((item, index) =>
       this.getElement(data, item, index, activeIndex, this.customValue)
     );
