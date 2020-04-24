@@ -20,10 +20,10 @@ const BI = props => {
 
   return (
     <div className={classes.biContainer}>
-      {dbMode == DBMode.Edit ? <DBHeader/> : <VisitorHeader/>}
-      {dbMode == DBMode.Edit && <DBToolbar/>}
+      {dbMode === DBMode.Edit ? <DBHeader/> : <VisitorHeader/>}
+      {dbMode === DBMode.Edit && <DBToolbar/>}
       <div className={classes.biBody}>
-        {dbMode == DBMode.Edit ? <DBEditor height={document.body.scrollHeight - HEADER_HEIGHT - TOOLBAR_HEIGHT}/> :
+        {dbMode === DBMode.Edit ? <DBEditor height={document.body.scrollHeight - HEADER_HEIGHT - TOOLBAR_HEIGHT}/> :
         <DBVisitor height={document.body.scrollHeight - HEADER_HEIGHT}/>}
       </div>
     </div>
