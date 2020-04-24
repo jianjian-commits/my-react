@@ -1,10 +1,13 @@
 import moment from 'moment'
 
-function localDate(date, componentType) {
+function localDate(date, componentType, isEditData) {
   // 将utc时区时间转为当前本地时间
   switch(componentType){
     case "DateInput":
       if(moment(date).isValid()){
+        if(isEditData){
+          return moment.utc(date).local()
+        }
         return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
       }
     break;
@@ -14,6 +17,9 @@ function localDate(date, componentType) {
         date =  new Date(`2016-09-03T${date}Z`)
       };
       if(moment(date).isValid()){
+        if(isEditData){
+          return moment.utc(date).local()
+        }
         return moment.utc(date).local().format("HH:mm:ss");
       }
       break;
