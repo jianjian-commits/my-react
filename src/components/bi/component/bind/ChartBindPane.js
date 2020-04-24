@@ -8,7 +8,7 @@ import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
 import FilterField from '../bind/field/FilterField';
 import DragItem from './DragItem';
-import { GroupType,SortType,TimeSumType } from "../elements/Constant";
+import { GroupType,SortType } from "../elements/Constant";
 import { changeBind, changeChartData, setElemType } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import { deepClone } from '../../utils/Util';
