@@ -491,7 +491,7 @@ class DataLinkageModal extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    // forms: store.formBuilder.formArray,
+    forms: store.formBuilder.formArray,
     formId: store.formBuilder.formId
   }),
   {
