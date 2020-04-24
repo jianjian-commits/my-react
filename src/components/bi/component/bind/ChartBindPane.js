@@ -151,10 +151,11 @@ class BindPane extends PureComponent {
 
   changeModalVisible = (visible) => {
     this.setState({visible});
-    // this.setFilterItem(null);
+    this.setFilterItem({});
   }
 
   setFilterItem = (filterItem) => {
+    console.log("======filterItem=========", filterItem);
     this.setState({filterItem});
   }
 
@@ -201,6 +202,7 @@ class BindPane extends PureComponent {
     const newArr = bindDataArr.filter((each) => {
       return item.idx != each.idx;
     })
+
     processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
@@ -361,6 +363,7 @@ class BindPane extends PureComponent {
   handleFilter = (type, item) => {
     if(type == "remove") {
       this.setFilterItem({});
+      this.removeField(item);
     }
     else if(type == "modify") {
       this.setFilterItem(item);
@@ -373,7 +376,6 @@ class BindPane extends PureComponent {
     bindDataArr = bindDataArr || [];
     const components = [];
     this.childRefs = [];
-    const meaFiledCount = bindDataArr.filter(item => item.bindType == "mea").length;
     const dimFiledCount = bindDataArr.filter(item => item.bindType == "dim").length;
     bindDataArr.forEach(
       (each, idx) => {

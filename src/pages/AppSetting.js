@@ -16,7 +16,8 @@ import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 
-import { setDashboards } from '../components/bi/redux/action';
+import { setDashboards, setDBMode } from '../components/bi/redux/action';
+import { DBMode } from '../components/bi/component/dashboard/Constant';
 import { setDB, deleteDB, renameDB, newDB } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
 
@@ -135,6 +136,7 @@ const AppSetting = props => {
   const openDashboard = id => {
     if(list[0].key !== "") {
       setDB(appId, id, props.setDashboards);
+      props.setDBMode(DBMode.Edit)
       history.push(`/app/${appId}/setting/bi/${id}`);
     }
   };
@@ -214,7 +216,6 @@ const AppSetting = props => {
   };
 
   const { permissions, teamId } = props;
-  console.log(permissions, teamId, appId);
   const isShowNewFormBtn = newFormAuth(permissions, teamId, appId);
 
   return (
@@ -499,6 +500,7 @@ export default connect(
     setAllForms,
     newDashboard,
     setDB,
-    setDashboards
+    setDashboards,
+    setDBMode
   }
 )(AppSetting);

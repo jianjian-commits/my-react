@@ -12,7 +12,7 @@ const VisitorHeader = props => {
 
   const handleBack = () => {
     setDashboards([]);
-    history.push(`/app/${appId}/setting`);
+    history.push(`/app/${appId}/detail`);
   }
 
   const value = (dashboards && dashboards.length > 0) ? dashboards[0].name : null;
