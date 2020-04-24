@@ -23,7 +23,7 @@ function FieldSortModal(props) {
           dimensions,
           indexes,
           conditions: data.conditions,
-          chartType: ChartType.HISTOGRAM,
+          chartType: data.type
         };
         setChartBindAttr(newChartBindAttr);
         setDimensions(dimensions);
@@ -100,9 +100,9 @@ function FieldSortModal(props) {
           name:props.dashboards[0].name,
           elements:props.dashboards[0].elements.map(element => {
             if(element.id == chartId){
-              element.data.legends = data.legends;
-              element.data.xaxisList = data.xaxisList;
+              element.data = data;
             }
+
             return element;
           })
         }

@@ -8,7 +8,7 @@ import { updateList } from "./utils/operateDraggable";
 
 const { SubMenu } = Menu;
 
-const DraggableWrapper = ({ draggable = false, formId, type, onClickList, index, onDragStart, onDrop, onDrag, onDragEnd,  onDragEnter, onDragLeave, children }) => (
+const DraggableWrapper = ({ draggable = false, formId, type, handleClickList, index, onDragStart, onDrop, onDrag, onDragEnd,  onDragEnter, onDragLeave, children }) => (
   <div
     className="drag-target"
     draggable={draggable}
@@ -24,7 +24,7 @@ const DraggableWrapper = ({ draggable = false, formId, type, onClickList, index,
     onDragEnter =  { e=> onDragEnter(e) }
     onDragLeave = {e=> onDragLeave(e) }
     onDrop={e => onDrop(e)}
-    onClick={(e) => {onClickList(formId, type);}} 
+    onClick={(e) => {handleClickList(formId, type);}} 
   >
     {children}
   </div>
@@ -104,8 +104,10 @@ const DraggableList = ({
     }
   }
 
+  const {handleClickList, handleDelete, handleRename, isDeleteOne, ...rest} = props;
+
   return (
-    <Menu {...props} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
+    <Menu {...rest} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
     >
       {groups &&
         groups.map((g, i) => {
@@ -131,7 +133,7 @@ const DraggableList = ({
                       formId={l.key}
                       onDrop={dropHandle}
                       type={l.type}
-                      onClickList={props.onClickList}
+                      handleClickList={handleClickList}
                     >
                       {l.key !== -1 ? <Icon component={l.icon || (l.type === "FORM"? TableIcon : DashboardIcon)} /> : ""}
                       <span>{l.name}</span>
@@ -141,9 +143,9 @@ const DraggableList = ({
                     formId = {l.key}
                     appId = { appId }
                     formname = {l.name}
-                    onDelete = { props.onDelete }
-                    onRename = { props.onRename }
-                    isDeleteOne = { props.isDeleteOne}
+                    handleDelete = { handleDelete }
+                    handleRename = { handleRename }
+                    isDeleteOne = { isDeleteOne}
                     />:null}
                           </Menu.Item>
                         ))}
@@ -157,7 +159,7 @@ const DraggableList = ({
               draggable={draggable}
               formId={l.key}
               type={l.type}
-              onClickList={props.onClickList}
+              handleClickList={handleClickList}
               index={n}
               onDrag = {
                 e=>onDragFun(e)
@@ -187,9 +189,9 @@ const DraggableList = ({
               type = {l.type}
               appId = { appId }
               formname = {l.name}
-              onDelete = { props.onDelete }
-              onRename = { props.onRename }
-              isDeleteOne = { props.isDeleteOne}
+              handleDelete = { handleDelete }
+              handleRename = { handleRename }
+              isDeleteOne = { isDeleteOne}
               /> : null}
           </Menu.Item>
         ))}

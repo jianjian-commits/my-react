@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { Layout, Input, ConfigProvider } from "antd";
 import zhCN from 'antd/es/locale/zh_CN';
@@ -10,6 +10,8 @@ import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import { setDashboards, setDBMode } from '../components/bi/redux/action';
 import { DBMode } from '../components/bi/component/dashboard/Constant';
 import { setDB } from '../components/bi/utils/reqUtil';
+import DBVisitor from '../components/bi/component/dashboard/DBVisitor';
+import VisitorHeader from '../components/bi/component/dashboard/VisitorHeader';
 
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";
 import FormBuilderSubmission from "../components/formBuilder/component/submission/submission";
@@ -28,6 +30,10 @@ import classes from "../styles/apps.module.scss";
 import appDeatilClasses from "../styles/appDetail.module.scss";
 // import { TableIcon } from "../assets/icons/index"
 const { Content, Sider } = Layout;
+const FORM = "FORM";
+const DASHBOARD = "DASHBOARD";
+const HEADER_HEIGHT = 40;
+const VISITOR_HEADER_HEIGHT = 50;
 
 const navigationList = (appName, history) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
@@ -52,7 +58,8 @@ const FormBuilderEditFormData = mobileAdoptor.submission(EditFormData);
 const AppDetail = props => {
   const { appId } = useParams();
   const history = useHistory();
-  const [selectedForm, setSelectedForm] = React.useState(null);
+  const [selectedID, setSelectedID] = React.useState(null);
+  const [selectedType, setSelectedType] = React.useState(FORM);
   const [searchKey, setSearchKey] = React.useState(null);
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
@@ -142,7 +149,7 @@ const AppDetail = props => {
   //根据点击菜单栏
   const onClickMenu = (key, e) => {
     setApprovalKey(key);
-    setSelectedForm(null);
+    setSelectedID(null);
     setEnterApprovalDetail(false);
   };
 
@@ -157,7 +164,7 @@ const AppDetail = props => {
       setSubmit(submitFlag);
       setSubmissionId(submission_id);
       if (formId) {
-        setSelectedForm(formId);
+        setSelectedID(formId);
       }
     },
     fn: onClickMenu,
@@ -181,7 +188,6 @@ const AppDetail = props => {
   }
 
   const handleSelectForm = (id) => {
-    setSelectedForm(id);
     setApprovalKey("");
     setSubmit(false);
     setSubmissionId(null);
@@ -192,26 +198,79 @@ const AppDetail = props => {
     if(list[0].key !== "") {
       setDB(appId, id, props.setDashboards);
       props.setDBMode(DBMode.Visit)
-      history.push(`/app/${appId}/setting/bi/${id}`);
+      // history.push(`/app/${appId}/setting/bi/${id}`);
     }
   };
 
     /**
    * On select dashboard or form.
    */
-  const onClickList = (id, type) => {
+  const handleClickList = (id, type) => {
+    setSelectedID(id);
+    setSelectedType(type);
+
     switch(type) {
-      case "DASHBOARD":
+      case DASHBOARD:
         openDBVistor(id);
         break;
-      case "FORM":
+      case FORM:
         handleSelectForm(id);
         break;
       default:
         console.log("Wrong type!");
     }
   }
-  
+
+  const getDashboard = () => {
+    return (
+      <div style={{height: document.body.scrollHeight - HEADER_HEIGHT}}>
+       <VisitorHeader/>
+       <DBVisitor height={document.body.scrollHeight - HEADER_HEIGHT - VISITOR_HEADER_HEIGHT}/>
+      </div>)
+  }
+
+  const getForm = () => {
+    return (<Fragment>
+      {submit ? (
+        submissionId ? (
+          <FormBuilderEditFormData
+            key={Math.random()}
+            formId={selectedID}
+            submissionId={submissionId}
+            appId={appId}
+            extraProp={user}
+            actionFun={(submission_id, submitFlag = false) => {
+              setSubmissionId(submission_id);
+              setSubmit(submitFlag);
+            }}
+          ></FormBuilderEditFormData>
+        ) : (
+          <FormBuilderSubmission
+            key={Math.random()}
+            formId={selectedID}
+            extraProp={user}
+            appid={appId}
+            actionFun={skipToSubmissionData}
+          ></FormBuilderSubmission>
+        )
+      ) : (
+        <FormBuilderSubmitData
+          key={Math.random()}
+          formId={selectedID}
+          actionFun={(submission_id, submitFlag = false, formId) => {
+            setSubmit(submitFlag);
+            setSubmissionId(submission_id);
+            if (formId) {
+              setSelectedID(formId);
+            }
+          }}
+          appId={appId}
+          searchStatus = { searchStatus }
+        ></FormBuilderSubmitData>
+      )}
+    </Fragment>)
+  }
+console.log("==========selectedType======", selectedType, selectedID, selectedID != void 0 , selectedType === DASHBOARD);
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader
@@ -249,9 +308,9 @@ const AppDetail = props => {
           </div>
           <div className={appDeatilClasses.formArea}>
             <DraggableList
-              selected={selectedForm}
+              selected={selectedID}
               draggable={false}
-              onClickList={onClickList}
+              handleClickList={handleClickList}
               groups={groups}
               list={list}
             />
@@ -260,49 +319,9 @@ const AppDetail = props => {
         <ConfigProvider locale={zhCN}>
           <Content className={classes.container}>
             {// eslint-disable-next-line
-            selectedForm != void 0 ? (
-              <>
-                {submit ? (
-                  submissionId ? (
-                    <FormBuilderEditFormData
-                      key={Math.random()}
-                      formId={selectedForm}
-                      submissionId={submissionId}
-                      appId={appId}
-                      extraProp={user}
-                      actionFun={(submission_id, submitFlag = false) => {
-                        setSubmissionId(submission_id);
-                        setSubmit(submitFlag);
-                      }}
-                    ></FormBuilderEditFormData>
-                  ) : (
-                    <FormBuilderSubmission
-                      key={Math.random()}
-                      formId={selectedForm}
-                      extraProp={user}
-                      appid={appId}
-                      actionFun={skipToSubmissionData}
-                    ></FormBuilderSubmission>
-                  )
-                ) : (
-                  <FormBuilderSubmitData
-                    key={Math.random()}
-                    formId={selectedForm}
-                    actionFun={(submission_id, submitFlag = false, formId) => {
-                      setSubmit(submitFlag);
-                      setSubmissionId(submission_id);
-                      if (formId) {
-                        setSelectedForm(formId);
-                      }
-                    }}
-                    appId={appId}
-                    searchStatus = { searchStatus }
-                  ></FormBuilderSubmitData>
-                )}
-              </>
-            ) : approvalKey !== null ? (
-              TransactList
-            ) : null}
+              selectedID != void 0 ? (selectedType === DASHBOARD ? getDashboard() : getForm()) :
+                approvalKey !== null ? (TransactList) : null
+            }
           </Content>
         </ConfigProvider>
       </Layout>

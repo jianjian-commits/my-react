@@ -16,7 +16,7 @@ import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
 import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
 
-import { setDashboards, setDBMode } from '../components/bi/redux/action';
+import { setDashboards, setDBMode, resetBIStore } from '../components/bi/redux/action';
 import { DBMode } from '../components/bi/component/dashboard/Constant';
 import { setDB, deleteDB, renameDB, newDB } from '../components/bi/utils/reqUtil';
 const { Content, Sider } = Layout;
@@ -144,7 +144,7 @@ const AppSetting = props => {
   /**
    * On delete dashboard or form.
    */
-  const onDelete = (id, type) => {
+  const handleDelete = (id, type) => {
     switch(type) {
       case "DASHBOARD":
         return deleteDB(appId, id);
@@ -158,7 +158,7 @@ const AppSetting = props => {
   /**
    * On select dashboard or form.
    */
-  const onClickList = (id, type) => {
+  const handleClickList = (id, type) => {
     switch(type) {
       case "DASHBOARD":
         openDashboard(id);
@@ -174,7 +174,7 @@ const AppSetting = props => {
   /**
    * On rename the dashboard or form.
    */
-  const onRename = (id, type, params) => {
+  const handleRename = (id, type, params) => {
     switch(type) {
       case "DASHBOARD":
         return renameDB(appId, id, params.name);
@@ -186,6 +186,8 @@ const AppSetting = props => {
   }
 
   const createDashboard = () => {
+    props.resetBIStore();
+
     newDB(appId).then(
       (res) => {
         if(res && res.msg === "success") {
@@ -266,12 +268,12 @@ const AppSetting = props => {
           <div className={classes.formArea}>
             <DraggableList
               draggable={!searchKey}
-              onClickList={onClickList}
+              handleClickList={handleClickList}
               groups={groups}
               list={list}
               onDrop={dragFileToFolder}
-              onDelete={ onDelete }
-              onRename={ onRename }
+              handleDelete={ handleDelete }
+              handleRename={ handleRename }
               isDeleteOne={( params ) => setIsDeleteOne( params )}
               appId = {appId}
               isChangeSequence = { ( params ) => setIsChangeSequence( params )}
@@ -499,6 +501,7 @@ export default connect(
   {
     setAllForms,
     newDashboard,
+    resetBIStore,
     setDB,
     setDashboards,
     setDBMode
