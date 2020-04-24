@@ -19,7 +19,7 @@ class IndexChart extends React.Component {
       return(
         <div className={classes.indexSum}>
           {chartdata.map(data=>
-            <span className={classes.indexCount}>{data.count}</span>
+            <span key={data.name + data.count} className={classes.indexCount}>{data.count}</span>
           )}
         </div>
       )
