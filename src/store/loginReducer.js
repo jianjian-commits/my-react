@@ -1,7 +1,7 @@
 import { message } from "antd";
 import request from "../utils/request";
 import { getAppList, clearAppList } from "./appReducer";
-import { history } from "./index";
+// import { history } from "./index";
 import { catchError, ScheduleCreate } from "../utils";
 
 export const initialState = {
@@ -243,13 +243,19 @@ export const initAllDetail = () => async dispatch => {
   try {
     const res = await request("/sysUser/current");
     if (res && res.status === "SUCCESS") {
-      Promise.all([getAllCompany(res.data.id)(dispatch),
-      getcurrentCompany()(dispatch),
-      dispatch(fetchUserDetail(res.data)),
-      dispatch(getAppList())])
-        .then(() => {
+      if (res.data.companyName) {
+        Promise.all([
+          getAllCompany(res.data.id)(dispatch),
+          getcurrentCompany()(dispatch),
+          dispatch(fetchUserDetail(res.data)),
+          dispatch(getAppList()),
+        ]).then(() => {
           dispatch(setFetchingNecessary(false));
-        })
+        });
+      } else {
+        dispatch(fetchUserDetail(res.data))
+        dispatch(setFetchingNecessary(false));
+      }
     } else {
       message.error(res.msg || "获取当前用户信息失败");
       dispatch(setFetchingNecessary(false));
@@ -295,7 +301,6 @@ export const signOut = () => async dispatch => {
   try {
     const res = await request(`/logout`, { method: "post", data: {} });
     if (res && res.status === "SUCCESS") {
-      history.push("/login");
       localStorage.removeItem("id_token");
       dispatch(signOutSuccess());
     } else {
