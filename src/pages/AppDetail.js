@@ -8,7 +8,7 @@ import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
 import { setDashboards, setDBMode } from '../components/bi/redux/action';
-import { DBMode } from '../components/bi/component/dashboard/Constant';
+// import { DBMode } from '../components/bi/component/dashboard/Constant';
 import { setDB } from '../components/bi/utils/reqUtil';
 
 import FormBuilderSubmitData from "../components/formBuilder/component/formData/formSubmitData";

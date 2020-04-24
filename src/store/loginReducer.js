@@ -1,7 +1,7 @@
 import { message } from "antd";
 import request from "../utils/request";
 import { getAppList, clearAppList } from "./appReducer";
-// import { history } from "./index";
+import { history } from "./index";
 import { catchError, ScheduleCreate } from "../utils";
 
 export const initialState = {
@@ -193,7 +193,6 @@ export const switchcurrentCompany = companyId => async dispatch => {
       method: "put"
     });
     if (res && res.status === "SUCCESS") {
-      // history.push("/app/list");
       dispatch(getcurrentCompany());
       dispatch(getUserDetail());
       dispatch(getAppList());
@@ -296,6 +295,7 @@ export const signOut = () => async dispatch => {
   try {
     const res = await request(`/logout`, { method: "post", data: {} });
     if (res && res.status === "SUCCESS") {
+      history.push("/login");
       localStorage.removeItem("id_token");
       dispatch(signOutSuccess());
     } else {

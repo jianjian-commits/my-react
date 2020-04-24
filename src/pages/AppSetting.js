@@ -148,10 +148,8 @@ const AppSetting = props => {
     switch(type) {
       case "DASHBOARD":
         return deleteDB(appId, id);
-        break;
       case "FORM":
         return deleteForm(appId, id);
-        break;
       default:
         console.log("Wrong type!");
     }
@@ -180,10 +178,8 @@ const AppSetting = props => {
     switch(type) {
       case "DASHBOARD":
         return renameDB(appId, id, params.name);
-        break;
       case "FORM":
         return updateFormName(appId, id, params);
-        break;
       default:
         console.log("Wrong type!");
     }
