@@ -1,98 +1,204 @@
-import React, { useState, useEffect } from "react";
-import { Icon } from "antd";
-import { GroupType } from "./Constant";
-import classNames from "classnames";
-import classes from "../../scss/bind/optionSelect.module.scss"
-const operationArr = [
-  { ...GroupType.SUM },
-  { ...GroupType.COUNT},
-  { ...GroupType.AVERAGE},
-  { ...GroupType.MAX },
-  { ...GroupType.MIN }
-];
+import React, { useState, useEffect, useRef } from "react";
+import { Icon, Popover, Input, Button } from "antd";
+import { GroupType, SortType, DataType} from "./Constant";
+import classes from "../../scss/bind/optionSelect.module.scss";
+import FieldNameModal from "../elements/modal/fieldNameModal";
+export const transforObjIntoArr = obj => {
+  let arr = [];
+  for (let i in obj) {
+    arr.push({...obj[i]}); 
+  }
+  return arr;
+}
+
+export const FieldSecondMenus = (props) => {
+  //二级菜单组件{菜单列表，选中索引，方法回调,是否禁用}
+  const { list, selectIndex, click ,disabled=false} = props;
+  return (
+    <Popover
+      placement="rightTop"
+      title=""
+      overlayStyle={{ paddingLeft: 0 }}
+      overlayClassName={classes.FieldSelectPopover}
+      content={
+        <div className={classes.popoverSelectionGroup} style={disabled ? {backgroundColor:"#e9ecef"} : {}}>
+          {list.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => {
+                if(disabled){
+                  return false;
+                }else{
+                  click(index);
+                }
+              }}
+              className={classes.selectionBox}
+            >
+              {item.name}
+              {selectIndex === index && <Icon type="check" />}
+            </div>
+          ))}
+        </div>
+      }
+      trigger="hover"
+    >
+      <div className={classes.dropDownItem}>
+        <span className={classes.dropDownItemSpan}>{props.label}</span>
+        <Icon type="right" />
+      </div>
+    </Popover>
+  );
+};
+
 export default function FieldMeasureSelect(props) {
-  const [selectIndex, setSelectIndex] = useState(props.item.selectIndex);
+  const {sort,currentGroup} = props.item
+  const operationArr = transforObjIntoArr(GroupType);
+  const SortTypeArr = transforObjIntoArr(SortType);
+  const [selectIndex, setSelectIndex] = useState(0);
+  const [sortTypeIndex, setSortTypeIndex] = useState(0);
   const [popoverVisible, setPopoverVisible] = useState(false);
-  const [btnVisible,setBtnVisible] = useState(false);
+  const [nameInputVisible, setNameInputVisible] = useState(false);
+  const [deleteBtnVisible, setDeleteBtnVisible] = useState(false);
+  const dropDownBtn = useRef(null);
   useEffect(() => {
-    const dropDownEvent = event => {
-      const e = event || window.event;
-      const btn = document.getElementById("dropDownBtn" + props.item.fieldId);
-      if (
-        e.srcElement.parentElement &&
-        !e.srcElement.parentElement.isSameNode(btn) &&
-        !e.srcElement.isSameNode(btn)
-      ) {
+    const dropDownEvent = (event) => {
+      if (popoverVisible) {
         setPopoverVisible(false);
       }
-    }
+    };
     document.addEventListener("click", dropDownEvent);
-    getSelectOperation(operationArr[selectIndex]);
     return () => {
       document.removeEventListener("click", dropDownEvent);
-    }
-  }, []);
+    };
+  }, [popoverVisible]);
 
-  const getSelectOperation = value => {
-    props.item.changeGroup(value, props.item.fieldId);
-  };
+  useEffect(() => {
+    if (sort) {
+      SortTypeArr.map((sortType,i) => {
+        if(sort.value == sortType.value){
+          setSortTypeIndex(i);
+        }
+      })
+    }
+    if(currentGroup){
+      operationArr.map((operationType,i) => {
+        if(currentGroup.value == operationType.value){
+          setSelectIndex(i);
+        }
+      })
+    }
+  }, [props]);
 
   const handleDeleteTarget = () => {
     props.item.removeField(props.item);
   };
 
   const handlMouseEnter = () => {
-    setBtnVisible(true);
+    setDeleteBtnVisible(true);
   };
 
   const handlMouseLeave = () => {
-    setBtnVisible(false);
+    setDeleteBtnVisible(false);
   };
 
-  const className = props.item.className;
+  const operationList = [
+    {
+      name: "修改显示名",
+      click: () => {
+        setNameInputVisible(true);
+      },
+    },
+    {
+      name: "数据格式",
+      click: () => {},
+    },
+    {
+      name: "删除字段",
+      click: () => {
+        handleDeleteTarget();
+      },
+    },
+  ];
 
+  const secondMenuSumFunc = (index) => {
+    setSelectIndex(index);
+    props.item.changeGroup(operationArr[index], props.item.fieldId);
+    setPopoverVisible(false);
+  };
+
+  //二级菜单字段排序回调
+  const secondMenuSortFunc = (index) => {
+    setSortTypeIndex(index);
+    props.item.changeSortType(SortTypeArr[index], props.item.fieldId);
+    setPopoverVisible(false);
+  };
+
+  const handleOK = name => {
+    props.item.changeFieldName(name, props.item.fieldId);
+    setNameInputVisible(false);
+  }
+  const handleCancel = () => {
+    setNameInputVisible(false);
+  }
+  const showSortIcon = () => {
+    const sortImgArr = [SortType.ASC.value,SortType.DESC.value];
+    return (sort && sortImgArr.includes(sort.value)) ? <img src={"/image/davinci/"+sort.value+".svg"}/> : null;
+  }
   return (
-    <div className={classes.meaContainer}>
+    <div
+      className={classes.meaContainer}
+      onMouseEnter={handlMouseEnter}
+      onMouseLeave={handlMouseLeave}
+    >
       <div
         className={classes.dropDownBtn}
-        onMouseEnter={handlMouseEnter} 
-        onMouseLeave={handlMouseLeave}
-        id={"dropDownBtn" + props.item.fieldId}
-        onClick={e => {
+        ref={dropDownBtn}
+        onClick={(e) => {
           e.stopPropagation();
           setPopoverVisible(!popoverVisible);
         }}
       >
         {popoverVisible === false ? <Icon type="down" /> : <Icon type="up" />}
         <span className={classes.dropDownBtnSpan}>
-          {`${props.item.label}(${operationArr[selectIndex].name})`}
+          {`${props.item.alias||props.item.label}(${operationArr[selectIndex].name})`}
+          {showSortIcon()}
         </span>
-        {btnVisible && <Icon type="close-circle" onClick={handleDeleteTarget} theme="filled" />}
+        {deleteBtnVisible && (
+          <Icon
+            type="close-circle"
+            onClick={handleDeleteTarget}
+            theme="filled"
+          />
+        )}
       </div>
+      {nameInputVisible && <FieldNameModal label={props.item.alias} handleOK={handleOK} handleCancel={handleCancel}/>}
       {popoverVisible && (
-        <div className={classes.dropDownItemContainer} id={"dropDown" + props.item.id}>
-          {operationArr.map((operation, index) => (
+        <div className={classes.dropDownItemContainer}>
+          <FieldSecondMenus
+            selectIndex={sortTypeIndex}
+            click={secondMenuSortFunc}
+            list={SortTypeArr}
+            disabled={props.item.dimFiledCount>1}
+            label={"排序方式"}
+          />
+          {props.item.type == DataType.NUMBER && (
+            <FieldSecondMenus
+              selectIndex={selectIndex}
+              click={secondMenuSumFunc}
+              list={operationArr}
+              label={"汇总方式"}
+            />
+          )}
+          {operationList.map((operation) => (
             <div
               className={classes.dropDownItem}
-              style={selectIndex == index ? {backgroundColor: "#dfecff"} : {}}
-              // className={classNames("dropDownItem", {
-              //   selectOption: selectIndex == index
-              // })}
               onClick={() => {
-                if (selectIndex === index) {
-                  setPopoverVisible(false);
-                } else {
-                  setSelectIndex(index);
-                  getSelectOperation(operationArr[index]);
-                  setPopoverVisible(false);
-                }
+                operation.click();
+                setPopoverVisible(false);
               }}
-              key={index}
+              key={operation.name}
             >
-              <span className={classes.dropDownItemSpan}>
-                {operation.name}
-              </span>
-              {selectIndex === index && <Icon type="check"/>}
+              <span className={classes.dropDownItemSpan}>{operation.name}</span>
             </div>
           ))}
         </div>

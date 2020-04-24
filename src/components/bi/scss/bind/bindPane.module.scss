@@ -1,5 +1,6 @@
 .bindPane {
-  border: 10px solid transparent;
+  border: 1px solid transparent;
+  margin: 15px 15px 0 15px;
 }
 
 .bindLine {
@@ -7,9 +8,10 @@
   align-items: center;
   width: 100%;
   border-style: dotted;
+  background-color: white;
   border-color: #adb5bd;
   border-width: thin;
-  margin-top: 5px;
+  margin-bottom: 15px;
 }
 
 .bindCols {
@@ -17,7 +19,7 @@
   flex-wrap: wrap;
 }
 .bindLabel {
-  width: 60px;
+  width: 80px;
   padding-left: 10px;
   min-height: 30px;
   max-height: 70px;
