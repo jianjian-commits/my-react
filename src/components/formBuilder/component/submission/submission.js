@@ -62,6 +62,8 @@ import coverTimeUtils from "../../utils/coverTimeUtils";
 import PureTime from "./component/pureTime";
 import PureDate from "./component/pureDate";
 
+import ApproverModal from "../../component/formData/components/ApproverModal"
+
 import ID from "../../utils/UUID";
 
 function hasErrors(fieldsError) {
@@ -90,6 +92,8 @@ class Submission extends Component {
       errorResponseMsg: {},
       isShowApprovalBtn: false,
       isSetCorrectFormChildData: false,
+      isApproverModalVisible: false,
+      currentTaskId: null
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -615,39 +619,41 @@ class Submission extends Component {
                 this.state.formId,
                 this.props.appid,
                 appeoveData,
-                () => {
-                  setTimeout(() => {
-                    let skipToSubmissionDataFlag = true;
-                    this.props.actionFun(skipToSubmissionDataFlag);
-                  }, 1000);
+                (shouldSetApprover,taskId) => {
+                  if(taskId != void 0){
+                    this.setState({
+                      isApproverModalVisible: shouldSetApprover,
+                      currentTaskId: taskId
+                    })
+                  }
+                  if(shouldSetApprover === false){
+                    this.props.getApproveCount(this.props.appid)
+                    setTimeout(() => {
+                      let skipToSubmissionDataFlag = true;
+                      this.props.actionFun(skipToSubmissionDataFlag);
+                    }, 1000);
+                  }
                 })
               .catch(error => {
-                if (error.response && error.response.data.code === 9998) {
-                  this._setErrorResponseData(error.response.data);
-                  isMobile ? Toast.fail("提交失败") : message.error("提交失败");
-                }else if(error.response && error.response.data.code == 2003){
-                  // this.setState({
-                  //   isSubmitted: false
-                  // })
-                  isMobile
-                  ? Toast.fail(error.response.data.msg)
-                  : message.error(error.response.data.msg);
-                }
+                message.error("提交审批失败");
               });
           }
         })
           .catch(error => {
+
             if (error.response && error.response.data.code === 9998) {
               this._setErrorResponseData(error.response.data);
               isMobile ? Toast.fail("提交失败") : message.error("提交失败");
-            } else if (error.response && error.response.data.code == 2003) {
-              // this.setState({
-              //   isSubmitted: false
-              // })
+            } else if (error.response && (error.response.data.code == 2003 || error.response.data.code == 2005)) {
               isMobile
                 ? Toast.fail(error.response.data.msg)
                 : message.error(error.response.data.msg);
+            } else if(error.response && error.response.data.code == 2004) {
+              message.error(this.props.formValidation.errMessage)
             }
+            this.setState({
+              isSubmitted: false
+            })
           });
       });
     }
@@ -1275,9 +1281,9 @@ class Submission extends Component {
   };
 
   render() {
-    const { formComponent, form, mobile = {} } = this.props;
+    const { formComponent, form, mobile = {}, userList, appid } = this.props;
     const { getFieldDecorator } = form;
-    let { pureFormComponents, currentLayout, errorResponseMsg } = this.state;
+    let { pureFormComponents, currentLayout, errorResponseMsg, isApproverModalVisible, currentTaskId, formId } = this.state;
     let layout = null;
 
     if (currentLayout == void 0) {
@@ -1452,6 +1458,20 @@ class Submission extends Component {
                     </Form.Item>
                   )}
                 </Form>
+                <ApproverModal 
+                  visible={isApproverModalVisible} 
+                  taskId={currentTaskId}
+                  setVisible={(isVisible)=>{this.setState({isApproverModalVisible: isVisible})}} 
+                  formId={formId}
+                  appId={appid}
+                  approverList={userList}
+                  afterApproverModal={()=>{
+                    setTimeout(() => {
+                      this.props.getApproveCount(this.props.appid)
+                      let skipToSubmissionDataFlag = true;
+                      this.props.actionFun(skipToSubmissionDataFlag);
+                    }, 1000);
+                  }}/>
               </div>
             </div>
           </div>
@@ -1468,7 +1488,8 @@ export default connect(
     forms: store.survey.forms,
     formComponent: store.survey.formComponent,
     childFormComponent: store.survey.childFormComponent,
-    formValidation: store.survey.formValidation
+    formValidation: store.survey.formValidation,
+    userList: store.formSubmitData.userList
   }),
   {
     getSubmissionData,

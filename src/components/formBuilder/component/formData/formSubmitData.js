@@ -20,6 +20,7 @@ import {
   getSubmissionData,
   getSubmissionDetail,
   getFilterSubmissionData,
+  getUserList
 } from "./redux/utils/getDataUtils";
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
@@ -181,6 +182,7 @@ class FormSubmitData extends PureComponent {
               this.setState({ isLoading });
             },
           });
+          this.props.getUserList(appId, formId);
         })
         .catch((err) => {
           console.error(err);
@@ -1103,5 +1105,6 @@ export default connect(
     deleteFormData,
     clearFormData,
     getSubmissionDetail,
+    getUserList
   }
 )(withRouter(FormSubmitData));
