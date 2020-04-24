@@ -2,7 +2,7 @@ import React from "react";
 import { Menu, Icon } from "antd";
 import { useLocation,useParams } from "react-router-dom"
 import "./draggableList.scss";
-import { TableIcon } from "../../assets/icons/index";
+import { TableIcon, DashboardIcon } from "../../assets/icons/index";
 import OperateBox from "./Operatebox";
 import { updateList } from "./utils/operateDraggable";
 
@@ -133,7 +133,7 @@ const DraggableList = ({
                       type={l.type}
                       onClickList={props.onClickList}
                     >
-                      {l.key !== -1 ? <Icon component={l.icon || TableIcon} /> : ""}
+                      {l.key !== -1 ? <Icon component={l.icon || (l.type == "FORM"? TableIcon : DashboardIcon)} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
                     {isShowOperate? 
@@ -178,7 +178,7 @@ const DraggableList = ({
               }
               
             >
-              {l.key !== "" ? <Icon component={l.icon || TableIcon} /> : ""}
+              {l.key !== "" ? <Icon component={l.icon || (l.type == "FORM"? TableIcon : DashboardIcon)} /> : ""}
               <span className="draggable-menu-item-title">{l.name}</span>
             </DraggableWrapper>
             {isShowOperate? 

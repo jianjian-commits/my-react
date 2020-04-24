@@ -19,3 +19,10 @@ export const findKey = (value, obj, compare = (a, b) => a === b) => {
 export const equals = (o1, o2) => {
   return JSON.stringify(o1) == JSON.stringify(o2)
 }
+
+/**
+ * Vary simple id.
+ */
+export const getUUID = () => {
+  return Date.now() + parseInt(Math.random() * 1000)
+}
