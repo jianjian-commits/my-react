@@ -248,6 +248,7 @@ class BindPane extends PureComponent {
         return each;
       })
     }
+
     processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
     this.clearSplit();
   }
