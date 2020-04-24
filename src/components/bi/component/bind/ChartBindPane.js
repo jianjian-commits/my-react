@@ -8,7 +8,7 @@ import FieldMeasureSelect from "../elements/FieldMeasureSelect";
 import FieldDimension from "../elements/FieldDimension";
 import FilterField from '../bind/field/FilterField';
 import DragItem from './DragItem';
-import { GroupType,SortType } from "../elements/Constant";
+import { GroupType,SortType,TimeSumType } from "../elements/Constant";
 import { changeBind, changeChartData, setElemType } from '../../redux/action';
 import { useParams } from "react-router-dom";
 import { deepClone } from '../../utils/Util';
@@ -101,6 +101,17 @@ const spec = {
 function preProcessDrop(item, currentType) {
   if(currentType == Types.MEASURE) {
     item["currentGroup"] = item.bindType == Types.MEASURE ? GroupType.SUM : GroupType.COUNT;
+    item["dataFormat"]  = {
+      custom: {
+        "format": "string"
+      },
+      predefine: {
+        "decimals": 0,
+        "percent": false,
+        "thousandSymbols": true
+      },
+      selectType: "PREDEFINE"
+    };
   }
   else if (currentType == Types.FILTER) {
     item.bindType = Types.FILTER;
@@ -111,8 +122,11 @@ function preProcessDrop(item, currentType) {
     item["currentGroup"] = GroupType.DEFAULT;
   }
 
-  if(item.type == DataType.DATETIME && currentType != Types.FILTER && item.bindType == Types.MEASURE) {
-    item["currentGroup"] = {name:"", value:"DAY"};
+  if(item.type == DataType.DATETIME && currentType != Types.FILTER && currentType == Types.DIMENSION) {
+    item["currentGroup"] = TimeSumType.DAY;
+  }
+  if(item.type == DataType.DATETIME && currentType != Types.FILTER && currentType == Types.MEASURE) {
+    item["currentGroup"] = GroupType.COUNT;
   }
 }
 
@@ -228,19 +242,18 @@ class BindPane extends PureComponent {
       obj.alias = obj.label;
       obj.bindType = bindType;
       bindDataArr.splice(splitIdx, 0, obj);
-
       if(bindType == Types.FILTER) {
         component.changeModalVisible(true);
         component.setFilterItem(item);
         return;
       }
     }
-    if(bindDataArr.filter(item => item.bindType == "dim").length > 1){
+    if(bindDataArr.filter(item => item.bindType == Types.DIMENSION).length > 1){
       bindDataArr = bindDataArr.map(each => {
-        if(each.bindType == "mea"){
+        if(each.bindType == Types.MEASURE){
           each.sort = {
             ...each.sort,
-            value:"DEFAULT"
+            value:SortType.DEFAULT.value
           }
         }
         return each;
@@ -358,6 +371,17 @@ class BindPane extends PureComponent {
     processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
   }
 
+  changeDataFormat = (dataFormatObj,fieldId) => {
+    let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
+    const newArr = bindDataArr.map((each) => {
+        if(fieldId == each.fieldId) {
+          each.dataFormat = {...dataFormatObj}
+        }
+        return each;
+      })
+    processBind(newArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
+  }
+
   handleFilter = (type, item) => {
     if(type == "remove") {
       this.setFilterItem({});
@@ -378,7 +402,7 @@ class BindPane extends PureComponent {
     bindDataArr.forEach(
       (each, idx) => {
         if(each.bindType == bindType) {
-          const item = {...each, changeFieldName:this.changeFieldName,removeField: this.removeField, changeGroup: this.changeGroup, changeSortType: this.changeSortType,dimFiledCount};
+          const item = {...each, changeFieldName:this.changeFieldName, changeDataFormat:this.changeDataFormat,removeField: this.removeField, changeGroup: this.changeGroup, changeSortType: this.changeSortType,dimFiledCount};
           const key = each.fieldId + "_" + idx;
           
           if(bindType == Types.DIMENSION) {

@@ -40,6 +40,7 @@ export default class EditAction {
             const field = each.field;
             field["currentGroup"] = each.currentGroup;
             field["groups"] = each.groups;
+            field["dataFormat"] =each.dataFormat;
             field["sort"] = each.sort;
             field["bindType"] = Types.MEASURE;
             field["idx"] = Date.now();
