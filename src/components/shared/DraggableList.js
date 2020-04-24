@@ -133,7 +133,7 @@ const DraggableList = ({
                       type={l.type}
                       onClickList={props.onClickList}
                     >
-                      {l.key !== -1 ? <Icon component={l.icon || (l.type == "FORM"? TableIcon : DashboardIcon)} /> : ""}
+                      {l.key !== -1 ? <Icon component={l.icon || (l.type === "FORM"? TableIcon : DashboardIcon)} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
                     {isShowOperate? 
@@ -178,7 +178,7 @@ const DraggableList = ({
               }
               
             >
-              {l.key !== "" ? <Icon component={l.icon || (l.type == "FORM"? TableIcon : DashboardIcon)} /> : ""}
+              {l.key !== "" ? <Icon component={l.icon || (l.type === "FORM"? TableIcon : DashboardIcon)} /> : ""}
               <span className="draggable-menu-item-title">{l.name}</span>
             </DraggableWrapper>
             {isShowOperate? 
