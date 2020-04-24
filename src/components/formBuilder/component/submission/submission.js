@@ -627,8 +627,8 @@ class Submission extends Component {
                     })
                   }
                   if(shouldSetApprover === false){
-                    this.props.getApproveCount(this.props.appid)
                     setTimeout(() => {
+                      this.props.getApproveCount(this.props.appid)
                       let skipToSubmissionDataFlag = true;
                       this.props.actionFun(skipToSubmissionDataFlag);
                     }, 1000);
@@ -651,9 +651,11 @@ class Submission extends Component {
             } else if(error.response && error.response.data.code == 2004) {
               message.error(this.props.formValidation.errMessage)
             }
-            this.setState({
-              isSubmitted: false
-            })
+            if(error.response){
+              this.setState({
+               isSubmitted: false
+             })
+             }
           });
       });
     }
