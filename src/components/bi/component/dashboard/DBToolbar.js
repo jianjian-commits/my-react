@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import { Button, Icon, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from '../../utils/request';
-import { setFormData, setDataSource } from '../../redux/action';
+import { setFormData, setDataSource, setDBMode } from '../../redux/action';
 import DataListModal from "../elements/modal/dataListModal";
 import classes from '../../scss/dashboard/toolbar.module.scss';
+import { DBMode } from "./Constant";
 
 const DBToolbar = props => {
   const { appId, dashboardId } = useParams();
@@ -29,6 +30,11 @@ const DBToolbar = props => {
   const [visible, setVisible] = useState(false);
   const modalProps = {type:"create", visible, setVisible};
 
+  const newChart = () => {
+    setVisible(true);
+    // setDBMode(DBMode.Editing);
+  }
+
   return (
     <div className={classes.dbToolbar}>
       <DataListModal key={Math.random()} {...modalProps} url={`/app/${appId}/setting/bi/${dashboardId}/chart`}/>
@@ -37,7 +43,7 @@ const DBToolbar = props => {
         className={classes.newChartIcon}
         onClick={modalProps.showModal}
       />
-      <div className={classes.newChart} onClick={() => setVisible(true)}>新建图表</div>
+      <div className={classes.newChart} onClick={newChart}>新建图表</div>
       <div className={classes.newChartButton}>
         {/* <Button className={classes.newChartPreview} type="link">
           预 览
@@ -55,5 +61,6 @@ export default connect(store => ({
 }), 
 {
   setFormData,
-  setDataSource
+  setDataSource,
+  setDBMode
 })(DBToolbar);
