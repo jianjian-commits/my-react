@@ -60,12 +60,17 @@ export default class RadioTest extends React.Component {
 
     // 设置输入框的值
   setInputSetected(e){
+    const { onChange } = this.props;
     let { value } = e.target;
     if(value && this.props.handleInputValue){
       this.props.handleInputValue(value);
     }else{
       this.setState({
         childInputValue:value
+      },()=>{
+        if(onChange){
+          onChange(value)
+        }
       })
     }
   }

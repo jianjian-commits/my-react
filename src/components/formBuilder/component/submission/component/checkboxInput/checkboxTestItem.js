@@ -51,6 +51,7 @@ export default class CheckboxInput extends React.Component {
       selectValues = [...new Set(selectValues)];
     this.state = {
       selectValues: selectValues,
+      selectValuesAll: indexs,
       childInputValue: ''
     };
     this.handleSelect = this.handleSelect.bind(this);
@@ -60,7 +61,6 @@ export default class CheckboxInput extends React.Component {
   setIndex(selectValues=[], data, indexs, startIndex){
     let index = indexs.indexOf(data, startIndex) === -1 ? indexs.length - 1 :indexs.indexOf(data, startIndex);
     if(index > -1 && selectValues.indexOf(index) !== -1 && startIndex < indexs.length - 1){
-      console.log(1)
       startIndex ++;
       return this.setIndex(selectValues, data, indexs, startIndex)
     }
@@ -72,7 +72,6 @@ export default class CheckboxInput extends React.Component {
     setDefaultSetected = (selectedValues = [], allvalues = []) => {
       const indexs = allvalues.map(item => item.value);
       const defaultSelected = [];
-      console.log(selectedValues,allvalues)
       selectedValues.forEach(value => {
         let index = indexs.indexOf(value);
         if (index > -1) {
@@ -86,13 +85,26 @@ export default class CheckboxInput extends React.Component {
   
     // 设置输入框的值
     setInputSetected(e){
+      const { onChange } = this.props
       let { value } = e.target;
-      
+      let newValues = this.state.selectValuesAll;
+      newValues.splice(-1,1,value);
+      this.setState({
+        selectValuesAll:newValues
+      })
       if(value && this.props.handleInputValue){
         this.props.handleInputValue(value);
       }else{
         this.setState({
           childInputValue:value
+        },()=>{
+          if(onChange){
+            let seletctValuesArr  = this.state.selectValues.map(i => this.props.item.values[i].value);
+            seletctValuesArr.splice(-1,1,value);
+                onChange(
+                  seletctValuesArr
+                )
+          }
         })
       }
     }
@@ -110,7 +122,7 @@ export default class CheckboxInput extends React.Component {
         () => {
           if (onChange) {
             onChange(
-                  this.state.selectValues.map(i => this.props.item.values[i].value)
+                  this.state.selectValues.map(i => this.state.selectValuesAll[i])
                   );
           }
         }
@@ -131,7 +143,6 @@ export default class CheckboxInput extends React.Component {
           () => {
             if (onChange) {
               if(this.props.item.values[index].isExtra){
-                console.log(1)
                 let seletctValuesArr  = this.state.selectValues.map(i => this.props.item.values[i].value);
                 seletctValuesArr.splice(-1,1,childInputValue)
                 onChange(
@@ -139,7 +150,7 @@ export default class CheckboxInput extends React.Component {
                 )
               }else{
                 onChange(
-                  this.state.selectValues.map(i => this.props.item.values[i].value)
+                  this.state.selectValues.map(i => this.state.selectValuesAll[i])
                 );
               }
             }
