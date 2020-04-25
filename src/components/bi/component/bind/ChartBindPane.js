@@ -16,6 +16,7 @@ import FilterModal from '../modal/FilterModal';
 import { OPERATORS } from '../elements/Constant';
 import { message } from 'antd';
 import { processBind } from "../../utils/reqUtil";
+import { getUUID } from "../../utils/Util";
 import classes from '../../scss/bind/bindPane.module.scss';
 
 /**
@@ -155,7 +156,6 @@ class BindPane extends PureComponent {
   }
 
   setFilterItem = (filterItem) => {
-    console.log("======filterItem=========", filterItem);
     this.setState({filterItem});
   }
 
@@ -198,7 +198,7 @@ class BindPane extends PureComponent {
 
   removeField = (item) => {
     let { bindDataArr, dataSource, changeBind, changeChartData, elemType, setElemType } = this.props;
-    
+
     const newArr = bindDataArr.filter((each) => {
       return item.idx != each.idx;
     })
@@ -226,7 +226,7 @@ class BindPane extends PureComponent {
     else {
       // when drag to add
       const obj = deepClone(item);
-      obj['idx'] = Date.now();
+      obj['idx'] = getUUID();
       obj.alias = obj.label;
       obj.bindType = bindType;
       bindDataArr.splice(splitIdx, 0, obj);
@@ -248,6 +248,7 @@ class BindPane extends PureComponent {
         return each;
       })
     }
+
     processBind(bindDataArr, dataSource.id, changeBind, changeChartData, elemType, setElemType);
     this.clearSplit();
   }

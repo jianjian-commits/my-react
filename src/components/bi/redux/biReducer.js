@@ -13,7 +13,8 @@ import {
   CLEAR_BIND,
   SET_DB_MODE,
   SAVE_CHART_CHANGE,
-  CHANGE_CHART_AVAILABLE
+  CHANGE_CHART_AVAILABLE,
+  RESET_STORE
 } from "./action";
 
 import { DBMode } from '../component/dashboard/Constant';
@@ -37,6 +38,11 @@ const initState = {
 
 export default function biReducer(state = initState, action) {
   switch (action.type) {
+    case RESET_STORE: {
+      return {
+        ...initState
+      };
+    }
     case NEW_DASHBOARD: {
       return {
         ...state,
@@ -138,7 +144,7 @@ export default function biReducer(state = initState, action) {
     case SAVE_CHART_CHANGE:{
       return {
         ...state,
-        isChartEdited:false
+        isChartEdited: false
       }
     }
     default:

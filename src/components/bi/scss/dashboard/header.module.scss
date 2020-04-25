@@ -1,10 +1,20 @@
-.biHeader {
+.header {
   height: 50px;
-  background-color: #2B81FF;
+  // background-color: #2B81FF;
 
   :global(.ant-btn) {
     height: 50px;
   }
+}
+
+.biHeader {
+  @extend .header;
+  background-color: #2B81FF;
+}
+
+.visitorHeader {
+  @extend .header;
+  background-color: transparent;
 }
 
 .headerBarBack {
@@ -25,12 +35,22 @@
   }
 }
 
-.renameDB {
+.name {
   display: inline;
   border: none;
   margin-left: 10px;
   background-color: transparent;
+}
+
+.renameDB {
+  @extend .name;
   color: #FFFFFF
+}
+
+.visitorName {
+  font-size: 18px;
+  @extend .name;
+  color: #333333;
 }
 
 .dbHeaderSave {

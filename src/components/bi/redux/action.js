@@ -17,6 +17,11 @@ export const SET_DB_MODE = "SET_DB_MODE";
 export const SAVE_CHART_CHANGE = "SAVE_CHART_CHANGE";
 export const CHANGE_CHART_INFO = "CHANGE_CHART_INFO";
 export const CHANGE_CHART_AVAILABLE = "CHANGE_CHART_AVAILABLE";
+export const RESET_STORE = "RESET_STORE";
+
+export const resetBIStore = () => dispatch => {
+  dispatch({type: RESET_STORE});
+}
 
 export const saveChartChange = () => dispatch => {
   dispatch({
