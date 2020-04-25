@@ -131,8 +131,9 @@ export const getPieChartOption = (chartData, chartInfo) => {
             color: 'gray'
           }
         },
+        // radius : '50%', 
         center: ['50%','60%'],
-        hoverAnimation:false
+        // hoverAnimation:false
       });
       let row = [];
       const legend = item.legend;
@@ -150,8 +151,6 @@ export const getPieChartOption = (chartData, chartInfo) => {
     dataset: {
       source
     },
-    radius : '55%', 
-    center: ['50%', '50%'], 
     legend: {y: "top", show: showLegend},
     tooltip: {
       trigger: 'item',

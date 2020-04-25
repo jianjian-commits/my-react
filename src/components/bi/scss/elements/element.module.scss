@@ -11,17 +11,17 @@
 
 .elementHeaderBack {
   height: 30px;
-  width: 2%;
+  // width: 2%;
+  margin-left: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  .ant-btn-link {
-    margin-left: 10px;
+  :global(.ant-btn-link) {
     font-size: 14px;
     font-weight: 500;
     color: rgb(250, 251, 252);
   }
-  .ant-btn {
+  :global(.ant-btn) {
     padding: 0px;
   }
 }
@@ -32,11 +32,14 @@
   margin-left: 10px;
   background-color: transparent;
   color: #FFFFFF;
+  overflow:hidden; 
+  white-space:nowrap; 
+  text-overflow:ellipsis;
 }
 
 .elementHeaderSave {
   float: right;
-  margin-right: 15px;
+  margin-right: 5px;
   top: 10px;
   span {
     background-color: #fff;
