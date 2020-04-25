@@ -106,7 +106,6 @@ function DataListModal(props) {
         if(res && res.msg === "success") {
           const data = res.data;
           props.setDataSource({id: data.formId, name: data.formName, data: data.items});
-          // history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
           props.setDBMode(DBMode.Editing);
         }
       })
