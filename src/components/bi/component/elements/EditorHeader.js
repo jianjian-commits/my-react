@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, Icon} from "antd";
+import { Button, Icon, message} from "antd";
 import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange } from '../../redux/action';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
@@ -23,14 +23,23 @@ const EditorHeader = props => {
   }
 
   const handleSave = (name) => {
-    updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo, elemType);
-    setDB(appId, dashboardId, setDashboards);
-    saveChartChange();
+    Promise.all([
+      updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo, elemType),
+      setDB(appId, dashboardId, setDashboards),
+      saveChartChange()
+    ]).then(
+      message.success("保存成功")
+    );
   }
 
   const onBlur = (e) => {
-    setName(e.target.value);
-    handleSave(e.target.value);
+    if(e.target.value == '') {
+      setName('新建图表');
+      handleSave('新建图表');
+    } else {
+      setName(e.target.value);
+      handleSave(e.target.value);
+    }
   }
 
   const [visible, setVisible] = useState(false);
@@ -63,7 +72,7 @@ const EditorHeader = props => {
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
-      <input className={classes.renameElement} defaultValue={elemName ? elemName: "新建图表"} onBlur={onBlur}/>
+      <input className={classes.renameElement} defaultValue={elemName ? elemName : "新建图表"} onBlur={onBlur}/>
       <Button onClick={()=> {handleSave(name)}} className={classes.elementHeaderSave} type="link">
         保 存
       </Button>

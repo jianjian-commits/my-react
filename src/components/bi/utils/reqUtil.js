@@ -1,5 +1,6 @@
 import request from './request';
 import { getChartAttrs, getChartAvailableList } from './ChartUtil';
+import { message } from 'antd';
 
 export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp, elemType) => {
   const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
