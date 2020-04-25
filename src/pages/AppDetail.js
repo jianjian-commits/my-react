@@ -270,7 +270,7 @@ const AppDetail = props => {
       )}
     </Fragment>)
   }
-console.log("==========selectedType======", selectedType, selectedID, selectedID != void 0 , selectedType === DASHBOARD);
+
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <CommonHeader

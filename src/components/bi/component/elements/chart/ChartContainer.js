@@ -17,6 +17,7 @@ import DeleteAction from '../action/DeleteAction';
 import RefreshAction from '../action/RefreshAction';
 import FullScreenAction from '../action/FullScreenAction';
 import SetSortAction from "../action/setSortAction";
+import CopyAction from '../action/CopyAction';
 
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
@@ -47,8 +48,10 @@ const ChartContainer = props => {
     iconBtnGroup = [
       new EditAction(elemType, chartId, () => {history.push(`/app/${appId}/setting/bi/${dashboardId}/${chartId}`)},
       {changeBind, changeChartData, setDataSource, changeChartInfo, setElemType}),
+      new CopyAction(chartId, dashboards, {setDashboards}),
       // new SetSortAction(()=>{setModalVisible(true)}),
-      new DeleteAction(dashboardId, chartId, appId, {setDashboards}),
+      new DeleteAction(dashboardId, chartId, appId, {setDashboards})
+      
       // new RefreshAction(elemType, chartId, dashboards, {setDashboards}),
       // new FullScreenAction(props.setFullChart)
     ]

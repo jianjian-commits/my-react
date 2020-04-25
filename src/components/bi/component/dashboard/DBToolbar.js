@@ -13,11 +13,9 @@ const DBToolbar = props => {
   const { setFormData } = props;
 
   useEffect(() => {
-    const dataRes = request(`/bi/forms?appId=`, {
+    const dataRes = request(`/bi/forms`, {
       method: "GET",
-      data: {
-        appId
-      }
+      headers: {appId, "Content-Type": "application/json"},
     })
 
     dataRes.then((res) => {
