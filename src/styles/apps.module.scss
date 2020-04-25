@@ -1,13 +1,12 @@
 .container {
   position: relative;
   min-height: calc(100vh - 50px);
-  width: 1680px;
   background-color: #f0f2f5;
   appearance: none;
 
-  .header {
-    padding: 20px 40px;
-  }
+  // .header {
+  //   padding: 20px 40px;
+  // }
 }
 
 :global(#root) {
@@ -302,7 +301,6 @@
 }
 
 .innerMain {
-  margin: 0 35px;
   display: block;
 
   button {

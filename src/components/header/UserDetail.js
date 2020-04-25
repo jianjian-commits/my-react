@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Modal, Form } from "antd";
 import { updateUserDetail } from "../../store/loginReducer";
-import HomeHeader from "./HomeHeader";
 import {
   userDetailParameter,
   formItems
 } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
+import { HomeLayout } from "../shared";
 import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
 
@@ -76,7 +76,7 @@ export default Form.create({ name: "reset-form" })(
         key: "所在企业",
         value: "companyName",
         meter: "resetCompanyName",
-        render: () => {},
+        render: () => { },
         redit: true
       },
       {
@@ -86,9 +86,9 @@ export default Form.create({ name: "reset-form" })(
         render: meter => render(meter),
         redit: true
       },
-      { key: "职位", value: "position", render: () => {}, redit: false },
-      { key: "分组", value: "group", render: () => {}, redit: false },
-      { key: "邮箱", value: "email", render: () => {}, redit: false },
+      { key: "职位", value: "position", render: () => { }, redit: false },
+      { key: "分组", value: "group", render: () => { }, redit: false },
+      { key: "邮箱", value: "email", render: () => { }, redit: false },
       {
         key: "手机",
         value: "mobilePhone",
@@ -116,8 +116,7 @@ export default Form.create({ name: "reset-form" })(
       });
     };
     return (
-      <>
-        <HomeHeader />
+      <HomeLayout>
         <div className={userDetailStyles.userDetail}>
           <div>
             <div>
@@ -141,8 +140,8 @@ export default Form.create({ name: "reset-form" })(
                       {r.value === "oldPassWord"
                         ? "********"
                         : r.value === "companyName"
-                        ? currentCompany.companyName
-                        : userDetail[r.value]}
+                          ? currentCompany.companyName
+                          : userDetail[r.value]}
                       <span
                         onClick={() => setModalMeter(r)}
                         style={{ color: "#1890ff", cursor: "pointer" }}
@@ -188,21 +187,21 @@ export default Form.create({ name: "reset-form" })(
                   hasFeedback={false}
                   colon={false}
                   labelAlign={"right"}
-                  // help={
-                  //   helpText && (
-                  //     <div
-                  //       style={{
-                  //         position: "absolute",
-                  //         left: "340px",
-                  //         width: "224px",
-                  //         height: "42px",
-                  //         lineHeight: "45px"
-                  //       }}
-                  //     >
-                  //       {helpText}
-                  //     </div>
-                  //   )
-                  // }
+                // help={
+                //   helpText && (
+                //     <div
+                //       style={{
+                //         position: "absolute",
+                //         left: "340px",
+                //         width: "224px",
+                //         height: "42px",
+                //         lineHeight: "45px"
+                //       }}
+                //     >
+                //       {helpText}
+                //     </div>
+                //   )
+                // }
                 >
                   {getFieldDecorator(parameters[index]["key"], {
                     ...o.options
@@ -219,7 +218,7 @@ export default Form.create({ name: "reset-form" })(
             })}
           </Form>
         </Modal>
-      </>
+      </HomeLayout>
     );
   })
 );

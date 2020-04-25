@@ -1,0 +1,25 @@
+.top {
+  padding: 0 18px;
+  line-height: 64px;
+  height: 64px;
+  font-size: 18px;
+  overflow: hidden;
+  a {
+    color: #fff;
+    display: inline-block;
+    height: 100%;
+  }
+  .logo {
+    width: 45px;
+    height: 32px;
+    line-height: 64px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    top: 8px;
+    background: url(../../assets/icons/logo.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}

@@ -2,9 +2,13 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import Authenticate from "../shared/Authenticate";
 import { BreadRight } from "../../assets/icons";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Layout } from "antd";
 import clx from "classnames";
 import comClasses from "../../styles/common.module.scss";
+import HomeHeader from "../header/HomeHeader";
+import HomeSider from "../sidder/HomeSider";
+
+const { Content } = Layout;
 
 export const PrivateRoute = ({
   auth,
@@ -61,3 +65,15 @@ export const Title = ({ navs }) => {
     </>
   );
 };
+
+export const HomeLayout = props => {
+  return <Layout>
+    <HomeSider />
+    <Content>
+      <HomeHeader />
+      <Content className={comClasses.commonContentWarpper}>
+        {props.children}
+      </Content>
+    </Content>
+  </Layout>
+}
