@@ -43,7 +43,11 @@ const ApproverModal = (props) =>{
     closable={false}
     visible={props.visible}
     onOk={()=>{props.setVisible(false);postApprover()}}
-    onCancel={()=>{props.setVisible(false)}}
+    onCancel={()=>{
+      props.setVisible(false);        
+      if(props.afterApproverModal){
+        props.afterApproverModal();
+      }}}
   >
       <Select
         mode="multiple"
