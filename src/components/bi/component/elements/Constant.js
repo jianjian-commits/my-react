@@ -126,3 +126,8 @@ export const TimeSumType = {
     value:"DAY"
   }
 }
+
+export const DataFormatType = {
+  PREDEFINE:"PREDEFINE",
+  CUSTOM:"CUSTOM"
+}

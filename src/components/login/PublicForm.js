@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "antd";
-import { connect } from "react-redux";
+import { connect } from "react-redux"; 
 import { formItems } from "./formItemConfig";
 
 export default connect(({ login }) => ({

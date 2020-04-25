@@ -3,6 +3,7 @@ import { Icon, Popover, Input, Button } from "antd";
 import { GroupType, SortType, DataType} from "./Constant";
 import classes from "../../scss/bind/optionSelect.module.scss";
 import FieldNameModal from "../elements/modal/fieldNameModal";
+import DataFormatModal from "../elements/modal/dataFormatModal";
 export const transforObjIntoArr = obj => {
   let arr = [];
   for (let i in obj) {
@@ -58,6 +59,7 @@ export default function FieldMeasureSelect(props) {
   const [sortTypeIndex, setSortTypeIndex] = useState(0);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [nameInputVisible, setNameInputVisible] = useState(false);
+  const [formatModalVisible, setFormatModalVisible] = useState(false);
   const [deleteBtnVisible, setDeleteBtnVisible] = useState(false);
   const dropDownBtn = useRef(null);
   useEffect(() => {
@@ -110,7 +112,9 @@ export default function FieldMeasureSelect(props) {
     },
     {
       name: "数据格式",
-      click: () => {},
+      click: () => {
+        setFormatModalVisible(true);
+      },
     },
     {
       name: "删除字段",
@@ -133,13 +137,26 @@ export default function FieldMeasureSelect(props) {
     setPopoverVisible(false);
   };
 
-  const handleOK = name => {
-    props.item.changeFieldName(name, props.item.fieldId);
-    setNameInputVisible(false);
+  const inputModalProps = {
+    handleOK : name => {
+      props.item.changeFieldName(name, props.item.fieldId);
+      setNameInputVisible(false);
+    },
+    handleCancel : () => {
+      setNameInputVisible(false);
+    }
   }
-  const handleCancel = () => {
-    setNameInputVisible(false);
+
+  const formatModalProps = {
+    handleCancel : () => {
+      setFormatModalVisible(false);
+    },
+    handleOK : obj => {
+      props.item.changeDataFormat(obj, props.item.fieldId);
+      setFormatModalVisible(false);
+    },
   }
+
   const showSortIcon = () => {
     const sortImgArr = [SortType.ASC.value,SortType.DESC.value];
     return (sort && sortImgArr.includes(sort.value)) ? <img src={"/image/davinci/"+sort.value+".svg"}/> : null;
@@ -171,7 +188,8 @@ export default function FieldMeasureSelect(props) {
           />
         )}
       </div>
-      {nameInputVisible && <FieldNameModal label={props.item.alias} handleOK={handleOK} handleCancel={handleCancel}/>}
+      {nameInputVisible && <FieldNameModal label={props.item.alias} {...inputModalProps}/>}
+      {formatModalVisible && <DataFormatModal dataFormat={props.item.dataFormat} {...formatModalProps}/>}
       {popoverVisible && (
         <div className={classes.dropDownItemContainer}>
           <FieldSecondMenus
