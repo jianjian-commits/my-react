@@ -11,16 +11,16 @@ export default function DataFormatModal(props) {
     !(predefine.decimals == 0)
   );
   const checkboxGroup = [
-    {
-      label: "千分符",
-      checked: modalPredefine.thousandSymbols,
-      onChange: (e) => {
-        setModalPredefine({
-          ...modalPredefine,
-          thousandSymbols: e.target.checked,
-        });
-      },
-    },
+    // {
+    //   label: "千分符",
+    //   checked: modalPredefine.thousandSymbols,
+    //   onChange: (e) => {
+    //     setModalPredefine({
+    //       ...modalPredefine,
+    //       thousandSymbols: e.target.checked,
+    //     });
+    //   },
+    // },
     {
       label: "百分比",
       checked: modalPredefine.percent,
@@ -126,8 +126,8 @@ export default function DataFormatModal(props) {
             )}
           </div>
         </div>
-        <div className={classes.itemBox}>
-          <Radio
+        <div className={classes.itemBox} style={{height:60}}>
+          {/* <Radio
             value={DataFormatType.CUSTOM}
             checked={modalSelectType == DataFormatType.CUSTOM}
             onChange={(e) => {
@@ -143,7 +143,7 @@ export default function DataFormatModal(props) {
             {modalSelectType != DataFormatType.CUSTOM && (
               <div className={classes.mask} />
             )}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className={classes.footBtns}>
