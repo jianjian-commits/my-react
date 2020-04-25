@@ -108,7 +108,7 @@ class FormChildTest extends React.Component {
           validate: item.validate,
           hasErr: false,
           autoInput: item.autoInput,
-          data: coverTimeUtils.localDate(data,item.type) || null
+          data: data || null
         };
         break;
       case "RadioButtons": {
@@ -1036,7 +1036,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if(item.data) {
-              const tempDate = coverTimeUtils.localDate(item.data, item.formType);
+              const tempDate = coverTimeUtils.localDate(item.data, item.formType, true);
               valueOption.value = tempDate;
             }
             resultArray.push(
@@ -1068,7 +1068,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if(item.data) {
-              valueOption.value = moment(coverTimeUtils.localDate(item.data, item.formType));
+              valueOption.value = moment(coverTimeUtils.localDate(item.data, item.formType, true));
             }
             resultArray.push(
               <div key={key} className={className}>
@@ -1099,7 +1099,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if(item.data) {
-              const tmpMoment = coverTimeUtils.localDate(item.data, item.formType);
+              const tmpMoment = coverTimeUtils.localDate(item.data, item.formType, true);
               valueOption.value = tmpMoment;
             }
             resultArray.push(
