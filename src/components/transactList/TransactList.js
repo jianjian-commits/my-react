@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Table, message } from "antd";
+import { message } from "antd";
+import { Table } from "../shared/customWidget";
 import request from '../../utils/request'
 import classes from "./transactList.module.scss";
 

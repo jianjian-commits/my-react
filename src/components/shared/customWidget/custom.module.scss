@@ -1,23 +1,27 @@
 .customTable {
+  color: rgba(0, 0, 0, 0.65);
   :global(.ant-table) {
-    tr {
-      background-color: #fff;
+    // tr {
+    //   background-color: #fff;
 
-      td:first-child {
-        color: #000000;
-      }
-    }
+    //   td:first-child {
+    //     color: #000000;
+    //   }
+    // }
 
     button {
-      padding: 0 30px 0 0;
+      padding: 0 20px 0 0;
     }
   }
-
+  :global(.ant-table-cell:first-child) {
+    padding-left: 24px;
+}
   :global(.ant-table-thead > tr > th) {
-    padding: 0 16px;
-    height: 50px;
-    background: #fff;
-    border-bottom: 1px solid #dcdee3;
+    background: rgb(250, 250, 250);
+    border-bottom: 1px solid rgb(240, 240, 240);
+    &:first-child {
+      padding-left: 24px !important;
+    }
   }
 
   :global(.ant-table-thead > tr:first-child > th:first-child) {
@@ -29,26 +33,29 @@
   }
 
   :global(.ant-table-tbody > tr > td) {
-    padding: 0 16px;
-    height: 50px;
-    border-bottom: 1px solid #dcdee3;
+    border-bottom: 1px solid rgb(240, 240, 240);
+    &:first-child {
+      padding-left: 24px !important;
+    }
   }
 
   :global(.ant-table-tbody
       > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
       > td) {
-    background-color: #e7f0ff;
+    background-color:rgb(240, 240, 240);
   }
 
-  :global(.ant-table-tbody > tr:last-child > td) {
-    border-bottom: 0;
+  // :global(.ant-table-tbody > tr:last-child > td) {
+  //   border-bottom: 0;
+  // }
+  :global(.ant-btn) {
+    height: auto
   }
-
-  :global(.ant-table-column-title) {
-    color: #333333;
-    font-weight: bold;
-    font-size: 15px;
-  }
+  // :global(.ant-table-column-title) {
+  //   color: #333333;
+  //   font-weight: bold;
+  //   font-size: 15px;
+  // }
 }
 
 .customCheckbox {
