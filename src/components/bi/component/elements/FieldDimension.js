@@ -77,10 +77,6 @@ export default function FieldDimensionSelect(props) {
       }
     },
     {
-      name: "数据格式",
-      click: () => {}
-    },
-    {
       name: "删除字段",
       click: () => {
         handleDeleteTarget();
