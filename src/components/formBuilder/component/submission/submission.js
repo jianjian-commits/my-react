@@ -471,6 +471,12 @@ class Submission extends Component {
     });
   };
 
+  _isFormChildComponent(key){
+    return  this.state.pureFormComponents.filter(component =>component.type === "FormChildTest")
+    .map(component => component.key)
+    .some(componentKey => componentKey === key)
+    
+  }
   // 设置正确的子表单数据
   setCorrectFormChildData = (values, formChildDataObj) => {
     let date = new Date(new Date().setUTCMilliseconds(0));
@@ -481,7 +487,7 @@ class Submission extends Component {
       if (formChildDataObj.hasOwnProperty(key)) {
         values[key] = formChildDataObj[key];
       }
-      if (Array.isArray(values[key])) {
+      if (this._isFormChildComponent(key)) {
 
         values[key].forEach((data, index) => {
           for (let k in data) {
