@@ -109,7 +109,7 @@ class PureTime extends React.Component {
 
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
-    console.log(value)
+
     this.handleEmitChange(value);
     setTimeout(() => {
       let key = this.props.item.key;

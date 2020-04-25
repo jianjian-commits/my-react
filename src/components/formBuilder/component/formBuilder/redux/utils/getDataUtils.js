@@ -16,7 +16,7 @@
 export const getAllForms = () => {
   axios.get(config.apiUrl + "/form")
     .then(response => {
-      console.log(2);
+
       dispatch({
         type: GET_ALL_FORMS,
         formArray: response.data.filter(item => {

@@ -87,7 +87,6 @@ class FileUploadInspector extends React.Component {
       ...validate
     };
     newValidate[type] = value || min;
-    console.log("change.........", newValidate);
     if (this.props.elementParent) {
       this.props.setFormChildItemAttr(
         this.props.elementParent,

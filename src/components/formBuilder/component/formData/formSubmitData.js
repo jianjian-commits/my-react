@@ -677,7 +677,7 @@ class FormSubmitData extends PureComponent {
       connectCondition,
       isFilterMode,
     } = this.state.filterArray;
-    console.log()
+
     if(this.props.searchStatus){
 
     }else{

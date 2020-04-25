@@ -46,7 +46,7 @@ export default class PositionCenterList extends React.Component {
   };
   showEditModal = (index) => {
     const { center, latitude, longitude, orientationRange } = this.props.centerList[index];
-    // console.log("center latitude longitutde, orientation", center, latitude, longitude, orientationRange);
+
     this.setState({
       center,
       latitude,
@@ -144,7 +144,6 @@ export default class PositionCenterList extends React.Component {
     function select(e) {
       placeSearch.setCity(e.poi.adcode);
       placeSearch.search(e.poi.name);  //关键字查询查询
-      // console.log("select", e, "name", e.poi.name);
       _this.setState({
         // center:`${e.poi.district}${e.poi.address}`,
         center: `${e.poi.name}`,

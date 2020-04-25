@@ -25,7 +25,7 @@ const ApproverModal = (props) =>{
         method: "PUT"
       });
       if (res && res.status === "SUCCESS") {
-        console.log("修改审批人成功");
+
         message.success("修改审批人成功");
         if(props.afterApproverModal){
           props.afterApproverModal();

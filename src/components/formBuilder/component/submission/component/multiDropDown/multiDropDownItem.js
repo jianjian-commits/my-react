@@ -65,7 +65,6 @@ export default class MultiDropDownItem extends React.Component {
     } else if(nextProps.isEditData && this.state.initFlag &&nextProps.value instanceof Array){
       let selectIndexArr = []
       let selectMiddleArr = nextProps.value
-      console.log(nextProps)
       nextProps.value.map( value =>{
         nextProps.item.data.values.map((item,index) => {
           if(item.value === value){

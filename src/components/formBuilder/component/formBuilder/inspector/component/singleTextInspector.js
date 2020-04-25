@@ -209,7 +209,7 @@ class SingleTextInspector extends React.Component {
               currentItemParent={elementParent}
               index={this.state.index}
               handleOk={(str) => {
-                console.log("ffc", str);
+
                 // handleFormulaSubmit(str, element, elementParent, data, {
                 //   setFormChildItemAttr: this.props.setFormChildItemAttr,
                 //   setItemValues: this.props.setItemValues,
@@ -308,7 +308,6 @@ class SingleTextInspector extends React.Component {
       isUniqueApi = true
     } = this.state;
 
-    console.log("fccc", label)
     return (
       <div className="textarea-text-input">
         <div className="base-form-tool">

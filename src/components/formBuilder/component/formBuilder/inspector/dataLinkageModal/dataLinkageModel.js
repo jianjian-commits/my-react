@@ -247,9 +247,6 @@ class DataLinkageModal extends React.Component {
             type: childData.element
           }
         ]
-      },
-      () => {
-        console.log(this.state.formChildData);
       }
     );
   };

@@ -8,7 +8,6 @@ export default class MultiDropDownItem extends React.Component {
     const indexs = item.dropDownOptions.map(item => item.value);
     let selectValues = [];
     let inputEditValue = "";
-    console.log(item)
     if(item.data){
       item.data.forEach(value => {
         let index = indexs.indexOf(value);

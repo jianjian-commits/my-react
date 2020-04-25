@@ -5,8 +5,7 @@ import { ComponentHeader } from "../utils/commonDom";
 
 export default class PureDate extends Component {
   onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+
   };
 
   render() {

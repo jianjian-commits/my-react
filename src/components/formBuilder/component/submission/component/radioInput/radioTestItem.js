@@ -83,7 +83,6 @@ export default class RadioTest extends React.Component {
   handleSelect(index) {
     const { onChange } = this.props;
     let childInputValue = this.state.childInputValue;
-    // console.log(this.state.selectValue, index)
     if (this.state.selectValue === index) {
       this.setState(
         state => ({
