@@ -75,7 +75,7 @@ const ghostButtonContent = {
 export default connect(
   ({ router, login }) => ({
     router,
-    transactList: login.transactList
+    transactList: login.transactList || {}
   }),
   { getTransactList }
 )(function HomeHeader(props) {
@@ -101,15 +101,13 @@ export default connect(
   //     <PromptIcon />
   //   </Badge>
   // );
-  const [init, setInit] = useState(true);
-  if (!transactList) {
-    getTransactList({});
-    return null;
-  }
-  if (init && transactList) {
-    getTransactList({});
-    setInit(false);
-  }
+  const [init, setInit] = useState(false);
+  React.useEffect(() => {
+    if (!init) {
+      getTransactList({});
+      setInit(false);
+    }
+  }, [init, getTransactList]);
   return (
     <div className={classes.hideHeader}>
       <Header className={classes.homeHeader} style={homeHeaderStyle}>

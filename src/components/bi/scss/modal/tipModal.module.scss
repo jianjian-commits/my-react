@@ -1,0 +1,86 @@
+.BITipModal{
+    font-family: Microsoft YaHei;
+    font-style: normal;
+    font-weight: normal;
+    :global(.ant-modal){
+      :global(.ant-modal-header){
+        padding: 0px;
+        border-bottom: none;
+        .normalModalTitle {
+          width: 400px;
+          height: 44px;
+          padding-left: 30px;
+          padding-top: 26px;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          i {
+            color: #ffa132;
+            margin-right: 9px;
+          }
+        }
+      }
+    
+      :global(.ant-modal-body){
+        padding: 0px;
+        .normalModalContainer {
+          width: 400px;
+          height: 130px;
+          .normalModalContent {
+            padding-left: 30px;
+            padding-right: 24px;
+            padding-top: 10px;
+            width: 100%;
+            height: 80px;
+            font-size: 13px;
+            color: #777f97;
+          }
+          .warningBtnGroup {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            padding-right: 10px;
+            :global(.ant-btn){
+              width: 70px;
+              height: 30px;
+              font-size: 14px;
+              border-radius: 3px;
+              margin-right: 10px;
+              &:nth-child(1) {
+                border: 1px solid #b6b6ba;
+                color: #777f97;
+              }
+              &:nth-child(2) {
+                border: 1px solid #e22d2d;
+                color: #e22d2d;
+              }
+            }
+          }
+          .tipBtnGroup {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            padding-right: 10px;
+            :global(.ant-btn){
+              width: 70px;
+              height: 30px;
+              font-size: 14px;
+              border-radius: 3px;
+              margin-right: 10px;
+              border: 1px solid #b6b6ba;
+              color: #777f97;
+              &:nth-child(3) {
+                background-color: #2a7fff;
+                color: #ffffff;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+  }

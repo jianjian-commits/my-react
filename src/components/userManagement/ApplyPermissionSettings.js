@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button, Checkbox, message, Radio } from "antd";
+import { Button, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
 import { Title } from "../shared";
+import { Checkbox } from "../shared/customWidget";
 
 const formMeteDataThead = {
   formHeader: [
@@ -175,7 +176,7 @@ const Tr = ({
             {header.key === "TYPE" && <span>{table.value}</span>}
             {Td[0] && (
               <CheckBox
-                defaultChecked={Td[0].defaultChecked || Td[0].checked}
+                // defaultChecked={Td[0].defaultChecked || Td[0].checked}
                 checked={Td[0].checked}
                 disabledCheck={
                   fp === "formPermissions"
@@ -295,7 +296,8 @@ const thunkBoard = (
   CheckBox,
   disabled,
   tableName,
-  fp
+  fp,
+  value
 ) => {
   const dat = state["state"][permissionsValue][tableName];
   return (
@@ -368,7 +370,7 @@ const thunkBoard = (
               </div>
             </div>
             <div>
-              {display[0].checked && (
+              {display[0].checked && value !== "data" && (
                 <Board
                   dat={dat}
                   filters={filters}
@@ -684,7 +686,8 @@ const Permission = ({
           CheckBox,
           disabled,
           boardValue,
-          value === "metaData" ? "boardDetailPermissions" : "boardPermissions"
+          value === "metaData" ? "boardDetailPermissions" : "boardPermissions",
+          value
         )}
     </div>
   );
@@ -718,7 +721,7 @@ const Top = ({
         <Button onClick={() => enterPermission()}>取消</Button>
         <Button
           onClick={() =>
-            handleSaveButton({ state, initialData, enterPermission,appId })
+            handleSaveButton({ state, initialData, enterPermission, appId })
           }
           disabled={disabled}
         >
@@ -729,7 +732,7 @@ const Top = ({
   );
 };
 
-function handleSaveButton({ state, initialData, enterPermission,appId }) {
+function handleSaveButton({ state, initialData, enterPermission, appId }) {
   request(`/sysRole/saveAppPermission`, {
     method: "put",
     data: {
@@ -809,7 +812,6 @@ export default function ApplyPermissionSetting(props) {
         checked={checked}
         onChange={onChange}
         disabled={disabledCheck || disabled}
-        className={Styles.checkBox}
         {...args}
       />
     );

@@ -1,6 +1,8 @@
 import React from "react";
 import { Modal } from "antd";
-
+import ChartContainer from '../../elements/chart/ChartContainer';
+import classes from "../../../scss/modal/chartModal.module.scss";
+import ExitFullScreenAction from '../../elements/action/ExitFullScreenAction';
 export default function ChartFullScreenModal(props) {
   return (
     <Modal
@@ -10,11 +12,12 @@ export default function ChartFullScreenModal(props) {
       width={"100%"}
       height={"100%"}
       bodyStyle={{padding:0}}
-      wrapClassName="BIChartModal"
+      wrapClassName={classes.BIChartModal}
       centered
     >
-      <div className="modalChartContainer">
-        {props.chart}
+      <div className={classes.modalChartContainer}>
+        <ChartContainer modalNarrowBtn={ new ExitFullScreenAction(() => {props.handleFullChart(null)})}
+          {...props.fullScrenObj}/>
       </div>
     </Modal>
   );

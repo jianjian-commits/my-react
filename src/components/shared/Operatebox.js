@@ -15,12 +15,12 @@ const OperateBox = (props) => {
           </svg>
           <span>删除</span>
         </div>,
-      content: '确定要删除表单 ?',
+      content: '确定要删除 ' + (props.type === "FORM" ? "表单" : "仪表盘") + '?',
       cancelText: "取消",
       okText: "确定",
       className: "operate-box-delete-form-modal",
       onOk() {
-        handleDeleteForm(props.formId);
+        handleDelete(props.id, props.type);
       }
     });
   }
@@ -58,7 +58,7 @@ const OperateBox = (props) => {
       okText: "确定",
       className: "operate-box-update-form-modal",
       onOk() {
-        handleUpdateFormName(props.formId);
+        handleRename(props.id, props.type);
       }
     });
   }
@@ -68,18 +68,18 @@ const OperateBox = (props) => {
     formName = value
   }
 
-  const handleDeleteForm = (params) => {
-    props.deleteForm(props.appId, params).then(res => {
-      if (res.status === 200) {
+  const handleDelete = (params, type) => {
+    props.handleDelete(params, type).then(res => {
+      if (res.status === 200 || res.msg === "success") {
         props.isDeleteOne(true)
         message.success('删除成功');
       }
     })
   }
 
-  const handleUpdateFormName = (params) => {
-    props.updateFormName(props.appId, params, { name: formName }).then(res => {
-      if (res.status === 200) {
+  const handleRename = (id, type) => {
+    props.handleRename(id, type, { name: formName }).then(res => {
+      if (res.status === 200 || res.msg === "success") {
         props.isDeleteOne(true)
         message.success('修改成功');
       }

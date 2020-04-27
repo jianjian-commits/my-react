@@ -1,5 +1,5 @@
 import {
-  SET_TYPE,
+  SET_ELEM_TYPE,
   NEW_DASHBOARD,
   NEW_ELEMENT,
   CHANGE_BIND,
@@ -13,14 +13,16 @@ import {
   CLEAR_BIND,
   SET_DB_MODE,
   SAVE_CHART_CHANGE,
-  SET_ELEM_TYPE
+  CHANGE_CHART_AVAILABLE,
+  RESET_STORE
 } from "./action";
 
 import { DBMode } from '../component/dashboard/Constant';
 import ChartInfo from '../component/elements/data/ChartInfo';
+import { ChartType, AllType } from "../component/elements/Constant";
 
 const initState = {
-  chartType: 'bar',
+  elemType: ChartType.HISTOGRAM,
   dbName: "",
   elemName: "",
   formDataArr: [],
@@ -30,11 +32,17 @@ const initState = {
   dashboards: [],
   dbMode: DBMode.Edit,
   isChartEdited:false,
-  chartInfo: new ChartInfo()
+  chartInfo: new ChartInfo(),
+  chartAvailableList: AllType
 };
 
 export default function biReducer(state = initState, action) {
   switch (action.type) {
+    case RESET_STORE: {
+      return {
+        ...initState
+      };
+    }
     case NEW_DASHBOARD: {
       return {
         ...state,
@@ -51,6 +59,7 @@ export default function biReducer(state = initState, action) {
       return {
         ...state,
         bindDataArr: action.bindDataArr,
+        chartAvailableList: action.chartAvailableList,
         isChartEdited:true
       };
     }
@@ -61,6 +70,8 @@ export default function biReducer(state = initState, action) {
         dataSource: action.dataSource,
         chartData: action.chartData,
         chartInfo: new ChartInfo(),
+        elemType: action.elemType,
+        chartAvailableList: action.chartAvailableList,
         isChartEdited:false,
       };
     }
@@ -110,13 +121,20 @@ export default function biReducer(state = initState, action) {
         isChartEdited:true
       };
     }
+    case CHANGE_CHART_AVAILABLE: {
+      return {
+        ...state,
+        chartAvailableList: action.chartAvailableList,
+        isChartEdited:true
+      };
+    }
     case SET_DB_MODE: {
       return {
         ...state,
         dbMode: action.dbMode
       };
     }
-    case SET_TYPE: {
+    case SET_ELEM_TYPE: {
       return {
         ...state,
         elemType: action.elemType,
@@ -126,7 +144,7 @@ export default function biReducer(state = initState, action) {
     case SAVE_CHART_CHANGE:{
       return {
         ...state,
-        isChartEdited:false
+        isChartEdited: false
       }
     }
     default:

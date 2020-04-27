@@ -1,0 +1,94 @@
+$margin: 20px;
+$margin-bottom: 5px;
+$width: 350px;
+
+.title {
+  padding-left: 10px;
+}
+
+.checkContainer {
+  width: 150px;
+  height: 200px;
+  border: 1px solid #212529;
+}
+
+.operator {
+  margin-left: $margin;
+  height: 50px;
+  line-height: 50px;
+}
+
+.label {
+  margin-right: 10px;
+}
+
+.FilterModal {
+  :global(.ant-modal-header) {
+    border: 1px solid #dcdee3;
+  } 
+}
+
+:global(.dropdownClassName) {
+  width: 0px;
+  :global(.ant-select-tree-switcher) {
+    display: none !important;
+    width: 0px;
+  }
+}
+
+
+.conditionContainer {
+  // height: 50px;
+  :global(.ant-select-tree-switcher .ant-select-tree-switcher_close) {
+    width: 0px;
+  }
+}
+
+.singleDateContainer {
+  width: $width;
+  margin-left: $margin;
+}
+
+.singleDate {
+  width: 100%;
+}
+
+.doubleDateContainer {
+  margin-left: $margin;
+  margin-bottom: 5px;
+  width: $width;
+}
+
+.doubleDate {
+  width: 100%;
+}
+
+.numberRange {
+  display: inline-flex;
+  margin-left: $margin;
+  height: 30px;
+  width: $width;
+  align-items: center;
+  border: 1px solid #dcdee3;
+}
+
+.numberSplit {
+  display: inline;
+  width: 30px;
+}
+
+.textInput {
+  margin-left: $margin;
+  height: 30px;
+  width: $width;
+}
+
+.numberInput {
+  border: none;
+  width: 210px;
+}
+
+.dateInput {
+  margin-bottom: $margin-bottom;
+}
+

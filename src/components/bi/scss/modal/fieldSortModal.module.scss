@@ -1,0 +1,66 @@
+.BIFieldSortModal {
+  font-family: Microsoft YaHei;
+  font-style: normal;
+  font-weight: normal;
+  :global(.ant-modal) {
+    :global(.ant-modal-header) {
+      padding: 0px;
+      border-bottom: none;
+      padding: 20px;
+      height: 40px;
+      .modalTitle {
+        font-size: 15px;
+      }
+    }
+    :global(.ant-modal-body) {
+      padding: 0px;
+      .modalContent {
+        height: auto;
+        min-height: 300px;
+        padding: 20px 20px;
+        .sortBtnBox {
+          height: 40px;
+          margin: 5px 0px;
+          position: relative;
+          display: flex;
+          align-items: center;
+          .fieldName {
+              font-size: 14px;
+          }
+          .btnGroup {
+            position: absolute;
+            right: 10px;
+            :global(.ant-btn) {
+                width: 60px;
+                height: 30px;
+                font-size: 14px;
+                border-radius: 0px;
+              
+              }
+          }
+        }
+      }
+      .footBtns {
+        padding: 0px 20px 20px 20px;
+        display: flex;
+        justify-content: flex-end;
+        height: 52px;
+        :global(.ant-btn) {
+          width: 70px;
+          height: 30px;
+          font-size: 14px;
+          border-radius: 3px;
+          margin-right: 10px;
+          &:nth-child(1) {
+            border: 1px solid #b6b6ba;
+            color: #777f97;
+          }
+          &:nth-child(2) {
+            background-color: #2a7fff;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+}
