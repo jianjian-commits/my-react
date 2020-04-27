@@ -15,7 +15,7 @@ import Dispose from "../pages/Dispose";
 import BI from "../pages/BI";
 import ElementEditor from "../pages/ElementEditor";
 import { APP_SETTING_ABLED } from "../auth";
-import { CompanyManageIcon } from "../assets/icons/company";
+// import { CompanyManageIcon } from "../assets/icons/company";
 
 export const companyWebs = [
   {
@@ -51,6 +51,39 @@ export const companyWebs = [
   },
 ];
 
+export const companyWebs2 = [
+  {
+    key: "company/info2",
+    path: "/company/info2",
+    label: "公司信息2",
+    icon: InfoIcon,
+    component: TeamInfo
+  },
+  {
+    key: "company/member2",
+    path: "/company/member2",
+    label: "公司成员2",
+    auth: TEAM_MANAGEMENT_LIST,
+    icon: MemberIcon,
+    component: TeamMember
+  },
+  {
+    key: "company/profile2",
+    path: "/company/profile2",
+    label: "分组2",
+    auth: PROFILE_MANAGEMENT_LIST,
+    icon: ProfileIcon,
+    exact: true,
+    component: ProfileManagement
+  },
+  {
+    key: "company/position2",
+    path: "/company/position2",
+    label: "职位2",
+    icon: PositionIcon,
+    component: PositionTree,
+  },
+];
 export const main = [
   {
     key: "app",
@@ -68,7 +101,7 @@ export const main = [
     key: "company",
     label: "公司管理",
     path: "/company",
-    icon: CompanyManageIcon,
+    icon: MemberIcon,
     component: CompanyManagement,
     children: companyWebs
   },
@@ -77,6 +110,14 @@ export const main = [
     label: "个人信息",
     path: "/userDetail",
     component: UserDetail
+  },
+  {
+    key: "company2",
+    label: "公司管理",
+    path: "/company2",
+    icon: MemberIcon,
+    component: CompanyManagement,
+    children: companyWebs2
   }
 ];
 

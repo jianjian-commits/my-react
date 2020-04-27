@@ -5,7 +5,7 @@
   font-size: 18px;
   overflow: hidden;
   a {
-    color: #fff;
+    color: #000;
     display: inline-block;
     height: 100%;
   }
@@ -21,5 +21,32 @@
     background: url(../../assets/icons/logo.png);
     background-size: cover;
     background-repeat: no-repeat;
+  }
+}
+.menu {
+  &:global(.ant-menu-item-selected) {
+    ::before {
+      border-left: 4px solid #1890ff;
+      content: "";
+      position: absolute;
+      left: 0;
+      height: 100%;
+    }
+    svg {
+      g,
+      polyline,
+      path {
+        fill: #1890ff;
+      }
+    }
+  }
+  span {
+    color: #333;
+  }
+  svg {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    margin-right: 10px;
   }
 }

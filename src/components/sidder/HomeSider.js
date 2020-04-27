@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { Layout, Menu, Icon } from "antd";
 import classes from "./sider.module.scss";
+import comClasses from "../../styles/common.module.scss";
 import { main } from "../../routers";
 
 const { Sider } = Layout;
@@ -28,14 +29,14 @@ const HomeSider = props => {
     return acc;
   }, []).map(e => e.key);
   console.log(selectedKeys, location.pathname)
-  return <Sider trigger={null} collapsible collapsed={collapsed}>
+  return <Sider trigger={null} theme="light" collapsible collapsed={collapsed}>
     <div className={classes.top}>
       <Link to="/">
         <div className={classes.logo} />
         <span>达芬奇</span>
       </Link>
     </div>
-    <Menu forceSubMenuRender theme="dark" selectedKeys={selectedKeys}>
+    <Menu className={comClasses.menu} forceSubMenuRender theme="light" mode="inline" selectedKeys={selectedKeys}>
       {main.map(r => {
         if (r.children) {
           return <SubMenu

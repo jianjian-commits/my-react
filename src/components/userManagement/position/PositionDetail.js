@@ -5,7 +5,7 @@ import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
 import proClass from "../../profileManagement/profile.module.scss";
-import { Navigation, HomeContentTitle } from "../../shared";
+import { HomeContentTitle } from "../../shared";
 import request from "../../../utils/request";
 import { catchError } from "../../../utils";
 import RelateWidage from "./RelateWidage";

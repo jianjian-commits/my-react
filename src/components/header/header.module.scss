@@ -2,6 +2,7 @@
   z-index: 1;
   line-height: 40px;
   // width: 100%;
+  background: rgb(42, 127, 255);
   color: #ddd;
   .wrapper {
     height: 100%;
@@ -465,7 +466,7 @@
   cursor: pointer;
   transition: all .3s;
   &:hover {
-    background: rgba(0,0,0,.025);
+    background: rgba(0,0,0,.1);
   }
 }
 .trigger {

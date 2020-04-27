@@ -8,8 +8,7 @@ import { getTransactList } from "../../store/loginReducer";
 
 const { Header } = Layout;
 const homeHeaderStyle = {
-  background: "#fff",
-  color: "#333",
+  background: "#2A7FFF",
   padding: 0,
   boxShadow: "0 1px 4px rgba(0,21,41,.08)",
   height: 40,

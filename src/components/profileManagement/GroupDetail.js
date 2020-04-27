@@ -9,7 +9,7 @@ import {
   // SettingModule
 } from "./DetailModule";
 import { catchError } from "../../utils";
-import { Navigation, HomeContentTitle } from "../shared";
+import { HomeContentTitle } from "../shared";
 
 const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
   const navigationList = [

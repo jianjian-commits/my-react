@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { connect } from "react-redux";
-import { Button, Row, Col, Popconfirm, message, Spin } from "antd";
+import { Button, Popconfirm, message, Spin } from "antd";
 import { Table } from "../../shared/customWidget";
 import Filter from "./Filter";
 import ChangeGroup from "./ChangeGroup";
@@ -11,7 +11,7 @@ import InviteUser from "../ModalInviteUser";
 import Authenticate from "../../shared/Authenticate";
 import { HomeContentTitle } from "../../shared/";
 import { catchError } from "../../../utils";
-import { ReactComponent as Funnel } from "../../../assets/icons/company/filter.svg";
+// import { ReactComponent as Funnel } from "../../../assets/icons/company/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
   TEAM_MANAGEMENT_DROP,
@@ -167,12 +167,12 @@ export default connect(
       .catch((err) => catchError(err));
   };
   // 过滤组件开关显示
-  const onClickFilter = () => {
-    setOnOff({
-      ...onOff,
-      filterSwith: !onOff.filterSwith,
-    });
-  };
+  // const onClickFilter = () => {
+  //   setOnOff({
+  //     ...onOff,
+  //     filterSwith: !onOff.filterSwith,
+  //   });
+  // };
   //过滤请求参数设置
   const filterData = (value, groupId) => {
     const _fiels = [];
