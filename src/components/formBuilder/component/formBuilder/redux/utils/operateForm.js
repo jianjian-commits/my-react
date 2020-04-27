@@ -248,7 +248,7 @@ export const updateForm = (
   localForm,
   errMessage,
   type,
-  callback = ()=>{},
+  callback = () => { },
   appid,
   extraProp
 ) => dispatch => {
@@ -352,7 +352,7 @@ export const updateForm = (
     .catch(err => {
       let status = err.response.status;
       callback(status);
-      if(status === 401) {
+      if (status === 401) {
         message.error("无权限进行此操作！");
         window.location.reload();
       } else {

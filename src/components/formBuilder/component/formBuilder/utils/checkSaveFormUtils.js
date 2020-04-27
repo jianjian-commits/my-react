@@ -11,6 +11,7 @@ import { getDataFromUrl } from "../../../utils/locationUtils";
 // 检查是否可以保存表单
 export default function checkAndSaveForm(props) {
   const { formData, formArray } = props;
+  console.log("fck", formData)
   const [...result] = [
     checkHasUniqueApiName(formData),
     checkHasLinkComponent(formData),
@@ -46,13 +47,14 @@ export function checkHasLinkComponent(formData) {
 
 // 检查联动表单是否存在
 export function checkHasLinkForm(forms = [], components = []) {
+  console.log(forms, components);
   const formsIds = forms.map(form => form.id);
   for (let i = 0; i < components.length; i++) {
     let component = components[i];
     if (
       component.data &&
       component.data.type &&
-      component.data.type !== "custom" &&
+      component.data.type == "DataLinkage" &&
       component.data.values &&
       !formsIds.includes(
         component.data.values.linkFormId || component.data.values.formId

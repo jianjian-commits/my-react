@@ -17,7 +17,6 @@ export default class PositionCenterItem extends Component {
   }
   render() {
     const { center, latitude, longitude, orientationRange } = this.props.item;
-    // console.log("item index", this.props.index)
     return (
       <div className="position-center-item">
         <div className="address-text">
