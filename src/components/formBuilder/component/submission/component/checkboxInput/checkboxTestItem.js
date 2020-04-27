@@ -94,6 +94,9 @@ export default class CheckboxInput extends React.Component {
       })
       if(value && this.props.handleInputValue){
         this.props.handleInputValue(value);
+        this.setState({
+          childInputValue:value
+        })
       }else{
         this.setState({
           childInputValue:value
