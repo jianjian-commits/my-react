@@ -44,7 +44,8 @@ export default class RadioTest extends React.Component {
     }
     this.state = {
       selectValue: index,
-      childInputValue:''
+      childInputValue:'',
+      childMiddleInputValue:''
     };
     this.handleSelect = this.handleSelect.bind(this);
     this.setInputSetected = this.setInputSetected.bind(this);
@@ -60,12 +61,20 @@ export default class RadioTest extends React.Component {
 
     // 设置输入框的值
   setInputSetected(e){
+    const { onChange } = this.props;
     let { value } = e.target;
     if(value && this.props.handleInputValue){
       this.props.handleInputValue(value);
+      this.setState({
+        childInputValue:value
+      })
     }else{
       this.setState({
         childInputValue:value
+      },()=>{
+        if(onChange){
+          onChange(this.state.childInputValue)
+        }
       })
     }
   }
@@ -82,7 +91,6 @@ export default class RadioTest extends React.Component {
   
   handleSelect(index) {
     const { onChange } = this.props;
-    let childInputValue = this.state.childInputValue;
     if (this.state.selectValue === index) {
       this.setState(
         state => ({
@@ -104,7 +112,7 @@ export default class RadioTest extends React.Component {
         () => {
           if (onChange) {
             if(this.props.item.values[index].isExtra){
-              onChange(childInputValue)
+              onChange(this.state.childInputValue);
             }else{
               onChange(this.props.item.values[index].value);
             }

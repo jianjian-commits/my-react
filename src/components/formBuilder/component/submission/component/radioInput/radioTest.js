@@ -15,6 +15,7 @@ class RadioInput extends React.Component {
 
     this.state = {
       inputValue: undefined,
+      inputMiddleValue:"",
       item: this.props.item
     };
   }
@@ -71,9 +72,10 @@ class RadioInput extends React.Component {
 
       let newValues =  [...values,newObj]
       this.setState({
-        item:{...this.state.item,values:newValues}
+        item:{...this.state.item,values:newValues},
+        inputMiddleValue:value
       },()=>{
-        setFieldsValue({[this.props.item.key]:value})
+        setFieldsValue({[this.props.item.key]:value || this.state.inputMiddleValue})
       })
     }
   render() {

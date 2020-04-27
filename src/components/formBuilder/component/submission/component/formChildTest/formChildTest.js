@@ -813,7 +813,6 @@ class FormChildTest extends React.Component {
                       item={item}
                       onChange={value => {
                         item.data = value;
-
                         checkValueValidByType(item, value)
                           ? (item.hasErr = false)
                           : (item.hasErr = true);
@@ -1221,6 +1220,7 @@ class FormChildTest extends React.Component {
         }
       });
       // 赋值
+      // console.log(selections);
       result[item.key].values = selections;
       // 解决当newArray为空时 输入内容列表会清空
       // newArray ? this.props.saveSubmitData(newArray) : null;
