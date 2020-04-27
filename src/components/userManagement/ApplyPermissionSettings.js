@@ -296,7 +296,8 @@ const thunkBoard = (
   CheckBox,
   disabled,
   tableName,
-  fp
+  fp,
+  value
 ) => {
   const dat = state["state"][permissionsValue][tableName];
   return (
@@ -369,7 +370,7 @@ const thunkBoard = (
               </div>
             </div>
             <div>
-              {display[0].checked && (
+              {display[0].checked && value !== "data" && (
                 <Board
                   dat={dat}
                   filters={filters}
@@ -685,7 +686,8 @@ const Permission = ({
           CheckBox,
           disabled,
           boardValue,
-          value === "metaData" ? "boardDetailPermissions" : "boardPermissions"
+          value === "metaData" ? "boardDetailPermissions" : "boardPermissions",
+          value
         )}
     </div>
   );
@@ -719,7 +721,7 @@ const Top = ({
         <Button onClick={() => enterPermission()}>取消</Button>
         <Button
           onClick={() =>
-            handleSaveButton({ state, initialData, enterPermission,appId })
+            handleSaveButton({ state, initialData, enterPermission, appId })
           }
           disabled={disabled}
         >
@@ -730,7 +732,7 @@ const Top = ({
   );
 };
 
-function handleSaveButton({ state, initialData, enterPermission,appId }) {
+function handleSaveButton({ state, initialData, enterPermission, appId }) {
   request(`/sysRole/saveAppPermission`, {
     method: "put",
     data: {
