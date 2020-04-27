@@ -1,0 +1,94 @@
+.dataFormatModal {
+  font-family: Microsoft YaHei;
+  font-style: normal;
+  font-weight: normal;
+  :global(.ant-modal) {
+    :global(.ant-modal-header) {
+      padding: 0px;
+      border-bottom: none;
+      padding: 20px;
+      height: 40px;
+      .modalTitle {
+        font-size: 15px;
+      }
+    }
+    :global(.ant-modal-body) {
+      padding: 0px;
+      .modalContent {
+        padding-top: 15px;
+        height: 300px;
+        .itemBox {
+          padding: 10px 20px;
+          height: auto;
+          :global(.ant-radio-wrapper) {
+            margin-bottom: 10px;
+          }
+          .formatSetting {
+              padding: 0px 20px;
+              position: relative;
+            .checkboxGroup {
+              height: 35px;
+              display: flex;
+              align-items: center;
+              :global(.ant-input) {
+                width: 120px;
+                margin-bottom: 3px;
+              }
+            }
+            .preview {
+              height: 100px;
+              background-color: #f4f5f5;
+              display: flex;
+              flex-direction: column;
+              padding: 8px 15px;
+              span {
+                width: 100%;
+                &:nth-child(1) {
+                  height: 30px;
+                  text-align: left;
+                }
+                &:nth-child(2) {
+                  height: 60px;
+                  font-size: 20px;
+                  text-align: center;
+                }
+              }
+            }
+            .custom {
+              height: 40px;
+            }
+            .mask{
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              z-index: 2000;
+              left: 0;
+              top: 0;
+            }
+          }
+        }
+      }
+      .footBtns {
+        padding: 0px 20px 20px 20px;
+        display: flex;
+        justify-content: flex-end;
+        height: 52px;
+        :global(.ant-btn) {
+          width: 70px;
+          height: 30px;
+          font-size: 14px;
+          border-radius: 3px;
+          margin-right: 10px;
+          &:nth-child(1) {
+            border: 1px solid #b6b6ba;
+            color: #777f97;
+          }
+          &:nth-child(2) {
+            background-color: #2a7fff;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+}

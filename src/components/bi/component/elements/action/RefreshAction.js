@@ -34,9 +34,9 @@ export default class RefreshAction {
               name: this.dashboards[0].name,
               elements: this.dashboards[0].elements.map(element => {
                 if(element.id == this.chartId){
-                  element.data.legends = data.legends;
-                  element.data.xaxisList = data.xaxisList;
+                  element.data = data;
                 }
+
                 return element;
               })
             }

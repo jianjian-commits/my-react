@@ -35,7 +35,7 @@ const FilterModal = (props) => {
     if(isNull(symbol)) {
       commitValue = null;
     }
-  
+
     if(dataType == DataType.NUMBER) {
       commitValue = symbol == OPERATORS.RANGE ? [parseNumber(min), parseNumber(max)] : parseNumber(commitValue)
     }
@@ -138,7 +138,7 @@ const FilterModal = (props) => {
     const res = request(`/bi/forms/fields/${item.fieldId}?formId=${dataSource.id}`).then((res) => {
       if(res && res.msg === "success") {
         const data = res.data;
-        set(data.values);
+        set(data.values || []);
       }
     })
   }
@@ -165,6 +165,10 @@ const FilterModal = (props) => {
       const treeData = multiOption.map((each, idx)=> {
         return {title: each, value: each, key: each + idx};
       })
+
+      if(treeData.length !== 0) {
+        treeData.splice(0, 0, {title: "多选", value: "", key: treeData.length + ""})
+      }
 
       const tProps = {
         treeData,
