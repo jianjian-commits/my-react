@@ -392,7 +392,6 @@ export const logicCheckType = [
         type: "AND",
         describe: "AND(logic_expression1,logic_expression2,...)   所有参数为真，返回true",
         checkFunc: (...dataArray) => {
-            console.log(dataArray)
             return dataArray.reduce((result, item) => {
                 return result === false ? result : item
             }, true)

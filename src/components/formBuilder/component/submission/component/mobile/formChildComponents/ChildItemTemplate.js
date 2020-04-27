@@ -42,7 +42,6 @@ const ChildItemTemplate = props => {
 
   // 隐藏后显示组件数据
   const getRightTitle = formItem => {
-    // console.log(formItem)
     let res = [];
     for (let item in formItem) {
       switch (formItem[item].formType) {
@@ -78,7 +77,6 @@ const ChildItemTemplate = props => {
   };
 
 
-  // console.log("fck ", hasItemErr)
   let className = hasItemErr ?
     "form-child-block form-child-container form-child-errContent" : "form-child-block form-child-container";
 

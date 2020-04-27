@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Tooltip } from 'antd'
+import { Tooltip } from 'antd'
 
 export default class PositionCenterItem extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ export default class PositionCenterItem extends Component {
     this.props.deleteItem(this.props.index);
   }
   render() {
-    const { center, latitude, longitude, orientationRange } = this.props.item;
+    const { center } = this.props.item;
     return (
       <div className="position-center-item">
         <div className="address-text">

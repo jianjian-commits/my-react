@@ -626,7 +626,6 @@ class FormChildTest extends React.Component {
             index = dataArr.indexOf(value);
           }
 
-          // console.log(item, data, formChildData);
           // 如果存在 获得提交数据中关联字段的数据
           if (index > -1) {
             let data = filterSubmissionData(submissions, linkDataId);

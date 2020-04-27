@@ -27,13 +27,10 @@ export default class PositionComponentMoblie extends React.Component {
     return isInCenterList;
   };
   checkCenterPosition = (rule, value, callback) => {
-    console.log(value);
     const { validate } = this.props.item;
     const isLimitOrientationRange = validate.isLimitOrientationRange;
     if (isLimitOrientationRange) {
-      console.log("限制范围检查");
       if (this.isInCenter(value)) {
-        console.log("在设定范围内");
         callback();
       } else {
         callback("当前位置不在规定的定位范围内");

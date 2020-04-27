@@ -127,8 +127,8 @@ class MultiDropDownInspector extends React.Component {
 
     }else{
       const newItem = {
-        label: `其它`,
-        value: `其它`,
+        label: `其他`,
+        value: `其他`,
         isExtra:true,
         shortcut: ""
       };
@@ -349,8 +349,8 @@ class MultiDropDownInspector extends React.Component {
                 <Input
                 key={`chooseItem${index}`}
                 type="text"
-                value="其它"
-                placeholder="其它"
+                value="其他"
+                placeholder="其他"
                 autoComplete="off"
                 disabled={true}
                 />

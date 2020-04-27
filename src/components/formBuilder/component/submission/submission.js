@@ -495,6 +495,12 @@ class Submission extends Component {
     });
   };
 
+  _isFormChildComponent(key) {
+    return this.state.pureFormComponents.filter(component => component.type === "FormChildTest")
+      .map(component => component.key)
+      .some(componentKey => componentKey === key)
+
+  }
   // 设置正确的子表单数据
   setCorrectFormChildData = (values, formChildDataObj) => {
     let date = new Date(new Date().setUTCMilliseconds(0));
@@ -505,7 +511,8 @@ class Submission extends Component {
       if (formChildDataObj.hasOwnProperty(key)) {
         values[key] = formChildDataObj[key];
       }
-      if (Array.isArray(values[key])) {
+      if (this._isFormChildComponent(key)) {
+
         values[key].forEach((data, index) => {
           for (let k in data) {
             let type = data[k].formType;
@@ -1356,7 +1363,7 @@ class Submission extends Component {
   };
 
   render() {
-    const { formComponent, form, mobile = {}, userList, appid } = this.props;
+    const { formComponent, form, mobile = {}, appid } = this.props;
     const { getFieldDecorator } = form;
     let { pureFormComponents, currentLayout, errorResponseMsg, isApproverModalVisible, currentTaskId, formId } = this.state;
     let layout = null;
@@ -1544,10 +1551,11 @@ class Submission extends Component {
                 <ApproverModal
                   visible={isApproverModalVisible}
                   taskId={currentTaskId}
-                  setVisible={(isVisible) => { this.setState({ isApproverModalVisible: isVisible }) }}
+                  setVisible={(isVisible) => {
+                    this.setState({ isApproverModalVisible: isVisible })
+                  }}
                   formId={formId}
                   appId={appid}
-                  approverList={userList}
                   afterApproverModal={() => {
                     setTimeout(() => {
                       this.props.getApproveCount(this.props.appid)
@@ -1571,8 +1579,7 @@ export default connect(
     forms: store.survey.forms,
     formComponent: store.survey.formComponent,
     childFormComponent: store.survey.childFormComponent,
-    formValidation: store.survey.formValidation,
-    userList: store.formSubmitData.userList
+    formValidation: store.survey.formValidation
   }),
   {
     getSubmissionData,
