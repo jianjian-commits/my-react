@@ -275,7 +275,7 @@ const FormDataDetailHeader = (props) => {
     backSpanText = "我的待办";
   }
 
-  const { taskData, currentForm, creator, createdTime, updateTime, userList } = props;
+  const { taskData, currentForm, creator, createdTime, updateTime } = props;
   const {
     canSubmit,
     canResubmit,
@@ -365,7 +365,6 @@ const FormDataDetailHeader = (props) => {
               setVisible={setApproverModalVisible} 
               formId={props.currentForm.id}
               appId={appId}
-              approverList={userList}
               afterApproverModal={()=>{
                 props.resetData();
               }}/>
@@ -379,6 +378,5 @@ const FormDataDetailHeader = (props) => {
 export default connect(({formSubmitData}) => ({
   createdTime: formSubmitData.createdTime,
   updateTime: formSubmitData.updateTime,
-  creator: formSubmitData.creator,
-  userList: formSubmitData.userList
+  creator: formSubmitData.creator
 }))(FormDataDetailHeader);

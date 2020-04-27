@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Select, message } from "antd";
 import request from "../../../../../utils/request";
 const { Option } = Select;
 
 const ApproverModal = (props) =>{
   const [userList, setUserList] = React.useState([]);
+  const [approveList, setApproverList] = React.useState([]);
+
+  useEffect(()=>{
+    getUserList();
+  },[props.appId,props.formId])
+  
   function handleChange(value) {
-    setUserList(value)
+    setApproverList([value])
   }
 
   async function postApprover(){
     try{
-      const { formId, appId, taskId } = props; //
-      // const currentTaskId = taskId || "410a57a3-82cb-11ea-a696-0242ac130003";
+      const { formId, appId, taskId } = props; 
       const res = await request(`/flow/approval/${taskId}/setApprover`,{
         headers:{
           appid: appId,
@@ -20,7 +25,7 @@ const ApproverModal = (props) =>{
         },
         data:{
           "approveRoles": [],
-          "approveUsers": userList
+          "approveUsers": approveList
         },
         method: "PUT"
       });
@@ -34,6 +39,24 @@ const ApproverModal = (props) =>{
 
     }catch(err){
       message.error("修改审批人失败")
+    }
+  }
+
+  async function getUserList() {
+    const { formId, appId } = props;
+    try{
+      const res = await request(`/user/list`,{
+        headers:{
+          appid: appId,
+          formid: formId,
+        },
+        method: "GET"
+      });
+      if (res && res.status === "SUCCESS") {
+        setUserList(res.data)
+      } 
+    }catch(err){
+      message.error("获取用户列表失败");
     }
   }
   return (
@@ -50,14 +73,14 @@ const ApproverModal = (props) =>{
       }}}
   >
       <Select
-        mode="multiple"
+        // mode="multiple"
         style={{ width: '100%' }}
         placeholder="请选择审批人"
         onChange={handleChange}
       >
         {
-          props.approverList.map(approver=>{
-          return <Option key={approver.id} value={approver.id}>{approver.name}</Option>
+          userList.map(user=>{
+          return <Option key={user.id} value={user.id}>{user.name}</Option>
           })
         }
       </Select>

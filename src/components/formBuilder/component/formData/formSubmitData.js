@@ -19,8 +19,7 @@ import HeaderBar from "../../component/base/NavBar";
 import {
   getSubmissionData,
   getSubmissionDetail,
-  getFilterSubmissionData,
-  getUserList
+  getFilterSubmissionData
 } from "./redux/utils/getDataUtils";
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
@@ -182,7 +181,6 @@ class FormSubmitData extends PureComponent {
               this.setState({ isLoading });
             },
           });
-          this.props.getUserList(appId, formId);
         })
         .catch((err) => {
           console.error(err);
@@ -1104,7 +1102,6 @@ export default connect(
     getFilterSubmissionData,
     deleteFormData,
     clearFormData,
-    getSubmissionDetail,
-    getUserList
+    getSubmissionDetail
   }
 )(withRouter(FormSubmitData));

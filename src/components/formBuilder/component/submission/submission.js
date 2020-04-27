@@ -1289,7 +1289,7 @@ class Submission extends Component {
   };
 
   render() {
-    const { formComponent, form, mobile = {}, userList, appid } = this.props;
+    const { formComponent, form, mobile = {}, appid } = this.props;
     const { getFieldDecorator } = form;
     let { pureFormComponents, currentLayout, errorResponseMsg, isApproverModalVisible, currentTaskId, formId } = this.state;
     let layout = null;
@@ -1472,7 +1472,6 @@ class Submission extends Component {
                   setVisible={(isVisible)=>{this.setState({isApproverModalVisible: isVisible})}} 
                   formId={formId}
                   appId={appid}
-                  approverList={userList}
                   afterApproverModal={()=>{
                     setTimeout(() => {
                       this.props.getApproveCount(this.props.appid)
@@ -1496,8 +1495,7 @@ export default connect(
     forms: store.survey.forms,
     formComponent: store.survey.formComponent,
     childFormComponent: store.survey.childFormComponent,
-    formValidation: store.survey.formValidation,
-    userList: store.formSubmitData.userList
+    formValidation: store.survey.formValidation
   }),
   {
     getSubmissionData,
