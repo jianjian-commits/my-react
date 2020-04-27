@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import { connect } from "react-redux";
-import { Icon, Button } from "antd";
+import { Icon, Button, message } from "antd";
 import { setDashboards } from '../../redux/action';
-import request from '../../utils/request';
 import { useParams, useHistory } from "react-router-dom";
-import { Input } from 'antd';
+import { renameDB } from "../../utils/reqUtil";
 import classes from '../../scss/dashboard/header.module.scss';
 
 const DBHeader = props => {
@@ -18,20 +17,8 @@ const DBHeader = props => {
   }
 
   const onBlur = (e) => {
-    updateDB(e.target.value);
-  }
-
-  const saveDB = () => {
-    // history.push(`/app/${appId}/setting`);
-  }
-
-  const updateDB = (dbName) => {
-    request(`/bi/dashboards/${dashboardId}`, {
-      method: "PUT",
-      data: {
-        name: dbName
-      }
-    });
+    renameDB(appId, dashboardId, e.target.value);
+    message.success('保存成功');
   }
 
   const onChange = (e) => {
@@ -48,7 +35,7 @@ const DBHeader = props => {
           <Icon type="arrow-left"/>
         </Button>
       </div>
-      <input className={classes.renameDB} value={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
+      <input className={classes.renameDB} defaultValue={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
       {/* <Button onClick={saveDB} className={classes.dbHeaderSave} type="link">
         保 存
       </Button> */}

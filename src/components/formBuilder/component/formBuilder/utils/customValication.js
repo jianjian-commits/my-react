@@ -212,11 +212,11 @@ var buildFuncTreeArray = (data, treeArray) => {
 
 var _executeFuncTree = funcTreeArray => {
   return funcTreeArray.reduce((childrenArray, item) => {
-    console.log("type :", item);
+
     if (item.type != void 0) {
       let funcArgArray = _executeFuncTree(item.children);
 
-      console.log("arugmengts", funcArgArray);
+
       let specificArray = [];
       for (let i = 0, len = funcArgArray.length; i < len; i++) {
         let item = funcArgArray[i];
@@ -239,20 +239,20 @@ var _executeFuncTree = funcTreeArray => {
               leftValue,
               rightValue
             );
-            console.log("asjdhkljhwjklwher", res);
+
             specificArray.push(res);
           }
         }
       }
 
-      console.log(specificArray);
+
 
       if (specificArray.length > 0) {
         childrenArray.push(item.checkFunc.apply(this, specificArray));
       } else {
         childrenArray.push(item.checkFunc.apply(this, funcArgArray));
       }
-      console.log(childrenArray);
+
 
       return childrenArray;
     } else {
@@ -269,7 +269,7 @@ export const checkCustomValidate = (data, str) => {
     .replace(/\"|\'/g, "")
     .replace(/\，/g, ",");
 
-  console.log(str);
+
 
   let resultArray = getFuncTree(str)
     .filter(item => {
@@ -279,11 +279,11 @@ export const checkCustomValidate = (data, str) => {
       return getArrayLevel(item);
     });
 
-  console.log(resultArray);
+
 
   let funcTreeArray = buildFuncTreeArray(data, resultArray);
 
-  console.log(funcTreeArray);
+
 
   let a = _executeFuncTree(funcTreeArray);
 
@@ -305,13 +305,12 @@ export const checkCustomValidate = (data, str) => {
         console.error("this symbol not find");
       } else {
         let res = specificSymbol.checkFunc.call(this, leftValue, rightValue);
-        console.log("asjdhkljhwjklwher", res);
+
         specificArray.push(res);
       }
     }
   }
-  console.log(specificArray);
-  console.log("result", a);
+
 
   if (specificArray.length > 0) {
     return specificArray[0];

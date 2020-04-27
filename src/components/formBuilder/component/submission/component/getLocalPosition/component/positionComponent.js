@@ -62,7 +62,6 @@ export default class PositionComponent extends Component {
       this.marker = new AMap.Marker({
         position: this.lnglat
       });
-      // console.log("marker", this.marker,this.lnglat);
       this.marker.setMap(this.map);
       this.map.setFitView();
     });
@@ -161,8 +160,6 @@ export default class PositionComponent extends Component {
   };
 
   showInfoClick = e => {
-    // console.log("show 可选列表")
-    // console.log("e", e);
     this.setState(
       {
         isPositionModalVisible: true
@@ -205,8 +202,6 @@ export default class PositionComponent extends Component {
         this.lnglat,
         rangeNumber,
         (status, result) => {
-          // console.log("searchNearBy result",result)
-          // console.log("searchNearBy status",status)
         }
       );
     });
@@ -232,7 +227,6 @@ export default class PositionComponent extends Component {
   };
 
   clickPositionMarker = e => {
-    console.log("clicckPosition", e);
     this.setState(
       {
         //修改后的位置

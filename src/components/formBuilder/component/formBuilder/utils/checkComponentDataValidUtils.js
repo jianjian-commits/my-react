@@ -6,7 +6,7 @@ export const checkValueValidByType = (item, data, errorValues=[]) => {
     return true;
   }
 
-  // console.log(item, data)
+
 
   switch (formType) {
     case "PhoneInput":
@@ -87,15 +87,6 @@ export const checkValueValidByType = (item, data, errorValues=[]) => {
           return true;
         }
       }
-      console.log(
-        "测试方法",
-        checkMaxAndMin(
-          validate.isLimitLength,
-          validate.minOptionNumber,
-          validate.maxOptionNumber,
-          data.length
-        )
-      );
       return checkMaxAndMin(
         validate.isLimitLength,
         validate.minOptionNumber,

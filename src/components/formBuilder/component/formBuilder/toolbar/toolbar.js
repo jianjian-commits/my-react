@@ -131,7 +131,7 @@ export const basicComponentsArray = [
       isLimitPoint:false,
       max: Number.MAX_VALUE,
       min: -Number.MAX_VALUE,
-      limitPoint:0
+      limitPoint:-1
     },
     data: {
       type: 'custom'

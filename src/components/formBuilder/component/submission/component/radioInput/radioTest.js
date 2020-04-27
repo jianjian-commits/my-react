@@ -15,6 +15,7 @@ class RadioInput extends React.Component {
 
     this.state = {
       inputValue: undefined,
+      inputMiddleValue:"",
       item: this.props.item
     };
   }
@@ -54,7 +55,6 @@ class RadioInput extends React.Component {
 
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
-    // console.log("fck",value)
     const { callEventArr } = this.props.item;
     if (callEventArr) {
       callEventArr.forEach(fnc => {
@@ -72,9 +72,10 @@ class RadioInput extends React.Component {
 
       let newValues =  [...values,newObj]
       this.setState({
-        item:{...this.state.item,values:newValues}
+        item:{...this.state.item,values:newValues},
+        inputMiddleValue:value
       },()=>{
-        setFieldsValue({[this.props.item.key]:value})
+        setFieldsValue({[this.props.item.key]:value || this.state.inputMiddleValue})
       })
     }
   render() {

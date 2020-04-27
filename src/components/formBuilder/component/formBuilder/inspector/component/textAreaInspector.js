@@ -62,7 +62,6 @@ class TextAreaInspector extends React.Component {
     let { name, value, checked } = ev.target;
     let { validate, unique } = this.props.element;
     validate = { ...validate };
-    // console.log(this.props.element, validate)
     switch (name) {
       case "customMessage": {
         validate.customMessage = value;

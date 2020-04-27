@@ -129,11 +129,10 @@ class NumberInput extends React.Component {
     // }
     if (value === "") {
       callback();
-    } else if (this.props.item.validate.isLimitLength 
-      && (validateMax !== null && validateMax < Number(value)) 
-      || (validateMin !== null && validateMin > Number(value)))
+    } else if (this.props.item.validate.isLimitLength
+      && ((validateMax !== Number.MAX_VALUE && validateMax < Number(value)) 
+      || (validateMin !== -Number.MAX_VALUE && validateMin > Number(value))))
       {
-      
         isStringValid(errMsg) ? callback(errMsg) : callback(defaultErrMsg);
     } else if(this.props.item.validate.isLimitPoint && (newNumberStr !== undefined)){
       if(newNumberStr.length > validatePoint ){

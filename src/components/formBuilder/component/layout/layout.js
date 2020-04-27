@@ -536,9 +536,9 @@ class Layout extends PureComponent {
 
         return item;
       });
-      // resultDataArray.push(customValue)
 
-      console.log(resultDataArray);
+
+
 
       this.props.submitLayout(
         resultDataArray,
@@ -547,35 +547,6 @@ class Layout extends PureComponent {
         currentLayoutId
       );
 
-      // if (this.state.operationType === "edit") {
-      //   this.state.formLayoutList.map(item => {
-      //     if (item.id === this.state.currentLayoutId) {
-      //       item.layout = newLayout;
-      //       item.name = this.state.currentLayoutName;
-      //       return item;
-      //     } else {
-      //       return item;
-      //     }
-      //   });
-      //   const newFormLayoutList = [...this.state.formLayoutList];
-      //   this.props.submitLayout(
-      //     newFormLayoutList,
-      //     formComponent,
-      //     this.state.currentLayoutId
-      //   );
-      // } else {
-      //   const createLayout = {
-      //     name: this.state.currentLayoutName,
-      //     layout: newLayout,
-      //     id: this.state.currentLayoutId
-      //   };
-      //   const newFormLayoutList = [...this.state.formLayoutList, createLayout];
-      //   this.props.submitLayout(
-      //     newFormLayoutList,
-      //     formComponent,
-      //     this.state.currentLayoutId
-      //   );
-      // }
     });
   };
 
@@ -643,7 +614,6 @@ class Layout extends PureComponent {
     //   ];
     // } else {
     //   newLayout = currentLayout;
-    //   console.log("newLayout", newLayout);
     // }
     // let newLayout = currentLayout.map(item => {
     //   if(item.i === id){
@@ -698,9 +668,6 @@ class Layout extends PureComponent {
   //       isShow: layout[idList.indexOf(item.id)].isShow
   //     };
   //   });
-  //   console.log("layOut", layout);
-
-  //   console.log("newPureFormComponents", newPureFormComponents);
 
   //   this.setState(state => ({
   //     ...state,
@@ -815,7 +782,6 @@ class Layout extends PureComponent {
                     //     };
                     //   }
                     // });
-                    // console.log("newCurrentLayout", newCurrentLayout);
 
                     // this.setState({ currentLayout: newCurrentLayout });
                   }}

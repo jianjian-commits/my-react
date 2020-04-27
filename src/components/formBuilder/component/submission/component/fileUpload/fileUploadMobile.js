@@ -2,7 +2,7 @@ import React from "react";
 import { Form } from "antd";
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import { isValueValid, isStringValid } from "../../../../utils/valueUtils";
-import FileUploadItem from './fileUploadMobileItemX';
+import FileUploadItem from './fileUploadMobileItem';
 export default class FileUpload extends React.Component {
   constructor(props) {
     super(props);

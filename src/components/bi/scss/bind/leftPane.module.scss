@@ -9,36 +9,39 @@
 
 .leftPaneData {
   height: 20%;
-  border: 1px solid #adb5bd;
   border-bottom: none;
-  padding: 0 14px;
+  padding: 0 20px;
 }
 
 .leftPaneDimension {
   height: 40%;
-  border: 1px solid #babfc5;
   border-top: 1px dashed #adb5bd;
   border-bottom: none;
 }
 
 .leftPaneMeasure {
   height: 40%;
-  border: 1px solid #adb5bd;
   border-top: 1px dashed #adb5bd;
 }
 
 .bindItem {
-  height: 20px;
-  margin: 10px 14px;
+  height: 31px;
+  line-height: 31px;
+  // margin: 12px 0;
+  padding-left: 23px;
   overflow: hidden;
+  color: #333333;
+  font-size: 12px;
+  box-sizing: border-box;
 }
 
 .bindItem:hover {
-  background-color: lightgreen;
+  background-color: rgba(42,122,255,0.15);
 }
 
 .dataIcon {
-  margin-right: 10px;
+  font-size: 11px;
+  margin-right: 9px;
 }
 
 .dataBox {
@@ -58,15 +61,17 @@
 }
 
 .dataSourceName:hover {
-  background-color: lightblue;
-  text-decoration: underline;
+  // background-color: lightblue;
+  // text-decoration: underline;
   cursor: pointer;
 }
 
 .colTitle {
   // text-align: center;
   list-style: none;
-  margin: 20px 14px;
-  font-size: 16px;
+  margin-top: 22px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  font-size: 14px;
   color: gray;
 }

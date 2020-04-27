@@ -228,7 +228,6 @@ export const saveForm = (
   })
     .then(response => {
       let id = response.data.id;
-      console.log(id);
       callback(`${url}${id}/edit?formId=${id}`);
     })
     .catch(err => {
@@ -248,7 +247,7 @@ export const updateForm = (
   localForm,
   errMessage,
   type,
-  callback = ()=>{},
+  callback = () => { },
   appid,
   extraProp
 ) => dispatch => {
@@ -352,19 +351,14 @@ export const updateForm = (
     .catch(err => {
       let status = err.response.status;
       callback(status);
-      if(status === 401) {
+      if (status === 401) {
         message.error("无权限进行此操作！");
         window.location.reload();
       } else {
         message.error("发生未知错误，请重试！");
       }
       setIsSetApiStatus(formDataArray, tempApiStatus);
-      // if (err.response.data === "Token Expired") {
-      //   console.log("token 已过期，正在请求新的token");
-      //   // mockLoginAndSetData(false, true);
-      // } else {
       console.info(err);
-      // }
     });
 };
 
@@ -411,8 +405,6 @@ export const getAllForms = () => dispatch => {
     url: config.apiUrl + "/form"
   })
     .then(response => {
-      // console.log(1);
-      // console.log(response);
       dispatch({
         type: GET_ALL_FORMS,
         formArray: response.data

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, Icon} from "antd";
+import { Button, Icon, message} from "antd";
 import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange } from '../../redux/action';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
@@ -11,7 +11,8 @@ import classes from '../../scss/elements/element.module.scss';
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited, dataSource} = props;
+  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited,
+    dataSource, elemType} = props;
   let [name, setName] = useState("新建图表");
 
   const handleBack = () => {
@@ -22,14 +23,23 @@ const EditorHeader = props => {
   }
 
   const handleSave = (name) => {
-    updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo);
-    setDB(dashboardId, setDashboards);
-    saveChartChange();
+    Promise.all([
+      updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo, elemType),
+      setDB(appId, dashboardId, setDashboards),
+      saveChartChange()
+    ]).then(
+      message.success("保存成功")
+    );
   }
 
   const onBlur = (e) => {
-    setName(e.target.value);
-    handleSave(e.target.value);
+    if(e.target.value == '') {
+      setName('新建图表');
+      handleSave('新建图表');
+    } else {
+      setName(e.target.value);
+      handleSave(e.target.value);
+    }
   }
 
   const [visible, setVisible] = useState(false);
@@ -62,7 +72,7 @@ const EditorHeader = props => {
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
-      <input className={classes.renameElement} defaultValue={elemName ? elemName: "新建图表"} onBlur={onBlur}/>
+      <input className={classes.renameElement} defaultValue={elemName ? elemName : "新建图表"} onBlur={onBlur}/>
       <Button onClick={()=> {handleSave(name)}} className={classes.elementHeaderSave} type="link">
         保 存
       </Button>
@@ -76,7 +86,8 @@ export default connect(
     bindDataArr: store.bi.bindDataArr,
     isChartEdited:store.bi.isChartEdited,
     chartInfo: store.bi.chartInfo,
-    dataSource: store.bi.dataSource
+    dataSource: store.bi.dataSource,
+    elemType: store.bi.elemType
   }),
   { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange}
 )(EditorHeader);

@@ -108,7 +108,7 @@ class FormChildTest extends React.Component {
           validate: item.validate,
           hasErr: false,
           autoInput: item.autoInput,
-          data: coverTimeUtils.localDate(data,item.type) || null
+          data: data || null
         };
         break;
       case "RadioButtons": {
@@ -813,7 +813,6 @@ class FormChildTest extends React.Component {
                       item={item}
                       onChange={value => {
                         item.data = value;
-                        console.log(value)
                         checkValueValidByType(item, value)
                           ? (item.hasErr = false)
                           : (item.hasErr = true);
@@ -1036,7 +1035,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if(item.data) {
-              const tempDate = coverTimeUtils.localDate(item.data, item.formType);
+              const tempDate = coverTimeUtils.localDate(item.data, item.formType, true);
               valueOption.value = tempDate;
             }
             resultArray.push(
@@ -1068,7 +1067,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if(item.data) {
-              valueOption.value = moment(coverTimeUtils.localDate(item.data, item.formType));
+              valueOption.value = moment(coverTimeUtils.localDate(item.data, item.formType, true));
             }
             resultArray.push(
               <div key={key} className={className}>
@@ -1099,7 +1098,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if(item.data) {
-              const tmpMoment = coverTimeUtils.localDate(item.data, item.formType);
+              const tmpMoment = coverTimeUtils.localDate(item.data, item.formType, true);
               valueOption.value = tmpMoment;
             }
             resultArray.push(
@@ -1221,7 +1220,7 @@ class FormChildTest extends React.Component {
         }
       });
       // 赋值
-      console.log(selections);
+      // console.log(selections);
       result[item.key].values = selections;
       // 解决当newArray为空时 输入内容列表会清空
       // newArray ? this.props.saveSubmitData(newArray) : null;

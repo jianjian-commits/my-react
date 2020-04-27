@@ -127,7 +127,7 @@ class DateInput extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if (initData) {
-      options.initialValue = coverTimeUtils.localDate(initData, item.type);
+      options.initialValue = coverTimeUtils.localDate(initData, item.type, true);
     } else if(isAutoInput) {
       options.initialValue = new moment();
     }

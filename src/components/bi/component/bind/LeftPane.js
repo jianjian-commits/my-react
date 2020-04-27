@@ -1,4 +1,4 @@
-import React, {PureComponent, useState} from "react";
+import React, {useState} from "react";
 import DragItem from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
@@ -28,10 +28,8 @@ const LeftPane = props => {
     }
 
     dataArr.forEach((each, idx) => {
-      const currentGroup = GroupType.SUM;
-
       if(each) {
-        const item = {...each, bindType: each.type === "NUMBER" ? Types.MEASURE : Types.DIMENSION, option: {currentGroup}}
+        const item = {...each, bindType: each.type === "NUMBER" ? Types.MEASURE : Types.DIMENSION}
         const arr = each.type === "NUMBER" ? meaArr : dimArr;
         const comp = <DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>;
         arr.push(comp);
@@ -48,19 +46,11 @@ const LeftPane = props => {
 
   const { dataSource } = props;
 
-  const [ listVisible,setListVisible] = useState(false); 
+  const [ listVisible, setListVisible] = useState(false); 
   const listModalProps = {
     visible:listVisible,
     type:"change",
-    showModal: () => {
-      setListVisible(true);
-    },
-    handleCancel: e => {
-      setListVisible(false);
-    },
-    handleOK: e => {
-      setListVisible(false);
-    }
+    setVisible: setListVisible
   };
   return (
     <div className={classes.leftPane}>
@@ -69,7 +59,7 @@ const LeftPane = props => {
           <div>数据</div>
           <div>
             <DataListModal key={Math.random()} {...listModalProps}/>
-            <div className={classes.changeDataSource} onClick={listModalProps.showModal}>更改数据源</div>
+            <div className={classes.changeDataSource} onClick={() => setListVisible(true)}>更改数据源</div>
           </div>
         </div>
         <div>

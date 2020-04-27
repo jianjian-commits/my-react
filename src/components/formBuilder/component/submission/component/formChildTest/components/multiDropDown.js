@@ -8,7 +8,6 @@ export default class MultiDropDownItem extends React.Component {
     const indexs = item.dropDownOptions.map(item => item.value);
     let selectValues = [];
     let inputEditValue = "";
-    console.log(item)
     if(item.data){
       item.data.forEach(value => {
         let index = indexs.indexOf(value);
@@ -45,7 +44,13 @@ export default class MultiDropDownItem extends React.Component {
             this.setState({ selectIndexArr: selectAllArr }, () => {
               const dataArr = dropDownOptions
                 .filter((element, i) => this.state.selectIndexArr.includes(i))
-                .map(item => item.value);
+                .map(item => {
+                  if(item.isExtra){
+                    return this.state.inputValue;
+                  }else{
+                    return item.value;
+                  }
+                });
               onChange(dataArr);
               this.setState({
                 isShowExtra:true,
@@ -74,13 +79,19 @@ export default class MultiDropDownItem extends React.Component {
                       .filter((element, i) =>
                         this.state.selectIndexArr.includes(i)
                       )
-                      .map(item => item.value);
-
+                      .map(item =>{
+                        if(item.isExtra){
+                          return this.state.inputValue
+                        }else{
+                          return item.value
+                        }
+                      });
+                      
                       this.setState({
                         selectValueArr: dataArr
                       })
 
-                    onChange(dataArr);
+                      onChange(dataArr);
 
                     this.setState({
                       isShowExtra:false,
@@ -89,22 +100,27 @@ export default class MultiDropDownItem extends React.Component {
                   }
                 );
               } else {
+
                 this.setState(
                   {
-                    selectIndexArr: [...selectIndexArr, index]
+                    selectIndexArr: [...this.state.selectIndexArr,index]
                   },
                   () => {
-                    const dataArr = dropDownOptions
+                      let dataArr = dropDownOptions
                       .filter((element, i) =>
-                        this.state.selectIndexArr.includes(i)
+                      this.state.selectIndexArr.includes(i)
                       )
-                      .map(item => item.value);
-
-                    onChange(dataArr);
-
-                    this.setState({
+                      .map(item => {
+                        if(item.isExtra){
+                          return this.state.inputValue
+                        }else{
+                          return item.value
+                        }
+                      });
+                      onChange(dataArr);
+                      this.setState({
                       selectValueArr:dataArr
-                    })
+                      })
 
                     if(item.isExtra) {
                       this.setState({isShowExtra:true})
@@ -150,6 +166,7 @@ export default class MultiDropDownItem extends React.Component {
                         selectMiddleArr.pop();
                         let newValue = this.state.inputValue === "其他" ? '': this.state.inputValue
                         let newSelectArr = [...selectMiddleArr,newValue]
+
                         onChange(newSelectArr)
                         this.setState({
                         selectValueArr:newSelectArr,
