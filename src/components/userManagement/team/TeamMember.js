@@ -9,17 +9,18 @@ import request from "../../../utils/request";
 import { getcurrentCompany } from "../../../store/loginReducer";
 import InviteUser from "../ModalInviteUser";
 import Authenticate from "../../shared/Authenticate";
+import { HomeContentTitle } from "../../shared/";
 import { catchError } from "../../../utils";
 import { ReactComponent as Funnel } from "../../../assets/icons/company/filter.svg";
 import {
   TEAM_MANAGEMENT_INVITE,
   TEAM_MANAGEMENT_DROP,
-  TEAM_MANAGEMENT_SWITCH
+  TEAM_MANAGEMENT_SWITCH,
 } from "../../../auth";
 
 export default connect(
   ({ login }) => ({
-    loginData: login
+    loginData: login,
   }),
   { getcurrentCompany }
 )(function TeamMember({ loginData, getcurrentCompany }) {
@@ -28,38 +29,38 @@ export default connect(
   const [data, setData] = React.useState(null); //用户数据
   const [total, setTotal] = React.useState(null);
   const [onOff, setOnOff] = React.useState({
-    filterSwith: false, //筛选的显示开关
-    changeGroupSwitch: false //变更分组模态框显示开关
+    filterSwith: true, //筛选的显示开关
+    changeGroupSwitch: false, //变更分组模态框显示开关
   });
   const [key, setKey] = React.useState({
     userKey: null, //变更分组用户的Id
-    groupKey: null //变更分组用户的当前分组id
+    groupKey: null, //变更分组用户的当前分组id
   });
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
-    pageSize: 10
+    pageSize: 10,
   });
   const [filterConditions, setFilterConditions] = React.useState([]);
   const columns = [
     {
       title: "用户昵称",
       dataIndex: "name",
-      width: 150
+      width: 150,
     },
     {
       title: "邮箱",
       dataIndex: "email",
-      width: 200
+      width: 200,
     },
     {
       title: "最后登录时间",
       dataIndex: "lastLoginDate",
-      width: 200
+      width: 200,
     },
     {
       title: "分组",
       dataIndex: "groupName",
-      width: 200
+      width: 200,
     },
     {
       title: "操作",
@@ -67,7 +68,7 @@ export default connect(
       width: 200,
       render: (text, record) => {
         return text.group.name === "超级管理员" &&
-          currentCompany.groups.filter(item => {
+          currentCompany.groups.filter((item) => {
             return item.name === "超级管理员";
           })[0].peopleNumber === 1 ? (
           true
@@ -95,8 +96,8 @@ export default connect(
             </Authenticate>
           </span>
         );
-      }
-    }
+      },
+    },
   ];
   //获取成员
   const gainData = useCallback(async () => {
@@ -110,12 +111,12 @@ export default connect(
       data: {
         page: pageConfig.currentPage,
         size: pageConfig.pageSize,
-        fields: filterConditions
-      }
+        fields: filterConditions,
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res && res.status === "SUCCESS") {
-          res.data.datas.forEach(item => {
+          res.data.datas.forEach((item) => {
             item.key = item.id;
             item.lastLoginDate = item.lastLoginDate
               ? new Date(item.lastLoginDate).toLocaleString()
@@ -129,7 +130,7 @@ export default connect(
         }
         loadingTimeout();
       })
-      .catch(err => {
+      .catch((err) => {
         loadingTimeout();
         catchError(err);
         return currentCompany.id;
@@ -137,12 +138,12 @@ export default connect(
     return clearTimeout(loadingTimeout());
   }, [pageConfig, filterConditions, currentCompany.id]);
   //踢出成员
-  const confirm = sysUserId => {
+  const confirm = (sysUserId) => {
     request(`/sysUser/${sysUserId}/company`, {
       method: "PUT",
-      data: { oldCompanyId: currentCompany.id }
+      data: { oldCompanyId: currentCompany.id },
     })
-      .then(res => {
+      .then((res) => {
         if (res && res.status === "SUCCESS") {
           if (
             pageConfig.currentPage >
@@ -152,7 +153,7 @@ export default connect(
           ) {
             setPageConfig({
               ...pageConfig,
-              currentPage: pageConfig.currentPage - 1
+              currentPage: pageConfig.currentPage - 1,
             });
           } else {
             gainData();
@@ -163,13 +164,13 @@ export default connect(
           message.error(res.msg || "踢出失败");
         }
       })
-      .catch(err => catchError(err));
+      .catch((err) => catchError(err));
   };
   // 过滤组件开关显示
   const onClickFilter = () => {
     setOnOff({
       ...onOff,
-      filterSwith: !onOff.filterSwith
+      filterSwith: !onOff.filterSwith,
     });
   };
   //过滤请求参数设置
@@ -179,39 +180,39 @@ export default connect(
       ? {
           conditions: [
             { negative: false, rule: "LK", value },
-            { negative: false, rule: "LK", value }
+            { negative: false, rule: "LK", value },
           ],
-          properties: ["email", "name"]
+          properties: ["email", "name"],
         }
       : null;
     _fiels[1] = groupId
       ? {
           conditions: [{ negative: false, rule: "EQ", value: groupId }],
-          properties: ["sysRoles.id"]
+          properties: ["sysRoles.id"],
         }
       : null;
-    const _newFiels = _fiels.filter(item => item !== null);
+    const _newFiels = _fiels.filter((item) => item !== null);
     setFilterConditions(_newFiels);
   };
   //变更分组
   const handleChange = (obj, e) => {
     setKey({
       userKey: obj.id,
-      groupKey: obj.group.id
+      groupKey: obj.group.id,
     });
     setOnOff({
       ...onOff,
-      changeGroupSwitch: !onOff.actionSwitch
+      changeGroupSwitch: !onOff.actionSwitch,
     });
   };
   // 提交变更分组
-  const changeGroupCal = async groupKey => {
+  const changeGroupCal = async (groupKey) => {
     if (groupKey) {
       await request(`/sysUser/${key.userKey}/group`, {
         method: "PUT",
-        data: { oldGroupId: key.groupKey, newGroupId: groupKey }
+        data: { oldGroupId: key.groupKey, newGroupId: groupKey },
       })
-        .then(res => {
+        .then((res) => {
           if (res && res.status === "SUCCESS") {
             gainData();
             getcurrentCompany();
@@ -220,18 +221,18 @@ export default connect(
             message.error(res.msg || "变更失败");
           }
         })
-        .catch(err => catchError(err));
+        .catch((err) => catchError(err));
     }
     setOnOff({
       ...onOff,
-      changeGroupSwitch: !onOff.changeGroupSwitch
+      changeGroupSwitch: !onOff.changeGroupSwitch,
     });
   };
   //点击页码
-  const onChangePage = e => {
+  const onChangePage = (e) => {
     setPageConfig({
       ...pageConfig,
-      currentPage: e
+      currentPage: e,
     });
   };
 
@@ -243,27 +244,20 @@ export default connect(
   useEffect(() => {
     gainData();
   }, [gainData]);
-
+  const btns = (
+    <>
+      <Authenticate auth={TEAM_MANAGEMENT_INVITE}>
+        <InviteUser {...loginData} />
+      </Authenticate>
+      {/* <Button className={classes.filterBtn} type="link" onClick={onClickFilter}>
+        <Funnel className={classes.filterSvg} />
+        筛选
+      </Button> */}
+    </>
+  );
   return currentCompany ? (
     <div className={classes.container}>
-      <Row type="flex" justify="space-between">
-        <Col>
-          <div className={classes.title}>公司成员</div>
-        </Col>
-        <Col>
-          <Authenticate auth={TEAM_MANAGEMENT_INVITE}>
-            <InviteUser {...loginData} />
-          </Authenticate>
-          <Button
-            className={classes.filterBtn}
-            type="link"
-            onClick={onClickFilter}
-          >
-            <Funnel className={classes.filterSvg} />
-            筛选
-          </Button>
-        </Col>
-      </Row>
+      <HomeContentTitle title={"公司成员"} btns={btns} />
       {onOff.filterSwith ? (
         <Filter groups={currentCompany.groups} fn={filterData} />
       ) : null}
@@ -272,7 +266,7 @@ export default connect(
           pagination={{
             total: total,
             pageSize: pageConfig.pageSize,
-            onChange: onChangePage
+            onChange: onChangePage,
           }}
           loading={loading}
           columns={columns}

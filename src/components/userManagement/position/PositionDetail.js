@@ -5,7 +5,7 @@ import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
 import proClass from "../../profileManagement/profile.module.scss";
-import { Title } from "../../shared";
+import { Navigation, HomeContentTitle } from "../../shared";
 import request from "../../../utils/request";
 import { catchError } from "../../../utils";
 import RelateWidage from "./RelateWidage";
@@ -14,32 +14,32 @@ export const BaseInfo = ({
   positionInfo,
   editing,
   updateBaseInfo,
-  updateEditing
+  updateEditing,
 }) => {
   const list = [
     { key: "value", label: "职位名称", value: positionInfo.value },
     {
       key: "superiorValue",
       label: "汇报上级",
-      value: positionInfo.superiorValue
+      value: positionInfo.superiorValue,
     },
     {
       key: "dataShare",
       label: "是否与同时共享数据",
-      value: positionInfo.dataShare
+      value: positionInfo.dataShare,
     },
-    { key: "description", label: "描述", value: positionInfo.description }
+    { key: "description", label: "描述", value: positionInfo.description },
   ];
-  const renderContent = item => {
+  const renderContent = (item) => {
     const editSwitchHandler = () => updateEditing(item.key, !editing[item.key]);
-    const editUpdateHandler = value => updateBaseInfo(item.key, value);
+    const editUpdateHandler = (value) => updateBaseInfo(item.key, value);
     switch (item.key) {
       case "value":
         return editing[item.key] ? (
           <Input
             value={item.value}
             onBlur={editSwitchHandler}
-            onChange={e => editUpdateHandler(e.target.value)}
+            onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
           <>
@@ -50,7 +50,7 @@ export const BaseInfo = ({
       case "dataShare":
         return (
           <Radio.Group
-            onChange={e =>
+            onChange={(e) =>
               editUpdateHandler(e.target.value === 1 ? true : false)
             }
             value={item.value ? 1 : 2}
@@ -64,7 +64,7 @@ export const BaseInfo = ({
           <Input
             value={item.value}
             onBlur={editSwitchHandler}
-            onChange={e => editUpdateHandler(e.target.value)}
+            onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
           <>
@@ -80,7 +80,7 @@ export const BaseInfo = ({
     <div className={proClass.groupBasic}>
       <table>
         <tbody>
-          {list.map(l => (
+          {list.map((l) => (
             <tr key={l.key}>
               <td>{l.label}</td>
               <td>{renderContent(l)}</td>
@@ -94,20 +94,20 @@ export const BaseInfo = ({
 
 const userSectionStyle = {
   display: "flex",
-  marginTop: 15
+  marginTop: 15,
 };
 const userTitleStyle = {
   flex: 1,
   fontSize: "15px",
   margin: "30px 8px 17px 0",
   display: "inline-block",
-  color: "#777f97"
+  color: "#777f97",
 };
 const userButtonStyle = {
   flex: 1,
   textAlign: "right",
   lineHeight: "69px",
-  marginRight: 10
+  marginRight: 10,
 };
 
 const RelateModal = ({
@@ -117,7 +117,7 @@ const RelateModal = ({
   positionId,
   allUsers,
   selectedKeys,
-  updateSelectedKeys
+  updateSelectedKeys,
 }) => {
   return (
     <Modal
@@ -153,23 +153,23 @@ const UserRelation = ({
   allUsers,
   selectedKeys,
   updateSelectedKeys,
-  removeUser
+  removeUser,
 }) => {
   const columns = [
     {
       title: "姓名",
       dataIndex: "name",
-      key: "name"
+      key: "name",
     },
     {
       title: "邮箱",
       dataIndex: "email",
-      key: "email"
+      key: "email",
     },
     {
       title: "加入时间",
       dataIndex: "entryDate",
-      key: "entryDate"
+      key: "entryDate",
     },
     {
       title: "操作",
@@ -186,8 +186,8 @@ const UserRelation = ({
             <Button type="link">踢出</Button>
           </Popconfirm>
         </div>
-      )
-    }
+      ),
+    },
   ];
   return (
     <div>
@@ -233,40 +233,40 @@ class PositionDetail extends Component {
         value: "",
         superiorValue: "",
         dataShare: false,
-        description: ""
+        description: "",
       },
       editing: {
         value: false,
-        description: false
+        description: false,
       },
       users: [],
       modalOpen: false,
-      modalSelectedKeys: []
+      modalSelectedKeys: [],
     };
   }
   updateEditing = (key, value) => {
-    this.setState(state => {
+    this.setState((state) => {
       return {
         ...state,
         editing: {
           ...state.editing,
-          [key]: value
-        }
+          [key]: value,
+        },
       };
     });
   };
   updateBaseInfo = (key, value) => {
-    this.setState(state => {
+    this.setState((state) => {
       return {
         ...state,
         positionInfo: {
           ...state.positionInfo,
-          [key]: value
-        }
+          [key]: value,
+        },
       };
     });
   };
-  updateTargetState = key => value => {
+  updateTargetState = (key) => (value) => {
     this.setState({ [key]: value });
   };
   fetchBaseInfo = async () => {
@@ -274,7 +274,7 @@ class PositionDetail extends Component {
       const res = await request(`/position/${this.props.position.id}`);
       if (res && res.status === "SUCCESS" && res.data) {
         this.setState({
-          positionInfo: res.data
+          positionInfo: res.data,
         });
       } else {
         message.error(res.msg || "获取职位详情失败");
@@ -288,11 +288,11 @@ class PositionDetail extends Component {
       const res = await request(`/position/${this.props.position.id}/user`);
       if (res && res.status === "SUCCESS") {
         this.setState({
-          users: (res.data || []).map(e => ({
+          users: (res.data || []).map((e) => ({
             ...e,
-            entryDate: moment(e.entryDate).format("YYYY/MM/DD H:mm")
+            entryDate: moment(e.entryDate).format("YYYY/MM/DD H:mm"),
           })),
-          modalSelectedKeys: (res.data || []).map(e => e.id)
+          modalSelectedKeys: (res.data || []).map((e) => e.id),
         });
       } else {
         message.error(res.msg || "获取职位用户列表失败");
@@ -309,8 +309,8 @@ class PositionDetail extends Component {
         data: {
           dataShare,
           description,
-          name: value
-        }
+          name: value,
+        },
       });
       if (res && res.status === "SUCCESS") {
         this.props.returnTree();
@@ -325,11 +325,12 @@ class PositionDetail extends Component {
   modalConfirmHandle = async () => {
     const { modalSelectedKeys } = this.state;
     const { isTop } = this.props;
-    if(isTop && modalSelectedKeys.length > 1) return message.error("顶级职位只能关联一位用户");
+    if (isTop && modalSelectedKeys.length > 1)
+      return message.error("顶级职位只能关联一位用户");
     try {
       const res = await request(`/position/${this.props.position.id}/user`, {
         method: "PUT",
-        data: modalSelectedKeys
+        data: modalSelectedKeys,
       });
       if (res && res.status === "SUCCESS") {
         message.success("保存成功");
@@ -344,10 +345,10 @@ class PositionDetail extends Component {
     }
   };
   modalCancelHandle = () => {
-    this.setState(state => ({
+    this.setState((state) => ({
       ...state,
       modalOpen: false,
-      modalSelectedKeys: state.users.map(e => e.id)
+      modalSelectedKeys: state.users.map((e) => e.id),
     }));
   };
   fetchAllUsers = async () => {
@@ -356,8 +357,8 @@ class PositionDetail extends Component {
         method: "POST",
         data: {
           page: 0,
-          size: 1000000
-        }
+          size: 1000000,
+        },
       });
       if (res && res.status === "SUCCESS") {
         this.setState({ allUsers: res.data.datas });
@@ -368,11 +369,11 @@ class PositionDetail extends Component {
       catchError(e);
     }
   };
-  removeUserHandle = async userId => {
+  removeUserHandle = async (userId) => {
     const { id } = this.state.positionInfo;
     try {
       const res = await request(`/position/${id}/user/${userId}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
       if (res && res.status === "SUCCESS") {
         message.success("踢出成功");
@@ -398,24 +399,27 @@ class PositionDetail extends Component {
       modalOpen,
       users,
       allUsers,
-      modalSelectedKeys
+      modalSelectedKeys,
     } = this.state;
     const navigationList = [
       { key: 0, label: "职位", onClick: returnTree },
-      { key: 1, label: position.value, disabled: true }
+      { key: 1, label: position.value, disabled: true },
     ];
     return (
       <>
-        <section>
-          <Title navs={navigationList} />
-          <Button
-            type="primary"
-            onClick={this.saveHandle}
-            style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
-          >
-            保存
-          </Button>
-        </section>
+        <HomeContentTitle
+          navs={navigationList}
+          title="职位"
+          btns={
+            <Button
+              type="primary"
+              onClick={this.saveHandle}
+              style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
+            >
+              保存
+            </Button>
+          }
+        />
         <BaseInfo
           positionInfo={positionInfo}
           editing={editing}

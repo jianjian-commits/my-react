@@ -3,7 +3,7 @@ import { Button, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
-import { Title } from "../shared";
+import { Navigation } from "../shared";
 import { Checkbox } from "../shared/customWidget";
 
 const formMeteDataThead = {
@@ -714,7 +714,7 @@ const Top = ({
   ];
   return (
     <div className={Styles.top}>
-      <Title navs={navigationList} />
+      <Navigation navs={navigationList} />
       <div className={Styles.btn}>
         <Button onClick={() => enterPermission()}>取消</Button>
         <Button

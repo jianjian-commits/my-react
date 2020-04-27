@@ -4,6 +4,7 @@ import { message } from "antd";
 import { Table } from "../shared/customWidget";
 import request from '../../utils/request'
 import classes from "./transactList.module.scss";
+import { HomeContentTitle } from "../shared";
 
 const TransactList = props => {
 
@@ -112,9 +113,10 @@ const TransactList = props => {
 
   return (
     <div className={classes.tableBox}>
-      <div className={classes.tableTitle}>
+      
+      <HomeContentTitle title={<div className={classes.tableTitle}>
       我的待办 <span className={classes.totalNumber}>（共{total}条）</span>
-      </div>
+      </div>}/>
       <Table
         loading={tableLoading}
         columns={columns} 

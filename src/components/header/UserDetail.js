@@ -7,7 +7,7 @@ import {
   formItems
 } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
-import { HomeLayout } from "../shared";
+import { HomeLayout, HomeContentTitle } from "../shared";
 import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
 
@@ -117,11 +117,9 @@ export default Form.create({ name: "reset-form" })(
     };
     return (
       <HomeLayout>
+        <HomeContentTitle title="个人信息"/>
         <div className={userDetailStyles.userDetail}>
           <div>
-            <div>
-              <span>个人信息</span>
-            </div>
             <ul>
               {/* <li>
                 <span>{rest0.key}</span>

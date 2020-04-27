@@ -16,6 +16,7 @@ import { CreateIcon } from "../../assets/icons/company";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 import clx from "classnames";
+import { HomeContentTitle } from "../shared";
 
 function GroupList(props) {
   const {
@@ -30,13 +31,12 @@ function GroupList(props) {
   } = props;
   return (
     <>
-      <span>分组</span>
-      <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
+      <HomeContentTitle title="分组" btns={<Authenticate auth={PROFILE_MANAGEMENT_NEW}>
         <Button onClick={handleClick}>
           <CreateIcon />
           添加分组
         </Button>
-      </Authenticate>
+      </Authenticate>}/>
       <Table
         columns={columns}
         loading={loading}

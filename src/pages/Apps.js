@@ -6,7 +6,7 @@ import ModalCreation from "../components/profileManagement/modalCreate/ModalCrea
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
 import Authenticate from "../components/shared/Authenticate";
-import { HomeLayout } from "../components/shared";
+import { HomeLayout, HomeContentTitle } from "../components/shared";
 import { TEAM_CREATE_APP, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import { catchError } from "../utils";
@@ -197,9 +197,7 @@ class Apps extends React.Component {
     return (
       <HomeLayout>
         <Content className={commonClasses.container}>
-          <header className={commonClasses.header}>
-            <span style={{ fontSize: 16, color: "#333333" }}>我的应用</span>
-          </header>
+          <HomeContentTitle title="我的应用"/>
           <Content className={classes.innerMain}>
             <div id="appsPanel" className={classes.appsPanel}>
               {getApps(appList)}
