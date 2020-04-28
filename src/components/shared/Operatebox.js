@@ -1,10 +1,12 @@
 import React from 'react';
-import { Dropdown, Modal, Input, Form, message } from "antd"
+import { Dropdown, Modal, Input, Form, message } from "antd";
+import classnames from 'classnames';
 const { confirm } = Modal
 const OperateBox = (props) => {
 
   // const [value, setValue] = React.useState(props.formname);
   let formName = ""
+  const {canEdit, canDelete} = props;
 
   const showDelConfirm = () => {
     confirm({
@@ -36,23 +38,6 @@ const OperateBox = (props) => {
           onChange={ handleSetValue }
           maxLength={20}
         />
-        // <Form> 
-        //   <Form.Item>
-        //     {getFieldDecorator('validator', {
-        //       rules: [{
-        //         required: true,
-        //         message: '请输入内容'
-        //       }],
-        //       initialValue:value
-        //     })
-        //     (
-        //       < Input
-        //       placeholder="请输入名称"
-        //       maxLength={20}
-        //       />
-        //   )}
-        //     </Form.Item>
-        // </Form>
       ,
       cancelText: "取消",
       okText: "确定",
@@ -85,13 +70,17 @@ const OperateBox = (props) => {
       }
     })
   }
+
+  const renameClass = canEdit ? "operate-box-item" : "operate-box-item-disable";
+  const deleteClass = canDelete ? "operate-box-item" : "operate-box-item-disable";
+
   const menu = (
     <div className="draggable-list-operate-container">
       <div className="operate-box" onClick={e => e.stopPropagation()} >
-        <div className="operate-box-update-name"
+        <div className={renameClass}
           onClick={showUpdateConfirm}
         > 修改名称 </div>
-        <div className="operate-box-delete-form"
+        <div className={deleteClass}
           onClick={showDelConfirm}>
           删除
                 </div>

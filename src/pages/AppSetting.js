@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout, Input, message } from "antd";
+import { Layout, Input, message, Icon } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import { getFormsAll, deleteForm ,updateFormName } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
-import DraggableList, {
-  // DropableWrapper
-} from "../components/shared/DraggableList";
+import DraggableList from "../components/shared/DraggableList";
 import { setAllForms } from "../components/formBuilder/component/formBuilder/redux/utils/operateFormComponent";
-
-import classes from "../styles/apps.module.scss";
+import { newDBIcon, newDBIcon_disable, newFormIcon, newFormIcon_disable } from "../assets/icons/index";
 import ForInfoModal from "../components/formBuilder/component/formInfoModal/formInfoModal";
 import Authenticate from "../components/shared/Authenticate";
 import { newDashboard } from '../components/bi/redux/action';
 import { APP_SETTING_ABLED } from "../auth";
-import { newFormAuth } from "../components/formBuilder/utils/permissionUtils";
-
+import { canCreateDB, canEditDB, canRemoveDB } from '../components/bi/utils/AuthorityUtil';
+import { newFormAuth, editFormAuth, deleteFormAuth } from "../components/formBuilder/utils/permissionUtils";
 import { setDashboards, setDBMode, resetBIStore } from '../components/bi/redux/action';
 import { DBMode } from '../components/bi/component/dashboard/Constant';
 import { setDB, deleteDB, renameDB, newDB } from '../components/bi/utils/reqUtil';
-const { Content, Sider } = Layout;
+import classes from "../styles/apps.module.scss";
 
+const { Content, Sider } = Layout;
 const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {
@@ -45,7 +43,6 @@ const AppSetting = props => {
   // isDeleteOne 用于判断是否删除表单
   const [ isDeleteOne, setIsDeleteOne ] = React.useState(false)
   const [ isChangeSequence, setIsChangeSequence ] = React.useState(false)
-
   let { groups, list, searchList } = mockForms;
   useEffect(() => {
     let newList = [];
@@ -61,7 +58,9 @@ const AppSetting = props => {
         key: item.id,
         name: item.name,
         path: item.path,
-        type: item.type
+        type: item.type,
+        canDelete: item.type === "DASHBOARD" ? canEditDB(permissions, teamId, appId, item.id) : editFormAuth(permissions, teamId, appId, item.id),
+        canEdit: item.type === "DASHBOARD" ? canRemoveDB(permissions, teamId, appId, item.id) : deleteFormAuth(permissions, teamId, appId, item.id),
       }));
 
       props.setAllForms(res);
@@ -161,10 +160,20 @@ const AppSetting = props => {
   const handleClickList = (id, type) => {
     switch(type) {
       case "DASHBOARD":
-        openDashboard(id);
+        if(canEditDB(permissions, teamId, appId, id)) {
+          openDashboard(id);
+          return;
+        }
+        
+        message.error("您没有权限编辑该仪表盘！");
         break;
       case "FORM":
-        openForm(id);
+        if(editFormAuth(permissions, teamId, appId, id)) {
+          openForm(id);
+          return;
+        }
+
+        message.error("您没有权限编辑该表单！");
         break;
       default:
         console.log("Wrong type!");
@@ -218,7 +227,8 @@ const AppSetting = props => {
   };
 
   const { permissions, teamId } = props;
-  const isShowNewFormBtn = newFormAuth(permissions, teamId, appId);
+  const canCreateForm = newFormAuth(permissions, teamId, appId);
+  const canCreateDashboard = canCreateDB(permissions, teamId, appId);
 
   return (
     <Authenticate type="redirect" auth={APP_SETTING_ABLED(appId)}>
@@ -275,7 +285,6 @@ const AppSetting = props => {
               handleDelete={ handleDelete }
               handleRename={ handleRename }
               isDeleteOne={( params ) => setIsDeleteOne( params )}
-              appId = {appId}
               isChangeSequence = { ( params ) => setIsChangeSequence( params )}
             />
             {/* <DropableWrapper
@@ -343,143 +352,36 @@ const AppSetting = props => {
           </div> */}
           <div className={classes.operateGroup}>
             <div className={classes.btnGroup}>
-              {isShowNewFormBtn ? (
+              {
                 <div
-                  className={classes.newForm}
+                  className={canCreateForm ? classes.newForm : classes.newForm_disable}
                   onClick={e => {
-                    modalProps.showModal();
+                    if(canCreateForm) {
+                      modalProps.showModal();
+                    }
                   }}
                 >
                   <div className={classes.formContent}>
                     <div className={classes.formSvg}>
-                      <svg
-                        width="78"
-                        height="70"
-                        viewBox="0 0 78 70"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect width="68" height="70" rx="5" fill="#D4E6FF" />
-                        <rect
-                          x="8"
-                          y="19"
-                          width="27"
-                          height="5"
-                          fill="#2A7EFF"
-                        />
-                        <rect
-                          x="8"
-                          y="44"
-                          width="42"
-                          height="5"
-                          fill="#2A7EFF"
-                        />
-                        <rect
-                          x="8"
-                          y="32"
-                          width="27"
-                          height="5"
-                          fill="#B0D0FF"
-                        />
-                        <circle cx="63" cy="15" r="15" fill="white" />
-                        <circle cx="63" cy="15" r="12" fill="#2A7EFF" />
-                        <rect
-                          x="56"
-                          y="14"
-                          width="14"
-                          height="2"
-                          fill="white"
-                        />
-                        <rect
-                          x="62"
-                          y="22"
-                          width="14"
-                          height="2"
-                          transform="rotate(-90 62 22)"
-                          fill="white"
-                        />
-                      </svg>
+                      <Icon component={ canCreateForm ? newFormIcon : newFormIcon_disable }
+                        style={{fontSize: '68px'}}/>
                     </div>
                     <div className={classes.formDesc}>新建表单</div>
                   </div>
                 </div>
-              ) : null}
+              }
               <div
-                className={classes.newDashBoard}
+                className={canCreateDashboard ? classes.newDB : classes.newDB_disable}
                 onClick={e => {
-                  createDashboard();
+                  if(canCreateDashboard) {
+                    createDashboard();
+                  }
                 }}
               >
-                <div className={classes.dashBoardContent}>
+                <div className={classes.dbContent}>
                   <div className={classes.dashboardSvg}>
-                    <svg
-                      width="80"
-                      height="70"
-                      viewBox="0 0 80 70"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect width="68" height="70" rx="5" fill="#FFE3B8" />
-                      <path
-                        d="M17.5 17V26.1C17.5 26.94 18.06 27.5 18.9 27.5H28C28 33.24 23.24 38 17.5 38C11.76 38 7 33.24 7 27.5C7 21.76 11.76 17 17.5 17Z"
-                        fill="#FFA11A"
-                      />
-                      <path
-                        d="M19 16C24.5714 16 29 20.4286 29 26H19V16Z"
-                        fill="#FFC775"
-                      />
-                      <rect
-                        x="20"
-                        y="62"
-                        width="18"
-                        height="5"
-                        transform="rotate(-90 20 62)"
-                        fill="#FFB549"
-                      />
-                      <rect
-                        x="55"
-                        y="62"
-                        width="15"
-                        height="5"
-                        transform="rotate(-90 55 62)"
-                        fill="#FFD89F"
-                      />
-                      <rect
-                        x="43"
-                        y="62"
-                        width="22"
-                        height="5"
-                        transform="rotate(-90 43 62)"
-                        fill="#FFB13F"
-                      />
-                      <rect
-                        x="32"
-                        y="62"
-                        width="9"
-                        height="5"
-                        transform="rotate(-90 32 62)"
-                        fill="#FFD89F"
-                      />
-                      <rect
-                        x="8"
-                        y="62"
-                        width="12"
-                        height="5"
-                        transform="rotate(-90 8 62)"
-                        fill="#FFD89F"
-                      />
-                      <circle cx="65" cy="15" r="15" fill="white" />
-                      <circle cx="65" cy="15" r="12" fill="#FFA82A" />
-                      <rect x="58" y="14" width="14" height="2" fill="white" />
-                      <rect
-                        x="64"
-                        y="22"
-                        width="14"
-                        height="2"
-                        transform="rotate(-90 64 22)"
-                        fill="white"
-                      />
-                    </svg>
+                    <Icon component={ canCreateDashboard ? newDBIcon : newDBIcon_disable}
+                      style={{fontSize: '68px'}}/>
                   </div>
                   <div className={classes.dashboardDesc}>新建仪表盘</div>
                 </div>
