@@ -89,7 +89,9 @@ const checkphone = (activeKey, dispatch) => {
 const checkEmail = async (rule, value, callback) => {
   if (!value) return callback();
   try {
+    console.log("===========request=========");
     const res = await request(`/sysUser/email/${value}/check`);
+    console.log("===========res=========", res);
     if (res && res.data === false) return callback("该邮箱已被注册");
   } catch (err) {
     catchError(err);
