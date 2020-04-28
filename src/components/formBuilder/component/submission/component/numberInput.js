@@ -163,7 +163,7 @@ class NumberInput extends React.Component {
        {...itemOption}>
 
         {getFieldDecorator(item.key, {
-          initialValue: initData || item.defaultValue, 
+          initialValue: String(initData) || item.defaultValue, 
           rules: [
             {
               validator: this.checkNumber
