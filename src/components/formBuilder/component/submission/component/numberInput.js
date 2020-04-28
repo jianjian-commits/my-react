@@ -1,7 +1,7 @@
 import React from "react";
 
 import { isValueValid, isStringValid } from "../../../utils/valueUtils";
-import { Input, Form} from "antd";
+import { Input, Form } from "antd";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import { withRouter } from "react-router-dom";
 import {
@@ -9,9 +9,10 @@ import {
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
+import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 class NumberInput extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       step: "1"
@@ -29,7 +30,7 @@ class NumberInput extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, (value) => {
@@ -52,14 +53,14 @@ class NumberInput extends React.Component {
           } else {
             index = newData.indexOf(value);
           }
-          if(index > -1) {
+          if (index > -1) {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
               [item.key]: res
             });
             // 多级联动
-          this.handleEmitChange(res);
+            this.handleEmitChange(res);
           } else {
             form.setFieldsValue({
               [item.key]: undefined
@@ -70,16 +71,29 @@ class NumberInput extends React.Component {
         });
       });
     }
-    if(isLimitPoint){
-      let newStep = (this.state.step / (Math.pow(10,limitPoint))).toString()
+    if (isLimitPoint) {
+      let newStep = (this.state.step / (Math.pow(10, limitPoint))).toString()
       this.setState({
-        step:newStep
+        step: newStep
       })
-    }else{
-      let newStep = (this.state.step / (Math.pow(10,1))).toString()
+    } else {
+      let newStep = (this.state.step / (Math.pow(10, 1))).toString()
       this.setState({
-        step:newStep
+        step: newStep
       })
+    }
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
+      });
     }
   }
 
@@ -97,13 +111,13 @@ class NumberInput extends React.Component {
     const value = Number(ev.target.value);
     this.handleEmitChange(value);
     this.props.resetErrorMsg(this.props.item.key);
-    setTimeout(()=>{
+    setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if (!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"), null)) {
+        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title', customMessage)
       }
-    },300)
+    }, 300)
   };
 
   checkNumber = (rule, value, callback) => {
@@ -111,9 +125,9 @@ class NumberInput extends React.Component {
     const validateMin = this.props.item.validate.min;
     const validatePoint = this.props.item.validate.limitPoint;
     let errMsg = this.props.item.validate.customMessage;
-    const newNumberStr = ( value.split("."))[1];
+    const newNumberStr = (value.split("."))[1];
     let defaultErrMsg = '';
-    if(this.props.item.validate.isLimitLength){
+    if (this.props.item.validate.isLimitLength) {
       if (validateMax !== Number.MAX_VALUE && validateMin !== -Number.MAX_VALUE) {
         defaultErrMsg = `请输入${validateMin} ~ ${validateMax}之间的数字`;
       } else if (validateMax !== Number.MAX_VALUE) {
@@ -130,19 +144,18 @@ class NumberInput extends React.Component {
     if (value === "") {
       callback();
     } else if (this.props.item.validate.isLimitLength
-      && ((validateMax !== Number.MAX_VALUE && validateMax < Number(value)) 
-      || (validateMin !== -Number.MAX_VALUE && validateMin > Number(value))))
-      {
-        isStringValid(errMsg) ? callback(errMsg) : callback(defaultErrMsg);
-    } else if(this.props.item.validate.isLimitPoint && (newNumberStr !== undefined)){
-      if(newNumberStr.length > validatePoint ){
+      && ((validateMax !== Number.MAX_VALUE && validateMax < Number(value))
+        || (validateMin !== -Number.MAX_VALUE && validateMin > Number(value)))) {
+      isStringValid(errMsg) ? callback(errMsg) : callback(defaultErrMsg);
+    } else if (this.props.item.validate.isLimitPoint && (newNumberStr !== undefined)) {
+      if (newNumberStr.length > validatePoint) {
         defaultErrMsg = `请输入小数点后小于或等于${validatePoint}位的数字`;
         isStringValid(errMsg) ? callback(errMsg) : callback(defaultErrMsg);
       }
     } else {
       callback()
     }
-    
+
   };
 
   render() {
@@ -150,7 +163,7 @@ class NumberInput extends React.Component {
 
     let errMsg = this.props.item.validate.customMessage;
     let itemOption = {}
-    if(this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0){
+    if (this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0) {
       itemOption.validateStatus = "error";
       itemOption.help = this.props.errorResponseMsg.join("")
     }
@@ -158,12 +171,12 @@ class NumberInput extends React.Component {
     return (
       <Form.Item
         label={
-          <LabelUtils data = {item} />
+          <LabelUtils data={item} />
         }
-       {...itemOption}>
+        {...itemOption}>
 
         {getFieldDecorator(item.key, {
-          initialValue: String(initData) || item.defaultValue, 
+          initialValue: String(initData) || item.defaultValue,
           rules: [
             {
               validator: this.checkNumber
@@ -176,8 +189,18 @@ class NumberInput extends React.Component {
               message: `${item.label}不能为空`
             }
           ],
-          validateTrigger:"onBlur"
-        })(<Input type="number" disabled={disabled} autoComplete="off" onChange={this.handleChange} step={ this.state.step }/>)}
+          validateTrigger: "onBlur"
+        })(<Input
+          type="number"
+          disabled={disabled}
+          autoComplete="off"
+          onChange={this.handleChange}
+          step={this.state.step}
+          onBlur={(ev) => {
+            const value = ev.target.value;
+            this.handleEmitFormulaEvent(value)
+          }}
+        />)}
       </Form.Item>
     );
   }

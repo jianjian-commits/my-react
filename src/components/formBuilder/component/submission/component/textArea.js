@@ -8,6 +8,7 @@ import {
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
+import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 class TextArea extends React.Component {
 
@@ -21,7 +22,7 @@ class TextArea extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -59,6 +60,18 @@ class TextArea extends React.Component {
         });
       });
     }
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
+      });
+    }
   }
 
   handleEmitChange = (value) => {
@@ -72,13 +85,13 @@ class TextArea extends React.Component {
   handleChange = ev => {
     const value = ev.target.value;
     this.handleEmitChange(value)
-    setTimeout(()=>{
+    setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if (!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"), null)) {
+        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title', customMessage)
       }
-    },300)
+    }, 300)
   };
 
   render() {
@@ -128,13 +141,17 @@ class TextArea extends React.Component {
                 errMsg.trim().length > 0 ? errMsg : `${item.label}不能为空`
             }
           ],
-          validateTrigger:"onBlur"
+          validateTrigger: "onBlur"
         })(
           <Input.TextArea
             disabled={disabled}
             rows={item.rows}
             allowClear
             onChange={this.handleChange}
+            onBlur={(ev) => {
+              const value = ev.target.value;
+              this.handleEmitFormulaEvent(value)
+            }}
           />
         )}
       </Form.Item>

@@ -12,6 +12,7 @@ import {
 } from "../utils/dataLinkUtils";
 import moment from "moment";
 import coverTimeUtils from "../../../utils/coverTimeUtils";
+import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 let timer = null;
 class DateInput extends React.Component {
@@ -29,13 +30,13 @@ class DateInput extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent, isEditData } = this.props;
     const { data, autoInput } = item;
-    if(autoInput){
+    if (autoInput) {
       this.setState({
         isAutoInput: true
       });
     }
-    if (autoInput  && !isEditData) {
-      timer = setInterval(()=>{
+    if (autoInput && !isEditData) {
+      timer = setInterval(() => {
         form.setFieldsValue({
           [item.key]: new moment()
         })
@@ -87,6 +88,19 @@ class DateInput extends React.Component {
         });
       });
     }
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
+      });
+    }
   }
 
   handleEmitChange = value => {
@@ -101,6 +115,8 @@ class DateInput extends React.Component {
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
     this.handleEmitChange(value);
+    this.handleEmitFormulaEvent(value)
+
     setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
@@ -128,7 +144,7 @@ class DateInput extends React.Component {
     let options = {};
     if (initData) {
       options.initialValue = coverTimeUtils.localDate(initData, item.type, true);
-    } else if(isAutoInput) {
+    } else if (isAutoInput) {
       options.initialValue = new moment();
     }
     return (
@@ -151,6 +167,7 @@ class DateInput extends React.Component {
             locale={locale}
             placeholder="请选择时间/日期"
             onChange={this.handleChange}
+
           />
         )}
       </Form.Item>

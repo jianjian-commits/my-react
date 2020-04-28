@@ -756,6 +756,17 @@ class Submission extends Component {
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
                   resetErrorMsg={this._changeErrorResponseData}
+                  isChangeLayout={this.state.isChangeLayout}
+                  handleSetFormula={this.handleSetFormula}
+                  formulaArray={this.state.formulaArray}
+                  formChildDataObj={this.state.formChildDataObj}
+                  formComponent={this.props.formComponent}
+                  saveFormChildSubmitData={(formChildDataObj) => {
+                    this.setState(state => ({
+                      ...state,
+                      formChildDataObj: formChildDataObj
+                    }));
+                  }}
                 />
               </div>
             );
@@ -775,6 +786,17 @@ class Submission extends Component {
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
                   resetErrorMsg={this._changeErrorResponseData}
+                  isChangeLayout={this.state.isChangeLayout}
+                  handleSetFormula={this.handleSetFormula}
+                  formulaArray={this.state.formulaArray}
+                  formChildDataObj={this.state.formChildDataObj}
+                  formComponent={this.props.formComponent}
+                  saveFormChildSubmitData={(formChildDataObj) => {
+                    this.setState(state => ({
+                      ...state,
+                      formChildDataObj: formChildDataObj
+                    }));
+                  }}
                 />
               </div>
             );
@@ -794,6 +816,17 @@ class Submission extends Component {
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
                   resetErrorMsg={this._changeErrorResponseData}
+                  isChangeLayout={this.state.isChangeLayout}
+                  handleSetFormula={this.handleSetFormula}
+                  formulaArray={this.state.formulaArray}
+                  formChildDataObj={this.state.formChildDataObj}
+                  formComponent={this.props.formComponent}
+                  saveFormChildSubmitData={(formChildDataObj) => {
+                    this.setState(state => ({
+                      ...state,
+                      formChildDataObj: formChildDataObj
+                    }));
+                  }}
                 />
               </div>
             );
@@ -806,16 +839,16 @@ class Submission extends Component {
               >
                 <SingleText
                   forms={forms}
-                  isChangeLayout={this.state.isChangeLayout}
                   handleSetComponentEvent={this.handleSetComponentEvent}
                   key={item.key}
                   form={this.props.form}
                   getFieldDecorator={getFieldDecorator}
+                  item={item}
+                  isChangeLayout={this.state.isChangeLayout}
                   handleSetFormula={this.handleSetFormula}
                   formulaArray={this.state.formulaArray}
                   formChildDataObj={this.state.formChildDataObj}
                   formComponent={this.props.formComponent}
-                  item={item}
                   saveFormChildSubmitData={(formChildDataObj) => {
                     this.setState(state => ({
                       ...state,
@@ -843,6 +876,17 @@ class Submission extends Component {
                   item={item}
                   errorResponseMsg={errorResponseMsg[item.key]}
                   resetErrorMsg={this._changeErrorResponseData}
+                  isChangeLayout={this.state.isChangeLayout}
+                  handleSetFormula={this.handleSetFormula}
+                  formulaArray={this.state.formulaArray}
+                  formChildDataObj={this.state.formChildDataObj}
+                  formComponent={this.props.formComponent}
+                  saveFormChildSubmitData={(formChildDataObj) => {
+                    this.setState(state => ({
+                      ...state,
+                      formChildDataObj: formChildDataObj
+                    }));
+                  }}
                 />
               </div>
             );
@@ -944,6 +988,17 @@ class Submission extends Component {
                       getFieldDecorator={getFieldDecorator}
                       form={this.props.form}
                       item={item}
+                      isChangeLayout={this.state.isChangeLayout}
+                      handleSetFormula={this.handleSetFormula}
+                      formulaArray={this.state.formulaArray}
+                      formChildDataObj={this.state.formChildDataObj}
+                      formComponent={this.props.formComponent}
+                      saveFormChildSubmitData={(formChildDataObj) => {
+                        this.setState(state => ({
+                          ...state,
+                          formChildDataObj: formChildDataObj
+                        }));
+                      }}
                     />
                   )}
               </div>
@@ -970,6 +1025,17 @@ class Submission extends Component {
                       getFieldDecorator={getFieldDecorator}
                       form={this.props.form}
                       item={item}
+                      isChangeLayout={this.state.isChangeLayout}
+                      handleSetFormula={this.handleSetFormula}
+                      formulaArray={this.state.formulaArray}
+                      formChildDataObj={this.state.formChildDataObj}
+                      formComponent={this.props.formComponent}
+                      saveFormChildSubmitData={(formChildDataObj) => {
+                        this.setState(state => ({
+                          ...state,
+                          formChildDataObj: formChildDataObj
+                        }));
+                      }}
                     />
                   )}
               </div>
@@ -996,6 +1062,17 @@ class Submission extends Component {
                       getFieldDecorator={getFieldDecorator}
                       form={this.props.form}
                       item={item}
+                      isChangeLayout={this.state.isChangeLayout}
+                      handleSetFormula={this.handleSetFormula}
+                      formulaArray={this.state.formulaArray}
+                      formChildDataObj={this.state.formChildDataObj}
+                      formComponent={this.props.formComponent}
+                      saveFormChildSubmitData={(formChildDataObj) => {
+                        this.setState(state => ({
+                          ...state,
+                          formChildDataObj: formChildDataObj
+                        }));
+                      }}
                     />
                   )}
               </div>
@@ -1070,6 +1147,17 @@ class Submission extends Component {
                   getFieldDecorator={getFieldDecorator}
                   form={this.props.form}
                   item={item}
+                  isChangeLayout={this.state.isChangeLayout}
+                  handleSetFormula={this.handleSetFormula}
+                  formulaArray={this.state.formulaArray}
+                  formChildDataObj={this.state.formChildDataObj}
+                  formComponent={this.props.formComponent}
+                  saveFormChildSubmitData={(formChildDataObj) => {
+                    this.setState(state => ({
+                      ...state,
+                      formChildDataObj: formChildDataObj
+                    }));
+                  }}
                 />
               </div>
             );
