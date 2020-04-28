@@ -164,7 +164,7 @@ const cardTarget = {
     if (document.getElementById("formPlaceHolder")  != void 0) {
       document.getElementById("formPlaceHolder").style.display = "block";
     }
-    console.log(document.getElementById("dragParentShadow"));
+
     if (document.getElementById("dragParentShadow")  != void 0) {
       document.getElementById("dragParentShadow").style.display = "none";
     }

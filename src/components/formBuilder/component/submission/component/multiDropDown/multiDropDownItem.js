@@ -65,7 +65,6 @@ export default class MultiDropDownItem extends React.Component {
     } else if(nextProps.isEditData && this.state.initFlag &&nextProps.value instanceof Array){
       let selectIndexArr = []
       let selectMiddleArr = nextProps.value
-      console.log(nextProps)
       nextProps.value.map( value =>{
         nextProps.item.data.values.map((item,index) => {
           if(item.value === value){
@@ -153,7 +152,13 @@ export default class MultiDropDownItem extends React.Component {
                     .filter((element, i) =>
                       this.state.selectIndexArr.includes(i)
                     )
-                    .map(item => item.value);
+                    .map(item => {
+                      if(item.isExtra){
+                        return this.state.inputValue;
+                      }else{
+                        return item.value;
+                      }
+                    });
                   onChange(dataArr);
                   this.setState({
                     isShowExtra:true,
@@ -189,7 +194,13 @@ export default class MultiDropDownItem extends React.Component {
                           .filter((element, i) =>
                             this.state.selectIndexArr.includes(i)
                           )
-                          .map(item => item.value);
+                          .map(item => {
+                            if(item.isExtra){
+                              return this.state.inputValue;
+                            }else{
+                              return item.value;
+                            }
+                          });
                           this.setState({
                             selectValueArr: dataArr
                           })
@@ -216,7 +227,13 @@ export default class MultiDropDownItem extends React.Component {
                           .filter((element, i) =>
                             this.state.selectIndexArr.includes(i)
                           )
-                          .map(item => item.value);
+                          .map(item => {
+                            if(item.isExtra){
+                              return this.state.inputValue;
+                            }else{
+                              return item.value;
+                            }
+                          });
                         this.setState({
                           selectValueArr: dataArr
                         })

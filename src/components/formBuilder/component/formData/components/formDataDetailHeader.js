@@ -193,7 +193,7 @@ const ApprovalProcessButtons = (props) => {
   );
 };
 const ReSubmitApprovalButton = (props) => {
-  const { canResubimit } = props;
+  const { canResubmit } = props;
   async function postApproveMsg() {
     props.setLoading(true);
     try {
@@ -215,7 +215,7 @@ const ReSubmitApprovalButton = (props) => {
       message.error("提交审批失败");
     }
   }
-  return canResubimit ? (
+  return canResubmit ? (
     <>
       <Button type="primary" onClick={postApproveMsg} className="btn">
         重新提交
@@ -225,6 +225,22 @@ const ReSubmitApprovalButton = (props) => {
     <></>
   );
 };
+
+const SetApproverBtn = (props) =>{
+  const { canSetApprover, taskId } = props;
+  return canSetApprover? (
+    <>
+    <Button type="primary" onClick={()=>{
+       props.setTaskId(taskId);
+       props.setApproverModalVisible(canSetApprover)
+    }} className="btn">
+      选择审批人
+    </Button>
+    </>
+  ) : (
+    <></>
+  );
+}
 
 const FormDataDetailHeader = (props) => {
   const appId = useParams().appId || props.appId;
@@ -259,14 +275,15 @@ const FormDataDetailHeader = (props) => {
     backSpanText = "我的待办";
   }
 
-  const { taskData, currentForm, creator, createdTime, updateTime, userList } = props;
+  const { taskData, currentForm, creator, createdTime, updateTime } = props;
   const {
     canSubmit,
-    canResubimit,
+    canResubmit,
     canApprove,
     canWithdraw,
     currentProcessInstanceId,
     currentTaskId,
+    canSetApprover
   } = taskData;
   return (
     <div className="FormDataDetailHeader">
@@ -317,7 +334,7 @@ const FormDataDetailHeader = (props) => {
               {...props}
             />
             <ReSubmitApprovalButton
-              canResubimit={canResubimit}
+              canResubmit={canResubmit}
               appId={appId}
               taskId={currentTaskId}
               {...props}
@@ -332,7 +349,15 @@ const FormDataDetailHeader = (props) => {
               taskId={currentTaskId}
               isApprovalProcessor={canApprove}
               appId={appId}
+              setTaskId={setTaskId}
+              setApproverModalVisible={setApproverModalVisible}
               {...props}
+            />
+            <SetApproverBtn 
+              taskId={currentTaskId}
+              setTaskId={setTaskId}
+              canSetApprover={canSetApprover}
+              setApproverModalVisible={setApproverModalVisible}
             />
             <ApproverModal 
               visible={isApproverModalVisible} 
@@ -340,7 +365,6 @@ const FormDataDetailHeader = (props) => {
               setVisible={setApproverModalVisible} 
               formId={props.currentForm.id}
               appId={appId}
-              approverList={userList}
               afterApproverModal={()=>{
                 props.resetData();
               }}/>
@@ -354,6 +378,5 @@ const FormDataDetailHeader = (props) => {
 export default connect(({formSubmitData}) => ({
   createdTime: formSubmitData.createdTime,
   updateTime: formSubmitData.updateTime,
-  creator: formSubmitData.creator,
-  userList: formSubmitData.userList
+  creator: formSubmitData.creator
 }))(FormDataDetailHeader);

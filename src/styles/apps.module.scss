@@ -155,7 +155,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    .newDashBoard {
+    .newDB {
       background-color: #fff;
       border-radius: 10px;
       width: 240px;
@@ -164,12 +164,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
 
-      .dashBoardContent {
-        cursor: pointer;
-
-        // .dashboardSvg {}
-
+      .dbContent {
         .dashboardDesc {
           margin-top: 21px;
           text-align: center;
@@ -184,6 +181,11 @@
       }
     }
 
+    .newDB_disable {
+      @extend .newDB;
+      cursor: not-allowed;
+    }
+
     .newForm {
       background-color: #fff;
       border-radius: 10px;
@@ -193,12 +195,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
 
       .formContent {
-        cursor: pointer;
-
-        // .formSvg {}
-
         .formDesc {
           margin-top: 21px;
           text-align: center;
@@ -211,6 +210,11 @@
           color: #333333;
         }
       }
+    }
+
+    .newForm_disable {
+      @extend .newForm;
+      cursor: not-allowed;
     }
   }
 }

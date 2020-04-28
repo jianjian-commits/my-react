@@ -102,7 +102,8 @@ export const getFormsAll = (appId, isDataPage , extraProp) => {
               key: item.id,
               name: item.name,
               id: item.id,
-              type: item.type
+              type: item.type,
+              components: item.components
             };
           });
         resolve(forms);

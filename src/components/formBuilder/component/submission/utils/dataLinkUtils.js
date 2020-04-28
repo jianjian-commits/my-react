@@ -7,7 +7,6 @@ export const getFormById = formId => {
     instanceAxios
       .get(config.apiUrl + "/form/" + formId)
       .then(res => {
-        // console.log(1);
         resolve(res.data);
       })
       .catch(err => {

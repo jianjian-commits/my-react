@@ -78,7 +78,7 @@ export default class DropDownTestItem extends React.Component {
 
             <>
             {
-              (selectIndex !== (selections.length - 1)) ? selections[selectIndex].value : this.state.inputValue
+              (selectIndex === selections.length - 1) && selections[(selections.length - 1)].isExtra ?  this.state.inputValue : selections[selectIndex].value
             }
             </>
             
@@ -116,7 +116,8 @@ export default class DropDownTestItem extends React.Component {
                       selectIndex: index,
                       isPopoverVisible: false
                     });
-                    onChange(selections[index].value);
+                    let selectSubmitValue = item.isExtra? this.state.inputValue:selections[index].value;
+                    onChange(selectSubmitValue);
                     if(item.isExtra) {
                       this.setState({isShowExtra:true})
                     }else{

@@ -1,6 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Modal, Input, Tabs, Collapse } from "antd";
+import {
+  addVerification,
+  editVerification
+} from "../../redux/utils/operateVerification";
 import { ruleList } from "./verificationRule";
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -27,7 +31,7 @@ class ConditionModal extends React.Component {
 
   componentWillMount() {
     let resultArray = [];
-    let excludeComponentType = ["RadioButtons", "CheckboxInput", "DropDown", "MultiDropDown", "DateInput", "GetLocalPosition", "ImageUpload", "FileUpload", "HandWrittenSignature", "Address", "ComponentTemplate", "Button"]
+    let excludeComponentType = ["RadioButtons", "CheckboxInput", "DropDown", "MultiDropDown", "DateInput", "GetLocalPosition", "ImageUpload", "FileUpload", "HandWrittenSignature", "Address", "ComponentTemplate", "Button", "PureDate", "PureTime"]
 
     this.props.data.forEach(item => {
       if (item.type == "FormChildTest") {
@@ -35,20 +39,23 @@ class ConditionModal extends React.Component {
           if (excludeComponentType.indexOf(childItem.type) === -1) {
             resultArray.push({
               label: item.label + "." + childItem.label,
-              id: item.id + "_" + childItem.id
+              key: item.key + "_" + childItem.key
             });
           }
         });
       } else if (excludeComponentType.indexOf(item.type) === -1) {
         resultArray.push({
           label: item.label,
-          id: item.id
+          key: item.key
         });
       }
     });
 
+
     this.setState({
-      componentLabelArray: resultArray,
+      componentLabelArray: resultArray.filter((item) => {
+        return item.key != this.props.currentItem.key
+      }),
       verificationStr: this.props.verificationStr,
       verificationValue: this.props.verificationValue
     });
@@ -108,7 +115,7 @@ class ConditionModal extends React.Component {
         if (startIndex < endIndex) {
           valueStr += verificationStr.substring(startIndex, endIndex)
         }
-        valueStr += field.id;
+        valueStr += field.key;
         verificationStr = verificationStr.slice(endIndex + field.label.length)
       }
     })
@@ -118,9 +125,9 @@ class ConditionModal extends React.Component {
     return valueStr
   }
 
-  addFromData(field) {
+  addFormData(field) {
     let value = field.label;
-    let id = field.id;
+    let key = field.key;
     let textAreaInput = this.textAreaInput;
     let cursorIndex = this.getCursortPosition(
       document.querySelector(".custom")
@@ -255,8 +262,11 @@ class ConditionModal extends React.Component {
         title="校验条件"
         visible={this.props.visible}
         onOk={() => {
-          this.props.handleOk(this.state.verificationStr);
+          console.log("haha", this.state.selectedComponent);
+
           let verificationValue = this.buildVerificationValue();
+          this.props.handleOk(this.state.selectedComponent, this.state.verificationStr, verificationValue);
+
           if (this.state.verificationStr) {
             this.setState(state => ({
               ...state,
@@ -265,7 +275,6 @@ class ConditionModal extends React.Component {
               selectedComponent: []
             }));
           }
-
         }}
         onCancel={() => {
           this.props.handleCancel();
@@ -309,9 +318,9 @@ class ConditionModal extends React.Component {
                   {fieldInputValue
                     ? searchFieldArray.map(item => (
                       <p
-                        key={item.id}
+                        key={item.key}
                         onClick={_e => {
-                          this.addFromData(item);
+                          this.addFormData(item);
                         }}
                       >
                         {item.label}
@@ -319,9 +328,9 @@ class ConditionModal extends React.Component {
                     ))
                     : this.state.componentLabelArray.map(item => (
                       <p
-                        key={item.id}
+                        key={item.key}
                         onClick={_e => {
-                          this.addFromData(item);
+                          this.addFormData(item);
                         }}
                       >
                         {item.label}
@@ -398,5 +407,8 @@ export default connect(
   store => ({
     data: store.formBuilder.data
   }),
-  {}
+  {
+    addVerification,
+    editVerification
+  }
 )(ConditionModal);

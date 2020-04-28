@@ -430,10 +430,11 @@ class NumberInputInspector extends React.PureComponent {
                   name="limitPoint"
                   placeholder="请输入"
                   onChange = { this.handleChangeAttrPoint }
-                  min={1}
+                  min={0}
                   step="1"
-                  value={validate.limitPoint === 0 ? "" : validate.limitPoint}
+                  value={validate.limitPoint === -1 ? "" : validate.limitPoint}
                   autoComplete="off"
+                  disabled={!validate.isLimitPoint}
                   />
                 </div>
             </div>

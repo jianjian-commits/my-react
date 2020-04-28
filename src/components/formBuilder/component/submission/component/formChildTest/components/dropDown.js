@@ -13,7 +13,7 @@ export default class DropDownTestItem extends React.Component {
     this.state = {
         selectIndex: index,
         isShowExtra:false,
-        inputValue:'其他'
+        inputValue:''
     };
   }
 
@@ -41,7 +41,11 @@ export default class DropDownTestItem extends React.Component {
                     }else{
                       
                         this.setState({selectIndex:index,isPopoverVisible:false},()=>{
-                            onChange(dropDownOptions[index].value);
+                            if(item.isExtra){
+                              onChange(this.state.inputValue);
+                            }else{
+                              onChange(dropDownOptions[index].value);
+                            }
                         })
                         if(item.isExtra) {
                           this.setState({isShowExtra:true});
@@ -77,7 +81,7 @@ export default class DropDownTestItem extends React.Component {
                     }
                 
                   }
-                  defaultValue = { this.state.inputValue === "其他" ? '':this.state.inputValue}
+                  defaultValue = { this.state.inputValue !== "" ? this.state.inputValue:''}
                 /> : null
               }
             </div>

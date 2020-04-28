@@ -8,12 +8,13 @@ import {
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
+import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 class Email extends React.Component {
   checkUnique = (rule, value, callback) => {
     if (value === "") {
       callback();
-    }else {
+    } else {
       callback();
     }
   };
@@ -29,7 +30,7 @@ class Email extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -67,6 +68,19 @@ class Email extends React.Component {
             this.handleEmitChange(undefined);
           }
         });
+      });
+    }
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
       });
     }
   }
@@ -108,14 +122,14 @@ class Email extends React.Component {
 
     let errMsg = item.validate.customMessage || "";
     let itemOption = {}
-    if(this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0){
+    if (this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0) {
       itemOption.validateStatus = "error";
       itemOption.help = this.props.errorResponseMsg.join("")
     }
 
     return (
       <Form.Item label={<LabelUtils data={item} />}
-      {...itemOption}>
+        {...itemOption}>
         {getFieldDecorator(item.key, {
           initialValue: initData || item.defaultValue,
           rules: [
@@ -133,12 +147,16 @@ class Email extends React.Component {
               message: "邮箱不能为空!"
             }
           ],
-          validateTrigger:"onBlur"
+          validateTrigger: "onBlur"
         })(
           <Input
             disabled={disabled}
             autoComplete="off"
             onChange={this.handleChange}
+            onBlur={(ev) => {
+              const value = ev.target.value;
+              this.handleEmitFormulaEvent(value)
+            }}
           />
         )}
       </Form.Item>
