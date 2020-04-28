@@ -44,13 +44,13 @@ class PureDate extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent, isEditData } = this.props;
     const { data, autoInput } = item;
-    if(autoInput){
+    if (autoInput) {
       this.setState({
         isAutoInput: true
       });
     }
     if (autoInput && !isEditData) {
-      timer = setInterval(()=>{
+      timer = setInterval(() => {
         form.setFieldsValue({
           [item.key]: new moment()
         })
@@ -102,6 +102,19 @@ class PureDate extends React.Component {
         });
       });
     }
+
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
+      });
+    }
   }
 
   handleEmitChange = value => {
@@ -116,6 +129,8 @@ class PureDate extends React.Component {
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
     this.handleEmitChange(value);
+    this.handleEmitFormulaEvent(value)
+
     setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
