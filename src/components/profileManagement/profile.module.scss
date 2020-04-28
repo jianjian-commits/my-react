@@ -1,5 +1,6 @@
 .wrapper {
   width: calc(100vw - 220px);
+  min-width: 800px;
   padding: 29px 21px;
 
   > span {
