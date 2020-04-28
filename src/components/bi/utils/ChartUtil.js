@@ -1,11 +1,64 @@
 import { Types } from '../component/bind/Types';
 import ChartInfo from '../component/elements/data/ChartInfo';
-import { ChartType, AllType, BarType } from '../component/elements/Constant'
+import { ChartType, AllType, BarType, ChartColor } from '../component/elements/Constant'
 import FilterCondition from '../component/elements/data/FilterCondition';
 import Field from '../component/elements/data/Field';
 import { deepClone, equals } from './Util';
 
-const _setFieldName = field => field.alias||field.legendName
+const _setFieldName = field => field.alias||field.legendName;
+
+const _formatNum = (value) => {
+  if(isNaN(parseFloat(value))) {
+    return 0;
+  }
+
+  let str = value.toString();
+  let reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
+  return str.replace(reg,"$1,");
+}
+
+const _Percent = (value) => {
+  if(isNaN(parseFloat(value))) {
+    return 0;
+  }
+  return value + "00%";
+}
+
+const _Decimals = (value, decimals) => {
+  if(isNaN(parseFloat(value))) {
+    return 0;
+  }
+  let item = value + '.';
+  for(let i = 0; i < decimals; i++){
+    item = item + "0";
+  }
+  return item;
+}
+
+const _checkPercent = (thousandSymbols,percent,decimals,value) => {
+  if(thousandSymbols && percent && decimals != 0){
+    let per = _Percent(value).substring(0,_Percent(value).length-1);
+    let dec = _Decimals(per,decimals);
+    return _formatNum(dec) + "%";
+  } else if(percent && !thousandSymbols && decimals == 0){
+    return _Percent(value);
+  } else if(!percent && !thousandSymbols && decimals != 0){
+    return _Decimals(value,decimals);
+  } else if(!percent && thousandSymbols && decimals == 0){
+    return _formatNum(value);
+  } else if(percent && thousandSymbols && decimals == 0){
+    let per = _Percent(value).substring(0,_Percent(value).length-1);
+    return _formatNum(per) + "%";
+  } else if(percent && !thousandSymbols && decimals != 0){
+    let per = _Percent(value).substring(0,_Percent(value).length-1);
+    return _Decimals(per,decimals) + "%";
+  } else if(!percent && thousandSymbols && decimals != 0){
+    let dec = _Decimals(value,decimals);
+    return _formatNum(dec,decimals);
+  } else {
+    return value;
+  }
+}
 
 //check is data include %
 const _checkBarPercent = xaxisList => {
@@ -95,37 +148,65 @@ export const getBarChartOption = (chartData, chartInfo) => {
         }
       }],
     yAxis: {name: titleYAxis || ""},
-    color: ['#4398E2','#6FB3EE','#F57243','#FFA585','#8D84E0','#BBB5F0','#FA5F84','#FE91BA','#1FB4BD','#94E2C7','#C2864F','#E6B181','#65B440','#9DDA81','#FCA036','#FFB966','#888E9D','#B9BCC7','#DA6ED5','#F3A9EE'],
+    color: ChartColor,
     grid: {top: '80px'},
     series
   } 
 }
 
+const _checkIndexPercent = item => {
+  let thousandSymbols = item.dataFormat.predefine.thousandSymbols;
+  let percent = item.dataFormat.predefine.percent;
+  let decimals = item.dataFormat.predefine.decimals;
+  let count = item.count;
+
+  return _checkPercent(thousandSymbols,percent,decimals,count);
+}
+
+const _checkIndexSumPercent = item => {
+  let thousandSymbols = item.dataFormat.predefine.thousandSymbols;
+  let percent = item.dataFormat.predefine.percent;
+  let decimals = item.dataFormat.predefine.decimals;
+  let count = item.count.toString();
+
+  return _checkPercent(thousandSymbols,percent,decimals,count);
+}
+
 export const getIndexChartOption = (chartData, chartInfo) => {
   const { headItem, items } = chartData;
   let indexData = [];
+  let headData = {
+    name: '',
+    count: ''
+  };
 
   if(!headItem || (headItem.length == 0) || !items || (items.length == 0)) {
     return {};
   }
 
-  indexData.push(headItem);
+  headData.name = headItem.name;
+  headData.count = _checkIndexSumPercent(headItem);
+  
+  indexData.push(headData);
   if(items.length > 1){
     items.forEach(item=>{
       item = {
         ...item,
-        count:item.formatCount || item.count
+        count: _checkIndexPercent(item) || item.count
       }
       indexData.push(item);
     })
   }
-
   return indexData;
 }
 
+const _checkPiePercent = (sectorItems, value) => {
+  let thousandSymbols = sectorItems[0].dataFormat.predefine.thousandSymbols;
+  let percent = sectorItems[0].dataFormat.predefine.percent;
+  let decimals = sectorItems[0].dataFormat.predefine.decimals;
 
-const _checkPiePercent = sectorItems => {
-  return sectorItems[0].formatCount.includes("%") ? '{c}%' : '{c}';
+  return _checkPercent(thousandSymbols,percent,decimals,value);
+
 }
 
 export const getPieChartOption = (chartData, chartInfo) => {
@@ -136,55 +217,44 @@ export const getPieChartOption = (chartData, chartInfo) => {
     return {};
   }
 
-  const source = [];
   const series = [];
+// console.log("========sectorItems=======", sectorItems, legends);
+  if( legends.length == sectorItems.length ) {
+    const data = [];
 
-  if( legends.length == sectorItems.length ){
-    sectorItems.forEach((item) => {
-      series.push({type: "pie",
-        label: {
-          show: showDataTag,
-          position: 'top',
-          textStyle: {
-            color: 'gray'
-          }
-        },
-        // radius : '50%', 
-        center: ['50%','60%'],
-        // hoverAnimation:false
-      });
-      let row = [];
-      const legend = item.legend;
-      legends.forEach((each) => {
-        if(each.legendName == legend.legendName){
-          row.push(_setFieldName(each));
-          row.push(_slicePercent(item.formatCount));
-        }
-      })
-      source.push(row);
+    sectorItems.forEach((item, idx) => {
+      data.push({ name: legends[idx].legendName, value: sectorItems[idx].count });
     })
+
+    const series_item = {
+      type: "pie",
+      label: {
+        show: showDataTag,
+        position: 'top',
+        textStyle: {
+          color: 'gray'
+        },
+        formatter: function(p) {return  p.name + ":"+ _checkPiePercent(sectorItems,p.value)}
+      },
+      data: data
+    }
+
+    series.push(series_item);
   }
 
-  const preFormatter = _checkPiePercent(sectorItems);
     
   return  {
-    dataset: {
-      source
-    },
     legend: {y: "top", show: showLegend},
     tooltip: {
       trigger: 'item',
-      formatter: preFormatter + '<br/>({d}%)'
+      formatter: function(p) {return  p.name + ":"+  _checkPiePercent(sectorItems,p.value)}
     },
-    label:{ 
-      show: true, 
-      formatter: preFormatter + ' ({d}%)'
-    }, 
-    labelLine :{show:true},
-    color: ['#4398E2','#6FB3EE','#F57243','#FFA585','#8D84E0','#BBB5F0','#FA5F84','#FE91BA','#1FB4BD','#94E2C7','#C2864F','#E6B181','#65B440','#9DDA81','#FCA036','#FFB966','#888E9D','#B9BCC7','#DA6ED5','#F3A9EE'],
+    labelLine : {show: true},
+    color: ChartColor,
     series
   } 
 }
+
 
 export const getOption = (chartData, chartInfo, elemType) => {
   if(equals(chartData, {})) {

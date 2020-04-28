@@ -11,16 +11,16 @@ export default function DataFormatModal(props) {
     !(predefine.decimals == 0)
   );
   const checkboxGroup = [
-    // {
-    //   label: "千分符",
-    //   checked: modalPredefine.thousandSymbols,
-    //   onChange: (e) => {
-    //     setModalPredefine({
-    //       ...modalPredefine,
-    //       thousandSymbols: e.target.checked,
-    //     });
-    //   },
-    // },
+    {
+      label: "千分符",
+      checked: modalPredefine.thousandSymbols,
+      onChange: (e) => {
+        setModalPredefine({
+          ...modalPredefine,
+          thousandSymbols: e.target.checked,
+        });
+      },
+    },
     {
       label: "百分比",
       checked: modalPredefine.percent,
@@ -52,12 +52,52 @@ export default function DataFormatModal(props) {
     });
   };
   const getFormatPreview = () => {
-    let showStr = "999999";
+    let showStr = "99999";
     if (modalPredefine.thousandSymbols) {
-      showStr = "999,999";
+      // showStr = "99,999";
+      for (let i = 0; i < Math.floor((showStr.length-(1+i))/3); i++){
+        showStr = showStr.substring(0,showStr.length-(4*i+3))+','+showStr.substring(showStr.length-(4*i+3));
+      }
     }
     if (modalPredefine.percent) {
-      showStr = showStr + "%";
+      showStr = "99999";
+      showStr = showStr + "00";
+      if(modalPredefine.thousandSymbols){
+        for (let i = 0; i < Math.floor((showStr.length-(1+i))/3); i++){
+          showStr = showStr.substring(0,showStr.length-(4*i+3))+','+showStr.substring(showStr.length-(4*i+3));
+        }
+        showStr = showStr + "%";
+      } else {
+        showStr = showStr + "%";
+      }
+    }
+    if(decimalsInput){
+      if(modalPredefine.thousandSymbols && modalPredefine.percent){
+        showStr = showStr.substr(0,showStr.length-1);
+        if( modalPredefine.decimals !== 0 && modalPredefine.decimals){
+          showStr = showStr + ".";
+          for(let i = 0; i < modalPredefine.decimals; i++){
+            showStr = showStr + "0";
+          }
+        }
+        showStr = showStr + "%";
+      } else if(modalPredefine.percent) {
+        showStr = showStr.substr(0,showStr.length-1);
+        if( modalPredefine.decimals !== 0 && modalPredefine.decimals){
+          showStr = showStr + ".";
+          for(let i = 0; i < modalPredefine.decimals; i++){
+            showStr = showStr + "0";
+          }
+        }
+        showStr = showStr + "%";
+      } else{
+        if( modalPredefine.decimals !== 0 && modalPredefine.decimals){
+          showStr = showStr + '.';
+          for(let i = 0; i < modalPredefine.decimals; i++){
+            showStr = showStr + "0";
+          }
+        }
+      }
     }
     return showStr;
   };
