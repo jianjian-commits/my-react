@@ -131,3 +131,5 @@ export const DataFormatType = {
   PREDEFINE:"PREDEFINE",
   CUSTOM:"CUSTOM"
 }
+
+export const ChartColor = ['#4398E2','#6FB3EE','#F57243','#FFA585','#8D84E0','#BBB5F0','#FA5F84','#FE91BA','#1FB4BD','#94E2C7','#C2864F','#E6B181','#65B440','#9DDA81','#FCA036','#FFB966','#888E9D','#B9BCC7','#DA6ED5','#F3A9EE'];
