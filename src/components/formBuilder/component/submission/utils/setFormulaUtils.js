@@ -1,3 +1,6 @@
+import config from "../../../config/config";
+import { instanceAxios } from "../../../utils/tokenUtils";
+
 var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDataObj, saveFormChildSubmitData, dataResource) => {
     if (formulaItem.parentKey == void 0) {
         form.setFieldsValue({
@@ -5,6 +8,7 @@ var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDat
         });
         const { callEventArr, formulaEvent } = formulaItem;
 
+        console.log("fck tw", formulaEvent)
         if (callEventArr) {
             callEventArr.forEach(fnc => {
                 fnc(resultData, this);
@@ -100,18 +104,17 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                 handleSetFormula(item.key, (value, dataResource) => {
                     let resultArray = [];
 
-                    console.log("fck", item, dataResource)
-                    if (dataResource != void 0) {
-                        if (item.data.type == "EditFormula") {
-                            let resultArray = item.data.values.connectArray.filter((item) => {
-                                return item.key == dataResource.key
-                            });
-                            if (resultArray.length > 0) {
-                                return;
-                            }
-                        }
-                        return;
-                    }
+                    // console.log("fck", value, formulaItem, item, dataResource)
+                    // if (dataResource != void 0) {
+                    //     if (item.data.type == "EditFormula") {
+                    //         let resultArray = item.data.values.connectArray.filter((item) => {
+                    //             return item.key == dataResource.key
+                    //         });
+                    //         if (resultArray.length > 0) {
+                    //             return;
+                    //         }
+                    //     }
+                    // }
 
                     resultArray.push({
                         type: item.key,
@@ -123,9 +126,26 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
 
                     console.log("hahah", resultArray);
 
-                    let resultData = "123123";
+                    let resultData = resultArray.reduce((resultObj, item) => {
+                        resultObj[item.type] = item.value
+                        return resultObj
+                    }, {});
 
-                    _executeBindEventByResultData(resultData, formulaItem, form, formChildDataObj, saveFormChildSubmitData, formChildItem == void 0 ? item : formChildItem);
+                    instanceAxios({
+                        url: config.apiUrl + "/inner/expression/calculate",
+                        method: "POST",
+                        data: {
+                            expressionString: itemFormulaObj.verificationValue,
+                            data: resultData,
+                        },
+                        headers: {
+                            "Content-Type": "application/json",
+                        }
+                    }).then(response => {
+                        let data = response.data;
+
+                        _executeBindEventByResultData(data, formulaItem, form, formChildDataObj, saveFormChildSubmitData, formChildItem == void 0 ? item : formChildItem);
+                    })
                 });
             } else if (formChildItem && connectItem.key == formChildItem.key) {
                 handleSetFormula(formChildItem.key, (value, dataResource) => {
