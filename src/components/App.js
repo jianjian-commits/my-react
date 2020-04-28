@@ -15,8 +15,7 @@ import { signOut, initAllDetail } from "../store/loginReducer";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
-export const getRoutes = (routes) => {
-  const a = (routes || []).map((route) =>
+export const getRoutes = (routes) => (routes || []).map((route) =>
     route.content ? (
       getRoutes(route.content)
     ) : (
@@ -28,10 +27,7 @@ export const getRoutes = (routes) => {
         options={route.options}
       />
     )
-  )
-  console.log(a)
-  return a
-};
+  );
 
 const AppInsideRouter = () => {
   const { appId } = useParams();

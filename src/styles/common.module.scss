@@ -44,34 +44,6 @@
   }
 }
 
-.menu {
-  &:global(.ant-menu-item-selected) {
-    ::before {
-      border-left: 4px solid #1890ff;
-      content: "";
-      position: absolute;
-      left: 0;
-      height: 100%;
-    }
-    svg {
-      g,
-      polyline,
-      path {
-        fill: #1890ff;
-      }
-    }
-  }
-  span {
-    color: #333;
-  }
-  svg {
-    display: inline-block;
-    position: relative;
-    top: 3px;
-    margin-right: 10px;
-  }
-}
-
 // .menu:hover {
 //   background-color: #e7f0ff !important;
 // }

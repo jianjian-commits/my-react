@@ -1,5 +1,6 @@
 .top {
   padding: 0 18px;
+  border-bottom: 1px solid #ddd;
   line-height: 64px;
   height: 64px;
   font-size: 18px;
@@ -24,29 +25,29 @@
   }
 }
 .menu {
-  &:global(.ant-menu-item-selected) {
-    ::before {
-      border-left: 4px solid #1890ff;
-      content: "";
-      position: absolute;
-      left: 0;
-      height: 100%;
+  .item {
+    &:hover {
+      background-color: #e7f0ff !important;
     }
-    svg {
-      g,
-      polyline,
-      path {
-        fill: #1890ff;
+    &:global(.ant-menu-item-selected) {
+      background-color: rgb(221, 234, 255) !important;
+      &::before {
+        border-left: 4px solid #1890ff;
+        content: "";
+        position: absolute;
+        left: 0;
+        height: 100%;
+      }
+      &::after {
+        height: 0;
+      }
+      svg {
+        g,
+        polyline,
+        path {
+          fill: #1890ff;
+        }
       }
     }
-  }
-  span {
-    color: #333;
-  }
-  svg {
-    display: inline-block;
-    position: relative;
-    top: 3px;
-    margin-right: 10px;
   }
 }

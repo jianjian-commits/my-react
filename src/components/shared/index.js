@@ -6,7 +6,7 @@ import { Breadcrumb, Layout, Card } from "antd";
 import clx from "classnames";
 import comClasses from "../../styles/common.module.scss";
 import HomeHeader from "../header/HomeHeader";
-import HomeSider from "../sidder/HomeSider";
+import HomeSider from "../sider/HomeSider";
 
 const { Content } = Layout;
 
