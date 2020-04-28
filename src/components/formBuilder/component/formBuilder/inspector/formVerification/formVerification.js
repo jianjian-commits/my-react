@@ -7,6 +7,7 @@ import {
 } from "../../redux/utils/operateVerification";
 import { Input, Button, Icon, Tooltip } from "antd";
 import ConditionModal from "./conditionModal";
+
 class VerificationItem extends React.Component {
   render() {
     const { item, index } = this.props;
