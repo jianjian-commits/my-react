@@ -1,5 +1,4 @@
 .draggable-list {
-
   .ant-menu-item.draggable-menu-item {
     font-size: 13px;
     height: 34px;
@@ -85,7 +84,7 @@
     background: #FFFFFF;
     box-shadow: 0px 2px 6px #D2D4DB;
 
-    div {
+    .operate-box-item-disable {
       height: 35px;
       padding-left: 15px;
 
@@ -96,6 +95,12 @@
       line-height: 35px;
 
       color: #333333;
+      cursor: not-allowed;
+    }
+
+    .operate-box-item {
+      @extend .operate-box-item-disable;
+
       cursor: pointer;
       &:hover{
         color: #777f97;

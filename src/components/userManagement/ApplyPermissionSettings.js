@@ -343,7 +343,7 @@ const thunkBoard = (
           <div key={board.boardId} className={Styles.form}>
             <div>
               <div>
-                <span>表单</span>
+                <span>仪表盘</span>
               </div>
               <span>{board.boardName}</span>
             </div>

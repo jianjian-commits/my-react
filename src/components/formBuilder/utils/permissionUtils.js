@@ -29,7 +29,6 @@ function hasSuperAuth(permissions, teamId) {
   return permissions.includes(`${teamId}:*:*:*:*:*`)
 }
 
-
 /**
  * @description: 新建表单权限校验
  * @param {Array} permissions
@@ -40,7 +39,7 @@ function hasSuperAuth(permissions, teamId) {
 export function newFormAuth(permissions, teamId, appId) {
   if (hasSuperAuth(permissions, teamId)) return true;
   // 校验1,2位和最后一位
-  const auth = `${teamId}:${appId}:?:?:?:MC`;
+  const auth = `${teamId}:${appId}:form#?:?:?:MC`;
   return permissions.includes(auth);
 }
 

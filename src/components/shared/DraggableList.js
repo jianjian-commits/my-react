@@ -1,10 +1,11 @@
 import React from "react";
-import { Menu, Icon } from "antd";
+import { Menu, Icon, message } from "antd";
 import { useLocation,useParams } from "react-router-dom"
-import "./draggableList.scss";
 import { TableIcon, DashboardIcon } from "../../assets/icons/index";
 import OperateBox from "./Operatebox";
 import { updateList } from "./utils/operateDraggable";
+
+import "./draggableList.scss";
 
 const { SubMenu } = Menu;
 
@@ -48,6 +49,7 @@ const DraggableList = ({
   const { pathname } = useLocation();
   const { appId } = useParams();
   const [ isShowOperate, setIsShowOperate] = React.useState(false);
+  const {handleClickList, handleDelete, handleRename, isDeleteOne, canEdit, canDelete, isChangeSequence, ...rest} = props;
   // const [ originlist, setOriginlist ] = React.useState([]);
 
   React.useEffect(()=>{
@@ -95,7 +97,7 @@ const DraggableList = ({
       let newTargetIndex = "" + (1 * targetIndex + 1) ;
       updateList(originId,newTargetIndex,appId).then(res=>{
         if(res.status === "SUCCESS"){
-          props.isChangeSequence(true);
+          isChangeSequence(true);
           targetDom.parentNode.style.border = "";
         }
       })
@@ -103,8 +105,6 @@ const DraggableList = ({
       targetDom.parentNode.style.border = "";
     }
   }
-
-  const {handleClickList, handleDelete, handleRename, isDeleteOne, ...rest} = props;
 
   return (
     <Menu {...rest} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
@@ -133,20 +133,23 @@ const DraggableList = ({
                       formId={l.key}
                       onDrop={dropHandle}
                       type={l.type}
+                      canEdit={l.canEdit}
                       handleClickList={handleClickList}
                     >
                       {l.key !== -1 ? <Icon component={l.icon || (l.type === "FORM"? TableIcon : DashboardIcon)} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
                     {isShowOperate? 
-                    <OperateBox 
-                    formId = {l.key}
-                    appId = { appId }
-                    formname = {l.name}
-                    handleDelete = { handleDelete }
-                    handleRename = { handleRename }
-                    isDeleteOne = { isDeleteOne}
-                    />:null}
+                    <OperateBox
+                      formId = {l.key}
+                      appId = { appId }
+                      formname = {l.name}
+                      canDelete={l.canDelete}
+                      canEdit={l.canEdit}
+                      handleDelete = { handleDelete }
+                      handleRename = { handleRename }
+                      isDeleteOne = { isDeleteOne}
+                    /> : null}
                           </Menu.Item>
                         ))}
                     </SubMenu>
@@ -159,6 +162,7 @@ const DraggableList = ({
               draggable={draggable}
               formId={l.key}
               type={l.type}
+              canEdit={l.canEdit}
               handleClickList={handleClickList}
               index={n}
               onDrag = {
@@ -189,6 +193,8 @@ const DraggableList = ({
               type = {l.type}
               appId = { appId }
               formname = {l.name}
+              canEdit={l.canEdit}
+              canDelete={l.canDelete}
               handleDelete = { handleDelete }
               handleRename = { handleRename }
               isDeleteOne = { isDeleteOne}
