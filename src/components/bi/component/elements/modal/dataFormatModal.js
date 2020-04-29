@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Radio, Checkbox, Input } from "antd";
 import classes from "../../../scss/modal/dataFormatModal.module.scss";
 import { DataFormatType } from "../Constant";
+import { getFormatter } from "../../../utils/ChartUtil"
 export default function DataFormatModal(props) {
   const { custom, predefine, selectType } = props.dataFormat;
   const [modalCustom, setModalCustom] = useState(custom);
@@ -51,56 +52,14 @@ export default function DataFormatModal(props) {
       decimals: e.target.value,
     });
   };
+
   const getFormatPreview = () => {
-    let showStr = "99999";
-    if (modalPredefine.thousandSymbols) {
-      // showStr = "99,999";
-      for (let i = 0; i < Math.floor((showStr.length-(1+i))/3); i++){
-        showStr = showStr.substring(0,showStr.length-(4*i+3))+','+showStr.substring(showStr.length-(4*i+3));
-      }
-    }
-    if (modalPredefine.percent) {
-      showStr = "99999";
-      showStr = showStr + "00";
-      if(modalPredefine.thousandSymbols){
-        for (let i = 0; i < Math.floor((showStr.length-(1+i))/3); i++){
-          showStr = showStr.substring(0,showStr.length-(4*i+3))+','+showStr.substring(showStr.length-(4*i+3));
-        }
-        showStr = showStr + "%";
-      } else {
-        showStr = showStr + "%";
-      }
-    }
-    if(decimalsInput){
-      if(modalPredefine.thousandSymbols && modalPredefine.percent){
-        showStr = showStr.substr(0,showStr.length-1);
-        if( modalPredefine.decimals !== 0 && modalPredefine.decimals){
-          showStr = showStr + ".";
-          for(let i = 0; i < modalPredefine.decimals; i++){
-            showStr = showStr + "0";
-          }
-        }
-        showStr = showStr + "%";
-      } else if(modalPredefine.percent) {
-        showStr = showStr.substr(0,showStr.length-1);
-        if( modalPredefine.decimals !== 0 && modalPredefine.decimals){
-          showStr = showStr + ".";
-          for(let i = 0; i < modalPredefine.decimals; i++){
-            showStr = showStr + "0";
-          }
-        }
-        showStr = showStr + "%";
-      } else{
-        if( modalPredefine.decimals !== 0 && modalPredefine.decimals){
-          showStr = showStr + '.';
-          for(let i = 0; i < modalPredefine.decimals; i++){
-            showStr = showStr + "0";
-          }
-        }
-      }
-    }
-    return showStr;
+    let showStr = 99999;
+    
+    return getFormatter(showStr, modalPredefine);
+
   };
+
   const checkoutType = (value) => {
     setModalSelectType(DataFormatType[value]);
   };

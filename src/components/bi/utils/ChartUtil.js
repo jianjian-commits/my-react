@@ -17,50 +17,7 @@ const _thousands = (value) => {
   return str.replace(reg,"$1,");
 }
 
-const _Percent = (value) => {
-  if(isNaN(parseFloat(value))) {
-    return 0;
-  }
-  return value + "00%";
-}
-
-const _Decimals = (value, decimals) => {
-  if(isNaN(parseFloat(value))) {
-    return 0;
-  }
-  let item = value + '.';
-  for(let i = 0; i < decimals; i++){
-    item = item + "0";
-  }
-  return item;
-}
-
-const _checkPercent = (thousandSymbols, percent, decimals, value) => {
-  if(thousandSymbols && percent && decimals != 0){
-    let per = _Percent(value).substring(0,_Percent(value).length-1);
-    let dec = _Decimals(per,decimals);
-    return _thousands(dec) + "%";
-  } else if(percent && !thousandSymbols && decimals == 0){
-    return _Percent(value);
-  } else if(!percent && !thousandSymbols && decimals != 0){
-    return _Decimals(value,decimals);
-  } else if(!percent && thousandSymbols && decimals == 0){
-    return _thousands(value);
-  } else if(percent && thousandSymbols && decimals == 0){
-    let per = _Percent(value).substring(0,_Percent(value).length-1);
-    return _thousands(per) + "%";
-  } else if(percent && !thousandSymbols && decimals != 0){
-    let per = _Percent(value).substring(0,_Percent(value).length-1);
-    return _Decimals(per,decimals) + "%";
-  } else if(!percent && thousandSymbols && decimals != 0){
-    let dec = _Decimals(value,decimals);
-    return _thousands(dec,decimals);
-  } else {
-    return value;
-  }
-}
-
-const _getFormatter = (value, format) => {
+export const getFormatter = (value, format) => {
   const predefine = format.predefine;
   if(!predefine) {
     return value;
@@ -149,12 +106,12 @@ export const getBarChartOption = (chartData, chartInfo) => {
         textStyle: {
           color: 'black'
         },
-        formatter: (v) => {return _getFormatter(v.data[v.seriesIndex + 1], formats[idx])}
+        formatter: (v) => {return getFormatter(v.data[v.seriesIndex + 1], formats[idx])}
       },
       tooltip: {
         trigger: 'item',
-        formatter: (v) => {return _setFieldName(each) + "<br />" + v.data[0] + ": " +
-          _getFormatter(v.data[v.seriesIndex + 1], formats[idx])}
+        formatter: (v) => {return _setFieldName(each) + "<br/>" + v.data[0] + ": " +
+          getFormatter(v.data[v.seriesIndex + 1], formats[idx])}
       }
     });
   })
@@ -186,24 +143,6 @@ export const getBarChartOption = (chartData, chartInfo) => {
   } 
 }
 
-const _checkIndexPercent = item => {
-  let thousandSymbols = item.dataFormat.predefine.thousandSymbols;
-  let percent = item.dataFormat.predefine.percent;
-  let decimals = item.dataFormat.predefine.decimals;
-  let count = item.count;
-
-  return _checkPercent(thousandSymbols,percent,decimals,count);
-}
-
-const _checkIndexSumPercent = item => {
-  let thousandSymbols = item.dataFormat.predefine.thousandSymbols;
-  let percent = item.dataFormat.predefine.percent;
-  let decimals = item.dataFormat.predefine.decimals;
-  let count = item.count.toString();
-
-  return _checkPercent(thousandSymbols,percent,decimals,count);
-}
-
 export const getIndexChartOption = (chartData, chartInfo) => {
   const { headItem, items } = chartData;
   let indexData = [];
@@ -217,28 +156,19 @@ export const getIndexChartOption = (chartData, chartInfo) => {
   }
 
   headData.name = headItem.name;
-  headData.count = _checkIndexSumPercent(headItem);
+  headData.count = getFormatter(headItem.count, headItem.dataFormat);
   
   indexData.push(headData);
   if(items.length > 1){
     items.forEach(item=>{
       item = {
         ...item,
-        count: _checkIndexPercent(item) || item.count
+        count: getFormatter(item.count, item.dataFormat) || item.count
       }
       indexData.push(item);
     })
   }
   return indexData;
-}
-
-const _checkPiePercent = (sectorItems, value) => {
-  let thousandSymbols = sectorItems[0].dataFormat.predefine.thousandSymbols;
-  let percent = sectorItems[0].dataFormat.predefine.percent;
-  let decimals = sectorItems[0].dataFormat.predefine.decimals;
-
-  return _checkPercent(thousandSymbols,percent,decimals,value);
-
 }
 
 export const getPieChartOption = (chartData, chartInfo) => {
@@ -266,7 +196,7 @@ export const getPieChartOption = (chartData, chartInfo) => {
         textStyle: {
           color: 'gray'
         },
-        formatter: function(p) {return  p.name + ":"+ _checkPiePercent(sectorItems,p.value)}
+        formatter: function(p) {return  p.name + ":" + getFormatter(p.value, sectorItems[0].dataFormat)}
       },
       data: data
     }
@@ -279,7 +209,7 @@ export const getPieChartOption = (chartData, chartInfo) => {
     legend: {y: "top", show: showLegend},
     tooltip: {
       trigger: 'item',
-      formatter: function(p) {return  p.name + ":"+  _checkPiePercent(sectorItems,p.value)}
+      formatter: function(p) {return  p.name + "<br/>" + getFormatter(p.value, sectorItems[0].dataFormat)}
     },
     labelLine : {show: true},
     color: ChartColor,
