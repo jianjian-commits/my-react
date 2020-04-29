@@ -1300,6 +1300,16 @@ class Submission extends Component {
                           formChildDataObj: this.state.formChildDataObj
                         }));
                       }}
+                      handleSetFormula={this.handleSetFormula}
+                      formulaArray={this.state.formulaArray}
+                      formComponent={this.props.formComponent}
+                      formChildDataObj={this.state.formChildDataObj}
+                      saveFormChildSubmitData={(formChildDataObj) => {
+                        this.setState(state => ({
+                          ...state,
+                          formChildDataObj: formChildDataObj
+                        }));
+                      }}
                     />
                   )}
               </div>
