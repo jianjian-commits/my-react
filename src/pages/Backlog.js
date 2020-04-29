@@ -1,9 +1,7 @@
 import React from "react";
-import { Layout } from "antd";
-import HomeHeader from "../components/header/HomeHeader";
+import { HomeLayout } from "../components/shared";
 import TransactList from "../components/transactList/TransactList";
 
-const { Content } = Layout;
 class Backlog extends React.Component {
   constructor(props) {
     super(props);
@@ -19,12 +17,9 @@ class Backlog extends React.Component {
   }
   render() {
     return (
-      <Layout>
-        <HomeHeader badgenum={this.state.badgenum}/>
-        <Content>
-          <TransactList setBadgenum={this.setBadgenum}></TransactList>
-        </Content>
-      </Layout>
+      <HomeLayout>
+        <TransactList setBadgenum={this.setBadgenum}></TransactList>
+      </HomeLayout>
     );
   }
 }

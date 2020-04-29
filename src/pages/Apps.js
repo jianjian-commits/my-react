@@ -2,11 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { history } from "../store";
 import { Layout, Button, Card, message, Modal, Input, Form } from "antd";
-import HomeHeader from "../components/header/HomeHeader";
 import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
 import Authenticate from "../components/shared/Authenticate";
+import { HomeLayout, HomeContentTitle } from "../components/shared";
 import { TEAM_CREATE_APP, APP_VISIABLED } from "../auth";
 import commonClasses from "../styles/common.module.scss";
 import { catchError } from "../utils";
@@ -29,8 +29,8 @@ const checkCompanyName = async (rule, value, callback) => {
   callback();
 };
 
-const getApps = list => {
-  return list.map(e => {
+const getApps = (list) => {
+  return list.map((e) => {
     return (
       <Authenticate key={e.id} auth={APP_VISIABLED(e.id)}>
         <Card
@@ -62,7 +62,7 @@ class Apps extends React.Component {
     try {
       const res = await request("/customApplication", {
         method: "POST",
-        data
+        data,
       });
       if (res && res.status === "SUCCESS") {
         message.success("创建应用成功");
@@ -80,7 +80,7 @@ class Apps extends React.Component {
   handleCancel() {
     this.setState({
       open: false,
-      noCompanyModalOpen: false
+      noCompanyModalOpen: false,
     });
   }
 
@@ -92,7 +92,7 @@ class Apps extends React.Component {
       form,
       allCompany,
       initAllDetail,
-      fetchingNecessary
+      fetchingNecessary,
     } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const appsPanelWidth = document.getElementById("appsPanel");
@@ -105,43 +105,42 @@ class Apps extends React.Component {
       title: {
         fontSize: "18px",
         lineHeight: "26px",
-        color: "#000000"
+        color: "#000000",
       },
       label: {
         fontSize: "14px",
         lineHeight: "20px",
-        color: "#777F97"
+        color: "#777F97",
       },
       image: {
         width: "530px",
-        height: "250px"
-      }
+        height: "250px",
+      },
     };
-    const handleConfirm = e => {
+    const handleConfirm = (e) => {
       e.preventDefault();
       validateFields((err, { ...rest }) => {
         if (!err) {
           request("/company", {
             method: "POST",
-            data: rest
+            data: rest,
           }).then(
-            res => {
+            (res) => {
               if (res && res.status === "SUCCESS") {
                 initAllDetail();
               } else {
                 message.error(res.msg || "创建公司失败");
               }
             },
-            error => catchError(error)
+            (error) => catchError(error)
           );
         }
       }).then(() => this.setState({ noCompanyModalOpen: false }));
     };
-    if (fetchingNecessary) return <HomeHeader />;
+    if (fetchingNecessary) return <HomeLayout />;
     if (!fetchingNecessary && (!allCompany || allCompany.length === 0))
       return (
-        <Layout>
-          <HomeHeader />
+        <HomeLayout>
           <div className={classes.noCompany}>
             <div>
               <NoCompany />
@@ -161,7 +160,7 @@ class Apps extends React.Component {
             visible={this.state.noCompanyModalOpen}
             width={"610px"}
             onCancel={() => this.setState({ noCompanyModalOpen: false })}
-            onOk={e => handleConfirm(e)}
+            onOk={(e) => handleConfirm(e)}
             wrapClassName={classes.noCompanyModalFormWarp}
           >
             <Form>
@@ -174,8 +173,8 @@ class Apps extends React.Component {
                   validateTrigger: "onBlur",
                   rules: [
                     { required: true, message: "公司名不可为空" },
-                    { validator: checkCompanyName }
-                  ]
+                    { validator: checkCompanyName },
+                  ],
                 })(<Input />)}
               </Form.Item>
               <Form.Item
@@ -192,15 +191,12 @@ class Apps extends React.Component {
               </Form.Item>
             </Form>
           </Modal>
-        </Layout>
+        </HomeLayout>
       );
     return (
-      <Layout>
-        <HomeHeader />
+      <HomeLayout>
         <Content className={commonClasses.container}>
-          <header className={commonClasses.header}>
-            <span style={{ fontSize: 16, color: "#333333" }}>我的应用</span>
-          </header>
+          <HomeContentTitle title="我的应用"/>
           <Content className={classes.innerMain}>
             <div id="appsPanel" className={classes.appsPanel}>
               {getApps(appList)}
@@ -211,7 +207,7 @@ class Apps extends React.Component {
                   onClick={() => this.setState({ open: true })}
                 >
                   创建应用
-                </Button>
+                  </Button>
                 {appList.length < 1 && (
                   <div className={classes.noApp}>
                     <NoAppImg />
@@ -224,7 +220,7 @@ class Apps extends React.Component {
                     key={index}
                     style={{
                       width: "180px",
-                      margin: "10px 15px 30px 15px"
+                      margin: "10px 15px 30px 15px",
                     }}
                   ></div>
                 ))}
@@ -238,11 +234,11 @@ class Apps extends React.Component {
           <ModalCreation
             title={"创建应用"}
             visible={this.state.open}
-            onOk={data => this.handleCreate(data)}
+            onOk={(data) => this.handleCreate(data)}
             onCancel={this.handleCancel}
           />
         </Content>
-      </Layout>
+      </HomeLayout>
     );
   }
 }
@@ -254,11 +250,11 @@ export default Form.create({ name: "createCompany-form" })(
       sysUserName: login.currentCompany.sysUserName,
       name: login.userDetail.name,
       allCompany: login.allCompany,
-      fetchingNecessary: login.fetchingNecessary
+      fetchingNecessary: login.fetchingNecessary,
     }),
     {
       getAppList,
-      initAllDetail
+      initAllDetail,
     }
   )(Apps)
 );

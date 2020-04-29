@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { Layout, Input, ConfigProvider } from "antd";
-import zhCN from 'antd/es/locale/zh_CN';
+import { Layout, Input } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
@@ -20,6 +19,8 @@ import { getFormsAll, getApproveCount, clearApproveCount } from "../components/f
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
+import { SiderTop } from "../components/sider/HomeSider";
+
 // import { submitFormDataAuth } from "../components/formBuilder/utils/permissionUtils";
 // import TransactList from "../components/transactList/TransactList";
 import TodoTransctionList from "../components/transactList/TodoTransctionList";
@@ -270,20 +271,15 @@ const AppDetail = props => {
       )}
     </Fragment>)
   }
-
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
-      <CommonHeader
-        // title={appName}
-        navigationList={navigationList(appName, history)}
-        operations={getOreations(appId, history)}
-      />
       <Layout>
-        <Sider
+      <Sider
           className={classes.appSider}
           style={{ background: "#fff" }}
           width="240"
         >
+          <SiderTop />
           <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount}/>
           <div className={appDeatilClasses.searchBox}>
             <Input
@@ -316,14 +312,19 @@ const AppDetail = props => {
             />
           </div>
         </Sider>
-        <ConfigProvider locale={zhCN}>
-          <Content className={classes.container}>
+      <Content>
+        <CommonHeader
+          // title={appName}
+          navigationList={navigationList(appName, history)}
+          operations={getOreations(appId, history)}
+        />
+        <Content className={classes.container}>
             {// eslint-disable-next-line
               selectedID != void 0 ? (selectedType === DASHBOARD ? getDashboard() : getForm()) :
                 approvalKey !== null ? (TransactList) : null
             }
           </Content>
-        </ConfigProvider>
+      </Content>
       </Layout>
     </Authenticate>
   );

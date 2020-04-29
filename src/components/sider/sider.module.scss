@@ -1,0 +1,53 @@
+.top {
+  padding: 0 18px;
+  border-bottom: 1px solid #ddd;
+  line-height: 64px;
+  height: 64px;
+  font-size: 18px;
+  overflow: hidden;
+  a {
+    color: #000;
+    display: inline-block;
+    height: 100%;
+  }
+  .logo {
+    width: 45px;
+    height: 32px;
+    line-height: 64px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    top: 8px;
+    background: url(../../assets/icons/logo.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
+.menu {
+  .item {
+    &:hover {
+      background-color: #e7f0ff !important;
+    }
+    &:global(.ant-menu-item-selected) {
+      background-color: rgb(221, 234, 255) !important;
+      &::before {
+        border-left: 4px solid #1890ff;
+        content: "";
+        position: absolute;
+        left: 0;
+        height: 100%;
+      }
+      &::after {
+        height: 0;
+      }
+      svg {
+        g,
+        polyline,
+        path {
+          fill: #1890ff;
+        }
+      }
+    }
+  }
+}

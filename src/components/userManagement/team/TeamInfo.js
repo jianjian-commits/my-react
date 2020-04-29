@@ -6,6 +6,7 @@ import classes from "./team.module.scss";
 import { getcurrentCompany, getAllCompany } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
+import { HomeContentTitle } from "../../shared/";
 import { catchError } from "../../../utils";
 import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 
@@ -99,7 +100,7 @@ export default connect(
   };
   return currentCompany ? (
     <div className={classes.container}>
-      <div className={classes.title}>公司信息</div>
+      <HomeContentTitle title="公司信息"></HomeContentTitle>
       <div className={classes.listBox}>
         <List itemLayout="horizontal" size="small">
           <List.Item>

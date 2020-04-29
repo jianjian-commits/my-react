@@ -13,6 +13,7 @@ import biReducer from "../components/bi/redux/biReducer";
 import login, { loginMiddleware } from "./loginReducer";
 import app from "./appReducer";
 import debug from "./debugReducer";
+import layout from "./layoutReducer";
 import { Process, Approval } from "componentized-process";
 
 const { table_process, process, processMiddleware } = Process.redux;
@@ -25,6 +26,7 @@ const reducers = history =>
     login,
     app,
     debug,
+    layout,
     table_process,
     table_approval,
     process,

@@ -1,14 +1,8 @@
-.hideHeader {
-  width: 100vw;
-  height: 40px;
-}
-
 .homeHeader {
-  position: fixed;
-  top: 0;
-  width: 100vw;
   z-index: 1;
+  line-height: 40px;
   // width: 100%;
+  background: rgb(42, 127, 255);
   color: #ddd;
   .wrapper {
     height: 100%;
@@ -21,7 +15,7 @@
     }
     .nav {
       flex: 1;
-      position: absolute;
+      position: relative;
       left: 0;
       height: 40px;
       // margin-left: 30px;
@@ -54,18 +48,19 @@
         }
       }
     }
-    & > div:last-child {
-      & > a {
-        font-size: 14px;
-        & > svg {
-          position: relative;
-          top: -2px;
-        }
-      }
-    }
-    // .user {
-    //   width: 80px;
+    // & > div:last-child {
+    //   & > a {
+    //     font-size: 14px;
+    //     & > svg {
+    //       position: relative;
+    //       top: -2px;
+    //     }
+    //   }
     // }
+    .user {
+      text-align: right;
+      // width: 80px;
+    }
   }
 }
 .breadCrumbs {
@@ -184,7 +179,6 @@
 }
 
 .userDetail {
-  width: 100vw;
   display: flex;
   justify-content: center;
   position: relative;
@@ -345,8 +339,6 @@
 
 .homeNav {
   & > ul {
-    position: absolute;
-    left: 60px;
     display: flex;
     align-items: center;
     height: 40px;
@@ -466,4 +458,21 @@
   &:hover {
     background-image: url("../../assets/icons/header/arrowLeftBG.svg");
   }
+}
+
+.userSection {
+  height: 100%;
+  padding: 0 12px;
+  cursor: pointer;
+  transition: all .3s;
+  &:hover {
+    background: rgba(0,0,0,.1);
+  }
+}
+.trigger {
+  font-size: 18px;
+  line-height: 45px !important;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
 }

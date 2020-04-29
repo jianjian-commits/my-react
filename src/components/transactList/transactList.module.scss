@@ -1,79 +1,81 @@
 .tableBox {
-  padding: 0 32px;
-  :global(.ant-table-wrapper) {
-      background-color: #fff;
-  }
-  :global(.ant-table-pagination.ant-pagination ){
-    flex: none;
-    text-align: center;
-    margin: 20px;
-    width: 100%;
-    :global(.ant-pagination-prev,
-    .ant-pagination-next) {
-      :global(.ant-pagination-item-link) {
-        line-height: 28px;
-        padding: 9px;
-        vertical-align: middle;
-        display: table-cell;
-      }
-    }
-    :global(.ant-pagination-item-active) {
-      background: #2A7FFF;
-      border-color: #2A7FFF;
-      a {
-        color: #fff;
-      }
-    }
-  }
-  :global(.ant-table) {
-    tr {
-      background-color: #fff;
-      td:first-child {
-        color: #000000;
-      }
-      &:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
-        background-color: #E7F0FF;
-      }
-    }
-    td {
-      > span {
-        color: #1890ff;
-      }
-    }
-    button {
-      padding: 0 30px 0 0;
-    }
-  }
-  :global(.ant-table-thead > tr > th) {
-    padding: 14px;
-    background: #fff;
-  }
-  :global(.ant-table-tbody){
-    font-size: 14px;
-  }
-  :global(.ant-table-tbody > tr > td) {
-    padding: 9px 16px;
-    border-bottom-color: #DCDEE3;
-    color: #333;
-    >span {
-      cursor: pointer;
-    }
-  }
-  :global(.ant-table-column-title) {
-        font-family: "Microsoft YaHei";
-        font-style: normal;
-        font-weight: bold;
-        font-size: 15px;
-  }
+  // padding: 0 32px;
+  // :global(.ant-table-wrapper) {
+  //     background-color: #fff;
+  // }
+  // :global(.ant-table-pagination.ant-pagination ){
+  //   flex: none;
+  //   text-align: center;
+  //   margin: 20px;
+  //   width: 100%;
+  //   :global(.ant-pagination-prev,
+  //   .ant-pagination-next) {
+  //     :global(.ant-pagination-item-link) {
+  //       line-height: 28px;
+  //       padding: 9px;
+  //       vertical-align: middle;
+  //       display: table-cell;
+  //     }
+  //   }
+  //   :global(.ant-pagination-item-active) {
+  //     background: #2A7FFF;
+  //     border-color: #2A7FFF;
+  //     a {
+  //       color: #fff;
+  //     }
+  //   }
+  // }
+  // :global(.ant-table) {
+  //   tr {
+  //     background-color: #fff;
+  //     td:first-child {
+  //       color: #000000;
+  //     }
+  //     &:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  //       background-color: #E7F0FF;
+  //     }
+  //   }
+  //   td {
+  //     > span {
+  //       color: #1890ff;
+  //     }
+  //   }
+  //   button {
+  //     padding: 0 30px 0 0;
+  //   }
+  // }
+  // :global(.ant-table-thead > tr > th) {
+  //   padding: 14px;
+  //   background: #fff;
+  // }
+  // :global(.ant-table-tbody){
+  //   font-size: 14px;
+  // }
+  // :global(.ant-table-tbody > tr > td) {
+  //   padding: 9px 16px;
+  //   border-bottom-color: #DCDEE3;
+  //   color: #333;
+  //   >span {
+  //     cursor: pointer;
+  //   }
+  // }
+  // :global(.ant-table-column-title) {
+  //       font-family: "Microsoft YaHei";
+  //       font-style: normal;
+  //       font-weight: bold;
+  //       font-size: 15px;
+  // }
 }
 .tableTitle {
   font-family: "Microsoft YaHei";
   font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
+  font-weight: 500;
+  font-size: 18px;
   line-height: 24px;
-  color: #333333;
-  padding:40px 0 30px 0;
+  color: #000;
+  // padding:40px 0 30px 0;
+  margin-top: 0;
+  margin-bottom: 0.5em;
   .totalNumber {
     color: #777f97;
   }
