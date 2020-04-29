@@ -22,9 +22,11 @@ const MenuItems = ({
 }) => (
   <>
     <Menu>
-      <Menu.Item>
-        <span>所属公司</span>
-      </Menu.Item>
+      {allCompany && allCompany.length > 0 && (
+        <Menu.Item>
+          <span>所属公司</span>
+        </Menu.Item>
+      )}
 
       {allCompany.map(company => {
         const check = company.id === currentCompany.id;

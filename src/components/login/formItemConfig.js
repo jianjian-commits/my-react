@@ -66,7 +66,10 @@ const email = () => ({
 });
 // 自定义校验
 const checkphone = (activeKey, dispatch) => {
-  const bol = activeKey === "initSignin" || activeKey === "signin";
+  const bol =
+    activeKey === "initSignin" ||
+    activeKey === "signin" ||
+    activeKey === "resetPhones";
   const context = bol ? "该手机号未注册" : "该手机号已被注册";
   const phone = async (rule, value, callback) => {
     if (!value) return callback();
@@ -89,9 +92,7 @@ const checkphone = (activeKey, dispatch) => {
 const checkEmail = async (rule, value, callback) => {
   if (!value) return callback();
   try {
-    console.log("===========request=========");
     const res = await request(`/sysUser/email/${value}/check`);
-    console.log("===========res=========", res);
     if (res && res.data === false) return callback("该邮箱已被注册");
   } catch (err) {
     catchError(err);
@@ -282,8 +283,6 @@ const verificationCode = ({
   allowSendCode
 }) => {
   const { getFieldValue } = form;
-  const verificationCodeSpanRef = React.createRef();
-  const verificationCodeButtonRef = React.createRef();
   const phone = getFieldValue("mobilePhone");
   return {
     itemName: "code",
@@ -306,7 +305,6 @@ const verificationCode = ({
         unprefix={unprefix}
         addonAfter={
           <Button
-            ref={button => (verificationCodeButtonRef.current = button)}
             disabled={isFetchCoding}
             onClick={
               allowSendCode
@@ -329,7 +327,6 @@ const verificationCode = ({
     ),
     additionComponent: (
       <span
-        ref={span => (verificationCodeSpanRef.current = span)}
         style={{
           position: "absolute",
           right: 0,
@@ -358,8 +355,8 @@ const mobilePhone = ({
         required("该项为必填"),
         whitespace(),
         number(),
-        { validator: checkphone(activeKey, dispatch) },
-        { len: 11, message: "请输入正确手机号" }
+        { len: 11, message: "请输入正确手机号" },
+        { validator: checkphone(activeKey, dispatch) }
       ]
     },
     component: (
@@ -368,7 +365,7 @@ const mobilePhone = ({
         addonBefore={<span>+86</span>}
         prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,0.25)" }} />}
         onChange={() => {
-          resetAllowSendCodeState();
+          resetAllowSendCodeState && resetAllowSendCodeState();
           form.setFields({ mobilePhone: { errors: null } });
         }}
         icon={icon}
@@ -463,6 +460,10 @@ const submit = ({
         type="primary"
         htmlType="submit"
         className={itemsStyles.button}
+        onClick={() => {
+          timeout && timeout.int && timeout.clear(0);
+          resetAllowSendCodeState();
+        }}
         style={{
           background: allowClickButton
             ? "rgba(24,144,255,1)"

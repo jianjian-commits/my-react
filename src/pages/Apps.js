@@ -75,7 +75,7 @@ class Apps extends React.Component {
       catchError(err);
     }
   }
- 
+
   // 取消新建/关闭模态窗
   handleCancel() {
     this.setState({
@@ -135,8 +135,7 @@ class Apps extends React.Component {
             error => catchError(error)
           );
         }
-      });
-      this.setState({ noCompanyModalOpen: false });
+      }).then(() => this.setState({ noCompanyModalOpen: false }));
     };
     if (fetchingNecessary) return <HomeHeader />;
     if (!fetchingNecessary && (!allCompany || allCompany.length === 0))

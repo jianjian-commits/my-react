@@ -137,7 +137,8 @@ export default connect(({ login }) => ({
               }
             >
               {getFieldDecorator(formItem.itemName, {
-                ...formItem.options
+                ...formItem.options,
+                validateFirst: true,
               })(formItem.component)}
               {formItem.additionComponent}
             </Form.Item>
