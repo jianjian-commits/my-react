@@ -220,6 +220,9 @@ class Submission extends Component {
       ) {
         values[component.key] = Number(values[component.key]);
       }
+      if(Number.isNaN(values[component.key])){
+        delete values[component.key];
+      }
     });
     return values;
   }
