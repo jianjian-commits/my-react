@@ -7,7 +7,7 @@ import { deepClone, equals } from './Util';
 
 const _setFieldName = field => field.alias||field.legendName;
 
-const _formatNum = (value) => {
+const _thousands = (value) => {
   if(isNaN(parseFloat(value))) {
     return 0;
   }
@@ -35,37 +35,61 @@ const _Decimals = (value, decimals) => {
   return item;
 }
 
-const _checkPercent = (thousandSymbols,percent,decimals,value) => {
+const _checkPercent = (thousandSymbols, percent, decimals, value) => {
   if(thousandSymbols && percent && decimals != 0){
     let per = _Percent(value).substring(0,_Percent(value).length-1);
     let dec = _Decimals(per,decimals);
-    return _formatNum(dec) + "%";
+    return _thousands(dec) + "%";
   } else if(percent && !thousandSymbols && decimals == 0){
     return _Percent(value);
   } else if(!percent && !thousandSymbols && decimals != 0){
     return _Decimals(value,decimals);
   } else if(!percent && thousandSymbols && decimals == 0){
-    return _formatNum(value);
+    return _thousands(value);
   } else if(percent && thousandSymbols && decimals == 0){
     let per = _Percent(value).substring(0,_Percent(value).length-1);
-    return _formatNum(per) + "%";
+    return _thousands(per) + "%";
   } else if(percent && !thousandSymbols && decimals != 0){
     let per = _Percent(value).substring(0,_Percent(value).length-1);
     return _Decimals(per,decimals) + "%";
   } else if(!percent && thousandSymbols && decimals != 0){
     let dec = _Decimals(value,decimals);
-    return _formatNum(dec,decimals);
+    return _thousands(dec,decimals);
   } else {
     return value;
   }
 }
 
-//check is data include %
-const _checkBarPercent = xaxisList => {
-  return xaxisList[0].items[0].formatCount.includes("%") ? v => v.data[1]+"%" : null;
+const _getFormatter = (value, format) => {
+  const predefine = format.predefine;
+  if(!predefine) {
+    return value;
+  }
+
+  const decimals = predefine.decimals;
+  const thousands = predefine.thousandSymbols;
+  const percent = predefine.percent;
+
+  let result = parseFloat(value);
+
+  if(percent) {
+    result = result * 100;
+  }
+
+  if(decimals > 0) {
+    result = result.toFixed(decimals);
+  }
+
+  if(thousands) {
+    result = _thousands(result);
+  }
+
+  if(percent) {
+    result += "%"
+  }
+
+  return result;
 }
-//slice % of data
-const _slicePercent = str => str.includes("%") ? str.substr(0,str.length-1) : str ;
 
 export const getBarChartOption = (chartData, chartInfo) => {
   const { xaxisList, legends } = chartData;
@@ -75,36 +99,28 @@ export const getBarChartOption = (chartData, chartInfo) => {
     return {};
   }
 
-  //is show %  
-  const formatter = _checkBarPercent(xaxisList);
-
   const source = [];
   const series = [];
+  const formats = [];
   const title = ["名称"];
 
   legends.forEach((each) => {
     title.push(_setFieldName(each));
-    series.push({type: 'bar',
-      label: {
-        show: showDataTag,
-        position: 'top',
-        textStyle: {
-          color: 'black'
-        },
-        formatter
-      }
-    });
   })
 
   source.push(title)
-  xaxisList.forEach((each) => {
+  xaxisList.forEach((each, index) => {
     let row = [];
     const items = each.items;
     row.push(each.dimensionName);
 
     if(legends.length == items.length) {
       items.forEach((item)=> {
-        row.push(_slicePercent(item.formatCount));
+        row.push(item.count);
+
+        if(index == 0) {
+          formats.push(item.dataFormat)
+        }
       })
     }
     else { // tow dimensions, one measure
@@ -112,7 +128,11 @@ export const getBarChartOption = (chartData, chartInfo) => {
         let count = "";
         items.forEach((item)=> {
           if(item.legend.legendName == legend.legendName) {
-            count = _slicePercent(item.formatCount);
+            count = item.count;
+
+            if(formats.length === 0) {
+              formats.push(item.dataFormat);
+            }
           }
         })
 
@@ -121,10 +141,23 @@ export const getBarChartOption = (chartData, chartInfo) => {
     }
     source.push(row);
   });
-
-  const style = {
-    color: 'red'
-  }
+  legends.forEach((each, idx) => {
+    series.push({type: 'bar',
+      label: {
+        show: showDataTag,
+        position: 'top',
+        textStyle: {
+          color: 'black'
+        },
+        formatter: (v) => {return _getFormatter(v.data[v.seriesIndex + 1], formats[idx])}
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: (v) => {return _setFieldName(each) + "<br />" + v.data[0] + ": " +
+          _getFormatter(v.data[v.seriesIndex + 1], formats[idx])}
+      }
+    });
+  })
 
   return  {
     dataset: {
@@ -132,11 +165,10 @@ export const getBarChartOption = (chartData, chartInfo) => {
     },
     legend: {y: 'top', show: showLegend},
     tooltip: {
-      backgroundColor: 'rgba(255,255,255,0.9)',
+      backgroundColor: 'rgba(255,255,255, 0.9)',
       textStyle: {
         color: '#777F97'
-      },
-      formatter
+      }
     },
     xAxis: [
       {
@@ -218,7 +250,7 @@ export const getPieChartOption = (chartData, chartInfo) => {
   }
 
   const series = [];
-// console.log("========sectorItems=======", sectorItems, legends);
+
   if( legends.length == sectorItems.length ) {
     const data = [];
 
@@ -337,27 +369,4 @@ export const getChartAttrs = (bindDataArr) => {
   })
 
   return { dimensions, indexes, conditions };
-}
-
-export const getOption2 = () => {
-  return  {
-    dataset: {
-      source: [
-          ['product', '性别', '数量'],
-          ['Matcha Latte', "男", 85.8],
-          ['Milk Tea', "女", 73.4],
-          ['Cheese Cocoa', "男", 65.2],
-          ['Walnut Brownie', "女", 53.9]
-      ]
-    },
-    legend: {},
-    tooltip: {},
-    xAxis: {type: 'category'},
-    yAxis: {},
-    series: [
-        {type: 'bar'},
-        {type: 'bar'},
-        {type: 'bar'}
-    ]
-  } 
 }
