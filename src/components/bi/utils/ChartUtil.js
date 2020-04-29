@@ -60,6 +60,7 @@ export const getBarChartOption = (chartData, chartInfo) => {
   const series = [];
   const formats = [];
   const title = ["名称"];
+  let oneMeasure = false;
 
   legends.forEach((each) => {
     title.push(_setFieldName(each));
@@ -86,6 +87,7 @@ export const getBarChartOption = (chartData, chartInfo) => {
         items.forEach((item)=> {
           if(item.legend.legendName == legend.legendName) {
             count = item.count;
+            oneMeasure = true;
 
             if(formats.length === 0) {
               formats.push(item.dataFormat);
@@ -98,7 +100,9 @@ export const getBarChartOption = (chartData, chartInfo) => {
     }
     source.push(row);
   });
+
   legends.forEach((each, idx) => {
+    let predefine = oneMeasure ? formats[0].predefine : formats[idx].predefine
     series.push({type: 'bar',
       label: {
         show: showDataTag,
@@ -106,12 +110,12 @@ export const getBarChartOption = (chartData, chartInfo) => {
         textStyle: {
           color: 'black'
         },
-        formatter: (v) => {return getFormatter(v.data[v.seriesIndex + 1], formats[idx].predefine)}
+        formatter: (v) => {return getFormatter(v.data[v.seriesIndex + 1], predefine)}
       },
       tooltip: {
         trigger: 'item',
         formatter: (v) => {return _setFieldName(each) + "<br/>" + v.data[0] + ": " +
-          getFormatter(v.data[v.seriesIndex + 1], formats[idx].predefine)}
+          getFormatter(v.data[v.seriesIndex + 1], predefine)}
       }
     });
   })
