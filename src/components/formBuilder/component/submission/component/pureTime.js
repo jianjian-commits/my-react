@@ -20,6 +20,7 @@ import {
   compareEqualArray
 } from "../utils/dataLinkUtils";
 import moment from "moment";
+import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 let timer = null;
 
@@ -38,13 +39,13 @@ class PureTime extends React.Component {
   componentDidMount() {
     const { form, item, handleSetComponentEvent, isEditData } = this.props;
     const { data, autoInput } = item;
-    if(autoInput){
+    if (autoInput) {
       this.setState({
         isAutoInput: true
       });
     }
     if (autoInput && !isEditData) {
-      timer = setInterval(()=>{
+      timer = setInterval(() => {
         form.setFieldsValue({
           [item.key]: new moment()
         })
@@ -96,6 +97,18 @@ class PureTime extends React.Component {
         });
       });
     }
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
+      });
+    }
   }
 
   handleEmitChange = value => {
@@ -109,8 +122,9 @@ class PureTime extends React.Component {
 
   // 如果存在回调数组，则遍历里面的函数执行
   handleChange = value => {
-    console.log(value)
     this.handleEmitChange(value);
+    this.handleEmitFormulaEvent(value)
+
     setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
@@ -137,8 +151,8 @@ class PureTime extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if (initData && isEditData) {
-      options.initialValue = coverTimeUtils.localDate(initData, item.type);
-    } else if(isAutoInput) {
+      options.initialValue = coverTimeUtils.localDate(initData, item.type, true);
+    } else if (isAutoInput) {
       options.initialValue = new moment();
     }
     return (

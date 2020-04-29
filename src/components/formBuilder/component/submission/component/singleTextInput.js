@@ -8,16 +8,16 @@ import {
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
+import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 class SingleTextInput extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       isValidating: false
     }
   }
-
 
   componentDidMount() {
     const { form, item, handleSetComponentEvent } = this.props;
@@ -25,12 +25,12 @@ class SingleTextInput extends React.Component {
     // 是否为数据联动
     if (data && data.type === "DataLinkage") {
       const {
-        conditionId, 
+        conditionId,
         linkComponentId,
         linkDataId,
         linkFormId,
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, (value) => {
@@ -52,7 +52,7 @@ class SingleTextInput extends React.Component {
           } else {
             index = newData.indexOf(value);
           }
-          if(index > -1) {
+          if (index > -1) {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
@@ -66,6 +66,19 @@ class SingleTextInput extends React.Component {
             this.handleEmitChange(undefined);
           }
         });
+      });
+    }
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
       });
     }
   }
@@ -83,13 +96,13 @@ class SingleTextInput extends React.Component {
     const value = ev.target.value;
     this.handleEmitChange(value)
     this.props.resetErrorMsg(this.props.item.key);
-    setTimeout(()=>{
+    setTimeout(() => {
       let key = this.props.item.key;
       let customMessage = this.props.item.validate.customMessage;
-      if(!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"),null)){
-        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title',customMessage)
+      if (!Object.is(document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain"), null)) {
+        document.querySelector(`#Id${key}Dom`).querySelector(".ant-form-explain").setAttribute('title', customMessage)
       }
-    },300)
+    }, 300)
   };
 
 
@@ -127,15 +140,15 @@ class SingleTextInput extends React.Component {
     }
 
     let itemOption = {}
-    if(this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0){
+    if (this.props.errorResponseMsg && this.props.errorResponseMsg.length > 0) {
       itemOption.validateStatus = "error";
       itemOption.help = this.props.errorResponseMsg.join("")
     }
 
     return (
-      <Form.Item label={<LabelUtils data={item} />} 
+      <Form.Item key="kkwjhefkjwef" label={<LabelUtils data={item} />}
         {...itemOption}
-        >
+      >
         {getFieldDecorator(item.key, {
           initialValue: initData || item.defaultValue,
           rules: [
@@ -148,8 +161,16 @@ class SingleTextInput extends React.Component {
                 errMsg.trim().length > 0 ? errMsg : `${item.label}不能为空`
             }
           ],
-          validateTrigger:["onBlur","onSubmit"]
-      })(<Input disabled={disabled} autoComplete="off" onChange={this.handleChange} />)}
+          validateTrigger: ["onBlur", "onSubmit"]
+        })(<Input
+          disabled={disabled}
+          autoComplete="off"
+          onChange={this.handleChange}
+          onBlur={(ev) => {
+            const value = ev.target.value;
+            this.handleEmitFormulaEvent(value)
+          }}
+        />)}
       </Form.Item>
     );
   }

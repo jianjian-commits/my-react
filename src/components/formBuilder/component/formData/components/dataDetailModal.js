@@ -10,15 +10,13 @@ class DataDetailModal extends React.Component {
     this.state = {};
   }
   _renderFileData = fileData => {
-    // console.log(fileData, typeof fileData);
-    // if (fileData && fileData.name) {
+
     if (fileData.length > 0) {
       return fileData.map((item, index) => (
         <p key={index}>
           {item["name"]}
           &nbsp; &nbsp;
           <a
-            // href={item["url"]}
             href={config.apiUrl + "/file/identification/" + item["url"]}
             download={item["name"]}
             style={{ textDecoration: "none" }}
@@ -31,8 +29,6 @@ class DataDetailModal extends React.Component {
     return "";
   };
   _renderSignatureData = fileData => {
-    // console.log(fileData, typeof fileData);
-    // if (fileData && fileData.name) {
     if (fileData.length > 0) {
       return fileData.map((item, index) => (
         <p key={index}>

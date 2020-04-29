@@ -16,51 +16,43 @@ class DBEditor extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      fullChart:null,
+      fullScrenObj: null
     }
   }
 
-  handleFullChart = fullChart => {
-    if(this.state.fullChart){
-      this.setState({fullChart:null});
-    }else{
-      this.setState({fullChart});
-    }
+  handleFullChart = fullScrenObj => {
+    this.setState({fullScrenObj});
   }
 
   getElements = (dashboards) => {
+    if(!dashboards || (dashboards.length == 0) || dashboards[0].elements.length == 0) {
+      return null;
+    }
+
     const elements = dashboards[0].elements;
     const keys = Object.keys(elements);
     const len = keys.length;
+    let elems = [];
+    const rows = [];
 
     if(len == 0) {
       return null;
     }
 
-    let elems = [];
-    const rows = [];
-    
-    
     keys.forEach((item, idx) => {
       const data = elements[item].data;
       const element = elements[item];
-      const containerObj = {isBtnBlock: false, key: item, chartData: data,
+      const containerObj = {isBtnBlock: false, key: item, chartData: data, elemType: element.type,
         chartName: element.name, chartId: element.id, chartInfo: element.chartTypeProp};
-      const modalNarrowBtn = 
-          {
-            type:"fullscreen-exit",
-            click:this.handleFullChart
-          };
-      const setFullChart = () => {this.handleFullChart(<ChartContainer modalNarrowBtn={modalNarrowBtn} handleFullChart={this.handleFullChart} {...containerObj}/>)};
 
       if(idx % 2 == 0) {
-        elems.push(<ChartContainer {...containerObj} setFullChart={setFullChart}/>);
+        elems.push(<ChartContainer {...containerObj} setFullChart={() => this.handleFullChart(containerObj)}/>);
 
         if(idx == len - 1) {
           rows.push(<Column children={elems} key={item}/>);
         }
       } else {
-        elems.push(<ChartContainer {...containerObj} setFullChart={setFullChart}/>);
+        elems.push(<ChartContainer {...containerObj} setFullChart={() => this.handleFullChart(containerObj)}/>);
         rows.push(<Column children={elems} key={item}/>);
         elems = [];
       }
@@ -71,6 +63,7 @@ class DBEditor extends React.PureComponent {
 
   render() {
     const { height, dashboards } = this.props;
+    const { fullScrenObj } = this.state; 
 
     if(!dashboards || (dashboards.length == 0) || dashboards[0].elements.length == 0) {
       return (
@@ -85,7 +78,7 @@ class DBEditor extends React.PureComponent {
     return (
       <Fragment>
         <div className={classes.dbEditor} style={{height}}>
-          {this.state.fullChart && <ChartFullModal chart={this.state.fullChart}/>}
+          {fullScrenObj && <ChartFullModal fullScrenObj={ fullScrenObj } handleFullChart={this.handleFullChart}/>}
           {this.getElements(dashboards)}
         </div>
       </Fragment>

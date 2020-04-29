@@ -1,0 +1,47 @@
+<svg
+                        width="78"
+                        height="70"
+                        viewBox="0 0 78 70"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect width="68" height="70" rx="5" fill="#D4E6FF" />
+                        <rect
+                          x="8"
+                          y="19"
+                          width="27"
+                          height="5"
+                          fill="#2A7EFF"
+                        />
+                        <rect
+                          x="8"
+                          y="44"
+                          width="42"
+                          height="5"
+                          fill="#2A7EFF"
+                        />
+                        <rect
+                          x="8"
+                          y="32"
+                          width="27"
+                          height="5"
+                          fill="#B0D0FF"
+                        />
+                        <circle cx="63" cy="15" r="15" fill="white" />
+                        <circle cx="63" cy="15" r="12" fill="#2A7EFF" />
+                        <rect
+                          x="56"
+                          y="14"
+                          width="14"
+                          height="2"
+                          fill="white"
+                        />
+                        <rect
+                          x="62"
+                          y="22"
+                          width="14"
+                          height="2"
+                          transform="rotate(-90 62 22)"
+                          fill="white"
+                        />
+                      </svg>

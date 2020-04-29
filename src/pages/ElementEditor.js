@@ -12,7 +12,7 @@ const { Sider, Content } = Layout;
 const ElementEditor = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
-  const { chartData, chartInfo } = props;
+  const { chartData, chartInfo, elemType } = props;
 
   const load = (e) => {
     history.push(`/app/${appId}/setting/bi/${dashboardId}`);
@@ -35,7 +35,7 @@ const ElementEditor = props => {
             </Sider>
             <Content className={classes.elemContainer}>
               <ChartBindPane/>
-              <ChartContainer isBtnBlock={true} chartData={chartData} chartInfo={chartInfo} style={{flexGrow: 1}}/>
+              <ChartContainer isBtnBlock={true} chartData={chartData} chartInfo={chartInfo} elemType={elemType} style={{flexGrow: 1}}/>
             </Content>
             <Sider style={{ background: "#fff" }}>
               <RightPane/>
@@ -49,6 +49,7 @@ const ElementEditor = props => {
 export default connect(store => ({
   dataSource: store.bi.dataSource,
   chartData: store.bi.chartData,
-  chartInfo: store.bi.chartInfo
+  chartInfo: store.bi.chartInfo,
+  elemType: store.bi.elemType
 }), {
 })(ElementEditor);

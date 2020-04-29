@@ -3,8 +3,7 @@ import {
   CLEAR_FORM_DATA,
   CLEAR_FORM_DETAIL,
   RECEIVED_FORM_DETAIL,
-  Filter_FORM_DATA,
-  GET_USER_LIST
+  Filter_FORM_DATA
 } from "./action";
 
 const initState = {
@@ -68,12 +67,6 @@ const formSubmitDataReducer = (state = initState, action) => {
         forms: { components: [], name: "" },
         taskData: {},
       };
-    }
-    case GET_USER_LIST:{
-      return {
-        ...state,
-        userList: action.userList
-      }
     }
     default: {
       return state;

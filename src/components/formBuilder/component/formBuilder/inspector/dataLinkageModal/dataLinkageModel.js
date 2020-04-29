@@ -247,9 +247,6 @@ class DataLinkageModal extends React.Component {
             type: childData.element
           }
         ]
-      },
-      () => {
-        console.log(this.state.formChildData);
       }
     );
   };
@@ -491,7 +488,7 @@ class DataLinkageModal extends React.Component {
 export default connect(
   store => ({
     data: store.formBuilder.data,
-    // forms: store.formBuilder.formArray,
+    forms: store.formBuilder.formArray,
     formId: store.formBuilder.formId
   }),
   {

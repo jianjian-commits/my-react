@@ -1,36 +1,56 @@
-.biHeader {
+.header {
   height: 50px;
-  background-color: #2B81FF;
+  // background-color: #2B81FF;
 
   :global(.ant-btn) {
     height: 50px;
   }
 }
 
+.biHeader {
+  @extend .header;
+  background-color: #2B81FF;
+}
+
+.visitorHeader {
+  @extend .header;
+  background-color: transparent;
+}
+
 .headerBarBack {
   height: 50px;
-  width: 2%;
+  // width: 2%;
+  margin-left: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   :global(.ant-btn-link) {
-    margin-left: 10px;
     font-size: 14px;
     font-weight: 500;
     // color: rgba(86, 92, 110, 1);
-    color: #FFFFFF
+    color: #FFFFFF;
   }
   :global(.ant-btn) {
     padding: 0px;
   }
 }
 
-.renameDB {
+.name {
   display: inline;
   border: none;
   margin-left: 10px;
   background-color: transparent;
+}
+
+.renameDB {
+  @extend .name;
   color: #FFFFFF
+}
+
+.visitorName {
+  font-size: 18px;
+  @extend .name;
+  color: #333333;
 }
 
 .dbHeaderSave {

@@ -11,17 +11,17 @@
 
 .elementHeaderBack {
   height: 30px;
-  width: 2%;
+  // width: 2%;
+  margin-left: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  .ant-btn-link {
-    margin-left: 10px;
+  :global(.ant-btn-link) {
     font-size: 14px;
     font-weight: 500;
     color: rgb(250, 251, 252);
   }
-  .ant-btn {
+  :global(.ant-btn) {
     padding: 0px;
   }
 }
@@ -32,11 +32,14 @@
   margin-left: 10px;
   background-color: transparent;
   color: #FFFFFF;
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
 }
 
 .elementHeaderSave {
   float: right;
-  margin-right: 15px;
+  margin-right: 5px;
   top: 10px;
   span {
     background-color: #fff;
@@ -54,4 +57,44 @@
   align-items: center;
   width: 100%;
   height: 100%;
+}
+
+.indexSum{
+  width: 300px;
+  height: 200px;
+  margin: auto;
+  // border: 1px solid red;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  .indexCount{
+    font-size: 60px;
+    color: #000;
+  }
+}
+
+.indexChart{
+  width: 96%;
+  height: 490px;
+  margin: auto;
+  box-sizing: border-box;
+  // border: 1px solid red;
+  overflow: scroll;
+  .indexTable{
+    height: 40px;
+    line-height: 40px;
+    padding-left: 21px;
+    padding-right: 84px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #DCDEE3;
+    border-bottom: none;
+    &:first-child{
+      color: #2B81FF;
+      font-weight: bold;
+    }
+    &:last-child{
+      border-bottom: 1px solid #DCDEE3;
+    }
+  }
 }

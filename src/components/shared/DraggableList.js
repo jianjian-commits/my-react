@@ -1,21 +1,22 @@
 import React from "react";
-import { Menu, Icon } from "antd";
+import { Menu, Icon, message } from "antd";
 import { useLocation,useParams } from "react-router-dom"
-import "./draggableList.scss";
-import { TableIcon } from "../../assets/icons/index";
+import { TableIcon, DashboardIcon } from "../../assets/icons/index";
 import OperateBox from "./Operatebox";
 import { updateList } from "./utils/operateDraggable";
 
+import "./draggableList.scss";
+
 const { SubMenu } = Menu;
 
-const DraggableWrapper = ({ draggable = false, formId, index, onDragStart, onDrop, onDrag, onDragEnd,  onDragEnter, onDragLeave, children }) => (
+const DraggableWrapper = ({ draggable = false, formId, type, handleClickList, index, onDragStart, onDrop, onDrag, onDragEnd,  onDragEnter, onDragLeave, children }) => (
   <div
     className="drag-target"
     draggable={draggable}
     // onDragStart={ onDragStart }
     onDragStart={e => {
       e.dataTransfer.setData("formId", formId)
-      e.dataTransfer.setData("formIndex",index)
+      e.dataTransfer.setData("formIndex", index)
     }}
     onDrag = { e=> onDrag(e) }
     onDragEnd = {e =>  onDragEnd(e) }
@@ -24,6 +25,7 @@ const DraggableWrapper = ({ draggable = false, formId, index, onDragStart, onDro
     onDragEnter =  { e=> onDragEnter(e) }
     onDragLeave = {e=> onDragLeave(e) }
     onDrop={e => onDrop(e)}
+    onClick={(e) => {handleClickList(formId, type);}} 
   >
     {children}
   </div>
@@ -47,63 +49,65 @@ const DraggableList = ({
   const { pathname } = useLocation();
   const { appId } = useParams();
   const [ isShowOperate, setIsShowOperate] = React.useState(false);
-  const [ originlist, setOriginlist ] = React.useState([]);
+  const {handleClickList, handleDelete, handleRename, isDeleteOne, canEdit, canDelete, isChangeSequence, ...rest} = props;
+  // const [ originlist, setOriginlist ] = React.useState([]);
 
   React.useEffect(()=>{
 
-    setOriginlist(list)
+    // setOriginlist(list)
     if(!pathname.includes("/detail")){
       setIsShowOperate( true )
     }
-  },[pathname])
+  },[pathname, list])
   //针对于拖动盒子本身
-//1
-const onDragFun = e =>{
-  // console.log(e.target)
-}
-//2
-const onDragEndFun = e =>{
-  // console.log(e.dataTransfer.getData("formId"))
-}
 
-//针对于目标盒子
-
-//3拖动过程中
-const onDragEnterFun = e =>{
-  let targetDom = e.target;
-  if(targetDom.className === 'drag-target'){
-    let targetDomParent = targetDom.parentNode;
-    targetDomParent.style.border = "1px dotted red";
+  //1
+  const onDragFun = e =>{
+    // console.log(e.target)
   }
+  //2
+  const onDragEndFun = e =>{
+    // console.log(e.dataTransfer.getData("formId"))
   }
 
-//4拖动结束
-const onDragLeaveFun = e =>{
-  let targetDom = e.target;
-    let targetDomParent = targetDom.parentNode;
-    targetDomParent.style.border = "";
-}
+  //针对于目标盒子
 
-const onDropFun = e =>{
-  let targetDom = e.target;
-  let originId = e.dataTransfer.getData("formId");
-  let targetIndex = e.target.parentNode.dataset.index;
-  // console.log(targetIndex)
-  if( targetIndex){
-    let newTargetIndex = "" + (1 * targetIndex + 1) ;
-    updateList(originId,newTargetIndex,appId).then(res=>{
-      if(res.status === "SUCCESS"){
-        props.isChangeSequence(true);
-        targetDom.parentNode.style.border = "";
-      }
-    })
-  }else{
-    targetDom.parentNode.style.border = "";
+  //3拖动过程中
+  const onDragEnterFun = e =>{
+    let targetDom = e.target;
+    if(targetDom.className === 'drag-target'){
+      let targetDomParent = targetDom.parentNode;
+      targetDomParent.style.border = "1px dotted red";
+    }
+    }
+
+  //4拖动结束
+  const onDragLeaveFun = e =>{
+    let targetDom = e.target;
+      let targetDomParent = targetDom.parentNode;
+      targetDomParent.style.border = "";
   }
-  
-}
+
+  const onDropFun = e =>{
+    let targetDom = e.target;
+    let originId = e.dataTransfer.getData("formId");
+    let targetIndex = e.target.parentNode.dataset.index;
+    // console.log(targetIndex)
+    if( targetIndex){
+      let newTargetIndex = "" + (1 * targetIndex + 1) ;
+      updateList(originId,newTargetIndex,appId).then(res=>{
+        if(res.status === "SUCCESS"){
+          isChangeSequence(true);
+          targetDom.parentNode.style.border = "";
+        }
+      })
+    }else{
+      targetDom.parentNode.style.border = "";
+    }
+  }
+
   return (
-    <Menu {...props} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
+    <Menu {...rest} className="draggable-list" selectedKeys={selected} mode="inline" theme="light"
     >
       {groups &&
         groups.map((g, i) => {
@@ -128,19 +132,24 @@ const onDropFun = e =>{
                       draggable={draggable}
                       formId={l.key}
                       onDrop={dropHandle}
+                      type={l.type}
+                      canEdit={l.canEdit}
+                      handleClickList={handleClickList}
                     >
-                      {l.key !== -1 ? <Icon component={l.icon || TableIcon} /> : ""}
+                      {l.key !== -1 ? <Icon component={l.icon || (l.type === "FORM"? TableIcon : DashboardIcon)} /> : ""}
                       <span>{l.name}</span>
                     </DraggableWrapper>
                     {isShowOperate? 
-                    <OperateBox 
-                    formId = {l.key}
-                    appId = { appId }
-                    formname = {l.name}
-                    deleteForm = { props.deleteForm }
-                    updateFormName = { props.updateFormName }
-                    isDeleteOne = { props.isDeleteOne}
-                    />:null}
+                    <OperateBox
+                      formId = {l.key}
+                      appId = { appId }
+                      formname = {l.name}
+                      canDelete={l.canDelete}
+                      canEdit={l.canEdit}
+                      handleDelete = { handleDelete }
+                      handleRename = { handleRename }
+                      isDeleteOne = { isDeleteOne}
+                    /> : null}
                           </Menu.Item>
                         ))}
                     </SubMenu>
@@ -152,6 +161,9 @@ const onDropFun = e =>{
             <DraggableWrapper
               draggable={draggable}
               formId={l.key}
+              type={l.type}
+              canEdit={l.canEdit}
+              handleClickList={handleClickList}
               index={n}
               onDrag = {
                 e=>onDragFun(e)
@@ -172,18 +184,21 @@ const onDropFun = e =>{
               }
               
             >
-              {l.key !== "" ? <Icon component={l.icon || TableIcon} /> : ""}
+              {l.key !== "" ? <Icon component={l.icon || (l.type === "FORM"? TableIcon : DashboardIcon)} /> : ""}
               <span className="draggable-menu-item-title">{l.name}</span>
             </DraggableWrapper>
             {isShowOperate? 
-            <OperateBox 
-            formId = {l.key}
-            appId = { appId }
-            formname = {l.name}
-            deleteForm = { props.deleteForm }
-            updateFormName = { props.updateFormName }
-            isDeleteOne = { props.isDeleteOne}
-            />:null}
+            <OperateBox
+              id = {l.key}
+              type = {l.type}
+              appId = { appId }
+              formname = {l.name}
+              canEdit={l.canEdit}
+              canDelete={l.canDelete}
+              handleDelete = { handleDelete }
+              handleRename = { handleRename }
+              isDeleteOne = { isDeleteOne}
+              /> : null}
           </Menu.Item>
         ))}
         

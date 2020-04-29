@@ -1,10 +1,12 @@
 import React from 'react';
-import { Dropdown, Modal, Input, Form, message } from "antd"
+import { Dropdown, Modal, Input, Form, message } from "antd";
+import classnames from 'classnames';
 const { confirm } = Modal
 const OperateBox = (props) => {
 
   // const [value, setValue] = React.useState(props.formname);
   let formName = ""
+  const {canEdit, canDelete} = props;
 
   const showDelConfirm = () => {
     confirm({
@@ -15,12 +17,12 @@ const OperateBox = (props) => {
           </svg>
           <span>删除</span>
         </div>,
-      content: '确定要删除表单 ?',
+      content: '确定要删除 ' + (props.type === "FORM" ? "表单" : "仪表盘") + '?',
       cancelText: "取消",
       okText: "确定",
       className: "operate-box-delete-form-modal",
       onOk() {
-        handleDeleteForm(props.formId);
+        handleDelete(props.id, props.type);
       }
     });
   }
@@ -36,29 +38,12 @@ const OperateBox = (props) => {
           onChange={ handleSetValue }
           maxLength={20}
         />
-        // <Form> 
-        //   <Form.Item>
-        //     {getFieldDecorator('validator', {
-        //       rules: [{
-        //         required: true,
-        //         message: '请输入内容'
-        //       }],
-        //       initialValue:value
-        //     })
-        //     (
-        //       < Input
-        //       placeholder="请输入名称"
-        //       maxLength={20}
-        //       />
-        //   )}
-        //     </Form.Item>
-        // </Form>
       ,
       cancelText: "取消",
       okText: "确定",
       className: "operate-box-update-form-modal",
       onOk() {
-        handleUpdateFormName(props.formId);
+        handleRename(props.id, props.type);
       }
     });
   }
@@ -68,30 +53,34 @@ const OperateBox = (props) => {
     formName = value
   }
 
-  const handleDeleteForm = (params) => {
-    props.deleteForm(props.appId, params).then(res => {
-      if (res.status === 200) {
+  const handleDelete = (params, type) => {
+    props.handleDelete(params, type).then(res => {
+      if (res.status === 200 || res.msg === "success") {
         props.isDeleteOne(true)
         message.success('删除成功');
       }
     })
   }
 
-  const handleUpdateFormName = (params) => {
-    props.updateFormName(props.appId, params, { name: formName }).then(res => {
-      if (res.status === 200) {
+  const handleRename = (id, type) => {
+    props.handleRename(id, type, { name: formName }).then(res => {
+      if (res.status === 200 || res.msg === "success") {
         props.isDeleteOne(true)
         message.success('修改成功');
       }
     })
   }
+
+  const renameClass = canEdit ? "operate-box-item" : "operate-box-item-disable";
+  const deleteClass = canDelete ? "operate-box-item" : "operate-box-item-disable";
+
   const menu = (
     <div className="draggable-list-operate-container">
       <div className="operate-box" onClick={e => e.stopPropagation()} >
-        <div className="operate-box-update-name"
+        <div className={renameClass}
           onClick={showUpdateConfirm}
         > 修改名称 </div>
-        <div className="operate-box-delete-form"
+        <div className={deleteClass}
           onClick={showDelConfirm}>
           删除
                 </div>

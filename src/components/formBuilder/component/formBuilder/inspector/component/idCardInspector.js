@@ -174,13 +174,6 @@ class IdCardInspector extends React.Component {
                 不允许重复
             </Checkbox>
 
-            {/* <Checkbox
-              name="inputMask"
-              checked={formatChecks}
-              onChange={this.handleChangeAttr}
-            >
-              格式校验
-            </Checkbox> */}
           </div>
         </div>
       </div>

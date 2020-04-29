@@ -12,7 +12,7 @@ import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
-import ConditionModal from "../formVerification/conditionModal";
+import FormulaModal from "../formVerification/formulaModal";
 import { handleFormulaSubmit } from "../utils/handleFormulaUtils";
 
 const { Option } = Select;
@@ -24,9 +24,9 @@ class SingleTextInspector extends React.Component {
       optionType: this.props.element.data.type || "custom",
       formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
-      isShowEditFormulaModal: false,
       isLinked: false,
       apiNameTemp: undefined, //api name 临时值
+      isShowEditFormulaModal: false,
       verificationStr: ""
     };
   }
@@ -202,18 +202,17 @@ class SingleTextInspector extends React.Component {
               {element.data.type == "EditFormula" ? "已设置公式" : "编辑公式"}
             </Button>
 
-            <ConditionModal
+            <FormulaModal
               visible={isShowEditFormulaModal}
               verificationStr={this.state.verificationStr}
               currentItem={element}
               currentItemParent={elementParent}
               index={this.state.index}
-              handleOk={(str) => {
-                console.log("ffc", str);
-                // handleFormulaSubmit(str, element, elementParent, data, {
-                //   setFormChildItemAttr: this.props.setFormChildItemAttr,
-                //   setItemValues: this.props.setItemValues,
-                // });
+              handleOk={(selectComponent, str, value) => {
+                handleFormulaSubmit(selectComponent, str, value, element, elementParent, {
+                  setFormChildItemAttr: this.props.setFormChildItemAttr,
+                  setItemValues: this.props.setItemValues,
+                });
 
                 this.setState({
                   index: -1,
@@ -308,7 +307,6 @@ class SingleTextInspector extends React.Component {
       isUniqueApi = true
     } = this.state;
 
-    console.log("fccc", label)
     return (
       <div className="textarea-text-input">
         <div className="base-form-tool">

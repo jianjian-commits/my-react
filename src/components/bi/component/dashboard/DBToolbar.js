@@ -3,46 +3,35 @@ import { connect } from "react-redux";
 import { Button, Icon, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from '../../utils/request';
-import { setFormData, setDataSource } from '../../redux/action';
+import { setFormData, setDataSource, setDBMode } from '../../redux/action';
 import DataListModal from "../elements/modal/dataListModal";
 import classes from '../../scss/dashboard/toolbar.module.scss';
+import { DBMode } from "./Constant";
 
 const DBToolbar = props => {
-  const history = useHistory();
   const { appId, dashboardId } = useParams();
   const { setFormData } = props;
-  let form = {};
 
   useEffect(() => {
-    const dataRes = request(`/bi/forms?appId=`, {
+    const dataRes = request(`/bi/forms`, {
       method: "GET",
-      data: {
-        appId
-      }
+      headers: {appId, "Content-Type": "application/json"},
     })
 
     dataRes.then((res) => {
       if(res && res.msg === 'success') {
-        const items = res.data.items || [];
-        setFormData(items);
+        setFormData(res.data.items || []);
       }
     }, () => {message.error("获取数据失败")})
   },[]);
 
   const [visible, setVisible] = useState(false);
-  const modalProps = {
-    visible,
-    type:"create",
-    showModal: () => {
-      setVisible(true);
-    },
-    handleCancel: e => {
-      setVisible(false);
-    },
-    handleOK: e => {
-      setVisible(false);
-    }
-  };
+  const modalProps = {type:"create", visible, setVisible};
+
+  const newChart = () => {
+    setVisible(true);
+    // setDBMode(DBMode.Editing);
+  }
 
   return (
     <div className={classes.dbToolbar}>
@@ -52,11 +41,11 @@ const DBToolbar = props => {
         className={classes.newChartIcon}
         onClick={modalProps.showModal}
       />
-      <div className={classes.newChart} onClick={modalProps.showModal}>新建图表</div>
+      <div className={classes.newChart} onClick={newChart}>新建图表</div>
       <div className={classes.newChartButton}>
-        <Button className={classes.newChartPreview} type="link">
+        {/* <Button className={classes.newChartPreview} type="link">
           预 览
-        </Button>
+        </Button> */}
         <Button className={classes.newChartSave} type="link">
           保 存
         </Button>
@@ -70,5 +59,6 @@ export default connect(store => ({
 }), 
 {
   setFormData,
-  setDataSource
+  setDataSource,
+  setDBMode
 })(DBToolbar);

@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../../../utils/request";
 import { DBMode } from "../../dashboard/Constant";
+import classes from "../../../scss/modal/dataModal.module.scss";
 import {
   setFormData,
   setDataSource,
@@ -18,7 +19,7 @@ const { Panel } = Collapse;
 
 function ModalTitle() {
   return (
-    <div className="formchoiceModalTitle">
+    <div className={classes.formchoiceModalTitle}>
       <span>添加数据源</span>
       <span>选择图表数据源</span>
     </div>
@@ -28,6 +29,7 @@ function ModalTitle() {
 function DataListModal(props) {
   const [choiceFormId, setChoiceFormId] = useState("");
   const [choiceFormName, setChoiceFormName] = useState("");
+  const { setVisible } = props;
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
 
@@ -35,6 +37,14 @@ function DataListModal(props) {
     setChoiceFormId(id);
     setChoiceFormName(name);
   };
+
+  const handleCancel = e => {
+    setVisible(false);
+  }
+
+  const handleOK = e => {
+    setVisible(false);
+  }
 
   const newChart = () => {
     const res = request(`/bi/charts`, {
@@ -69,7 +79,7 @@ function DataListModal(props) {
   const onConfirm = () => {
     if (props.type == "create") {
       newChart();
-      props.handleOK();
+      handleOK();
       props.clearBind();
     } else {
       setChangeVisible(true);
@@ -83,12 +93,12 @@ function DataListModal(props) {
       setChangeVisible(true);
     },
     handleCancel: e => {
-      props.handleOK();
+      handleOK();
       setChangeVisible(false);
     },
     handleOK: e => {
       // newChart();
-      props.handleOK();
+      handleOK();
       props.clearBind();
       setChangeVisible(false);
 
@@ -96,7 +106,6 @@ function DataListModal(props) {
         if(res && res.msg === "success") {
           const data = res.data;
           props.setDataSource({id: data.formId, name: data.formName, data: data.items});
-          // history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
           props.setDBMode(DBMode.Editing);
         }
       })
@@ -114,12 +123,12 @@ function DataListModal(props) {
       centered
       width={500}
       bodyStyle={{ padding: 0 }}
-      wrapClassName="BIDataModal"
-      handleCancel={props.handleCancel}
-      handleOK={props.handleOK}
+      wrapClassName={classes.BIDataModal}
+      handleCancel={handleCancel}
+      handleOK={handleOK}
     >
-      <div className="formChoiceModalContainer">
-        <div className="formGroups">
+      <div className={classes.formChoiceModalContainer}>
+        <div className={classes.formGroups}>
           <Collapse
             bordered={false}
             activeKey={"formList"}
@@ -134,9 +143,8 @@ function DataListModal(props) {
                     _getFormChoice(form.formId, form.formName);
                   }}
                   key={form.formId}
-                  className={classNames({
-                    activeSpan: form.id == choiceFormId
-                  })}
+                  className={form.id == choiceFormId ? {backgroundColor: 'rgba(43, 129, 255, 0.1)'} : {}
+                  }
                 >
                   <Icon type="profile" style={{ color: "orange" }} />
                   {form.formName}
@@ -150,8 +158,8 @@ function DataListModal(props) {
             </Panel>
           </Collapse>
         </div>
-        <div className="footBtnGroups">
-          <Button onClick={props.handleCancel}>取消</Button>
+        <div className={classes.footBtnGroups}>
+          <Button onClick={handleCancel}>取消</Button>
           <Button onClick={onConfirm}>确定</Button>
         </div>
       </div>

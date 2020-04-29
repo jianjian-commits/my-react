@@ -8,6 +8,7 @@ import {
   filterSubmissionData,
   compareEqualArray
 } from "../utils/dataLinkUtils";
+import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 class PhoneNumber extends React.Component {
   componentDidMount() {
@@ -21,7 +22,7 @@ class PhoneNumber extends React.Component {
         linkDataId,
         linkFormId
       } = data.values;
-      const {appId} = this.props.match.params;
+      const { appId } = this.props.match.params;
       getFormAllSubmission(appId, linkFormId).then(submissions => {
         let dataArr = filterSubmissionData(submissions, linkComponentId);
         handleSetComponentEvent(conditionId, value => {
@@ -56,6 +57,18 @@ class PhoneNumber extends React.Component {
             this.handleEmitChange(undefined);
           }
         });
+      });
+    }
+
+    if (this.props.isChangeLayout == true) {
+      setFormulaEvent(this.props)
+    }
+  }
+  handleEmitFormulaEvent = (value) => {
+    const { formulaEvent } = this.props.item;
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(value);
       });
     }
   }
@@ -150,6 +163,10 @@ class PhoneNumber extends React.Component {
             disabled={disabled}
             autoComplete="off"
             onChange={this.handleChange}
+            onBlur={(ev) => {
+              const value = ev.target.value;
+              this.handleEmitFormulaEvent(value)
+            }}
           />
         )}
       </Form.Item>

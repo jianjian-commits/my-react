@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
-import { Checkbox, Button, Table, Input, Radio, ConfigProvider } from "antd";
+import { Button, Input, Radio, ConfigProvider } from "antd";
+import { Table, Checkbox } from "../shared/customWidget";
 import classes from "./profile.module.scss";
 import moment from "moment";
 import { EditIcon } from "../../assets/icons";
