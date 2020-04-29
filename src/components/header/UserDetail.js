@@ -12,7 +12,6 @@ import userDetailStyles from "./header.module.scss";
 import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
 import store from "../../store";
-import { registerMap } from "echarts";
 
 const Mete = {
   companyName: "企业名称",
