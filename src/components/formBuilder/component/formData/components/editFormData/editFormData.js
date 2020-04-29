@@ -86,7 +86,12 @@ class EditFormData extends Component {
     } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
           const { formId, submissionId } = this.state;
-          axios.get(config.apiUrl + `/form/${formId}`).then(res => {
+          axios.get(config.apiUrl + `/form/${formId}`,
+          {
+            headers: {
+              "isDataPage": true,
+            }
+          }).then(res => {
             let currentForm = res.data;
             const pureFormComponents = currentForm.components.filter(item => {
               return item.type !== "Button";
