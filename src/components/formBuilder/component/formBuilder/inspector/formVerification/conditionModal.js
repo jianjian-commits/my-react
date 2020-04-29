@@ -31,7 +31,7 @@ class ConditionModal extends React.Component {
 
   componentWillMount() {
     let resultArray = [];
-    let excludeComponentType = ["RadioButtons","CheckboxInput","DropDown","MultiDropDown","DateInput","GetLocalPosition","ImageUpload","FileUpload","HandWrittenSignature","Address","ComponentTemplate","Button","PureDate","PureTime"]
+    let excludeComponentType = ["RadioButtons","CheckboxInput","DropDown","MultiDropDown","GetLocalPosition","ImageUpload","FileUpload","HandWrittenSignature","Address","ComponentTemplate","Button","PureDate","PureTime"]
 
     this.props.data.forEach(item => {
       if (item.type == "FormChildTest") {

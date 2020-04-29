@@ -415,3 +415,121 @@ export const logicCheckType = [
         }
     },
 ];
+
+//  checkFunc由后端提供
+export const dateCheckType =[
+    {
+        type: "DATE",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        DATE(时间戳/数字格式的年月日时间)
+        DATE(timestamp)，将时间戳转换为日期对象
+        DATE(year,month,day)，将数字类型输入的年月日转换为日期对象
+        DATE(year,month,day,hour,minute,second)，将数字类型输入的年月日时分秒转换为日期对象`,
+        checkFunc: (...target) => {
+            if(_isInvalidDate(...target)){ 
+                return new Date(...target)
+            }
+        }
+    },{
+        type: "DATEDIF",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        DATEDIF(开始时间,结束时间,[单位])，单位可以是 "y" 、"M"、"d"、"h"、"m"、"s"
+        DATEDIF(下单时间,付款时间,"h")，如果下单时间是9:00，付款时间为当天10:30，计算得到的小时差为1.5`,
+        checkFunc: (target) => {
+        }
+    },{
+        type: "NOW",
+        describe: `
+        NOW()，获取当前时间`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){ 
+                return Date.now();
+            }
+        }
+    },{
+        type: "TODAY",
+        describe: `
+        TODAY()，返回当前日期`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){ 
+                return new Date().toDateString()
+            }
+        }
+    },{
+        type: "YEAR",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        YEAR(时间戳)，返回某日期的年份
+        YEAR(日期时间)，如果日期时间字段为2020-01-18 13:06:12,返回2020`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){ 
+                return new Date(target).getFullYear()
+            }
+        }
+    },{
+        type: "MONTH",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        MONTH(时间戳)，返回某日期的月份
+        MONTH(日期时间)，如果日期时间字段为2020-01-18 13:06:12,返回01`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){ 
+                return new Date(target).getFullMonth();
+            }
+        }
+    },{
+        type: "DAY",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        DAY(时间戳)，返回某日期的日期
+        DAY(日期时间)，如果日期时间字段为2020-01-18 13:06:12,返回18`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){
+                return new Date(target).getDay();
+            }
+        }
+    },{
+        type: "HOUR",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        HOUR(时间戳)，返回某日期的小时数
+        HOUR(日期时间)，如果日期时间字段为2020-01-18 13:06:12,返回13`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){
+                return new Date(target).getHours();
+            }
+        }
+    },{
+        type: "MINUTE",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        MINUTE(时间戳)，返回某日期的分钟数
+        MINUTE(日期时间)，如果日期时间字段为2020-01-18 13:06:12,返回06`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){
+                return new Date(target).getMinutes();
+            }
+        }
+    },{
+        type: "SECOND",
+        describe: `
+        手动输入时间日期格式需要用下列格式输入：2020-02-24T17:14:09+08:00（yyyy-mm-ddThh:mm:ss+时区）
+        SECOND(时间戳)，返回某日期的年份
+        SECOND(日期时间)，如果日期时间字段为2020-01-18 13:06:12,返回12`,
+        checkFunc: (target) => {
+            if(_isInvalidDate(target)){
+                return new Date(target).getSeconds();
+            }
+        }
+    }
+]
+
+function _isInvalidDate(value) {
+    if(new Date(value).toString() === "Invalid Date"){
+        return false;
+    }else{
+        return true;
+    }
+}
