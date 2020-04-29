@@ -22,6 +22,8 @@ import locationUtils from "../../../../utils/locationUtils";
 import { checkFormChildItemIsLinked } from "../utils/filterData";
 import isInFormChild from "../utils/isInFormChild";
 import { checkUniqueApi } from "../utils/checkUniqueApiName";
+import FormulaModal from "../formVerification/formulaModal";
+import { handleFormulaSubmit } from "../utils/handleFormulaUtils";
 const { Option } = Select;
 
 class TextAreaInspector extends React.Component {
@@ -32,7 +34,9 @@ class TextAreaInspector extends React.Component {
       formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
       isLinked: false,
-      apiNameTemp: undefined //api name 临时值
+      apiNameTemp: undefined, //api name 临时值
+      isShowEditFormulaModal: false,
+      verificationStr: ""
     };
   }
 
@@ -56,6 +60,12 @@ class TextAreaInspector extends React.Component {
       isUniqueApi: isUniqueApi,
       APIMessage
     });
+
+    if (element.data.type == "EditFormula") {
+      this.setState({
+        verificationStr: element.data.values.verificationStr
+      })
+    }
   }
 
   handleChangeAttr = ev => {
@@ -192,24 +202,55 @@ class TextAreaInspector extends React.Component {
           </>
         );
       }
+      case "EditFormula": {
+        return (
+          <>
+            <Button
+              className="data-link-set"
+              onClick={() => {
+                this.setState({
+                  isShowEditFormulaModal: true
+                })
+              }}
+            >
+              {element.data.type == "EditFormula" ? "已设置公式" : "编辑公式"}
+            </Button>
+
+            <FormulaModal
+              visible={this.state.isShowEditFormulaModal}
+              verificationStr={this.state.verificationStr}
+              currentItem={element}
+              currentItemParent={elementParent}
+              index={this.state.index}
+              handleOk={(selectComponent, str, value) => {
+                handleFormulaSubmit(selectComponent, str, value, element, elementParent, {
+                  setFormChildItemAttr: this.props.setFormChildItemAttr,
+                  setItemValues: this.props.setItemValues,
+                });
+
+                this.setState({
+                  index: -1,
+                  isShowEditFormulaModal: false,
+                  verificationStr: str
+                })
+              }}
+              handleCancel={() => {
+                this.setState({
+                  index: -1,
+                  isShowEditFormulaModal: false
+                })
+              }}
+            />
+
+          </>
+        );
+      }
       default: {
         return;
       }
     }
   };
 
-  handleGetOptionStr = type => {
-    switch (type) {
-      case "custom": {
-        return "自定义";
-      }
-      case "DataLinkage": {
-        return "数据联动";
-      }
-      default:
-        return "";
-    }
-  };
   // 设置数据联动
   handleSetDataLinkage = isShow => {
     this.setState({
@@ -239,6 +280,12 @@ class TextAreaInspector extends React.Component {
       case "DataLinkage": {
         this.setState({
           optionType: "DataLinkage"
+        });
+        break;
+      }
+      case "EditFormula": {
+        this.setState({
+          optionType: "EditFormula"
         });
         break;
       }
@@ -339,19 +386,20 @@ class TextAreaInspector extends React.Component {
                 disabled
               />
             ) : (
-              <>
-                <Select
-                  value={optionType}
-                  style={{ width: "100%" }}
-                  onChange={this.handleSelectChange}
-                  className="data-source-select"
-                >
-                  <Option value="custom">自定义</Option>
-                  <Option value="DataLinkage">数据联动</Option>
-                </Select>
-                {this.renderOptionDataFrom(optionType)}
-              </>
-            )}
+                <>
+                  <Select
+                    value={optionType}
+                    style={{ width: "100%" }}
+                    onChange={this.handleSelectChange}
+                    className="data-source-select"
+                  >
+                    <Option value="custom">自定义</Option>
+                    <Option value="DataLinkage">数据联动</Option>
+                    <Option value="EditFormula">公式编辑</Option>
+                  </Select>
+                  {this.renderOptionDataFrom(optionType)}
+                </>
+              )}
 
             <p htmlFor="single-text-default-value">预览行数</p>
             <InputNumber
