@@ -7,7 +7,7 @@ import { deepClone, equals } from './Util';
 
 const _setFieldName = field => field.alias||field.legendName;
 
-const _formatNum = (value) => {
+const _thousands = (value) => {
   if(isNaN(parseFloat(value))) {
     return 0;
   }
@@ -17,47 +17,34 @@ const _formatNum = (value) => {
   return str.replace(reg,"$1,");
 }
 
-const _Percent = (value) => {
-  if(isNaN(parseFloat(value))) {
-    return 0;
-  }
-  return value + "00%";
-}
-
-const _Decimals = (value, decimals) => {
-  if(isNaN(parseFloat(value))) {
-    return 0;
-  }
-  let item = value + '.';
-  for(let i = 0; i < decimals; i++){
-    item = item + "0";
-  }
-  return item;
-}
-
-const _checkPercent = (thousandSymbols,percent,decimals,value) => {
-  if(thousandSymbols && percent && decimals != 0){
-    let per = _Percent(value).substring(0,_Percent(value).length-1);
-    let dec = _Decimals(per,decimals);
-    return _formatNum(dec) + "%";
-  } else if(percent && !thousandSymbols && decimals == 0){
-    return _Percent(value);
-  } else if(!percent && !thousandSymbols && decimals != 0){
-    return _Decimals(value,decimals);
-  } else if(!percent && thousandSymbols && decimals == 0){
-    return _formatNum(value);
-  } else if(percent && thousandSymbols && decimals == 0){
-    let per = _Percent(value).substring(0,_Percent(value).length-1);
-    return _formatNum(per) + "%";
-  } else if(percent && !thousandSymbols && decimals != 0){
-    let per = _Percent(value).substring(0,_Percent(value).length-1);
-    return _Decimals(per,decimals) + "%";
-  } else if(!percent && thousandSymbols && decimals != 0){
-    let dec = _Decimals(value,decimals);
-    return _formatNum(dec,decimals);
-  } else {
+export const _getFormatter = (value, predefine) => {
+  if(!predefine) {
     return value;
   }
+
+  const decimals = predefine.decimals;
+  const thousands = predefine.thousandSymbols;
+  const percent = predefine.percent;
+
+  let result = parseFloat(value);
+
+  if(percent) {
+    result = result * 100;
+  }
+
+  if(decimals > 0) {
+    result = result.toFixed(decimals);
+  }
+
+  if(thousands) {
+    result = _thousands(result);
+  }
+
+  if(percent) {
+    result += "%"
+  }
+
+  return result;
 }
 
 //check is data include %
@@ -155,21 +142,16 @@ export const getBarChartOption = (chartData, chartInfo) => {
 }
 
 const _checkIndexPercent = item => {
-  let thousandSymbols = item.dataFormat.predefine.thousandSymbols;
-  let percent = item.dataFormat.predefine.percent;
-  let decimals = item.dataFormat.predefine.decimals;
+  let predefine = item.dataFormat.predefine;
   let count = item.count;
 
-  return _checkPercent(thousandSymbols,percent,decimals,count);
+  return _getFormatter(count,predefine);
 }
-
 const _checkIndexSumPercent = item => {
-  let thousandSymbols = item.dataFormat.predefine.thousandSymbols;
-  let percent = item.dataFormat.predefine.percent;
-  let decimals = item.dataFormat.predefine.decimals;
+  let predefine = item.dataFormat.predefine;
   let count = item.count.toString();
 
-  return _checkPercent(thousandSymbols,percent,decimals,count);
+  return _getFormatter(count,predefine);
 }
 
 export const getIndexChartOption = (chartData, chartInfo) => {
@@ -201,12 +183,9 @@ export const getIndexChartOption = (chartData, chartInfo) => {
 }
 
 const _checkPiePercent = (sectorItems, value) => {
-  let thousandSymbols = sectorItems[0].dataFormat.predefine.thousandSymbols;
-  let percent = sectorItems[0].dataFormat.predefine.percent;
-  let decimals = sectorItems[0].dataFormat.predefine.decimals;
+  let predefine = sectorItems[0].dataFormat.predefine;
 
-  return _checkPercent(thousandSymbols,percent,decimals,value);
-
+  return _getFormatter(value,predefine);
 }
 
 export const getPieChartOption = (chartData, chartInfo) => {
@@ -218,7 +197,7 @@ export const getPieChartOption = (chartData, chartInfo) => {
   }
 
   const series = [];
-// console.log("========sectorItems=======", sectorItems, legends);
+
   if( legends.length == sectorItems.length ) {
     const data = [];
 
@@ -247,7 +226,7 @@ export const getPieChartOption = (chartData, chartInfo) => {
     legend: {y: "top", show: showLegend},
     tooltip: {
       trigger: 'item',
-      formatter: function(p) {return  p.name + ":"+  _checkPiePercent(sectorItems,p.value)}
+      formatter: function(p) {return  p.name + "<br/>"+  _checkPiePercent(sectorItems,p.value)}
     },
     labelLine : {show: true},
     color: ChartColor,
