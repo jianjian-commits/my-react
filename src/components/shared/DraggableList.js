@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Icon, message } from "antd";
+import { Menu, Icon } from "antd";
 import { useLocation,useParams } from "react-router-dom"
 import { TableIcon, DashboardIcon } from "../../assets/icons/index";
 import OperateBox from "./Operatebox";
