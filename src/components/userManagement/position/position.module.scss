@@ -36,7 +36,7 @@
 }
 
 .tree {
-  height: calc(100vh - 200px);
+  min-height: calc(100vh - 200px);
   margin-top: 10px;
   background-color: #fff;
   width: 100%;
