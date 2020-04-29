@@ -702,7 +702,7 @@ class FormSubmitData extends PureComponent {
             <ControlBtn
               appId={this.props.appId}
               formId={this.state.formId}
-              submissionId={record.id}
+              submissionId={ record._id}
               userId={record.userId}
               data={record}
               handleDeleteSubmisson={this.handleDeleteSubmisson}
@@ -857,6 +857,7 @@ class FormSubmitData extends PureComponent {
         ? dataObj.extraProp["user"]
         : { name: "", id: "" };
       let obj = {
+        _id: dataObj.id,
         id: dataObj.id,
         created: dataObj.created,
         modified: dataObj.modified,
