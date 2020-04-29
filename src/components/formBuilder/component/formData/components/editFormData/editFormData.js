@@ -185,6 +185,9 @@ class EditFormData extends Component {
       if (component.type === "NumberInput" && values.hasOwnProperty(component.key)) {
         values[component.key] = Number(values[component.key])
       }
+      if(Number.isNaN(values[component.key])){
+        delete values[component.key];
+      }
     });
     return values;
   }
@@ -433,6 +436,7 @@ class EditFormData extends Component {
     const isMobile = this.props.mobile.is;
 
     if (!this.state.isSubmitted) {
+
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.state.currentForm.components;
         let customDataArray = [];
@@ -474,7 +478,7 @@ class EditFormData extends Component {
             }, 1000);
           })
           .catch(error => {
-             console.log(err);
+             console.log(error);
              if (error.response && error.response.data.code === 9998) {
              this._setErrorResponseData(error.response.data);
             }
