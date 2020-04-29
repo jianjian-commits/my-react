@@ -388,6 +388,12 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
               margin: 0;
               width: 100%;
               padding-top:15px;
+              &>.ant-calendar-picker{
+                width:195px;
+              }
+              &>.ant-time-picker{
+                width: 195px;
+              }
               .ant-input-affix-wrapper.ant-input-affix-wrapper-textarea-with-clear-btn {
                 .ant-input {
                   resize: none;
