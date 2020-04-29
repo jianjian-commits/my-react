@@ -135,8 +135,7 @@ class Apps extends React.Component {
             (error) => catchError(error)
           );
         }
-      });
-      this.setState({ noCompanyModalOpen: false });
+      }).then(() => this.setState({ noCompanyModalOpen: false }));
     };
     if (fetchingNecessary) return <HomeLayout />;
     if (!fetchingNecessary && (!allCompany || allCompany.length === 0))

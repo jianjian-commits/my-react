@@ -26,7 +26,7 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
     setDataStr(e.target.value);
   };
 
-  const content = <div>{dataStr}</div>;
+  const content = <div>{defaultValue}</div>;
 
   return (
     <div className={classes.rowBox}>
@@ -98,7 +98,6 @@ export default connect(
       })
       .catch(err => catchError(err));
   };
-
   return currentCompany ? (
     <div className={classes.container}>
       <HomeContentTitle title="公司信息"></HomeContentTitle>
@@ -108,7 +107,7 @@ export default connect(
             <EditInput
               defaultValue={currentCompany.companyName}
               onClickSubmit={onClickSubmit}
-              lableKey="name"
+              lableKey="companyName"
               lable="公司名称"
             />
           </List.Item>
@@ -116,7 +115,7 @@ export default connect(
             <EditInput
               defaultValue={currentCompany.companyDescription}
               onClickSubmit={onClickSubmit}
-              lableKey="description"
+              lableKey="companyDescription"
               lable="公司介绍"
             />
           </List.Item>

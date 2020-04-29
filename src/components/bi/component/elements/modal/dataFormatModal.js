@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Radio, Checkbox, Input } from "antd";
 import classes from "../../../scss/modal/dataFormatModal.module.scss";
 import { DataFormatType } from "../Constant";
+import { getFormatter } from "../../../utils/ChartUtil"
 export default function DataFormatModal(props) {
   const { custom, predefine, selectType } = props.dataFormat;
   const [modalCustom, setModalCustom] = useState(custom);
@@ -11,16 +12,16 @@ export default function DataFormatModal(props) {
     !(predefine.decimals == 0)
   );
   const checkboxGroup = [
-    // {
-    //   label: "千分符",
-    //   checked: modalPredefine.thousandSymbols,
-    //   onChange: (e) => {
-    //     setModalPredefine({
-    //       ...modalPredefine,
-    //       thousandSymbols: e.target.checked,
-    //     });
-    //   },
-    // },
+    {
+      label: "千分符",
+      checked: modalPredefine.thousandSymbols,
+      onChange: (e) => {
+        setModalPredefine({
+          ...modalPredefine,
+          thousandSymbols: e.target.checked,
+        });
+      },
+    },
     {
       label: "百分比",
       checked: modalPredefine.percent,
@@ -51,16 +52,14 @@ export default function DataFormatModal(props) {
       decimals: e.target.value,
     });
   };
+
   const getFormatPreview = () => {
-    let showStr = "999999";
-    if (modalPredefine.thousandSymbols) {
-      showStr = "999,999";
-    }
-    if (modalPredefine.percent) {
-      showStr = showStr + "%";
-    }
-    return showStr;
+    let showStr = 99999;
+    
+    return getFormatter(showStr, modalPredefine);
+
   };
+
   const checkoutType = (value) => {
     setModalSelectType(DataFormatType[value]);
   };

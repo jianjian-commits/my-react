@@ -21,11 +21,21 @@ const MenuItems = ({
   currentCompany,
   setSwitchCompany
 }) => (
+<<<<<<< HEAD
     <>
       <Menu>
         <Menu.Item>
           <span>所属公司</span>
         </Menu.Item>
+=======
+  <>
+    <Menu>
+      {allCompany && allCompany.length > 0 && (
+        <Menu.Item>
+          <span>所属公司</span>
+        </Menu.Item>
+      )}
+>>>>>>> 9eccb7f7e18e374f6f79c833b9b8a3c1f8f5b3cc
 
         {allCompany.map(company => {
           const check = company.id === currentCompany.id;
