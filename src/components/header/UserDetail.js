@@ -6,7 +6,7 @@ import {
   resetAllowSendCodeState,
   sendCode
 } from "../../store/loginReducer";
-import HomeHeader from "./HomeHeader";
+// import HomeHeader from "./HomeHeader";
 import { userDetailParameter, formItems } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
 import { HomeLayout, HomeContentTitle } from "../shared";
