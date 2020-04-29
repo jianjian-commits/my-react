@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Modal, Form } from "antd";
-import { updateUserDetail } from "../../store/loginReducer";
-import HomeHeader from "./HomeHeader";
 import {
-  userDetailParameter,
-  formItems
-} from "../login/formItemConfig";
+  updateUserDetail,
+  resetAllowSendCodeState,
+  sendCode
+} from "../../store/loginReducer";
+import HomeHeader from "./HomeHeader";
+import { userDetailParameter, formItems } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
 import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
+import store from "../../store";
 
 const Mete = {
   companyName: "企业名称",
   name: "昵称",
   mobilePhone: "当前手机号",
-  verificationCode: "验证码",
+  code: "验证码",
   oldPassWord: "当前密码",
   newPassWord: "新密码",
   confirmPassWord: "确认密码"
@@ -25,13 +27,31 @@ export default Form.create({ name: "reset-form" })(
   connect(
     ({ login }) => ({
       userDetail: login.userDetail,
-      currentCompany: login.currentCompany
+      currentCompany: login.currentCompany,
+      allowSendCode: login.allowSendCode,
+      isFetchCoding: login.isFetchCoding,
+      fetchText: login.fetchText,
+      timeout: login.timeout
     }),
     {
-      updateUserDetail
+      updateUserDetail,
+      resetAllowSendCodeState,
+      sendCode
     }
   )(function UserDetail(props) {
-    const { userDetail, updateUserDetail, form, currentCompany } = props;
+    const {
+      userDetail,
+      updateUserDetail,
+      form,
+      currentCompany,
+      resetAllowSendCodeState,
+      allowSendCode,
+      sendCode,
+      isFetchCoding,
+      fetchText,
+      timeout
+    } = props;
+    const { dispatch } = store;
     const {
       validateFields,
       getFieldDecorator,
@@ -55,7 +75,15 @@ export default Form.create({ name: "reset-form" })(
           itemName: m.itemName,
           icon: m.icon,
           modalMeter,
-          setModalMeter
+          setModalMeter,
+          resetAllowSendCodeState,
+          dispatch,
+          activeKey: "resetPhone",
+          allowSendCode,
+          codeType: "RESET",
+          sendCode,
+          isFetchCoding,
+          fetchText
         });
       }
       return formItems[m.key]({
@@ -65,7 +93,15 @@ export default Form.create({ name: "reset-form" })(
         icon: m.icon,
         modalMeter,
         setModalMeter,
-        update: true
+        update: true,
+        resetAllowSendCodeState,
+        dispatch,
+        activeKey: "resetPhone",
+        allowSendCode,
+        codeType: "RESET",
+        sendCode,
+        isFetchCoding,
+        fetchText
       });
     });
     const render = meter => {
@@ -109,8 +145,10 @@ export default Form.create({ name: "reset-form" })(
       e.preventDefault();
       validateFields((err, { actionType, verificationCode, ...rest }) => {
         if (!err) {
-          updateUserDetail(rest).then(() => {
+          updateUserDetail({ ...rest, code: verificationCode }).then(() => {
             setModalMeter(initModalMeter);
+            verificationCode && timeout && timeout.int && timeout.clear(0);
+            verificationCode && resetAllowSendCodeState();
           });
         }
       });
@@ -144,7 +182,10 @@ export default Form.create({ name: "reset-form" })(
                         ? currentCompany.companyName
                         : userDetail[r.value]}
                       <span
-                        onClick={() => setModalMeter(r)}
+                        onClick={() => {
+                          resetAllowSendCodeState && resetAllowSendCodeState();
+                          setModalMeter(r);
+                        }}
                         style={{ color: "#1890ff", cursor: "pointer" }}
                       >
                         {r.render(r.meter)}
@@ -168,7 +209,16 @@ export default Form.create({ name: "reset-form" })(
           visible={!!modalMeter.meter}
           footer={null}
           width={"484px"}
-          onCancel={() => setModalMeter({ ...modalMeter, meter: false })}
+          onCancel={() => {
+            setModalMeter({ ...modalMeter, meter: false });
+          }}
+          afterClose={() => {
+            modalMeter.value === "mobilePhone" && resetAllowSendCodeState();
+            modalMeter.value === "mobilePhone" &&
+              timeout &&
+              timeout.int &&
+              timeout.clear(0);
+          }}
           className={userDetailStyles.detailUpdateModal}
           closeIcon={<CloseIcon />}
         >
@@ -205,7 +255,8 @@ export default Form.create({ name: "reset-form" })(
                   // }
                 >
                   {getFieldDecorator(parameters[index]["key"], {
-                    ...o.options
+                    ...o.options,
+                    validateFirst: true
                     // initialValue:
                     //   o.itemName === "oldPassWord"
                     //     ? null

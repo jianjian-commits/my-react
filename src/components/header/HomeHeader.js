@@ -148,7 +148,7 @@ export default connect(
                   <span>我的应用</span>
                 </Menu.Item>
                 <Menu.Item key="/backlog">
-                  <Badge dot offset={[-8, 8]} count={transactList.total}>
+                  <Badge dot offset={[-8, 8]} count={transactList.total || 0}>
                     待办事项
                   </Badge>
                 </Menu.Item>
