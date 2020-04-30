@@ -24,9 +24,9 @@ class SingleTextInspector extends React.Component {
       optionType: this.props.element.data.type || "custom",
       formPath: locationUtils.getUrlParamObj().path,
       isShowDataLinkageModal: false,
-      isShowEditFormulaModal: false,
       isLinked: false,
       apiNameTemp: undefined, //api name 临时值
+      isShowEditFormulaModal: false,
       verificationStr: ""
     };
   }
