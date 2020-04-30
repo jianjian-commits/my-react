@@ -166,9 +166,9 @@ const FilterModal = (props) => {
         return {title: each, value: each, key: each + idx};
       })
 
-      if(treeData.length !== 0) {
-        treeData.splice(0, 0, {title: "多选", value: "", key: treeData.length + ""})
-      }
+      // if(treeData.length !== 0) {
+      //   treeData.splice(0, 0, {title: "全选", value: "", key: treeData.length + ""})
+      // }
 
       const tProps = {
         treeData,
