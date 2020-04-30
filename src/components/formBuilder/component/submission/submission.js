@@ -220,6 +220,9 @@ class Submission extends Component {
       ) {
         values[component.key] = Number(values[component.key]);
       }
+      if(Number.isNaN(values[component.key])){
+        delete values[component.key];
+      }
     });
     return values;
   }
@@ -1298,6 +1301,16 @@ class Submission extends Component {
                         this.setState(state => ({
                           ...state,
                           formChildDataObj: this.state.formChildDataObj
+                        }));
+                      }}
+                      handleSetFormula={this.handleSetFormula}
+                      formulaArray={this.state.formulaArray}
+                      formComponent={this.props.formComponent}
+                      formChildDataObj={this.state.formChildDataObj}
+                      saveFormChildSubmitData={(formChildDataObj) => {
+                        this.setState(state => ({
+                          ...state,
+                          formChildDataObj: formChildDataObj
                         }));
                       }}
                     />

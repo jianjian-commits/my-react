@@ -35,6 +35,7 @@ import DateInput from "./components/dateInput";
 import moment from "moment";
 import coverTimeUtils from '../../../../utils/coverTimeUtils'
 import ID from "../../../../utils/UUID";
+import { setFormulaEvent } from "../../utils/setFormulaUtils";
 
 class FormChildTest extends React.Component {
   constructor(props) {
@@ -66,10 +67,10 @@ class FormChildTest extends React.Component {
           submission
         );
       });
-      if(submission.childFormDataId){
-         result["childFormDataId"] = submission.childFormDataId;
+      if (submission.childFormDataId) {
+        result["childFormDataId"] = submission.childFormDataId;
       }
-     
+
       return result;
     });
     return newSubmitDataArray;
@@ -95,7 +96,7 @@ class FormChildTest extends React.Component {
           type: item.label,
           formType: item.type,
           data: data || item.defaultValue || null,
-          validate: {unique: item.unique, ...item.validate},
+          validate: { unique: item.unique, ...item.validate },
           hasErr: false
         };
         break;
@@ -258,7 +259,7 @@ class FormChildTest extends React.Component {
             result[item.key] = {
               type: item.label,
               formType: item.type,
-              validate: {unique: item.unique, ...item.validate},
+              validate: { unique: item.unique, ...item.validate },
               hasErr: false,
               data: child[item.key].data
             };
@@ -396,6 +397,7 @@ class FormChildTest extends React.Component {
     let values = item.values;
     let result = {};
     const { appId } = this.props.match.params;
+    let submitDataLength = newArray.length;
 
     values.forEach(item => {
       switch (item.type) {
@@ -410,7 +412,7 @@ class FormChildTest extends React.Component {
             type: item.label,
             formType: item.type,
             data: item.defaultValue || "",
-            validate: {unique: item.unique, ...item.validate},
+            validate: { unique: item.unique, ...item.validate },
             hasErr: false
           };
           break;
@@ -544,6 +546,22 @@ class FormChildTest extends React.Component {
     result["childFormDataId"] = ID.oldUuid();
     newArray.push(result);
 
+    values.forEach(item => {
+      switch (item.type) {
+        case "SingleText":
+        case "NumberInput":
+        case "PhoneInput":
+        case "EmailInput":
+        case "DateInput":
+        case "PureDate":
+        case "PureTime":
+        case "TextArea":
+          setFormulaEvent(this.props, item, submitDataLength);
+        default:
+          break;
+      }
+    });
+
     this.props.saveSubmitData(newArray);
   };
 
@@ -560,9 +578,9 @@ class FormChildTest extends React.Component {
       });
     }
 
-    if(errorResponseMsg !=void 0){
+    if (errorResponseMsg != void 0) {
       let errorArr = [];
-      for(let key in errorResponseMsg){
+      for (let key in errorResponseMsg) {
         errorResponseMsg[key].map(errorMsg => errorArr.push(errorMsg.msg))
       }
       this.setState({
@@ -572,12 +590,12 @@ class FormChildTest extends React.Component {
     }
   }
 
-  _getErrorMsgValue(componentKey){
+  _getErrorMsgValue(componentKey) {
     const errorResponseMsg = this.props.errorResponseMsg;
-    if(errorResponseMsg && errorResponseMsg.hasOwnProperty(componentKey)){
-      return errorResponseMsg[componentKey].map( errorMsg => errorMsg.value);
+    if (errorResponseMsg && errorResponseMsg.hasOwnProperty(componentKey)) {
+      return errorResponseMsg[componentKey].map(errorMsg => errorMsg.value);
     }
-      return []
+    return []
   }
 
   componentDidMount() {
@@ -648,6 +666,22 @@ class FormChildTest extends React.Component {
       });
     }
   };
+
+  handleEmitFormulaEvent = (formChildKey, formChildObj) => {
+    let { submitDataArray } = this.props;
+    let { formulaEvent } = formChildObj;
+    let dataArray = submitDataArray.map((item) => {
+      return item[formChildKey].data
+    }).filter((item) => {
+      return item != void 0
+    });
+
+    if (formulaEvent) {
+      formulaEvent.forEach(fnc => {
+        fnc(dataArray);
+      });
+    }
+  }
 
   handleChange = ev => {
     const value = ev.target.value;
@@ -739,7 +773,7 @@ class FormChildTest extends React.Component {
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
                       : (item.hasErr = true);
-                    if(typeof value =="string" && value!==""){
+                    if (typeof value == "string" && value !== "") {
                       item.data = Number(value);
                     }
                     this.setState({
@@ -747,6 +781,8 @@ class FormChildTest extends React.Component {
                     });
                     this._checkFormChildHasError(submitDataArray);
                     this.handleItemChange(value, item);
+
+                    this.handleEmitFormulaEvent(key, item);
                   }}
                   value={item.data}
                 />
@@ -793,6 +829,8 @@ class FormChildTest extends React.Component {
                     });
                     this._checkFormChildHasError(submitDataArray);
                     this.handleItemChange(value, item);
+
+                    this.handleEmitFormulaEvent(key, item);
                   }}
                   value={item.data}
                 />
@@ -985,8 +1023,8 @@ class FormChildTest extends React.Component {
                   {item.data.length !== 0 ? (
                     <span className="dataSpan">{item.data[0].name}</span>
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                   <img src="/image/icons/edit.png" alt="图片加载出错" />
                 </div>
               </Popover>
@@ -1023,8 +1061,8 @@ class FormChildTest extends React.Component {
                   {item.data.length !== 0 ? (
                     <span className="dataSpan">{item.data[0].name}</span>
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                   <img src="/image/icons/edit.png" alt="图片加载出错" />
                 </div>
               </Popover>
@@ -1034,7 +1072,7 @@ class FormChildTest extends React.Component {
         case "DateInput":
           {
             let valueOption = {};
-            if(item.data) {
+            if (item.data) {
               const tempDate = coverTimeUtils.localDate(item.data, item.formType, true);
               valueOption.value = tempDate;
             }
@@ -1047,7 +1085,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择时间/日期"
                   onChange={(value, dataString) => {
-                    item.data = value;
+                    item.data = coverTimeUtils.utcDate(value, item.formType);
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1057,6 +1095,8 @@ class FormChildTest extends React.Component {
                       refesh: !this.state.refesh
                     }));
                     this._checkFormChildHasError(submitDataArray);
+
+                    this.handleEmitFormulaEvent(key, item);
                   }}
                 />
               </div>
@@ -1066,7 +1106,7 @@ class FormChildTest extends React.Component {
         case "PureDate":
           {
             let valueOption = {};
-            if(item.data) {
+            if (item.data) {
               valueOption.value = moment(coverTimeUtils.localDate(item.data, item.formType, true));
             }
             resultArray.push(
@@ -1078,7 +1118,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择日期"
                   onChange={(value, dataString) => {
-                    item.data = value;
+                    item.data = coverTimeUtils.utcDate(value, item.formType);
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1088,6 +1128,8 @@ class FormChildTest extends React.Component {
                       refesh: !this.state.refesh
                     }));
                     this._checkFormChildHasError(submitDataArray);
+
+                    this.handleEmitFormulaEvent(key, item);
                   }}
                 />
               </div>
@@ -1097,7 +1139,7 @@ class FormChildTest extends React.Component {
         case "PureTime":
           {
             let valueOption = {};
-            if(item.data) {
+            if (item.data) {
               const tmpMoment = coverTimeUtils.localDate(item.data, item.formType, true);
               valueOption.value = tmpMoment;
             }
@@ -1109,7 +1151,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择时间"
                   onChange={(value, dataString) => {
-                    item.data = value;
+                    item.data = coverTimeUtils.utcDate(value, item.formType);
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1119,6 +1161,8 @@ class FormChildTest extends React.Component {
                       refesh: !this.state.refesh
                     }));
                     this._checkFormChildHasError(submitDataArray);
+
+                    this.handleEmitFormulaEvent(key, item);
                   }}
                 />
               </div>
@@ -1250,7 +1294,7 @@ class FormChildTest extends React.Component {
       }
     });
 
-    if(isFormChildErr === false){
+    if (isFormChildErr === false) {
       this.props.resetErrorMsg(parentItem.key)
     }
     this.setState({ hasFormChildError: isFormChildErr });
@@ -1275,102 +1319,49 @@ class FormChildTest extends React.Component {
               </div>
               <div className="formChildAddBtn">
                 <Button type="link" onClick={this.handleAddRow}>
-                  <Icon type="plus" /> 添加 
+                  <Icon type="plus" /> 添加
                 </Button>
               </div>
             </div>
           </div>
         ) : (
-          getFieldDecorator(item.key)(
-            <div className="app-formChild">
-              <div className="formChildContainer">
-                <div className="TitleContainer">
-                  <div className="componentTitle" />
-                  {values.map((item, index) => (
-                    <div
-                      key={index}
-                      style={
-                        item.label === "时间/日期"
-                          ? { width: 200, flex: "0 0 200px" }
-                          : { width: 140 }
-                      }
-                      className={
-                        item.validate.required
-                          ? "componentTitle-required"
-                          : "componentTitle"
-                      }
-                      title={item.label}
-                    >
-                      {item.label}
-                    </div>
-                  ))}
-                </div>
-                {submitDataArray.map((item, index) => (
-                  <div className="contentContainer" key={"formChild" + index}>
-                    <div className="componentContent">
-                      <span
-                        key={Math.random()}
-                        id={formChildKey + "Number" + index}
-                        style={{
-                          display: "inline-block",
-                          width: "25px",
-                          height: "25px",
-                          lineHeight: "25px"
-                        }}
-                        onMouseEnter={() => {
-                          submitDataArray.forEach((item, i) => {
-                            if (
-                              document.getElementById(
-                                formChildKey + "Number" + i
-                              ) != void 0
-                            ) {
-                              document.getElementById(
-                                formChildKey + "Number" + i
-                              ).style.display = "inline-block";
-                            }
-                            if (
-                              document.getElementById(
-                                formChildKey + "Btn" + i
-                              ) != void 0
-                            ) {
-                              document.getElementById(
-                                formChildKey + "Btn" + i
-                              ).style.display = "none";
-                            }
-                          });
-
-                          if (
-                            document.getElementById(
-                              formChildKey + "Number" + index
-                            ) != void 0
-                          ) {
-                            document.getElementById(
-                              formChildKey + "Number" + index
-                            ).style.display = "none";
-                          }
-                          if (
-                            document.getElementById(
-                              formChildKey + "Btn" + index
-                            ) != void 0
-                          ) {
-                            document.getElementById(
-                              formChildKey + "Btn" + index
-                            ).style.display = "inline-block";
-                          }
-                        }}
+            getFieldDecorator(item.key)(
+              <div className="app-formChild">
+                <div className="formChildContainer">
+                  <div className="TitleContainer">
+                    <div className="componentTitle" />
+                    {values.map((item, index) => (
+                      <div
+                        key={index}
+                        style={
+                          item.label === "时间/日期"
+                            ? { width: 200, flex: "0 0 200px" }
+                            : { width: 140 }
+                        }
+                        className={
+                          item.validate.required
+                            ? "componentTitle-required"
+                            : "componentTitle"
+                        }
+                        title={item.label}
                       >
-                        {index + 1}
-                      </span>
-                      {submitDataArray.length > 0 ? (
-                        <img
+                        {item.label}
+                      </div>
+                    ))}
+                  </div>
+                  {submitDataArray.map((item, index) => (
+                    <div className="contentContainer" key={"formChild" + index}>
+                      <div className="componentContent">
+                        <span
                           key={Math.random()}
-                          src="/image/icons/delete.png"
+                          id={formChildKey + "Number" + index}
                           style={{
+                            display: "inline-block",
                             width: "25px",
-                            height: "25px"
+                            height: "25px",
+                            lineHeight: "25px"
                           }}
-                          id={formChildKey + "Btn" + index}
-                          onMouseOut={() => {
+                          onMouseEnter={() => {
                             submitDataArray.forEach((item, i) => {
                               if (
                                 document.getElementById(
@@ -1399,42 +1390,95 @@ class FormChildTest extends React.Component {
                             ) {
                               document.getElementById(
                                 formChildKey + "Number" + index
+                              ).style.display = "none";
+                            }
+                            if (
+                              document.getElementById(
+                                formChildKey + "Btn" + index
+                              ) != void 0
+                            ) {
+                              document.getElementById(
+                                formChildKey + "Btn" + index
                               ).style.display = "inline-block";
                             }
                           }}
-                          onClick={_e => {
-                            let newArray = this.props.submitDataArray;
-                            newArray.splice(index, 1);
-                            this.props.saveSubmitData(newArray);
+                        >
+                          {index + 1}
+                        </span>
+                        {submitDataArray.length > 0 ? (
+                          <img
+                            key={Math.random()}
+                            src="/image/icons/delete.png"
+                            style={{
+                              width: "25px",
+                              height: "25px"
+                            }}
+                            id={formChildKey + "Btn" + index}
+                            onMouseOut={() => {
+                              submitDataArray.forEach((item, i) => {
+                                if (
+                                  document.getElementById(
+                                    formChildKey + "Number" + i
+                                  ) != void 0
+                                ) {
+                                  document.getElementById(
+                                    formChildKey + "Number" + i
+                                  ).style.display = "inline-block";
+                                }
+                                if (
+                                  document.getElementById(
+                                    formChildKey + "Btn" + i
+                                  ) != void 0
+                                ) {
+                                  document.getElementById(
+                                    formChildKey + "Btn" + i
+                                  ).style.display = "none";
+                                }
+                              });
 
-                            this.setState(state => ({
-                              ...state,
-                              refesh: !this.state.refesh
-                            }));
-                          }}
-                        />
-                      ) : null}
+                              if (
+                                document.getElementById(
+                                  formChildKey + "Number" + index
+                                ) != void 0
+                              ) {
+                                document.getElementById(
+                                  formChildKey + "Number" + index
+                                ).style.display = "inline-block";
+                              }
+                            }}
+                            onClick={_e => {
+                              let newArray = this.props.submitDataArray;
+                              newArray.splice(index, 1);
+                              this.props.saveSubmitData(newArray);
+
+                              this.setState(state => ({
+                                ...state,
+                                refesh: !this.state.refesh
+                              }));
+                            }}
+                          />
+                        ) : null}
+                      </div>
+                      {this.renderFormChild(item, index, submitDataArray)}
                     </div>
-                    {this.renderFormChild(item, index, submitDataArray)}
-                  </div>
-                ))}
-              </div>
-              {hasFormChildError ? (
-                <div className="ant-form-explain" style={{ color: "red" }}>
-                  <p>{this.state.errorMsg}</p>
+                  ))}
                 </div>
-              ) : (
-                <></>
-              )}
-              <div className="formChildAddBtn">
-                <Button type="link" onClick={this.handleAddRow}>
-                  <Icon type="plus" />
-                  添加
+                {hasFormChildError ? (
+                  <div className="ant-form-explain" style={{ color: "red" }}>
+                    <p>{this.state.errorMsg}</p>
+                  </div>
+                ) : (
+                    <></>
+                  )}
+                <div className="formChildAddBtn">
+                  <Button type="link" onClick={this.handleAddRow}>
+                    <Icon type="plus" />
+                    添加
                 </Button>
+                </div>
               </div>
-            </div>
-          )
-        )}
+            )
+          )}
       </Form.Item>
     );
   }

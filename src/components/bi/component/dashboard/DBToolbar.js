@@ -30,7 +30,7 @@ const DBToolbar = props => {
 
   const newChart = () => {
     setVisible(true);
-    // setDBMode(DBMode.Editing);
+    setDBMode(DBMode.Editing);
   }
 
   return (
