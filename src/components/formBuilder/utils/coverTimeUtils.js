@@ -25,7 +25,7 @@ function localDate(date, componentType, isEditData) {
       break;
     case "PureDate":
       if(moment(date).isValid()){
-        return moment.utc(date).local().format("YYYY-MM-DD");
+        return moment(date).local().format("YYYY-MM-DD");
       }
       break;
     default: 
@@ -45,7 +45,7 @@ function utcDate(date, componentType){
     case "PureTime":
       return moment(date).utc().millisecond(0).format("HH:mm:ss.SSS")
     case "PureDate":
-      return moment(date).utc().millisecond(0).format("YYYY-MM-DD")
+      return moment(date).millisecond(0).format("YYYY-MM-DD")
   }
   return ;
 }

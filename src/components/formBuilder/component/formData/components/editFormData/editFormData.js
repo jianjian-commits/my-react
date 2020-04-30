@@ -419,11 +419,6 @@ class EditFormData extends Component {
                 let dateString = moment(date).format();
                 data[k].data = dateString.substring(dateString.indexOf("+"), -1);
               }
-            }else{
-              const dateTypes = ["PureDate", "PureTime", "DateInput"];
-              if (dateTypes.includes(type) && data[k].data) {
-                  data[k].data = coverTimeUtils.utcDate(data[k].data, type);
-              }
             }
           }
         });
