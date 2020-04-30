@@ -24,7 +24,7 @@ import { ChartType, AllType } from "../component/elements/Constant";
 const initState = {
   elemType: ChartType.HISTOGRAM,
   dbName: "",
-  elemName: "",
+  elemName: "新建图表",
   formDataArr: [],
   dataSource: {},
   bindDataArr: [],

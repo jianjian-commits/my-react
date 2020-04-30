@@ -8,7 +8,7 @@ import ChartToolbarBtn from "../ChartToolbarBtn";
 import { DBMode } from '../../dashboard/Constant';
 import { ChartType } from '../Constant';
 import { useHistory, useParams } from "react-router-dom";
-import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType, setDBMode } from '../../../redux/action';
+import { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType, setDBMode, setElemName } from '../../../redux/action';
 import EditAction from '../action/EditAction';
 import classes from '../../../scss/elements/chart.module.scss';
 import fullScreenClasses from '../../../scss/modal/chartModal.module.scss';
@@ -22,7 +22,7 @@ import CopyAction from '../action/CopyAction';
 const ChartContainer = props => {
   const { chartData, style, dashboards, chartName, isBtnBlock=false, dbMode, chartId,
     changeBind, changeChartData, setDataSource, chartInfo, changeChartInfo, elemType, setElemType,
-    setDashboards, setDBMode } = props;
+    setDashboards, setDBMode, setElemName } = props;
   const { elementId, dashboardId, appId } = useParams();
   const history = useHistory();
   const chartOption = (chartData && chartInfo) ? getOption(chartData, chartInfo, elemType) : {};
@@ -47,7 +47,7 @@ const ChartContainer = props => {
   if(dbMode == DBMode.Edit) {
     iconBtnGroup = [
       new EditAction(elemType, chartId, () => {history.push(`/app/${appId}/setting/bi/${dashboardId}/${chartId}`)},
-      {changeBind, changeChartData, setDataSource, changeChartInfo, setElemType, setDBMode}),
+      {changeBind, changeChartData, setDataSource, changeChartInfo, setElemType, setDBMode, setElemName}),
       new CopyAction(chartId, dashboards, {setDashboards}),
       new DeleteAction(dashboardId, chartId, appId, {setDashboards})
     ]
@@ -127,5 +127,5 @@ export default connect(
   store => ({
     dashboards: store.bi.dashboards,
     dbMode: store.bi.dbMode}),
-    { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType, setDBMode }
+    { changeBind, changeChartData, setDataSource, changeChartInfo, setDashboards, setElemType, setDBMode, setElemName }
   )(ChartContainer);
