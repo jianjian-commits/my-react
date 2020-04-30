@@ -6,6 +6,7 @@ import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
 import SaveTipModal from "../elements/modal/saveTipModal";
+import RenameInput from '../base/RenameInput';
 import classes from '../../scss/elements/element.module.scss';
 
 const EditorHeader = props => {
@@ -13,7 +14,6 @@ const EditorHeader = props => {
   const { appId, dashboardId, elementId } = useParams();
   const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited,
     dataSource, elemType} = props;
-  let [name, setName] = useState("新建图表");
 
   const handleBack = () => {
     const { clearBind } = props;
@@ -32,14 +32,8 @@ const EditorHeader = props => {
     );
   }
 
-  const onBlur = (e) => {
-    if(e.target.value == '') {
-      setName('新建图表');
-      handleSave('新建图表');
-    } else {
-      setName(e.target.value);
-      handleSave(e.target.value);
-    }
+  const handleCommit = (val) => {
+    handleSave(val);
   }
 
   const [visible, setVisible] = useState(false);
@@ -53,7 +47,6 @@ const EditorHeader = props => {
     },
     //返回且保存图表
     saveChart: e => {
-      handleSave(name);
       handleBack();
       setVisible(false);
     },
@@ -72,8 +65,8 @@ const EditorHeader = props => {
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
-      <input className={classes.renameElement} defaultValue={elemName ? elemName : "新建图表"} onBlur={onBlur}/>
-      <Button onClick={()=> {handleSave(name)}} className={classes.elementHeaderSave} type="link">
+      <RenameInput name={elemName} defName="新建图表" handleCommit={handleCommit}/>
+      <Button className={classes.elementHeaderSave} type="link">
         保 存
       </Button>
     </div>
