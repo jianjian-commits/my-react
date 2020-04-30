@@ -138,7 +138,7 @@ export default connect(
                   创建时间
                 </Col>
                 <Col span={16} className={classes.text}>
-                  {new Date(currentCompany.createdDate).toLocaleString()}
+                  {currentCompany.createdDate ? new Date(currentCompany.createdDate).toLocaleString() : null}
                 </Col>
               </Row>
             </div>
