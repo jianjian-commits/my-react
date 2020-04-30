@@ -200,7 +200,8 @@ export const getPieChartOption = (chartData, chartInfo) => {
         textStyle: {
           color: 'gray'
         },
-        formatter: function(p) {return  p.name + ":" + getFormatter(p.value, sectorItems[0].dataFormat.predefine)}
+        formatter: function(p) { return p.name + ": " + getFormatter(p.value, sectorItems[0].dataFormat.predefine) +
+          `(${p.percent}%)`}
       },
       data: data
     }
@@ -213,7 +214,8 @@ export const getPieChartOption = (chartData, chartInfo) => {
     legend: {y: "top", show: showLegend},
     tooltip: {
       trigger: 'item',
-      formatter: function(p) {return  p.name + "<br/>" + getFormatter(p.value, sectorItems[0].dataFormat.predefine)}
+      formatter: function(p) {return  p.name + "<br/>" + getFormatter(p.value, sectorItems[0].dataFormat.predefine) +
+        "<br/>" + `${p.percent}%`}
     },
     labelLine : {show: true},
     color: ChartColor,
