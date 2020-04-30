@@ -125,7 +125,6 @@ const OperateBox = (props) => {
   );
 
   const { getFieldDecorator } = props.form
-  console.log(props)
   return (
     <>
       <Dropdown overlay={menu} >
