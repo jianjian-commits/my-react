@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Icon, message} from "antd";
-import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange } from '../../redux/action';
+import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange, setElemName } from '../../redux/action';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
@@ -13,7 +13,7 @@ const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
   const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited,
-    dataSource, elemType} = props;
+    dataSource, elemType, setElemName } = props;
 
   const handleBack = () => {
     const { clearBind } = props;
@@ -33,6 +33,7 @@ const EditorHeader = props => {
   }
 
   const handleCommit = (val) => {
+    setElemName(val);
     handleSave(val);
   }
 
@@ -48,6 +49,7 @@ const EditorHeader = props => {
     //返回且保存图表
     saveChart: e => {
       handleBack();
+      handleSave(elemName);
       setVisible(false);
     },
     //返回但不保存图表
@@ -65,8 +67,8 @@ const EditorHeader = props => {
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
-      <RenameInput name={elemName} defName="新建图表" handleCommit={handleCommit}/>
-      <Button className={classes.elementHeaderSave} type="link">
+      <RenameInput name={elemName} handleCommit={handleCommit}/>
+      <Button className={classes.elementHeaderSave} onClick={()=> {handleSave(elemName)}} type="link">
         保 存
       </Button>
     </div>
@@ -82,5 +84,5 @@ export default connect(
     dataSource: store.bi.dataSource,
     elemType: store.bi.elemType
   }),
-  { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange}
+  { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange, setElemName }
 )(EditorHeader);

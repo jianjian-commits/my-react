@@ -31,7 +31,7 @@ const DBHeader = props => {
           <Icon type="arrow-left"/>
         </Button>
       </div>
-      <RenameInput name={name} defName="新建仪表盘" handleCommit={handleCommit}/>
+      <RenameInput name={name} handleCommit={handleCommit}/>
       {/* <Button onClick={saveDB} className={classes.dbHeaderSave} type="link">
         保 存
       </Button> */}
