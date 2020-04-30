@@ -28,7 +28,10 @@ function localDate(date, componentType, isEditData) {
         return moment.utc(date).local().format("YYYY-MM-DD");
       }
       break;
-    default: return moment.utc(date+"Z").local().format("YYYY-MM-DD HH:mm:ss")
+    default: 
+    if(moment(date+"Z").isValid()){
+      return moment.utc(date+"Z").local().format("YYYY-MM-DD HH:mm:ss");
+    }
   }
 
   return "";
@@ -46,6 +49,7 @@ function utcDate(date, componentType){
   }
   return ;
 }
+
 
 export default {
   localDate,
