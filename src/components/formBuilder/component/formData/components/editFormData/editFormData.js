@@ -1057,14 +1057,14 @@ class EditFormData extends Component {
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }}
                  >记录列表</Breadcrumb.Item>
-                <Breadcrumb.Item className="submitRecord">提交记录</Breadcrumb.Item>
+                <Breadcrumb.Item className="submitRecord">编辑记录</Breadcrumb.Item>
               </Breadcrumb>
             </div>
           )}
           <div className={"formBuilder-Submission"}>
             <div className="Content">
               <div className="submission-title">{currentForm.name}</div>
-              {currentForm.formInfo != "" ? (
+              {currentForm.formInfo != void 0 && currentForm.formInfo !== "" ? (
                 <div
                   className="submission-formInfo"
                   id="submission-title"

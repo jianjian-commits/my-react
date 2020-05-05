@@ -49,7 +49,7 @@ class ReactFormBuilder extends React.Component {
         setAllForms(res);
       });
     }
-    // this.props.getAllForms();
+    this.props.setActiveInnerIndex(-1);
   }
   //增加一个形参判断是否点击的是子组件里面的元素
   editModeOn(editElement, e, formChildInnerElement) {
