@@ -17,7 +17,6 @@ const Authenticate = props => {
     children,
     hide = false
   } = props;
-  console.log(type)
   if (debug) return children;
   if (type === "ignore") return children;
   if (!permissions || state === "pending" || hide || !teamId) return null;
