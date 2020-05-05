@@ -100,6 +100,7 @@ class Apps extends React.Component {
     if (appsPanelWidth) {
       const rowAppNum = parseInt(appsPanelWidth.clientWidth / 210);
       hideApps = Array.from(new Array(rowAppNum).keys());
+      console.log(hideApps)
     }
     const noCompanyStyle = {
       title: {
@@ -226,9 +227,9 @@ class Apps extends React.Component {
                 ))}
             </div>
             {appList.length < 1 && sysUserName !== name && (
-              <>
+              <div style={{textAlign: "center"}}>
                 <NoAppUnSysImg />
-              </>
+              </div>
             )}
           </Content>
           <ModalCreation
