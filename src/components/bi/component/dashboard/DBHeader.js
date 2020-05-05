@@ -4,6 +4,7 @@ import { Icon, Button, message } from "antd";
 import { setDashboards } from '../../redux/action';
 import { useParams, useHistory } from "react-router-dom";
 import { renameDB } from "../../utils/reqUtil";
+import RenameInput from '../base/RenameInput';
 import classes from '../../scss/dashboard/header.module.scss';
 
 const DBHeader = props => {
@@ -16,18 +17,13 @@ const DBHeader = props => {
     history.push(`/app/${appId}/setting`);
   }
 
-  const onBlur = (e) => {
-    renameDB(appId, dashboardId, e.target.value);
+  const handleCommit = (val) => {
+    renameDB(appId, dashboardId, val);
     message.success('保存成功');
   }
 
-  const onChange = (e) => {
-    setName(e.target.value);
-  }
+  const name = (dashboards && dashboards.length > 0) ? dashboards[0].name : "";
 
-  const [name, setName] = useState("");
-
-  const value = (dashboards && dashboards.length > 0) ? dashboards[0].name : null;
   return (
     <div className={classes.biHeader}>
       <div className={classes.headerBarBack}>
@@ -35,7 +31,7 @@ const DBHeader = props => {
           <Icon type="arrow-left"/>
         </Button>
       </div>
-      <input className={classes.renameDB} defaultValue={ name || value || "新建仪表盘" } onChange={onChange} onBlur={onBlur}/>
+      <RenameInput name={name} handleCommit={handleCommit}/>
       {/* <Button onClick={saveDB} className={classes.dbHeaderSave} type="link">
         保 存
       </Button> */}

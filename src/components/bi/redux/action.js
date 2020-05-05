@@ -60,7 +60,7 @@ export const renameDashboard = (dbName) => dispatch => {
   })
 }
 
-export const renameElement = (elemName) => dispatch => {
+export const setElemName = (elemName) => dispatch => {
   dispatch({
       type: RENAME_ELEMENT,
       elemName

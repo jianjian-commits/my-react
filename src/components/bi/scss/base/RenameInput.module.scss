@@ -1,0 +1,16 @@
+.renameInput {
+  display: inline;
+  margin-left: 10px;
+  height: 30px;
+  color: #FFFFFF;
+  background-color: transparent;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: none;
+}
+
+.selInput {
+  @extend .renameInput;
+  border-bottom: dashed white 1px;
+}

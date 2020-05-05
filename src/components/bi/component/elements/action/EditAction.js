@@ -68,6 +68,7 @@ export default class EditAction {
         this.options.changeChartInfo(chartInfo || new ChartInfo());
         this.options.setElemType(this.elemType);
         this.options.setDBMode(DBMode.Editing);
+        this.options.setElemName(data.name);
         request(`/bi/charts/data`, {
           method: "POST",
           data: {
