@@ -5,6 +5,7 @@ import { Layout, Menu, Icon } from "antd";
 import classes from "./sider.module.scss";
 import { updateSiderOpenKeys } from "../../store/layoutReducer";
 import { main } from "../../routers";
+import { authorityIsValid } from "../../utils";
 import clx from "classnames";
 
 const { Sider } = Layout;
@@ -20,7 +21,7 @@ export const SiderTop = ({ collapsed }) => (
   </div>
 );
 
-const renderItem = r => (
+const renderItem = (r) => (
   <Menu.Item className={classes.item} key={r.key}>
     <Link to={r.path}>
       {r.icon ? (
@@ -35,8 +36,15 @@ const renderItem = r => (
   </Menu.Item>
 );
 
-const HomeSider = props => {
-  const { collapsed, openKeys, updateSiderOpenKeys } = props;
+const HomeSider = (props) => {
+  const {
+    collapsed,
+    openKeys,
+    updateSiderOpenKeys,
+    debug,
+    permissions,
+    teamId,
+  } = props;
   const location = useLocation();
 
   const selectedKeys = main
@@ -49,11 +57,18 @@ const HomeSider = props => {
       }
       return acc;
     }, [])
-    .map(e => e.key);
+    .map((e) => e.key);
 
   const revertOpenKeysWhileCollapse = () => {
     if (collapsed) updateSiderOpenKeys([]);
   };
+  const authFilter = (e) =>
+    authorityIsValid({
+      debug,
+      permissions,
+      teamId,
+      auth: e.auth,
+    });
   return (
     <Sider
       trigger={null}
@@ -72,12 +87,12 @@ const HomeSider = props => {
         openKeys={openKeys}
         onClick={revertOpenKeysWhileCollapse}
       >
-        {main.map(r => {
+        {main.filter(authFilter).map((r) => {
           if (r.children) {
             return (
               <SubMenu
                 key={r.key}
-                onTitleClick={e => updateSiderOpenKeys([e.key])}
+                onTitleClick={(e) => updateSiderOpenKeys([e.key])}
                 title={
                   <span>
                     {r.icon ? (
@@ -91,7 +106,7 @@ const HomeSider = props => {
                   </span>
                 }
               >
-                {r.children.map(e => renderItem(e))}
+                {r.children.filter(authFilter).map((e) => renderItem(e))}
               </SubMenu>
             );
           }
@@ -103,9 +118,12 @@ const HomeSider = props => {
 };
 
 export default connect(
-  ({ layout: { sider } }) => ({
+  ({ debug, login, layout: { sider } }) => ({
     collapsed: sider.collapsed,
-    openKeys: sider.openKeys
+    openKeys: sider.openKeys,
+    teamId: login.currentCompany && login.currentCompany.id,
+    permissions: (login.userDetail && login.userDetail.permissions) || [],
+    debug: debug.isOpen
   }),
   { updateSiderOpenKeys }
 )(HomeSider);

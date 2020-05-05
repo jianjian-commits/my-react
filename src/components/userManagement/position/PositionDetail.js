@@ -8,6 +8,8 @@ import proClass from "../../profileManagement/profile.module.scss";
 import { HomeContentTitle } from "../../shared";
 import request from "../../../utils/request";
 import { catchError } from "../../../utils";
+import Authenticate from "../../shared/Authenticate";
+import { POSITION_MANAGEMENT_UPDATE, POSITION_MANAGEMENT_LIST } from "../../../auth";
 import RelateWidage from "./RelateWidage";
 
 export const BaseInfo = ({
@@ -42,11 +44,13 @@ export const BaseInfo = ({
             onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
-          <>
-            <span>{item.value}</span>
-            <EditIcon onClick={editSwitchHandler} />
-          </>
-        );
+            <>
+              <span>{item.value}</span>
+              <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+                <EditIcon onClick={editSwitchHandler} />
+              </Authenticate>
+            </>
+          );
       case "dataShare":
         return (
           <Radio.Group
@@ -67,11 +71,14 @@ export const BaseInfo = ({
             onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
-          <>
-            <span>{item.value}</span>
-            <EditIcon onClick={editSwitchHandler} />
-          </>
-        );
+            <>
+              <span>{item.value}</span>
+              <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+                <EditIcon onClick={editSwitchHandler} />
+              </Authenticate>
+
+            </>
+          );
       default:
         return <span>{item.value}</span>;
     }
@@ -175,7 +182,7 @@ const UserRelation = ({
       title: "操作",
       key: "action",
       render: (text, record) => (
-        <div>
+        <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
           <Popconfirm
             title={`把【${record.name}】从该职位【${position.value}】中移除?`}
             onConfirm={() => removeUser(record.id)}
@@ -185,7 +192,7 @@ const UserRelation = ({
           >
             <Button type="link">移除</Button>
           </Popconfirm>
-        </div>
+        </Authenticate>
       ),
     },
   ];
@@ -196,6 +203,7 @@ const UserRelation = ({
           <span>关联用户</span>
         </div>
         <div style={userButtonStyle}>
+          <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
           <Button
             style={{ border: "1px solid rgb(42, 127, 255)", color: "#2a7fff" }}
             onClick={() => openHandle(true)}
@@ -203,6 +211,7 @@ const UserRelation = ({
             <CreateIcon />
             添加关联
           </Button>
+          </Authenticate>
         </div>
       </div>
       <Table
@@ -411,13 +420,16 @@ class PositionDetail extends Component {
           navs={navigationList}
           title="职位"
           btns={
-            <Button
-              type="primary"
-              onClick={this.saveHandle}
-              style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
-            >
-              保存
+            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+              <Button
+                type="primary"
+                onClick={this.saveHandle}
+                style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
+              >
+                保存
             </Button>
+            </Authenticate>
+
           }
         />
         <BaseInfo
