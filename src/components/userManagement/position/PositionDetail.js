@@ -177,7 +177,7 @@ const UserRelation = ({
       render: (text, record) => (
         <div>
           <Popconfirm
-            title={`把【${record.name}】从该职位[【${position.value}】中移除?`}
+            title={`把【${record.name}】从该职位【${position.value}】中移除?`}
             onConfirm={() => removeUser(record.id)}
             okText="确认"
             cancelText="取消"
