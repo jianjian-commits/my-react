@@ -6,7 +6,7 @@ import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
 import DraggableList from "../components/shared/DraggableList";
 import mobileAdoptor from "../components/formBuilder/utils/mobileAdoptor";
-import { setDashboards, setDBMode } from '../components/bi/redux/action';
+import { setDashboards, setDBMode, setVisitorSorts } from '../components/bi/redux/action';
 import { DBMode } from '../components/bi/component/dashboard/Constant';
 import { setDB } from '../components/bi/utils/reqUtil';
 import DBVisitor from '../components/bi/component/dashboard/DBVisitor';
@@ -199,7 +199,7 @@ const AppDetail = props => {
     if(list[0].key !== "") {
       setDB(appId, id, props.setDashboards);
       props.setDBMode(DBMode.Visit)
-      // history.push(`/app/${appId}/setting/bi/${id}`);
+      props.setVisitorSorts(new Map());
     }
   };
 
@@ -339,5 +339,6 @@ export default connect(({ app, login, forms }) => ({
   getApproveCount,
   clearApproveCount,
   setDashboards,
-  setDBMode
+  setDBMode,
+  setVisitorSorts
 })(AppDetail);

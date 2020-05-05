@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Tooltip, Checkbox, Input } from 'antd';
 import { updateChartReq, processBind } from '../../utils/reqUtil';
@@ -14,6 +14,7 @@ const RightPane = (props) => {
   const { changeBind, changeChartData, chartInfo, bindDataArr, elemName, changeChartInfo, dataSource, setElemType, elemType,
     chartAvailableList } = props;
   const { elementId } = useParams();
+
   let [activeIcon, setActiveIcon] = useState(elemType || ChartType.HISTOGRAM);
   let [titleXAxis, setTitleXAxis] = useState(chartInfo.titleXAxis);
   let [titleYAxis, setTitleYAxis] = useState(chartInfo.titleYAxis);
@@ -21,6 +22,14 @@ const RightPane = (props) => {
   let [showDataTag, setShowDataTag] = useState(chartInfo.showDataTag);
   let showRPTTitle = true;
   let showRPTools = true;
+
+  useEffect(()=> {
+    setActiveIcon(chartInfo.elemType);
+    setTitleXAxis(chartInfo.titleXAxis);
+    setTitleYAxis(chartInfo.titleYAxis);
+    setShowLegend(chartInfo.showLegend);
+    setShowDataTag(chartInfo.showDataTag);
+  }, [chartInfo])
 
   const onChangeShowLegend = () => {
     let show = !showLegend;
@@ -88,7 +97,7 @@ const RightPane = (props) => {
         <span>可视化</span>
         <div className={classes.chartGroup}>
         {chartGroup.map(chart =>
-        <Tooltip key={chart.type}  title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} mouseLeaveDelay={0}>
+        <Tooltip key={chart.type} title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} mouseLeaveDelay={0}>
           <div
             className={chartAvailableList.includes(chart.type) ? classNames(classes.IconBox, {activeIcon: elemType==chart.type}) : classes.unavailable }
             onClick={()=>{handleSelectIcon(chartAvailableList.includes(chart.type) ? chart.type : ChartType.HISTOGRAM)}}
