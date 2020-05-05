@@ -17,9 +17,9 @@ const Authenticate = props => {
     children,
     hide = false
   } = props;
-
+  
   if (debug) return children;
-  if (!permissions || state === "pending" || hide) return null;
+  if (!permissions || state === "pending" || hide || !teamId) return null;
   if (!authorityIsValid({ debug, permissions, teamId, auth })) {
     switch (type) {
       case "redirect":
