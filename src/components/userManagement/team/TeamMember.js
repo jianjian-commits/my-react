@@ -58,6 +58,11 @@ export default connect(
       width: 200,
     },
     {
+      title: "职位",
+      dataIndex: "position",
+      width: 200,
+    },
+    {
       title: "分组",
       dataIndex: "groupName",
       width: 200,
@@ -122,6 +127,7 @@ export default connect(
               ? new Date(item.lastLoginDate).toLocaleString()
               : null;
             item.groupName = item.group.name;
+            item.position = item.position.value;
           });
           setData(res.data.datas);
           setTotal(res.data.total);
