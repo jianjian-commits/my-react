@@ -56,6 +56,9 @@ export const main = [
     key: "app",
     label: "应用概览",
     path: "/app/list",
+    authOptions: {
+      type: "ignore"
+    },
     component: AppList
   },
   {

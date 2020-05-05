@@ -149,7 +149,7 @@ const UserRelation = ({
   onOK,
   onCancel,
   users,
-  positionId,
+  position,
   allUsers,
   selectedKeys,
   updateSelectedKeys,
@@ -177,13 +177,13 @@ const UserRelation = ({
       render: (text, record) => (
         <div>
           <Popconfirm
-            title="把该成员从公司中踢出?"
+            title={`把【${record.name}】从该职位【${position.value}】中移除?`}
             onConfirm={() => removeUser(record.id)}
             okText="确认"
             cancelText="取消"
             placement="top"
           >
-            <Button type="link">踢出</Button>
+            <Button type="link">移除</Button>
           </Popconfirm>
         </div>
       ),
@@ -214,7 +214,7 @@ const UserRelation = ({
       ></Table>
       <RelateModal
         visible={open}
-        positionId={positionId}
+        positionId={position.id}
         allUsers={allUsers}
         onOk={onOK}
         onCancel={onCancel}
@@ -429,7 +429,7 @@ class PositionDetail extends Component {
         <UserRelation
           open={modalOpen}
           users={users}
-          positionId={position.id}
+          position={position}
           allUsers={allUsers}
           openHandle={this.updateTargetState("modalOpen")}
           onOK={this.modalConfirmHandle}

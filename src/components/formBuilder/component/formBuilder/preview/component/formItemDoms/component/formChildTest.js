@@ -100,107 +100,15 @@ class FormChildTest extends React.Component {
         case "DateInput":
           return this.renderComponentIcon("date", item, i, parentId);
         case "PureDate":
-          return this.renderComponentIcon("puredate", item, i, parentId);
+          return this.renderComponentIcon("pureDate", item, i, parentId);
         case "PureTime":
-          return this.renderComponentIcon("puretime", item, i, parentId);
+          return this.renderComponentIcon("pureTime", item, i, parentId);
         case "Address":
           return this.renderComponentIcon("address", item, i, parentId);
-        // return (
-        //   <div
-        //     id={item.id}
-        //     onClick={e => {
-        //       this.props.editModeOn(data, e, item);
-        //       this.props.setActiveInnerIndex(item.id);
-        //     }}
-        //     className="form-child-item"
-        //     key={item.id}
-        //   >
-        //     <div style={style} id={`${parentId}${i}Top`}></div>
-        //     <div
-        //       className={classNames("child-item-content", {
-        //         'activeContent': this.props.activeInnerIndex === item.id
-        //       })}
-        //     >
-        //       <div className={item.validate.required ? "item-title-required" : "item-title"}>{item.label}</div>
-        //       <div className="item-component">
-        //         <div className="checkboxComponent">
-        //           <img src="/image/icons/edit.png" alt="图片加载出错" />
-        //         </div>
-        //         <div
-        //           className={classNames("deleteBtn", {
-        //             activeItem: this.props.activeInnerIndex !== item.id
-        //           })}
-        //           onClick={(e) => {
-        //             e.stopPropagation()
-        //             const { values } = this.props.data;
-        //             const newValues = values.filter(
-        //               (innerItem, index) => innerItem.id !== item.id
-        //             );
-        //             this.props.setItemAttr(
-        //               this.props.data,
-        //               "values",
-        //               newValues
-        //             );
-        //             this.props.setActiveInnerIndex(-1);
-        //             this.props.editModeOn(data,e);
-        //           }}
-        //         >
-        //           <img src="/image/icons/bar_delete_hover.png" />
-        //         </div>
-        //       </div>
-        //     </div>
-        //     <div style={style} id={`${parentId}${i}Bottom`}></div>
-        //   </div>
-        // );
         case "DropDown":
           return this.renderComponentIcon("dropdown", item, i, parentId);
         case "MultiDropDown":
           return this.renderComponentIcon("check_dropdown", item, i, parentId);
-        // return (
-        //   <div
-        //     id={item.id}
-        //     onClick={e => {
-        //       this.props.editModeOn(data, e, item);
-        //       this.props.setActiveInnerIndex(item.id);
-        //     }}
-        //     className="form-child-item"
-        //     key={item.id}
-        //   >
-        //     <div style={style} id={`${parentId}${i}Top`}></div>
-        //     <div
-        //       className={classNames("child-item-content", {
-        //         'activeContent': this.props.activeInnerIndex === item.id
-        //       })}
-        //     >
-        //       <div className={item.validate.required ? "item-title-required" : "item-title"}>{item.label}</div>
-        //       <div className="item-component">
-        //         <Select />
-        //         <div
-        //           className={classNames("deleteBtn", {
-        //             activeItem: this.props.activeInnerIndex !== item.id
-        //           })}
-        //           onClick={(e) => {
-        //             e.stopPropagation()
-        //             const { values } = this.props.data;
-        //             const newValues = values.filter(
-        //               (innerItem, index) => innerItem.id !== item.id
-        //             );
-        //             this.props.setItemAttr(
-        //               this.props.data,
-        //               "values",
-        //               newValues
-        //             );
-        //             this.props.setActiveInnerIndex(-1);
-        //             this.props.editModeOn(data,e);
-        //           }}
-        //         >
-        //           <img src="/image/icons/bar_delete_hover.png" />
-        //         </div>
-        //       </div>
-        //     </div>
-        //     <div style={style} id={`${parentId}${i}Bottom`}></div>
-        //   </div>
-        // );
         case "SingleText":
           return this.renderComponentIcon("text", item, i, parentId);
         case "TextArea":
@@ -213,51 +121,6 @@ class FormChildTest extends React.Component {
           return this.renderComponentIcon("idcard", item, i, parentId);
         case "EmailInput":
           return this.renderComponentIcon("email", item, i, parentId);
-        // return (
-        //   <div
-        //     id={item.id}
-        //     onClick={e => {
-        //       this.props.editModeOn(data, e, item);
-        //       this.props.setActiveInnerIndex(item.id);
-        //     }}
-        //     className="form-child-item"
-        //     key={item.id}
-        //   >
-        //     <div style={style} id={`${parentId}${i}Top`}></div>
-        //     <div
-        //       className={classNames("child-item-content", {
-        //         'activeContent': this.props.activeInnerIndex === item.id
-        //       })}
-        //     >
-        //       <div className={item.validate.required ? "item-title-required" : "item-title"}>{item.label}</div>
-        //       <div className="item-component">
-        //         <Input />
-        //         <div
-        //           className={classNames("deleteBtn", {
-        //             activeItem: this.props.activeInnerIndex !== item.id
-        //           })}
-        //           onClick={(e) => {
-        //             e.stopPropagation()
-        //             const { values } = this.props.data;
-        //             const newValues = values.filter(
-        //               (innerItem, index) => innerItem.id !== item.id
-        //             );
-        //             this.props.setItemAttr(
-        //               this.props.data,
-        //               "values",
-        //               newValues
-        //             );
-        //             this.props.setActiveInnerIndex(-1);
-        //             this.props.editModeOn(data,e);
-        //           }}
-        //         >
-        //           <img src="/image/icons/bar_delete_hover.png" />
-        //         </div>
-        //       </div>
-        //     </div>
-        //     <div style={style} id={`${parentId}${i}Bottom`}></div>
-        //   </div>
-        // );
         default:
           break;
       }

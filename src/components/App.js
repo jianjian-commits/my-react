@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, Redirect, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "antd";
-import { ConnectedRouter, routerActions } from "connected-react-router";
+import { ConnectedRouter } from "connected-react-router";
 import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
@@ -22,7 +22,8 @@ export const getRoutes = (routes) =>
       getRoutes(route.content)
     ) : (
       <PrivateRoute
-        auth={routerActions.auth}
+        auth={route.auth}
+        authOptions={route.authOptions}
         path={route.path}
         component={route.component}
         key={route.key}
