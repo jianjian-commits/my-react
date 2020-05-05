@@ -1,7 +1,7 @@
 import { message } from "antd";
 import request from "../utils/request";
 import { getAppList, clearAppList } from "./appReducer";
-// import { history } from "./index";
+import { history } from "./index";
 import { catchError, ScheduleCreate } from "../utils";
 
 export const initialState = {
@@ -20,6 +20,7 @@ export const initialState = {
 };
 
 export const START_SPINNING = "Login/START_SPINNING";
+export const SET_APP_INIT = "Login/SET_APP_INIT";
 export const START_LOGIN = "Login/START_LOGIN";
 export const LOGIN_SUCCESS = "Login/LOGIN_SUCCESS";
 export const FETCH_REQUEST_SENT = "Login/FETCH_REQUEST_SENT";
@@ -45,6 +46,10 @@ export const startSpinning = () => ({
   type: START_SPINNING
 });
 
+export const setAppInit = payload => ({
+  type: SET_APP_INIT,
+  payload
+});
 export const startLogin = () => ({
   type: START_LOGIN
 });
@@ -259,12 +264,14 @@ export const initAllDetail = ignore => async dispatch => {
       }
     } else {
       dispatch(setFetchingNecessary(false));
+      dispatch(setAppInit(true));
       if (ignore) return false;
       message.error(res.msg || "获取当前用户信息失败");
     }
   } catch (err) {
     dispatch(setFetchingNecessary(false));
-    catchError(err);
+    dispatch(setAppInit(true));
+    !ignore && catchError(err);
   }
 };
 
@@ -305,6 +312,7 @@ export const signOut = () => async dispatch => {
     if (res && res.status === "SUCCESS") {
       localStorage.removeItem("id_token");
       dispatch(signOutSuccess());
+      history.push("/login")
     } else {
       message.error(res.msg || "退出失败");
     }
@@ -315,6 +323,11 @@ export const signOut = () => async dispatch => {
 
 export default function loginReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case SET_APP_INIT:
+      return {
+        ...state,
+        appInit: payload
+      };
     case CLEAR_USER_DATA:
       return {
         ...state,
