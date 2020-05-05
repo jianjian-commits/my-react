@@ -184,7 +184,7 @@ export default class Inspector extends React.Component {
         );
       case "Address":
         return (
-          <AddressInspector element={editElement} elementParent={editElementParent} key={editElement.key} element={editElement} />
+          <AddressInspector key={editElement.id} element={editElement}  />
         );
       case "Button":
         return (
