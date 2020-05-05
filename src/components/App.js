@@ -99,7 +99,6 @@ class App extends React.Component {
   render() {
     const { appInit } = this.props;
     if (!appInit) return <FullLoading />;
-    console.log(111)
     return (
       <ErrorBoundary error={<ErrorPage />}>
         <ConnectedRouter history={history}>
