@@ -6,6 +6,7 @@ import { catchError, ScheduleCreate } from "../utils";
 
 export const initialState = {
   isLoading: false,
+  appInit: false,
   loginData: null,
   isAuthenticated: !!localStorage.getItem("id_token"),
   userDetail: {},
@@ -236,7 +237,7 @@ export const getAllCompany = () => async dispatch => {
 };
 
 //初始化所有信息
-export const initAllDetail = () => async dispatch => {
+export const initAllDetail = ignore => async dispatch => {
   dispatch(setFetchingNecessary(true));
   dispatch({ type: FETCH_REQUEST_SENT });
   dispatch({ type: CLEAR_USER_DATA });
@@ -257,8 +258,9 @@ export const initAllDetail = () => async dispatch => {
         dispatch(setFetchingNecessary(false));
       }
     } else {
-      message.error(res.msg || "获取当前用户信息失败");
       dispatch(setFetchingNecessary(false));
+      if (ignore) return false;
+      message.error(res.msg || "获取当前用户信息失败");
     }
   } catch (err) {
     dispatch(setFetchingNecessary(false));
@@ -367,6 +369,7 @@ export default function loginReducer(state = initialState, { type, payload }) {
     case FETCH_USER_DETAIL:
       return {
         ...state,
+        appInit: true,
         userDetail: payload
       };
     case FETCH_ALL_COMPANY:
