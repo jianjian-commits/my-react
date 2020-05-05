@@ -117,16 +117,18 @@ const SubmitTransactList = props => {
 
   return (
     props.enterApprovalDetail === false ?(
-      <div className={classes.tableBox}>
+      <div className={classes.transactListContainer}>
       <div className={classes.tableTitle}>
         我发起的 <span className={classes.totalNumber}>（共{total}条）</span>
       </div>
-      <Table
-        loading={tableLoading} 
-        columns={columns} 
-        dataSource={transactList} 
-        pagination={paginationProps}
-        ></Table>
+      <div className={classes.tableBox}>
+        <Table
+          loading={tableLoading} 
+          columns={columns} 
+          dataSource={transactList} 
+          pagination={paginationProps}
+          ></Table>
+      </div>
     </div>
     ):(
       <FormDataDetail

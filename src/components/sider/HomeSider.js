@@ -5,20 +5,22 @@ import { Layout, Menu, Icon } from "antd";
 import classes from "./sider.module.scss";
 import { updateSiderOpenKeys } from "../../store/layoutReducer";
 import { main } from "../../routers";
+import clx from "classnames";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-export const SiderTop = () => (
+export const SiderTop = ({ collapsed }) => (
   <div className={classes.top}>
     <Link to="/">
-      <div className={classes.logo} />
-      <span>达芬奇</span>
+      <div className={clx(classes.logoBox, { [classes.collapsed]: collapsed })}>
+        <div className={classes.logo} />
+      </div>
     </Link>
   </div>
 );
 
-const renderItem = (r) => (
+const renderItem = r => (
   <Menu.Item className={classes.item} key={r.key}>
     <Link to={r.path}>
       {r.icon ? (
@@ -33,7 +35,7 @@ const renderItem = (r) => (
   </Menu.Item>
 );
 
-const HomeSider = (props) => {
+const HomeSider = props => {
   const { collapsed, openKeys, updateSiderOpenKeys } = props;
   const location = useLocation();
 
@@ -47,14 +49,20 @@ const HomeSider = (props) => {
       }
       return acc;
     }, [])
-    .map((e) => e.key);
+    .map(e => e.key);
 
   const revertOpenKeysWhileCollapse = () => {
     if (collapsed) updateSiderOpenKeys([]);
   };
   return (
-    <Sider trigger={null} theme="light" width="240" collapsible collapsed={collapsed}>
-      <SiderTop />
+    <Sider
+      trigger={null}
+      theme="light"
+      width="240"
+      collapsible
+      collapsed={collapsed}
+    >
+      <SiderTop collapsed={collapsed} />
       <Menu
         forceSubMenuRender={true}
         className={classes.menu}
@@ -64,12 +72,12 @@ const HomeSider = (props) => {
         openKeys={openKeys}
         onClick={revertOpenKeysWhileCollapse}
       >
-        {main.map((r) => {
+        {main.map(r => {
           if (r.children) {
             return (
               <SubMenu
                 key={r.key}
-                onTitleClick={(e) => updateSiderOpenKeys([e.key])}
+                onTitleClick={e => updateSiderOpenKeys([e.key])}
                 title={
                   <span>
                     {r.icon ? (
@@ -83,7 +91,7 @@ const HomeSider = (props) => {
                   </span>
                 }
               >
-                {r.children.map((e) => renderItem(e))}
+                {r.children.map(e => renderItem(e))}
               </SubMenu>
             );
           }
@@ -97,7 +105,7 @@ const HomeSider = (props) => {
 export default connect(
   ({ layout: { sider } }) => ({
     collapsed: sider.collapsed,
-    openKeys: sider.openKeys,
+    openKeys: sider.openKeys
   }),
   { updateSiderOpenKeys }
 )(HomeSider);
