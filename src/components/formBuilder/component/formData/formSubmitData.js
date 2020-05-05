@@ -703,7 +703,7 @@ class FormSubmitData extends PureComponent {
               appId={this.props.appId}
               formId={this.state.formId}
               submissionId={ record._id}
-              userId={record.userId}
+              userId={record._userId}
               data={record}
               handleDeleteSubmisson={this.handleDeleteSubmisson}
               showModal={this.showModal}
