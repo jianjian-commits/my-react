@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Button, Collapse, Icon, message } from "antd";
 import { useState } from "react";
-import classNames from "classnames";
 import { push } from "connected-react-router";
 import { connect } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
@@ -12,7 +11,8 @@ import {
   setFormData,
   setDataSource,
   clearBind,
-  setDBMode
+  setDBMode,
+  setElemName
 } from "../../../redux/action";
 import ChangeTipModal from "./changeTipModal";
 const { Panel } = Collapse;
@@ -29,9 +29,9 @@ function ModalTitle() {
 function DataListModal(props) {
   const [choiceFormId, setChoiceFormId] = useState("");
   const [choiceFormName, setChoiceFormName] = useState("");
-  const { setVisible } = props;
+  const { setVisible, setElemName, setDataSource, setDBMode, clearBind } = props;
   const history = useHistory();
-  const { appId, dashboardId, elementId } = useParams();
+  const { appId, dashboardId } = useParams();
 
   const _getFormChoice = (id, name) => {
     setChoiceFormId(id);
@@ -61,13 +61,14 @@ function DataListModal(props) {
           const view = data.view;
           const elementId = view.id;
 
-          props.setDataSource({
+          setDataSource({
             id: choiceFormId,
             name: choiceFormName,
             data: view.formFields
           });
           history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
-          props.setDBMode(DBMode.Editing);
+          setDBMode(DBMode.Editing);
+          setElemName(view.name);
         }
       },
       () => {
@@ -80,7 +81,7 @@ function DataListModal(props) {
     if (props.type == "create") {
       newChart();
       handleOK();
-      props.clearBind();
+      clearBind();
     } else {
       setChangeVisible(true);
     }
@@ -97,16 +98,15 @@ function DataListModal(props) {
       setChangeVisible(false);
     },
     handleOK: e => {
-      // newChart();
       handleOK();
-      props.clearBind();
+      clearBind();
       setChangeVisible(false);
 
       request(`/bi/forms/${choiceFormId}`).then((res) => {
         if(res && res.msg === "success") {
           const data = res.data;
-          props.setDataSource({id: data.formId, name: data.formName, data: data.items});
-          props.setDBMode(DBMode.Editing);
+          setDataSource({id: data.formId, name: data.formName, data: data.items});
+          setDBMode(DBMode.Editing);
         }
       })
     }
@@ -176,6 +176,7 @@ export default connect(
     setFormData,
     setDataSource,
     clearBind,
-    setDBMode
+    setDBMode,
+    setElemName
   }
 )(DataListModal);
