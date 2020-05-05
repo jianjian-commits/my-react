@@ -1,5 +1,5 @@
 .top {
-  padding: 0 18px;
+  padding: 0 21.5px;
   border-bottom: 1px solid #ddd;
   line-height: 64px;
   height: 64px;
@@ -10,15 +10,22 @@
     display: inline-block;
     height: 100%;
   }
+  .logoBox{
+    width: 197px;
+    overflow: hidden;
+  }
+  .collapsed{
+    width: 38px;
+  }
   .logo {
-    width: 45px;
-    height: 32px;
-    line-height: 64px;
+    width: 197px;
+    height: 39px;
+    line-height: 63px;
     box-sizing: border-box;
     display: inline-block;
-    margin-right: 10px;
+    // margin-right: 10px;
     position: relative;
-    top: 8px;
+    top: 11px;
     background: url(../../assets/icons/logo.png);
     background-size: cover;
     background-repeat: no-repeat;
