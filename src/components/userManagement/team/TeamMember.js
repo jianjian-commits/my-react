@@ -127,7 +127,7 @@ export default connect(
               ? new Date(item.lastLoginDate).toLocaleString()
               : null;
             item.groupName = item.group.name;
-            item.position = item.position.value;
+            item.position = (item.position && item.position.value) || null;
           });
           setData(res.data.datas);
           setTotal(res.data.total);

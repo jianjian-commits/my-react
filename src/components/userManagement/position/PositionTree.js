@@ -15,6 +15,9 @@ import request from "../../../utils/request";
 import ModalCreation from "../../profileManagement/modalCreate/ModalCreation";
 import PositionDetail from "./PositionDetail";
 import { HomeContentTitle } from "../../shared";
+import Authenticate from "../../shared/Authenticate";
+import { POSITION_MANAGEMENT_DELETE, POSITION_MANAGEMENT_NEW } from "../../../auth";
+
 const { TreeNode } = Tree;
 
 const Header = () => {
@@ -177,6 +180,7 @@ class PositionTree extends Component {
             />
           )}
           {item.code !== "COMPANY" && (
+            <Authenticate auth={POSITION_MANAGEMENT_NEW}>
             <EditIcon
               onClick={() => {
                 this.setState({
@@ -186,8 +190,10 @@ class PositionTree extends Component {
                 });
               }}
             />
+            </Authenticate>
           )}
           {!item.code && (
+            <Authenticate auth={POSITION_MANAGEMENT_DELETE}>
             <Popconfirm
               title="确认删除该职位？"
               onConfirm={() => this.onDelect(item.id)}
@@ -197,6 +203,7 @@ class PositionTree extends Component {
             >
               <RemoveIcon />
             </Popconfirm>
+            </Authenticate>
           )}
         </div>
       );

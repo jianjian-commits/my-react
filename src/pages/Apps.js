@@ -209,7 +209,7 @@ class Apps extends React.Component {
                 >
                   创建应用
                   </Button>
-                {appList.length < 1 && (
+                {appList.length < 1 && sysUserName === name && (
                   <div className={classes.noApp}>
                     <NoAppImg />
                   </div>
