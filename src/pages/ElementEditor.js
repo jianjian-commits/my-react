@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import ChartContainer from '../components/bi/component/elements/chart/ChartContainer';
 import EditorHeader from '../components/bi/component/elements/EditorHeader';
+import { setDashboards } from '../components/bi/redux/action';
+import { setDB } from '../components/bi/utils/reqUtil';
 import { Layout } from "antd";
 import { ChartBindPane, LeftPane, RightPane, DragAndDrop } from '../components/bi/component/bind';
 import classes from "../styles/bi.module.scss";
@@ -12,17 +14,17 @@ const { Sider, Content } = Layout;
 const ElementEditor = props => {
   const history = useHistory();
   const { appId, dashboardId } = useParams();
-  const { chartData, chartInfo, elemType } = props;
+  const { chartData, chartInfo, elemType, formDataArr, setDashboards } = props;
 
-  const load = (e) => {
-    history.push(`/app/${appId}/setting/bi/${dashboardId}`);
+  const reLoad = () => {
+    if(!formDataArr || formDataArr.length === 0) {
+      setDB(appId, dashboardId, setDashboards);
+      history.push(`/app/${appId}/setting/bi/${dashboardId}`);
+    }
   }
 
   useEffect(()=> {
-    window.addEventListener("load", load);
-    return () => {
-      window.removeEventListener("load", load);
-    }
+    reLoad();
   })
 
   return (
@@ -47,9 +49,8 @@ const ElementEditor = props => {
 }
 
 export default connect(store => ({
-  dataSource: store.bi.dataSource,
+  formDataArr: store.bi.formDataArr,
   chartData: store.bi.chartData,
   chartInfo: store.bi.chartInfo,
   elemType: store.bi.elemType
-}), {
-})(ElementEditor);
+}), { setDashboards })(ElementEditor);

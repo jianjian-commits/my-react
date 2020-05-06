@@ -113,7 +113,7 @@ export default Form.create({ name: "reset-form" })(
         key: "所在企业",
         value: "companyName",
         meter: "resetCompanyName",
-        render: () => { },
+        render: () => {},
         redit: true
       },
       {
@@ -123,9 +123,9 @@ export default Form.create({ name: "reset-form" })(
         render: meter => render(meter),
         redit: true
       },
-      { key: "职位", value: "position", render: () => { }, redit: false },
-      { key: "分组", value: "group", render: () => { }, redit: false },
-      { key: "邮箱", value: "email", render: () => { }, redit: false },
+      { key: "职位", value: "position", render: () => {}, redit: false },
+      { key: "分组", value: "group", render: () => {}, redit: false },
+      { key: "邮箱", value: "email", render: () => {}, redit: false },
       {
         key: "手机",
         value: "mobilePhone",
@@ -144,19 +144,31 @@ export default Form.create({ name: "reset-form" })(
     // const [rest0, ...rest] = resetUser;
     const handleSubmit = e => {
       e.preventDefault();
-      validateFields((err, { actionType, verificationCode, ...rest }) => {
-        if (!err) {
-          updateUserDetail({ ...rest, code: verificationCode }).then(() => {
-            setModalMeter(initModalMeter);
-            verificationCode && timeout && timeout.int && timeout.clear(0);
-            verificationCode && resetAllowSendCodeState();
-          });
+      validateFields(
+        (
+          err,
+          { actionType, userDetailModalSubmit, verificationCode, ...rest }
+        ) => {
+          if (!err) {
+            updateUserDetail(
+              Object.assign(
+                rest,
+                rest.mobilePhone && verificationCode
+                  ? { code: verificationCode, codeType: "RESETPHONE" }
+                  : {}
+              )
+            ).then(() => {
+              setModalMeter(initModalMeter);
+              verificationCode && timeout && timeout.int && timeout.clear(0);
+              verificationCode && resetAllowSendCodeState();
+            });
+          }
         }
-      });
+      );
     };
     return (
       <HomeLayout>
-        <HomeContentTitle title="个人信息"/>
+        <HomeContentTitle title="个人信息" />
         <div className={userDetailStyles.userDetail}>
           <div>
             <ul>
@@ -177,8 +189,8 @@ export default Form.create({ name: "reset-form" })(
                       {r.value === "oldPassWord"
                         ? "********"
                         : r.value === "companyName"
-                          ? currentCompany.companyName
-                          : userDetail[r.value]}
+                        ? currentCompany.companyName
+                        : userDetail[r.value]}
                       <span
                         onClick={() => {
                           resetAllowSendCodeState && resetAllowSendCodeState();
@@ -236,21 +248,6 @@ export default Form.create({ name: "reset-form" })(
                   hasFeedback={false}
                   colon={false}
                   labelAlign={"right"}
-                // help={
-                //   helpText && (
-                //     <div
-                //       style={{
-                //         position: "absolute",
-                //         left: "340px",
-                //         width: "224px",
-                //         height: "42px",
-                //         lineHeight: "45px"
-                //       }}
-                //     >
-                //       {helpText}
-                //     </div>
-                //   )
-                // }
                 >
                   {getFieldDecorator(parameters[index]["key"], {
                     ...o.options,

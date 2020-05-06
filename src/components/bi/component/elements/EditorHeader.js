@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Icon, message} from "antd";
-import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange, setElemName } from '../../redux/action';
+import { changeBind, setDashboards, clearBind, setDBMode ,setChartChange, setElemName } from '../../redux/action';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
@@ -12,7 +12,7 @@ import classes from '../../scss/elements/element.module.scss';
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited,
+  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, setChartChange, isChartEdited,
     dataSource, elemType, setElemName } = props;
 
   const handleBack = () => {
@@ -26,7 +26,7 @@ const EditorHeader = props => {
     Promise.all([
       updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo, elemType),
       setDB(appId, dashboardId, setDashboards),
-      saveChartChange()
+      setChartChange(true)
     ]).then(
       message.success("保存成功")
     );
@@ -84,5 +84,5 @@ export default connect(
     dataSource: store.bi.dataSource,
     elemType: store.bi.elemType
   }),
-  { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange, setElemName }
+  { changeBind, setDashboards, clearBind, setDBMode ,setChartChange, setElemName }
 )(EditorHeader);

@@ -203,7 +203,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
               taskData: response.data.data,
               createdTime: res.data.createdTime,
               updateTime: res.data.updateTime,
-              creator: res.data.extraProp.user.name
+              creator: res.data.extraProp && res.data.extraProp.user ? res.data.extraProp.user.name : ""
             });
         }).catch(err=>{
           callback(false);
@@ -214,7 +214,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
             extraProp: res.data.extraProp,
             taskData: []
           });
-          message.error("获取审批流水失败",err.response.data.msg)
+          message.error("获取审批流水失败")
         })
       }).catch(err=>{
         callback(false);
@@ -225,7 +225,7 @@ export const getSubmissionDetail = (formId, submissionId, appId, callback) => di
           extraProp: {},
           taskData: []
         });
-        message.error("获取数据详情失败",err.response.data.msg)
+        message.error("获取数据详情失败")
       });
   }).catch(err=>{
     callback(false);
