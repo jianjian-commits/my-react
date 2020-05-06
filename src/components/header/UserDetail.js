@@ -81,7 +81,7 @@ export default Form.create({ name: "reset-form" })(
           dispatch,
           activeKey: "resetPhone",
           allowSendCode,
-          codeType: "RESET",
+          codeType: "RESETPHONE",
           sendCode,
           isFetchCoding,
           fetchText
@@ -99,7 +99,7 @@ export default Form.create({ name: "reset-form" })(
         dispatch,
         activeKey: "resetPhone",
         allowSendCode,
-        codeType: "RESET",
+        codeType: "RESETPHONE",
         sendCode,
         isFetchCoding,
         fetchText
@@ -154,7 +154,7 @@ export default Form.create({ name: "reset-form" })(
               Object.assign(
                 rest,
                 rest.mobilePhone && verificationCode
-                  ? { code: verificationCode, codeType: "RESETPHONE" }
+                  ? { code: verificationCode }
                   : {}
               )
             ).then(() => {
