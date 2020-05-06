@@ -1,11 +1,12 @@
 import React from 'react';
-import { Dropdown, Modal, Input, Form, message } from "antd";
+import { Dropdown, Modal, Input, Form, message, Button } from "antd";
+import classnames from 'classnames';
 const { confirm } = Modal
 const OperateBox = (props) => {
 
   // const [value, setValue] = React.useState(props.formname);
-  let formName = ""
-  const {canEdit, canDelete} = props;
+  const {canEdit, canDelete, form} = props;
+  const [isVisiable,setIsVisiable] = React.useState(false);
 
   const showDelConfirm = () => {
     confirm({
@@ -27,29 +28,18 @@ const OperateBox = (props) => {
   }
 
   const showUpdateConfirm = () => {
-    confirm({
-      title: "修改名称",
-      icon: <></>,
-      content:
-        <Input 
-          placeholder="请输入名称"
-          defaultValue = { props.formname }
-          onChange={ handleSetValue }
-          maxLength={20}
-        />
-      ,
-      cancelText: "取消",
-      okText: "确定",
-      className: "operate-box-update-form-modal",
-      onOk() {
-        handleRename(props.id, props.type);
-      }
-    });
+    setIsVisiable(true);
   }
 
-  const handleSetValue = (e) => {
-    let value = e.target.value
-    formName = value
+  const handleCancel = () =>{
+        props.form.resetFields();
+        setIsVisiable(false);
+  }
+  const handleSetValue = () => {
+    let inputValue = props.form.getFieldValue("formName");
+    props.form.setFieldsValue({
+      "formName": inputValue
+    })
   }
 
   const handleDelete = (params, type) => {
@@ -62,10 +52,20 @@ const OperateBox = (props) => {
   }
 
   const handleRename = (id, type) => {
-    props.handleRename(id, type, { name: formName }).then(res => {
-      if (res.status === 200 || res.msg === "success") {
-        props.isDeleteOne(true)
-        message.success('修改成功');
+    let { handleRename } = props;
+    props.form.validateFields((error,values)=>{
+      if(!error){
+        // 关闭模态框
+        setIsVisiable(false);
+        // 获取验证通过的值
+        let { formName } = values;
+        // 发送修改名称的请求
+        handleRename(id, type, { name: formName }).then(res => {
+          if (res.status === 200 || res.msg === "success") {
+            props.isDeleteOne(true);
+            message.success('修改成功');
+          }
+        })
       }
     })
   }
@@ -86,7 +86,8 @@ const OperateBox = (props) => {
       </div>
     </div>
   );
-  // const { getFieldDecorator } = props.form
+
+  const { getFieldDecorator } = props.form
   return (
     <>
       <Dropdown overlay={menu} >
@@ -96,6 +97,48 @@ const OperateBox = (props) => {
           </span>
         </span>
       </Dropdown>
+      <Modal
+          visible={isVisiable}
+          className = "operate-box-update-form-modal"
+          footer={null}
+          closable={false}
+        >
+        
+        <Form className="formRename">
+          <Form.Item label="修改名称" className="formRenameInput">
+         {
+         getFieldDecorator("formName", {
+              rules: [{ required: true, message: "修改名称不为空" }],
+              validateTrigger: "onBlur",
+              initialValue: props.formname
+         })(
+          <Input 
+          placeholder="请输入名称"
+          onBlur = { handleSetValue  }
+          maxLength={20}
+          />)
+          }
+          </Form.Item>
+
+          <Form.Item className="formRenameBtnGroup">
+            <div className = "btnGroup">
+              <Button
+                className = "btnGroup-cancel"
+                onClick = { handleCancel }
+              >
+                取消
+              </Button>
+              <Button
+               className = "btnGroup-confirm"
+               onClick = { () => handleRename(props.id, props.type) }
+              >
+                确认
+              </Button>
+            </div>
+          </Form.Item>
+          </Form>
+
+        </Modal>
     </>
   )
 }

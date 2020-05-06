@@ -173,33 +173,65 @@
     }
 }
 .operate-box-update-form-modal{
-  width: 404px;
-  height: 170px;
+  width: 410px!important;
+  height: 170px !important;
   margin-top: -85px!important;
   top:50% !important;
-.ant-modal-content{
   .ant-modal-body{
-    padding:20px;
+    padding: 20px !important;
+  }
+.ant-modal-content{
+  .formRename{
     background: #FFFFFF;
     box-shadow: 0px 4px 20px rgba(165, 174, 183, 0.25);
     border-radius: 5px;
-    .modal-title{
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      height: 23px;
-      span{
-        margin-left: 9.5px;
+    .formRenameInput{
+
+      .ant-form-item-label{
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        height: 23px;
+        margin-bottom: 20px;
+        label{
+          margin-left: 9.5px;
+          font-family: "Noto Sans SC";
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 23px;
+  
+          color: #333333;
+        }
+        // .ant-modal-confirm-content{
+        //   font-family: "Noto Sans SC";
+        //   font-style: normal;
+        //   font-weight: normal;
+        //   font-size: 14px;
+        //   line-height: 20px;
+  
+        //   color: #777F97;
+        //             }
+      }
+      .ant-input{
+        height: 40px;
+
+        background: #FFFFFF;
+        box-shadow: 0px 4px 30px rgba(163, 170, 177, 0.25);
+        border-radius: 5px;
 
         font-family: "Noto Sans SC";
         font-style: normal;
         font-weight: normal;
-        font-size: 16px;
-        line-height: 23px;
+        font-size: 14px;
+        line-height: 20px;
 
-        color: #333333;
+        color: #B6B6BA;
       }
-      .ant-modal-confirm-content{
+    }
+    .formRenameBtnGroup{
+        width: 100%;
+        margin-bottom: 0;
         font-family: "Noto Sans SC";
         font-style: normal;
         font-weight: normal;
@@ -207,30 +239,21 @@
         line-height: 20px;
 
         color: #777F97;
-                  }
-    }
-    .ant-modal-confirm-title{
-      font-family: "Noto Sans SC";
-      font-style: normal;
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 23px;
-      
-      color: #333333;
-    }
-    .ant-modal-confirm-content{
-      margin-top: 21px;
-      .ant-input{
-        height: 40px;
-        width: 370px;
-
-        border-radius: 3px;
-      }
-    }
-    .ant-modal-confirm-btns{
-      .ant-btn:nth-of-type(2){
-        background: #2A7FFF;
-      }
+        .btnGroup{
+          float: right;
+          .btnGroup-cancel{
+            height: 32px;
+            margin-right: 10px;
+          }
+          .btnGroup-confirm{
+            height: 32px;
+            color: #FFFFFF;
+            background: #2A7FFF;
+            border: 1px solid #B6B6BA;
+            box-sizing: border-box;
+            border-radius: 3px;
+          }
+        }
     }
   }
 }
