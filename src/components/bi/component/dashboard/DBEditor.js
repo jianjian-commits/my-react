@@ -69,7 +69,7 @@ class DBEditor extends React.PureComponent {
       return (
         <Fragment>
           <div className={classes.dbPlaceholder} style={{height}}>
-            <div>点击新建图表创建仪表盘</div>
+            {/* <div>点击新建图表创建仪表盘</div> */}
           </div>
         </Fragment>
       )

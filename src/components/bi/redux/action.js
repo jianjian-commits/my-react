@@ -14,7 +14,7 @@ export const SET_DATA_SOURCE = "SET_DATA_SOURCE";
 export const CHANGE_CHART_DATA = "CHANGE_CHART_DATA";
 export const CLEAR_BIND = "CLEAR_BIND";
 export const SET_DB_MODE = "SET_DB_MODE";
-export const SAVE_CHART_CHANGE = "SAVE_CHART_CHANGE";
+export const SET_CHART_CHANGE = "SET_CHART_CHANGE";
 export const CHANGE_CHART_INFO = "CHANGE_CHART_INFO";
 export const CHANGE_CHART_AVAILABLE = "CHANGE_CHART_AVAILABLE";
 export const RESET_STORE = "RESET_STORE";
@@ -24,9 +24,10 @@ export const resetBIStore = () => dispatch => {
   dispatch({type: RESET_STORE});
 }
 
-export const saveChartChange = () => dispatch => {
+export const setChartChange = (isChartEdited) => dispatch => {
   dispatch({
-    type: SAVE_CHART_CHANGE,
+    type: SET_CHART_CHANGE,
+    isChartEdited
   })
 }
 
@@ -82,11 +83,15 @@ export const changeChartData = (chartData) => dispatch => {
   })
 }
 
-export const setDataSource = (dataSource) => dispatch => {
+export const setDataSource = (dataSource, init = true) => dispatch => {
   dispatch({
     type: SET_DATA_SOURCE,
     dataSource
   })
+
+  if(!init) {
+    setChartChange(true);
+  }
 }
 
 export const setDashboards = (dashboards) => dispatch => {
