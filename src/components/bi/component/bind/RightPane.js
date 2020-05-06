@@ -74,7 +74,6 @@ const RightPane = (props) => {
 
   const updateChartInfo = (chartInfo) => {
     chartInfo = chartInfo || getChartInfo();
-    updateChartReq(elementId, dataSource.id, bindDataArr, elemName || "新建图表", {...chartInfo}, elemType);
     changeChartInfo(chartInfo || new ChartInfo());
   }
 
