@@ -2,6 +2,7 @@ import request from '../../../utils/request';
 import ChartInfo from '../data/ChartInfo';
 import { Types } from '../../bind/Types';
 import { getUUID } from '../../../utils/Util';
+import { DBMode } from '../../dashboard/Constant';
 
 export default class EditAction {
   constructor(elemType, chartId, callback, options) {
@@ -66,6 +67,8 @@ export default class EditAction {
         this.options.changeBind(bindDataArr);
         this.options.changeChartInfo(chartInfo || new ChartInfo());
         this.options.setElemType(this.elemType);
+        this.options.setDBMode(DBMode.Editing);
+        this.options.setElemName(data.name);
         request(`/bi/charts/data`, {
           method: "POST",
           data: {

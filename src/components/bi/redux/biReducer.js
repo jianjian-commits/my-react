@@ -14,7 +14,8 @@ import {
   SET_DB_MODE,
   SAVE_CHART_CHANGE,
   CHANGE_CHART_AVAILABLE,
-  RESET_STORE
+  RESET_STORE,
+  SET_VISITOR_SORTS
 } from "./action";
 
 import { DBMode } from '../component/dashboard/Constant';
@@ -24,7 +25,7 @@ import { ChartType, AllType } from "../component/elements/Constant";
 const initState = {
   elemType: ChartType.HISTOGRAM,
   dbName: "",
-  elemName: "",
+  elemName: "新建图表",
   formDataArr: [],
   dataSource: {},
   bindDataArr: [],
@@ -33,7 +34,8 @@ const initState = {
   dbMode: DBMode.Edit,
   isChartEdited:false,
   chartInfo: new ChartInfo(),
-  chartAvailableList: AllType
+  chartAvailableList: AllType,
+  visitorSorts: new Map()
 };
 
 export default function biReducer(state = initState, action) {
@@ -145,6 +147,12 @@ export default function biReducer(state = initState, action) {
       return {
         ...state,
         isChartEdited: false
+      }
+    }
+    case SET_VISITOR_SORTS: {
+      return {
+        ...state,
+        visitorSorts: action.visitorSorts
       }
     }
     default:

@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Table, message } from "antd";
+import { message } from "antd";
+import { Table } from "../shared/customWidget";
 import request from '../../utils/request'
 import classes from "./transactList.module.scss";
+import { HomeContentTitle } from "../shared";
 
 const TransactList = props => {
 
@@ -110,10 +112,11 @@ const TransactList = props => {
   };
 
   return (
-    <div className={classes.tableBox} style={{ margin:"0 42px"}}>
-      <div className={classes.tableTitle}>
+    <>
+      <HomeContentTitle title={<div className={classes.tableTitle}>
       我的待办 <span className={classes.totalNumber}>（共{total}条）</span>
-      </div>
+      </div>}/>
+      <div className={classes.tableBox}>
       <Table
         loading={tableLoading}
         columns={columns} 
@@ -122,7 +125,8 @@ const TransactList = props => {
         pagination={paginationProps}
         >
       </Table>
-    </div>
+      </div>
+    </>
   );
 };
 

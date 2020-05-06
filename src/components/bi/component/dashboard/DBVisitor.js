@@ -1,6 +1,7 @@
 import React, {Fragment} from "react";
 import { connect } from "react-redux";
 import ChartContainer from '../elements/chart/ChartContainer';
+import { setVisitorSorts } from '../../redux/action';
 import classes from '../../scss/dashboard/editor.module.scss';
 import ChartFullModal from "../elements/modal/chartFullModal";
 
@@ -57,8 +58,12 @@ class DBVisitor extends React.PureComponent {
         elems = [];
       }
     });
-    
+
     return rows;
+  }
+
+  componentWillUnmount() {
+    this.props.setVisitorSorts(new Map());
   }
 
   render() {
@@ -78,5 +83,8 @@ class DBVisitor extends React.PureComponent {
 
 export default connect(
   store => ({
-    dashboards: store.bi.dashboards}), {}
+    dashboards: store.bi.dashboards}), 
+    {
+      setVisitorSorts
+    }
   )(DBVisitor);

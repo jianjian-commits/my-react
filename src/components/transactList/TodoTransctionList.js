@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Table, message } from "antd";
+import { message } from "antd";
+import { Table } from "../shared/customWidget";
 import request from '../../utils/request'
 import classes from "./transactList.module.scss";
 import FormDataDetail from "../formBuilder/component/formData/components/formDataDetail"
@@ -115,16 +116,18 @@ const TodoTransactList = props => {
 
   return (
     props.enterApprovalDetail === false ?(
-      <div className={classes.tableBox}>
+      <div className={classes.transactListContainer}>
       <div className={classes.tableTitle}>
       我的待办 <span className={classes.totalNumber}>（共{total}条）</span>
       </div>
-      <Table
-        loading={tableLoading} 
-        columns={columns} 
-        dataSource={transactList} 
-        pagination={paginationProps}
-        ></Table>
+      <div className={classes.tableBox}>
+        <Table
+          loading={tableLoading} 
+          columns={columns} 
+          dataSource={transactList} 
+          pagination={paginationProps}
+          ></Table>
+      </div>
     </div>
     ):(
       <FormDataDetail

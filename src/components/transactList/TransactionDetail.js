@@ -4,13 +4,13 @@ import {
   Row,
   Col,
   List,
-  Table,
   Tabs,
   Modal,
   Icon,
   Input,
   message
 } from "antd";
+import { Table } from "../shared/customWidget";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../../utils/request";
 import { EditIcon, DeleteIcon } from "./svgIcon/index";

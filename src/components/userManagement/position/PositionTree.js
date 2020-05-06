@@ -6,7 +6,7 @@ import {
   PromptIcon,
   CompanyIcon,
   CreateIcon,
-  RemoveIcon
+  RemoveIcon,
 } from "../../../assets/icons/company";
 // import { getCurrentCompany } from "../../../store/loginReducer";
 import { EditIcon } from "../../../assets/icons";
@@ -14,21 +14,29 @@ import { catchError } from "../../../utils";
 import request from "../../../utils/request";
 import ModalCreation from "../../profileManagement/modalCreate/ModalCreation";
 import PositionDetail from "./PositionDetail";
+import { HomeContentTitle } from "../../shared";
+import Authenticate from "../../shared/Authenticate";
+import { POSITION_MANAGEMENT_DELETE, POSITION_MANAGEMENT_NEW } from "../../../auth";
+
 const { TreeNode } = Tree;
 
 const Header = () => {
   return (
-    <p>
-      <span>职位</span>
-      <Tooltip
-        placement="right"
-        title="帮助您按照团队组织架构定义成员的层级关系！"
-        trigger="click"
-        overlayClassName="header-tooltip"
-      >
-        <PromptIcon />
-      </Tooltip>
-    </p>
+    <HomeContentTitle
+      title={
+        <h3>
+          职位
+          <Tooltip
+            placement="right"
+            title="帮助您按照团队组织架构定义成员的层级关系！"
+            trigger="click"
+            overlayClassName="header-tooltip"
+          >
+            <span>&nbsp;&nbsp;<PromptIcon /></span>
+          </Tooltip>
+        </h3>
+      }
+    />
   );
 };
 
@@ -38,7 +46,7 @@ class PositionTree extends Component {
     this.state = {
       treeData: [],
       selectedPosition: null,
-      isTop: false
+      isTop: false,
     };
     this.handleCreate = this.handleCreate.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -52,18 +60,18 @@ class PositionTree extends Component {
         dataShare: false,
         description: data.description,
         name: data.name,
-        superior: this.state.selectedPosition.id
+        superior: this.state.selectedPosition.id,
       };
       const res = await request("/position", {
         method: "POST",
-        data: positionCreateBO
+        data: positionCreateBO,
       });
       if (res && res.status === "SUCCESS") {
         message.success("新建职位成功!");
         this.handleCancel();
         this.setState({
           detailOpened: true,
-          selectedPosition: res.data
+          selectedPosition: res.data,
         });
         // this.getPositionTree();
       } else {
@@ -79,7 +87,7 @@ class PositionTree extends Component {
     this.setState({
       positionModalOpen: false,
       selectedPosition: null,
-      detailOpened: false
+      detailOpened: false,
     });
   }
 
@@ -87,7 +95,7 @@ class PositionTree extends Component {
   async onDelect(targetId) {
     try {
       const res = await request(`/position/${targetId}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
       if (res && res.status === "SUCCESS") {
         message.success("删除职位成功!");
@@ -121,8 +129,8 @@ class PositionTree extends Component {
             value: this.props.companyName || companyData.companyName,
             id: this.props.id || companyData.id,
             code: "COMPANY",
-            children: [...res.data]
-          }
+            children: [...res.data],
+          },
         ];
         this.setState({ treeData });
       } else {
@@ -136,7 +144,7 @@ class PositionTree extends Component {
   operateTree(command) {
     const expandedKeys = [];
     function filterArray(arr) {
-      return arr.map(i => {
+      return arr.map((i) => {
         expandedKeys.push(i.id);
         if (i.children.length > 0) {
           filterArray(i.children);
@@ -151,29 +159,41 @@ class PositionTree extends Component {
       filterArray([]);
     }
     this.setState({
-      expandedKeys
+      expandedKeys,
     });
   }
 
-  renderTreeNodes = data =>
-    data.map(item => {
+  renderTreeNodes = (data) =>
+    data.map((item) => {
       let title;
       title = (
         <div className={classes["title-wrap"]} key={item.id}>
           {item.value}
           {item.code !== "COMPANY" && (
             <CreateIcon
-              onClick={() => this.setState({ positionModalOpen: true, selectedPosition: item })}
+              onClick={() =>
+                this.setState({
+                  positionModalOpen: true,
+                  selectedPosition: item,
+                })
+              }
             />
           )}
           {item.code !== "COMPANY" && (
+            <Authenticate auth={POSITION_MANAGEMENT_NEW}>
             <EditIcon
               onClick={() => {
-                this.setState({ detailOpened: true, selectedPosition: item, isTop: !item.superiorId });
+                this.setState({
+                  detailOpened: true,
+                  selectedPosition: item,
+                  isTop: !item.superiorId,
+                });
               }}
             />
+            </Authenticate>
           )}
           {!item.code && (
+            <Authenticate auth={POSITION_MANAGEMENT_DELETE}>
             <Popconfirm
               title="确认删除该职位？"
               onConfirm={() => this.onDelect(item.id)}
@@ -183,6 +203,7 @@ class PositionTree extends Component {
             >
               <RemoveIcon />
             </Popconfirm>
+            </Authenticate>
           )}
         </div>
       );
@@ -213,38 +234,41 @@ class PositionTree extends Component {
             isTop={isTop}
           />
         ) : (
-            <>
-              <Header />
-              <div className={classes.tree}>
-                <div className={classes.button}>
-                  <Button type="link" onClick={() => this.operateTree("unfold")}>
-                    全部展开
+          <>
+            <Header />
+            <div className={classes.tree}>
+              <div className={classes.button}>
+                <Button type="link" onClick={() => this.operateTree("unfold")}>
+                  全部展开
                 </Button>
-                  |
-                <Button type="link" onClick={() => this.operateTree("collapse")}>
-                    全部折叠
-                </Button>
-                </div>
-                <Tree
-                  showIcon
-                  showLine
-                  onExpand={expandedKeys => {
-                    this.setState({
-                      expandedKeys: expandedKeys
-                    });
-                  }}
-                  className="hide-file-icon"
-                  expandedKeys={this.state.expandedKeys}
+                |
+                <Button
+                  type="link"
+                  onClick={() => this.operateTree("collapse")}
                 >
-                  {this.renderTreeNodes(this.state.treeData)}
-                </Tree>
+                  全部折叠
+                </Button>
               </div>
-            </>
-          )}
+              <Tree
+                showIcon
+                showLine
+                onExpand={(expandedKeys) => {
+                  this.setState({
+                    expandedKeys: expandedKeys,
+                  });
+                }}
+                className="hide-file-icon"
+                expandedKeys={this.state.expandedKeys}
+              >
+                {this.renderTreeNodes(this.state.treeData)}
+              </Tree>
+            </div>
+          </>
+        )}
         <ModalCreation
           title={"新建职位"}
           visible={this.state.positionModalOpen}
-          onOk={data => this.handleCreate(data)}
+          onOk={(data) => this.handleCreate(data)}
           onCancel={this.handleCancel}
         />
       </div>
@@ -255,9 +279,9 @@ class PositionTree extends Component {
 export default connect(
   ({ login }) => ({
     id: login.currentCompany && login.currentCompany.id,
-    companyName: login.currentCompany && login.currentCompany.companyName
+    companyName: login.currentCompany && login.currentCompany.companyName,
   }),
   {
-    // getCurrentCompany 
+    // getCurrentCompany
   }
 )(PositionTree);

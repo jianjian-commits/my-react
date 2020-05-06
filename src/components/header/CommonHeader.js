@@ -23,14 +23,14 @@ const homeHeaderStyle = {
   padding: "0 20px",
   lineHeight: "40px"
 };
-const logoStyle = {
-  // background: "rgba(255, 255, 255, 0.4)",
-  height: "100%",
-  marginRight: "10px",
-  color: "#333",
-  lineHeight: "37px",
-  textAlign: "center"
-};
+// const logoStyle = {
+//   // background: "rgba(255, 255, 255, 0.4)",
+//   height: "100%",
+//   marginRight: "10px",
+//   color: "#333",
+//   lineHeight: "37px",
+//   textAlign: "center"
+// };
 
 const getNavigationList = navs => {
   if (!navs || !navs.length) return null;
@@ -112,9 +112,9 @@ export default connect(
     <div className={classes.hideHeader}>
       <Header className={classes.homeHeader} style={homeHeaderStyle}>
         <div className={classes.wrapper}>
-          <div className={classes.logo}>
-            <div style={logoStyle}>{/* logo */}</div>
-          </div>
+          {/* <div className={classes.logo}>
+            <div style={logoStyle}>logo</div>
+          </div> */}
           <div className={classes.title}>{getTitle(props.title)}</div>
           <div className={classes.nav}>
             {getNavigationList(props.navigationList)}

@@ -2,26 +2,28 @@ import React from "react";
 import { Route, Switch, Redirect, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "antd";
-import { ConnectedRouter, routerActions } from "connected-react-router";
+import { ConnectedRouter } from "connected-react-router";
 import { main, appPaths } from "../routers";
 import { history } from "../store";
 import { PrivateRoute, PublicRoute } from "./shared";
 import ErrorPage from "../pages/Error";
+import { FullLoading } from "../pages/Loading";
 import Login from "./login";
 import ForgetPassword from "./login/ForgetPassword";
 import InviteUser from "./login/InviteUser";
 import { setDebug } from "../store/debugReducer";
-import { signOut } from "../store/loginReducer";
+import { signOut, initAllDetail } from "../store/loginReducer";
 
 import ErrorBoundary from "./shared/ErrorBoundary";
 
-export const getRoutes = routes =>
-  (routes || []).map(route =>
+export const getRoutes = (routes) =>
+  (routes || []).map((route) =>
     route.content ? (
       getRoutes(route.content)
     ) : (
       <PrivateRoute
-        auth={routerActions.auth}
+        auth={route.auth}
+        authOptions={route.authOptions}
         path={route.path}
         component={route.component}
         key={route.key}
@@ -34,11 +36,11 @@ const AppInsideRouter = () => {
   const { appId } = useParams();
 
   const authOptions = {
-    type: "redirect"
+    type: "redirect",
   };
   return (
     <Switch>
-      {appPaths.map(p => (
+      {appPaths.map((p) => (
         <PrivateRoute
           auth={p.auth && p.auth(appId)}
           authOptions={authOptions}
@@ -53,10 +55,13 @@ const AppInsideRouter = () => {
     </Switch>
   );
 };
-
-const App = ({ debug, setDebug, signOut }) => (
-  <ErrorBoundary error={<ErrorPage />}>
-    <ConnectedRouter history={history}>
+class App extends React.Component {
+  componentDidMount() {
+    const INIT = true;
+    this.props.initAllDetail(INIT);
+  }
+  renderRoutes() {
+    return (
       <Switch>
         <PublicRoute
           exact
@@ -69,27 +74,47 @@ const App = ({ debug, setDebug, signOut }) => (
         <PrivateRoute path="/app/:appId" component={AppInsideRouter} />
         <Route render={() => <Redirect to="/app/list" />} />
       </Switch>
-      <Button
-        style={{ position: "fixed", bottom: 0, left: 0 }}
-        type={debug ? "danger" : "normal"}
-        onClick={() => setDebug(!debug)}
-      >
-        {debug ? "贤者模式" : "找bug模式"}
-      </Button>
-      <Button
-        style={{ position: "fixed", bottom: 0, left: "100px" }}
-        onClick={() => signOut()}
-      >
-        临时退出
-      </Button>
-    </ConnectedRouter>
-  </ErrorBoundary>
-);
+    );
+  }
+  renderTemporary() {
+    const { debug, setDebug, signOut } = this.props;
+    return (
+      <>
+        <Button
+          style={{ position: "fixed", bottom: 0, left: 0 }}
+          type={debug ? "danger" : "normal"}
+          onClick={() => setDebug(!debug)}
+        >
+          {debug ? "贤者模式" : "找bug模式"}
+        </Button>
+        <Button
+          style={{ position: "fixed", bottom: 0, left: "100px" }}
+          onClick={() => signOut()}
+        >
+          临时退出
+        </Button>
+      </>
+    );
+  }
+  render() {
+    const { appInit } = this.props;
+    if (!appInit) return <FullLoading />;
+    return (
+      <ErrorBoundary error={<ErrorPage />}>
+        <ConnectedRouter history={history}>
+          {this.renderRoutes()}
+          {this.renderTemporary()}
+        </ConnectedRouter>
+      </ErrorBoundary>
+    );
+  }
+}
 
 export default connect(
   ({ login, debug }) => ({
     isAuthenticated: login.isAuthenticated,
-    debug: debug.isOpen
+    appInit: login.appInit,
+    debug: debug.isOpen,
   }),
-  { setDebug, signOut }
+  { setDebug, signOut, initAllDetail }
 )(App);

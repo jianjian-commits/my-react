@@ -17,7 +17,7 @@ const OperateBox = (props) => {
           </svg>
           <span>删除</span>
         </div>,
-      content: '确定要删除 ' + (props.type === "FORM" ? "表单" : "仪表盘") + '?',
+      content: `确定要删除 ${props.formname}` + (props.type === "FORM" ? "表单" : "仪表盘") + '?',
       cancelText: "取消",
       okText: "确定",
       className: "operate-box-delete-form-modal",

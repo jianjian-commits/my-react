@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Input, Select, Button } from "antd";
+import { Row, Col, Input, Select, Button, Card } from "antd";
 
 import classes from "./team.module.scss";
 
@@ -25,7 +25,7 @@ const Filter = props => {
 
   // 过滤
   return (
-    <div>
+    <Card style={{ borderBottom: "none"}} bodyStyle={{ padding: 12 }}>
       <Row type='flex'>
         <Col className={classes.filterRow}>
           <span>用户信息</span>
@@ -62,7 +62,7 @@ const Filter = props => {
           <Button className={classes.submitBtn} onClick={filterSubmit}>筛选</Button>
         </Col>
       </Row>
-    </div>
+    </Card>
   );
 };
 

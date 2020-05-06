@@ -86,7 +86,12 @@ class EditFormData extends Component {
     } = this.props;
     mobile.is && mountClassNameOnRoot(mobile.className);
           const { formId, submissionId } = this.state;
-          axios.get(config.apiUrl + `/form/${formId}`).then(res => {
+          axios.get(config.apiUrl + `/form/${formId}`,
+          {
+            headers: {
+              "isDataPage": true,
+            }
+          }).then(res => {
             let currentForm = res.data;
             const pureFormComponents = currentForm.components.filter(item => {
               return item.type !== "Button";
@@ -179,6 +184,9 @@ class EditFormData extends Component {
       }
       if (component.type === "NumberInput" && values.hasOwnProperty(component.key)) {
         values[component.key] = Number(values[component.key])
+      }
+      if(Number.isNaN(values[component.key])){
+        delete values[component.key];
       }
     });
     return values;
@@ -411,11 +419,6 @@ class EditFormData extends Component {
                 let dateString = moment(date).format();
                 data[k].data = dateString.substring(dateString.indexOf("+"), -1);
               }
-            }else{
-              const dateTypes = ["PureDate", "PureTime", "DateInput"];
-              if (dateTypes.includes(type) && data[k].data) {
-                  data[k].data = coverTimeUtils.utcDate(data[k].data, type);
-              }
             }
           }
         });
@@ -428,6 +431,7 @@ class EditFormData extends Component {
     const isMobile = this.props.mobile.is;
 
     if (!this.state.isSubmitted) {
+
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.state.currentForm.components;
         let customDataArray = [];
@@ -469,7 +473,7 @@ class EditFormData extends Component {
             }, 1000);
           })
           .catch(error => {
-             console.log(err);
+             console.log(error);
              if (error.response && error.response.data.code === 9998) {
              this._setErrorResponseData(error.response.data);
             }
@@ -1053,14 +1057,14 @@ class EditFormData extends Component {
                     this.props.actionFun(skipToSubmissionDataFlag);
                   }}
                  >记录列表</Breadcrumb.Item>
-                <Breadcrumb.Item className="submitRecord">提交记录</Breadcrumb.Item>
+                <Breadcrumb.Item className="submitRecord">编辑记录</Breadcrumb.Item>
               </Breadcrumb>
             </div>
           )}
           <div className={"formBuilder-Submission"}>
             <div className="Content">
               <div className="submission-title">{currentForm.name}</div>
-              {currentForm.formInfo != "" ? (
+              {currentForm.formInfo != void 0 && currentForm.formInfo !== "" ? (
                 <div
                   className="submission-formInfo"
                   id="submission-title"

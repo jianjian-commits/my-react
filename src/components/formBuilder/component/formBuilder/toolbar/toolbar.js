@@ -156,7 +156,7 @@ export const advancedComponentArray = [
     icon: ['form', 17],
   }),
   _buildDefaultProp({
-    label: "时间/日期",
+    label: "时间日期",
     tooltip: "",
     type: "DateInput",
     defaultValue: "",

@@ -79,6 +79,7 @@ const AppSetting = props => {
     // 初始化是否更改列表的顺序
 
     setIsChangeSequence( false )
+    // eslint-disable-next-line
   }, [props, appId, isDeleteOne,isChangeSequence]);
 
   const currentApp =

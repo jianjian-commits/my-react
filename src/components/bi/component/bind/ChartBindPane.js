@@ -163,7 +163,10 @@ class BindPane extends PureComponent {
 
   changeModalVisible = (visible) => {
     this.setState({visible});
-    this.setFilterItem({});
+
+    if(!visible) {
+      this.setFilterItem({});
+    }
   }
 
   setFilterItem = (filterItem) => {

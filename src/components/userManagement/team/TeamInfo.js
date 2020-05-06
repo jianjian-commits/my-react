@@ -6,6 +6,7 @@ import classes from "./team.module.scss";
 import { getcurrentCompany, getAllCompany } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
+import { HomeContentTitle } from "../../shared/";
 import { catchError } from "../../../utils";
 import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 
@@ -25,7 +26,7 @@ const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
     setDataStr(e.target.value);
   };
 
-  const content = <div>{dataStr}</div>;
+  const content = <div>{defaultValue}</div>;
 
   return (
     <div className={classes.rowBox}>
@@ -97,17 +98,16 @@ export default connect(
       })
       .catch(err => catchError(err));
   };
-
   return currentCompany ? (
     <div className={classes.container}>
-      <div className={classes.title}>公司信息</div>
+      <HomeContentTitle title="公司信息"></HomeContentTitle>
       <div className={classes.listBox}>
         <List itemLayout="horizontal" size="small">
           <List.Item>
             <EditInput
               defaultValue={currentCompany.companyName}
               onClickSubmit={onClickSubmit}
-              lableKey="name"
+              lableKey="companyName"
               lable="公司名称"
             />
           </List.Item>
@@ -115,7 +115,7 @@ export default connect(
             <EditInput
               defaultValue={currentCompany.companyDescription}
               onClickSubmit={onClickSubmit}
-              lableKey="description"
+              lableKey="companyDescription"
               lable="公司介绍"
             />
           </List.Item>
@@ -138,7 +138,7 @@ export default connect(
                   创建时间
                 </Col>
                 <Col span={16} className={classes.text}>
-                  {new Date(currentCompany.createdDate).toLocaleString()}
+                  {currentCompany.createdDate ? new Date(currentCompany.createdDate).toLocaleString() : null}
                 </Col>
               </Row>
             </div>

@@ -9,7 +9,7 @@ import {
   // SettingModule
 } from "./DetailModule";
 import { catchError } from "../../utils";
-import { Title } from "../shared";
+import { HomeContentTitle } from "../shared";
 
 const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
   const navigationList = [
@@ -18,8 +18,7 @@ const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
   ];
   return (
     <>
-      <Title navs={navigationList} />
-      {!disabled && (
+      <HomeContentTitle title="分组" navs={navigationList} btns={!disabled && (
         <>
           <Button
             type="primary"
@@ -38,7 +37,8 @@ const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
             取消
           </Button>
         </>
-      )}
+      )}/>
+      
     </>
   );
 };

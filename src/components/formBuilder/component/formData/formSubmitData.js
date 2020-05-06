@@ -486,9 +486,9 @@ class FormSubmitData extends PureComponent {
           return <></>;
         }
         return this._renderSignatureData(submitData);
-      case "founder":
-      case "created":
-      case "modified":
+      case "_founder":
+      case "_created":
+      case "_modified":
         if (submitData == void 0) {
           return <></>;
         }
@@ -693,7 +693,7 @@ class FormSubmitData extends PureComponent {
     const controlCol = [
       {
         title: "操作",
-        dataIndex: "id",
+        dataIndex: "_id",
         key: "control",
         width: 200,
         fixed: "right",
@@ -702,8 +702,8 @@ class FormSubmitData extends PureComponent {
             <ControlBtn
               appId={this.props.appId}
               formId={this.state.formId}
-              submissionId={record.id}
-              userId={record.userId}
+              submissionId={ record._id}
+              userId={record._userId}
               data={record}
               handleDeleteSubmisson={this.handleDeleteSubmisson}
               showModal={this.showModal}
@@ -819,32 +819,32 @@ class FormSubmitData extends PureComponent {
       : [];
     columns.push({
       title: "创建人",
-      dataIndex: "founder",
-      key: "founder",
+      dataIndex: "_founder",
+      key: "_founder",
       width: 210,
-      sorter: (a, b) => new Date(a.created) - new Date(b.created),
-      sortOrder: sortedInfo.columnKey === "founder" && sortedInfo.order,
+      sorter: (a, b) => new Date(a._created) - new Date(b._created),
+      sortOrder: sortedInfo.columnKey === "_founder" && sortedInfo.order,
     });
     columns.push({
       title: "创建时间",
-      dataIndex: "created",
-      key: "created",
+      dataIndex: "_created",
+      key: "_created",
       width: 210,
-      sorter: (a, b) => new Date(a.created) - new Date(b.created),
-      sortOrder: sortedInfo.columnKey === "created" && sortedInfo.order,
+      sorter: (a, b) => new Date(a._created) - new Date(b._created),
+      sortOrder: sortedInfo.columnKey === "_created" && sortedInfo.order,
       render: (record) => {
-        return this._renderComponentDataByType({ type: "created" }, record);
+        return this._renderComponentDataByType({ type: "_created" }, record);
       },
     });
     columns.push({
       title: "修改时间",
-      dataIndex: "modified",
-      key: "modified",
+      dataIndex: "_modified",
+      key: "_modified",
       width: 210,
-      sorter: (a, b) => new Date(a.created) - new Date(b.created),
-      sortOrder: sortedInfo.columnKey === "modified" && sortedInfo.order,
+      sorter: (a, b) => new Date(a._modified) - new Date(b._modified),
+      sortOrder: sortedInfo.columnKey === "_modified" && sortedInfo.order,
       render: (record) => {
-        return this._renderComponentDataByType({ type: "modified" }, record);
+        return this._renderComponentDataByType({ type: "_modified" }, record);
       },
     });
 
@@ -857,11 +857,11 @@ class FormSubmitData extends PureComponent {
         ? dataObj.extraProp["user"]
         : { name: "", id: "" };
       let obj = {
-        id: dataObj.id,
-        created: dataObj.created,
-        modified: dataObj.modified,
-        founder: name,
-        userId: id,
+        _id: dataObj.id,
+        _created: dataObj.created,
+        _modified: dataObj.modified,
+        _founder: name,
+        _userId: id,
       };
       let dataItem = dataObj.data;
       for (let n in dataItem) {
@@ -1072,7 +1072,7 @@ class FormSubmitData extends PureComponent {
                   key={Math.random()}
                   loading={this.state.isLoading}
                   rowClassName={"tableRow"}
-                  rowKey={(record) => record.id}
+                  rowKey={(record) => record._id}
                   columns={columns}
                   dataSource={formDataShowArray}
                   pagination={paginationProps}

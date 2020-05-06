@@ -1,4 +1,4 @@
-import { textCheckType, numberCheckType, logicCheckType } from "../../utils/checkTypeList";
+import { textCheckType, numberCheckType, logicCheckType, dateCheckType } from "../../utils/checkTypeList";
 
 export const ruleList = [
   {
@@ -12,5 +12,8 @@ export const ruleList = [
   {
     ruleType: "数字类",
     ruleTypeList: [...numberCheckType]
+  },{
+    ruleType: "时间日期类",
+    ruleTypeList: [...dateCheckType]
   }
 ];

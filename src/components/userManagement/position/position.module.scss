@@ -1,5 +1,4 @@
 .wrapper {
-  padding: 29px 21px;
   > p {
     padding-top: 4px;
     display: flex;
@@ -37,8 +36,8 @@
 }
 
 .tree {
-  height: calc(100vh - 200px);
-  margin-top: 26px;
+  min-height: calc(100vh - 200px);
+  margin-top: 10px;
   background-color: #fff;
   width: 100%;
   ul {

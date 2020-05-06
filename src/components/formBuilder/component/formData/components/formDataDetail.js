@@ -73,20 +73,24 @@ const ApprovalStatus = (props) => {
 const EditApprovalButton = (props) => {
   // 权限相关
   const { appId } = useParams();
-  const { permissions, teamId, id: formId, userDetail } = props;
+  const { permissions, teamId, id: formId, userDetail ,extraProp} = props;
+  let  user = null;
+  if(extraProp) {
+    user = extraProp.user;
+  }
   const idEditAuth = editFormDataAuth(
     permissions,
     teamId,
     appId,
     formId,
-    userDetail.id
+    extraProp ? extraProp.user.id : ""
   );
   const isDeleteAuth = deleteFormDataAuth(
     permissions,
     teamId,
     appId,
     formId,
-    userDetail.id
+    extraProp ? extraProp.user.id : ""
   );
   // 删除和编辑按钮
   // 根据页面详情页的权限展示

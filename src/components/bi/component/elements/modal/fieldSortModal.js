@@ -4,12 +4,14 @@ import classes from "../../../scss/modal/fieldSortModal.module.scss";
 import request from "../../../utils/request";
 import { ChartType,SortType} from "../Constant";
 import {connect} from "react-redux";
-import { setDashboards} from '../../../redux/action';
+import { setDashboards, setVisitorSorts} from '../../../redux/action';
 function FieldSortModal(props) {
-  const [chartBindAttr, setChartBindAttr] = useState({});
+  const [bindData, setBindData] = useState({});
   const [dimensions, setDimensions] = useState([]);
   const [indexes, setIndexes] = useState([]);
-  const { chartId, chartName } = props;
+  const [sortArr, setSortArr] = useState([]);
+  const { chartId, chartName, setDashboards, handleCancel, visitorSorts } = props;
+
   useEffect(() => {
     request(`/bi/charts/${chartId}`).then((res) => {
       if (res && res.msg === "success") {
@@ -17,7 +19,7 @@ function FieldSortModal(props) {
         const formId = data.formId;
         const dimensions = data.dimensions;
         const indexes = data.indexes;
-        const newChartBindAttr = {
+        const bindDataObj = {
           chartId,
           formId,
           dimensions,
@@ -25,22 +27,20 @@ function FieldSortModal(props) {
           conditions: data.conditions,
           chartType: data.type
         };
-        setChartBindAttr(newChartBindAttr);
+        setBindData(bindDataObj);
         setDimensions(dimensions);
         setIndexes(indexes);
+        setSortArr(visitorSorts.get(chartId) ? visitorSorts.get(chartId) :
+          getSort(dimensions, dimensions.length == 1 ? indexes : []));
       }
     });
   }, []);
-  const showFieldArr = () => {
-    if(dimensions.length == 1){
-      return [].concat(dimensions).concat(indexes);
-    }else{
-      return [].concat(dimensions);
-    }
-  }
-  const setFieldSortType = (fieldId,sortType) => {
-    if(dimensions.length == 1){
-      const newDismensions = dimensions.map(dim => {
+
+  const setFieldSortType = (fieldId, sortType) => {
+    let newDismensions = [], newIndexes = [];
+
+    if(dimensions.length == 1) {
+      newDismensions = dimensions.map(dim => {
         if(dim.field.fieldId == fieldId){
           dim.sort.value = sortType;
         }else{
@@ -49,7 +49,7 @@ function FieldSortModal(props) {
         return dim;
       })
       setDimensions(newDismensions);
-      const newIndexes = indexes.map(idx => {
+      newIndexes = indexes.map(idx => {
         if(idx.field.fieldId == fieldId){
           idx.sort.value = sortType;
         }else{
@@ -58,8 +58,9 @@ function FieldSortModal(props) {
         return idx;
       })
       setIndexes(newIndexes);
-    }else{
-      const newDismensions = dimensions.map(dim => {
+    }
+    else {
+      newDismensions = dimensions.map(dim => {
         if(dim.field.fieldId == fieldId){
           dim.sort.value = sortType;
         }
@@ -67,7 +68,11 @@ function FieldSortModal(props) {
       })
       setDimensions(newDismensions);
     }
+
+    const aa = getSort(newDismensions, newDismensions.length == 1 ? newIndexes : []);
+    setSortArr(aa);
   }
+
   const btnGroup = [
     {
       label: SortType.DEFAULT.name,
@@ -85,18 +90,18 @@ function FieldSortModal(props) {
       onClick:  setFieldSortType,
     },
   ];
+
   const setSort = () => {
-    let newChartBindAttr = chartBindAttr;
-    newChartBindAttr["dimensions"] = dimensions;
-    newChartBindAttr["indexes"] = indexes;
+    bindData["dimensions"] = dimensions;
+    bindData["indexes"] = indexes;
     request(`/bi/charts/data`, {
       method: "POST",
-      data: newChartBindAttr
+      data: bindData
     }).then((res) => {
       if(res && res.msg === "success") {
         const dataObj = res.data;
         const data = dataObj.data;
-        const newDashboardsItem = {
+        const dbItem = {
           name:props.dashboards[0].name,
           elements:props.dashboards[0].elements.map(element => {
             if(element.id == chartId){
@@ -106,13 +111,14 @@ function FieldSortModal(props) {
             return element;
           })
         }
-        const newDashboards = [];
-        newDashboards.push(newDashboardsItem);
-        props.setDashboards(newDashboards);
-        props.handleCancel();
+
+        setDashboards([dbItem]);
+        setVisitorSorts(visitorSorts.set(chartId, getSort(dimensions, indexes)));
+        handleCancel();
       }
     })
   }
+
   return (
     <Modal
       title={
@@ -123,21 +129,21 @@ function FieldSortModal(props) {
       footer={null}
       width={500}
       bodyStyle={{ padding: 0 }}
-      handleCancel={props.handleCancel}
+      handleCancel={handleCancel}
       wrapClassName={classes.BIFieldSortModal}
       centered
     >
       <div className={classes.modalContent}>
-        {showFieldArr().map((fieldObj, index) => (
-          <div key={fieldObj.field.fieldId} className={classes.sortBtnBox}>
-            <span className={classes.fieldName}>{fieldObj.field.label}</span>
+        {sortArr.map((each, index) => (
+          <div key={each.id} className={classes.sortBtnBox}>
+            <span className={classes.fieldName}>{each.label}</span>
             <div className={classes.btnGroup}>
               {btnGroup.map((btn) => (
                 <Button
                   key={btn.label}
-                  style={fieldObj.sort.value == btn.value ? 
+                  style={each.sort == btn.value ?
                     {backgroundColor: "#dfecff"} : {}}
-                  onClick={()=>{btn.onClick(fieldObj.field.fieldId,btn.value)}}
+                  onClick={()=>{btn.onClick(each.id, btn.value)}}
                 >
                   {btn.label}
                 </Button>
@@ -147,15 +153,31 @@ function FieldSortModal(props) {
         ))}
       </div>
       <div className={classes.footBtns}>
-        <Button onClick={props.handleCancel}>取消</Button>
+        <Button onClick={handleCancel}>取消</Button>
         <Button onClick={setSort}>排序</Button>
       </div>
     </Modal>
   );
 }
+
+function processField(item) {
+  return {id: item.field.fieldId, label: item.field.alias, sort: item.sort.value}
+}
+
+function getSort(dimensions, indexes) {
+  let sorts = [];
+
+  if(dimensions.length == 1) {
+    sorts = sorts.concat(dimensions.map(processField));
+  }
+
+  return sorts.concat(indexes.map(processField));
+}
+
 export default connect(store => 
   ({
     dashboards: store.bi.dashboards,
+    visitorSorts: store.bi.visitorSorts
   }),{
-    setDashboards
+    setDashboards, setVisitorSorts
   })(FieldSortModal);
