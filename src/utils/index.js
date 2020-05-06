@@ -8,9 +8,10 @@ export const authorityIsValid = ({ debug, permissions, teamId, auth }) => {
 };
 
 export function catchError(err) {
-  message.error(
-    (err.response && err.response.data && err.response.data.msg) || "系统错误"
-  );
+  !!localStorage.getItem("id_token") &&
+    message.error(
+      (err.response && err.response.data && err.response.data.msg) || "系统错误"
+    );
 }
 // 防抖
 export const debounce = (fn, delay) => {
@@ -59,20 +60,19 @@ export class ScheduleCreate {
       this.num = 59;
     }
   }
-  interval(timeOut){
+  interval(timeOut) {
     const int = setInterval(() => {
       this.dispatch(this.fetchCoding(`重新发送（${this.num}s）`));
-      this.interval = this.num
+      this.interval = this.num;
       this.num = this.num - 1;
     }, timeOut);
-    this.int = int
+    this.int = int;
   }
-  clear(timeOut){
+  clear(timeOut) {
     setTimeout(() => {
       clearInterval(this.int);
       this.dispatch(this.fetchCodeEnd());
-      this.num = null
+      this.num = null;
     }, timeOut);
   }
-
 }
