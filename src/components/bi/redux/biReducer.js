@@ -12,7 +12,7 @@ import {
   CHANGE_CHART_INFO,
   CLEAR_BIND,
   SET_DB_MODE,
-  SAVE_CHART_CHANGE,
+  SET_CHART_CHANGE,
   CHANGE_CHART_AVAILABLE,
   RESET_STORE,
   SET_VISITOR_SORTS
@@ -106,7 +106,6 @@ export default function biReducer(state = initState, action) {
       return {
         ...state,
         dataSource: action.dataSource,
-        isChartEdited:true
       };
     }
     case CHANGE_CHART_DATA: {
@@ -143,10 +142,10 @@ export default function biReducer(state = initState, action) {
         isChartEdited:true
       };
     }
-    case SAVE_CHART_CHANGE:{
+    case SET_CHART_CHANGE:{
       return {
         ...state,
-        isChartEdited: false
+        isChartEdited: action.isChartEdited
       }
     }
     case SET_VISITOR_SORTS: {

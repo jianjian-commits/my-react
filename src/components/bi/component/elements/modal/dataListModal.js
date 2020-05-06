@@ -65,10 +65,9 @@ function DataListModal(props) {
             id: choiceFormId,
             name: choiceFormName,
             data: view.formFields
-          });
+          }, true);
           history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
           setDBMode(DBMode.Editing);
-          setElemName(view.name);
         }
       },
       () => {
