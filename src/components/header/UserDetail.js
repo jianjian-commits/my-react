@@ -153,13 +153,8 @@ export default Form.create({ name: "reset-form" })(
             updateUserDetail(
               Object.assign(
                 rest,
-                verificationCode
-                  ? {
-                      code: verificationCode
-                    }
-                  : {},
                 rest.mobilePhone && verificationCode
-                  ? { codeType: "RESETPHONE" }
+                  ? { code: verificationCode, codeType: "RESETPHONE" }
                   : {}
               )
             ).then(() => {
