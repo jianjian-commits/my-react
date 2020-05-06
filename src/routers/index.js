@@ -81,7 +81,10 @@ export const main = [
     key: "userDetail",
     label: "个人信息",
     path: "/userDetail",
-    component: UserDetail
+    component: UserDetail,
+    authOptions: {
+      type: "ignore"
+    },
   }
 ];
 
