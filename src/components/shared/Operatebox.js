@@ -29,43 +29,6 @@ const OperateBox = (props) => {
 
   const showUpdateConfirm = () => {
     setIsVisiable(true);
-    // confirm({
-    //   title: "修改名称",
-    //   icon: <></>,
-    //   content:
-        // <Form
-        // name="formRename"
-        // >
-        //   {/* <Input 
-        //   placeholder="请输入名称"
-        //   defaultValue = { props.formname }
-        //   onChange={ handleSetValue }
-        //   maxLength={20}
-        // /> */}
-        // <Form.Item>
-        //  {
-        //  getFieldDecorator("formName", {
-        //       rules: [{ required: true, message: "请输入表单名字" }],
-        //       validateTrigger: "onBlur",
-        //       // initialValue: props.formname
-        //  })(
-        // <Input 
-        //   placeholder="请输入名称"
-        //   onChange = { handleSetValue  }
-        //   maxLength={20}
-        // />)
-        // }
-        // </Form.Item>
-        // </Form>
-    //   ,
-    //   cancelText: "取消",
-    //   okText: "确定",
-    //   className: "operate-box-update-form-modal",
-    //   onOk() {
-    //     handleRename(props.id, props.type);
-    //   }
-    // });
-
   }
 
   const handleCancel = () =>{
