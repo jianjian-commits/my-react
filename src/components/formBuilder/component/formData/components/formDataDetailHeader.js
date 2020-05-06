@@ -204,7 +204,11 @@ const ReSubmitApprovalButton = (props) => {
         method: "GET",
       });
       if (res && res.status === "SUCCESS") {
-        props.resetData();
+        props.setTaskId(res.data.taskId);
+        props.setApproverModalVisible(res.data.shouldSetApprover);
+        if(res.data.shouldSetApprover === false){
+          props.resetData();
+        }
         message.success("提交审批成功");
       } else {
         props.setLoading(false);
@@ -337,6 +341,8 @@ const FormDataDetailHeader = (props) => {
               canResubmit={canResubmit}
               appId={appId}
               taskId={currentTaskId}
+              setTaskId={setTaskId}
+              setApproverModalVisible={setApproverModalVisible}
               {...props}
             />
             <WithdrawApprovalButton
