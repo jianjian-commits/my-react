@@ -9,7 +9,10 @@ import { HomeContentTitle } from "../../shared";
 import request from "../../../utils/request";
 import { catchError } from "../../../utils";
 import Authenticate from "../../shared/Authenticate";
-import { POSITION_MANAGEMENT_UPDATE, POSITION_MANAGEMENT_LIST } from "../../../auth";
+import {
+  POSITION_MANAGEMENT_UPDATE,
+  TEAM_MANAGEMENT_LIST,
+} from "../../../auth";
 import RelateWidage from "./RelateWidage";
 
 export const BaseInfo = ({
@@ -44,13 +47,13 @@ export const BaseInfo = ({
             onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
-            <>
-              <span>{item.value}</span>
-              <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-                <EditIcon onClick={editSwitchHandler} />
-              </Authenticate>
-            </>
-          );
+          <>
+            <span>{item.value}</span>
+            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+              <EditIcon onClick={editSwitchHandler} />
+            </Authenticate>
+          </>
+        );
       case "dataShare":
         return (
           <Radio.Group
@@ -71,14 +74,13 @@ export const BaseInfo = ({
             onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
-            <>
-              <span>{item.value}</span>
-              <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-                <EditIcon onClick={editSwitchHandler} />
-              </Authenticate>
-
-            </>
-          );
+          <>
+            <span>{item.value}</span>
+            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+              <EditIcon onClick={editSwitchHandler} />
+            </Authenticate>
+          </>
+        );
       default:
         return <span>{item.value}</span>;
     }
@@ -204,13 +206,22 @@ const UserRelation = ({
         </div>
         <div style={userButtonStyle}>
           <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-          <Button
-            style={{ border: "1px solid rgb(42, 127, 255)", color: "#2a7fff" }}
-            onClick={() => openHandle(true)}
-          >
-            <CreateIcon />
-            添加关联
-          </Button>
+            <Authenticate
+              // type="custom"
+              auth={TEAM_MANAGEMENT_LIST}
+              options={{ disabled: true }}
+            >
+              <Button
+                style={{
+                  border: "1px solid rgb(42, 127, 255)",
+                  color: "#2a7fff",
+                }}
+                onClick={() => openHandle(true)}
+              >
+                <CreateIcon />
+                添加关联
+              </Button>
+            </Authenticate>
           </Authenticate>
         </div>
       </div>
@@ -375,6 +386,15 @@ class PositionDetail extends Component {
         message.error(res.msg || "获取公司数据出错");
       }
     } catch (e) {
+      if (
+        e.response &&
+        e.response.data &&
+        e.response.data.status &&
+        e.response.data.status === "UNAUTHORIZED"
+      ) {
+        console.log(e.response);
+        return message.warn("添加关联用户需要用户列表权限，请联系管理员");
+      }
       catchError(e);
     }
   };
@@ -427,9 +447,8 @@ class PositionDetail extends Component {
                 style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
               >
                 保存
-            </Button>
+              </Button>
             </Authenticate>
-
           }
         />
         <BaseInfo
