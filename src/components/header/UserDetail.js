@@ -158,7 +158,9 @@ export default Form.create({ name: "reset-form" })(
                       code: verificationCode
                     }
                   : {},
-                rest.mobilePhone ? { codeType: "RESETPHONE" } : {}
+                rest.mobilePhone && verificationCode
+                  ? { codeType: "RESETPHONE" }
+                  : {}
               )
             ).then(() => {
               setModalMeter(initModalMeter);
