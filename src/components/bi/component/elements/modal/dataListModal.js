@@ -1,18 +1,14 @@
 import React from "react";
-import { Modal, Button, Collapse, Icon, message } from "antd";
+import { Modal, Button, Collapse, Icon } from "antd";
 import { useState } from "react";
 import { push } from "connected-react-router";
 import { connect } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
 import request from "../../../utils/request";
 import { DBMode } from "../../dashboard/Constant";
 import classes from "../../../scss/modal/dataModal.module.scss";
 import {
-  setFormData,
   setDataSource,
-  clearBind,
-  setDBMode,
-  setElemName
+  clearBind
 } from "../../../redux/action";
 import ChangeTipModal from "./changeTipModal";
 const { Panel } = Collapse;
@@ -29,59 +25,17 @@ function ModalTitle() {
 function DataListModal(props) {
   const [choiceFormId, setChoiceFormId] = useState("");
   const [choiceFormName, setChoiceFormName] = useState("");
-  const { setVisible, setDataSource, setDBMode, clearBind, setElemName } = props;
-  const history = useHistory();
-  const { appId, dashboardId } = useParams();
+  const { setVisible, setDataSource, clearBind, createChart } = props;
 
   const _getFormChoice = (id, name) => {
     setChoiceFormId(id);
     setChoiceFormName(name);
   };
 
-  const handleCancel = e => {
-    setVisible(false);
-  }
-
-  const handleOK = e => {
-    setVisible(false);
-  }
-
-  const newChart = () => {
-    const res = request(`/bi/charts`, {
-      method: "POST",
-      data: {
-        name: "新建图表",
-        dashboardId,
-        formId: choiceFormId
-      }
-    }).then(
-      res => {
-        if (res && res.msg === "success") {
-          const data = res.data;
-          const view = data.view;
-          const elementId = view.id;
-
-          request(`/bi/forms/${choiceFormId}`).then((res) => {
-            if(res && res.msg === "success") {
-              const data = res.data;
-              setDataSource({id: data.formId, name: data.formName, data: data.items});
-              history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
-              setDBMode(DBMode.Editing);
-              setElemName(view.name);
-            }
-          })          
-        }
-      },
-      () => {
-        message.error("创建图表失败");
-      }
-    );
-  };
-
   const onConfirm = () => {
     if (props.type == "create") {
-      newChart();
-      handleOK();
+      createChart(choiceFormId);
+      setVisible(false);
       clearBind();
     } else {
       setChangeVisible(true);
@@ -95,11 +49,11 @@ function DataListModal(props) {
       setChangeVisible(true);
     },
     handleCancel: e => {
-      handleOK();
+      setVisible(false);
       setChangeVisible(false);
     },
     handleOK: e => {
-      handleOK();
+      setVisible(false);
       clearBind();
       setChangeVisible(false);
 
@@ -107,7 +61,6 @@ function DataListModal(props) {
         if(res && res.msg === "success") {
           const data = res.data;
           setDataSource({id: data.formId, name: data.formName, data: data.items});
-          setDBMode(DBMode.Editing);
         }
       })
     }
@@ -125,8 +78,8 @@ function DataListModal(props) {
       width={500}
       bodyStyle={{ padding: 0 }}
       wrapClassName={classes.BIDataModal}
-      handleCancel={handleCancel}
-      handleOK={handleOK}
+      handleCancel={() => {setVisible(false);}}
+      handleOK={() => {setVisible(false);}}
     >
       <div className={classes.formChoiceModalContainer}>
         <div className={classes.formGroups}>
@@ -160,7 +113,7 @@ function DataListModal(props) {
           </Collapse>
         </div>
         <div className={classes.footBtnGroups}>
-          <Button onClick={handleCancel}>取消</Button>
+          <Button onClick={() => {setVisible(false);}}>取消</Button>
           <Button onClick={onConfirm}>确定</Button>
         </div>
       </div>
@@ -174,10 +127,7 @@ export default connect(
   }),
   {
     push,
-    setFormData,
     setDataSource,
-    clearBind,
-    setDBMode,
-    setElemName
+    clearBind
   }
 )(DataListModal);
