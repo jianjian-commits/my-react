@@ -66,7 +66,10 @@ export const main = [
     key: "backlog",
     label: "待办事项",
     path: "/backlog",
-    component: Backlog
+    component: Backlog,
+    authOptions: {
+      type: "ignore"
+    },
   },
   {
     key: "company",
