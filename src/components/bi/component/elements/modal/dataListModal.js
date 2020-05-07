@@ -29,7 +29,7 @@ function ModalTitle() {
 function DataListModal(props) {
   const [choiceFormId, setChoiceFormId] = useState("");
   const [choiceFormName, setChoiceFormName] = useState("");
-  const { setVisible, setElemName, setDataSource, setDBMode, clearBind } = props;
+  const { setVisible, setDataSource, setDBMode, clearBind, setElemName } = props;
   const history = useHistory();
   const { appId, dashboardId } = useParams();
 
@@ -61,13 +61,15 @@ function DataListModal(props) {
           const view = data.view;
           const elementId = view.id;
 
-          setDataSource({
-            id: choiceFormId,
-            name: choiceFormName,
-            data: view.formFields
-          }, true);
-          history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
-          setDBMode(DBMode.Editing);
+          request(`/bi/forms/${choiceFormId}`).then((res) => {
+            if(res && res.msg === "success") {
+              const data = res.data;
+              setDataSource({id: data.formId, name: data.formName, data: data.items});
+              history.push(`/app/${appId}/setting/bi/${dashboardId}/${elementId}`);
+              setDBMode(DBMode.Editing);
+              setElemName(view.name);
+            }
+          })          
         }
       },
       () => {

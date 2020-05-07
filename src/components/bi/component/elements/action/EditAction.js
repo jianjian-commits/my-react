@@ -1,7 +1,7 @@
 import request from '../../../utils/request';
 import ChartInfo from '../data/ChartInfo';
 import { Types } from '../../bind/Types';
-import { getUUID } from '../../../utils/Util';
+import { getUUID, deepClone } from '../../../utils/Util';
 import { DBMode } from '../../dashboard/Constant';
 
 export default class EditAction {
@@ -17,6 +17,7 @@ export default class EditAction {
     request(`/bi/charts/${this.chartId}`).then((res) => {
       if(res && res.msg === "success") {
         const data = res.data.view;
+        const oldElement = deepClone(data);
         const formId = data.formId;
         const chartInfo = data.chartTypeProp;
         let bindDataArr = [];
@@ -25,9 +26,9 @@ export default class EditAction {
         if(dimensions && dimensions.length > 0) {
           const dimArr = dimensions.map((each, idx) => {
             let field = each.field;
-            field["currentGroup"] =each.currentGroup;
-            field["groups"] =each.groups;
-            field["sort"] =each.sort;
+            field["currentGroup"] = each.currentGroup;
+            field["groups"] = each.groups;
+            field["sort"] = each.sort;
             field["bindType"] = Types.DIMENSION;
             field["idx"] = getUUID();
             return field;
@@ -69,6 +70,7 @@ export default class EditAction {
         this.options.setElemType(this.elemType);
         this.options.setDBMode(DBMode.Editing);
         this.options.setElemName(data.name);
+        this.options.setOldElement(oldElement);
         request(`/bi/charts/data`, {
           method: "POST",
           data: {
