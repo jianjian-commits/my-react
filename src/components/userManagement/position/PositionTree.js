@@ -16,7 +16,7 @@ import ModalCreation from "../../profileManagement/modalCreate/ModalCreation";
 import PositionDetail from "./PositionDetail";
 import { HomeContentTitle } from "../../shared";
 import Authenticate from "../../shared/Authenticate";
-import { POSITION_MANAGEMENT_DELETE, POSITION_MANAGEMENT_NEW } from "../../../auth";
+import { POSITION_MANAGEMENT_DELETE, POSITION_MANAGEMENT_NEW, POSITION_MANAGEMENT_UPDATE } from "../../../auth";
 
 const { TreeNode } = Tree;
 
@@ -170,7 +170,8 @@ class PositionTree extends Component {
         <div className={classes["title-wrap"]} key={item.id}>
           {item.value}
           {item.code !== "COMPANY" && (
-            <CreateIcon
+            <Authenticate auth={POSITION_MANAGEMENT_NEW}>
+             <CreateIcon
               onClick={() =>
                 this.setState({
                   positionModalOpen: true,
@@ -178,9 +179,11 @@ class PositionTree extends Component {
                 })
               }
             />
+            </Authenticate>
+           
           )}
           {item.code !== "COMPANY" && (
-            <Authenticate auth={POSITION_MANAGEMENT_NEW}>
+            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
             <EditIcon
               onClick={() => {
                 this.setState({

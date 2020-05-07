@@ -9,6 +9,7 @@ import Authenticate from "../../shared/Authenticate";
 import { HomeContentTitle } from "../../shared/";
 import { catchError } from "../../../utils";
 import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
+import moment from "moment";
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   const [isRedact, setIsRedact] = useState(false);
@@ -138,7 +139,11 @@ export default connect(
                   创建时间
                 </Col>
                 <Col span={16} className={classes.text}>
-                  {currentCompany.createdDate ? new Date(currentCompany.createdDate).toLocaleString() : null}
+                  {currentCompany.createdDate
+                    ? moment(parseInt(currentCompany.createdDate)).format(
+                        "YYYY-MM-DD kk:mm:ss"
+                      )
+                    : null}
                 </Col>
               </Row>
             </div>
@@ -147,6 +152,6 @@ export default connect(
       </div>
     </div>
   ) : (
-      <Spin size="large" />
-    );
+    <Spin size="large" />
+  );
 });
