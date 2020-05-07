@@ -230,11 +230,11 @@ export const getOption = (chartData, chartInfo, elemType) => {
   }
 
   switch(elemType){
-    case ChartType.HISTOGRAM: 
+    case ChartType.HISTOGRAM:
       return getBarChartOption(chartData, chartInfo);
     case ChartType.INDEX_DIAGRAM: 
       return getIndexChartOption(chartData, chartInfo); 
-    case ChartType.AREA_CHART: 
+    case ChartType.PIE:
       return getPieChartOption(chartData, chartInfo);
     default:
       break;
@@ -259,6 +259,21 @@ export const getChartAvailableList = (bindDataArr) => {
   })
 
   return dimCount > 1 || meaCount > 1 ? BarType : AllType;
+}
+
+export const getChartObj = (id, formId, bindDataArr, name, chartTypeProp, type) => {
+  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+
+  return {
+    chartTypeProp,
+    conditions,
+    dimensions,
+    indexes,
+    formId,
+    name,
+    type,
+    id
+  }
 }
 
 /**
@@ -291,6 +306,9 @@ export const getChartAttrs = (bindDataArr) => {
     delete field.bindType;
     delete field.currentGroup;
     delete field.dataFormat;
+    delete field.idx;
+    delete field.sort;
+    delete field.groups;
    
     switch(each.bindType) {
       case Types.DIMENSION:

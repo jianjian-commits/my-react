@@ -1,29 +1,14 @@
 import request from './request';
-import { getChartAttrs, getChartAvailableList } from './ChartUtil';
+import { getChartAttrs, getChartAvailableList, getChartObj } from './ChartUtil';
 import { message } from 'antd';
 
 export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp, elemType) => {
-  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+  const view = getChartObj(elementId, formId, bindDataArr, name, chartTypeProp, elemType);
 
   return request(`/bi/charts/${elementId}`, {
     method: "PUT",
     data: {
-      view: {
-        chartTypeProp,
-        conditions,
-        dimensions,
-        formFields: [],
-        indexes,
-        formId,
-        name,
-        supportChartTypes: [
-          {
-            "metadataId": "string",
-            "status": "SUCCESS"
-          }
-        ],
-        type: elemType
-      }
+      view
     }
   });
 }

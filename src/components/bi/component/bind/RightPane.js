@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Tooltip, Checkbox, Input } from 'antd';
-import { updateChartReq, processBind } from '../../utils/reqUtil';
+import { processBind } from '../../utils/reqUtil';
 import ChartInfo from "../elements/data/ChartInfo";
 import { changeBind, changeChartData, changeChartInfo, setElemType } from '../../redux/action';
 import { useParams } from "react-router-dom";
@@ -87,7 +87,7 @@ const RightPane = (props) => {
     )  
   }
 
-  showRPTTitle = elemType != ChartType.AREA_CHART;
+  showRPTTitle = elemType != ChartType.PIE;
   showRPTools = elemType != ChartType.INDEX_DIAGRAM;
 
   return (

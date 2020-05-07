@@ -12,10 +12,10 @@ import {
   CHANGE_CHART_INFO,
   CLEAR_BIND,
   SET_DB_MODE,
-  SET_CHART_CHANGE,
   CHANGE_CHART_AVAILABLE,
   RESET_STORE,
-  SET_VISITOR_SORTS
+  SET_VISITOR_SORTS,
+  SET_OLD_ELEMENT
 } from "./action";
 
 import { DBMode } from '../component/dashboard/Constant';
@@ -32,10 +32,10 @@ const initState = {
   chartData: {},
   dashboards: [],
   dbMode: DBMode.Edit,
-  isChartEdited:false,
   chartInfo: new ChartInfo(),
   chartAvailableList: AllType,
-  visitorSorts: new Map()
+  visitorSorts: new Map(),
+  oldElement: {}
 };
 
 export default function biReducer(state = initState, action) {
@@ -61,8 +61,7 @@ export default function biReducer(state = initState, action) {
       return {
         ...state,
         bindDataArr: action.bindDataArr,
-        chartAvailableList: action.chartAvailableList,
-        isChartEdited:true
+        chartAvailableList: action.chartAvailableList
       };
     }
     case CLEAR_BIND: {
@@ -73,8 +72,7 @@ export default function biReducer(state = initState, action) {
         chartData: action.chartData,
         chartInfo: new ChartInfo(),
         elemType: action.elemType,
-        chartAvailableList: action.chartAvailableList,
-        isChartEdited:false,
+        chartAvailableList: action.chartAvailableList
       };
     }
     case RENAME_DASHBOARD: {
@@ -92,8 +90,7 @@ export default function biReducer(state = initState, action) {
     case RENAME_ELEMENT: {
       return {
         ...state,
-        elemName: action.elemName,
-        isChartEdited:true
+        elemName: action.elemName
       };
     }
     case SET_FORM_DATA: {
@@ -111,22 +108,19 @@ export default function biReducer(state = initState, action) {
     case CHANGE_CHART_DATA: {
       return {
         ...state,
-        chartData: action.chartData,
-        isChartEdited:true
+        chartData: action.chartData
       };
     }
     case CHANGE_CHART_INFO: {
       return {
         ...state,
-        chartInfo: action.chartInfo,
-        isChartEdited:true
+        chartInfo: action.chartInfo
       };
     }
     case CHANGE_CHART_AVAILABLE: {
       return {
         ...state,
-        chartAvailableList: action.chartAvailableList,
-        isChartEdited:true
+        chartAvailableList: action.chartAvailableList
       };
     }
     case SET_DB_MODE: {
@@ -138,20 +132,19 @@ export default function biReducer(state = initState, action) {
     case SET_ELEM_TYPE: {
       return {
         ...state,
-        elemType: action.elemType,
-        isChartEdited:true
+        elemType: action.elemType
       };
-    }
-    case SET_CHART_CHANGE:{
-      return {
-        ...state,
-        isChartEdited: action.isChartEdited
-      }
     }
     case SET_VISITOR_SORTS: {
       return {
         ...state,
         visitorSorts: action.visitorSorts
+      }
+    }
+    case SET_OLD_ELEMENT: {
+      return {
+        ...state,
+        oldElement: action.oldElement
       }
     }
     default:

@@ -14,21 +14,14 @@ export const SET_DATA_SOURCE = "SET_DATA_SOURCE";
 export const CHANGE_CHART_DATA = "CHANGE_CHART_DATA";
 export const CLEAR_BIND = "CLEAR_BIND";
 export const SET_DB_MODE = "SET_DB_MODE";
-export const SET_CHART_CHANGE = "SET_CHART_CHANGE";
 export const CHANGE_CHART_INFO = "CHANGE_CHART_INFO";
 export const CHANGE_CHART_AVAILABLE = "CHANGE_CHART_AVAILABLE";
 export const RESET_STORE = "RESET_STORE";
 export const SET_VISITOR_SORTS = "SET_VISITOR_SORTS";
+export const SET_OLD_ELEMENT = "SET_OLD_ELEMENT";
 
 export const resetBIStore = () => dispatch => {
   dispatch({type: RESET_STORE});
-}
-
-export const setChartChange = (isChartEdited) => dispatch => {
-  dispatch({
-    type: SET_CHART_CHANGE,
-    isChartEdited
-  })
 }
 
 export const newDashboard = (dashboardId, dbName) => dispatch => {
@@ -83,15 +76,11 @@ export const changeChartData = (chartData) => dispatch => {
   })
 }
 
-export const setDataSource = (dataSource, init = true) => dispatch => {
+export const setDataSource = (dataSource) => dispatch => {
   dispatch({
     type: SET_DATA_SOURCE,
     dataSource
   })
-
-  if(!init) {
-    setChartChange(true);
-  }
 }
 
 export const setDashboards = (dashboards) => dispatch => {
@@ -138,6 +127,13 @@ export const setVisitorSorts = (visitorSorts) => dispatch => {
   dispatch({
     type: SET_VISITOR_SORTS,
     visitorSorts
+  });
+}
+
+export const setOldElement = (oldElement) => dispatch => {
+  dispatch({
+    type: SET_OLD_ELEMENT,
+    oldElement
   });
 }
 
