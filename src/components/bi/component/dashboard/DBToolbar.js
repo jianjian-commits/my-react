@@ -3,14 +3,18 @@ import { connect } from "react-redux";
 import { Button, Icon, message } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 import request from '../../utils/request';
-import { setFormData, setDataSource, setDBMode } from '../../redux/action';
+import { setFormData, setDataSource, setDBMode, setElemName, setOldElement } from '../../redux/action';
 import DataListModal from "../elements/modal/dataListModal";
-import classes from '../../scss/dashboard/toolbar.module.scss';
 import { DBMode } from "./Constant";
+import { ChartType } from '../../component/elements/Constant';
+import classes from '../../scss/dashboard/toolbar.module.scss';
+import ChartInfo from "../elements/data/ChartInfo";
+
 
 const DBToolbar = props => {
   const { appId, dashboardId } = useParams();
-  const { setFormData } = props;
+  const history = useHistory();
+  const { setFormData, setElemName, setDataSource, setDBMode, setOldElement } = props;
 
   useEffect(() => {
     const dataRes = request(`/bi/forms`, {
@@ -30,12 +34,44 @@ const DBToolbar = props => {
 
   const newChart = () => {
     setVisible(true);
-    setDBMode(DBMode.Editing);
   }
+
+  const createChart = (formId) => {
+    request(`/bi/charts`, {
+      method: "POST",
+      data: {
+        name: "新建图表",
+        dashboardId,
+        formId
+      }
+    }).then(
+      res => {
+        if (res && res.msg === "success") {
+          const data = res.data;
+          const view = data.view;
+
+          request(`/bi/forms/${formId}`).then((res) => {
+            if(res && res.msg === "success") {
+              const data = res.data;
+              setDataSource({id: data.formId, name: data.formName, data: data.items});
+              history.push(`/app/${appId}/setting/bi/${dashboardId}/${view.id}`);
+              setDBMode(DBMode.Editing);
+              setElemName(view.name);
+              setOldElement({chartTypeProp: new ChartInfo(), conditions: [], dimensions: [], indexes: [], formId: view.formId,
+                name: view.name, type: ChartType.HISTOGRAM, id: view.id})
+            }
+          })          
+        }
+      },
+      () => {
+        message.error("创建图表失败");
+      }
+    );
+  };
 
   return (
     <div className={classes.dbToolbar}>
-      <DataListModal key={Math.random()} {...modalProps} url={`/app/${appId}/setting/bi/${dashboardId}/chart`}/>
+      <DataListModal key={Math.random()} {...modalProps} createChart={createChart}/>
       <Icon
         type="plus-circle"
         className={classes.newChartIcon}
@@ -55,10 +91,13 @@ const DBToolbar = props => {
 }
 
 export default connect(store => ({
-  formDataArr: store.bi.formDataArr
+  formDataArr: store.bi.formDataArr,
+  bindDataArr: store.bi.bindDataArr
 }), 
 {
   setFormData,
   setDataSource,
-  setDBMode
+  setDBMode,
+  setElemName,
+  setOldElement
 })(DBToolbar);
