@@ -8,7 +8,6 @@ export const authorityIsValid = ({ debug, permissions, teamId, auth }) => {
 };
 
 export function catchError(err) {
-  !!localStorage.getItem("id_token") &&
     message.error(
       (err.response && err.response.data && err.response.data.msg) || "系统错误"
     );
