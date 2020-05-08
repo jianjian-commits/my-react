@@ -232,10 +232,11 @@ export const saveForm = (
     })
     .catch(err => {
       console.info(err);
-      if ((err.response.data.code = "1002")) {
+      if ((err.response.data.code === 1002)) {
         message.error("该api已存在");
+      } else if(err.response.data.code === 3000) {
+        message.error("没有创建表单权限");
       }
-      // }
     });
 };
 

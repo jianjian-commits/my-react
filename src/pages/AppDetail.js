@@ -166,6 +166,7 @@ const AppDetail = props => {
       setSubmissionId(submission_id);
       if (formId) {
         setSelectedID(formId);
+        setApprovalKey("")
       }
     },
     fn: onClickMenu,
