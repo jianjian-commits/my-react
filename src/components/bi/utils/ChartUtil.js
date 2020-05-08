@@ -286,11 +286,11 @@ export const getChartAttrs = (bindDataArr) => {
   let sort = { fieldId: "", value: "DEFAULT" };
   let dataFormat = {};
   const conditions = [];
+
   bindDataArr.forEach((each) => {
     if(each.bindType == Types.FILTER) {
-      const field = new Field(each.fieldId, each.label, each.type);
-      let condition = new FilterCondition(field, each.value, each.symbol);
-      conditions.push(condition);
+      const field = {fieldId: each.fieldId, type: each.type, label: each.label, alias: each.alias};
+      conditions.push({field, value: each.value, symbol: each.symbol});
       return; // continue
     }
     
