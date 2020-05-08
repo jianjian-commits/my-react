@@ -100,7 +100,6 @@ class Apps extends React.Component {
     if (appsPanelWidth) {
       const rowAppNum = parseInt(appsPanelWidth.clientWidth / 210);
       hideApps = Array.from(new Array(rowAppNum).keys());
-      console.log(hideApps)
     }
     const noCompanyStyle = {
       title: {

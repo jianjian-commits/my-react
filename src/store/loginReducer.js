@@ -310,9 +310,9 @@ export const signOut = () => async dispatch => {
   try {
     const res = await request(`/logout`, { method: "post", data: {} });
     if (res && res.status === "SUCCESS") {
+      history.push("/login");
       localStorage.removeItem("id_token");
       dispatch(signOutSuccess());
-      history.push("/login")
     } else {
       message.error(res.msg || "退出失败");
     }

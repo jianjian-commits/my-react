@@ -21,7 +21,8 @@ export default connect(
   ({ router, login, layout }) => ({
     router,
     collapsed: layout.sider.collapsed,
-    transactList: login.transactList || {}
+    transactList: login.transactList || {},
+    login
   }),
   { toggleSiderCollapsed, getTransactList }
 )(function HomeHeader(props) {
@@ -33,7 +34,7 @@ export default connect(
   const [init, setInit] = useState(false);
   React.useEffect(() => {
     if (!init) {
-      getTransactList({});
+      props.login.userId && getTransactList({});
       setInit(false);
     }
   }, [init, getTransactList]);
