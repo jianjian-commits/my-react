@@ -14,31 +14,32 @@ import { catchError } from "../../../utils";
 import request from "../../../utils/request";
 import ModalCreation from "../../profileManagement/modalCreate/ModalCreation";
 import PositionDetail from "./PositionDetail";
-import { HomeContentTitle } from "../../shared";
+import HomeContent from "../../content/HomeContent";
 import Authenticate from "../../shared/Authenticate";
-import { POSITION_MANAGEMENT_DELETE, POSITION_MANAGEMENT_NEW, POSITION_MANAGEMENT_UPDATE } from "../../../auth";
+import {
+  POSITION_MANAGEMENT_DELETE,
+  POSITION_MANAGEMENT_NEW,
+  POSITION_MANAGEMENT_UPDATE,
+} from "../../../auth";
 
 const { TreeNode } = Tree;
 
-const Header = () => {
-  return (
-    <HomeContentTitle
-      title={
-        <h3>
-          职位
-          <Tooltip
-            placement="right"
-            title="帮助您按照团队组织架构定义成员的层级关系！"
-            trigger="click"
-            overlayClassName="header-tooltip"
-          >
-            <span>&nbsp;&nbsp;<PromptIcon /></span>
-          </Tooltip>
-        </h3>
-      }
-    />
-  );
-};
+const Title = (
+  <h3>
+    职位
+    <Tooltip
+      placement="right"
+      title="帮助您按照团队组织架构定义成员的层级关系！"
+      trigger="click"
+      overlayClassName="header-tooltip"
+    >
+      <span>
+        &nbsp;&nbsp;
+        <PromptIcon />
+      </span>
+    </Tooltip>
+  </h3>
+);
 
 class PositionTree extends Component {
   constructor(props) {
@@ -171,41 +172,40 @@ class PositionTree extends Component {
           {item.value}
           {item.code !== "COMPANY" && (
             <Authenticate auth={POSITION_MANAGEMENT_NEW}>
-             <CreateIcon
-              onClick={() =>
-                this.setState({
-                  positionModalOpen: true,
-                  selectedPosition: item,
-                })
-              }
-            />
+              <CreateIcon
+                onClick={() =>
+                  this.setState({
+                    positionModalOpen: true,
+                    selectedPosition: item,
+                  })
+                }
+              />
             </Authenticate>
-           
           )}
           {item.code !== "COMPANY" && (
             <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-            <EditIcon
-              onClick={() => {
-                this.setState({
-                  detailOpened: true,
-                  selectedPosition: item,
-                  isTop: !item.superiorId,
-                });
-              }}
-            />
+              <EditIcon
+                onClick={() => {
+                  this.setState({
+                    detailOpened: true,
+                    selectedPosition: item,
+                    isTop: !item.superiorId,
+                  });
+                }}
+              />
             </Authenticate>
           )}
           {!item.code && (
             <Authenticate auth={POSITION_MANAGEMENT_DELETE}>
-            <Popconfirm
-              title="确认删除该职位？"
-              onConfirm={() => this.onDelect(item.id)}
-              okText="是"
-              cancelText="否"
-              placement="top"
-            >
-              <RemoveIcon />
-            </Popconfirm>
+              <Popconfirm
+                title="确认删除该职位？"
+                onConfirm={() => this.onDelect(item.id)}
+                okText="是"
+                cancelText="否"
+                placement="top"
+              >
+                <RemoveIcon />
+              </Popconfirm>
             </Authenticate>
           )}
         </div>
@@ -228,53 +228,49 @@ class PositionTree extends Component {
 
   render() {
     const { detailOpened, selectedPosition, isTop } = this.state;
+    if (detailOpened)
+      return (
+        <PositionDetail
+          position={selectedPosition}
+          returnTree={this.returnTree}
+          isTop={isTop}
+        />
+      );
+
+    console.log(Title);
     return (
-      <div className={classes.wrapper}>
-        {detailOpened ? (
-          <PositionDetail
-            position={selectedPosition}
-            returnTree={this.returnTree}
-            isTop={isTop}
-          />
-        ) : (
-          <>
-            <Header />
-            <div className={classes.tree}>
-              <div className={classes.button}>
-                <Button type="link" onClick={() => this.operateTree("unfold")}>
-                  全部展开
-                </Button>
-                |
-                <Button
-                  type="link"
-                  onClick={() => this.operateTree("collapse")}
-                >
-                  全部折叠
-                </Button>
-              </div>
-              <Tree
-                showIcon
-                showLine
-                onExpand={(expandedKeys) => {
-                  this.setState({
-                    expandedKeys: expandedKeys,
-                  });
-                }}
-                className="hide-file-icon"
-                expandedKeys={this.state.expandedKeys}
-              >
-                {this.renderTreeNodes(this.state.treeData)}
-              </Tree>
-            </div>
-          </>
-        )}
+      <HomeContent title={Title}>
+        <div className={classes.tree}>
+          <div className={classes.button}>
+            <Button type="link" onClick={() => this.operateTree("unfold")}>
+              全部展开
+            </Button>
+            |
+            <Button type="link" onClick={() => this.operateTree("collapse")}>
+              全部折叠
+            </Button>
+          </div>
+          <Tree
+            showIcon
+            showLine
+            onExpand={(expandedKeys) => {
+              this.setState({
+                expandedKeys: expandedKeys,
+              });
+            }}
+            className="hide-file-icon"
+            expandedKeys={this.state.expandedKeys}
+          >
+            {this.renderTreeNodes(this.state.treeData)}
+          </Tree>
+        </div>
         <ModalCreation
           title={"新建职位"}
           visible={this.state.positionModalOpen}
           onOk={(data) => this.handleCreate(data)}
           onCancel={this.handleCancel}
         />
-      </div>
+      </HomeContent>
     );
   }
 }

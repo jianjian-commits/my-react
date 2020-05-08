@@ -1,11 +1,11 @@
 import React from 'react';
 import { Dropdown, Modal, Input, Form, message, Button } from "antd";
-import classnames from 'classnames';
+// import classnames from 'classnames';
 const { confirm } = Modal
 const OperateBox = (props) => {
 
   // const [value, setValue] = React.useState(props.formname);
-  const {canEdit, canDelete, form} = props;
+  const {canEdit, canDelete } = props;
   const [isVisiable,setIsVisiable] = React.useState(false);
 
   const showDelConfirm = () => {

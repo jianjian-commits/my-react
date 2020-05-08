@@ -52,9 +52,12 @@
 
 // 基础信息
 .groupBasic {
+  table{
+    width: 100%;
+  }
   tbody {
     background: #fff;
-    width: calc(100vw - 263px);
+    width: 100%;
     margin-top: 10px;
     padding: 10px;
     display: inline-block;
