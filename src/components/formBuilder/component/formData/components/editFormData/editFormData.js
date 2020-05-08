@@ -478,6 +478,9 @@ class EditFormData extends Component {
              this._setErrorResponseData(error.response.data);
             }
             isMobile ? Toast.fail(`${error.response.data.msg}`) : message.error(`${error.response.data.msg}`);
+            this.setState({
+              isSubmitted: false
+            })
           });
       });
     }

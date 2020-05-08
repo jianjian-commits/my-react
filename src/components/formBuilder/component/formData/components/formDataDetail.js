@@ -109,12 +109,12 @@ const EditApprovalButton = (props) => {
         console.log(err);
       });
   };
-  return props.enterPort === "FormSubmitData" ? (
+  return props.enterPort !== "Dispose" ? (
     <div className="toolbarBox" style={{ cursor: "pointer" }}>
       {idEditAuth ? (
         <span
           onClick={() => {
-            actionFun(dataId, true);
+            actionFun(dataId, true, formId);
           }}
         >
           <Icon component={EditIcon} style={{ marginRight: 5 }} />
@@ -549,7 +549,7 @@ class FormDataDetail extends PureComponent {
     }
     let BoxStyle = {};
     if (this.props.enterPort === "Dispose") {
-      BoxStyle = { width: "calc(100vw - 500px)", margin: "0 auto" };
+      BoxStyle = { width: "calc(100vw - 200px)", margin: "0 auto" };
     }
     return (
       <div className="formDetailBox" style={BoxStyle}>
