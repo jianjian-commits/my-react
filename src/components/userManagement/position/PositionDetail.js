@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Button, Input, Radio, message, Modal, Popconfirm } from "antd";
+import { history } from "../../../store";
 import { Table } from "../../shared/customWidget";
 import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
 import proClass from "../../profileManagement/profile.module.scss";
-import { HomeContentTitle } from "../../shared";
+import HomeContent from "../../content/HomeContent";
 import request from "../../../utils/request";
 import { catchError } from "../../../utils";
 import Authenticate from "../../shared/Authenticate";
@@ -431,26 +432,25 @@ class PositionDetail extends Component {
       modalSelectedKeys,
     } = this.state;
     const navigationList = [
-      { key: 0, label: "职位", onClick: returnTree },
-      { key: 1, label: position.value, disabled: true },
+      { key: 0, label: "首页", onClick: () => history.push("/app/list") },
+      { key: 1, label: "职位", onClick: returnTree },
     ];
     return (
-      <>
-        <HomeContentTitle
-          navs={navigationList}
-          title="职位"
-          btns={
-            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-              <Button
-                type="primary"
-                onClick={this.saveHandle}
-                style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
-              >
-                保存
-              </Button>
-            </Authenticate>
-          }
-        />
+      <HomeContent
+        navs={navigationList}
+        title={position.value}
+        btns={
+          <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+            <Button
+              type="primary"
+              onClick={this.saveHandle}
+              style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
+            >
+              保存
+            </Button>
+          </Authenticate>
+        }
+      >
         <BaseInfo
           positionInfo={positionInfo}
           editing={editing}
@@ -469,7 +469,7 @@ class PositionDetail extends Component {
           updateSelectedKeys={this.updateTargetState("modalSelectedKeys")}
           removeUser={this.removeUserHandle}
         />
-      </>
+      </HomeContent>
     );
   }
 }

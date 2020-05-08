@@ -37,7 +37,7 @@ export default connect(
       props.login.userId && getTransactList({});
       setInit(false);
     }
-  }, [init, getTransactList]);
+  }, [init, getTransactList, props.login.userId]);
   return (
     <Header className={classes.homeHeader} style={homeHeaderStyle}>
       <div className={classes.wrapper}>
