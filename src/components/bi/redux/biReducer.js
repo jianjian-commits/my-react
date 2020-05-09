@@ -28,7 +28,7 @@ const initState = {
   elemName: "新建图表",
   formDataArr: [],
   dataSource: {},
-  bindDataArr: [],
+  bindDataObj: {dimensions: [], indexes: [], conditions: []},
   chartData: {},
   dashboards: [],
   dbMode: DBMode.Edit,
@@ -60,14 +60,14 @@ export default function biReducer(state = initState, action) {
     case CHANGE_BIND: {
       return {
         ...state,
-        bindDataArr: action.bindDataArr,
+        bindDataObj: action.bindDataObj,
         chartAvailableList: action.chartAvailableList
       };
     }
     case CLEAR_BIND: {
       return {
         ...state,
-        bindDataArr: action.bindDataArr, 
+        bindDataObj: action.bindDataObj, 
         dataSource: action.dataSource,
         chartData: action.chartData,
         chartInfo: new ChartInfo(),

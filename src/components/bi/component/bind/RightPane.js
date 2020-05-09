@@ -11,7 +11,7 @@ import { chartGroup } from "../elements/ElemType";
 import { ChartType } from "../elements/Constant";
 
 const RightPane = (props) => {
-  const { changeBind, changeChartData, chartInfo, bindDataArr, elemName, changeChartInfo, dataSource, setElemType, elemType,
+  const { changeBind, changeChartData, chartInfo, bindDataObj, elemName, changeChartInfo, dataSource, setElemType, elemType,
     chartAvailableList } = props;
   const { elementId } = useParams();
 
@@ -50,7 +50,7 @@ const RightPane = (props) => {
   const handleSelectIcon = chartIcon => {
     setActiveIcon(chartIcon);
     setElemType(chartIcon);
-    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, chartIcon);
+    processBind(bindDataObj, dataSource.id, changeBind, changeChartData, chartIcon);
   }
 
   const onChangeTitleXAxis = (e) => {
@@ -127,7 +127,7 @@ const RightPane = (props) => {
 export default connect((store) => {
   return {
     chartInfo: store.bi.chartInfo,
-    bindDataArr: store.bi.bindDataArr,
+    bindDataObj: store.bi.bindDataObj,
     elemName: store.bi.elemName,
     dataSource: store.bi.dataSource,
     elemType: store.bi.elemType,

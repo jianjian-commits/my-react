@@ -91,8 +91,7 @@ const DBToolbar = props => {
 }
 
 export default connect(store => ({
-  formDataArr: store.bi.formDataArr,
-  bindDataArr: store.bi.bindDataArr
+  formDataArr: store.bi.formDataArr
 }), 
 {
   setFormData,

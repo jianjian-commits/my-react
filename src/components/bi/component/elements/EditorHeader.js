@@ -14,7 +14,7 @@ import classes from '../../scss/elements/element.module.scss';
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode,
+  const { elemName, bindDataObj, chartInfo, setDashboards, setDBMode,
     dataSource, elemType, setElemName, oldElement, setOldElement } = props;
 
   const handleBack = () => {
@@ -26,9 +26,9 @@ const EditorHeader = props => {
 
   const handleSave = () => {
     Promise.all([
-      updateChartReq(elementId, dataSource.id, bindDataArr, elemName, chartInfo, elemType),
+      updateChartReq(elementId, dataSource.id, bindDataObj, elemName, chartInfo, elemType),
       setDB(appId, dashboardId, setDashboards),
-      setOldElement(getChartObj(elementId, dataSource.id, bindDataArr, elemName, chartInfo, elemType))
+      setOldElement(getChartObj(elementId, dataSource.id, bindDataObj, elemName, chartInfo, elemType))
     ]).then(
       message.success("保存成功")
     );
@@ -39,7 +39,7 @@ const EditorHeader = props => {
   }
 
   const isChanged = () => {
-    const elem = getChartObj(elementId, dataSource.id, bindDataArr, elemName, chartInfo, elemType);
+    const elem = getChartObj(elementId, dataSource.id, bindDataObj, elemName, chartInfo, elemType);
     return !_.isEqual(oldElement, elem);
   }
 
@@ -88,7 +88,7 @@ const EditorHeader = props => {
 export default connect(
   store => ({
     elemName: store.bi.elemName,
-    bindDataArr: store.bi.bindDataArr,
+    bindDataObj: store.bi.bindDataObj,
     chartInfo: store.bi.chartInfo,
     dataSource: store.bi.dataSource,
     elemType: store.bi.elemType,

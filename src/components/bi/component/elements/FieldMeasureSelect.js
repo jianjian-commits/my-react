@@ -126,20 +126,20 @@ export default function FieldMeasureSelect(props) {
 
   const secondMenuSumFunc = (index) => {
     setSelectIndex(index);
-    props.item.changeGroup(operationArr[index], props.item.fieldId);
+    props.item.changeGroup(operationArr[index], props.item.index, props.item.bindType);
     setPopoverVisible(false);
   };
 
   //二级菜单字段排序回调
   const secondMenuSortFunc = (index) => {
     setSortTypeIndex(index);
-    props.item.changeSortType(SortTypeArr[index], props.item.fieldId);
+    props.item.changeSortType({...SortTypeArr[index], fieldId: props.item.fieldId}, props.item.index, props.item.bindType);
     setPopoverVisible(false);
   };
 
   const inputModalProps = {
     handleOK : name => {
-      props.item.changeFieldName(name, props.item.fieldId);
+      props.item.changeFieldName(name, props.item.index, props.item.bindType);
       setNameInputVisible(false);
     },
     handleCancel : () => {
@@ -152,7 +152,7 @@ export default function FieldMeasureSelect(props) {
       setFormatModalVisible(false);
     },
     handleOK : obj => {
-      props.item.changeDataFormat(obj, props.item.fieldId);
+      props.item.changeDataFormat(obj, props.item.index);
       setFormatModalVisible(false);
     },
   }

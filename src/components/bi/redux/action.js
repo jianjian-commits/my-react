@@ -40,11 +40,11 @@ export const newElement = (dashboardId, dbName) => dispatch => {
   })
 }
 
-export const changeBind = (bindDataArr) => dispatch => {
+export const changeBind = (bindDataObj) => dispatch => {
   dispatch({
       type: CHANGE_BIND,
-      bindDataArr,
-      chartAvailableList: getChartAvailableList(bindDataArr)
+      bindDataObj,
+      chartAvailableList: getChartAvailableList(bindDataObj)
   })
 }
 
@@ -94,7 +94,7 @@ export const clearBind = (params) => dispatch => {
   dispatch({
     type: CLEAR_BIND,
     dataSource: {},
-    bindDataArr: [],
+    bindDataObj: {dimensions: [], indexes: [], conditions: []},
     chartData: {},
     elemType: ChartType.HISTOGRAM,
     chartInfo: new ChartInfo(),
