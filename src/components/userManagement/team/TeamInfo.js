@@ -6,7 +6,7 @@ import classes from "./team.module.scss";
 import { getcurrentCompany, getAllCompany } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
-import { HomeContentTitle } from "../../shared/";
+import HomeContent from "../../content/HomeContent";
 import { catchError } from "../../../utils";
 import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
 import moment from "moment";
@@ -100,8 +100,7 @@ export default connect(
       .catch(err => catchError(err));
   };
   return currentCompany ? (
-    <div className={classes.container}>
-      <HomeContentTitle title="公司信息"></HomeContentTitle>
+    <HomeContent title="公司信息">
       <div className={classes.listBox}>
         <List itemLayout="horizontal" size="small">
           <List.Item>
@@ -150,7 +149,7 @@ export default connect(
           </List.Item>
         </List>
       </div>
-    </div>
+    </HomeContent>
   ) : (
     <Spin size="large" />
   );

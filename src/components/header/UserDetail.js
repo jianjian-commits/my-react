@@ -9,7 +9,8 @@ import {
 // import HomeHeader from "./HomeHeader";
 import { userDetailParameter, formItems } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
-import { HomeLayout, HomeContentTitle } from "../shared";
+import { HomeLayout } from "../shared";
+import HomeContent from "../content/HomeContent";
 import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
 import store from "../../store";
@@ -168,7 +169,7 @@ export default Form.create({ name: "reset-form" })(
     };
     return (
       <HomeLayout>
-        <HomeContentTitle title="个人信息" />
+        <HomeContent title="个人信息">
         <div className={userDetailStyles.userDetail}>
           <div>
             <ul>
@@ -265,6 +266,7 @@ export default Form.create({ name: "reset-form" })(
             })}
           </Form>
         </Modal>
+        </HomeContent>
       </HomeLayout>
     );
   })

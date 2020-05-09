@@ -1,21 +1,21 @@
 import React from "react";
 import { connect } from "react-redux";
 import { history } from "../store";
-import { Layout, Button, Card, message, Modal, Input, Form } from "antd";
+import clx from "classnames";
+import { Button, Card, message, Modal, Input, Form } from "antd";
 import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";
 import Authenticate from "../components/shared/Authenticate";
-import { HomeLayout, HomeContentTitle } from "../components/shared";
+import { HomeLayout } from "../components/shared";
+import HomeContent from "../components/content/HomeContent";
 import { TEAM_CREATE_APP, APP_VISIABLED } from "../auth";
-import commonClasses from "../styles/common.module.scss";
 import { catchError } from "../utils";
 import classes from "../styles/apps.module.scss";
 import { NoAppImg, NoCompany, NoAppUnSysImg } from "../assets/images";
 import { CloseIcon } from "../assets/icons/header";
 import { initAllDetail } from "../store/loginReducer";
 
-const { Content } = Layout;
 const { Meta } = Card;
 
 const checkCompanyName = async (rule, value, callback) => {
@@ -193,51 +193,51 @@ class Apps extends React.Component {
           </Modal>
         </HomeLayout>
       );
+      
     return (
       <HomeLayout>
-        <Content className={commonClasses.container}>
-          <HomeContentTitle title="我的应用"/>
-          <Content className={classes.innerMain}>
-            <div id="appsPanel" className={classes.appsPanel}>
-              {getApps(appList)}
-              <Authenticate auth={TEAM_CREATE_APP}>
+        <HomeContent title="我的应用" mainClassName={classes.innerMain}>
+          <div id="appsPanel" className={classes.appsPanel}>
+            {getApps(appList)}
+            <Authenticate auth={TEAM_CREATE_APP}>
+              <Card className={clx(classes.appCard, classes.createAppButton)}>
                 <Button
                   type="dashed"
                   icon="plus"
                   onClick={() => this.setState({ open: true })}
                 >
                   创建应用
-                  </Button>
-                {appList.length < 1 && sysUserName === name && (
-                  <div className={classes.noApp}>
-                    <NoAppImg />
-                  </div>
-                )}
-              </Authenticate>
-              {hideApps &&
-                hideApps.map((a, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      width: "180px",
-                      margin: "10px 15px 30px 15px",
-                    }}
-                  ></div>
-                ))}
+                </Button>
+              </Card>
+              {appList.length < 1 && sysUserName === name && (
+                <div className={classes.noApp}>
+                  <NoAppImg />
+                </div>
+              )}
+            </Authenticate>
+            {hideApps &&
+              hideApps.map((a, index) => (
+                <div
+                  key={index}
+                  style={{
+                    width: "180px",
+                    margin: "10px 15px 30px 15px",
+                  }}
+                ></div>
+              ))}
+          </div>
+          {appList.length < 1 && sysUserName !== name && (
+            <div style={{ textAlign: "center" }}>
+              <NoAppUnSysImg />
             </div>
-            {appList.length < 1 && sysUserName !== name && (
-              <div style={{textAlign: "center"}}>
-                <NoAppUnSysImg />
-              </div>
-            )}
-          </Content>
+          )}
           <ModalCreation
             title={"创建应用"}
             visible={this.state.open}
             onOk={(data) => this.handleCreate(data)}
             onCancel={this.handleCancel}
           />
-        </Content>
+        </HomeContent>
       </HomeLayout>
     );
   }

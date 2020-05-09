@@ -9,7 +9,7 @@ import request from "../../../utils/request";
 import { getcurrentCompany } from "../../../store/loginReducer";
 import InviteUser from "../ModalInviteUser";
 import Authenticate from "../../shared/Authenticate";
-import { HomeContentTitle } from "../../shared/";
+import HomeContent from "../../content/HomeContent";
 import { catchError } from "../../../utils";
 // import { ReactComponent as Funnel } from "../../../assets/icons/company/filter.svg";
 import {
@@ -265,8 +265,7 @@ export default connect(
     </>
   );
   return currentCompany ? (
-    <div className={classes.container}>
-      <HomeContentTitle title={"公司成员"} btns={btns} />
+    <HomeContent title={"公司成员"} btns={btns}>
       {onOff.filterSwith ? (
         <Filter groups={currentCompany.groups} fn={filterData} />
       ) : null}
@@ -291,7 +290,7 @@ export default connect(
           fn={changeGroupCal}
         />
       ) : null}
-    </div>
+    </HomeContent>
   ) : (
     <Spin size="large" />
   );
