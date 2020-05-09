@@ -2,8 +2,8 @@ import request from './request';
 import { getChartAttrs, getChartAvailableList, getChartObj } from './ChartUtil';
 import { message } from 'antd';
 
-export const updateChartReq = (elementId, formId, bindDataArr, name, chartTypeProp, elemType) => {
-  const view = getChartObj(elementId, formId, bindDataArr, name, chartTypeProp, elemType);
+export const updateChartReq = (elementId, formId, bindDataObj, name, chartTypeProp, elemType) => {
+  const view = getChartObj(elementId, formId, bindDataObj, name, chartTypeProp, elemType);
 
   return request(`/bi/charts/${elementId}`, {
     method: "PUT",
@@ -54,9 +54,9 @@ export const newDB = (appId) => {
   });
 }
 
-export const processBind = (bindDataArr, formId, changeBind, changeChartData, elemType, setElemType) => {
-  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
-  const availableList = getChartAvailableList(bindDataArr);
+export const processBind = (bindDataObj, formId, changeBind, changeChartData, elemType, setElemType) => {
+  const { dimensions, indexes, conditions } = getChartAttrs(bindDataObj);
+  const availableList = getChartAvailableList(bindDataObj);
   let type = elemType
 
   if(!availableList.includes(elemType)) {
@@ -81,5 +81,5 @@ export const processBind = (bindDataArr, formId, changeBind, changeChartData, el
     }
   })
 
-  changeBind(bindDataArr);
+  changeBind(bindDataObj);
 }

@@ -241,28 +241,18 @@ export const getOption = (chartData, chartInfo, elemType) => {
   }
 }
 
-export const getChartAvailableList = (bindDataArr) => {
-  if(!bindDataArr) {
+export const getChartAvailableList = (bindDataObj) => {
+  if(!bindDataObj || equals(bindDataObj, {})) {
     return AllType;
   }
 
-  let dimCount = 0;
-  let meaCount = 0;
-  bindDataArr.forEach((each) => {
-    if(each.bindType == Types.DIMENSION) {
-      dimCount++;
-    }
-
-    if(each.bindType == Types.MEASURE) {
-      meaCount++;
-    }
-  })
-
-  return dimCount > 1 || meaCount > 1 ? BarType : AllType;
+  let dimCount = bindDataObj.dimensions ? bindDataObj.dimensions.length : 0;
+  let idxCount = bindDataObj.indexes ? bindDataObj.indexes.length : 0;
+  return dimCount > 1 || idxCount > 1 ? BarType : AllType;
 }
 
-export const getChartObj = (id, formId, bindDataArr, name, chartTypeProp, type) => {
-  const { dimensions, indexes, conditions } = getChartAttrs(bindDataArr);
+export const getChartObj = (id, formId, bindDataObj, name, chartTypeProp, type) => {
+  const { dimensions, indexes, conditions } = getChartAttrs(bindDataObj);
 
   return {
     chartTypeProp,
@@ -279,48 +269,47 @@ export const getChartObj = (id, formId, bindDataArr, name, chartTypeProp, type) 
 /**
  * Get chart attributes for req.
  */
-export const getChartAttrs = (bindDataArr) => {
-  bindDataArr = bindDataArr || [];
-  let dimensions = [], indexes = [];
-  const groups = [];
-  let sort = { fieldId: "", value: "DEFAULT" };
-  let dataFormat = {};
-  const conditions = [];
+export const getChartAttrs = (bindDataObj) => {
+  let { dimensions, indexes, conditions } = bindDataObj;
+  let dimensionsArr = [], indexesArr = [], conditionsArr = [];
 
-  bindDataArr.forEach((each) => {
-    if(each.bindType == Types.FILTER) {
+  if(dimensions && dimensions.length > 0) {
+    dimensions.forEach((each) => {
+      dimensionsArr.push(_getField(each, true))
+    })
+  }
+
+  if(indexes && indexes.length > 0) {
+    indexes.forEach((each) => {
+      indexesArr.push(_getField(each))
+    })
+  }
+
+  if(conditions && conditions.length > 0) {
+    conditions.forEach((each) => {
       const field = {fieldId: each.fieldId, type: each.type, label: each.label, alias: each.alias};
-      conditions.push({field, value: each.value, symbol: each.symbol});
-      return; // continue
-    }
-    
-    const field = deepClone(each);
-    const currentGroup = field.currentGroup;
-    if(field.dataFormat){
-      dataFormat=field.dataFormat;
-    }
-    if(field.sort) {
-      sort = field.sort;
-    }
+      conditionsArr.push({field, value: each.value, symbol: each.symbol});
+    })
+  }
 
-    delete field.bindType;
-    delete field.currentGroup;
-    delete field.dataFormat;
-    delete field.idx;
-    delete field.sort;
-    delete field.groups;
-   
-    switch(each.bindType) {
-      case Types.DIMENSION:
-        dimensions.push({ field, currentGroup, groups, sort});
-        break;
-      case Types.MEASURE:
-        indexes.push({ field, currentGroup, groups, sort,dataFormat});
-        break;
-      default:
-        console.log("wrong type!");
-    }
-  })
+  return { dimensions: dimensionsArr, indexes: indexesArr, conditions: conditionsArr };
+}
 
-  return { dimensions, indexes, conditions };
+const _getField = (val, isDim) => {
+  const field = deepClone(val);
+
+  const groups = [];
+  let dataFormat = field.dataFormat ? field.dataFormat : {};
+  let sort = field.sort ? field.sort : { fieldId: "", value: "DEFAULT" };
+  const currentGroup = field.currentGroup;
+
+  delete field.bindType;
+  delete field.currentGroup;
+  delete field.dataFormat;
+  delete field.idx;
+  delete field.sort;
+  delete field.groups;
+
+  return isDim ? { field, currentGroup, groups, sort} :
+    { field, currentGroup, groups, sort, dataFormat};
 }

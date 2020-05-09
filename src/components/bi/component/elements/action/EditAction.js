@@ -20,7 +20,7 @@ export default class EditAction {
         const oldElement = deepClone(data);
         const formId = data.formId;
         const chartInfo = data.chartTypeProp;
-        let bindDataArr = [];
+        let bindDataObj = {dimensions: [], indexes: [], conditions: []};
         const { dimensions, indexes, conditions } = data;
 
         if(dimensions && dimensions.length > 0) {
@@ -29,27 +29,27 @@ export default class EditAction {
             field["currentGroup"] = each.currentGroup;
             field["groups"] = each.groups;
             field["sort"] = each.sort;
-            field["bindType"] = Types.DIMENSION;
+            field["bindType"] = Types.DIMENSIONS;
             field["idx"] = getUUID();
             return field;
           })
 
-          bindDataArr = dimArr;
+          bindDataObj.dimensions = dimArr;
         }
 
         if(indexes && indexes.length > 0) {
-          const meaArr = indexes.map((each, idx) => {
+          const idxArr = indexes.map((each, idx) => {
             const field = each.field;
             field["currentGroup"] = each.currentGroup;
             field["groups"] = each.groups;
             field["dataFormat"] =each.dataFormat;
             field["sort"] = each.sort;
-            field["bindType"] = Types.MEASURE;
+            field["bindType"] = Types.INDEXES;
             field["idx"] = getUUID() 
             return field;
           })
 
-          bindDataArr = bindDataArr.concat(meaArr);
+          bindDataObj.indexes = idxArr;
         }
 
         if(conditions && conditions.length > 0) {
@@ -57,15 +57,15 @@ export default class EditAction {
             const field = each.field;
             field["value"] = each.value;
             field["symbol"] = each.symbol;
-            field["bindType"] = Types.FILTER;
+            field["bindType"] = Types.CONDITIONS;
             field["idx"] = getUUID()
             return field;
           })
 
-          bindDataArr = bindDataArr.concat(filterArr);
+          bindDataObj.conditions = filterArr;
         }
 
-        this.options.changeBind(bindDataArr);
+        this.options.changeBind(bindDataObj);
         this.options.changeChartInfo(chartInfo || new ChartInfo());
         this.options.setElemType(this.elemType);
         this.options.setDBMode(DBMode.Editing);
