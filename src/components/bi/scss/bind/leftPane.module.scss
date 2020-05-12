@@ -13,6 +13,12 @@
   padding: 0 20px;
 }
 
+.fieldContainer {
+  // 40px is colTitle height.
+  height: calc(100% - 40px);
+  overflow: scroll;
+}
+
 .leftPaneDimension {
   height: 40%;
   border-top: 1px dashed #adb5bd;
@@ -61,17 +67,16 @@
 }
 
 .dataSourceName:hover {
-  // background-color: lightblue;
-  // text-decoration: underline;
   cursor: pointer;
 }
 
 .colTitle {
   // text-align: center;
   list-style: none;
-  margin-top: 22px;
+  margin-top: 20px;
   margin-bottom: 10px;
   margin-left: 20px;
   font-size: 14px;
   color: gray;
+  height: 20px;
 }
