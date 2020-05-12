@@ -189,6 +189,11 @@
   }
   .ant-table-thead {
     font-size: 14px;
+    .ant-table-header-column {
+      font-size: 15px;
+      color: #333;
+      font-weight: bold;
+    }
     tr {
       th {
         font-size: 14px;
