@@ -19,16 +19,20 @@
 .appCard {
   width: 180px;
   height: 144px;
-  display: inline-block;
+  float: left;
   cursor: pointer;
   > div:hover {
     box-shadow: 0px 4px 8px rgba(176, 176, 176, 0.25);
   }
 
   &:global(.ant-card) {
-    margin: 10px 15px 30px 15px;
+    margin: 0 30px 30px 0;
+    display: inline-block;
     border-radius: 5px;
     border: none;
+    // &:not(:nth-of-type(1)) {
+    //   margin: 0 0 30px 30px;
+    // }
   }
 
   :global(.ant-card-body) {
@@ -304,15 +308,27 @@
 
 .innerMain {
   display: block;
-
-  button {
-    width: 180px;
-    height: 144px;
-    display: inline-block;
-    background-color: #fff;
-    color: #333;
-    margin: 12px 15px 30px 15px;
-    vertical-align: top;
+  .appsPanel{
+    position: relative;
+    overflow:hidden;
+  }
+  .createAppButton {
+    :global(.ant-card-body) {
+      margin: 0;
+      padding: 0;
+    }
+    button {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      background-color: #fff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      :hover {
+        color: #40a9ff; 
+      }
+    }
   }
 
   > svg,

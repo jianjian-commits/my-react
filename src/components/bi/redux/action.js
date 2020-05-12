@@ -14,20 +14,14 @@ export const SET_DATA_SOURCE = "SET_DATA_SOURCE";
 export const CHANGE_CHART_DATA = "CHANGE_CHART_DATA";
 export const CLEAR_BIND = "CLEAR_BIND";
 export const SET_DB_MODE = "SET_DB_MODE";
-export const SAVE_CHART_CHANGE = "SAVE_CHART_CHANGE";
 export const CHANGE_CHART_INFO = "CHANGE_CHART_INFO";
 export const CHANGE_CHART_AVAILABLE = "CHANGE_CHART_AVAILABLE";
 export const RESET_STORE = "RESET_STORE";
 export const SET_VISITOR_SORTS = "SET_VISITOR_SORTS";
+export const SET_OLD_ELEMENT = "SET_OLD_ELEMENT";
 
 export const resetBIStore = () => dispatch => {
   dispatch({type: RESET_STORE});
-}
-
-export const saveChartChange = () => dispatch => {
-  dispatch({
-    type: SAVE_CHART_CHANGE,
-  })
 }
 
 export const newDashboard = (dashboardId, dbName) => dispatch => {
@@ -46,11 +40,11 @@ export const newElement = (dashboardId, dbName) => dispatch => {
   })
 }
 
-export const changeBind = (bindDataArr) => dispatch => {
+export const changeBind = (bindDataObj) => dispatch => {
   dispatch({
       type: CHANGE_BIND,
-      bindDataArr,
-      chartAvailableList: getChartAvailableList(bindDataArr)
+      bindDataObj,
+      chartAvailableList: getChartAvailableList(bindDataObj)
   })
 }
 
@@ -100,7 +94,7 @@ export const clearBind = (params) => dispatch => {
   dispatch({
     type: CLEAR_BIND,
     dataSource: {},
-    bindDataArr: [],
+    bindDataObj: {dimensions: [], indexes: [], conditions: []},
     chartData: {},
     elemType: ChartType.HISTOGRAM,
     chartInfo: new ChartInfo(),
@@ -133,6 +127,13 @@ export const setVisitorSorts = (visitorSorts) => dispatch => {
   dispatch({
     type: SET_VISITOR_SORTS,
     visitorSorts
+  });
+}
+
+export const setOldElement = (oldElement) => dispatch => {
+  dispatch({
+    type: SET_OLD_ELEMENT,
+    oldElement
   });
 }
 

@@ -175,6 +175,7 @@ const FilterModal = (props) => {
         value: value,
         onChange: onChangeValue,
         loadData: setMulti,
+        onFocus: setMulti,
         treeCheckable: true,
         dropdownClassName:"dropdownClassName",
         showSearch: true,

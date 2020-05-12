@@ -56,8 +56,7 @@ export const TEAM_MANAGEMENT_UPDATE_INFO =
 export const TEAM_MANAGEMENT_LIST = `${TEAM_MANAGEMENT_PREFIX}DR`;
 export const TEAM_MANAGEMENT_INVITE = "?:?:?:?:IC";
 export const TEAM_MANAGEMENT_DROP = `${TEAM_MANAGEMENT_PREFIX}TU`;
-export const TEAM_MANAGEMENT_SWITCH = `${TEAM_MANAGEMENT_PREFIX}RU
-`;
+export const TEAM_MANAGEMENT_SWITCH = `${TEAM_MANAGEMENT_PREFIX}RU`;
 
 const POSITION_MANAGEMENT_PREFIX =
   "?:class#com.wctsoft.davinci.entity.Position:?:?:";

@@ -5,7 +5,6 @@ export const deepClone = Obj => {
   return JSON.parse(JSON.stringify(Obj));
 };
 
-
 /**
  * Get the key by value and obj.
  */

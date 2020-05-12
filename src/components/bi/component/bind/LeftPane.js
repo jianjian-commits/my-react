@@ -29,7 +29,7 @@ const LeftPane = props => {
 
     dataArr.forEach((each, idx) => {
       if(each) {
-        const item = {...each, bindType: each.type === "NUMBER" ? Types.MEASURE : Types.DIMENSION}
+        const item = {...each, bindType: each.type === "NUMBER" ? Types.INDEXES : Types.DIMENSIONS}
         const arr = each.type === "NUMBER" ? meaArr : dimArr;
         const comp = <DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>;
         arr.push(comp);

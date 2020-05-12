@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Tooltip, Checkbox, Input } from 'antd';
-import { updateChartReq, processBind } from '../../utils/reqUtil';
+import { processBind } from '../../utils/reqUtil';
 import ChartInfo from "../elements/data/ChartInfo";
 import { changeBind, changeChartData, changeChartInfo, setElemType } from '../../redux/action';
 import { useParams } from "react-router-dom";
@@ -11,7 +11,7 @@ import { chartGroup } from "../elements/ElemType";
 import { ChartType } from "../elements/Constant";
 
 const RightPane = (props) => {
-  const { changeBind, changeChartData, chartInfo, bindDataArr, elemName, changeChartInfo, dataSource, setElemType, elemType,
+  const { changeBind, changeChartData, chartInfo, bindDataObj, elemName, changeChartInfo, dataSource, setElemType, elemType,
     chartAvailableList } = props;
   const { elementId } = useParams();
 
@@ -50,7 +50,7 @@ const RightPane = (props) => {
   const handleSelectIcon = chartIcon => {
     setActiveIcon(chartIcon);
     setElemType(chartIcon);
-    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, chartIcon);
+    processBind(bindDataObj, dataSource.id, changeBind, changeChartData, chartIcon);
   }
 
   const onChangeTitleXAxis = (e) => {
@@ -74,7 +74,6 @@ const RightPane = (props) => {
 
   const updateChartInfo = (chartInfo) => {
     chartInfo = chartInfo || getChartInfo();
-    updateChartReq(elementId, dataSource.id, bindDataArr, elemName || "新建图表", {...chartInfo}, elemType);
     changeChartInfo(chartInfo || new ChartInfo());
   }
 
@@ -88,7 +87,7 @@ const RightPane = (props) => {
     )  
   }
 
-  showRPTTitle = elemType != ChartType.AREA_CHART;
+  showRPTTitle = elemType != ChartType.PIE;
   showRPTools = elemType != ChartType.INDEX_DIAGRAM;
 
   return (
@@ -128,7 +127,7 @@ const RightPane = (props) => {
 export default connect((store) => {
   return {
     chartInfo: store.bi.chartInfo,
-    bindDataArr: store.bi.bindDataArr,
+    bindDataObj: store.bi.bindDataObj,
     elemName: store.bi.elemName,
     dataSource: store.bi.dataSource,
     elemType: store.bi.elemType,

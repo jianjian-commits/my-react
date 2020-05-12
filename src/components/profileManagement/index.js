@@ -9,14 +9,14 @@ import PermissionSetting from "../userManagement/ApplyPermissionSettings";
 import {
   PROFILE_MANAGEMENT_NEW,
   PROFILE_MANAGEMENT_UPDATE,
-  PROFILE_MANAGEMENT_DELETE
+  PROFILE_MANAGEMENT_DELETE,
 } from "../../auth";
 import { catchError } from "../../utils";
 import { CreateIcon } from "../../assets/icons/company";
 import classes from "./profile.module.scss";
 import request from "../../utils/request";
 import clx from "classnames";
-import { HomeContentTitle } from "../shared";
+import HomeContent from "../content/HomeContent";
 
 function GroupList(props) {
   const {
@@ -27,16 +27,20 @@ function GroupList(props) {
     visible,
     onOk,
     onCancel,
-    loading
+    loading,
   } = props;
   return (
-    <>
-      <HomeContentTitle title="分组" btns={<Authenticate auth={PROFILE_MANAGEMENT_NEW}>
-        <Button onClick={handleClick}>
-          <CreateIcon />
-          添加分组
-        </Button>
-      </Authenticate>}/>
+    <HomeContent
+      title="分组"
+      btns={
+        <Authenticate auth={PROFILE_MANAGEMENT_NEW}>
+          <Button onClick={handleClick}>
+            <CreateIcon />
+            添加分组
+          </Button>
+        </Authenticate>
+      }
+    >
       <Table
         columns={columns}
         loading={loading}
@@ -49,7 +53,7 @@ function GroupList(props) {
         onOk={onOk}
         onCancel={onCancel}
       />
-    </>
+    </HomeContent>
   );
 }
 
@@ -63,7 +67,7 @@ class ProfileManagement extends React.Component {
       title: "",
       oldRoleId: "",
       roleList: [],
-      loading: true
+      loading: true,
     };
     this.action = "view";
     this.roleId = "";
@@ -102,7 +106,7 @@ class ProfileManagement extends React.Component {
       const res = await request("/sysRole/list");
       if (res && res.status === "SUCCESS") {
         this.setState({
-          roleList: res.data
+          roleList: res.data,
         });
       } else {
         message.error(res.msg || "获取分组列表失败");
@@ -120,14 +124,14 @@ class ProfileManagement extends React.Component {
       const res =
         title === "添加分组"
           ? await request(`/sysRole/role?name=${data.roleName}`, {
-              method: "PUT"
+              method: "PUT",
             })
           : await request("/sysRole/clone", {
               method: "PUT",
               data: {
                 oldRoleId: this.state.oldRoleId,
-                newRoleName: data.roleName
-              }
+                newRoleName: data.roleName,
+              },
             });
       if (res && res.status === "SUCCESS") {
         message.success(`${title}成功!`);
@@ -146,7 +150,7 @@ class ProfileManagement extends React.Component {
   async removeGroup(record) {
     try {
       const res = await request(`/sysRole/${record.roleId}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
       if (res && res.status === "SUCCESS") {
         message.success("删除成功！");
@@ -162,7 +166,7 @@ class ProfileManagement extends React.Component {
   // 进入或退出分组详情
   enterDetail(boolean, type, record) {
     this.setState({
-      enterD: boolean
+      enterD: boolean,
     });
     this.action = type ? type : "view";
     this.roleId = record ? record.roleId : "";
@@ -173,7 +177,7 @@ class ProfileManagement extends React.Component {
   // 进入或退出权限管理
   enterPermission(boolean, record) {
     this.setState({
-      enterP: boolean
+      enterP: boolean,
     });
     this.appId = record ? record.appId : "";
   }
@@ -191,14 +195,14 @@ class ProfileManagement extends React.Component {
             {
               key: "view",
               text: "查看",
-              options: () => this.enterDetail(true, "view", record)
+              options: () => this.enterDetail(true, "view", record),
             },
             {
               key: "edit",
               text: "编辑",
               auth: PROFILE_MANAGEMENT_UPDATE,
               options: () => this.enterDetail(true, "edit", record),
-              hide: record.code === "SUPER_ADMIN"
+              hide: record.code === "SUPER_ADMIN",
             },
             {
               key: "clone",
@@ -208,19 +212,19 @@ class ProfileManagement extends React.Component {
                 this.setState({
                   open: true,
                   title: "克隆分组",
-                  oldRoleId: record.roleId
-                })
+                  oldRoleId: record.roleId,
+                }),
             },
             {
               key: "delete",
               text: "删除",
               auth: PROFILE_MANAGEMENT_DELETE,
-              hide: record.code === "SUPER_ADMIN" || record.code === "GENERAL"
-            }
+              hide: record.code === "SUPER_ADMIN" || record.code === "GENERAL",
+            },
           ];
           return roleList
-            .filter(v => !v.hide)
-            .map(w => (
+            .filter((v) => !v.hide)
+            .map((w) => (
               <Authenticate key={w.key} auth={w.auth}>
                 {w.key === "delete" ? (
                   <Popconfirm
@@ -254,20 +258,22 @@ class ProfileManagement extends React.Component {
                 )}
               </Authenticate>
             ));
-        }
-      }
+        },
+      },
     ];
 
     return (
       <div className={classes.wrapper}>
-        {enterP && <PermissionSetting
-          action={this.action}
-          roleId={this.roleId}
-          appId={this.appId}
-          roleName={this.roleName}
-          enterDetail={this.enterDetail}
-          enterPermission={this.enterPermission}
-        />}
+        {enterP && (
+          <PermissionSetting
+            action={this.action}
+            roleId={this.roleId}
+            appId={this.appId}
+            roleName={this.roleName}
+            enterDetail={this.enterDetail}
+            enterPermission={this.enterPermission}
+          />
+        )}
         {enterD === true ? (
           <GroupDetail
             action={this.action}
@@ -284,7 +290,7 @@ class ProfileManagement extends React.Component {
             handleClick={() => this.setState({ open: true, title: "添加分组" })}
             columns={columns}
             dataSource={roleList}
-            onOk={data => this.handleCreate(data, title)}
+            onOk={(data) => this.handleCreate(data, title)}
             onCancel={() => this.setState({ open: false })}
             visible={open}
             title={title}
@@ -297,5 +303,5 @@ class ProfileManagement extends React.Component {
 }
 export default connect(({ login }) => ({
   userId: login.userDetail.id,
-  teamId: login.currentCompany.id
+  teamId: login.currentCompany.id,
 }))(ProfileManagement);

@@ -47,13 +47,13 @@ export default function FieldDimensionSelect(props) {
   //二级菜单根据时间汇总回调
   const secondMenuSumFunc = index => {
     setSumTypeIndex(index);
-    props.item.changeGroup(TimeSumTypeArr[index], props.item.fieldId);
+    props.item.changeGroup(TimeSumTypeArr[index], props.item.index, props.item.bindType);
     setPopoverVisible(false);
   }
   //二级菜单字段排序回调
   const secondMenuSortFunc = index => {
     setSortTypeIndex(index);
-    props.item.changeSortType(SortTypeArr[index], props.item.fieldId);
+    props.item.changeSortType({...SortTypeArr[index], fieldId: props.item.fieldId}, props.item.index, props.item.bindType);
     setPopoverVisible(false);
   }
 
@@ -83,9 +83,9 @@ export default function FieldDimensionSelect(props) {
       }
     }
   ];
-  
+
   const handleOK = name => {
-    props.item.changeFieldName(name, props.item.fieldId);
+    props.item.changeFieldName(name, props.item.index, props.item.bindType);
     setNameInputVisible(false);
   }
   const handleCancel = () => {

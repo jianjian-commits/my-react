@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Button, Icon, message} from "antd";
-import { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange, setElemName } from '../../redux/action';
+import { changeBind, setDashboards, clearBind, setDBMode , setElemName, setOldElement } from '../../redux/action';
 import { updateChartReq, setDB } from '../../utils/reqUtil';
 import { DBMode } from '../dashboard/Constant';
 import { useParams, useHistory } from "react-router-dom";
 import SaveTipModal from "../elements/modal/saveTipModal";
 import RenameInput from '../base/RenameInput';
+import { getChartObj } from '../../utils/ChartUtil';
+import _ from 'lodash';
 import classes from '../../scss/elements/element.module.scss';
 
 const EditorHeader = props => {
   const history = useHistory();
   const { appId, dashboardId, elementId } = useParams();
-  const { elemName, bindDataArr, chartInfo, setDashboards, setDBMode, saveChartChange, isChartEdited,
-    dataSource, elemType, setElemName } = props;
+  const { elemName, bindDataObj, chartInfo, setDashboards, setDBMode,
+    dataSource, elemType, setElemName, oldElement, setOldElement } = props;
 
   const handleBack = () => {
     const { clearBind } = props;
@@ -22,11 +24,11 @@ const EditorHeader = props => {
     setDBMode(DBMode.Edit);
   }
 
-  const handleSave = (name) => {
+  const handleSave = () => {
     Promise.all([
-      updateChartReq(elementId, dataSource.id, bindDataArr, name, chartInfo, elemType),
+      updateChartReq(elementId, dataSource.id, bindDataObj, elemName, chartInfo, elemType),
       setDB(appId, dashboardId, setDashboards),
-      saveChartChange()
+      setOldElement(getChartObj(elementId, dataSource.id, bindDataObj, elemName, chartInfo, elemType))
     ]).then(
       message.success("保存成功")
     );
@@ -34,7 +36,11 @@ const EditorHeader = props => {
 
   const handleCommit = (val) => {
     setElemName(val);
-    handleSave(val);
+  }
+
+  const isChanged = () => {
+    const elem = getChartObj(elementId, dataSource.id, bindDataObj, elemName, chartInfo, elemType);
+    return !_.isEqual(oldElement, elem);
   }
 
   const [visible, setVisible] = useState(false);
@@ -49,7 +55,7 @@ const EditorHeader = props => {
     //返回且保存图表
     saveChart: e => {
       handleBack();
-      handleSave(elemName);
+      handleSave();
       setVisible(false);
     },
     //返回但不保存图表
@@ -59,11 +65,15 @@ const EditorHeader = props => {
     }
   };
 
+  const onClickBack = () => {
+    isChanged() ? modalProps.showModal() : handleBack()
+  }
+
   return (
     <div className={classes.elementHeader}>
       <SaveTipModal {...modalProps}/>
       <div className={classes.elementHeaderBack}>
-        <Button onClick={isChartEdited ? modalProps.showModal : handleBack} type="link">
+        <Button onClick={onClickBack} type="link">
           <Icon type="arrow-left" style={{color:"#fff"}}/>
         </Button>
       </div>
@@ -78,11 +88,11 @@ const EditorHeader = props => {
 export default connect(
   store => ({
     elemName: store.bi.elemName,
-    bindDataArr: store.bi.bindDataArr,
-    isChartEdited:store.bi.isChartEdited,
+    bindDataObj: store.bi.bindDataObj,
     chartInfo: store.bi.chartInfo,
     dataSource: store.bi.dataSource,
-    elemType: store.bi.elemType
+    elemType: store.bi.elemType,
+    oldElement: store.bi.oldElement
   }),
-  { changeBind, setDashboards, clearBind, setDBMode ,saveChartChange, setElemName }
+  { changeBind, setDashboards, clearBind, setDBMode, setElemName, setOldElement }
 )(EditorHeader);

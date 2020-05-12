@@ -6,9 +6,10 @@ import classes from "./team.module.scss";
 import { getcurrentCompany, getAllCompany } from "../../../store/loginReducer";
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import Authenticate from "../../shared/Authenticate";
-import { HomeContentTitle } from "../../shared/";
+import HomeContent from "../../content/HomeContent";
 import { catchError } from "../../../utils";
 import { TEAM_MANAGEMENT_UPDATE_INFO } from "../../../auth";
+import moment from "moment";
 
 const EditInput = ({ defaultValue, lableKey, onClickSubmit, lable }) => {
   const [isRedact, setIsRedact] = useState(false);
@@ -99,8 +100,7 @@ export default connect(
       .catch(err => catchError(err));
   };
   return currentCompany ? (
-    <div className={classes.container}>
-      <HomeContentTitle title="公司信息"></HomeContentTitle>
+    <HomeContent title="公司信息">
       <div className={classes.listBox}>
         <List itemLayout="horizontal" size="small">
           <List.Item>
@@ -138,15 +138,19 @@ export default connect(
                   创建时间
                 </Col>
                 <Col span={16} className={classes.text}>
-                  {currentCompany.createdDate ? new Date(currentCompany.createdDate).toLocaleString() : null}
+                  {currentCompany.createdDate
+                    ? moment(parseInt(currentCompany.createdDate)).format(
+                        "YYYY-MM-DD kk:mm:ss"
+                      )
+                    : null}
                 </Col>
               </Row>
             </div>
           </List.Item>
         </List>
       </div>
-    </div>
+    </HomeContent>
   ) : (
-      <Spin size="large" />
-    );
+    <Spin size="large" />
+  );
 });
