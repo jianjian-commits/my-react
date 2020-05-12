@@ -70,14 +70,14 @@ const LeftPane = props => {
         </div>
       </div>
       <div className={classes.leftPaneDimension}>
-          <ul>
-            <li className={classes.colTitle}>非数值型字段</li>
+          <div className={classes.colTitle}>非数值型字段</div>
+          <ul className={classes.fieldContainer}>
             {getItems(dataSource).dimArr}
           </ul>
       </div>
       <div className={classes.leftPaneMeasure}>
-          <ul>
-            <li className={classes.colTitle}>数值型字段</li>
+          <div className={classes.colTitle}>数值型字段</div>
+          <ul className={classes.fieldContainer}>
             {getItems(dataSource).meaArr}
           </ul>
       </div>
