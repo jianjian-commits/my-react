@@ -1309,23 +1309,11 @@ class FormChildTest extends React.Component {
 
     return (
       <Form.Item label={<LabelUtils data={item} />}>
-        {item.values.length === 0 ? (
-          <div>
-            <div className="app-formChild">
-              <div className="formChildContainer">
-                <div className="TitleContainer">
-                  <div className="componentTitle" />
-                </div>
-              </div>
-              <div className="formChildAddBtn">
-                <Button type="link" onClick={this.handleAddRow}>
-                  <Icon type="plus" /> 添加
-                </Button>
-              </div>
-            </div>
-          </div>
-        ) : (
-            getFieldDecorator(item.key)(
+        {/* 
+            // FIXME: 没有子组件的时候 是否需要提示
+        */}
+
+            {getFieldDecorator(item.key)(
               <div className="app-formChild">
                 <div className="formChildContainer">
                   <div className="TitleContainer">
@@ -1477,7 +1465,6 @@ class FormChildTest extends React.Component {
                 </Button>
                 </div>
               </div>
-            )
           )}
       </Form.Item>
     );

@@ -489,7 +489,7 @@ class FormDataDetail extends PureComponent {
             return (
               <div key={item.key} className="dataDteailFormChild">
                 <p className="dataTitle">{item.label}</p>
-                {this.renderChildFormTest(formDetail[item.key], item.values)}
+                {item.values.length > 0 ? this.renderChildFormTest(formDetail[item.key], item.values): null}
               </div>
             );
           case "GetLocalPosition":

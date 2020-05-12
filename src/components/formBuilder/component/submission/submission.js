@@ -673,6 +673,7 @@ class Submission extends Component {
             }
           })
           .catch(error => {
+            console.log("error",error)
 
             if (error.response && error.response.data.code === 9998) {
               this._setErrorResponseData(error.response.data);

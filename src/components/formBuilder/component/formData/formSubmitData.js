@@ -746,7 +746,7 @@ class FormSubmitData extends PureComponent {
                 title: item.label,
                 key: item.length === 0 ? item.key : null,
                 children:
-                  item.length !== 0
+                  item.length !== 0 && item.values.length >0
                     ? item.values.map((formChild, i) => {
                         return {
                           title: formChild.label,
@@ -773,7 +773,11 @@ class FormSubmitData extends PureComponent {
                           },
                         };
                       })
-                    : null,
+                    : [
+                      {
+                        key: item.key,
+                        width: 110
+                      }],
               };
               formChildIdArray.push(item.key);
             } else if (item.type === "NumberInput") {
