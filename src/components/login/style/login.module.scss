@@ -101,11 +101,6 @@ $unHoverGray: #b6b6ba;
       }
     }
   }
-  & :global(.ant-tabs-ink-bar) {
-    color: #2a7fff;
-    box-shadow: 0px 2px 8px #6ca7ff;
-    border-radius: 21px;
-  }
 }
 
 .activeLeft {
@@ -452,7 +447,7 @@ $unHoverGray: #b6b6ba;
       }
       & > div:nth-child(3) {
         & input {
-          width: 308px;
+          width: 308px !important;
           height: 40px;
           // border: 1px solid #d6d8de;
           box-sizing: border-box;
@@ -578,9 +573,25 @@ $unHoverGray: #b6b6ba;
       border-radius: 6px;
       font-size: 14px;
       color: #ffffff;
-      & > span{
+      & > span {
         line-height: 44px;
       }
     }
+  }
+}
+
+.tabBar1Style {
+  & :global(.ant-tabs-ink-bar) {
+    color: #2a7fff;
+    box-shadow: 0px 2px 8px #6ca7ff;
+    border-radius: 21px;
+    width: 46px !important;
+    height: 5px;
+    margin: 0 41px;
+  }
+}
+.tabBar2Style {
+  & :global(.ant-tabs-ink-bar) {
+    width: 62px !important;
   }
 }
