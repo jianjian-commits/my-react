@@ -300,7 +300,7 @@ const verificationCode = ({
             style={{ color: "rgba(0,0,0,.25)" }}
           />
         }
-        placeholder={"请填写验证码"}
+        placeholder={"请输入验证码"}
         icon={icon}
         unprefix={unprefix}
         addonAfter={
@@ -345,7 +345,8 @@ const mobilePhone = ({
   hasFeedback,
   resetAllowSendCodeState,
   dispatch,
-  activeKey
+  activeKey,
+  placeholder
 }) => {
   return {
     itemName: "mobilePhone",
@@ -361,7 +362,7 @@ const mobilePhone = ({
     },
     component: (
       <Input
-        placeholder={"请填写手机号"}
+        placeholder={placeholder ? placeholder : "请填写手机号"}
         addonBefore={<span>+86</span>}
         prefix={<Icon type="phone" style={{ color: "rgba(0,0,0,0.25)" }} />}
         onChange={() => {
@@ -606,7 +607,9 @@ export const loginForgetPasswordParameter = [
     label: "手机号",
     hasFeedback: true,
     colon: false,
-    icon: true
+    icon: false,
+    unprefix: true,
+    placeholder: "请输入注册时绑定的手机号"
   },
   // { key: "mobilePhone", value: "forgrtPassword" },
   {
@@ -616,18 +619,20 @@ export const loginForgetPasswordParameter = [
     label: "验证码",
     hasFeedback: true,
     colon: false,
-    icon: true,
+    icon: false,
+    unprefix: true,
     codeType: "RESET"
   },
   {
     help: "forgetPassword",
     key: "password",
     value: null,
-    label: "新密码",
+    label: "设置密码",
     hasFeedback: true,
     colon: false,
     itemName: "password",
-    icon: true
+    icon: false,
+    unprefix: true
   },
   { key: "submit", value: "resetPassword", itemName: "resetPasswordSubmit" }
 ];
