@@ -589,7 +589,12 @@ export const loginPasswordParameter = [
   { key: "submit", value: "login", itemName: "loginPasswordSubmit" }
 ];
 export const loginPhoneParameter = [
-  { key: "mobilePhone", value: "login", itemName: "mobilePhone" },
+  {
+    key: "mobilePhone",
+    value: "login",
+    itemName: "mobilePhone",
+    placeholder: "请输入注册时绑定的手机号"
+  },
   {
     key: "verificationCode",
     value: null,
