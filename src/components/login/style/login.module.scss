@@ -44,7 +44,7 @@ $unHoverGray: #b6b6ba;
     height: 42px;
     background: #ffffff;
     border-radius: 6px;
-    padding-left: 50px !important;
+    text-indent: 20px;
     border-top-right-radius: 6px !important;
     border-bottom-right-radius: 6px !important;
 
@@ -573,14 +573,14 @@ $unHoverGray: #b6b6ba;
       border-radius: 6px;
       font-size: 14px;
       color: #ffffff;
-      & > span{
+      & > span {
         line-height: 44px;
       }
     }
   }
 }
 
-.tabBar1Style{
+.tabBar1Style {
   & :global(.ant-tabs-ink-bar) {
     color: #2a7fff;
     box-shadow: 0px 2px 8px #6ca7ff;
@@ -590,7 +590,7 @@ $unHoverGray: #b6b6ba;
     margin: 0 41px;
   }
 }
-.tabBar2Style{
+.tabBar2Style {
   & :global(.ant-tabs-ink-bar) {
     width: 62px !important;
   }
