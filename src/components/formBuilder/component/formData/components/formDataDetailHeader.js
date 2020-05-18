@@ -7,10 +7,6 @@ import { connect } from "react-redux";
 import request from "../../../../../utils/request";
 import ApproverModal from "./ApproverModal"
 
-import dateUtils from "../../../utils/coverTimeUtils";
-
-const localDate = dateUtils.localDate;
-
 const StartApprovalButton = (props) => {
   async function startApprovelBtnClick() {
     try {
@@ -281,7 +277,7 @@ const FormDataDetailHeader = (props) => {
     backSpanText = "我的待办";
   }
 
-  const { taskData, currentForm, creator, createdTime, updateTime } = props;
+  const { taskData } = props;
   const {
     canSubmit,
     canResubmit,
@@ -346,19 +342,12 @@ const FormDataDetailHeader = (props) => {
           props.resetData();
         }}/></>}
     />
-    <div className="title">
-      <div className="created-detail">
-        <span>创建人：{creator}</span>
-        <span>创建时间：{localDate(createdTime)}</span>
-        <span>更新时间：{localDate(updateTime)}</span>
-      </div>
-    </div>
     </div>
   );
 };
 
 export default connect(({formSubmitData}) => ({
-  createdTime: formSubmitData.createdTime,
-  updateTime: formSubmitData.updateTime,
-  creator: formSubmitData.creator
+  // createdTime: formSubmitData.createdTime,
+  // updateTime: formSubmitData.updateTime,
+  // creator: formSubmitData.creator
 }))(FormDataDetailHeader);

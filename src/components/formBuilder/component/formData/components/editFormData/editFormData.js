@@ -1080,7 +1080,7 @@ class EditFormData extends Component {
                       layout={layout}
                       cols={12}
                       rowHeight={22}
-                      width={870}
+                      width={570}
                       onLayoutChange={layout => {
                         this.setState({ currentLayout: layout });
                       }}

@@ -15,6 +15,9 @@ import {
   editFormDataAuth,
   deleteFormDataAuth,
 } from "../../../utils/permissionUtils";
+
+const localDate = coverTimeUtils.localDate;
+
 import { getTransactList } from "../../../../../store/loginReducer";
 import EditHistory from "./editHistory";
 import moment from "moment";
@@ -552,7 +555,7 @@ class FormDataDetail extends PureComponent {
       BoxStyle = { width: "calc(100vw - 200px)", margin: "0 auto" };
     }
     return (
-      <div className="formDetailBox" style={BoxStyle}>
+      <div style={BoxStyle}>
         <Spin spinning={this.state.isLoading}>
           <FormDataDetailHeader
             submissionId={this.state.submissionId}
@@ -562,6 +565,14 @@ class FormDataDetail extends PureComponent {
             setLoading={this.setLoading}
             getApproveCount={this.props.getApproveCount}
           />
+          <div className="formDetailBox">
+          <div className="title">
+            <div className="created-detail">
+              <span>创建人：{this.props.formSubmitData.creator}</span>
+              <span>创建时间：{localDate(this.props.formSubmitData.createdTime)}</span>
+              <span>更新时间：{localDate(this.props.formSubmitData.updateTime)}</span>
+            </div>
+          </div>
           <div className="formDataDetailContainer">
             <Tabs
               defaultActiveKey="detail"
@@ -589,6 +600,7 @@ class FormDataDetail extends PureComponent {
               ) : null}
             </Tabs>
           </div>
+          </div>
         </Spin>
       </div>
     );
@@ -604,6 +616,7 @@ export default connect(
     token: store.rootData.token,
     extraProp: store.formSubmitData.extraProp,
     taskData: store.formSubmitData.taskData,
+    formSubmitData: store.formSubmitData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentCompany && login.currentCompany.id,
     approveListCount: forms.approveListCount,
