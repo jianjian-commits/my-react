@@ -3,7 +3,7 @@ import { Button, message, Radio } from "antd";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
-import { Navigation } from "../shared";
+import HomeContent from "../content/HomeContent";
 import { Checkbox } from "../shared/customWidget";
 
 const formMeteDataThead = {
@@ -12,13 +12,13 @@ const formMeteDataThead = {
     { key: "ADD", value: "增加" },
     { key: "REDIT", value: "编辑" },
     { key: "DELETE", value: "删除" },
-    { key: "ENABLE", value: "启用" }
+    { key: "ENABLE", value: "启用" },
   ],
   boardHeader: [
     { key: "TYPE", value: "类型" },
     { key: "UPDATE", value: "编辑" },
-    { key: "DEL", value: "删除" }
-  ]
+    { key: "DEL", value: "删除" },
+  ],
 };
 
 const formDataThead = {
@@ -30,13 +30,13 @@ const formDataThead = {
     { key: "DELETE", value: "删除自己" },
     { key: "SEARCHALL", value: "查看所有" },
     { key: "REDITALL", value: "编辑所有" },
-    { key: "DELETEALL", value: "删除所有" }
+    { key: "DELETEALL", value: "删除所有" },
   ],
   boardHeader: [
     { key: "TYPE", value: "类型" },
     { key: "UPDATE", value: "编辑" },
-    { key: "DEL", value: "删除" }
-  ]
+    { key: "DEL", value: "删除" },
+  ],
 };
 
 const Mete = {
@@ -44,12 +44,12 @@ const Mete = {
   TABLE: [
     { key: "FORM", value: "表单数据" },
     { key: "AP", value: "审批流元数据" },
-    { key: "PB", value: "自动化流程元数据" }
+    { key: "PB", value: "自动化流程元数据" },
   ],
   appSetting: "可见",
   createForm: "允许",
   createBoard: "允许",
-  order: "允许"
+  order: "允许",
 };
 
 const Board = ({
@@ -63,22 +63,22 @@ const Board = ({
   CheckBox,
   formId,
   fp,
-  tableName
+  tableName,
 }) => {
   return (
     <table className={Styles.table}>
       <thead>
         <tr>
-          {headers.map(header => (
+          {headers.map((header) => (
             <th key={header.key}>{header.value}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         <tr>
-          {headers.map(header => {
+          {headers.map((header) => {
             const Td = filters.filter(
-              f => f.value.split("_")[2] === header.key
+              (f) => f.value.split("_")[2] === header.key
             );
             if (header.key === "TYPE")
               return <td key={header.key}>仪表盘数据</td>;
@@ -88,12 +88,12 @@ const Board = ({
                   <CheckBox
                     // defaultChecked={Td[0].defaultChecked || Td[0].checked}
                     checked={Td[0].checked}
-                    onChange={e => {
-                      dat[index][fp] = filters.map(f => {
+                    onChange={(e) => {
+                      dat[index][fp] = filters.map((f) => {
                         if (f.value.split("_")[2] === header.key) {
                           return {
                             ...f,
-                            checked: e.target.checked
+                            checked: e.target.checked,
                           };
                         }
                         return f;
@@ -104,16 +104,16 @@ const Board = ({
                           ...state["state"],
                           [permissionsValue]: {
                             ...state["state"][permissionsValue],
-                            [tableName]: dat
-                          }
+                            [tableName]: dat,
+                          },
                         },
                         data: crreteData({
                           defaultChecked: Td[0].defaultChecked || Td[0].checked,
                           checked: e.target.checked,
                           state,
                           dat: Td[0],
-                          formId
-                        })
+                          formId,
+                        }),
                       });
                     }}
                   />
@@ -127,7 +127,7 @@ const Board = ({
   );
 };
 
-const blackSpan = value => (
+const blackSpan = (value) => (
   <span style={{ color: "#333333", fontSize: "14px" }}>{value}</span>
 );
 
@@ -143,29 +143,29 @@ const Tr = ({
   CheckBox,
   formId,
   fp,
-  tableName
+  tableName,
 }) => {
-  const filte = filters.filter(f => f.label.split("_")[0] === table.key);
+  const filte = filters.filter((f) => f.label.split("_")[0] === table.key);
   return (
     <tr>
-      {headers.map(header => {
-        const Td = filte.filter(f => f.label.split("_")[1] === header.key);
-        const disabledCheck = value => {
+      {headers.map((header) => {
+        const Td = filte.filter((f) => f.label.split("_")[1] === header.key);
+        const disabledCheck = (value) => {
           if (value === "DELETE") {
             const relater = filters.filter(
-              f => f.label.split("_")[1] === "DELETEALL"
+              (f) => f.label.split("_")[1] === "DELETEALL"
             )[0].checked;
             return relater;
           }
           if (value === "REDITOWNER") {
             const relater = filters.filter(
-              f => f.label.split("_")[1] === "REDITALL"
+              (f) => f.label.split("_")[1] === "REDITALL"
             )[0].checked;
             return relater;
           }
           if (value === "SEARCHOWNER") {
             const relater = filters.filter(
-              f => f.label.split("_")[1] === "SEARCHALL"
+              (f) => f.label.split("_")[1] === "SEARCHALL"
             )[0].checked;
             return relater;
           }
@@ -183,15 +183,15 @@ const Tr = ({
                     ? disabledCheck(Td[0].label.split("_")[1])
                     : null
                 }
-                onChange={e => {
-                  dat[index][fp] = filters.map(f => {
+                onChange={(e) => {
+                  dat[index][fp] = filters.map((f) => {
                     if (
                       Td[0].label.split("_")[1] === "DELETEALL" &&
                       f.label.split("_")[1] === "DELETE"
                     )
                       return {
                         ...f,
-                        checked: e.target.checked
+                        checked: e.target.checked,
                       };
                     if (
                       Td[0].label.split("_")[1] === "REDITALL" &&
@@ -199,7 +199,7 @@ const Tr = ({
                     )
                       return {
                         ...f,
-                        checked: e.target.checked
+                        checked: e.target.checked,
                       };
                     if (
                       Td[0].label.split("_")[1] === "SEARCHALL" &&
@@ -207,12 +207,12 @@ const Tr = ({
                     )
                       return {
                         ...f,
-                        checked: e.target.checked
+                        checked: e.target.checked,
                       };
                     if (f.label === Td[0].label) {
                       return {
                         ...f,
-                        checked: !f.checked
+                        checked: !f.checked,
                       };
                     }
                     return f;
@@ -223,16 +223,16 @@ const Tr = ({
                       ...state["state"],
                       [permissionsValue]: {
                         ...state["state"][permissionsValue],
-                        [tableName]: dat
-                      }
+                        [tableName]: dat,
+                      },
                     },
                     data: crreteData({
                       defaultChecked: Td[0].defaultChecked || Td[0].checked,
                       checked: e.target.checked,
                       state,
                       dat: Td[0],
-                      formId
-                    })
+                      formId,
+                    }),
                   });
                 }}
               />
@@ -253,21 +253,21 @@ const Table = ({
   setState,
   CheckBox,
   formId,
-  fp
+  fp,
 }) => {
   return (
     <table className={Styles.table}>
       <thead>
         <tr>
-          {headers.map(header => (
+          {headers.map((header) => (
             <th key={header.key}>{header.value}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {Mete["TABLE"].map(table => (
+        {Mete["TABLE"].map((table) => (
           <React.Fragment key={table.key}>
-            {filters.filter(f => f.label.split("_")[0] === table.key)[0] && (
+            {filters.filter((f) => f.label.split("_")[0] === table.key)[0] && (
               <Tr
                 table={table}
                 filters={filters}
@@ -305,19 +305,19 @@ const thunkBoard = (
       {dat.map((board, index) => {
         const filters = board.boardDetailPermissions || board[fp];
         const display = filters.filter(
-          f =>
+          (f) =>
             f.value.split("_")[1] === "VISIBLE" ||
             f.value.split("_")[2] === "VISIBLE"
         );
-        const onChange = e => {
-          dat[index][fp] = filters.map(f => {
+        const onChange = (e) => {
+          dat[index][fp] = filters.map((f) => {
             if (
               f.value.split("_")[1] === "VISIBLE" ||
               f.value.split("_")[2] === "VISIBLE"
             ) {
               return {
                 ...f,
-                checked: e.target.value
+                checked: e.target.value,
               };
             }
             return f;
@@ -328,15 +328,15 @@ const thunkBoard = (
               ...state["state"],
               [permissionsValue]: {
                 ...state["state"][permissionsValue],
-                [tableName]: dat
-              }
+                [tableName]: dat,
+              },
             },
             data: radioData({
               state,
               dat: display[0],
               formId: board.boardId,
-              value: e.target.value
-            })
+              value: e.target.value,
+            }),
           });
         };
         return (
@@ -408,14 +408,14 @@ const thunkForm = (
       {dat.map((form, index) => {
         const filters = form.formDetailPermissions || form[fp];
         const display = filters.filter(
-          f => f.value.split("_")[1] === "VISIBLE"
+          (f) => f.value.split("_")[1] === "VISIBLE"
         );
-        const onChange = e => {
-          dat[index][fp] = filters.map(f => {
+        const onChange = (e) => {
+          dat[index][fp] = filters.map((f) => {
             if (f.value.split("_")[1] === "VISIBLE") {
               return {
                 ...f,
-                checked: e.target.value
+                checked: e.target.value,
               };
             }
             return f;
@@ -426,15 +426,15 @@ const thunkForm = (
               ...state["state"],
               [permissionsValue]: {
                 ...state["state"][permissionsValue],
-                [tableName]: dat
-              }
+                [tableName]: dat,
+              },
             },
             data: radioData({
               state,
               dat: display[0],
               formId: form.formId,
-              value: e.target.value
-            })
+              value: e.target.value,
+            }),
           });
         };
         return (
@@ -493,7 +493,7 @@ const thunkForm = (
 
 const thunkSetting = (state, settingValue, setState, disabled, visMete) => {
   const dat = state["state"][settingValue];
-  const onChange = e => {
+  const onChange = (e) => {
     const { value } = e.target;
     setState({
       ...state,
@@ -501,18 +501,18 @@ const thunkSetting = (state, settingValue, setState, disabled, visMete) => {
         ...state["state"],
         [settingValue]: Object.assign({
           ...dat,
-          checked: value
-        })
+          checked: value,
+        }),
       },
       permissionAllTrue: value
-        ? [...state.permissionAllTrue.filter(f => f !== dat.value), dat.value]
-        : state.permissionAllTrue.filter(f => f !== dat.value),
+        ? [...state.permissionAllTrue.filter((f) => f !== dat.value), dat.value]
+        : state.permissionAllTrue.filter((f) => f !== dat.value),
       permissionTrueToFalse: value
-        ? state.permissionTrueToFalse.filter(f => f !== dat.value)
+        ? state.permissionTrueToFalse.filter((f) => f !== dat.value)
         : [
-            ...state.permissionTrueToFalse.filter(f => f !== dat.value),
-            dat.value
-          ]
+            ...state.permissionTrueToFalse.filter((f) => f !== dat.value),
+            dat.value,
+          ],
     });
   };
   const radioValue = Mete[settingValue];
@@ -541,9 +541,9 @@ const thunkSetting = (state, settingValue, setState, disabled, visMete) => {
 };
 
 const radioData = ({ state, dat, formId, value }) => {
-  const fi = state.data.filter(f => f.formId === formId);
-  const fil = item => {
-    return item.filter(f => f !== dat.value);
+  const fi = state.data.filter((f) => f.formId === formId);
+  const fil = (item) => {
+    return item.filter((f) => f !== dat.value);
   };
   if (!fi[0])
     state.data = [
@@ -551,23 +551,23 @@ const radioData = ({ state, dat, formId, value }) => {
       {
         formId,
         permissionAllTrue: [],
-        permissionTrueToFalse: []
-      }
+        permissionTrueToFalse: [],
+      },
     ];
-  return state.data.map(d => {
+  return state.data.map((d) => {
     const values = () => [dat.value];
     if (d.formId === formId) {
       if (value) {
         return {
           ...d,
           permissionAllTrue: [...fil(d.permissionAllTrue), ...values()],
-          permissionTrueToFalse: fil(d.permissionTrueToFalse)
+          permissionTrueToFalse: fil(d.permissionTrueToFalse),
         };
       } else {
         return {
           ...d,
           permissionAllTrue: fil(d.permissionAllTrue),
-          permissionTrueToFalse: [...fil(d.permissionTrueToFalse), ...values()]
+          permissionTrueToFalse: [...fil(d.permissionTrueToFalse), ...values()],
         };
       }
     }
@@ -575,9 +575,9 @@ const radioData = ({ state, dat, formId, value }) => {
   });
 };
 const crreteData = ({ defaultChecked, checked, state, dat, formId }) => {
-  const fi = state.data.filter(f => f.formId === formId);
-  const fil = item => {
-    return item.filter(f => f !== dat.value);
+  const fi = state.data.filter((f) => f.formId === formId);
+  const fil = (item) => {
+    return item.filter((f) => f !== dat.value);
   };
   if (!fi[0])
     state.data = [
@@ -585,10 +585,10 @@ const crreteData = ({ defaultChecked, checked, state, dat, formId }) => {
       {
         formId,
         permissionAllTrue: [],
-        permissionTrueToFalse: []
-      }
+        permissionTrueToFalse: [],
+      },
     ];
-  return state.data.map(d => {
+  return state.data.map((d) => {
     const values = () => {
       const profix = dat.value.split("_");
       if (profix[1] === "LIST") return [dat.value, profix[0] + "_CHECK"];
@@ -601,19 +601,19 @@ const crreteData = ({ defaultChecked, checked, state, dat, formId }) => {
         return {
           ...d,
           permissionAllTrue: fil(d.permissionAllTrue),
-          permissionTrueToFalse: fil(d.permissionTrueToFalse)
+          permissionTrueToFalse: fil(d.permissionTrueToFalse),
         };
       if (checked) {
         return {
           ...d,
           permissionAllTrue: [...fil(d.permissionAllTrue), ...values()],
-          permissionTrueToFalse: fil(d.permissionTrueToFalse)
+          permissionTrueToFalse: fil(d.permissionTrueToFalse),
         };
       } else {
         return {
           ...d,
           permissionAllTrue: fil(d.permissionAllTrue),
-          permissionTrueToFalse: [...fil(d.permissionTrueToFalse), ...values()]
+          permissionTrueToFalse: [...fil(d.permissionTrueToFalse), ...values()],
         };
       }
     }
@@ -629,14 +629,14 @@ const Permission = ({
   CheckBox,
   settingDisplay,
   title,
-  disabled
+  disabled,
 }) => {
   const permissionsValue = value + "Permissions";
-  const displayControl = item =>
+  const displayControl = (item) =>
     state["state"][item] &&
     (state["state"]["appSetting"]["checked"] || value === "data") &&
     settingDisplay;
-  const formControl = item => {
+  const formControl = (item) => {
     return (
       state["state"][permissionsValue][item] &&
       (state["state"]["appSetting"]["checked"] || value === "data")
@@ -693,14 +693,14 @@ const Permission = ({
   );
 };
 
-const Top = ({
+const getTopPartion = ({
   roleName,
   state,
   disabled,
   initialData,
   enterPermission,
   enterDetail,
-  appId
+  appId,
 }) => {
   const navigationList = [
     {
@@ -709,15 +709,16 @@ const Top = ({
       onClick: () => {
         enterPermission();
         enterDetail();
-      }
+      },
     },
     { key: 1, label: roleName, onClick: () => enterPermission() },
-    { key: 2, label: "应用权限设置", disabled: true }
+    { key: 2, label: "应用权限设置", disabled: true },
   ];
-  return (
-    <div className={Styles.top}>
-      <Navigation navs={navigationList} />
-      <div className={Styles.btn}>
+  return {
+    title: roleName,
+    navigationList,
+    btns: (
+      <>
         <Button onClick={() => enterPermission()}>取消</Button>
         <Button
           onClick={() =>
@@ -727,9 +728,9 @@ const Top = ({
         >
           保存
         </Button>
-      </div>
-    </div>
-  );
+      </>
+    ),
+  };
 };
 
 function handleSaveButton({ state, initialData, enterPermission, appId }) {
@@ -739,11 +740,11 @@ function handleSaveButton({ state, initialData, enterPermission, appId }) {
       ...initialData,
       appPermissionUpdateDetailBos: state.data,
       permissionAllTrue: state.permissionAllTrue,
-      permissionTrueToFalse: state.permissionTrueToFalse
+      permissionTrueToFalse: state.permissionTrueToFalse,
     },
-    headers: { appId }
+    headers: { appId },
   }).then(
-    res => {
+    (res) => {
       if (res && res.status === "SUCCESS") {
         message.success("保存成功");
         enterPermission();
@@ -751,7 +752,7 @@ function handleSaveButton({ state, initialData, enterPermission, appId }) {
         message.error(res.msg || "保存应用权限失败");
       }
     },
-    err => catchError(err)
+    (err) => catchError(err)
   );
 }
 
@@ -759,20 +760,20 @@ function fetchPermissionsDetail({ roleId, appId, setState, state }) {
   request(`/sysRole/appPermission`, {
     method: "post",
     data: { roleId },
-    headers: { appId }
+    headers: { appId },
   }).then(
-    res => {
+    (res) => {
       if (res && res.status === "SUCCESS") {
         setState({
           ...state,
           state: res.data,
-          data: []
+          data: [],
         });
       } else {
         message.error(res.msg || "获取应用权限失败");
       }
     },
-    err => catchError(err)
+    (err) => catchError(err)
   );
 }
 
@@ -783,19 +784,19 @@ export default function ApplyPermissionSetting(props) {
     appId,
     enterPermission,
     roleName,
-    enterDetail
+    enterDetail,
   } = props;
   const initialData = {
     roleId: roleId,
     permissionAllTrue: [],
     permissionTrueToFalse: [],
-    appPermissionUpdateDetailBos: []
+    appPermissionUpdateDetailBos: [],
   };
   const [state, setState] = useState({
     state: null,
     data: [],
     permissionAllTrue: [],
-    permissionTrueToFalse: []
+    permissionTrueToFalse: [],
   });
   const [init, setInit] = useState(false);
   const disabled = action === "view" ? true : false;
@@ -821,46 +822,44 @@ export default function ApplyPermissionSetting(props) {
       roleId,
       appId,
       setState,
-      state
+      state,
     });
     return setInit(true);
   }
   if (!state.state) return null;
+  const topPartion = getTopPartion({
+    roleName,
+    state,
+    disabled,
+    initialData,
+    enterPermission,
+    enterDetail,
+    appId,
+  });
   return (
-    <>
-      <div className={Styles.apsLayout}>
-        <div className={Styles.aps}>
-          <Top
-            state={state}
-            disabled={disabled}
-            initialData={initialData}
-            enterPermission={enterPermission}
-            enterDetail={enterDetail}
-            roleName={roleName}
-            appId={appId}
-          />
-          <Permission
-            value={"metaData"}
-            headers={formMeteDataThead}
-            state={state}
-            setState={setState}
-            CheckBox={CheckBox}
-            settingDisplay={true}
-            title={"元数据权限"}
-            disabled={disabled}
-          />
-          <Permission
-            value={"data"}
-            headers={formDataThead}
-            state={state}
-            setState={setState}
-            CheckBox={CheckBox}
-            settingDisplay={false}
-            title={"数据权限"}
-            disabled={disabled}
-          />
-        </div>
+    <HomeContent {...topPartion}>
+      <div className={Styles.aps}>
+        <Permission
+          value={"metaData"}
+          headers={formMeteDataThead}
+          state={state}
+          setState={setState}
+          CheckBox={CheckBox}
+          settingDisplay={true}
+          title={"元数据权限"}
+          disabled={disabled}
+        />
+        <Permission
+          value={"data"}
+          headers={formDataThead}
+          state={state}
+          setState={setState}
+          CheckBox={CheckBox}
+          settingDisplay={false}
+          title={"数据权限"}
+          disabled={disabled}
+        />
       </div>
-    </>
+    </HomeContent>
   );
 }
