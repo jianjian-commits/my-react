@@ -1,5 +1,7 @@
 import React,{useEffect} from "react";
 import { Button, Row, Col, Icon, Modal, Breadcrumb, message, Input,Select } from "antd";
+import HeaderBar from "../../base/NavBar";
+import { history } from "../../../../../store";
 import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import request from "../../../../../utils/request";
@@ -291,92 +293,66 @@ const FormDataDetailHeader = (props) => {
   } = taskData;
   return (
     <div className="FormDataDetailHeader">
-      <Row type="flex" justify="space-between">
-        <Col>
-          <Row type="flex" align="middle" gutter={10}>
-            <Col>
-              <div className="title">
-                <Breadcrumb
-                  separator={
-                    <svg
-                      width="7"
-                      height="12"
-                      viewBox="0 0 7 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z"
-                        fill="#666666"
-                      />
-                    </svg>
-                  }
-                >
-                  <Breadcrumb.Item className="recordList" onClick={onClickBack}>
-                    {backSpanText}
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item className="submitRecord">
-                    {currentForm.name}
-                  </Breadcrumb.Item>
-                </Breadcrumb>
-                <div className="created-detail">
-                  <span>创建人：{creator}</span>
-                  <span>创建时间：{localDate(createdTime)}</span>
-                  <span>更新时间：{localDate(updateTime)}</span>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </Col>
-        <Col>
-          <div className="title">
-            <StartApprovalButton
-              canSubmit={canSubmit}
-              appId={appId}
-              setTaskId={setTaskId}
-              setApproverModalVisible={setApproverModalVisible}
-              {...props}
-            />
-            <ReSubmitApprovalButton
-              canResubmit={canResubmit}
-              appId={appId}
-              taskId={currentTaskId}
-              setTaskId={setTaskId}
-              setApproverModalVisible={setApproverModalVisible}
-              {...props}
-            />
-            <WithdrawApprovalButton
-              isAllowedWithDraw={canWithdraw}
-              appId={appId}
-              processInstanceId={currentProcessInstanceId}
-              {...props}
-            />
-            <ApprovalProcessButtons
-              taskId={currentTaskId}
-              isApprovalProcessor={canApprove}
-              appId={appId}
-              setTaskId={setTaskId}
-              setApproverModalVisible={setApproverModalVisible}
-              {...props}
-            />
-            <SetApproverBtn 
-              taskId={currentTaskId}
-              setTaskId={setTaskId}
-              canSetApprover={canSetApprover}
-              setApproverModalVisible={setApproverModalVisible}
-            />
-            <ApproverModal 
-              visible={isApproverModalVisible} 
-              taskId={taskId || currentTaskId}
-              setVisible={setApproverModalVisible} 
-              formId={props.currentForm.id}
-              appId={appId}
-              afterApproverModal={()=>{
-                props.resetData();
-              }}/>
-          </div>
-        </Col>
-      </Row>
+    <HeaderBar
+      name={"记录详情"}
+      navs={[
+        { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
+        { key: 1, label: props.appName || "未知应用名", disabled: true },
+        { key: 1, label: "记录列表", onClick: onClickBack }
+      ]}
+      isShowExtraTitle={false}
+      btns={<><StartApprovalButton
+        canSubmit={canSubmit}
+        appId={appId}
+        setTaskId={setTaskId}
+        setApproverModalVisible={setApproverModalVisible}
+        {...props}
+      />
+      <ReSubmitApprovalButton
+        canResubmit={canResubmit}
+        appId={appId}
+        taskId={currentTaskId}
+        setTaskId={setTaskId}
+        setApproverModalVisible={setApproverModalVisible}
+        {...props}
+      />
+      <WithdrawApprovalButton
+        isAllowedWithDraw={canWithdraw}
+        appId={appId}
+        processInstanceId={currentProcessInstanceId}
+        {...props}
+      />
+      <ApprovalProcessButtons
+        taskId={currentTaskId}
+        isApprovalProcessor={canApprove}
+        appId={appId}
+        setTaskId={setTaskId}
+        setApproverModalVisible={setApproverModalVisible}
+        {...props}
+      />
+      <SetApproverBtn 
+        taskId={currentTaskId}
+        setTaskId={setTaskId}
+        canSetApprover={canSetApprover}
+        setApproverModalVisible={setApproverModalVisible}
+      />
+      <ApproverModal 
+        visible={isApproverModalVisible} 
+        taskId={taskId || currentTaskId}
+        setVisible={setApproverModalVisible} 
+        formId={props.currentForm.id}
+        appId={appId}
+        afterApproverModal={()=>{
+          props.resetData();
+        }}/></>}
+    />
+    <div className="title">
+      <div className="created-detail">
+        <span>创建人：{creator}</span>
+        <span>创建时间：{localDate(createdTime)}</span>
+        <span>更新时间：{localDate(updateTime)}</span>
+      </div>
+    </div>
     </div>
   );
 };
