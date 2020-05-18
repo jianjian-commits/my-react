@@ -31,7 +31,7 @@ export const BaseInfo = ({
     },
     {
       key: "dataShare",
-      label: "是否与同时共享数据",
+      label: "同职位共享数据",
       value: positionInfo.dataShare,
     },
     { key: "description", label: "描述", value: positionInfo.description },

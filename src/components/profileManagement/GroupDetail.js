@@ -228,12 +228,12 @@ class GroupDetail1 extends Component {
   }
 
   render() {
-    const { action, enterDetail, enterPermission, roleName } = this.props;
+    const { action, enterDetail, enterPermission, roleName, className } = this.props;
     const { editable, baseInfoBo, appManagerBos, permissions } = this.state;
     const disabled = action === "view" ? true : false;
     const topPartion = getTopPartion({ roleName, disabled, enterDetail, handleDetail: this.handleDetail.bind(this) });
     return (
-      <HomeContent {...topPartion}>
+      <HomeContent className={className} {...topPartion}>
         <BaseInfoModule
           disabled={disabled}
           baseInfoBo={baseInfoBo}

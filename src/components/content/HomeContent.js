@@ -26,10 +26,10 @@ export default connect(
   () => ({}),
 )(function HomeContent(props) {
   const {
-    title, navs, btns, children, mainClassName
+    title, navs, btns, children, mainClassName, className
   } = props;
   return (
-    <Content className={classes.homeContentWrapper} style={{}}>
+    <Content className={clx(className, classes.homeContentWrapper)} style={{}}>
       <HomeContentTitle {...{title, navs, btns}}/>
       <div className={clx(comClasses.homeContentMain, mainClassName)}>
         {children}
