@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import Authenticate from "../shared/Authenticate";
-import { Button, message, Popconfirm } from "antd";
-import { Table } from "../shared/customWidget";
+import { message, Popconfirm } from "antd";
+import { Table, Button } from "../shared/customWidget";
 import ModalCreation from "./modalCreate/ModalCreation";
 import GroupDetail from "./GroupDetail";
 import PermissionSetting from "../userManagement/ApplyPermissionSettings";

@@ -84,3 +84,39 @@
     border-color: #00000040;
   }
 }
+
+.customButton {
+  margin-left: 6px;
+  > svg {
+    position: relative;
+    top: 1px;
+    margin-right: 5px;
+  }
+  &:global(.default) {
+    border: 1px solid rgb(42, 127, 255);
+    background-color: transparent;
+    color: rgb(42, 127, 255);
+    svg {
+      rect {
+        fill: rgb(42, 127, 255);
+      }
+    }
+    &:hover, &:active, &:focus {
+      svg {
+        rect {
+          fill: #40a9ff
+        }
+      }
+    }
+  }
+  &:global(.primary) {
+    border: 1px solid rgb(42, 127, 255);
+    background-color: rgb(42, 127, 255);
+    color: rgb(255, 255, 255);
+    svg {
+      rect {
+        fill: rgb(255, 255, 255);
+      }
+    }
+  }
+}

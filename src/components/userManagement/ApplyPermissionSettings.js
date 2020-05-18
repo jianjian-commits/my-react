@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, message, Radio } from "antd";
+import { message, Radio } from "antd";
+import { Button } from "../shared/customWidget";
 import Styles from "./user.module.scss";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
@@ -721,6 +722,7 @@ const getTopPartion = ({
       <>
         <Button onClick={() => enterPermission()}>取消</Button>
         <Button
+          type="primary"
           onClick={() =>
             handleSaveButton({ state, initialData, enterPermission, appId })
           }

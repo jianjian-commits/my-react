@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { history } from "../../store";
 import request from "../../utils/request";
-import { Button, message } from "antd";
+import { message } from "antd";
+import { Button } from "../shared/customWidget";
 import {
   BaseInfoModule,
   AppManagerModule,
@@ -31,10 +32,6 @@ const getTopPartion = ({ roleName, disabled, enterDetail, handleDetail }) => {
         </Button>
         <Button
           onClick={() => enterDetail()}
-          style={{
-            border: "1px solid #2A7FFF",
-            backgroundColor: "transparent"
-          }}
         >
           取消
         </Button>
