@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { message } from "antd";
+import HomeContent from "../content/HomeContent";
+import { history } from "../../store";
 import { Table } from "../shared/customWidget";
 import request from '../../utils/request'
 import classes from "./transactList.module.scss";
@@ -17,35 +19,35 @@ const SubmitTransactList = props => {
   const [tableLoading, setTableLoading] = React.useState(false);
 
   useEffect(() => {
-      getTransactList(currentPage, pageSize);
-  },[approvalKey]);
+    getTransactList(currentPage, pageSize);
+  }, [approvalKey]);
 
   async function getTransactList(currentPage, pageSize) {
     setTableLoading(true)
     try {
-      const res = await request(`/flow/history/approval/submits`,{
-        method:"POST",
-        headers:{
+      const res = await request(`/flow/history/approval/submits`, {
+        method: "POST",
+        headers: {
           appid: appId
         },
-        data:{
+        data: {
           page: currentPage, //从1开始
           size: pageSize
         }
       });
       if (res && res.status === "SUCCESS") {
-          const { total, currentPage, pageSize, datas } = res.data;
-          const list = datas.map(item =>{
-            item.key= item.submitDate;
-            item.submitDate = new Date(item.submitDate).toLocaleString("chinese", { hour12: false })
-            return item;
-          });
-          setTransactList(list);
-          setApprovalKey(approvalKey);
-          setTotal(total);
-          setPageSize(pageSize);
-          setCurrentPage(currentPage);
-          setTableLoading(false)
+        const { total, currentPage, pageSize, datas } = res.data;
+        const list = datas.map(item => {
+          item.key = item.submitDate;
+          item.submitDate = new Date(item.submitDate).toLocaleString("chinese", { hour12: false })
+          return item;
+        });
+        setTransactList(list);
+        setApprovalKey(approvalKey);
+        setTotal(total);
+        setPageSize(pageSize);
+        setCurrentPage(currentPage);
+        setTableLoading(false)
       } else {
         message.error("获取审批列表失败");
         setTableLoading(false)
@@ -91,7 +93,7 @@ const SubmitTransactList = props => {
       key: "action",
       render: (text, record) => {
         return (
-          <span onClick={(e)=>{props.setEnterApprovalDetail(true); setCurrentDetailId(record.dataId)}}>查看</span>
+          <span onClick={(e) => { props.setEnterApprovalDetail(true); setCurrentDetailId(record.dataId) }}>查看</span>
         );
       }
     }
@@ -114,34 +116,41 @@ const SubmitTransactList = props => {
     setPageSize(pageSize);
     getTransactList(current, pageSize);
   };
-
+  const navs = [
+    { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
+    { key: 1, label: `${props.appName}`, disabled: true }
+  ];
   return (
-    props.enterApprovalDetail === false ?(
-      <div className={classes.transactListContainer}>
-      <div className={classes.tableTitle}>
-        我发起的 <span className={classes.totalNumber}>（共{total}条）</span>
-      </div>
-      <div className={classes.tableBox}>
-        <Table
-          loading={tableLoading} 
-          columns={columns} 
-          dataSource={transactList} 
-          pagination={paginationProps}
+    props.enterApprovalDetail === false ? (
+      <HomeContent
+        title={
+          <div className={classes.tableTitle}>
+            我发起的 <span className={classes.totalNumber}>（共{total}条）</span>
+          </div>
+        }
+        navs={navs}
+      >
+        <div className={classes.tableBox}>
+          <Table
+            loading={tableLoading}
+            columns={columns}
+            dataSource={transactList}
+            pagination={paginationProps}
           ></Table>
-      </div>
-    </div>
-    ):(
-      <FormDataDetail
-        id={currentDetailId.substring(0, currentDetailId.indexOf("-"))}
-        dataId={currentDetailId}
-        appId={appId}
-        actionFun={props.actionFun}
-        fn = {props.fn}
-        approvalKey={props.approvalKey}
-        enterPort={"TransctionList"}
-      />
-    )
-    
+        </div>
+      </HomeContent>
+    ) : (
+        <FormDataDetail
+          id={currentDetailId.substring(0, currentDetailId.indexOf("-"))}
+          dataId={currentDetailId}
+          appId={appId}
+          actionFun={props.actionFun}
+          fn={props.fn}
+          approvalKey={props.approvalKey}
+          enterPort={"TransctionList"}
+        />
+      )
+
   );
 };
 

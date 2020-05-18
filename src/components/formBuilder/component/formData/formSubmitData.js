@@ -971,8 +971,9 @@ class FormSubmitData extends PureComponent {
                   this.props.history.go(-1);
                 }}
                 name={this.props.forms.name}
+                appName={this.props.appName}
                 isShowBtn={true}
-                isShowBackBtn={false}
+                isShowBackBtn={true}
                 btnValue="提交数据"
                 formId={this.props.formId}
                 clickCallback={() => {

@@ -72,6 +72,7 @@ const HomeSider = (props) => {
   return (
     <Sider
       trigger={null}
+      className={classes.sider}
       theme="light"
       width="240"
       collapsible
