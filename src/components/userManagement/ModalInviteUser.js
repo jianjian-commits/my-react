@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Input, Button, Modal, message } from "antd";
+import { Input, Modal, message } from "antd";
+import { Button } from "../shared/customWidget";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
@@ -35,8 +36,6 @@ export default function InviteUser(props) {
   return (
     <>
       <Button
-        className={classes.btn}
-        // icon="plus"
         type="primary"
         onClick={() => handleInviteUserBtn()}
       >
