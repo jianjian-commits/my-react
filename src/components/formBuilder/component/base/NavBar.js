@@ -62,7 +62,6 @@ class NavBar extends PureComponent {
           this.props.btns
         )}
       </div> ) : null;
-    console.log(btns)
     return (
       <HomeContentTitle
         title={name}
