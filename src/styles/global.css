@@ -1,3 +1,11 @@
+
+#root {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
 body {
   margin: 0;
   background: #f3f4f5;
