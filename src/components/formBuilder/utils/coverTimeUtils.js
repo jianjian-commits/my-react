@@ -25,7 +25,11 @@ function localDate(date, componentType, isEditData) {
       break;
     case "PureDate":
       if(moment(date).isValid()){
-        return moment(date).local().format("YYYY-MM-DD");
+        if(isEditData){
+          return moment.utc(date).local()
+        }else {
+          return moment(date).local().format("YYYY-MM-DD");
+        }
       }
       break;
     default: 

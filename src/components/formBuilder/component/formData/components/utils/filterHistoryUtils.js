@@ -11,8 +11,8 @@ import DateUtils from "../../../../utils/coverTimeUtils";
 const filterHistory = {
   DateInput: record => {
     const type = record.type;
-    let beforeValue = DateUtils.localDate(record.beforeValue, type),
-      afterValue = DateUtils.localDate(record.afterValue, type);
+    let beforeValue = DateUtils.localDate(record.beforeValue, type, true),
+      afterValue = DateUtils.localDate(record.afterValue, type, true);
       switch(type) {
           case "DateInput": {
               return [beforeValue ? beforeValue.format("YYYY-MM-DD HH:mm:ss") : "", afterValue ? afterValue.format("YYYY-MM-DD HH:mm:ss") : ""]
