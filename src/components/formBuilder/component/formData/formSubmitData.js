@@ -24,7 +24,7 @@ import {
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
 import FilterComponent from "./components/filterComponent/filterComponent";
-import coverTimeUtils from "../../utils/coverTimeUtils";
+import { localDate } from "../../utils/coverTimeUtils";
 import moment from "moment";
 
 // 加载数据时重写表格为空状态
@@ -305,19 +305,19 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureTime":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "ImageUpload":
@@ -492,7 +492,7 @@ class FormSubmitData extends PureComponent {
         if (submitData == void 0) {
           return <></>;
         }
-        return coverTimeUtils.localDate(submitData);
+        return localDate(submitData, "DateInput");
       case "MultiDropDown":
       case "CheckboxInput":
         return (
@@ -503,20 +503,20 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div key={component.key}>
-            {submitData != void 0 ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData != void 0 ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
           return (
             <div className="formChild-item">
-              {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+              {submitData ? localDate(submitData, component.type) : ""}
             </div>
       );
       case "PureTime":
         return (
           <div key={component.key}>
             {submitData != void 0
-              ? coverTimeUtils.localDate(submitData, component.type)
+              ? localDate(submitData, component.type)
               : ""}
           </div>
         );
