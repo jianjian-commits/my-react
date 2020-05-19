@@ -16,11 +16,10 @@ import {
   deleteFormDataAuth,
 } from "../../../utils/permissionUtils";
 
-const localDate = coverTimeUtils.localDate;
-
 import { getTransactList } from "../../../../../store/loginReducer";
 import EditHistory from "./editHistory";
 import moment from "moment";
+const localDate = coverTimeUtils.localDate;
 const { TabPane } = Tabs;
 const columns = [
   {
