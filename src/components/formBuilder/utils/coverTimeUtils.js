@@ -11,17 +11,16 @@ function localDate(date, componentType, isReturnMomentType = false) {
   if(moment(date).isValid()){
     if(isReturnMomentType === true) {
       return moment.utc(date).local()
-    } else {
-      switch(componentType){
-        case "DateInput":
-          return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
-        case "PureTime":
-          return moment.utc(date).local().format("HH:mm:ss");
-        case "PureDate":
-          return moment(date).local().format("YYYY-MM-DD");
-        default: 
-          return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
-        }
+    }
+    switch(componentType){
+      case "DateInput":
+        return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
+      case "PureTime":
+        return moment.utc(date).local().format("HH:mm:ss");
+      case "PureDate":
+        return moment(date).local().format("YYYY-MM-DD");
+      default: 
+        return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
     }
   }
 
