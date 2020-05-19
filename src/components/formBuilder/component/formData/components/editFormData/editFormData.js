@@ -6,7 +6,7 @@ import { history } from "../../../../../../store";
 import config from '../../../../config/config'
 import { modifySubmissionDetail } from "../../redux/utils/getDataUtils";
 import moment from "moment";
-import coverTimeUtils from '../../../../utils/coverTimeUtils'
+import { utcDate } from '../../../../utils/coverTimeUtils'
 
 import { connect } from "react-redux";
 import HeaderBar from "../../../base/NavBar";
@@ -207,9 +207,9 @@ class EditFormData extends Component {
         ) {
           // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
           if (values[component.key].constructor === Date) {
-            values[component.key] = coverTimeUtils.utcDate(new Date(values[component.key]), "DateInput");
+            values[component.key] = utcDate(new Date(values[component.key]), type);
           } else {
-            values[component.key] = coverTimeUtils.utcDate(values[component.key], type);
+            values[component.key] = utcDate(values[component.key], type);
           }
         }
 

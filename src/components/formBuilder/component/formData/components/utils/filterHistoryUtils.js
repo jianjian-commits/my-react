@@ -6,13 +6,13 @@
  * @Description:
  * @FilePath: \form-builderc:\Komons\work\all\davinci-paas-frontend\src\components\formBuilder\component\formData\components\utils\filterHistoryUtils.js
  */
-import DateUtils from "../../../../utils/coverTimeUtils";
+import { localDate } from "../../../../utils/coverTimeUtils";
 
 const filterHistory = {
   DateInput: record => {
     const type = record.type;
-    let beforeValue = DateUtils.localDate(record.beforeValue, type, true),
-      afterValue = DateUtils.localDate(record.afterValue, type, true);
+    let beforeValue = localDate(record.beforeValue, type, true),
+      afterValue = localDate(record.afterValue, type, true);
       switch(type) {
           case "DateInput": {
               return [beforeValue ? beforeValue.format("YYYY-MM-DD HH:mm:ss") : "", afterValue ? afterValue.format("YYYY-MM-DD HH:mm:ss") : ""]

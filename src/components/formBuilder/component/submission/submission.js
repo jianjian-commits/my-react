@@ -58,7 +58,7 @@ import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
 import moment from "moment";
-import coverTimeUtils from "../../utils/coverTimeUtils";
+import { utcDate } from "../../utils/coverTimeUtils";
 
 import PureTime from "./component/pureTime";
 import PureDate from "./component/pureDate";
@@ -242,12 +242,12 @@ class Submission extends Component {
         ) {
           // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
           if (values[component.key].constructor === Date) {
-            values[component.key] = coverTimeUtils.utcDate(
+            values[component.key] = utcDate(
               new Date(values[component.key]),
               "DateInput"
             );
           } else {
-            values[component.key] = coverTimeUtils.utcDate(
+            values[component.key] = utcDate(
               values[component.key],
               type
             );
@@ -534,7 +534,7 @@ class Submission extends Component {
             } else {
               const dateTypes = ["PureDate", "PureTime", "DateInput"];
               if (dateTypes.includes(type) && data[k].data) {
-                data[k].data = coverTimeUtils.utcDate(data[k].data, type);
+                data[k].data = utcDate(data[k].data, type);
               }
             }
           }

@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Form, Table, Icon, Tabs, message, Spin } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import coverTimeUtils from "../../../utils/coverTimeUtils";
+import { localDate } from "../../../utils/coverTimeUtils";
 import {
   getSubmissionDetail
 } from "../redux/utils/getDataUtils";
@@ -18,8 +18,6 @@ import {
 
 import { getTransactList } from "../../../../../store/loginReducer";
 import EditHistory from "./editHistory";
-import moment from "moment";
-const localDate = coverTimeUtils.localDate;
 const { TabPane } = Tabs;
 const columns = [
   {
@@ -223,7 +221,7 @@ class FormDataDetail extends PureComponent {
         return (
           <div className="formChildData">
             {submitData
-              ? coverTimeUtils.localDate(submitData, component.type)
+              ? localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -231,14 +229,14 @@ class FormDataDetail extends PureComponent {
           return (
             <div className="formChildData">
               {submitData
-                ? coverTimeUtils.localDate(submitData, component.type)
+                ? localDate(submitData, component.type)
                 : ""}
             </div>)
         case "PureTime":
         return (
           <div className="formChildData">
             {submitData
-              ? coverTimeUtils.localDate(submitData, component.type)
+              ? localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -351,7 +349,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
+                    ? localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -362,7 +360,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
+                    ? localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -373,7 +371,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
+                    ? localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -568,8 +566,8 @@ class FormDataDetail extends PureComponent {
           <div className="title">
             <div className="created-detail">
               <span>创建人：{this.props.formSubmitData.creator}</span>
-              <span>创建时间：{localDate(this.props.formSubmitData.createdTime)}</span>
-              <span>更新时间：{localDate(this.props.formSubmitData.updateTime)}</span>
+              <span>创建时间：{localDate(this.props.formSubmitData.createdTime, "DateInput")}</span>
+              <span>更新时间：{localDate(this.props.formSubmitData.updateTime, "DateInput")}</span>
             </div>
           </div>
           <div className="formDataDetailContainer">
