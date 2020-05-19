@@ -17,7 +17,7 @@ export function localDate(date, componentType, isEditData) {
     case "DateInput":
       return isValid ? moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss") : "";
     case "PureTime":
-      return moment.utc(date).local().format("HH:mm:ss");
+      return isValid ? moment.utc(date).local().format("HH:mm:ss") : "";
     case "PureDate":
       return isValid ? moment(date).local().format("YYYY-MM-DD") : "";
   }
