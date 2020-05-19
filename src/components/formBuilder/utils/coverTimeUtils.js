@@ -1,40 +1,27 @@
 import moment from 'moment'
 
-function localDate(date, componentType, isEditData) {
+function localDate(date, componentType, isReturnMomentType = false) {
   // 将utc时区时间转为当前本地时间
-  switch(componentType){
-    case "DateInput":
-      if(moment(date).isValid()){
-        if(isEditData){
-          return moment.utc(date).local()
-        }
-        return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
-      }
-    break;
-    case "PureTime":
-      if(!moment(date).isValid()){
-        // 是否在组件内使用 2020-04-17T03:37:01.633
-        date =  new Date(`2016-09-03T${date}Z`)
-      };
-      if(moment(date).isValid()){
-        if(isEditData){
-          return moment.utc(date).local()
-        }
-        return moment.utc(date).local().format("HH:mm:ss");
-      }
-      break;
-    case "PureDate":
-      if(moment(date).isValid()){
-        if(isEditData){
-          return moment.utc(date).local()
-        }else {
+  if(componentType === "PureTime" && !moment(date).isValid()) {
+    date =  new Date(`2016-09-03T${date}Z`)
+  } else if(componentType === undefined) {
+    date = date+"Z"
+  }
+
+  if(moment(date).isValid()){
+    if(isReturnMomentType === true) {
+      return moment.utc(date).local()
+    } else {
+      switch(componentType){
+        case "DateInput":
+          return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
+        case "PureTime":
+          return moment.utc(date).local().format("HH:mm:ss");
+        case "PureDate":
           return moment(date).local().format("YYYY-MM-DD");
+        default: 
+          return moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
         }
-      }
-      break;
-    default: 
-    if(moment(date+"Z").isValid()){
-      return moment.utc(date+"Z").local().format("YYYY-MM-DD HH:mm:ss");
     }
   }
 
