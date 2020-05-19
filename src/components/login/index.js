@@ -75,6 +75,9 @@ function Signin({
             borderBottom: "1px solid #FFFFFF",
             marginBottom: "50px"
           }}
+          className={clx(Styles.tabBar1Style, {
+            [Styles.tabBar2Style]: activeTab === "2"
+          })}
           tabBarGutter={35}
           onChange={key => setActiveTab(key)}
         >

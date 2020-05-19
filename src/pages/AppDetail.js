@@ -65,7 +65,7 @@ const AppDetail = props => {
   const [submit, setSubmit] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState(null);
   const [enterApprovalDetail, setEnterApprovalDetail] = React.useState(false);
-  const [searchStatus,setSearchStatus] = React.useState(true)
+  const [searchStatus, setSearchStatus] = React.useState(true)
 
   // zxx mockForms存储表单列表数据
   const [mockForms, setMockForms] = React.useState({
@@ -85,22 +85,22 @@ const AppDetail = props => {
     setUser({ user: { id, name } });
 
     // let extraProp = { user: { id, name} }
-    
-      getFormsAll(appId, true).then(res => {
-        // let newList = []
-        newList = res.map(item => ({
-          key: item.id,
-          name: item.name,
-          type: item.type
-          // icon: TableIcon
-        }));
-        
-        setMockForms({
-          groups: [],
-          searchList: [],
-          list: newList
-        });
+
+    getFormsAll(appId, true).then(res => {
+      // let newList = []
+      newList = res.map(item => ({
+        key: item.id,
+        name: item.name,
+        type: item.type
+        // icon: TableIcon
+      }));
+
+      setMockForms({
+        groups: [],
+        searchList: [],
+        list: newList
       });
+    });
 
   }, [appId, props.userDetail]);
 
@@ -140,9 +140,9 @@ const AppDetail = props => {
   const searchHandle = e => {
     const { value } = e.target;
     setSearchKey(value);
-    if(value){
+    if (value) {
       setSearchStatus(false)
-    }else{
+    } else {
       setSearchStatus(true)
     }
   };
@@ -161,6 +161,7 @@ const AppDetail = props => {
 
   let TransactList = <></>;
   let transctionListOptions = {
+    appName,
     actionFun: (submission_id, submitFlag = false, formId) => {
       setSubmit(submitFlag);
       setSubmissionId(submission_id);
@@ -176,7 +177,7 @@ const AppDetail = props => {
   };
   switch (approvalKey) {
     case "myPending":
-      TransactList = <TodoTransctionList {...transctionListOptions} approveListCount={props.approveListCount}/>;
+      TransactList = <TodoTransctionList {...transctionListOptions} approveListCount={props.approveListCount} />;
       break;
     case "mySubmitted":
       TransactList = <SubmitTransctionList {...transctionListOptions} />;
@@ -197,21 +198,21 @@ const AppDetail = props => {
   }
 
   const openDBVistor = id => {
-    if(list[0].key !== "") {
+    if (list[0].key !== "") {
       setDB(appId, id, props.setDashboards);
       props.setDBMode(DBMode.Visit)
       props.setVisitorSorts(new Map());
     }
   };
 
-    /**
-   * On select dashboard or form.
-   */
+  /**
+ * On select dashboard or form.
+ */
   const handleClickList = (id, type) => {
     setSelectedID(id);
     setSelectedType(type);
 
-    switch(type) {
+    switch (type) {
       case DASHBOARD:
         openDBVistor(id);
         break;
@@ -225,9 +226,9 @@ const AppDetail = props => {
 
   const getDashboard = () => {
     return (
-      <div style={{height: document.body.scrollHeight - HEADER_HEIGHT}}>
-       <VisitorHeader/>
-       <DBVisitor height={document.body.scrollHeight - HEADER_HEIGHT - VISITOR_HEADER_HEIGHT}/>
+      <div style={{ height: document.body.scrollHeight - HEADER_HEIGHT }}>
+        <VisitorHeader />
+        <DBVisitor height={document.body.scrollHeight - HEADER_HEIGHT - VISITOR_HEADER_HEIGHT} />
       </div>)
   }
 
@@ -239,6 +240,7 @@ const AppDetail = props => {
             key={Math.random()}
             formId={selectedID}
             submissionId={submissionId}
+            appName={appName}
             appId={appId}
             extraProp={user}
             actionFun={(submission_id, submitFlag = false) => {
@@ -247,41 +249,43 @@ const AppDetail = props => {
             }}
           ></FormBuilderEditFormData>
         ) : (
-          <FormBuilderSubmission
+            <FormBuilderSubmission
+              key={Math.random()}
+              formId={selectedID}
+              extraProp={user}
+              appid={appId}
+              appName={appName}
+              actionFun={skipToSubmissionData}
+            ></FormBuilderSubmission>
+          )
+      ) : (
+          <FormBuilderSubmitData
             key={Math.random()}
             formId={selectedID}
-            extraProp={user}
-            appid={appId}
-            actionFun={skipToSubmissionData}
-          ></FormBuilderSubmission>
-        )
-      ) : (
-        <FormBuilderSubmitData
-          key={Math.random()}
-          formId={selectedID}
-          actionFun={(submission_id, submitFlag = false, formId) => {
-            setSubmit(submitFlag);
-            setSubmissionId(submission_id);
-            if (formId) {
-              setSelectedID(formId);
-            }
-          }}
-          appId={appId}
-          searchStatus = { searchStatus }
-        ></FormBuilderSubmitData>
-      )}
+            appName={appName}
+            actionFun={(submission_id, submitFlag = false, formId) => {
+              setSubmit(submitFlag);
+              setSubmissionId(submission_id);
+              if (formId) {
+                setSelectedID(formId);
+              }
+            }}
+            appId={appId}
+            searchStatus={searchStatus}
+          ></FormBuilderSubmitData>
+        )}
     </Fragment>)
   }
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <Layout>
-      <Sider
+        <Sider
           className={classes.appSider}
           style={{ background: "#fff" }}
           width="240"
         >
           <SiderTop />
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount}/>
+          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount} />
           <div className={appDeatilClasses.searchBox}>
             <Input
               placeholder="输入名称来搜索"
@@ -313,19 +317,19 @@ const AppDetail = props => {
             />
           </div>
         </Sider>
-      <Content>
-        <CommonHeader
-          // title={appName}
-          navigationList={navigationList(appName, history)}
-          operations={getOreations(appId, history)}
-        />
-        <Content className={classes.container}>
+        <Content>
+          <CommonHeader
+            // title={appName}
+            navigationList={navigationList(appName, history)}
+            operations={getOreations(appId, history)}
+          />
+          <Content className={classes.container}>
             {// eslint-disable-next-line
               selectedID != void 0 ? (selectedType === DASHBOARD ? getDashboard() : getForm()) :
                 approvalKey !== null ? (TransactList) : null
             }
           </Content>
-      </Content>
+        </Content>
       </Layout>
     </Authenticate>
   );
@@ -336,7 +340,7 @@ export default connect(({ app, login, forms }) => ({
   permissions: (login.userDetail && login.userDetail.permissions) || [],
   userDetail: login.userDetail,
   approveListCount: forms.approveListCount
-}),{
+}), {
   getApproveCount,
   clearApproveCount,
   setDashboards,

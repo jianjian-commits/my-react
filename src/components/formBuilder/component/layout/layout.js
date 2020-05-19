@@ -749,7 +749,7 @@ class Layout extends PureComponent {
                   layout={defaultLayout}
                   cols={12}
                   rowHeight={22}
-                  width={870}
+                  width={570}
                   onLayoutChange={layout => {
                     layout = layout.map(item => {
                       if (item.y < 0) {

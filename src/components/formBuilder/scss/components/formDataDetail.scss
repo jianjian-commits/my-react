@@ -1,10 +1,5 @@
 .formDetailBox {
-  padding: 0 32px;
-}
-.FormDataDetailHeader{
-  width: 100%;
-  padding-top: 40px;
-  padding-bottom: 30px;
+  padding: 0 30px;
   .title {
     display: flex;
     align-items: center;
@@ -13,9 +8,12 @@
     font-weight: normal;
     font-size: 16px;
     color: #333333;
+    background-color: #fff;
+    margin-top: 30px;
+    padding: 10px 20px;
+
     .created-detail {
       font-size: 14px;
-      margin-left: 40px;
       span {
         margin-right: 35px;
         &:last-child {
@@ -43,6 +41,9 @@
           color: #333333;
       }
     }
+}
+.FormDataDetailHeader{
+  
   .btn{
     width: 104px;
     margin-left: 20px;
@@ -65,7 +66,6 @@
   }
 }
 .formDataDetailContainer {
-  width: 100%;
   margin-bottom: 60px;
   height: auto;
   margin: auto;

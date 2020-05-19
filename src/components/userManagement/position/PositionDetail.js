@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Button, Input, Radio, message, Modal, Popconfirm } from "antd";
+import { Input, Radio, message, Modal, Popconfirm } from "antd";
 import { history } from "../../../store";
-import { Table } from "../../shared/customWidget";
+import { Table, Button } from "../../shared/customWidget";
 import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
@@ -31,7 +31,7 @@ export const BaseInfo = ({
     },
     {
       key: "dataShare",
-      label: "是否与同时共享数据",
+      label: "同职位共享数据",
       value: positionInfo.dataShare,
     },
     { key: "description", label: "描述", value: positionInfo.description },
@@ -213,10 +213,6 @@ const UserRelation = ({
               options={{ disabled: true }}
             >
               <Button
-                style={{
-                  border: "1px solid rgb(42, 127, 255)",
-                  color: "#2a7fff",
-                }}
                 onClick={() => openHandle(true)}
               >
                 <CreateIcon />

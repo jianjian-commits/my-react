@@ -13,7 +13,7 @@ const defaultNavigationList = [
   { key: 0, label: "首页", onClick: () => history.push("/app/list") }
 ];
 export const HomeContentTitle = ({ title, navs=defaultNavigationList, btns }) => {
-  return <Card className={comClasses.homeContentTitle} bodyStyle={{ padding: "12px 18px 6px" }}>
+  return <Card className={comClasses.homeContentTitle} bodyStyle={{ padding: "12px 18px 6px", height: "88px" }}>
     {navs ? <Navigation navs={navs}/> : null }
     <div className={comClasses.main}>
       <div className={comClasses.title}>{typeof title === "string" ? <h3>{title}</h3> : title}</div>
@@ -26,10 +26,10 @@ export default connect(
   () => ({}),
 )(function HomeContent(props) {
   const {
-    title, navs, btns, children, mainClassName
+    title, navs, btns, children, mainClassName, className
   } = props;
   return (
-    <Content className={classes.homeContentWrapper} style={{}}>
+    <Content className={clx(className, classes.homeContentWrapper)} style={{}}>
       <HomeContentTitle {...{title, navs, btns}}/>
       <div className={clx(comClasses.homeContentMain, mainClassName)}>
         {children}

@@ -75,7 +75,7 @@ const DBToolbar = props => {
       <Icon
         type="plus-circle"
         className={classes.newChartIcon}
-        onClick={modalProps.showModal}
+        onClick={newChart}
       />
       <div className={classes.newChart} onClick={newChart}>新建图表</div>
       <div className={classes.newChartButton}>

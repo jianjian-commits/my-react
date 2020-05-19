@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { history } from "../../store";
 import request from "../../utils/request";
-import { Button, message } from "antd";
+import { message } from "antd";
+import { Button } from "../shared/customWidget";
 import {
   BaseInfoModule,
   AppManagerModule,
@@ -31,10 +32,6 @@ const getTopPartion = ({ roleName, disabled, enterDetail, handleDetail }) => {
         </Button>
         <Button
           onClick={() => enterDetail()}
-          style={{
-            border: "1px solid #2A7FFF",
-            backgroundColor: "transparent"
-          }}
         >
           取消
         </Button>
@@ -228,12 +225,12 @@ class GroupDetail1 extends Component {
   }
 
   render() {
-    const { action, enterDetail, enterPermission, roleName } = this.props;
+    const { action, enterDetail, enterPermission, roleName, className } = this.props;
     const { editable, baseInfoBo, appManagerBos, permissions } = this.state;
     const disabled = action === "view" ? true : false;
     const topPartion = getTopPartion({ roleName, disabled, enterDetail, handleDetail: this.handleDetail.bind(this) });
     return (
-      <HomeContent {...topPartion}>
+      <HomeContent className={className} {...topPartion}>
         <BaseInfoModule
           disabled={disabled}
           baseInfoBo={baseInfoBo}

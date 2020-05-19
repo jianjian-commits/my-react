@@ -10,11 +10,11 @@
     display: inline-block;
     height: 100%;
   }
-  .logoBox{
+  .logoBox {
     width: 197px;
     overflow: hidden;
   }
-  .collapsed{
+  .collapsed {
     width: 38px;
   }
   .logo {
@@ -31,28 +31,34 @@
     background-repeat: no-repeat;
   }
 }
-.menu {
-  .item {
-    &:hover {
-      background-color: #e7f0ff !important;
-    }
-    &:global(.ant-menu-item-selected) {
-      background-color: rgb(221, 234, 255) !important;
-      &::before {
-        border-left: 4px solid #1890ff;
-        content: "";
-        position: absolute;
-        left: 0;
-        height: 100%;
+.sider {
+  box-shadow: 0px 4px 8px rgba(176, 176, 176, 0.25);
+
+  
+  .menu {
+    border-right: none !important;
+    .item {
+      &:hover {
+        background-color: #e7f0ff !important;
       }
-      &::after {
-        height: 0;
-      }
-      svg {
-        g,
-        polyline,
-        path {
-          fill: #1890ff;
+      &:global(.ant-menu-item-selected) {
+        background-color: rgb(221, 234, 255) !important;
+        &::before {
+          border-left: 4px solid #1890ff;
+          content: "";
+          position: absolute;
+          left: 0;
+          height: 100%;
+        }
+        &::after {
+          height: 0;
+        }
+        svg {
+          g,
+          polyline,
+          path {
+            fill: #1890ff;
+          }
         }
       }
     }
