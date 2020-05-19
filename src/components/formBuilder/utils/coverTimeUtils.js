@@ -4,8 +4,6 @@ export function localDate(date, componentType, isEditData) {
   // 将utc时区时间转为当前本地时间
   if(componentType === "PureTime" && !moment(date).isValid()) {
     date =  new Date(`2016-09-03T${date}Z`)
-  } else if(componentType === "DateInput") {
-    date = date+"Z"
   }
 
   const isValid = moment(date).isValid();
