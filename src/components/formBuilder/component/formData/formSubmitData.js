@@ -982,6 +982,7 @@ class FormSubmitData extends PureComponent {
                 clickExtendCallBack={this.showFilterComponent}
                 isFilterMode={this.state.isFilterMode}
                 handleFilterFields={this.handleFilterFields}
+                selectedFieldsNumber = {this.state.selectedFields && this.state.selectedFields.length}
               />
             )}
             <div
