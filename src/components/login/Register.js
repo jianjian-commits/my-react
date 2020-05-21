@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { Button, Result, message } from "antd";
+import {
+  // Button,
+  // Result,
+  message
+} from "antd";
 import request from "../../utils/request";
 import PublicForm from "./PublicForm";
 import { registerParameter } from "./formItemConfig";
 import Styles from "./style/login.module.scss";
 import { catchError } from "../../utils";
-import { RegisteSuccessIcon, RegisteErrorIcon } from "../../assets/icons/login";
+// import { RegisteSuccessIcon, RegisteErrorIcon } from "../../assets/icons/login";
 
 export default connect(({ login }) => ({ timeout: login.timeout }))(
   function Register({
@@ -24,33 +28,49 @@ export default connect(({ login }) => ({ timeout: login.timeout }))(
   }) {
     const { token } = params;
     const { inviter, invitedCompany } = history.location.query || query || {};
-    const [status, setStatus] = useState(null);
-    const [visible, setVisible] = useState(true);
-    const registerUser = async ({ actionType, rest }) => {
+    // const [status, setStatus] = useState(null);
+    // const [visible, setVisible] = useState(true);
+    const registerUser = async ({ actionType, rest, form }) => {
       try {
         const res = await request(token ? `/reg?token=${token}` : "/reg", {
           method: "post",
           data: { ...rest, password: rest.registerPassword }
         });
         if (res && res.status === "SUCCESS") {
-          setStatus(true);
-          setVisible(false);
+          history.push("/");
+          // setStatus(true);
+          // setVisible(false);
         } else {
-          setStatus(false);
+          // setStatus(false);
           message.error(res.msg || "注册失败");
         }
       } catch (err) {
-        setStatus(false);
-        setVisible(false);
-        catchError(err);
+        if (rest.code)
+          form.setFields({
+            code: {
+              value: rest.code,
+              errors: [
+                (err.response && err.response.data && err.response.data.msg) ||
+                  "系统错误"
+              ]
+            }
+          });
+        // setStatus(false);
+        // setVisible(false);
+        if (
+          err.response &&
+          err.response.data &&
+          err.response.data.msg !== "无效验证码"
+        )
+          catchError(err);
       }
     };
-    const confirm = () => {
-      timeout && timeout.int && timeout.clear(0);
-      resetAllowSendCodeState()
-      if (!status) return setVisible(true);
-      history.push("/");
-    };
+    // const confirm = () => {
+    //   timeout && timeout.int && timeout.clear(0);
+    //   resetAllowSendCodeState();
+    //   if (!status) return setVisible(true);
+    //   history.push("/");
+    // };
 
     const BlueFont = props => {
       return <span style={{ color: "#1890ff" }}>{props.children}</span>;
@@ -99,30 +119,31 @@ export default connect(({ login }) => ({ timeout: login.timeout }))(
         </div>
       </>
     );
-    const registerResult = (
-      <div className={Styles.result}>
-        <Result
-          title={status ? "恭喜您注册成功" : "注册失败"}
-          icon={
-            status ? (
-              <RegisteSuccessIcon />
-            ) : (
-              <RegisteErrorIcon style={{ marginTop: "7.86px" }} />
-            )
-          }
-          extra={[
-            <Button
-              type="primary"
-              key={"success"}
-              onClick={confirm}
-              style={{ marginLeft: status ? "31.82px" : "8.6px" }}
-            >
-              {status ? "立即登录" : "重新注册"}
-            </Button>
-          ]}
-        />
-      </div>
-    );
-    return <>{visible ? component : registerResult}</>;
+    // const registerResult = (
+    //   <div className={Styles.result}>
+    //     <Result
+    //       title={status ? "恭喜您注册成功" : "注册失败"}
+    //       icon={
+    //         status ? (
+    //           <RegisteSuccessIcon />
+    //         ) : (
+    //           <RegisteErrorIcon style={{ marginTop: "7.86px" }} />
+    //         )
+    //       }
+    //       extra={[
+    //         <Button
+    //           type="primary"
+    //           key={"success"}
+    //           onClick={confirm}
+    //           style={{ marginLeft: status ? "31.82px" : "8.6px" }}
+    //         >
+    //           {status ? "立即登录" : "重新注册"}
+    //         </Button>
+    //       ]}
+    //     />
+    //   </div>
+    // );
+    // return <>{visible ? component : registerResult}</>;
+    return <>{component}</>;
   }
 );
