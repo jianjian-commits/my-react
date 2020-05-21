@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Input as Inp, Button as Btn, Icon } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
-import { catchError, throttle } from "../../utils";
+import { catchError } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 import { allowSendCode } from "../../store/loginReducer";
@@ -280,20 +280,21 @@ const verificationCode = ({
   sendCode,
   isFetchCoding,
   fetchText,
-  allowSendCode
+  allowSendCode,
+  activeKey
 }) => {
   const { getFieldValue } = form;
   const phone = getFieldValue("mobilePhone");
   return {
     itemName: "code",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [required("该项为必填"), whitespace()]
     },
     component: (
       <Input
         classes={itemsStyles.loginPhoneCard}
-        onChange={() => form.setFields({ verificationCode: { errors: null } })}
+        onChange={() => form.setFields({ code: { errors: null } })}
         prefix={
           <Icon
             type="safety-certificate"
@@ -306,17 +307,19 @@ const verificationCode = ({
         addonAfter={
           <Button
             disabled={isFetchCoding}
-            onClick={
-              allowSendCode
-                ? throttle(() => sendCode(phone, codeType), 6000)
-                : null
+            onClick={() =>
+              form.validateFields(["mobilePhone"], (errors, values) =>
+                errors && errors.mobilePhone
+                  ? null
+                  : sendCode(values.mobilePhone, codeType)
+              )
             }
             style={{
               height: "42px",
               borderRadius: "6px",
               background: "#2A7FFF",
               color: "#ffffff",
-              opacity: allowSendCode ? (isFetchCoding ? 0.5 : 1) : 0.5,
+              opacity: phone ? (isFetchCoding ? 0.5 : 1) : 0.5,
               width: "130px"
             }}
           >
@@ -325,15 +328,15 @@ const verificationCode = ({
         }
       />
     ),
-    additionComponent: (
-      <span
-        style={{
-          position: "absolute",
-          right: 0,
-          top: "30px"
-        }}
-      ></span>
-    )
+    additionComponent:
+      // <span
+      //   style={{
+      //     position: "absolute",
+      //     right: 0,
+      //     top: "30px"
+      //   }}
+      // ></span>
+      null
   };
 };
 
@@ -351,7 +354,7 @@ const mobilePhone = ({
   return {
     itemName: "mobilePhone",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace(),
