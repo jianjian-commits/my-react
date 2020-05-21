@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "antd";
-import { connect } from "react-redux"; 
+import { connect } from "react-redux";
 import { formItems } from "./formItemConfig";
 
 export default connect(({ login }) => ({
@@ -47,13 +47,15 @@ export default connect(({ login }) => ({
                 code: rest.code
               }
             : rest;
-          if (!err && resetPasswordSubmit) return reSetPassword(newRest);
+          if (!err && resetPasswordSubmit)
+            return reSetPassword({ ...newRest, form });
           if (!err) {
             func({
               token: params.token ? params.token : null,
               rest: newRest,
               history,
-              loginType
+              loginType,
+              form
             });
           }
         }
@@ -108,7 +110,13 @@ export default connect(({ login }) => ({
               style={{ marginBottom: marginBottom }}
               label={p.label ? p.label : null}
               colon={p.colon}
-              hasFeedback={p.hasFeedback}
+              hasFeedback={
+                (p.help === "register" || p.help === "forgetPassword") &&
+                helpText &&
+                helpText.length > 0
+                  ? true
+                  : false
+              }
               help={
                 (p.help === "register" || p.help === "forgetPassword") &&
                 helpText ? (
@@ -138,7 +146,7 @@ export default connect(({ login }) => ({
             >
               {getFieldDecorator(formItem.itemName, {
                 ...formItem.options,
-                validateFirst: true,
+                validateFirst: true
               })(formItem.component)}
               {formItem.additionComponent}
             </Form.Item>

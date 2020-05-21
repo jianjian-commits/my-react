@@ -153,16 +153,20 @@ export default Form.create({ name: "reset-form" })(
           if (!err) {
             updateUserDetail(
               Object.assign(
+                {
+                  form,
+                  setModalMeter,
+                  initModalMeter,
+                  verificationCode,
+                  timeout,
+                  resetAllowSendCodeState
+                },
                 rest,
                 rest.mobilePhone && verificationCode
                   ? { code: verificationCode }
                   : {}
               )
-            ).then(() => {
-              setModalMeter(initModalMeter);
-              verificationCode && timeout && timeout.int && timeout.clear(0);
-              verificationCode && resetAllowSendCodeState();
-            });
+            );
           }
         }
       );
@@ -170,10 +174,10 @@ export default Form.create({ name: "reset-form" })(
     return (
       <HomeLayout>
         <HomeContent title="个人信息">
-        <div className={userDetailStyles.userDetail}>
-          <div>
-            <ul>
-              {/* <li>
+          <div className={userDetailStyles.userDetail}>
+            <div>
+              <ul>
+                {/* <li>
                 <span>{rest0.key}</span>
                 <span>
                   {userDetail[rest0.value]}
@@ -182,90 +186,120 @@ export default Form.create({ name: "reset-form" })(
                   </span>
                 </span>
               </li> */}
-              {resetUser.map(r => {
-                return (
-                  <li key={r.value}>
-                    <span>{r.key}</span>
-                    <span>
-                      {r.value === "oldPassWord"
-                        ? "********"
-                        : r.value === "companyName"
-                        ? currentCompany.companyName
-                        : userDetail[r.value]}
-                      <span
-                        onClick={() => {
-                          resetAllowSendCodeState && resetAllowSendCodeState();
-                          setModalMeter(r);
-                        }}
-                        style={{ color: "#1890ff", cursor: "pointer" }}
-                      >
-                        {r.render(r.meter)}
+                {resetUser.map(r => {
+                  return (
+                    <li key={r.value}>
+                      <span>{r.key}</span>
+                      <span>
+                        {r.value === "oldPassWord"
+                          ? "********"
+                          : r.value === "companyName"
+                          ? currentCompany.companyName
+                          : userDetail[r.value]}
+                        <span
+                          onClick={() => {
+                            resetAllowSendCodeState &&
+                              resetAllowSendCodeState();
+                            setModalMeter(r);
+                          }}
+                          style={{ color: "#1890ff", cursor: "pointer" }}
+                        >
+                          {r.render(r.meter)}
+                        </span>
                       </span>
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
-        </div>
-        <Modal
-          title={
-            <span
-              style={{
-                fontSize: "16px",
-                color: "#333333"
-              }}
-            >{`修改${modalMeter.key}`}</span>
-          }
-          visible={!!modalMeter.meter}
-          footer={null}
-          width={"484px"}
-          onCancel={() => {
-            setModalMeter({ ...modalMeter, meter: false });
-          }}
-          afterClose={() => {
-            modalMeter.value === "mobilePhone" && resetAllowSendCodeState();
-            modalMeter.value === "mobilePhone" &&
-              timeout &&
-              timeout.int &&
-              timeout.clear(0);
-          }}
-          className={userDetailStyles.detailUpdateModal}
-          closeIcon={<CloseIcon />}
-        >
-          <Form
-            onSubmit={e => handleSubmit(e)}
-            className={clx(userDetailStyles.modalForm, {
-              [userDetailStyles.detailUpdateModalPhone]:
-                modalMeter.value === "mobilePhone"
-            })}
+          <Modal
+            title={
+              <span
+                style={{
+                  fontSize: "16px",
+                  color: "#333333"
+                }}
+              >{`修改${modalMeter.key}`}</span>
+            }
+            visible={!!modalMeter.meter}
+            footer={null}
+            width={"484px"}
+            onCancel={() => {
+              setModalMeter({ ...modalMeter, meter: false });
+            }}
+            afterClose={() => {
+              modalMeter.value === "mobilePhone" && resetAllowSendCodeState();
+              modalMeter.value === "mobilePhone" &&
+                timeout &&
+                timeout.int &&
+                timeout.clear(0);
+            }}
+            className={userDetailStyles.detailUpdateModal}
+            closeIcon={<CloseIcon />}
           >
-            {items.map((o, index) => {
-              // const helpText = getFieldError(o.itemName);
-              return (
-                <Form.Item
-                  key={o.itemName}
-                  label={Mete[o.itemName]}
-                  hasFeedback={false}
-                  colon={false}
-                  labelAlign={"right"}
-                >
-                  {getFieldDecorator(parameters[index]["key"], {
-                    ...o.options,
-                    validateFirst: true
-                    // initialValue:
-                    //   o.itemName === "oldPassWord"
-                    //     ? null
-                    //     : o.itemName === "verificationCode"
-                    //     ? null
-                    //     : userDetail[o.itemName]
-                  })(o.component)}
-                  {o.additionComponent}
-                </Form.Item>
-              );
-            })}
-          </Form>
-        </Modal>
+            <div>
+              <Form
+                onSubmit={e => handleSubmit(e)}
+                className={clx(userDetailStyles.modalForm, {
+                  [userDetailStyles.detailUpdateModalPhone]:
+                    modalMeter.value === "mobilePhone"
+                })}
+              >
+                {items.map(o => {
+                  const helpText = form.getFieldError(o.itemName);
+                  return (
+                    <Form.Item
+                      key={o.itemName}
+                      label={Mete[o.itemName]}
+                      hasFeedback={false}
+                      colon={false}
+                      labelAlign={"right"}
+                      help={
+                        (o.help === "register" ||
+                          o.help === "forgetPassword") &&
+                        helpText ? (
+                          <div
+                            style={{
+                              position: "absolute",
+                              left: "340px",
+                              width: "224px",
+                              height: "42px",
+                              lineHeight: "45px"
+                            }}
+                          >
+                            {helpText}
+                          </div>
+                        ) : (
+                          <span
+                            style={{
+                              display: "block",
+                              height: helpText ? "32px" : 0,
+                              lineHeight: "32px"
+                            }}
+                          >
+                            {helpText}
+                          </span>
+                        )
+                      }
+                    >
+                      {getFieldDecorator(o.itemName, {
+                        ...o.options,
+                        validateFirst: true
+                        // initialValue:
+                        //   o.itemName === "oldPassWord"
+                        //     ? null
+                        //     : o.itemName === "verificationCode"
+                        //     ? null
+                        //     : userDetail[o.itemName]
+                      })(o.component)}
+                      {o.additionComponent}
+                    </Form.Item>
+                  );
+                })}
+              </Form>
+            </div>
+          </Modal>
         </HomeContent>
       </HomeLayout>
     );

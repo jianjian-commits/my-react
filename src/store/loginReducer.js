@@ -65,7 +65,7 @@ export const loginFailure = () => ({
 export const setFetchingNecessary = payload => ({
   type: SET_FETCHING_NECESSARY,
   payload
-})
+});
 export const resetError = () => ({
   type: RESET_ERROR
 });
@@ -161,7 +161,15 @@ export const getTransactList = ({
 };
 
 //更新个人信息
-export const updateUserDetail = payload => async dispatch => {
+export const updateUserDetail = ({
+  form,
+  setModalMeter,
+  initModalMeter,
+  verificationCode,
+  timeout,
+  resetAllowSendCodeState,
+  ...payload
+}) => async dispatch => {
   try {
     const res = await request(`/sysUser`, {
       method: "put",
@@ -170,11 +178,30 @@ export const updateUserDetail = payload => async dispatch => {
     if (res && res.status === "SUCCESS") {
       message.success("修改成功");
       await getUserDetail()(dispatch);
+      setModalMeter(initModalMeter);
+      verificationCode && timeout && timeout.int && timeout.clear(0);
+      verificationCode && resetAllowSendCodeState();
     } else {
       message.error(res.msg || "个人信息修改失败");
     }
   } catch (err) {
-    catchError(err);
+    if (payload.code) {
+      form.setFields({
+        code: {
+          value: payload.code,
+          errors: [
+            (err.response && err.response.data && err.response.data.msg) ||
+              "系统错误"
+          ]
+        }
+      });
+    }
+    if (
+      err.response &&
+      err.response.data &&
+      err.response.data.msg !== "无效验证码"
+    )
+      catchError(err);
   }
 };
 
@@ -254,12 +281,12 @@ export const initAllDetail = ignore => async dispatch => {
           getAllCompany(res.data.id)(dispatch),
           getcurrentCompany()(dispatch),
           dispatch(fetchUserDetail(res.data)),
-          dispatch(getAppList()),
+          dispatch(getAppList())
         ]).then(() => {
           dispatch(setFetchingNecessary(false));
         });
       } else {
-        dispatch(fetchUserDetail(res.data))
+        dispatch(fetchUserDetail(res.data));
         dispatch(setFetchingNecessary(false));
       }
     } else {
@@ -280,7 +307,8 @@ export const loginUser = ({
   token,
   rest,
   history,
-  loginType
+  loginType,
+  form
 }) => async dispatch => {
   await dispatch(startLogin());
   try {
@@ -298,7 +326,22 @@ export const loginUser = ({
     }
   } catch (err) {
     dispatch(loginFailure());
-    catchError(err);
+    if (rest.code)
+      form.setFields({
+        code: {
+          value: rest.code,
+          errors: [
+            (err.response && err.response.data && err.response.data.msg) ||
+              "系统错误"
+          ]
+        }
+      });
+    if (
+      err.response &&
+      err.response.data &&
+      err.response.data.msg !== "无效验证码"
+    )
+      catchError(err);
   }
 };
 
@@ -445,7 +488,7 @@ export const loginMiddleware = store => next => action => {
     store.dispatch(clearAppList());
   }
   if (action.type === LOGIN_SUCCESS) {
-    store.dispatch(initAllDetail())
+    store.dispatch(initAllDetail());
   }
   next(action);
 };
