@@ -135,8 +135,8 @@ export default connect(({ login }) => ({
                   <span
                     style={{
                       display: "block",
-                      height: helpText ? "32px" : 0,
-                      lineHeight: "32px"
+                      height: helpText ? "20px" : 0,
+                      lineHeight: "20px"
                     }}
                   >
                     {helpText}

@@ -274,8 +274,8 @@ export default Form.create({ name: "reset-form" })(
                           <span
                             style={{
                               display: "block",
-                              height: helpText ? "32px" : 0,
-                              lineHeight: "32px"
+                              height: helpText ? "22px" : 0,
+                              lineHeight: "22px"
                             }}
                           >
                             {helpText}
