@@ -60,9 +60,9 @@ class NavBar extends PureComponent {
             {btnValue}
           </Button>
         ) : (
-          this.props.btns
+          null
         )}
-      </div> ) : null;
+      </div> ) : this.props.btns;
     return (
       <HomeContentTitle
         title={name}
