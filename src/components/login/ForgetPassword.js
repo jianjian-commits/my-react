@@ -61,6 +61,7 @@ export default connect(
   return (
     <div className={signinStyles.forgetPassword}>
       <div>
+        <div>重置密码</div>
         <PublicForm
           parameter={loginForgetPasswordParameter}
           marginBottom={24}

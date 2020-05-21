@@ -401,11 +401,16 @@ $unHoverGray: #b6b6ba;
     width: 980px;
     height: 445px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     border-top: 5px solid #2a7fff;
     border-radius: 5px 5px 0px 0px;
     background-color: #ffffff;
+    & > div{
+      margin-top: 40px;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
     & > form {
       width: 422px;
       height: 328px;

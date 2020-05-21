@@ -171,12 +171,19 @@ const password = ({
   itemName,
   icon,
   unprefix,
-  hasFeedback
+  hasFeedback,
+  activeKey
 }) => ({
   itemName: itemName,
   options: {
-    validateTrigger: "onBlur",
-    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
+    validateTrigger: "onSubmit",
+    rules: [
+      required("该项为必填"),
+      whitespace(),
+      activeKey !== "signin" &&
+        activeKey !== "initSignin" &&
+        requireCharAndNum()
+    ]
   },
   component: (
     <Input
@@ -416,7 +423,7 @@ const userEmail = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "userEmail",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace(),
