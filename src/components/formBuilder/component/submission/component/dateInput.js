@@ -11,7 +11,7 @@ import {
   compareEqualArray
 } from "../utils/dataLinkUtils";
 import moment from "moment";
-import coverTimeUtils from "../../../utils/coverTimeUtils";
+import { localDate } from "../../../utils/coverTimeUtils";
 import { setFormulaEvent } from "../utils/setFormulaUtils";
 
 let timer = null;
@@ -78,7 +78,7 @@ class DateInput extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: coverTimeUtils.localDate(res, item.type)
+              [item.key]: localDate(res, item.type, true)
             });
             // 多级联动
             this.handleEmitChange(res);
@@ -143,7 +143,9 @@ class DateInput extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if (initData) {
-      options.initialValue = coverTimeUtils.localDate(initData, item.type, true);
+      console.log("sasdsdsdadswd")
+      options.initialValue = localDate(initData, item.type, true);
+      console.log("initialValue", options.initialValue)
     } else if (isAutoInput) {
       options.initialValue = new moment();
     }
