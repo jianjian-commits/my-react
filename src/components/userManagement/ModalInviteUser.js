@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Input, Modal, message } from "antd";
+// import {Modal} from "../shared/customWidget"
 import { Button } from "../shared/customWidget";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
 import classes from "./inviteUser.module.scss";
 import { CreateIcon } from "../../assets/icons/company"
+import { CloseIcon } from "../../assets/icons/header";
 const customCss = {
   bodyStyle: {
     padding: "46px 30px 182px",
@@ -49,6 +51,7 @@ export default function InviteUser(props) {
         footer={null}
         width="690px"
         onCancel={() => setVisible(false)}
+        closeIcon={<CloseIcon />}
       >
         <p className={classes.title}>邀请新成员加入</p>
         <p className={classes.text}>
