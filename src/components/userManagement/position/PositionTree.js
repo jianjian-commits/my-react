@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Tooltip, Button, Tree, Popconfirm, message } from "antd";
 import { connect } from "react-redux";
 import classes from "./position.module.scss";
+import comClasses from "../../../styles/common.module.scss";
 import {
   PromptIcon,
   CompanyIcon,
@@ -25,7 +26,7 @@ import {
 const { TreeNode } = Tree;
 
 const Title = (
-  <h3>
+  <span className={comClasses.font}>
     职位
     <Tooltip
       placement="right"
@@ -38,7 +39,7 @@ const Title = (
         <PromptIcon />
       </span>
     </Tooltip>
-  </h3>
+  </span>
 );
 
 class PositionTree extends Component {
