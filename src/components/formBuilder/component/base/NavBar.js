@@ -23,6 +23,7 @@ class NavBar extends PureComponent {
       },
       clickExtendCallBack,
       handleFilterFields,
+      selectedFieldsNumber,
       forms
     } = this.props;
 
@@ -43,7 +44,7 @@ class NavBar extends PureComponent {
           trigger={["click"]}
         >
           <Button>
-          <span id="fieldsBtn"> 显示字段 </span>
+        <span id="fieldsBtn"> 显示字段 { selectedFieldsNumber <forms.components.length  ? <Icon component={FilterModeIcon} />: null}</span>
           </Button>
           
         </Dropdown>
@@ -59,9 +60,9 @@ class NavBar extends PureComponent {
             {btnValue}
           </Button>
         ) : (
-          this.props.btns
+          null
         )}
-      </div> ) : null;
+      </div> ) : this.props.btns;
     return (
       <HomeContentTitle
         title={name}
