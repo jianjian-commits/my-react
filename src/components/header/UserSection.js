@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Menu, Modal } from "antd";
+import { Dropdown, Menu } from "antd";
+import { Modal } from "../shared/customWidget";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -29,48 +30,48 @@ const MenuItems = ({
         </Menu.Item>
       )}
 
-        {allCompany.map(company => {
-          const check = company.id === currentCompany.id;
-          return (
-            <Menu.Item key={company.id}>
-              <Link
-                onClick={
-                  check
-                    ? () => ""
-                    : () =>
+      {allCompany.map(company => {
+        const check = company.id === currentCompany.id;
+        return (
+          <Menu.Item key={company.id}>
+            <Link
+              onClick={
+                check
+                  ? () => ""
+                  : () =>
                       setSwitchCompany({
                         companyName: company.companyName,
                         visible: true,
                         companyId: company.id
                       })
-                }
-                to="#"
-              >
-                <div style={{ marginRight: "40px" }}>{company.companyName}</div>
-                {check && (
-                  <CheckedIcon
-                    style={{ floatRight: "0px", marginLeft: "10px" }}
-                  />
-                )}
-              </Link>
-            </Menu.Item>
-          );
-        })}
-        <Menu.Divider />
-        <Menu.Item>
-          <Link to="/userDetail">个人信息</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <div
-            style={{ width: "100%", height: "100%" }}
-            onClick={() => setVisible(true)}
-          >
-            退出登录
+              }
+              to="#"
+            >
+              <div style={{ marginRight: "40px" }}>{company.companyName}</div>
+              {check && (
+                <CheckedIcon
+                  style={{ floatRight: "0px", marginLeft: "10px" }}
+                />
+              )}
+            </Link>
+          </Menu.Item>
+        );
+      })}
+      <Menu.Divider />
+      <Menu.Item>
+        <Link to="/userDetail">个人信息</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <div
+          style={{ width: "100%", height: "100%" }}
+          onClick={() => setVisible(true)}
+        >
+          退出登录
         </div>
-        </Menu.Item>
-      </Menu>
-    </>
-  );
+      </Menu.Item>
+    </Menu>
+  </>
+);
 const User = props => {
   const { signOut, login, initAllDetail, switchcurrentCompany } = props;
   const { userDetail, fetchRequestSent, allCompany, currentCompany } = login;
@@ -92,7 +93,7 @@ const User = props => {
       companyId: null
     });
   };
-  
+
   return (
     <>
       <Dropdown
@@ -105,9 +106,11 @@ const User = props => {
           switchcurrentCompany
         })}
       >
-        <div 
-         className={classes.userSection}
-          style={{ color: props.theme === "white" ? "" : "rgba(255, 255, 255, 0.9)" }}
+        <div
+          className={classes.userSection}
+          style={{
+            color: props.theme === "white" ? "" : "rgba(255, 255, 255, 0.9)"
+          }}
         >
           {userDetail.name}
           <DownOutlinedIcon
@@ -121,9 +124,9 @@ const User = props => {
         width="404px"
         title={
           <>
-            <WarningIcon />
-                退出登录
-              </>
+            <WarningIcon style={{marginRight: "9.49px"}} />
+            退出登录
+          </>
         }
         cancelText={<span style={{ color: "#777F97" }}>取消</span>}
         okText={"确定"}
@@ -132,12 +135,12 @@ const User = props => {
         closable={false}
       >
         确定退出登录?
-          </Modal>
+      </Modal>
       <Modal
         className={Styles.signoutModal}
         visible={switchCompany.visible}
         width="404px"
-        title={<>切换公司</>}
+        title={"切换公司"}
         cancelText={<span style={{ color: "#777F97" }}>取消</span>}
         okText={"确定"}
         onCancel={() =>

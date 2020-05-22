@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Modal, Form } from "antd";
+import { Form } from "antd";
+import { Modal } from "../shared/customWidget";
 import {
   updateUserDetail,
   resetAllowSendCodeState,
@@ -11,7 +12,6 @@ import { userDetailParameter, formItems } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
 import { HomeLayout } from "../shared";
 import HomeContent from "../content/HomeContent";
-import { CloseIcon } from "../../assets/icons/header";
 import clx from "classnames";
 import store from "../../store";
 
@@ -85,7 +85,8 @@ export default Form.create({ name: "reset-form" })(
           codeType: "RESETPHONE",
           sendCode,
           isFetchCoding,
-          fetchText
+          fetchText,
+          placeholder: m.placeholder
         });
       }
       return formItems[m.key]({
@@ -103,7 +104,8 @@ export default Form.create({ name: "reset-form" })(
         codeType: "RESETPHONE",
         sendCode,
         isFetchCoding,
-        fetchText
+        fetchText,
+        placeholder: m.placeholder
       });
     });
     const render = meter => {
@@ -214,17 +216,10 @@ export default Form.create({ name: "reset-form" })(
             </div>
           </div>
           <Modal
-            title={
-              <span
-                style={{
-                  fontSize: "16px",
-                  color: "#333333"
-                }}
-              >{`修改${modalMeter.key}`}</span>
-            }
+            title={`修改${modalMeter.key}`}
             visible={!!modalMeter.meter}
             footer={null}
-            width={"484px"}
+            width={"452px"}
             onCancel={() => {
               setModalMeter({ ...modalMeter, meter: false });
             }}
@@ -236,22 +231,27 @@ export default Form.create({ name: "reset-form" })(
                 timeout.clear(0);
             }}
             className={userDetailStyles.detailUpdateModal}
-            closeIcon={<CloseIcon />}
           >
             <div>
               <Form
                 onSubmit={e => handleSubmit(e)}
-                className={clx(userDetailStyles.modalForm, {
-                  [userDetailStyles.detailUpdateModalPhone]:
-                    modalMeter.value === "mobilePhone"
-                })}
+                className={clx(
+                  userDetailStyles.modalForm,
+                  {
+                    [userDetailStyles.detailUpdateModalPhone]:
+                      modalMeter.value === "mobilePhone"
+                  },
+                  {
+                    [userDetailStyles.noLabelInput]: modalMeter.value === "name"
+                  }
+                )}
               >
                 {items.map(o => {
                   const helpText = form.getFieldError(o.itemName);
                   return (
                     <Form.Item
                       key={o.itemName}
-                      label={Mete[o.itemName]}
+                      label={o.itemName !== "name" && Mete[o.itemName]}
                       hasFeedback={false}
                       colon={false}
                       labelAlign={"right"}

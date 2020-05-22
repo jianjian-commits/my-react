@@ -406,7 +406,7 @@ $unHoverGray: #b6b6ba;
     border-top: 5px solid #2a7fff;
     border-radius: 5px 5px 0px 0px;
     background-color: #ffffff;
-    & > div{
+    & > div {
       margin-top: 40px;
       margin-bottom: 30px;
       font-size: 16px;
@@ -443,11 +443,10 @@ $unHoverGray: #b6b6ba;
           border-bottom-right-radius: 6px !important;
         }
         & button {
-          width: 104px;
+          width: 124px !important;
           padding-left: 14px;
           height: 40px !important;
           // background: #1890ff !important;
-          opacity: 0.5;
         }
       }
       & > div:nth-child(3) {
@@ -498,24 +497,21 @@ $unHoverGray: #b6b6ba;
 }
 
 .userDetailModalButton {
+  text-align: right;
   & > button {
-    width: 149px !important;
-    height: 40px !important;
-    border-radius: 6px !important;
-    box-sizing: border-box;
-    font-size: 14px !important;
+    width: 87px;
+    height: 36px;
+    border-radius: 5px;
   }
   & > button:first-child {
-    color: #777f97 !important;
-    background: #ffffff !important;
-    box-shadow: 0px 3px 12px rgba(108, 121, 166, 0.1) !important;
-    border: 1px solid #b6b6ba !important;
+    border: 1px solid #d6d8de;
+    box-sizing: border-box;
+    background: #ffffff;
+    color: #777f97;
   }
   & > button:last-child {
-    margin-left: 10px !important;
-    color: #ffffff !important;
-    background: #2a7fff !important;
-    opacity: 0.5;
+    color: #ffffff;
+    margin-left: 10px;
   }
 }
 
