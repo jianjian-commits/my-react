@@ -99,7 +99,8 @@ const EditHistory = ({ submissionId }) => {
         message.error("获取编辑数据记录失败！");
       }
       setHistoryData(
-        res.data.map(item => ({
+        res.data.filter(item => item.changeFieldUpdateRecords === null ||  item.changeFieldUpdateRecords.length > 0)
+        .map(item => ({
           editor:
             item.extraProp.updateUser && item.extraProp.updateUser["name"],
           date: moment.utc(item.updateTime).local().format("YYYY-MM-DD HH:mm:ss"),
