@@ -1,5 +1,7 @@
 import React from "react";
-import { Modal, Select, Row, Col } from "antd";
+import { Select, Row, Col } from "antd";
+import { Modal } from "../../shared/customWidget"
+
 import classes from './team.module.scss'
 
 const { Option } = Select;

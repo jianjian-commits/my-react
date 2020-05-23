@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Modal, Select, Checkbox, Icon } from "antd";
+import { Select, Checkbox, Icon } from "antd";
+import { Modal } from "../../../../../../../shared/customWidget"
 import { getDataFromUrl } from "../../../../../../utils/locationUtils";
 import ID from "../../../../../../utils/UUID";
 

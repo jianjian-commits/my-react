@@ -1,5 +1,6 @@
 import React from "react";
-import { Form, Icon, Tooltip, Spin, Modal, Button, message } from "antd";
+import { Form, Icon, Tooltip, Spin, Button, message } from "antd";
+import { Modal } from "../../../..//../shared/customWidget"
 
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 export default class HandWrittenSignatureMobile extends React.Component {

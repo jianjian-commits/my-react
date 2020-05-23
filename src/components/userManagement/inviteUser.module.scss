@@ -18,3 +18,14 @@
 .action {
   color: #666;
 }
+.inviteModal {
+  .input {
+    margin-right: 10px;
+    background-color: #f3f4f6;
+  }
+  :global(.ant-modal-body) {
+    padding: 46px 30px 182px;
+    box-shadow: 0px 4px 26px rgba(46, 106, 162, 0.25);
+    border-radius: 5px;
+  }
+}

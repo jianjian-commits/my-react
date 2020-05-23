@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Input, Select, Menu, Dropdown, Icon, message } from "antd";
+import { Input, Select, Menu, Dropdown, Icon, message } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import FormIcon from "../../../base/FormIcon";
 import {
   setItemValues,

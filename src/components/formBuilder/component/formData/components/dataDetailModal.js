@@ -1,5 +1,6 @@
 import React from "react";
-import { Modal, Table } from "antd";
+import { Table } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import { connect } from "react-redux";
 import { getSubmissionDetail } from "../redux/utils/getDataUtils";
 import config from "../../../config/config";

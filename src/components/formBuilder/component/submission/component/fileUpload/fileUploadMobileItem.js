@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Icon, message, Modal } from "antd";
+import { Button, Icon, message } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import ID from '../../../../utils/UUID';
 import { postFile } from "../../utils/filePostUtils";
 class FileUploadMobileItem extends React.Component {
