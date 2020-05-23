@@ -19,7 +19,7 @@ import { getFormsAll, getApproveCount, clearApproveCount } from "../components/f
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
-import { SiderTop } from "../components/sider/HomeSider";
+// import { SiderTop } from "../components/sider/HomeSider";
 
 // import { submitFormDataAuth } from "../components/formBuilder/utils/permissionUtils";
 // import TransactList from "../components/transactList/TransactList";
@@ -36,10 +36,10 @@ const DASHBOARD = "DASHBOARD";
 const HEADER_HEIGHT = 40;
 const VISITOR_HEADER_HEIGHT = 50;
 
-const navigationList = (appName, history) => [
-  { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-  { key: 1, label: `${appName}`, disabled: true }
-];
+// const navigationList = (appName, history) => [
+//   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
+//   { key: 1, label: `${appName}`, disabled: true }
+// ];
 
 const getOreations = (appId, history) => [
   {
@@ -281,7 +281,7 @@ const AppDetail = props => {
       <Layout>
         <CommonHeader
           // title={appName}
-          navigationList={navigationList(appName, history)}
+          // navigationList={navigationList(appName, history)}
           operations={getOreations(appId, history)}
         />
 
