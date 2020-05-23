@@ -6,7 +6,6 @@ import { CloseIcon } from "../../../assets/icons/header";
 
 const CustomModal = props => {
   const { className, title, ...rest } = props;
-  console.log(title, !title, !!title)
   return (
     <Modal
       closeIcon={<CloseIcon />}
