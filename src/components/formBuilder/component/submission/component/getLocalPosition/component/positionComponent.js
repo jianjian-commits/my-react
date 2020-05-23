@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Input, Form, Tooltip, Icon, Button, Modal } from "antd";
+import { Input, Form, Tooltip, Icon, Button } from "antd";
+import { Modal } from "../../../../../../shared/customWidget"
 
 // let AMap;
 

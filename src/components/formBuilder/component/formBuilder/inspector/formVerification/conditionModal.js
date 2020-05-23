@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Input, Tabs, Collapse } from "antd";
+import { Input, Tabs, Collapse } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import {
   addVerification,
   editVerification

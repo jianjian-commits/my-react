@@ -6,12 +6,17 @@ import { CloseIcon } from "../../../assets/icons/header";
 
 const CustomModal = props => {
   const { className, title, ...rest } = props;
+  console.log(title, !title, !!title)
   return (
     <Modal
       closeIcon={<CloseIcon />}
       {...rest}
-      className={clx(classes.customModal, className)}
-      title={<span className={classes.titleSpan}>{title}</span>}
+      className={clx(
+        classes.customModal,
+        { [classes.hrColor]: !!title },
+        className
+      )}
+      title={title && <span className={classes.titleSpan}>{title}</span>}
     />
   );
 };

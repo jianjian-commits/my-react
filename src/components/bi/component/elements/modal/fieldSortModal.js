@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Icon, Button, Input } from "antd";
+import { Icon, Button, Input } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import classes from "../../../scss/modal/fieldSortModal.module.scss";
 import request from "../../../utils/request";
 import { SortType} from "../Constant";

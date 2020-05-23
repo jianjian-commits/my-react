@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Icon, Modal, Tooltip, Spin } from "antd";
+import { Button, Icon, Tooltip, Spin } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
 import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
 import { connect } from "react-redux";

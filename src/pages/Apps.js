@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { history } from "../store";
 import clx from "classnames";
-import { Button, Card, message, Modal, Input, Form } from "antd";
+import { Button, Card, message, Input, Form } from "antd";
+import { Modal } from "../components/shared/customWidget"
 import ModalCreation from "../components/profileManagement/modalCreate/ModalCreation";
 import request from "../utils/request";
 import { getAppList } from "../store/appReducer";

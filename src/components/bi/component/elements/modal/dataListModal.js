@@ -1,5 +1,6 @@
 import React from "react";
-import { Modal, Button, Collapse, Icon } from "antd";
+import { Button, Collapse, Icon } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import { useState } from "react";
 import { push } from "connected-react-router";
 import { connect } from "react-redux";

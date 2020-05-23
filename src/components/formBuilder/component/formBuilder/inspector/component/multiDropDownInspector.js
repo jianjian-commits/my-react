@@ -6,9 +6,9 @@ import {
   InputNumber,
   Tooltip,
   Select,
-  Divider,
-  Modal
+  Divider
 } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import { filterFormsForRelation } from "../utils/filterData";
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";
 import OtherDataModal from "../dataLinkageModal/otherDataModal";

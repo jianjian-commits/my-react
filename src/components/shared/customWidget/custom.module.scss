@@ -135,11 +135,12 @@
   :global(.ant-modal-body) {
     padding: 30px;
   }
-  :global(.ant-modal-header) {
-    height: 50px;
-    border-bottom: 1px solid #dcdee3;
-  }
   :global(.ant-form-item-with-help) {
     text-align: right;
+  }
+}
+.hrColor {
+  :global(.ant-modal-header) {
+    border-bottom: 1px solid #dcdee3;
   }
 }
