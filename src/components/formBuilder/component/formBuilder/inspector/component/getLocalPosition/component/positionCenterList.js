@@ -1,5 +1,6 @@
 import React from "react";
-import { Icon, Button, Modal, InputNumber, Form, Input, message } from "antd";
+import { Icon, Button, InputNumber, Form, Input, message } from "antd";
+import { Modal } from "../../../../../../../shared/customWidget"
 import PositionCenterItem from "./positionCenterItem"
 
 // var AMap;

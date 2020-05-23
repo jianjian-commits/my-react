@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Form, Icon, Input, Button, Checkbox } from "antd";
+import { Form, Icon, Input, Button, Checkbox } from "antd";
+import { Modal } from "../../../shared/customWidget"
 import { saveForm } from "../formBuilder/redux/utils/operateForm";
 import { push } from "connected-react-router";
 import pinyin from "chinese-to-pinyin";

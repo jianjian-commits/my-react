@@ -5,12 +5,11 @@ import {
   Col,
   List,
   Tabs,
-  Modal,
   Icon,
   Input,
   message
 } from "antd";
-import { Table } from "../shared/customWidget";
+import { Table, Modal } from "../shared/customWidget";
 import { useParams, useHistory } from "react-router-dom";
 import request from "../../utils/request";
 import { EditIcon, DeleteIcon } from "./svgIcon/index";

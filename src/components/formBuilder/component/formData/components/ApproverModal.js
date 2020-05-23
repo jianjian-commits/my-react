@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Modal, Select, message } from "antd";
+import { Select, message } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import request from "../../../../../utils/request";
 const { Option } = Select;
 

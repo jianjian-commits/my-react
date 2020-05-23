@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Modal, Form, Input } from "antd";
+import { Form, Input } from "antd";
+import { Modal } from "../../shared/customWidget"
 import classes from "./create.module.scss";
 import classnames from "classnames";
 import MyTextArea from "./MyTextArea";

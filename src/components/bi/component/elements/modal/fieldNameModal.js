@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Icon, Button, Input } from "antd";
+import { Icon, Button, Input } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import classes from "../../../scss/modal/fieldNameModal.module.scss";
 export default function FieldNameModal(props) {
   const [fieldName, setFieldName] = useState(props.label);

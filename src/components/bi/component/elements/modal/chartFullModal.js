@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import ChartContainer from '../../elements/chart/ChartContainer';
 import classes from "../../../scss/modal/chartModal.module.scss";
 import ExitFullScreenAction from '../../elements/action/ExitFullScreenAction';
