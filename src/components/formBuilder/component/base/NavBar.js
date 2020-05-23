@@ -7,8 +7,9 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { submitFormDataAuth } from "../../utils/permissionUtils";
 import FilterFieldsComponents from "../formData/components/filterFields/filterFieldsComponents";
-import {ReactComponent as FilterModeIcon } from "./filterModeIcon.svg"
+import { ReactComponent as FilterModeIcon } from "./filterModeIcon.svg"
 
+const Divider = () => <div style={{ display: "inline-block", width: 10 }}/>;
 class NavBar extends PureComponent {
   render() {
     const {
@@ -31,7 +32,7 @@ class NavBar extends PureComponent {
     const { appName, permissions, teamId, match, formId, isFilterMode, navs } = this.props;
     const { appId } = match.params;
     const isSubmitAuth = submitFormDataAuth(permissions, teamId, appId, formId);
-    
+
     const btns = isShowExtraTitle ? (
       <div className="headerBarExtraTitle">
         <Dropdown
@@ -44,13 +45,15 @@ class NavBar extends PureComponent {
           trigger={["click"]}
         >
           <Button>
-        <span id="fieldsBtn"> 显示字段 { selectedFieldsNumber <forms.components.length  ? <Icon component={FilterModeIcon} />: null}</span>
+            <span id="fieldsBtn"> 显示字段 {selectedFieldsNumber < forms.components.length ? <Icon component={FilterModeIcon} /> : null}</span>
           </Button>
-          
+
         </Dropdown>
+        <Divider />
         <Button onClick={clickExtendCallBack}>
-          <span> 筛选条件 {isFilterMode ? <Icon component={FilterModeIcon} />: null}</span>
+          <span> 筛选条件 {isFilterMode ? <Icon component={FilterModeIcon} /> : null}</span>
         </Button>
+        <Divider />
         {isShowBtn === true && isSubmitAuth ? (
           <Button
             className="headerBarButton"
@@ -60,9 +63,9 @@ class NavBar extends PureComponent {
             {btnValue}
           </Button>
         ) : (
-          null
-        )}
-      </div> ) : this.props.btns;
+            null
+          )}
+      </div>) : this.props.btns;
     return (
       <HomeContentTitle
         title={name}
