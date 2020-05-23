@@ -441,7 +441,6 @@ class PositionDetail extends Component {
             <Button
               type="primary"
               onClick={this.saveHandle}
-              style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
             >
               保存
             </Button>
