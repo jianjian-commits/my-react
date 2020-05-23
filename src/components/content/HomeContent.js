@@ -13,7 +13,7 @@ const defaultNavigationList = [
   { key: 0, label: "首页", onClick: () => history.push("/app/list") }
 ];
 export const HomeContentTitle = ({ title, navs=defaultNavigationList, btns }) => {
-  return <Card className={comClasses.homeContentTitle} bodyStyle={{ padding: "15.5px 18px 6px 28.5px", height: "100px" }}>
+  return <Card className={comClasses.homeContentTitle} bodyStyle={{ padding: "15.5px 30px 6px 30px", height: "100px" }}>
     {navs ? <Navigation navs={navs} separator={"/"} style={{ height: 36 }} fontStyle={{ fontSize: 14 }}/> : null }
     <div className={comClasses.main}>
       <div className={comClasses.title}>{typeof title === "string" ? <span className={comClasses.font}>{title}</span> : title}</div>
