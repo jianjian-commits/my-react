@@ -6,4 +6,6 @@ export { ReactComponent as newDBIcon } from "./newDB.svg";
 export { ReactComponent as newDBIcon_disable } from "./newDB_disable.svg";
 export { ReactComponent as newFormIcon } from "./newForm.svg";
 export { ReactComponent as newFormIcon_disable } from "./newForm_disable.svg";
+export { ReactComponent as LogoIcon } from "./logo.svg";
+export { ReactComponent as ForgetPasswordLogoIcon } from "./forgetPasswordLogo.svg";
 

@@ -397,6 +397,11 @@ $unHoverGray: #b6b6ba;
   display: flex;
   justify-content: center;
   align-items: center;
+  & > svg{
+    position: absolute;
+    top: 50px;
+    left: 50px;
+  }
   & > div {
     width: 980px;
     height: 445px;
