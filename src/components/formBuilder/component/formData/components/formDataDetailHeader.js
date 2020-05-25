@@ -101,7 +101,7 @@ const WithdrawApprovalButton = (props) => {
     );
   }
   return isAllowedWithDraw ? (
-    <Button type="primary" className="btn" onClick={withdraw}>
+    <Button type="primary" className="btn shortletter" onClick={withdraw}>
       撤回
     </Button>
   ) : (
@@ -149,46 +149,24 @@ const ApprovalProcessButtons = (props) => {
       props.setLoading(false);
       message.error("提交审批意见失败");
     }
-
-    return isApprovalProcessor ? (
-      <>
-        <Button
-          type="danger"
-          onClick={handleRefused}
-          className="btn redBtn shortletter"
-        >
-          拒绝
-        </Button>
-        <Button type="primary" onClick={handlePass} className="btn shortletter">
-          通过
-        </Button>
-      </>
-    ) : (
-      <></>
-    );
   }
 
   return isApprovalProcessor ? (
     <>
-      <Button
-        type="danger"
-        onClick={handleRefused}
-        className="btn"
-        style={{
-          backgroundColor: "#fff",
-          borderColor: "#fff",
-          color: "#E71010",
-        }}
-      >
-        拒绝
-      </Button>
-      <Button type="primary" onClick={handlePass} className="btn">
-        通过
-      </Button>
-    </>
-  ) : (
-    <></>
-  );
+    <Button
+      type="danger"
+      onClick={handleRefused}
+      className="btn redBtn shortletter"
+    >
+      拒绝
+    </Button>
+    <Button type="primary" onClick={handlePass} className="btn shortletter">
+      通过
+    </Button>
+  </>
+) : (
+  <></>
+);
 };
 const ReSubmitApprovalButton = (props) => {
   const { canResubmit } = props;
