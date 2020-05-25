@@ -122,7 +122,7 @@ const username = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "username",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace()
@@ -146,7 +146,7 @@ const name = ({ form, payload, icon, unprefix, hasFeedback, placeholder }) => {
   return {
     itemName: "name",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace(),
@@ -177,7 +177,10 @@ const password = ({
 }) => ({
   itemName: itemName,
   options: {
-    validateTrigger: "onSubmit",
+    validateTrigger:
+      activeKey !== "signin" && activeKey !== "initSignin"
+        ? "onBlur"
+        : "onSubmit",
     rules: [
       required("该项为必填"),
       whitespace(),
@@ -206,17 +209,17 @@ const password = ({
 const oldPassWord = ({ form, payload, icon, unprefix, hasFeedback }) => ({
   itemName: "oldPassWord",
   options: {
-    validateTrigger: "onBlur",
-    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
+    validateTrigger: "onSubmit",
+    rules: [required("该项为必填"), whitespace()]
   },
   component: (
     <Input
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       onChange={() => form.setFields({ oldPassWord: { errors: null } })}
-      placeholder={"当前密码"}
-      icon={icon}
-      unprefix={unprefix}
+      placeholder={"请输入当前密码"}
+      icon={true}
+      unprefix={true}
     />
   ),
   additionComponent: null
@@ -232,9 +235,9 @@ const newPassWord = ({ form, payload, icon, unprefix, hasFeedback }) => ({
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       onChange={() => form.setFields({ newPassWord: { errors: null } })}
-      placeholder={"新密码"}
-      icon={icon}
-      unprefix={unprefix}
+      placeholder={"至少8位，必须包含数字和字母"}
+      icon={false}
+      unprefix={true}
     />
   ),
   additionComponent: null
@@ -250,11 +253,10 @@ const confirmPassWord = ({
   return {
     itemName: "confirmPassWord",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace(),
-        requireCharAndNum(),
         {
           validator: (rule, value, callback) => {
             if (!value) return callback();
@@ -400,7 +402,7 @@ const companyName = ({
   return {
     itemName: "companyName",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         hasFeedback || update ? required("该项为必填") : "",
         requireChinese(),
