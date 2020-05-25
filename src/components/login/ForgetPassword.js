@@ -8,6 +8,7 @@ import { catchError } from "../../utils";
 import { message } from "antd";
 import { history } from "../../store";
 import { loginForgetPasswordParameter } from "./formItemConfig";
+import { ForgetPasswordLogoIcon } from "../../assets/icons";
 
 const reSetPassword = async ({ form, code, ...rest }) => {
   try {
@@ -60,6 +61,7 @@ export default connect(
 }) {
   return (
     <div className={signinStyles.forgetPassword}>
+      <ForgetPasswordLogoIcon />
       <div>
         <div>重置密码</div>
         <PublicForm

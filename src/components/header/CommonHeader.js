@@ -5,7 +5,7 @@ import {
   Breadcrumb,
   Button
 } from "antd";
-import { HeaderLogo } from "../../assets/images";
+import { LogoIcon } from "../../assets/icons";
 import User from "./UserSection";
 import classes from "./header.module.scss";
 import { Link } from "react-router-dom";
@@ -114,7 +114,7 @@ export default connect(
     <div className={classes.hideHeader}>
       <Header className={classes.homeHeader} style={homeHeaderStyle}>
         <div className={classes.wrapper}>
-          <div className={classes.logo}><Link to="/"><HeaderLogo /></Link></div>
+          <div className={classes.logo}><Link to="/"><LogoIcon /></Link></div>
           <div className={classes.title}>{getTitle(props.title)}</div>
           <div className={classes.nav}>
             {getNavigationList(props.navigationList)}

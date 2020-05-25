@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Layout } from "antd";
 import User from "./UserSection";
 import classes from "./header.module.scss";
-import { HeaderLogo } from "../../assets/images";
+import { LogoIcon } from "../../assets/icons";
 import { connect } from "react-redux";
 import { toggleSiderCollapsed } from "../../store/layoutReducer";
 import { getTransactList } from "../../store/loginReducer";
@@ -48,7 +48,7 @@ export default connect(
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={toggleSiderCollapsed}
         /> */}
-        <div className={classes.logo}><Link to="/"><HeaderLogo /></Link></div>
+        <div className={classes.logo}><Link to="/"><LogoIcon /></Link></div>
         <div className={classes.nav}></div>
         <div className={classes.user}>
           <User theme="white" />
