@@ -269,7 +269,7 @@ export default connect(
       {onOff.filterSwith ? (
         <Filter groups={currentCompany.groups} fn={filterData} />
       ) : null}
-      <div className={classes.tableBox}>
+      <div className={classes.wrapper}>
         <Table
           pagination={{
             total: total,
