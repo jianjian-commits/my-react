@@ -1,5 +1,6 @@
 import React from "react";
-import { Input, Checkbox, Button, Tooltip, Select, Divider, Modal } from "antd";
+import { Input, Checkbox, Button, Tooltip, Select, Divider } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import { connect } from "react-redux";
 import locationUtils from "../../../../utils/locationUtils";
 import DataLinkageModal from "../dataLinkageModal/dataLinkageModel";

@@ -5,4 +5,7 @@ $slider-horizontal-width: 100%;
 .formBuilder {
   @import "../../../../../../node_modules/bootstrap-slider/src/sass/bootstrap-slider";
   @import "../../../../../../node_modules/bootstrap/scss/bootstrap.scss";
+  button {
+    border-radius: 3px;
+  }
 }

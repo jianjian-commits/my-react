@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Input, Radio, message, Modal, Popconfirm } from "antd";
+import { Input, Radio, message, Popconfirm } from "antd";
+import { Modal } from "../../shared/customWidget"
 import { history } from "../../../store";
 import { Table, Button } from "../../shared/customWidget";
 import moment from "moment";
@@ -440,7 +441,6 @@ class PositionDetail extends Component {
             <Button
               type="primary"
               onClick={this.saveHandle}
-              style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
             >
               保存
             </Button>

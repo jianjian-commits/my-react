@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Icon, message, Modal } from "antd";
+import { Button, Icon, message } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import { ActionSheet } from "antd-mobile";
 // const { ActionSheet} = window["antd-mobile"];
 class ImageUploadTestItem extends React.Component {

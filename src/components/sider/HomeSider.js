@@ -63,7 +63,7 @@ const HomeSider = (props) => {
     if (collapsed) updateSiderOpenKeys([]);
   };
   const authFilter = (e) =>
-    authorityIsValid({
+    !e.hidden && authorityIsValid({
       debug,
       permissions,
       teamId,
@@ -78,9 +78,8 @@ const HomeSider = (props) => {
       collapsible
       collapsed={collapsed}
     >
-      <SiderTop collapsed={collapsed} />
+      {/* <SiderTop collapsed={collapsed} /> */}
       <Menu
-        forceSubMenuRender={true}
         className={classes.menu}
         theme="light"
         mode="inline"

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Modal, Select, Icon, Input, message } from "antd";
+import { Select, Icon, Input, message } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import { connect } from "react-redux";
 import { setErrorComponentIndex } from "../../redux/utils/operateFormComponent";
 import { getDataFromUrl } from "../../../../utils/locationUtils";

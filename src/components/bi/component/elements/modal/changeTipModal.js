@@ -1,5 +1,6 @@
 import React from "react";
-import { Modal, Icon, Button } from "antd";
+import { Icon, Button } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import classes from "../../../scss/modal/tipModal.module.scss"
 const title = "更改数据源";
 

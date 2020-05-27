@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dropdown, Modal, Input, Form, message, Button } from "antd";
+import { Dropdown, Input, Form, message, Button } from "antd";
+import { Modal } from "../shared/customWidget"
 // import classnames from 'classnames';
 const { confirm } = Modal
 const OperateBox = (props) => {

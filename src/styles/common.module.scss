@@ -11,7 +11,6 @@
 }
 
 .container {
-  // height: calc(100vh - 50px);
   .header {
     padding: 37px 50px 10px 50px;
   }
@@ -53,6 +52,12 @@
     display: flex;
     .title {
       flex: 1;
+      .font {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 26px;
+        color: #333333;
+      }
     }
     .btns {
       flex: 1;

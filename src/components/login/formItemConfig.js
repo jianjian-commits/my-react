@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Button as Btn, Icon } from "antd";
+import { Input as Inp, Icon } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
 import { catchError } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 import { allowSendCode } from "../../store/loginReducer";
+import { Button } from "../shared/customWidget";
 
 const meteImg = {
   username: <UserNameIcon style={{ marginLeft: "10px" }} />,
@@ -31,20 +32,20 @@ class Input extends React.Component {
   }
 }
 
-class Button extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
-    const { children, style, className, ...rest } = this.props;
-    return (
-      <Btn {...rest} style={Object.assign(style)} className={clx(className)}>
-        {children}
-      </Btn>
-    );
-  }
-}
+// class Button extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {};
+//   }
+//   render() {
+//     const { children, style, className, ...rest } = this.props;
+//     return (
+//       <Btn {...rest} style={Object.assign(style)} className={clx(className)}>
+//         {children}
+//       </Btn>
+//     );
+//   }
+// }
 
 //  rules校验规则
 const required = msg => ({ required: true, message: msg });
@@ -121,7 +122,7 @@ const username = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "username",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace()
@@ -141,11 +142,11 @@ const username = ({ form, payload, icon, unprefix, hasFeedback }) => {
   };
 };
 
-const name = ({ form, payload, icon, unprefix, hasFeedback }) => {
+const name = ({ form, payload, icon, unprefix, hasFeedback, placeholder }) => {
   return {
     itemName: "name",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace(),
@@ -155,7 +156,7 @@ const name = ({ form, payload, icon, unprefix, hasFeedback }) => {
     component: (
       <Input
         prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-        placeholder={"请输入用户昵称"}
+        placeholder={placeholder || "请输入用户昵称"}
         onChange={() => form.setFields({ name: { errors: null } })}
         icon={icon}
         unprefix={unprefix}
@@ -171,12 +172,22 @@ const password = ({
   itemName,
   icon,
   unprefix,
-  hasFeedback
+  hasFeedback,
+  activeKey
 }) => ({
   itemName: itemName,
   options: {
-    validateTrigger: "onBlur",
-    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
+    validateTrigger:
+      activeKey !== "signin" && activeKey !== "initSignin"
+        ? "onBlur"
+        : "onSubmit",
+    rules: [
+      required("该项为必填"),
+      whitespace(),
+      activeKey !== "signin" &&
+        activeKey !== "initSignin" &&
+        requireCharAndNum()
+    ]
   },
   component: (
     <Input
@@ -198,17 +209,17 @@ const password = ({
 const oldPassWord = ({ form, payload, icon, unprefix, hasFeedback }) => ({
   itemName: "oldPassWord",
   options: {
-    validateTrigger: "onBlur",
-    rules: [required("该项为必填"), whitespace(), requireCharAndNum()]
+    validateTrigger: "onSubmit",
+    rules: [required("该项为必填"), whitespace()]
   },
   component: (
     <Input
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       onChange={() => form.setFields({ oldPassWord: { errors: null } })}
-      placeholder={"当前密码"}
-      icon={icon}
-      unprefix={unprefix}
+      placeholder={"请输入当前密码"}
+      icon={true}
+      unprefix={true}
     />
   ),
   additionComponent: null
@@ -224,9 +235,9 @@ const newPassWord = ({ form, payload, icon, unprefix, hasFeedback }) => ({
       prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
       type="password"
       onChange={() => form.setFields({ newPassWord: { errors: null } })}
-      placeholder={"新密码"}
-      icon={icon}
-      unprefix={unprefix}
+      placeholder={"至少8位，必须包含数字和字母"}
+      icon={false}
+      unprefix={true}
     />
   ),
   additionComponent: null
@@ -242,11 +253,10 @@ const confirmPassWord = ({
   return {
     itemName: "confirmPassWord",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace(),
-        requireCharAndNum(),
         {
           validator: (rule, value, callback) => {
             if (!value) return callback();
@@ -306,7 +316,7 @@ const verificationCode = ({
         unprefix={unprefix}
         addonAfter={
           <Button
-            disabled={isFetchCoding}
+            disabled={isFetchCoding || !phone}
             onClick={() =>
               form.validateFields(["mobilePhone"], (errors, values) =>
                 errors && errors.mobilePhone
@@ -319,8 +329,9 @@ const verificationCode = ({
               borderRadius: "6px",
               background: "#2A7FFF",
               color: "#ffffff",
-              opacity: phone ? (isFetchCoding ? 0.5 : 1) : 0.5,
-              width: "130px"
+              // opacity: phone ? (isFetchCoding ? 0.5 : 1) : 0.5,
+              width: "130px",
+              margin: "0"
             }}
           >
             {fetchText ? fetchText : "发送验证码"}
@@ -391,7 +402,7 @@ const companyName = ({
   return {
     itemName: "companyName",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         hasFeedback || update ? required("该项为必填") : "",
         requireChinese(),
@@ -416,7 +427,7 @@ const userEmail = ({ form, payload, icon, unprefix, hasFeedback }) => {
   return {
     itemName: "userEmail",
     options: {
-      validateTrigger: "onBlur",
+      validateTrigger: "onSubmit",
       rules: [
         required("该项为必填"),
         whitespace(),
@@ -448,12 +459,12 @@ const submit = ({
   resetAllowSendCodeState,
   timeout
 }) => {
-  const { getFieldsValue, isFieldsTouched } = form;
-  const touched = isFieldsTouched();
-  const values = Object.values(getFieldsValue());
-  const filled = values.filter(f => f);
-  const allowClickButton =
-    values.length === filled.length && touched ? true : false;
+  // const { getFieldsValue, isFieldsTouched } = form;
+  // const touched = isFieldsTouched();
+  // const values = Object.values(getFieldsValue());
+  // const filled = values.filter(f => f);
+  // const allowClickButton =
+  //   values.length === filled.length && touched ? true : false;
   return {
     itemName: itemName,
     options: {
@@ -468,11 +479,11 @@ const submit = ({
           timeout && timeout.int && timeout.clear(0);
           resetAllowSendCodeState();
         }}
-        style={{
-          background: allowClickButton
-            ? "rgba(24,144,255,1)"
-            : "rgba(24,144,255,0.5)"
-        }}
+        // style={{
+        //   background: allowClickButton
+        //     ? "rgba(24,144,255,1)"
+        //     : "rgba(24,144,255,0.5)"
+        // }}
         // onClick={throttle(e => (e.target.disabled = true), 3000)}
       >
         {payload === "login" && "登录"}
@@ -552,12 +563,12 @@ const userDetailModalSubmit = ({
   modalMeter,
   setModalMeter
 }) => {
-  const { getFieldsValue, isFieldsTouched } = form;
-  const touched = isFieldsTouched();
-  const values = Object.values(getFieldsValue());
-  const filled = values.filter(f => f);
-  const allowClickButton =
-    values.length === filled.length && touched ? true : false;
+  // const { getFieldsValue, isFieldsTouched } = form;
+  // const touched = isFieldsTouched();
+  // const values = Object.values(getFieldsValue());
+  // const filled = values.filter(f => f);
+  // const allowClickButton =
+  //   values.length === filled.length && touched ? true : false;
   return {
     itemName: "userDetailModalSubmit",
     options: {
@@ -568,14 +579,14 @@ const userDetailModalSubmit = ({
         <Button
           type="primary"
           onClick={() => setModalMeter({ ...modalMeter, meter: false })}
-          style={{ opacity: allowClickButton ? 1 : 0.5 }}
+          // style={{ opacity: allowClickButton ? 1 : 0.5 }}
         >
           取消
         </Button>
         <Button
           type="primary"
           htmlType="submit"
-          style={{ opacity: allowClickButton ? 1 : 0.5 }}
+          // style={{ opacity: allowClickButton ? 1 : 0.5 }}
         >
           完成
         </Button>
@@ -711,16 +722,31 @@ export const registerParameter = [
 ];
 export const userDetailParameter = {
   resetCompanyName: [
-    { key: "companyName", value: "redit", icon: true },
+    {
+      key: "companyName",
+      value: "redit",
+      icon: false,
+      placeholder: "请输入公司名称"
+    },
     { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ],
   resetName: [
-    { key: "name", value: null, icon: true },
+    { key: "name", value: null, icon: false, placeholder: "请输入名称" },
     { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ],
   resetMobilePhone: [
-    { key: "mobilePhone", value: null, icon: true },
-    { key: "verificationCode", value: null, icon: true },
+    {
+      key: "mobilePhone",
+      value: null,
+      icon: true,
+      placeholder: "请输入手机号"
+    },
+    {
+      key: "verificationCode",
+      value: null,
+      icon: false,
+      placeholder: "请输入验证码"
+    },
     { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ],
   resetPassword: [
@@ -729,10 +755,23 @@ export const userDetailParameter = {
       value: null,
       label: "当前密码",
       icon: true,
-      corn: false
+      corn: false,
+      placeholder: "请输入当前密码"
     },
-    { key: "newPassWord", value: null, label: "新密码", icon: true },
-    { key: "confirmPassWord", value: null, label: "确认密码", icon: true },
+    {
+      key: "newPassWord",
+      value: null,
+      label: "新密码",
+      icon: true,
+      placeholder: "请输入新密码"
+    },
+    {
+      key: "confirmPassWord",
+      value: null,
+      label: "确认密码",
+      icon: true,
+      placeholder: "请确认新密码"
+    },
     { key: "userDetailModalSubmit", value: "submit", itemName: "resetSubmit" }
   ]
 };

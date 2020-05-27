@@ -1,5 +1,6 @@
 import React,{useEffect} from "react";
-import { Button, Row, Col, Icon, Modal, Breadcrumb, message, Input,Select } from "antd";
+import { Button, Row, Col, Icon, Breadcrumb, message, Input,Select } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import HeaderBar from "../../base/NavBar";
 import { history } from "../../../../../store";
 import { useHistory, useParams } from "react-router-dom";

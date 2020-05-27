@@ -24,14 +24,14 @@ export const PrivateRoute = ({
   >
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         localStorage.getItem("id_token") ? (
           React.createElement(component, { ...props, ...options })
         ) : (
           <Redirect
             to={{
               pathname: "/login",
-              state: { from: props.location }
+              state: { from: props.location },
             }}
           />
         )
@@ -41,20 +41,26 @@ export const PrivateRoute = ({
 );
 
 export const PublicRoute = ({ component, props, ...rest }) => (
-  <Route {...rest} render={props => React.createElement(component, props)} />
+  <Route {...rest} render={(props) => React.createElement(component, props)} />
 );
 
-export const Navigation = ({ navs = [] }) => {
+export const Navigation = ({
+  navs = [],
+  separator = <BreadRight />,
+  style = {},
+  fontStyle = {},
+}) => {
   return (
     <>
-      <Breadcrumb style={{ height: 34 }} separator={<BreadRight />}>
-        {navs.map(n => (
+      <Breadcrumb style={{ height: 34, ...style }} separator={separator}>
+        {navs.map((n) => (
           <Breadcrumb.Item
             key={n.key}
+            style={fontStyle}
             className={clx({
               [comClasses.breadcrumbItem]: true,
               [comClasses.disabled]: n.disabled,
-              [comClasses.active]: !n.disabled
+              [comClasses.active]: !n.disabled,
             })}
             onClick={n.onClick}
           >
@@ -66,12 +72,14 @@ export const Navigation = ({ navs = [] }) => {
   );
 };
 
-export const HomeLayout = props => <Layout>
-    <HomeSider />
-    <Content>
-      <HomeHeader />
+export const HomeLayout = (props) => (
+  <Layout>
+    <HomeHeader />
+    <Layout>
+      <HomeSider />
       <Content className={comClasses.commonContentWarpper}>
         {props.children}
       </Content>
-    </Content>
-  </Layout>;
+    </Layout>
+  </Layout>
+);

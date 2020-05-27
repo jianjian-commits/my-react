@@ -19,7 +19,7 @@ import { getFormsAll, getApproveCount, clearApproveCount } from "../components/f
 // import { appDetailMenu } from "../components/transactList/appDetailMenu";
 import { APP_VISIABLED, APP_SETTING_ABLED } from "../auth";
 import Authenticate from "../components/shared/Authenticate";
-import { SiderTop } from "../components/sider/HomeSider";
+// import { SiderTop } from "../components/sider/HomeSider";
 
 // import { submitFormDataAuth } from "../components/formBuilder/utils/permissionUtils";
 // import TransactList from "../components/transactList/TransactList";
@@ -36,10 +36,10 @@ const DASHBOARD = "DASHBOARD";
 const HEADER_HEIGHT = 40;
 const VISITOR_HEADER_HEIGHT = 50;
 
-const navigationList = (appName, history) => [
-  { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-  { key: 1, label: `${appName}`, disabled: true }
-];
+// const navigationList = (appName, history) => [
+//   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
+//   { key: 1, label: `${appName}`, disabled: true }
+// ];
 
 const getOreations = (appId, history) => [
   {
@@ -279,57 +279,58 @@ const AppDetail = props => {
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <Layout>
-        <Sider
-          className={classes.appSider}
-          style={{ background: "#fff" }}
-          width="240"
-        >
-          <SiderTop />
-          <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount} />
-          <div className={appDeatilClasses.searchBox}>
-            <Input
-              placeholder="输入名称来搜索"
-              value={searchKey}
-              onChange={searchHandle}
-              prefix={
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.8696 11.2369L9.44935 8.80981C10.2291 7.87776 10.6988 6.67619 10.6988 5.36437C10.6988 2.40165 8.3039 0 5.34945 0C2.39492 0 0 2.40163 0 5.36437C0 8.32711 2.39494 10.7287 5.34945 10.7287C6.6747 10.7287 7.88717 10.2453 8.82161 9.44493L11.239 11.869C11.4131 12.0437 11.6955 12.0437 11.8696 11.869C12.0435 11.6944 12.0435 11.4115 11.8696 11.2369ZM5.34946 9.83465C2.88747 9.83465 0.89158 7.83323 0.89158 5.36435C0.89158 2.89549 2.88747 0.894038 5.34946 0.894038C7.81145 0.894038 9.80702 2.8955 9.80702 5.36435C9.80702 7.83323 7.81143 9.83465 5.34946 9.83465Z"
-                    fill="#B6B6BA"
-                  />
-                </svg>
-              }
-            />
-          </div>
-          <div className={appDeatilClasses.formArea}>
-            <DraggableList
-              selected={selectedID}
-              draggable={false}
-              handleClickList={handleClickList}
-              groups={groups}
-              list={list}
-            />
-          </div>
-        </Sider>
-        <Content>
-          <CommonHeader
-            // title={appName}
-            navigationList={navigationList(appName, history)}
-            operations={getOreations(appId, history)}
-          />
+        <CommonHeader
+          // title={appName}
+          // navigationList={navigationList(appName, history)}
+          operations={getOreations(appId, history)}
+        />
+
+        <Layout>
+          <Sider
+            className={classes.appSider}
+            style={{ background: "#fff" }}
+            width="240"
+          >
+            {/* <SiderTop /> */}
+            <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount} />
+            <div className={appDeatilClasses.searchBox}>
+              <Input
+                placeholder="输入名称来搜索"
+                value={searchKey}
+                onChange={searchHandle}
+                prefix={
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.8696 11.2369L9.44935 8.80981C10.2291 7.87776 10.6988 6.67619 10.6988 5.36437C10.6988 2.40165 8.3039 0 5.34945 0C2.39492 0 0 2.40163 0 5.36437C0 8.32711 2.39494 10.7287 5.34945 10.7287C6.6747 10.7287 7.88717 10.2453 8.82161 9.44493L11.239 11.869C11.4131 12.0437 11.6955 12.0437 11.8696 11.869C12.0435 11.6944 12.0435 11.4115 11.8696 11.2369ZM5.34946 9.83465C2.88747 9.83465 0.89158 7.83323 0.89158 5.36435C0.89158 2.89549 2.88747 0.894038 5.34946 0.894038C7.81145 0.894038 9.80702 2.8955 9.80702 5.36435C9.80702 7.83323 7.81143 9.83465 5.34946 9.83465Z"
+                      fill="#B6B6BA"
+                    />
+                  </svg>
+                }
+              />
+            </div>
+            <div className={appDeatilClasses.formArea}>
+              <DraggableList
+                selected={selectedID}
+                draggable={false}
+                handleClickList={handleClickList}
+                groups={groups}
+                list={list}
+              />
+            </div>
+          </Sider>
           <Content className={classes.container}>
             {// eslint-disable-next-line
               selectedID != void 0 ? (selectedType === DASHBOARD ? getDashboard() : getForm()) :
                 approvalKey !== null ? (TransactList) : null
             }
           </Content>
-        </Content>
+        </Layout>
       </Layout>
     </Authenticate>
   );
