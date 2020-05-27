@@ -160,18 +160,20 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
     width: 70%;
     flex: initial;
     padding-top: 49px;
-    background: #FFF;
+    background: rgb(240, 242, 245);
     overflow:auto;
     overflow-x:hidden;
     .react-form-builder-preview {
-      min-height: 100%;
-      max-width: 570px;
+      height:100%;
+      max-width: 800px;
+      min-width: 570px;
       margin: 0 auto;
-      border: 1px solid #ddd;
+
+
       background: #fff;
-      // height: 570px;
       #emptyFormComponent {
-        height: 96%;
+        height: 100%;
+        padding: 20px;
       }
       &.isdragging {
         .Sortable,
@@ -311,6 +313,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       }
       .Sortable {
         min-height: 650px;
+        background-color: #fff;
         transition: all 0.2s ease-in;
         position: relative;
         cursor: move;
@@ -843,6 +846,13 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
           width: 100%;
         }
       }
+    }
+  }
+  @media screen and (max-width: 1650px) {
+    .preview-container {
+      background: #fff;
+      border-left: 1px solid #ddd;
+      border-right: 1px solid #ddd;
     }
   }
 
@@ -1976,10 +1986,8 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
 }
 
 #formPlaceHolder {
-  margin-left: 2%;
-  margin-top: 2%;
-  height: 96%;
-  width: 96%;
+  height: 100%;
+  width: 100%;
   border: 1px dashed #d6d8de;
   text-align: center;
   color: #d6d8de;
@@ -1990,7 +1998,7 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       outline: 1px dashed rgba(0, 122, 255, 1);
     }
     width: 100%;
-    height: 70vh;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

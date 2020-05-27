@@ -122,9 +122,9 @@ body {
         //   z-index: 100;
         // }
         // padding-left: 30px;
-        &>div{
-          margin-left: 30px;
-        }
+        // &>div{
+          // margin-left: 30px;
+        // }
         .react-grid-item {
           .ant-form-item {
             font-size: 13px;
@@ -441,6 +441,9 @@ body {
                   font-size: 13px;
                   border-radius: 0;
                 }
+                .ant-input-affix-wrapper-textarea-with-clear-btn {
+                  width: 405px;
+                }
               }
             }
           }
@@ -450,9 +453,7 @@ body {
             border-radius: 0;
           }
           .SubmitBtn {
-            border-top: 1px dashed #B4B6BC;;
             padding:16px 0 15px;
-            // !这个需要修改
             margin-top: 30px;
             .ant-btn {
               min-width: 110px;
