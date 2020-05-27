@@ -53,12 +53,16 @@ class FormInforModal extends React.Component {
 
   apiUniqueCheck = (rule, value, callback) => {
     //检测apiName只能由字母数字及下划线构成
-    var reg = /^\w+$/
-    if (this._isApiNameExist(value)) {
-      callback("API Name已存在，请重新输入");
-    } else if (!reg.test(value)) {
-      callback("API Name只能由字母、数字及下划线构成");
-    } else {
+    if(value !== undefined && value !== "") {
+      var reg = /^\w+$/
+      if (this._isApiNameExist(value)) {
+        callback("API Name已存在，请重新输入");
+      } else if (!reg.test(value)) {
+        callback("API Name只能由字母、数字及下划线构成");
+      } else {
+        callback();
+      }
+    }else{
       callback();
     }
   };
