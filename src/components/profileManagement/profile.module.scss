@@ -11,7 +11,8 @@
   //   margin: 0 6px 0 0;
   // }
 
-  > button,section > button {
+  > button,
+  section > button {
     float: right;
     color: #2a7fff;
     width: 104px;
@@ -21,7 +22,7 @@
     border: none;
   }
 
-  .isHide{
+  .isHide {
     display: none;
   }
 
@@ -52,7 +53,7 @@
 
 // 基础信息
 .groupBasic {
-  table{
+  table {
     width: 100%;
   }
   tbody {
@@ -106,8 +107,11 @@
   table {
     border-top: 1px solid #dcdee3;
 
-    th span {
-      font-weight: normal !important;
+    tr {
+      height: 49px;
+      span {
+        font-weight: normal !important;
+      }
     }
   }
 
@@ -137,7 +141,6 @@
 }
 
 .groupManage {
-
   :global(.ant-radio-group) {
     display: block;
     background: #fff;
@@ -151,7 +154,7 @@
       }
     }
   }
-    .checkboxStyle {
+  .checkboxStyle {
     background: #fff;
     padding: 14px 30px;
 
@@ -159,7 +162,6 @@
       margin: 0 60px 0 10px;
     }
   }
-
 }
 
 .groupSetting {
