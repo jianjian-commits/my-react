@@ -124,8 +124,6 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
 
                     _getFormulaRelationData(form, resultArray, itemFormulaObj, formChildDataObj, formComponentArray, connectItem);
 
-                    console.log("hahah", resultArray);
-
                     let resultData = resultArray.reduce((resultObj, item) => {
                         resultObj[item.type] = item.value
                         return resultObj
@@ -140,6 +138,7 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                         },
                         headers: {
                             "Content-Type": "application/json",
+                            "formId": props.formComponent.id
                         }
                     }).then(response => {
                         let data = response.data;
