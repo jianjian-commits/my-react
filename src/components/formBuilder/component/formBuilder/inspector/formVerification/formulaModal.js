@@ -260,7 +260,7 @@ class ConditionModal extends React.Component {
 
     return (
       <Modal
-        title="校验条件"
+        title="公式编辑"
         visible={this.props.visible}
         onOk={() => {
           console.log("haha", this.state.selectedComponent);
