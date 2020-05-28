@@ -14,7 +14,7 @@
     "bootstrap-slider": "^10.6.2",
     "chinese-to-pinyin": "^1.3.1",
     "classnames": "^2.2.6",
-    "componentized-process": "git+http://192.168.3.101/wct/frontend-componentized-process.git#0a37aae3adf81ca57c1deee30dd8498da54c89ea",
+    "componentized-process": "git+http://192.168.3.101/wct/frontend-componentized-process.git#5f4eb0533953fb9f225aa2803953ae520df7d1ac",
     "connected-react-router": "^6.6.1",
     "copy-to-clipboard": "^3.2.1",
     "echarts": "^4.6.0",
