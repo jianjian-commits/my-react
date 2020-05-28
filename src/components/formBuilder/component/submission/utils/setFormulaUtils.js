@@ -48,7 +48,6 @@ var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDat
                 func(formulaDataArray, dataResource)
             })
         }
-        console.log("xwedxw",formChildDataObj)
         saveFormChildSubmitData(formChildDataObj)
     }
 };
