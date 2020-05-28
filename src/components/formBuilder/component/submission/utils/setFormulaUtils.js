@@ -135,10 +135,10 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                         data: {
                             expressionString: itemFormulaObj.verificationValue,
                             data: resultData,
+                            formId: props.formComponent.id
                         },
                         headers: {
-                            "Content-Type": "application/json",
-                            "formId": props.formComponent.id
+                            "Content-Type": "application/json"
                         }
                     }).then(response => {
                         let data = response.data;
