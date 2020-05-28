@@ -2,6 +2,10 @@ import config from "../../../config/config";
 import { instanceAxios } from "../../../utils/tokenUtils";
 
 var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDataObj, saveFormChildSubmitData, dataResource) => {
+
+    if(formulaItem.type === "NumberInput"){
+        resultData = String(resultData);
+    }
     if (formulaItem.parentKey == void 0) {
         form.setFieldsValue({
             [formulaItem.key]: resultData
@@ -44,7 +48,7 @@ var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDat
                 func(formulaDataArray, dataResource)
             })
         }
-
+        console.log("xwedxw",formChildDataObj)
         saveFormChildSubmitData(formChildDataObj)
     }
 };
