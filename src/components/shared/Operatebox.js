@@ -1,8 +1,8 @@
 import React from 'react';
-import { Dropdown, Input, Form, message, Button } from "antd";
+import { Dropdown, Input, Form, message, Button, Modal as AntModal } from "antd";
 import { Modal } from "../shared/customWidget"
 // import classnames from 'classnames';
-const { confirm } = Modal
+const { confirm } = AntModal;
 const OperateBox = (props) => {
 
   // const [value, setValue] = React.useState(props.formname);
