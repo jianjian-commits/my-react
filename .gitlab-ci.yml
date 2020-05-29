@@ -21,6 +21,7 @@ run-aliyun:
   variables:
     PORT: 9030
     REACT_APP_HOST_IP: http://utranda.com:9080
+    GIT_STRATEGY: none
   before_script:
     - pwd
     - rm -rf davinci-paas-frontend
