@@ -232,14 +232,14 @@ class FormSubmitData extends PureComponent {
   };
 
   _truncateValue(value) {
-    Array.isArray(value) && (value = value.toString());
     if (value == void 0) {
       return "";
-    } else if (value.length >= 11) {
-      return value.substr(0, 10) + "...";
-    } else {
-      return value;
     }
+    value  = String(value);
+    if (value.length >= 11) {
+      return value.substr(0, 10) + "...";
+    }
+    return value;
   }
 
   _renderFileData = (fileData) => {
