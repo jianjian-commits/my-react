@@ -1,10 +1,15 @@
 import config from "../../../config/config";
 import { instanceAxios } from "../../../utils/tokenUtils";
+import { utcDate, localDate } from "../../../utils/coverTimeUtils"
+
+const DateType = ['DateInput', 'PureTime', "PureDate"];
 
 var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDataObj, saveFormChildSubmitData, dataResource) => {
 
     if(formulaItem.type === "NumberInput"){
         resultData = String(resultData);
+    }else if(DateType.includes(formulaItem.type)){
+        resultData = localDate(resultData, formulaItem.type, true)
     }
     if (formulaItem.parentKey == void 0) {
         form.setFieldsValue({
@@ -112,7 +117,9 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                     //         }
                     //     }
                     // }
-
+                    if(DateType.includes(item.type)) {
+                        value = utcDate(value, item.type)
+                    }
                     resultArray.push({
                         type: item.key,
                         value: value
