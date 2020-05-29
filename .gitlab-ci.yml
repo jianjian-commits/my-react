@@ -1,5 +1,4 @@
 stages:
-  - run
   - ci-build
   - run-aliyun
 
@@ -7,8 +6,8 @@ variables:
   PORT: 9030
   REACT_APP_HOST_IP: http://192.168.3.105:9080
 
-run:
-  stage: run
+run-in-105:
+  stage: ci-build
   script:
     - docker-compose up -d --build
   tags:
@@ -28,7 +27,7 @@ ci-build:
   tags:
     - 106shell
 
-run-aliyun:
+run-in-aliyun:
   stage: run-aliyun
   variables:
     GIT_STRATEGY: none
