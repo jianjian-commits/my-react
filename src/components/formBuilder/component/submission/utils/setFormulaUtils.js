@@ -2,13 +2,16 @@ import config from "../../../config/config";
 import { instanceAxios } from "../../../utils/tokenUtils";
 
 var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDataObj, saveFormChildSubmitData, dataResource) => {
+
+    if(formulaItem.type === "NumberInput"){
+        resultData = String(resultData);
+    }
     if (formulaItem.parentKey == void 0) {
         form.setFieldsValue({
             [formulaItem.key]: resultData
         });
         const { callEventArr, formulaEvent } = formulaItem;
 
-        console.log("fck tw", formulaEvent)
         if (callEventArr) {
             callEventArr.forEach(fnc => {
                 fnc(resultData, this);
@@ -28,8 +31,6 @@ var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDat
             target.data = resultData;
             formulaDataArray.push(resultData);
 
-            console.log(formulaDataArray)
-
             if (target.callEventArr) {
                 target.callEventArr.forEach(fnc => {
                     fnc(resultData, this);
@@ -44,7 +45,6 @@ var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDat
                 func(formulaDataArray, dataResource)
             })
         }
-
         saveFormChildSubmitData(formChildDataObj)
     }
 };
@@ -92,8 +92,6 @@ var _getFormulaRelationData = (form, resultArray, itemFormulaObj, formChildDataO
 export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
     const { form, item, formulaArray, formComponent, formChildDataObj, handleSetFormula, saveFormChildSubmitData } = props;
 
-    console.log(props);
-
     let formComponentArray = formComponent.components;
 
     formulaArray.forEach((formulaItem) => {
@@ -104,7 +102,6 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                 handleSetFormula(item.key, (value, dataResource) => {
                     let resultArray = [];
 
-                    // console.log("fck", value, formulaItem, item, dataResource)
                     // if (dataResource != void 0) {
                     //     if (item.data.type == "EditFormula") {
                     //         let resultArray = item.data.values.connectArray.filter((item) => {
@@ -150,7 +147,6 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                 handleSetFormula(formChildItem.key, (value, dataResource) => {
                     let resultArray = [];
 
-                    console.log("fck222", formChildItem, dataResource)
                     if (dataResource != void 0) {
                         if (formChildItem.data.type == "EditFormula") {
                             let resultArray = formChildItem.data.values.connectArray.filter((item) => {

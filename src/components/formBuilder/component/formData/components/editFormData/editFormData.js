@@ -74,7 +74,8 @@ class EditFormData extends Component {
       errorResponseMsg: {},
       currentForm: { components: [], name: "" },
       formDetail: [],
-      oldExtraProp: {}
+      oldExtraProp: {},
+      isChangeLayout: false
     };
     this.renderFormComponent = this.renderFormComponent.bind(this);
   }
@@ -97,6 +98,26 @@ class EditFormData extends Component {
             const pureFormComponents = currentForm.components.filter(item => {
               return item.type !== "Button";
             });
+            let formulaArray = currentForm.components.reduce((resultArray, item) => {
+              if (item.type == "Button") {
+                return resultArray
+              }
+      
+              if (item.type == "FormChildTest") {
+                item.values.forEach((childItem) => {
+                  if (childItem.data && childItem.data.type == "EditFormula") {
+                    childItem.parentKey = item.key;
+                    resultArray.push(childItem)
+                  }
+                })
+              } else {
+                if (item.data && item.data.type == "EditFormula") {
+                  resultArray.push(item)
+                }
+              }
+      
+              return resultArray
+            }, []);
             axios
               .get(
                 config.apiUrl + `/submission/${submissionId}`,
@@ -120,7 +141,9 @@ class EditFormData extends Component {
                   formChildDataObj,
                   oldExtraProp,
                   initflag: false,
-                  isSubmitted: false
+                  isSubmitted: false,
+                  formulaArray: formulaArray,
+                  isSetFormulaData: true
                 })
               });
           }).catch((error) => {
@@ -487,6 +510,43 @@ class EditFormData extends Component {
     }
   };
 
+  handleSetFormula = (
+    componentKey,
+    callback,
+    childParentKey,
+    insertFromChildIndex
+  ) => {
+    const pureFormComponents = this.state.pureFormComponents.map(component => {
+      if (component.key == componentKey) {
+        if (component.formulaEvent != void 0) {
+          component.formulaEvent.push(callback);
+        } else {
+          component.formulaEvent = [callback];
+        }
+      } else if (component.element == "FormChildTest" && childParentKey) {
+        // 如果关联的是子组件则为子组件注册事件
+        let { formChildDataObj } = this.state;
+        let formChildSubmitDataObj = formChildDataObj[childParentKey][insertFromChildIndex];
+
+        let operateObj = formChildSubmitDataObj[componentKey];
+
+        if (operateObj.formulaEvent != void 0) {
+          operateObj.formulaEvent.push(callback);
+        } else {
+          operateObj.formulaEvent = [callback];
+        }
+        this.setState({ formChildDataObj: formChildDataObj });
+      }
+      return component;
+    });
+
+    console.log(pureFormComponents);
+
+    this.setState({
+      pureFormComponents
+    });
+  };
+
   renderFormComponent = (getFieldDecorator, components, errorResponseMsg) => {
     const { currentForm, formDetail } = this.state;
     const { mobile } = this.props;
@@ -511,7 +571,11 @@ class EditFormData extends Component {
           initData: formDetail[item.key],
           errorResponseMsg: errorResponseMsg[item.key],
           isEditData: true,
-          resetErrorMsg: this._changeErrorResponseData
+          resetErrorMsg: this._changeErrorResponseData,
+          formulaArray: this.state.formulaArray,
+          formComponent: {components:this.state.pureFormComponents, id: this.state.formId},
+          handleSetFormula:this.handleSetFormula,
+          isChangeLayout: this.state.isChangeLayout
         }
         switch (item.type) {
           case "EmailInput":
@@ -1082,7 +1146,7 @@ class EditFormData extends Component {
                       rowHeight={22}
                       width={570}
                       onLayoutChange={layout => {
-                        this.setState({ currentLayout: layout });
+                        this.setState({ currentLayout: layout, isChangeLayout: true });
                       }}
                     >
                       {this.renderFormComponent(
