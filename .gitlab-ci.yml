@@ -20,8 +20,6 @@ ci-build:
   variables:
     PORT: 9030
     REACT_APP_HOST_IP: http://utranda.com:9080
-  before_script:
-    - npm --unsafe-perm install && npm run build
   script:
     - docker-compose build && docker-compose push
   tags:
