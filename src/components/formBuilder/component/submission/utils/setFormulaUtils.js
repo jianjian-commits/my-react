@@ -12,7 +12,6 @@ var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDat
         });
         const { callEventArr, formulaEvent } = formulaItem;
 
-        console.log("fck tw", formulaEvent)
         if (callEventArr) {
             callEventArr.forEach(fnc => {
                 fnc(resultData, this);
@@ -31,8 +30,6 @@ var _executeBindEventByResultData = (resultData, formulaItem, form, formChildDat
             let target = item[formulaItem.key];
             target.data = resultData;
             formulaDataArray.push(resultData);
-
-            console.log(formulaDataArray)
 
             if (target.callEventArr) {
                 target.callEventArr.forEach(fnc => {
@@ -95,8 +92,6 @@ var _getFormulaRelationData = (form, resultArray, itemFormulaObj, formChildDataO
 export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
     const { form, item, formulaArray, formComponent, formChildDataObj, handleSetFormula, saveFormChildSubmitData } = props;
 
-    console.log(props);
-
     let formComponentArray = formComponent.components;
 
     formulaArray.forEach((formulaItem) => {
@@ -107,7 +102,6 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                 handleSetFormula(item.key, (value, dataResource) => {
                     let resultArray = [];
 
-                    // console.log("fck", value, formulaItem, item, dataResource)
                     // if (dataResource != void 0) {
                     //     if (item.data.type == "EditFormula") {
                     //         let resultArray = item.data.values.connectArray.filter((item) => {
@@ -153,7 +147,6 @@ export const setFormulaEvent = (props, formChildItem, insertFromChildIndex) => {
                 handleSetFormula(formChildItem.key, (value, dataResource) => {
                     let resultArray = [];
 
-                    console.log("fck222", formChildItem, dataResource)
                     if (dataResource != void 0) {
                         if (formChildItem.data.type == "EditFormula") {
                             let resultArray = formChildItem.data.values.connectArray.filter((item) => {
