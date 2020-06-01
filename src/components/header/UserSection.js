@@ -112,10 +112,12 @@ const User = props => {
             color: props.theme === "white" ? "" : "rgba(255, 255, 255, 0.9)"
           }}
         >
-          {userDetail.name}
-          <DownOutlinedIcon
-            style={{ margin: "0 0 0 5px", color: "rgba(255, 255, 255, 0.9)" }}
-          />
+          <div>{userDetail.name}</div>
+          <div>
+            <DownOutlinedIcon
+              style={{ margin: "0 0 0 5px", color: "rgba(255, 255, 255, 0.9)" }}
+            />
+          </div>
         </div>
       </Dropdown>
       <Modal
@@ -124,7 +126,7 @@ const User = props => {
         width="404px"
         title={
           <>
-            <WarningIcon style={{marginRight: "9.49px"}} />
+            <WarningIcon style={{ marginRight: "9.49px" }} />
             退出登录
           </>
         }

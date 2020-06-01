@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Layout, Input, message, Icon } from "antd";
+import { Content } from "../components/shared/customWidget";
 import { useParams, useHistory } from "react-router-dom";
 import { getFormsAll, deleteForm ,updateFormName } from "../components/formBuilder/component/homePage/redux/utils/operateFormUtils";
 import CommonHeader from "../components/header/CommonHeader";
@@ -18,7 +19,7 @@ import { DBMode } from '../components/bi/component/dashboard/Constant';
 import { setDB, deleteDB, renameDB, newDB } from '../components/bi/utils/reqUtil';
 import classes from "../styles/apps.module.scss";
 
-const { Content, Sider } = Layout;
+const { Sider } = Layout;
 const navigationList = (history, appId, appName) => [
   { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
   {

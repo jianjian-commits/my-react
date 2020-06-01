@@ -3,12 +3,11 @@ import { Route, Redirect } from "react-router-dom";
 import Authenticate from "../shared/Authenticate";
 import { BreadRight } from "../../assets/icons";
 import { Breadcrumb, Layout } from "antd";
+import { Content } from "../shared/customWidget";
 import clx from "classnames";
 import comClasses from "../../styles/common.module.scss";
 import HomeHeader from "../header/HomeHeader";
 import HomeSider from "../sider/HomeSider";
-
-const { Content } = Layout;
 
 export const PrivateRoute = ({
   auth,
@@ -24,14 +23,14 @@ export const PrivateRoute = ({
   >
     <Route
       {...rest}
-      render={(props) =>
+      render={props =>
         localStorage.getItem("id_token") ? (
           React.createElement(component, { ...props, ...options })
         ) : (
           <Redirect
             to={{
               pathname: "/login",
-              state: { from: props.location },
+              state: { from: props.location }
             }}
           />
         )
@@ -41,26 +40,26 @@ export const PrivateRoute = ({
 );
 
 export const PublicRoute = ({ component, props, ...rest }) => (
-  <Route {...rest} render={(props) => React.createElement(component, props)} />
+  <Route {...rest} render={props => React.createElement(component, props)} />
 );
 
 export const Navigation = ({
   navs = [],
   separator = <BreadRight />,
   style = {},
-  fontStyle = {},
+  fontStyle = {}
 }) => {
   return (
     <>
       <Breadcrumb style={{ height: 34, ...style }} separator={separator}>
-        {navs.map((n) => (
+        {navs.map(n => (
           <Breadcrumb.Item
             key={n.key}
             style={fontStyle}
             className={clx({
               [comClasses.breadcrumbItem]: true,
               [comClasses.disabled]: n.disabled,
-              [comClasses.active]: !n.disabled,
+              [comClasses.active]: !n.disabled
             })}
             onClick={n.onClick}
           >
@@ -72,7 +71,7 @@ export const Navigation = ({
   );
 };
 
-export const HomeLayout = (props) => (
+export const HomeLayout = props => (
   <Layout>
     <HomeHeader />
     <Layout>
