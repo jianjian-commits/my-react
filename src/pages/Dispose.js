@@ -1,11 +1,10 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Layout } from "antd";
+import { Content } from "../components/shared/customWidget";
 import CommonHeader from "../components/header/CommonHeader";
 import FormDataDetail from "../components/formBuilder/component/formData/components/formDataDetail";
 import { AppManageIcon } from "../assets/icons/apps";
-
-const { Content } = Layout;
 
 const navigationList = (appId, history) => [
   {

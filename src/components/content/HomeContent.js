@@ -1,13 +1,12 @@
 import React from "react";
-import { Layout, Card } from "antd";
+import { Card } from "antd";
+import { Content} from "../shared/customWidget"
 import classes from "./content.module.scss";
 import clx from "classnames";
 import { history } from "../../store";
 import { Navigation } from "../shared";
 import { connect } from "react-redux";
 import comClasses from "../../styles/common.module.scss"
-
-const { Content } = Layout;
 
 const defaultNavigationList = [
   { key: 0, label: "首页", onClick: () => history.push("/app/list") }
