@@ -104,7 +104,8 @@ function preProcessDrop(item, currentType) {
     item["value"] = "";
   }
   else if(currentType == Types.DIMENSIONS) {
-    item["currentGroup"] = GroupType.DEFAULT;
+    //GroupType.DEFAULT
+    item["currentGroup"] = {name: "", value: null};
   }
 
   if(item.type == DataType.DATETIME && currentType != Types.CONDITIONS) {

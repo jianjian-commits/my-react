@@ -3,7 +3,7 @@ services:
   davinci-ui:
     labels:
       - "maintainer=caozhiwu@wctsoft.com"
-    image: registry.cn-shenzhen.aliyuncs.com/wct/davinci-ui:latest
+    image: registry.cn-shenzhen.aliyuncs.com/wct/davinci-ui:develop
     restart: always
     build:
       context: .

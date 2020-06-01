@@ -87,7 +87,7 @@ export const GroupType = {
   AVERAGE: {name: "平均", value: "AVERAGE"},
   MAX: {name: "最大", value: "MAX"},
   MIN: {name: "最小", value: "MIN"},
-  DEFAULT: {name: "", value: null},
+  // DEFAULT: {name: "", value: null},
 }
 
 export const SortType = {
