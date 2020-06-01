@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Button, Radio, Checkbox, Input } from "antd";
+import { Button, Radio, Checkbox, Input } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import classes from "../../../scss/modal/dataFormatModal.module.scss";
 import { DataFormatType } from "../Constant";
 import { getFormatter } from "../../../utils/ChartUtil"

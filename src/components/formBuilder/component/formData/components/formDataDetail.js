@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Form, Table, Icon, Tabs, message, Spin } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import coverTimeUtils from "../../../utils/coverTimeUtils";
+import { localDate } from "../../../utils/coverTimeUtils";
 import {
   getSubmissionDetail
 } from "../redux/utils/getDataUtils";
@@ -15,9 +15,9 @@ import {
   editFormDataAuth,
   deleteFormDataAuth,
 } from "../../../utils/permissionUtils";
+
 import { getTransactList } from "../../../../../store/loginReducer";
 import EditHistory from "./editHistory";
-import moment from "moment";
 const { TabPane } = Tabs;
 const columns = [
   {
@@ -74,23 +74,20 @@ const EditApprovalButton = (props) => {
   // 权限相关
   const { appId } = useParams();
   const { permissions, teamId, id: formId, userDetail ,extraProp} = props;
-  let  user = null;
-  if(extraProp) {
-    user = extraProp.user;
-  }
+
   const idEditAuth = editFormDataAuth(
     permissions,
     teamId,
     appId,
     formId,
-    extraProp ? extraProp.user.id : ""
+    extraProp && extraProp.user ? extraProp.user.id : ""
   );
   const isDeleteAuth = deleteFormDataAuth(
     permissions,
     teamId,
     appId,
     formId,
-    extraProp ? extraProp.user.id : ""
+    extraProp && extraProp.user ? extraProp.user.id : ""
   );
   // 删除和编辑按钮
   // 根据页面详情页的权限展示
@@ -112,12 +109,12 @@ const EditApprovalButton = (props) => {
         console.log(err);
       });
   };
-  return props.enterPort === "FormSubmitData" ? (
+  return props.enterPort !== "Dispose" ? (
     <div className="toolbarBox" style={{ cursor: "pointer" }}>
       {idEditAuth ? (
         <span
           onClick={() => {
-            actionFun(dataId, true);
+            actionFun(dataId, true, formId);
           }}
         >
           <Icon component={EditIcon} style={{ marginRight: 5 }} />
@@ -224,7 +221,7 @@ class FormDataDetail extends PureComponent {
         return (
           <div className="formChildData">
             {submitData
-              ? coverTimeUtils.localDate(submitData, component.type)
+              ? localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -232,14 +229,14 @@ class FormDataDetail extends PureComponent {
           return (
             <div className="formChildData">
               {submitData
-                ? coverTimeUtils.localDate(submitData, component.type)
+                ? localDate(submitData, component.type)
                 : ""}
             </div>)
         case "PureTime":
         return (
           <div className="formChildData">
             {submitData
-              ? coverTimeUtils.localDate(submitData, component.type)
+              ? localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -352,7 +349,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
+                    ? localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -363,7 +360,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
+                    ? localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -374,7 +371,7 @@ class FormDataDetail extends PureComponent {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key]
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
+                    ? localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>
@@ -492,7 +489,7 @@ class FormDataDetail extends PureComponent {
             return (
               <div key={item.key} className="dataDteailFormChild">
                 <p className="dataTitle">{item.label}</p>
-                {this.renderChildFormTest(formDetail[item.key], item.values)}
+                {item.values.length > 0 ? this.renderChildFormTest(formDetail[item.key], item.values): null}
               </div>
             );
           case "GetLocalPosition":
@@ -552,10 +549,10 @@ class FormDataDetail extends PureComponent {
     }
     let BoxStyle = {};
     if (this.props.enterPort === "Dispose") {
-      BoxStyle = { width: "calc(100vw - 500px)", margin: "0 auto" };
+      BoxStyle = { width: "calc(100vw - 200px)", margin: "0 auto" };
     }
     return (
-      <div className="formDetailBox" style={BoxStyle}>
+      <div style={BoxStyle}>
         <Spin spinning={this.state.isLoading}>
           <FormDataDetailHeader
             submissionId={this.state.submissionId}
@@ -565,6 +562,14 @@ class FormDataDetail extends PureComponent {
             setLoading={this.setLoading}
             getApproveCount={this.props.getApproveCount}
           />
+          <div className="formDetailBox">
+          <div className="title">
+            <div className="created-detail">
+              <span>创建人：{this.props.formSubmitData.creator}</span>
+              <span>创建时间：{localDate(this.props.formSubmitData.createdTime, "DateInput")}</span>
+              <span>更新时间：{localDate(this.props.formSubmitData.updateTime, "DateInput")}</span>
+            </div>
+          </div>
           <div className="formDataDetailContainer">
             <Tabs
               defaultActiveKey="detail"
@@ -592,6 +597,7 @@ class FormDataDetail extends PureComponent {
               ) : null}
             </Tabs>
           </div>
+          </div>
         </Spin>
       </div>
     );
@@ -607,6 +613,7 @@ export default connect(
     token: store.rootData.token,
     extraProp: store.formSubmitData.extraProp,
     taskData: store.formSubmitData.taskData,
+    formSubmitData: store.formSubmitData,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
     teamId: login.currentCompany && login.currentCompany.id,
     approveListCount: forms.approveListCount,

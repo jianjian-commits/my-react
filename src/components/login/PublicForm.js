@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Form } from "antd";
-import { connect } from "react-redux"; 
+import { connect } from "react-redux";
 import { formItems } from "./formItemConfig";
 
 export default connect(({ login }) => ({
@@ -25,7 +25,12 @@ export default connect(({ login }) => ({
     activeKey,
     timeout
   }) {
-    const { getFieldDecorator, validateFields, getFieldError } = form;
+    const {
+      getFieldDecorator,
+      validateFields,
+      getFieldError,
+      getFieldsValue
+    } = form;
     const handleSubmit = e => {
       e.preventDefault();
       validateFields(
@@ -47,20 +52,30 @@ export default connect(({ login }) => ({
                 code: rest.code
               }
             : rest;
-          if (!err && resetPasswordSubmit) return reSetPassword(newRest);
+          if (!err && resetPasswordSubmit)
+            return reSetPassword({ ...newRest, form });
           if (!err) {
             func({
               token: params.token ? params.token : null,
               rest: newRest,
               history,
-              loginType
+              loginType,
+              form
             });
           }
         }
       );
     };
+    const formContent = useRef();
     return (
-      <Form onSubmit={e => handleSubmit(e)}>
+      <Form
+        onSubmit={e => {
+          e.preventDefault();
+          JSON.stringify(formContent.current) !==
+            JSON.stringify(getFieldsValue()) && handleSubmit(e);
+          formContent.current = getFieldsValue();
+        }}
+      >
         {parameter.map(p => {
           const formItem =
             p.key === "submit" && params.token
@@ -108,7 +123,13 @@ export default connect(({ login }) => ({
               style={{ marginBottom: marginBottom }}
               label={p.label ? p.label : null}
               colon={p.colon}
-              hasFeedback={p.hasFeedback}
+              hasFeedback={
+                (p.help === "register" || p.help === "forgetPassword") &&
+                helpText &&
+                helpText.length > 0
+                  ? true
+                  : false
+              }
               help={
                 (p.help === "register" || p.help === "forgetPassword") &&
                 helpText ? (
@@ -127,8 +148,8 @@ export default connect(({ login }) => ({
                   <span
                     style={{
                       display: "block",
-                      height: helpText ? "32px" : 0,
-                      lineHeight: "32px"
+                      height: helpText ? "20px" : 0,
+                      lineHeight: "20px"
                     }}
                   >
                     {helpText}
@@ -137,8 +158,8 @@ export default connect(({ login }) => ({
               }
             >
               {getFieldDecorator(formItem.itemName, {
-                ...formItem.options,
-                validateFirst: true,
+                ...formItem.options
+                // validateFirst: true
               })(formItem.component)}
               {formItem.additionComponent}
             </Form.Item>

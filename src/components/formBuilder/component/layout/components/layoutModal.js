@@ -1,5 +1,6 @@
 import React from "react";
-import { Modal, Button, Select } from "antd";
+import { Button, Select } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 class LayoutModal extends React.Component {
   constructor(props) {
     super(props);

@@ -15,7 +15,7 @@ import Dispose from "../pages/Dispose";
 import BI from "../pages/BI";
 import ElementEditor from "../pages/ElementEditor";
 import { APP_SETTING_ABLED, TEAM_MANAGEMENT_ABLE } from "../auth";
-// import { CompanyManageIcon } from "../assets/icons/company";
+import { MyappsIcon, TodoIcon } from "../assets/icons/apps";
 
 export const companyWebs = [
   {
@@ -60,13 +60,18 @@ export const main = [
     authOptions: {
       type: "ignore"
     },
+    icon: MyappsIcon,
     component: AppList
   },
   {
     key: "backlog",
     label: "待办事项",
     path: "/backlog",
-    component: Backlog
+    component: Backlog,
+    icon: TodoIcon,
+    authOptions: {
+      type: "ignore"
+    },
   },
   {
     key: "company",
@@ -81,7 +86,11 @@ export const main = [
     key: "userDetail",
     label: "个人信息",
     path: "/userDetail",
-    component: UserDetail
+    hidden: true,
+    component: UserDetail,
+    authOptions: {
+      type: "ignore"
+    },
   }
 ];
 

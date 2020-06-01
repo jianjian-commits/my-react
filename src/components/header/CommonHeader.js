@@ -4,10 +4,11 @@ import {
   Layout,
   Breadcrumb,
   Button
-  // , Badge
 } from "antd";
+import { LogoIcon } from "../../assets/icons";
 import User from "./UserSection";
 import classes from "./header.module.scss";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Authenticate from "../shared/Authenticate";
 import { getAppList } from "../../store/appReducer";
@@ -20,7 +21,8 @@ const { Header } = Layout;
 const homeHeaderStyle = {
   background: "#2A7FFF",
   height: 40,
-  padding: "0 20px",
+  boxShadow: "0 1px 4px rgba(0,21,41,.08)",
+  padding: "0 20px 0 0",
   lineHeight: "40px"
 };
 // const logoStyle = {
@@ -112,9 +114,7 @@ export default connect(
     <div className={classes.hideHeader}>
       <Header className={classes.homeHeader} style={homeHeaderStyle}>
         <div className={classes.wrapper}>
-          {/* <div className={classes.logo}>
-            <div style={logoStyle}>logo</div>
-          </div> */}
+          <div className={classes.logo}><Link to="/"><LogoIcon /></Link></div>
           <div className={classes.title}>{getTitle(props.title)}</div>
           <div className={classes.nav}>
             {getNavigationList(props.navigationList)}

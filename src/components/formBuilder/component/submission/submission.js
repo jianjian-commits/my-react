@@ -14,6 +14,7 @@ import { getSubmissionData } from "../formData/redux/utils/getDataUtils";
 import { getApproveCount } from "../homePage/redux/utils/operateFormUtils";
 
 import { connect } from "react-redux";
+import { history } from "../../../../store";
 import HeaderBar from "../base/NavBar";
 import PhoneInput from "./component/phoneInput";
 import locationUtils from "../../utils/locationUtils";
@@ -57,7 +58,7 @@ import MultiDropDownMobile from "./component/mobile/multiDropDownMobile";
 import DropDownMobile from "./component/mobile/dropDownMobile";
 import mobileAdoptor from "../../utils/mobileAdoptor";
 import moment from "moment";
-import coverTimeUtils from "../../utils/coverTimeUtils";
+import { utcDate } from "../../utils/coverTimeUtils";
 
 import PureTime from "./component/pureTime";
 import PureDate from "./component/pureDate";
@@ -241,12 +242,12 @@ class Submission extends Component {
         ) {
           // 统一将时间的毫秒都抹零 PC端和移动端传过来的时间类型不一样。。。
           if (values[component.key].constructor === Date) {
-            values[component.key] = coverTimeUtils.utcDate(
+            values[component.key] = utcDate(
               new Date(values[component.key]),
               "DateInput"
             );
           } else {
-            values[component.key] = coverTimeUtils.utcDate(
+            values[component.key] = utcDate(
               values[component.key],
               type
             );
@@ -533,7 +534,7 @@ class Submission extends Component {
             } else {
               const dateTypes = ["PureDate", "PureTime", "DateInput"];
               if (dateTypes.includes(type) && data[k].data) {
-                data[k].data = coverTimeUtils.utcDate(data[k].data, type);
+                data[k].data = utcDate(data[k].data, type);
               }
             }
           }
@@ -673,6 +674,7 @@ class Submission extends Component {
             }
           })
           .catch(error => {
+            console.log("error",error)
 
             if (error.response && error.response.data.code === 9998) {
               this._setErrorResponseData(error.response.data);
@@ -1497,37 +1499,18 @@ class Submission extends Component {
       <>
         <Spin spinning={this.state.isSubmitted}>
           {mobile.is ? null : (
-            <div className="submissionTitle">
-              <Breadcrumb
-                separator={
-                  <svg
-                    width="7"
-                    height="12"
-                    viewBox="0 0 7 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5.57603 5.99767L0.142303 0.856381C-0.0474734 0.661494 -0.0474734 0.341052 0.142303 0.146165C0.332079 -0.0487218 0.640298 -0.0487218 0.829185 0.146165L6.61269 5.61745C6.71402 5.72256 6.75735 5.86278 6.75002 5.99767C6.75757 6.13722 6.71402 6.27744 6.61269 6.38233L0.829408 11.8536C0.640521 12.0487 0.332079 12.0487 0.142525 11.8536C-0.0472507 11.6534 -0.0472507 11.3383 0.142525 11.1434L5.57603 5.99767Z"
-                      fill="#666666"
-                    />
-                  </svg>
-                }
-              >
-                <Breadcrumb.Item
-                  className="recordList"
-                  onClick={() => {
-                    let skipToSubmissionDataFlag = true;
-                    this.props.actionFun(skipToSubmissionDataFlag);
-                  }}
-                >
-                  记录列表
-                </Breadcrumb.Item>
-                <Breadcrumb.Item className="submitRecord">
-                  提交记录
-                </Breadcrumb.Item>
-              </Breadcrumb>
-            </div>
+            <HeaderBar
+              name={"提交记录"}
+              navs={[
+                { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
+                { key: 1, label: this.props.appName || "未知应用名", disabled: true },
+                { key: 1, label: "记录列表", onClick: () => {
+                  let skipToSubmissionDataFlag = true;
+                  this.props.actionFun(skipToSubmissionDataFlag);
+                }}
+              ]}
+              isShowExtraTitle={false}
+            />
           )}
           <div className={"formBuilder-Submission"}>
             <div className="Content">

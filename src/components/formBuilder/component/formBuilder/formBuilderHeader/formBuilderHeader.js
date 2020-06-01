@@ -1,6 +1,8 @@
 import React from "react";
-import { Button, Icon, Modal, Tooltip, Spin } from "antd";
+import { Button, Modal } from "../../../../shared/customWidget";
+import { Icon, Tooltip, Spin } from "antd";
 import { setFormName, saveForm, updateForm } from "../redux/utils/operateForm";
+import { HomeContentTitle } from "../../../../content/HomeContent";
 import { setErrorComponentIndex } from "../redux/utils/operateFormComponent";
 import { connect } from "react-redux";
 import checkAndSaveForm from "../utils/checkSaveFormUtils";
@@ -12,11 +14,9 @@ class ForBuilderHeader extends React.Component {
     this.state = {
       visible: false,
       isTitleCanEdit: true,
-      formTitleClass: "showFormTitle",
       btnCanClick: true,
       isEditAuth: false,
     };
-    this.handleTitleEdit = this.handleTitleEdit.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -42,17 +42,6 @@ class ForBuilderHeader extends React.Component {
     });
   }
 
-  handleTitleEdit() {
-    this.setState(state => ({
-      ...state,
-      isTitleCanEdit: !this.state.isTitleCanEdit,
-      formTitleClass:
-        this.state.isTitleCanEdit === true ? "editFormTitle" : "showFormTitle"
-    }));
-    if (this.props.name.trim() === "") {
-      this.props.setFormName("表单名字");
-    }
-  }
   handleChangeName = ev => {
     let { value } = ev.target;
     this.props.setFormName(value);
@@ -125,132 +114,65 @@ class ForBuilderHeader extends React.Component {
   }
   render() {
     let editForm = this.props.editForm;
-    return (
-      <div className="react-form-builder-header">
-        {/* <Modal
-          title=""
-          visible={this.state.visible}
-          closable={false}
-          footer={null}
-          centered
-          width="350"
-          style={{
-            height: 160
-          }}
-        >
-          <div className="backModalContent">
-            <div className="header">
-              <img src="/image/icons/tip.png" alt="图片加载出错" />
-              <span>提醒</span>
-            </div>
-            <div className="body">
-              <p>是否保存当前更改</p>
-            </div>
-            <div className="footer">
-              <Button onClick={this.handleCancel}>取消</Button>
-              <Button
-                onClick={() => {
-                  this.handleOk(editForm);
-                }}
-              >
-                确认
-              </Button>
-            </div>
-          </div>
-        </Modal> */}
-
-        {/* <div className="headerBarBack">
-          <Button onClick={this.showModal} type="link">
-            <Icon type="left" />
-          </Button>
-        </div> */}
-        <div className="FormTitle">
-          {this.state.isTitleCanEdit === true ? (
-            <span>编辑表单</span>
-          ) : (
-            <input
-              disabled={this.state.isTitleCanEdit}
-              maxLength="20"
-              className={this.state.formTitleClass}
-              onBlur={this.handleTitleEdit}
-              onChange={this.handleChangeName}
-              value={this.props.name}
-            />
-          )}
-          {/* {this.state.isTitleCanEdit === true ? (
-            <Tooltip title="编辑">
-              <img
-                onClick={this.handleTitleEdit}
-                src="/image/icons/editform.png"
-              />
-            </Tooltip>
-          ) : (
-            <></>
-          )} */}
-        </div>
-        <div className="CreateFormStep" />
-        <div className="CreateFormOperations">
-          {/* <Button className="header-btn default">预览</Button> */}
-          {this.state.isEditAuth ? <Button
-            disabled={!this.state.btnCanClick}
-            loading={!this.state.btnCanClick}
-            className="header-btn primary"
-            onClick={e => {
+    const saveHandle = e => {
+      const checkRes = checkAndSaveForm(this.props);
+      if (!checkRes.res) {
+        return;
+      }
+      this.setState({ btnCanClick: false }, () => {
+        editForm || this.props.localForm !== null
+          ? (() => {
               const checkRes = checkAndSaveForm(this.props);
-              if (!checkRes.res) {
-                return;
+              if (checkRes.res) {
+                this.props.updateForm(
+                  this.props.formData,
+                  this.props.submissionAccess,
+                  this.props.name,
+                  this.props.verificationList,
+                  this.props.localForm,
+                  this.props.errMessage,
+                  "save",
+                  () => {
+                    this.setState({ btnCanClick: true });
+                  },
+                  this.props.appid,
+                  this.props.extraProp,
+                );
+              } else {
+                this.props.setErrorComponentIndex(checkRes.componentsIndex);
+                this.setState({ btnCanClick: true });
               }
-              this.setState({ btnCanClick: false }, () => {
-                editForm || this.props.localForm !== null
-                  ? (() => {
-                      const checkRes = checkAndSaveForm(this.props);
-                      if (checkRes.res) {
-                        this.props.updateForm(
-                          this.props.formData,
-                          this.props.submissionAccess,
-                          this.props.name,
-                          this.props.verificationList,
-                          this.props.localForm,
-                          this.props.errMessage,
-                          "save",
-                          () => {
-                            this.setState({ btnCanClick: true });
-                          },
-                          this.props.appid,
-                          this.props.extraProp,
-                        );
-                      } else {
-                        this.props.setErrorComponentIndex(checkRes.componentsIndex);
-                        this.setState({ btnCanClick: true });
-                      }
-                    })()
-                  : (() => {
-                      const checkRes = checkAndSaveForm(this.props);
-                      if(checkRes.res){
-                        this.props.saveForm(
-                          this.props.submissionAccess,
-                          this.props.name,
-                          this.props.verificationList,
-                          this.props.errMessage,
-                          "save",
-                          () => {
-                            this.setState({ btnCanClick: true });
-                          },
-                          this.props.appid,
-                          this.props.extraProp,
-                        );
-                      } else {
-                        this.setState({ btnCanClick: true });
-                      }
-                    })();
-              });
-            }}
-            type="primary"
-          >
-            { this.state.btnCanClick ? "保存" : "保存"}
-          </Button> : null}
-        </div>
-      </div>
+            })()
+          : (() => {
+              const checkRes = checkAndSaveForm(this.props);
+              if(checkRes.res){
+                this.props.saveForm(
+                  this.props.submissionAccess,
+                  this.props.name,
+                  this.props.verificationList,
+                  this.props.errMessage,
+                  "save",
+                  () => {
+                    this.setState({ btnCanClick: true });
+                  },
+                  this.props.appid,
+                  this.props.extraProp,
+                );
+              } else {
+                this.setState({ btnCanClick: true });
+              }
+            })();
+      });
+    };
+    return (
+      <HomeContentTitle title="编辑表单" btns={this.state.isEditAuth ? <Button
+        disabled={!this.state.btnCanClick}
+        loading={!this.state.btnCanClick}
+        onClick={saveHandle}
+        type="primary"
+      >
+        保存
+      </Button> : null}/>
     );
   }
 }

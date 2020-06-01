@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Modal, Form } from "antd";
+import { Form } from "antd";
+import { Modal } from "../shared/customWidget";
 import {
   updateUserDetail,
   resetAllowSendCodeState,
@@ -9,8 +10,8 @@ import {
 // import HomeHeader from "./HomeHeader";
 import { userDetailParameter, formItems } from "../login/formItemConfig";
 import userDetailStyles from "./header.module.scss";
-import { HomeLayout, HomeContentTitle } from "../shared";
-import { CloseIcon } from "../../assets/icons/header";
+import { HomeLayout } from "../shared";
+import HomeContent from "../content/HomeContent";
 import clx from "classnames";
 import store from "../../store";
 
@@ -81,10 +82,11 @@ export default Form.create({ name: "reset-form" })(
           dispatch,
           activeKey: "resetPhone",
           allowSendCode,
-          codeType: "RESET",
+          codeType: "RESETPHONE",
           sendCode,
           isFetchCoding,
-          fetchText
+          fetchText,
+          placeholder: m.placeholder
         });
       }
       return formItems[m.key]({
@@ -99,10 +101,11 @@ export default Form.create({ name: "reset-form" })(
         dispatch,
         activeKey: "resetPhone",
         allowSendCode,
-        codeType: "RESET",
+        codeType: "RESETPHONE",
         sendCode,
         isFetchCoding,
-        fetchText
+        fetchText,
+        placeholder: m.placeholder
       });
     });
     const render = meter => {
@@ -113,7 +116,7 @@ export default Form.create({ name: "reset-form" })(
         key: "所在企业",
         value: "companyName",
         meter: "resetCompanyName",
-        render: () => { },
+        render: () => {},
         redit: true
       },
       {
@@ -123,9 +126,9 @@ export default Form.create({ name: "reset-form" })(
         render: meter => render(meter),
         redit: true
       },
-      { key: "职位", value: "position", render: () => { }, redit: false },
-      { key: "分组", value: "group", render: () => { }, redit: false },
-      { key: "邮箱", value: "email", render: () => { }, redit: false },
+      { key: "职位", value: "position", render: () => {}, redit: false },
+      { key: "分组", value: "group", render: () => {}, redit: false },
+      { key: "邮箱", value: "email", render: () => {}, redit: false },
       {
         key: "手机",
         value: "mobilePhone",
@@ -144,23 +147,39 @@ export default Form.create({ name: "reset-form" })(
     // const [rest0, ...rest] = resetUser;
     const handleSubmit = e => {
       e.preventDefault();
-      validateFields((err, { actionType, verificationCode, ...rest }) => {
-        if (!err) {
-          updateUserDetail({ ...rest, code: verificationCode }).then(() => {
-            setModalMeter(initModalMeter);
-            verificationCode && timeout && timeout.int && timeout.clear(0);
-            verificationCode && resetAllowSendCodeState();
-          });
+      validateFields(
+        (
+          err,
+          { actionType, userDetailModalSubmit, verificationCode, ...rest }
+        ) => {
+          if (!err) {
+            updateUserDetail(
+              Object.assign(
+                {
+                  form,
+                  setModalMeter,
+                  initModalMeter,
+                  verificationCode,
+                  timeout,
+                  resetAllowSendCodeState
+                },
+                rest,
+                rest.mobilePhone && verificationCode
+                  ? { code: verificationCode }
+                  : {}
+              )
+            );
+          }
         }
-      });
+      );
     };
     return (
       <HomeLayout>
-        <HomeContentTitle title="个人信息"/>
-        <div className={userDetailStyles.userDetail}>
-          <div>
-            <ul>
-              {/* <li>
+        <HomeContent title="个人信息">
+          <div className={userDetailStyles.userDetail}>
+            <div>
+              <ul>
+                {/* <li>
                 <span>{rest0.key}</span>
                 <span>
                   {userDetail[rest0.value]}
@@ -169,105 +188,119 @@ export default Form.create({ name: "reset-form" })(
                   </span>
                 </span>
               </li> */}
-              {resetUser.map(r => {
-                return (
-                  <li key={r.value}>
-                    <span>{r.key}</span>
-                    <span>
-                      {r.value === "oldPassWord"
-                        ? "********"
-                        : r.value === "companyName"
+                {resetUser.map(r => {
+                  return (
+                    <li key={r.value}>
+                      <span>{r.key}</span>
+                      <span>
+                        {r.value === "oldPassWord"
+                          ? "********"
+                          : r.value === "companyName"
                           ? currentCompany.companyName
                           : userDetail[r.value]}
-                      <span
-                        onClick={() => {
-                          resetAllowSendCodeState && resetAllowSendCodeState();
-                          setModalMeter(r);
-                        }}
-                        style={{ color: "#1890ff", cursor: "pointer" }}
-                      >
-                        {r.render(r.meter)}
+                        <span
+                          onClick={() => {
+                            resetAllowSendCodeState &&
+                              resetAllowSendCodeState();
+                            setModalMeter(r);
+                          }}
+                          style={{ color: "#1890ff", cursor: "pointer" }}
+                        >
+                          {r.render(r.meter)}
+                        </span>
                       </span>
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
-        </div>
-        <Modal
-          title={
-            <span
-              style={{
-                fontSize: "16px",
-                color: "#333333"
-              }}
-            >{`修改${modalMeter.key}`}</span>
-          }
-          visible={!!modalMeter.meter}
-          footer={null}
-          width={"484px"}
-          onCancel={() => {
-            setModalMeter({ ...modalMeter, meter: false });
-          }}
-          afterClose={() => {
-            modalMeter.value === "mobilePhone" && resetAllowSendCodeState();
-            modalMeter.value === "mobilePhone" &&
-              timeout &&
-              timeout.int &&
-              timeout.clear(0);
-          }}
-          className={userDetailStyles.detailUpdateModal}
-          closeIcon={<CloseIcon />}
-        >
-          <Form
-            onSubmit={e => handleSubmit(e)}
-            className={clx(userDetailStyles.modalForm, {
-              [userDetailStyles.detailUpdateModalPhone]:
-                modalMeter.value === "mobilePhone"
-            })}
+          <Modal
+            title={`修改${modalMeter.key}`}
+            visible={!!modalMeter.meter}
+            footer={null}
+            width={"452px"}
+            onCancel={() => {
+              setModalMeter({ ...modalMeter, meter: false });
+            }}
+            afterClose={() => {
+              modalMeter.value === "mobilePhone" && resetAllowSendCodeState();
+              modalMeter.value === "mobilePhone" &&
+                timeout &&
+                timeout.int &&
+                timeout.clear(0);
+            }}
+            className={userDetailStyles.detailUpdateModal}
           >
-            {items.map((o, index) => {
-              // const helpText = getFieldError(o.itemName);
-              return (
-                <Form.Item
-                  key={o.itemName}
-                  label={Mete[o.itemName]}
-                  hasFeedback={false}
-                  colon={false}
-                  labelAlign={"right"}
-                // help={
-                //   helpText && (
-                //     <div
-                //       style={{
-                //         position: "absolute",
-                //         left: "340px",
-                //         width: "224px",
-                //         height: "42px",
-                //         lineHeight: "45px"
-                //       }}
-                //     >
-                //       {helpText}
-                //     </div>
-                //   )
-                // }
-                >
-                  {getFieldDecorator(parameters[index]["key"], {
-                    ...o.options,
-                    validateFirst: true
-                    // initialValue:
-                    //   o.itemName === "oldPassWord"
-                    //     ? null
-                    //     : o.itemName === "verificationCode"
-                    //     ? null
-                    //     : userDetail[o.itemName]
-                  })(o.component)}
-                  {o.additionComponent}
-                </Form.Item>
-              );
-            })}
-          </Form>
-        </Modal>
+            <div>
+              <Form
+                onSubmit={e => handleSubmit(e)}
+                className={clx(
+                  userDetailStyles.modalForm,
+                  {
+                    [userDetailStyles.detailUpdateModalPhone]:
+                      modalMeter.value === "mobilePhone"
+                  },
+                  {
+                    [userDetailStyles.noLabelInput]: modalMeter.value === "name"
+                  }
+                )}
+              >
+                {items.map(o => {
+                  const helpText = form.getFieldError(o.itemName);
+                  return (
+                    <Form.Item
+                      key={o.itemName}
+                      label={o.itemName !== "name" && Mete[o.itemName]}
+                      hasFeedback={false}
+                      colon={false}
+                      labelAlign={"right"}
+                      help={
+                        (o.help === "register" ||
+                          o.help === "forgetPassword") &&
+                        helpText ? (
+                          <div
+                            style={{
+                              position: "absolute",
+                              left: "340px",
+                              width: "224px",
+                              height: "42px",
+                              lineHeight: "45px"
+                            }}
+                          >
+                            {helpText}
+                          </div>
+                        ) : (
+                          <span
+                            style={{
+                              display: "block",
+                              height: helpText ? "22px" : 0,
+                              lineHeight: "22px"
+                            }}
+                          >
+                            {helpText}
+                          </span>
+                        )
+                      }
+                    >
+                      {getFieldDecorator(o.itemName, {
+                        ...o.options,
+                        validateFirst: true
+                        // initialValue:
+                        //   o.itemName === "oldPassWord"
+                        //     ? null
+                        //     : o.itemName === "verificationCode"
+                        //     ? null
+                        //     : userDetail[o.itemName]
+                      })(o.component)}
+                      {o.additionComponent}
+                    </Form.Item>
+                  );
+                })}
+              </Form>
+            </div>
+          </Modal>
+        </HomeContent>
       </HomeLayout>
     );
   })

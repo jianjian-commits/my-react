@@ -59,8 +59,8 @@ const AppSetting = props => {
         name: item.name,
         path: item.path,
         type: item.type,
-        canDelete: item.type === "DASHBOARD" ? canEditDB(permissions, teamId, appId, item.id) : editFormAuth(permissions, teamId, appId, item.id),
-        canEdit: item.type === "DASHBOARD" ? canRemoveDB(permissions, teamId, appId, item.id) : deleteFormAuth(permissions, teamId, appId, item.id),
+        canEdit: item.type === "DASHBOARD" ? canEditDB(permissions, teamId, appId, item.id) : editFormAuth(permissions, teamId, appId, item.id),
+        canDelete: item.type === "DASHBOARD" ? canRemoveDB(permissions, teamId, appId, item.id) : deleteFormAuth(permissions, teamId, appId, item.id),
       }));
 
       props.setAllForms(res);

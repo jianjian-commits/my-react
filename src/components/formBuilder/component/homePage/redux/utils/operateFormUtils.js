@@ -1,8 +1,6 @@
 import axios from "axios";
-import { instanceAxios } from "../../../../utils/tokenUtils";
-import coverTimeUtils from "../../../../utils/coverTimeUtils";
+import { localDate } from "../../../../utils/coverTimeUtils";
 import config from "../../../../config/config";
-import { message } from "antd";
 import { RECIVE_FORMS, GET_APPROVE_LIST_COUNT, CLEAR_APPROVE_COUNT} from "../action";
 
 export const deleteForm = ( appId, formId ) => {
@@ -48,11 +46,13 @@ export const getForms = (pageSize, currentPage) => dispatch => {
           .map(item => {
             return {
               key: item.id,
-              created: coverTimeUtils.localDate(
-                item.createdTime
+              created: localDate(
+                item.createdTime,
+                "DateInput"
               ),
-              modified: coverTimeUtils.localDate(
-                item.updateTime
+              modified: localDate(
+                item.updateTime,
+                "DateInput"
               ),
               name: item.name,
               id: item.id,

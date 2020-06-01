@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Icon, Button, Input } from "antd";
+import { Icon, Button, Input } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import classes from "../../../scss/modal/fieldSortModal.module.scss";
 import request from "../../../utils/request";
-import { ChartType,SortType} from "../Constant";
+import { SortType} from "../Constant";
 import {connect} from "react-redux";
 import { setDashboards, setVisitorSorts} from '../../../redux/action';
 function FieldSortModal(props) {
@@ -30,8 +31,7 @@ function FieldSortModal(props) {
         setBindData(bindDataObj);
         setDimensions(dimensions);
         setIndexes(indexes);
-        setSortArr(visitorSorts.get(chartId) ? visitorSorts.get(chartId) :
-          getSort(dimensions, dimensions.length == 1 ? indexes : []));
+        setSortArr(visitorSorts.get(chartId) ? visitorSorts.get(chartId) : getSort(dimensions, indexes));
       }
     });
   }, []);
@@ -69,8 +69,8 @@ function FieldSortModal(props) {
       setDimensions(newDismensions);
     }
 
-    const aa = getSort(newDismensions, newDismensions.length == 1 ? newIndexes : []);
-    setSortArr(aa);
+    const sort = getSort(newDismensions, newIndexes);
+    setSortArr(sort);
   }
 
   const btnGroup = [
@@ -165,13 +165,13 @@ function processField(item) {
 }
 
 function getSort(dimensions, indexes) {
-  let sorts = [];
+  let sorts = dimensions.map(processField);
 
   if(dimensions.length == 1) {
-    sorts = sorts.concat(dimensions.map(processField));
+    sorts = sorts.concat(indexes.map(processField))
   }
 
-  return sorts.concat(indexes.map(processField));
+  return sorts;
 }
 
 export default connect(store => 

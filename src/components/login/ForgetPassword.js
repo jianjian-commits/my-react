@@ -8,8 +8,9 @@ import { catchError } from "../../utils";
 import { message } from "antd";
 import { history } from "../../store";
 import { loginForgetPasswordParameter } from "./formItemConfig";
+import { ForgetPasswordLogoIcon } from "../../assets/icons";
 
-const reSetPassword = async ({ code, ...rest }) => {
+const reSetPassword = async ({ form, code, ...rest }) => {
   try {
     const res = await request(`/sysUser/resetPassword/${code}`, {
       method: "put",
@@ -22,7 +23,22 @@ const reSetPassword = async ({ code, ...rest }) => {
       message.error(res.msg || "密码重置失败");
     }
   } catch (err) {
-    catchError(err);
+    if (code)
+      form.setFields({
+        code: {
+          value: code,
+          errors: [
+            (err.response && err.response.data && err.response.data.msg) ||
+              "系统错误"
+          ]
+        }
+      });
+    if (
+      err.response &&
+      err.response.data &&
+      err.response.data.msg !== "无效验证码"
+    )
+      catchError(err);
   }
 };
 
@@ -45,7 +61,9 @@ export default connect(
 }) {
   return (
     <div className={signinStyles.forgetPassword}>
+      <ForgetPasswordLogoIcon />
       <div>
+        <div>重置密码</div>
         <PublicForm
           parameter={loginForgetPasswordParameter}
           marginBottom={24}

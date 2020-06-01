@@ -42,31 +42,32 @@ $font-Family: "PingFangSC-Regular", "PingFang SC";
       }
     }
   }
-  .headerBarExtraTitle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #2a7fff;
-    > span {
-      display: block;
-      width: 104px;
-      height: 36px;
-      line-height: 36px;
-      text-align: center;
-      background-color: #fff;
-      border-radius: 3px;
-      margin-right: 20px;
-      cursor: pointer;
-      user-select: none;
-      &:hover {
-        background: #e6e6e6;
-      }
-    }
-  }
+  
   .headerBarButton {
     &.ant-btn {
       width: 104px;
       height: 36px;
+    }
+  }
+}
+
+.headerBarExtraTitle {
+  color: #2a7fff;
+  
+  > span {
+    display: inline-block;
+    width: 104px;
+    height: 36px;
+    border: 1px solid #2a7fff;
+    line-height: 36px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 3px;
+    margin-right: 20px;
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      background: #e6e6e6;
     }
   }
 }

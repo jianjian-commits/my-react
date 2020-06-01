@@ -6,9 +6,9 @@ import {
   Spin,
   Upload,
   Button,
-  message,
-  Modal
+  message
 } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import LabelUtils from "../../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import ImageUploadItem from "./imageUploadItem";
 import { isValueValid, isStringValid } from "../../../../utils/valueUtils";

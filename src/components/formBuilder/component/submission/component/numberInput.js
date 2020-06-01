@@ -196,6 +196,8 @@ class NumberInput extends React.Component {
           autoComplete="off"
           onChange={this.handleChange}
           step={this.state.step}
+          max={item.validate.max}
+          min={item.validate.min}
           onBlur={(ev) => {
             const value = ev.target.value;
             this.handleEmitFormulaEvent(value)

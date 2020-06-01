@@ -1,9 +1,10 @@
 import React from "react";
-import { Modal, Table } from "antd";
+import { Table } from "antd";
+import { Modal } from "../../../../shared/customWidget"
 import { connect } from "react-redux";
 import { getSubmissionDetail } from "../redux/utils/getDataUtils";
 import config from "../../../config/config";
-import coverTimeUtils from "../../../utils/coverTimeUtils";
+import { localDate } from "../../../utils/coverTimeUtils";
 class DataDetailModal extends React.Component {
   constructor(props) {
     super(props);
@@ -188,7 +189,7 @@ class DataDetailModal extends React.Component {
                 <p className="dataTitle">{item.label}</p>
                 <p className="dataContent">
                   {formDetail[item.key] != void 0
-                    ? coverTimeUtils.localDate(formDetail[item.key], item.type)
+                    ? localDate(formDetail[item.key], item.type)
                     : ""}
                 </p>
               </div>

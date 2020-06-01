@@ -6,9 +6,9 @@ import {
   Button,
   Tooltip,
   InputNumber,
-  Divider,
-  Modal
+  Divider
 } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import { connect } from "react-redux";
 import isInFormChild from "../utils/isInFormChild";
 import {

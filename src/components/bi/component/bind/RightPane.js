@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Tooltip, Checkbox, Input } from 'antd';
-import { updateChartReq, processBind } from '../../utils/reqUtil';
+import { processBind } from '../../utils/reqUtil';
 import ChartInfo from "../elements/data/ChartInfo";
 import { changeBind, changeChartData, changeChartInfo, setElemType } from '../../redux/action';
 import { useParams } from "react-router-dom";
@@ -11,7 +11,7 @@ import { chartGroup } from "../elements/ElemType";
 import { ChartType } from "../elements/Constant";
 
 const RightPane = (props) => {
-  const { changeBind, changeChartData, chartInfo, bindDataArr, elemName, changeChartInfo, dataSource, setElemType, elemType,
+  const { changeBind, changeChartData, chartInfo, bindDataObj, elemName, changeChartInfo, dataSource, setElemType, elemType,
     chartAvailableList } = props;
   const { elementId } = useParams();
 
@@ -47,10 +47,14 @@ const RightPane = (props) => {
     updateChartInfo(info);
   }
 
-  const handleSelectIcon = chartIcon => {
-    setActiveIcon(chartIcon);
-    setElemType(chartIcon);
-    processBind(bindDataArr, dataSource.id, changeBind, changeChartData, chartIcon);
+  const handleSelectIcon = type => {
+    if(!chartAvailableList.includes(type)) {
+      return;
+    }
+
+    setActiveIcon(type);
+    setElemType(type);
+    processBind(bindDataObj, dataSource.id, changeBind, changeChartData, type);
   }
 
   const onChangeTitleXAxis = (e) => {
@@ -74,7 +78,6 @@ const RightPane = (props) => {
 
   const updateChartInfo = (chartInfo) => {
     chartInfo = chartInfo || getChartInfo();
-    updateChartReq(elementId, dataSource.id, bindDataArr, elemName || "新建图表", {...chartInfo}, elemType);
     changeChartInfo(chartInfo || new ChartInfo());
   }
 
@@ -88,7 +91,7 @@ const RightPane = (props) => {
     )  
   }
 
-  showRPTTitle = elemType != ChartType.AREA_CHART;
+  showRPTTitle = elemType != ChartType.PIE;
   showRPTools = elemType != ChartType.INDEX_DIAGRAM;
 
   return (
@@ -97,14 +100,14 @@ const RightPane = (props) => {
         <span>可视化</span>
         <div className={classes.chartGroup}>
         {chartGroup.map(chart =>
-        <Tooltip key={chart.type} title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} mouseLeaveDelay={0}>
-          <div
-            className={chartAvailableList.includes(chart.type) ? classNames(classes.IconBox, {activeIcon: elemType==chart.type}) : classes.unavailable }
-            onClick={()=>{handleSelectIcon(chartAvailableList.includes(chart.type) ? chart.type : ChartType.HISTOGRAM)}}
-          >
-            <img src={"/image/davinci/"+chart.type+".svg"}/>
-          </div>
-        </Tooltip>
+          <Tooltip key={chart.type} title={chartTitle(chart.intro)} placement="left" overlayClassName={classes.TooltipBox} mouseLeaveDelay={0}>
+            <div
+              className={chartAvailableList.includes(chart.type) ? classNames(classes.IconBox, {activeIcon: elemType==chart.type}) : classes.unavailable }
+              onClick={()=>{handleSelectIcon(chart.type)}}
+            >
+              <img src={"/image/davinci/"+chart.type+".svg"}/>
+            </div>
+          </Tooltip>
         )}
         </div>
       </div>
@@ -128,7 +131,7 @@ const RightPane = (props) => {
 export default connect((store) => {
   return {
     chartInfo: store.bi.chartInfo,
-    bindDataArr: store.bi.bindDataArr,
+    bindDataObj: store.bi.bindDataObj,
     elemName: store.bi.elemName,
     dataSource: store.bi.dataSource,
     elemType: store.bi.elemType,

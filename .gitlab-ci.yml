@@ -1,17 +1,42 @@
 stages:
-  - run
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
+  - ci-build
+  - run-aliyun
+
 variables:
   PORT: 9030
   REACT_APP_HOST_IP: http://192.168.3.105:9080
-run:
-  stage: run
+
+run-in-105:
+  stage: ci-build
   script:
     - docker-compose up -d --build
   tags:
     - 105shell
+  only:
+    - develop
+
+ci-build:
+  stage: ci-build
+  variables:
+    PORT: 9030
+    REACT_APP_HOST_IP: http://utranda.com:9080
+  script:
+    - docker-compose build && docker-compose push
+  tags:
+    - 106shell
+
+run-in-aliyun:
+  stage: run-aliyun
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - pwd
+    - rm -rf davinci-paas-frontend
+    - git clone --depth=1 -b develop --single-branch http://sz.wctsoft.top:8180/wct/davinci-paas-frontend.git
+  script:
+    - cd davinci-paas-frontend
+    - docker-compose pull && docker-compose up -d && docker-compose ps
+  tags:
+    - aliyun
   only:
     - develop

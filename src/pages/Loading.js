@@ -2,7 +2,7 @@ import React from "react";
 import { Spin } from "antd";
 
 const Loading = (props) => (
-  <Spin tip="Loading..." spinning={props.spinning} style={{ top: "450px" }}>
+  <Spin tip="Loading..." spinning={props.spinning} style={{ top: "450px" }} delay={1000}>
     {props.children}
   </Spin>
 );

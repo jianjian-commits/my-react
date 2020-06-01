@@ -63,7 +63,7 @@ const HomeSider = (props) => {
     if (collapsed) updateSiderOpenKeys([]);
   };
   const authFilter = (e) =>
-    authorityIsValid({
+    !e.hidden && authorityIsValid({
       debug,
       permissions,
       teamId,
@@ -72,14 +72,14 @@ const HomeSider = (props) => {
   return (
     <Sider
       trigger={null}
+      className={classes.sider}
       theme="light"
       width="240"
       collapsible
       collapsed={collapsed}
     >
-      <SiderTop collapsed={collapsed} />
+      {/* <SiderTop collapsed={collapsed} /> */}
       <Menu
-        forceSubMenuRender={true}
         className={classes.menu}
         theme="light"
         mode="inline"
@@ -89,10 +89,17 @@ const HomeSider = (props) => {
       >
         {main.filter(authFilter).map((r) => {
           if (r.children) {
+            const onTitleClick = (e) => {
+              updateSiderOpenKeys(
+                openKeys.includes(e.key)
+                  ? openKeys.filter((k) => k !== e.key)
+                  : [...openKeys, e.key]
+              );
+            };
             return (
               <SubMenu
                 key={r.key}
-                onTitleClick={(e) => updateSiderOpenKeys([e.key])}
+                onTitleClick={onTitleClick}
                 title={
                   <span>
                     {r.icon ? (
@@ -123,7 +130,7 @@ export default connect(
     openKeys: sider.openKeys,
     teamId: login.currentCompany && login.currentCompany.id,
     permissions: (login.userDetail && login.userDetail.permissions) || [],
-    debug: debug.isOpen
+    debug: debug.isOpen,
   }),
   { updateSiderOpenKeys }
 )(HomeSider);

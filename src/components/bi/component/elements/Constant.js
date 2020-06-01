@@ -1,6 +1,6 @@
 export const ChartType = {
   HISTOGRAM: "HISTOGRAM",
-  AREA_CHART: "AREA_CHART",
+  PIE: "PIE",
   INDEX_DIAGRAM: "INDEX_DIAGRAM"
 }
 
@@ -10,8 +10,8 @@ export const DataType = {
   STRING: "STRING"
 }
 
-export const AllType = ["HISTOGRAM", "AREA_CHART", "INDEX_DIAGRAM"];
-export const PieType = ["AREA_CHART"];
+export const AllType = ["HISTOGRAM", "PIE", "INDEX_DIAGRAM"];
+export const PieType = ["PIE"];
 export const BarType = ["HISTOGRAM"];
 export const BarIndexType = ["HISTOGRAM","INDEX_DIAGRAM"];
 

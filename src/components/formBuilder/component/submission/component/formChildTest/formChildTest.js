@@ -33,7 +33,7 @@ import DropDown from "./components/dropDown";
 import MultiDropDown from "./components/multiDropDown";
 import DateInput from "./components/dateInput";
 import moment from "moment";
-import coverTimeUtils from '../../../../utils/coverTimeUtils'
+import { utcDate, localDate } from '../../../../utils/coverTimeUtils'
 import ID from "../../../../utils/UUID";
 import { setFormulaEvent } from "../../utils/setFormulaUtils";
 
@@ -1073,7 +1073,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if (item.data) {
-              const tempDate = coverTimeUtils.localDate(item.data, item.formType, true);
+              const tempDate = localDate(item.data, item.formType, true);
               valueOption.value = tempDate;
             }
             resultArray.push(
@@ -1085,7 +1085,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择时间/日期"
                   onChange={(value, dataString) => {
-                    item.data = coverTimeUtils.utcDate(value, item.formType);
+                    item.data = utcDate(value, item.formType);
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1107,7 +1107,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if (item.data) {
-              valueOption.value = moment(coverTimeUtils.localDate(item.data, item.formType, true));
+              valueOption.value = moment(localDate(item.data, item.formType, true));
             }
             resultArray.push(
               <div key={key} className={className}>
@@ -1118,7 +1118,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择日期"
                   onChange={(value, dataString) => {
-                    item.data = coverTimeUtils.utcDate(value, item.formType);
+                    item.data = utcDate(value, item.formType);
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1140,7 +1140,7 @@ class FormChildTest extends React.Component {
           {
             let valueOption = {};
             if (item.data) {
-              const tmpMoment = coverTimeUtils.localDate(item.data, item.formType, true);
+              const tmpMoment = localDate(item.data, item.formType, true);
               valueOption.value = tmpMoment;
             }
             resultArray.push(
@@ -1151,7 +1151,7 @@ class FormChildTest extends React.Component {
                   {...valueOption}
                   placeholder="请选择时间"
                   onChange={(value, dataString) => {
-                    item.data = coverTimeUtils.utcDate(value, item.formType);
+                    item.data = utcDate(value, item.formType);
 
                     checkValueValidByType(item, value)
                       ? (item.hasErr = false)
@@ -1309,23 +1309,11 @@ class FormChildTest extends React.Component {
 
     return (
       <Form.Item label={<LabelUtils data={item} />}>
-        {item.values.length === 0 ? (
-          <div>
-            <div className="app-formChild">
-              <div className="formChildContainer">
-                <div className="TitleContainer">
-                  <div className="componentTitle" />
-                </div>
-              </div>
-              <div className="formChildAddBtn">
-                <Button type="link" onClick={this.handleAddRow}>
-                  <Icon type="plus" /> 添加
-                </Button>
-              </div>
-            </div>
-          </div>
-        ) : (
-            getFieldDecorator(item.key)(
+        {/* 
+            // FIXME: 没有子组件的时候 是否需要提示
+        */}
+
+            {getFieldDecorator(item.key)(
               <div className="app-formChild">
                 <div className="formChildContainer">
                   <div className="TitleContainer">
@@ -1477,7 +1465,6 @@ class FormChildTest extends React.Component {
                 </Button>
                 </div>
               </div>
-            )
           )}
       </Form.Item>
     );

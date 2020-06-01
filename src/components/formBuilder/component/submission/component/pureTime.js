@@ -13,7 +13,7 @@ import { Form, Tooltip, Icon } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import LabelUtils from "../../formBuilder/preview/component/formItemDoms/utils/LabelUtils";
 import { withRouter } from "react-router-dom";
-import coverTimeUtils from "../../../utils/coverTimeUtils";
+import { localDate } from "../../../utils/coverTimeUtils";
 import {
   getFormAllSubmission,
   filterSubmissionData,
@@ -87,7 +87,7 @@ class PureTime extends React.Component {
             let data = filterSubmissionData(submissions, linkDataId);
             let res = data[index];
             form.setFieldsValue({
-              [item.key]: coverTimeUtils.localDate(res, item.type)
+              [item.key]: localDate(res, item.type)
             });
             // 多级联动
             this.handleEmitChange(res);
@@ -151,7 +151,7 @@ class PureTime extends React.Component {
     let errMsg = this.props.item.validate.customMessage;
     let options = {};
     if (initData && isEditData) {
-      options.initialValue = coverTimeUtils.localDate(initData, item.type, true);
+      options.initialValue = localDate(initData, item.type, true);
     } else if (isAutoInput) {
       options.initialValue = new moment();
     }

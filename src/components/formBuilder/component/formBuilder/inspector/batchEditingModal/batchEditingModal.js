@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Input, Modal} from 'antd'
+import { Input} from 'antd'
+import { Modal } from "../../../../../shared/customWidget"
 const { TextArea } = Input;
 export default class BatchEditingModal extends Component {
 

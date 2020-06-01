@@ -1,5 +1,6 @@
 import React from "react";
-import { Modal, TreeSelect, Select, DatePicker } from "antd";
+import { TreeSelect, Select, DatePicker } from "antd";
+import { Modal } from "../../../shared/customWidget"
 import { useState } from "react";
 import { connect } from "react-redux";
 import moment from 'moment';
@@ -175,6 +176,7 @@ const FilterModal = (props) => {
         value: value,
         onChange: onChangeValue,
         loadData: setMulti,
+        onFocus: setMulti,
         treeCheckable: true,
         dropdownClassName:"dropdownClassName",
         showSearch: true,

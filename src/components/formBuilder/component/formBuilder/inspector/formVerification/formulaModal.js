@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Input, Tabs, Collapse } from "antd";
+import { Input, Tabs, Collapse } from "antd";
+import { Modal } from "../../../../../shared/customWidget"
 import {
   addVerification,
   editVerification
@@ -31,7 +32,7 @@ class ConditionModal extends React.Component {
 
   componentWillMount() {
     let resultArray = [];
-    let excludeComponentType = ["RadioButtons", "CheckboxInput", "DropDown", "MultiDropDown", "DateInput", "GetLocalPosition", "ImageUpload", "FileUpload", "HandWrittenSignature", "Address", "ComponentTemplate", "Button", "PureDate", "PureTime"]
+    let excludeComponentType = ["RadioButtons", "CheckboxInput", "DropDown", "MultiDropDown", "GetLocalPosition", "ImageUpload", "FileUpload", "HandWrittenSignature", "Address", "ComponentTemplate", "Button"]
 
     this.props.data.forEach(item => {
       if (item.type == "FormChildTest") {
@@ -259,7 +260,7 @@ class ConditionModal extends React.Component {
 
     return (
       <Modal
-        title="校验条件"
+        title="公式编辑"
         visible={this.props.visible}
         onOk={() => {
           console.log("haha", this.state.selectedComponent);

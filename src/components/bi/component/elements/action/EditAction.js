@@ -1,7 +1,7 @@
 import request from '../../../utils/request';
 import ChartInfo from '../data/ChartInfo';
 import { Types } from '../../bind/Types';
-import { getUUID } from '../../../utils/Util';
+import { getUUID, deepClone } from '../../../utils/Util';
 import { DBMode } from '../../dashboard/Constant';
 
 export default class EditAction {
@@ -17,38 +17,39 @@ export default class EditAction {
     request(`/bi/charts/${this.chartId}`).then((res) => {
       if(res && res.msg === "success") {
         const data = res.data.view;
+        const oldElement = deepClone(data);
         const formId = data.formId;
         const chartInfo = data.chartTypeProp;
-        let bindDataArr = [];
+        let bindDataObj = {dimensions: [], indexes: [], conditions: []};
         const { dimensions, indexes, conditions } = data;
 
         if(dimensions && dimensions.length > 0) {
           const dimArr = dimensions.map((each, idx) => {
             let field = each.field;
-            field["currentGroup"] =each.currentGroup;
-            field["groups"] =each.groups;
-            field["sort"] =each.sort;
-            field["bindType"] = Types.DIMENSION;
+            field["currentGroup"] = each.currentGroup;
+            field["groups"] = each.groups;
+            field["sort"] = each.sort;
+            field["bindType"] = Types.DIMENSIONS;
             field["idx"] = getUUID();
             return field;
           })
 
-          bindDataArr = dimArr;
+          bindDataObj.dimensions = dimArr;
         }
 
         if(indexes && indexes.length > 0) {
-          const meaArr = indexes.map((each, idx) => {
+          const idxArr = indexes.map((each, idx) => {
             const field = each.field;
             field["currentGroup"] = each.currentGroup;
             field["groups"] = each.groups;
             field["dataFormat"] =each.dataFormat;
             field["sort"] = each.sort;
-            field["bindType"] = Types.MEASURE;
+            field["bindType"] = Types.INDEXES;
             field["idx"] = getUUID() 
             return field;
           })
 
-          bindDataArr = bindDataArr.concat(meaArr);
+          bindDataObj.indexes = idxArr;
         }
 
         if(conditions && conditions.length > 0) {
@@ -56,19 +57,20 @@ export default class EditAction {
             const field = each.field;
             field["value"] = each.value;
             field["symbol"] = each.symbol;
-            field["bindType"] = Types.FILTER;
+            field["bindType"] = Types.CONDITIONS;
             field["idx"] = getUUID()
             return field;
           })
 
-          bindDataArr = bindDataArr.concat(filterArr);
+          bindDataObj.conditions = filterArr;
         }
 
-        this.options.changeBind(bindDataArr);
+        this.options.changeBind(bindDataObj);
         this.options.changeChartInfo(chartInfo || new ChartInfo());
         this.options.setElemType(this.elemType);
         this.options.setDBMode(DBMode.Editing);
         this.options.setElemName(data.name);
+        this.options.setOldElement(oldElement);
         request(`/bi/charts/data`, {
           method: "POST",
           data: {

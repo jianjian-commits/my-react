@@ -14,7 +14,7 @@ import {
 } from "antd";
 import locale from "antd/lib/date-picker/locale/zh_CN";
 import moment from 'moment';
-import coverTimeUtils from "../../../../utils/coverTimeUtils"
+import { utcDate } from "../../../../utils/coverTimeUtils"
 import {
   EQUALS,
   NOT_EQUALS,
@@ -51,8 +51,8 @@ const numberLogicalOperators = [
 const pureTimeLogicalOperators =[
   { type: "EQUALS", operator: EQUALS, label: "等于" },
   { type: "NOT_EQUALS", operator: NOT_EQUALS, label: "不等于" },
-  { type: "GREATER_THAN", operator: GREATER_THAN, label: "大于" },
-  { type: "LESS_THAN", operator: LESS_THAN, label: "小于" },
+  { type: "GREATER_THAN", operator: GREATER_THAN, label: "之后" },
+  { type: "LESS_THAN", operator: LESS_THAN, label: "之前" },
   { type: "NOT_EXISTS", operator: `__regex=/^\\S/i`, label: "不为空" },
   { type: "EXISTS", operator: NOT_EXISTS, label: "为空" },
   { type: "IN", operator: `__regex=`, label: "包含" },
@@ -84,18 +84,8 @@ const dateLogicalOperators = [
   { type: "NOT_EQUALS", operator: NOT_EQUALS, label: "不等于" },
   { type: "EXISTS", operator: EXISTS, label: "不为空" },
   { type: "EXISTS", operator: NOT_EXISTS, label: "为空" },
-  { type: "GREATER_THAN", operator: GREATER_THAN, label: "大于" },
-  {
-    type: "GREATER_THAN_OR_EQUAL_TO",
-    operator: GREATER_THAN_OR_EQUAL_TO,
-    label: "大于等于"
-  },
-  { type: "LESS_THAN", operator: LESS_THAN, label: "小于" },
-  {
-    type: "LESS_THAN_OR_EQUAL_TO",
-    operator: LESS_THAN_OR_EQUAL_TO,
-    label: "小于等于"
-  }
+  { type: "GREATER_THAN", operator: GREATER_THAN, label: "之后" },
+  { type: "LESS_THAN", operator: LESS_THAN, label: "之前" },
 ];
 const checkBoxLogicalOperators = [
   { type: "CHECKBOX_IN", operator: IN, label: "包含" },
@@ -264,7 +254,7 @@ class FilterItem extends Component {
               {...options}
               showTime
               locale={locale}
-              placeholder="请选择时间/日期"
+              placeholder="请选择时间日期"
               onChange={this.handleChangeDate}
               style={{ width: "100%" }}
             />
@@ -278,7 +268,7 @@ class FilterItem extends Component {
           {...options}
           showTime
           locale={locale}
-          placeholder="请选择时间/日期"
+          placeholder="请选择时间"
           onChange={this.handleChangeDate}
           style={{ width: "100%" }}
         />
@@ -289,9 +279,8 @@ class FilterItem extends Component {
           key={`${filed.key}${this.state.operator}`}
           disabled={isDisabled || this.state.disabledCostomValue}
           {...options}
-          showTime
           locale={locale}
-          placeholder="请选择时间/日期"
+          placeholder="请选择日期"
           onChange={this.handleChangeDate}
           style={{ width: "100%" }}
         />
@@ -708,7 +697,7 @@ export default class FilterComponent extends Component {
     return filterArray.map(filter=>{
       const dateTypes = ["DateInput", "PureTime", "PureDate"]
       if(dateTypes.includes(filter.field.type)){
-        filter.costomValue = coverTimeUtils.utcDate(filter.costomValue, filter.field.type)
+        filter.costomValue = utcDate(filter.costomValue, filter.field.type)
         return filter
       }
       return filter;

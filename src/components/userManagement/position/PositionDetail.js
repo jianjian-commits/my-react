@@ -1,15 +1,20 @@
 import React, { Component } from "react";
-import { Button, Input, Radio, message, Modal, Popconfirm } from "antd";
-import { Table } from "../../shared/customWidget";
+import { Input, Radio, message, Popconfirm } from "antd";
+import { Modal } from "../../shared/customWidget"
+import { history } from "../../../store";
+import { Table, Button } from "../../shared/customWidget";
 import moment from "moment";
 import { EditIcon } from "../../../assets/icons";
 import { CreateIcon } from "../../../assets/icons/company";
 import proClass from "../../profileManagement/profile.module.scss";
-import { HomeContentTitle } from "../../shared";
+import HomeContent from "../../content/HomeContent";
 import request from "../../../utils/request";
 import { catchError } from "../../../utils";
 import Authenticate from "../../shared/Authenticate";
-import { POSITION_MANAGEMENT_UPDATE, POSITION_MANAGEMENT_LIST } from "../../../auth";
+import {
+  POSITION_MANAGEMENT_UPDATE,
+  TEAM_MANAGEMENT_LIST,
+} from "../../../auth";
 import RelateWidage from "./RelateWidage";
 
 export const BaseInfo = ({
@@ -27,7 +32,7 @@ export const BaseInfo = ({
     },
     {
       key: "dataShare",
-      label: "是否与同时共享数据",
+      label: "同职位共享数据",
       value: positionInfo.dataShare,
     },
     { key: "description", label: "描述", value: positionInfo.description },
@@ -44,13 +49,13 @@ export const BaseInfo = ({
             onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
-            <>
-              <span>{item.value}</span>
-              <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-                <EditIcon onClick={editSwitchHandler} />
-              </Authenticate>
-            </>
-          );
+          <>
+            <span>{item.value}</span>
+            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+              <EditIcon onClick={editSwitchHandler} />
+            </Authenticate>
+          </>
+        );
       case "dataShare":
         return (
           <Radio.Group
@@ -71,14 +76,13 @@ export const BaseInfo = ({
             onChange={(e) => editUpdateHandler(e.target.value)}
           />
         ) : (
-            <>
-              <span>{item.value}</span>
-              <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-                <EditIcon onClick={editSwitchHandler} />
-              </Authenticate>
-
-            </>
-          );
+          <>
+            <span>{item.value}</span>
+            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+              <EditIcon onClick={editSwitchHandler} />
+            </Authenticate>
+          </>
+        );
       default:
         return <span>{item.value}</span>;
     }
@@ -204,13 +208,18 @@ const UserRelation = ({
         </div>
         <div style={userButtonStyle}>
           <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-          <Button
-            style={{ border: "1px solid rgb(42, 127, 255)", color: "#2a7fff" }}
-            onClick={() => openHandle(true)}
-          >
-            <CreateIcon />
-            添加关联
-          </Button>
+            <Authenticate
+              // type="custom"
+              auth={TEAM_MANAGEMENT_LIST}
+              options={{ disabled: true }}
+            >
+              <Button
+                onClick={() => openHandle(true)}
+              >
+                <CreateIcon />
+                添加关联
+              </Button>
+            </Authenticate>
           </Authenticate>
         </div>
       </div>
@@ -375,6 +384,15 @@ class PositionDetail extends Component {
         message.error(res.msg || "获取公司数据出错");
       }
     } catch (e) {
+      if (
+        e.response &&
+        e.response.data &&
+        e.response.data.status &&
+        e.response.data.status === "UNAUTHORIZED"
+      ) {
+        console.log(e.response);
+        return message.warn("添加关联用户需要用户列表权限，请联系管理员");
+      }
       catchError(e);
     }
   };
@@ -411,27 +429,24 @@ class PositionDetail extends Component {
       modalSelectedKeys,
     } = this.state;
     const navigationList = [
-      { key: 0, label: "职位", onClick: returnTree },
-      { key: 1, label: position.value, disabled: true },
+      { key: 0, label: "首页", onClick: () => history.push("/app/list") },
+      { key: 1, label: "职位", onClick: returnTree },
     ];
     return (
-      <>
-        <HomeContentTitle
-          navs={navigationList}
-          title="职位"
-          btns={
-            <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
-              <Button
-                type="primary"
-                onClick={this.saveHandle}
-                style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
-              >
-                保存
+      <HomeContent
+        navs={navigationList}
+        title={position.value}
+        btns={
+          <Authenticate auth={POSITION_MANAGEMENT_UPDATE}>
+            <Button
+              type="primary"
+              onClick={this.saveHandle}
+            >
+              保存
             </Button>
-            </Authenticate>
-
-          }
-        />
+          </Authenticate>
+        }
+      >
         <BaseInfo
           positionInfo={positionInfo}
           editing={editing}
@@ -450,7 +465,7 @@ class PositionDetail extends Component {
           updateSelectedKeys={this.updateTargetState("modalSelectedKeys")}
           removeUser={this.removeUserHandle}
         />
-      </>
+      </HomeContent>
     );
   }
 }

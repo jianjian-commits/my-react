@@ -29,7 +29,7 @@ const LeftPane = props => {
 
     dataArr.forEach((each, idx) => {
       if(each) {
-        const item = {...each, bindType: each.type === "NUMBER" ? Types.MEASURE : Types.DIMENSION}
+        const item = {...each, bindType: each.type === "NUMBER" ? Types.INDEXES : Types.DIMENSIONS}
         const arr = each.type === "NUMBER" ? meaArr : dimArr;
         const comp = <DragItem item={item} key={each.fieldId} id={each.fieldId} Child={DragChild}/>;
         arr.push(comp);
@@ -70,16 +70,16 @@ const LeftPane = props => {
         </div>
       </div>
       <div className={classes.leftPaneDimension}>
-          <ul>
-            <li className={classes.colTitle}>非数值型字段</li>
+          <div className={classes.colTitle}>非数值型字段</div>
+          <div className={classes.fieldContainer}>
             {getItems(dataSource).dimArr}
-          </ul>
+          </div>
       </div>
       <div className={classes.leftPaneMeasure}>
-          <ul>
-            <li className={classes.colTitle}>数值型字段</li>
+          <div className={classes.colTitle}>数值型字段</div>
+          <div className={classes.fieldContainer}>
             {getItems(dataSource).meaArr}
-          </ul>
+          </div>
       </div>
     </div>
   )

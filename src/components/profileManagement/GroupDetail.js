@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { history } from "../../store";
 import request from "../../utils/request";
-import { Button, message } from "antd";
+import { message } from "antd";
+import { Button } from "../shared/customWidget";
 import {
   BaseInfoModule,
   AppManagerModule,
@@ -9,38 +11,33 @@ import {
   // SettingModule
 } from "./DetailModule";
 import { catchError } from "../../utils";
-import { HomeContentTitle } from "../shared";
+import HomeContent from "../content/HomeContent";
 
-const Top = ({ roleName, disabled, enterDetail, handleDetail }) => {
+const getTopPartion = ({ roleName, disabled, enterDetail, handleDetail }) => {
   const navigationList = [
-    { key: 0, label: "分组", onClick: () => enterDetail() },
-    { key: 1, label: roleName, disabled: true }
+    { key: 0, label: "首页", onClick: () => history.push("/app/list") },
+    { key: 1, label: "分组", onClick: () => enterDetail() },
   ];
-  return (
-    <>
-      <HomeContentTitle title="分组" navs={navigationList} btns={!disabled && (
-        <>
-          <Button
-            type="primary"
-            onClick={() => handleDetail()}
-            style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
-          >
-            保存
-          </Button>
-          <Button
-            onClick={() => enterDetail()}
-            style={{
-              border: "1px solid #2A7FFF",
-              backgroundColor: "transparent"
-            }}
-          >
-            取消
-          </Button>
-        </>
-      )}/>
-      
-    </>
-  );
+  return {
+    title: roleName,
+    navs: navigationList,
+    btns: !disabled && (
+      <>
+        <Button
+          type="primary"
+          onClick={() => handleDetail()}
+          style={{ backgroundColor: "#2A7FFF", color: "#fff" }}
+        >
+          保存
+        </Button>
+        <Button
+          onClick={() => enterDetail()}
+        >
+          取消
+        </Button>
+      </>
+    )
+  }
 };
 
 class GroupDetail1 extends Component {
@@ -228,17 +225,12 @@ class GroupDetail1 extends Component {
   }
 
   render() {
-    const { action, enterDetail, enterPermission, roleName,className } = this.props;
+    const { action, enterDetail, enterPermission, roleName, className } = this.props;
     const { editable, baseInfoBo, appManagerBos, permissions } = this.state;
     const disabled = action === "view" ? true : false;
+    const topPartion = getTopPartion({ roleName, disabled, enterDetail, handleDetail: this.handleDetail.bind(this) });
     return (
-      <section className={className}>
-        <Top
-          roleName={roleName}
-          disabled={disabled}
-          enterDetail={enterDetail}
-          handleDetail={this.handleDetail.bind(this)}
-        />
+      <HomeContent className={className} {...topPartion}>
         <BaseInfoModule
           disabled={disabled}
           baseInfoBo={baseInfoBo}
@@ -259,7 +251,7 @@ class GroupDetail1 extends Component {
           onChange={this.onChange}
         />
         {/* <SettingModule disabled={disabled} settings={settings} /> */}
-      </section>
+      </HomeContent>
     );
   }
 }

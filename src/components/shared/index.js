@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import Authenticate from "../shared/Authenticate";
 import { BreadRight } from "../../assets/icons";
-import { Breadcrumb, Layout, Card } from "antd";
+import { Breadcrumb, Layout } from "antd";
 import clx from "classnames";
 import comClasses from "../../styles/common.module.scss";
 import HomeHeader from "../header/HomeHeader";
@@ -24,14 +24,14 @@ export const PrivateRoute = ({
   >
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         localStorage.getItem("id_token") ? (
           React.createElement(component, { ...props, ...options })
         ) : (
           <Redirect
             to={{
               pathname: "/login",
-              state: { from: props.location }
+              state: { from: props.location },
             }}
           />
         )
@@ -41,20 +41,26 @@ export const PrivateRoute = ({
 );
 
 export const PublicRoute = ({ component, props, ...rest }) => (
-  <Route {...rest} render={props => React.createElement(component, props)} />
+  <Route {...rest} render={(props) => React.createElement(component, props)} />
 );
 
-export const Navigation = ({ navs = [] }) => {
+export const Navigation = ({
+  navs = [],
+  separator = <BreadRight />,
+  style = {},
+  fontStyle = {},
+}) => {
   return (
     <>
-      <Breadcrumb separator={<BreadRight />}>
-        {navs.map(n => (
+      <Breadcrumb style={{ height: 34, ...style }} separator={separator}>
+        {navs.map((n) => (
           <Breadcrumb.Item
             key={n.key}
+            style={fontStyle}
             className={clx({
               [comClasses.breadcrumbItem]: true,
               [comClasses.disabled]: n.disabled,
-              [comClasses.active]: !n.disabled
+              [comClasses.active]: !n.disabled,
             })}
             onClick={n.onClick}
           >
@@ -66,22 +72,14 @@ export const Navigation = ({ navs = [] }) => {
   );
 };
 
-export const HomeLayout = props => <Layout>
-    <HomeSider />
-    <Content>
-      <HomeHeader />
+export const HomeLayout = (props) => (
+  <Layout>
+    <HomeHeader />
+    <Layout>
+      <HomeSider />
       <Content className={comClasses.commonContentWarpper}>
         {props.children}
       </Content>
-    </Content>
-  </Layout>;
-
-export const HomeContentTitle = ({ title, navs, btns }) => {
-  return <Card className={comClasses.homeContentTitle} bodyStyle={{ padding: "12px 24px" }}>
-    {navs ? <Navigation navs={navs}/> : null }
-    <div className={comClasses.main}>
-      <div className={comClasses.title}>{typeof title === "string" ? <h3>{title}</h3> : title}</div>
-      <div className={comClasses.btns}>{btns}</div>
-    </div>
-  </Card>
-};
+    </Layout>
+  </Layout>
+);

@@ -5,7 +5,6 @@ export const deepClone = Obj => {
   return JSON.parse(JSON.stringify(Obj));
 };
 
-
 /**
  * Get the key by value and obj.
  */
@@ -25,4 +24,14 @@ export const equals = (o1, o2) => {
  */
 export const getUUID = () => {
   return Date.now() + parseInt(Math.random() * 1000)
+}
+
+/**
+ * Get the text width.
+ */
+export const getTextWidth = (text, fontSize = "12px", fontFamily = 'sans-serif') => {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  context.font = fontSize + " " + fontFamily;
+  return context.measureText(text).width;
 }

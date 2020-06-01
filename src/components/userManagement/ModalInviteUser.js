@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import { Input, Button, Modal, message } from "antd";
+import { Input, message } from "antd";
+import { Modal } from "../shared/customWidget";
+import { Button } from "../shared/customWidget";
 import copy from "copy-to-clipboard";
 import request from "../../utils/request";
 import { catchError } from "../../utils";
 import classes from "./inviteUser.module.scss";
-import { CreateIcon } from "../../assets/icons/company"
-const customCss = {
-  bodyStyle: {
-    padding: "46px 30px 182px",
-    boxShadow: "0px 4px 26px rgba(46, 106, 162, 0.25)",
-    borderRadius: "5px"
-  },
-  input: { marginRight: "10px", backgroundColor: "#F3F4F6" }
-};
+import { CreateIcon } from "../../assets/icons/company";
 
 export default function InviteUser(props) {
   const { currentCompany, userDetail } = props;
@@ -34,21 +28,17 @@ export default function InviteUser(props) {
   const inviteUrl = `${window.location.origin}/invite/${userDetail.id}/${currentCompany.id}/${token}`;
   return (
     <>
-      <Button
-        className={classes.btn}
-        // icon="plus"
-        type="primary"
-        onClick={() => handleInviteUserBtn()}
-      >
+      <Button type="primary" onClick={() => handleInviteUserBtn()}>
         <CreateIcon />
         邀请
       </Button>
       <Modal
         // title="邀请新成员加入"
-        bodyStyle={customCss.bodyStyle}
+        className={classes.inviteModal}
         visible={visible}
         footer={null}
         width="690px"
+        closable={false}
         onCancel={() => setVisible(false)}
       >
         <p className={classes.title}>邀请新成员加入</p>
@@ -56,7 +46,7 @@ export default function InviteUser(props) {
           发送以下链接给新成员，点击链接即可加入公司
         </p>
         <div style={{ display: "flex" }}>
-          <Input value={inviteUrl} style={customCss.input} />
+          <Input value={inviteUrl} className={classes.input} />
           <Button
             type="primary"
             onClick={() => {

@@ -1,5 +1,6 @@
 import React from "react";
-import { Row, Col, Input, Select, Button, Card } from "antd";
+import { Row, Col, Input, Select, Card } from "antd";
+import { Button } from "../../shared/customWidget";
 
 import classes from "./team.module.scss";
 
@@ -59,7 +60,7 @@ const Filter = props => {
               );
             })}
           </Select>
-          <Button className={classes.submitBtn} onClick={filterSubmit}>筛选</Button>
+          <Button type="primary" onClick={filterSubmit}>筛选</Button>
         </Col>
       </Row>
     </Card>

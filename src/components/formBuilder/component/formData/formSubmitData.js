@@ -24,7 +24,7 @@ import {
 import { clearFormData, deleteFormData } from "./redux/utils/deleteDataUtils";
 import DataDetailModal from "./components/dataDetailModal";
 import FilterComponent from "./components/filterComponent/filterComponent";
-import coverTimeUtils from "../../utils/coverTimeUtils";
+import { localDate } from "../../utils/coverTimeUtils";
 import moment from "moment";
 
 // 加载数据时重写表格为空状态
@@ -232,14 +232,14 @@ class FormSubmitData extends PureComponent {
   };
 
   _truncateValue(value) {
-    Array.isArray(value) && (value = value.toString());
     if (value == void 0) {
       return "";
-    } else if (value.length >= 11) {
-      return value.substr(0, 10) + "...";
-    } else {
-      return value;
     }
+    value  = String(value);
+    if (value.length >= 11) {
+      return value.substr(0, 10) + "...";
+    }
+    return value;
   }
 
   _renderFileData = (fileData) => {
@@ -305,19 +305,19 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureTime":
         return (
           <div className="formChild-item">
-            {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "ImageUpload":
@@ -492,7 +492,7 @@ class FormSubmitData extends PureComponent {
         if (submitData == void 0) {
           return <></>;
         }
-        return coverTimeUtils.localDate(submitData);
+        return localDate(submitData, "DateInput");
       case "MultiDropDown":
       case "CheckboxInput":
         return (
@@ -503,20 +503,20 @@ class FormSubmitData extends PureComponent {
       case "DateInput":
         return (
           <div key={component.key}>
-            {submitData != void 0 ? coverTimeUtils.localDate(submitData, component.type) : ""}
+            {submitData != void 0 ? localDate(submitData, component.type) : ""}
           </div>
         );
       case "PureDate":
           return (
             <div className="formChild-item">
-              {submitData ? coverTimeUtils.localDate(submitData, component.type) : ""}
+              {submitData ? localDate(submitData, component.type) : ""}
             </div>
       );
       case "PureTime":
         return (
           <div key={component.key}>
             {submitData != void 0
-              ? coverTimeUtils.localDate(submitData, component.type)
+              ? localDate(submitData, component.type)
               : ""}
           </div>
         );
@@ -746,7 +746,7 @@ class FormSubmitData extends PureComponent {
                 title: item.label,
                 key: item.length === 0 ? item.key : null,
                 children:
-                  item.length !== 0
+                  item.length !== 0 && item.values.length >0
                     ? item.values.map((formChild, i) => {
                         return {
                           title: formChild.label,
@@ -773,7 +773,11 @@ class FormSubmitData extends PureComponent {
                           },
                         };
                       })
-                    : null,
+                    : [
+                      {
+                        key: item.key,
+                        width: 110
+                      }],
               };
               formChildIdArray.push(item.key);
             } else if (item.type === "NumberInput") {
@@ -967,8 +971,9 @@ class FormSubmitData extends PureComponent {
                   this.props.history.go(-1);
                 }}
                 name={this.props.forms.name}
+                appName={this.props.appName}
                 isShowBtn={true}
-                isShowBackBtn={false}
+                isShowBackBtn={true}
                 btnValue="提交数据"
                 formId={this.props.formId}
                 clickCallback={() => {
@@ -977,6 +982,7 @@ class FormSubmitData extends PureComponent {
                 clickExtendCallBack={this.showFilterComponent}
                 isFilterMode={this.state.isFilterMode}
                 handleFilterFields={this.handleFilterFields}
+                selectedFieldsNumber = {this.state.selectedFields && this.state.selectedFields.length}
               />
             )}
             <div
