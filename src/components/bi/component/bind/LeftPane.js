@@ -3,7 +3,6 @@ import DragItem from './DragItem';
 import { connect } from "react-redux";
 import { setDataSource } from '../../redux/action';
 import { Types } from './Types';
-import { GroupType } from '../../component/elements/Constant';
 import DataListModal from "../elements/modal/dataListModal";
 import { Icon } from "antd";
 import classes from '../../scss/bind/leftPane.module.scss';
