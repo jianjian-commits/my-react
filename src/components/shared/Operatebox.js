@@ -8,9 +8,11 @@ const OperateBox = (props) => {
   // const [value, setValue] = React.useState(props.formname);
   const {canEdit, canDelete } = props;
   const [isVisiable,setIsVisiable] = React.useState(false);
+  const [isShowing,setIsShowing] = React.useState( true );
 
   const showDelConfirm = () => {
     if(canDelete){
+      setIsShowing(false);
       confirm({
         icon:
           <div className="modal-title">
@@ -25,6 +27,9 @@ const OperateBox = (props) => {
         className: "operate-box-delete-form-modal",
         onOk() {
           handleDelete(props.id, props.type);
+        },
+        onCancel(){
+          setIsShowing(true);
         }
       });
     }
@@ -33,12 +38,14 @@ const OperateBox = (props) => {
   const showUpdateConfirm = () => {
     if(canEdit){
       setIsVisiable(true);
+      setIsShowing(false);
     }
   }
 
   const handleCancel = () =>{
         props.form.resetFields();
         setIsVisiable(false);
+        setIsShowing(true);
   }
   const handleSetValue = () => {
     let inputValue = props.form.getFieldValue("formName");
@@ -50,7 +57,8 @@ const OperateBox = (props) => {
   const handleDelete = (params, type) => {
     props.handleDelete(params, type).then(res => {
       if (res.status === 200 || res.msg === "success") {
-        props.isDeleteOne(true)
+        props.isDeleteOne(true);
+        setIsShowing(true);
         message.success('删除成功');
       }
     })
@@ -62,6 +70,7 @@ const OperateBox = (props) => {
       if(!error){
         // 关闭模态框
         setIsVisiable(false);
+        setIsShowing(true);
         // 获取验证通过的值
         let { formName } = values;
         // 发送修改名称的请求
@@ -82,10 +91,10 @@ const OperateBox = (props) => {
     <div className="draggable-list-operate-container">
       <div className="operate-box" onClick={e => e.stopPropagation()} >
         <div className={renameClass}
-          onClick={showUpdateConfirm}
+          onClick={ isShowing && showUpdateConfirm}
         > 修改名称 </div>
         <div className={deleteClass}
-          onClick={showDelConfirm}>
+          onClick={ isShowing && showDelConfirm}>
           删除
                 </div>
       </div>
