@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input as Inp, Icon } from "antd";
+import { Input as Inp, Icon, Button } from "antd";
 import request from "../../utils/request";
 import clx from "classnames";
 import { catchError } from "../../utils";
 import itemsStyles from "./style/login.module.scss";
 import { UserNameIcon, PassWordIcon } from "../../assets/icons/login";
 import { allowSendCode } from "../../store/loginReducer";
-import { Button } from "../shared/customWidget";
+// import { Button } from "../shared/customWidget";
 
 const meteImg = {
   username: <UserNameIcon style={{ marginLeft: "10px" }} />,
