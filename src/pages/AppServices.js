@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"; 
 import { connect } from "react-redux";
 import { Layout, Menu, Tooltip } from "antd";
+import { Content } from "../components/shared/customWidget";
 import { Route, Redirect, useParams, useHistory } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
@@ -15,7 +16,7 @@ import classes from "../styles/apps.module.scss";
 import { ApIcon, FbIcon, PbIcon } from "../assets/icons/apps";
 import { getAppList } from "../store/appReducer";
 
-const { Content, Sider } = Layout;
+const { Sider } = Layout;
 
 const services = [
   { key: "edit", name: "表单编辑", icon: FbIcon, component: CreateForm },

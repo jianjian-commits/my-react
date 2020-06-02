@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { Layout, Input } from "antd";
+import { Content } from "../components/shared/customWidget";
 import { useParams, useHistory } from "react-router-dom";
 import CommonHeader from "../components/header/CommonHeader";
 import { ApprovalSection } from "../components/approval";
@@ -30,7 +31,7 @@ import { AppManageIcon } from "../assets/icons/apps";
 import classes from "../styles/apps.module.scss";
 import appDeatilClasses from "../styles/appDetail.module.scss";
 // import { TableIcon } from "../assets/icons/index"
-const { Content, Sider } = Layout;
+const { Sider } = Layout;
 const FORM = "FORM";
 const DASHBOARD = "DASHBOARD";
 const HEADER_HEIGHT = 40;

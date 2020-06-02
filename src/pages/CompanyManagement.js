@@ -1,12 +1,11 @@
 import React from "react";
-import { Layout } from "antd";
+import { Content } from "../components/shared/customWidget";
 import { connect } from "react-redux";
 import commonClasses from "../styles/common.module.scss";
 import { Route } from "react-router-dom";
 import Authenticate from "../components/shared/Authenticate";
 import { HomeLayout } from "../components/shared";
 import { companyWebs } from "../routers";
-const { Content } = Layout;
 
 const TeamManagement = props => {
   return (

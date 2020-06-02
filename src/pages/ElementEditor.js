@@ -6,10 +6,11 @@ import EditorHeader from '../components/bi/component/elements/EditorHeader';
 import { setDashboards } from '../components/bi/redux/action';
 import { setDB } from '../components/bi/utils/reqUtil';
 import { Layout } from "antd";
+import { Content } from "../components/shared/customWidget";
 import { ChartBindPane, LeftPane, RightPane, DragAndDrop } from '../components/bi/component/bind';
 import classes from "../styles/bi.module.scss";
 import "../components/bi/scss/index.scss";
-const { Sider, Content } = Layout;
+const { Sider } = Layout;
 
 const ElementEditor = props => {
   const history = useHistory();
