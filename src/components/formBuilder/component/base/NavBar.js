@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { submitFormDataAuth } from "../../utils/permissionUtils";
 import FilterFieldsComponents from "../formData/components/filterFields/filterFieldsComponents";
-import { ReactComponent as FilterModeIcon } from "./filterModeIcon.svg"
+import { FilterModeIcon } from "./../../svg"
 
 const Divider = () => <div style={{ display: "inline-block", width: 10 }}/>;
 class NavBar extends PureComponent {
