@@ -561,6 +561,8 @@ class FormDataDetail extends PureComponent {
             {...this.props}
             setLoading={this.setLoading}
             getApproveCount={this.props.getApproveCount}
+            // name="我是坚坚坚坚坚坚坚坚坚坚坚啊"
+            // appName="我的应用"  
           />
           <div className="formDetailBox">
           <div className="title">

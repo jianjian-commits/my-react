@@ -50,7 +50,6 @@ const AppInsideRouter = () => {
           component={p.component}
         />
       ))}
-      )}
       <Route render={() => <Redirect to="/app/list" />} />
     </Switch>
   );

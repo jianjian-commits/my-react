@@ -106,6 +106,7 @@ export default connect(
     allCompany: login.allCompany
   }),
   { getAppList }
+  /* **********最上面头部信息************ */
 )(function CommonHeader(props) {
   if (props.appList.length === 0 && props.allCompany.length !== 0) {
     props.getAppList();

@@ -962,6 +962,7 @@ class FormSubmitData extends PureComponent {
             appId={this.props.appId}
             actionFun={this.props.actionFun}
             enterPort={"FormSubmitData"}
+            appName={this.props.appName}
           />
         ) : (
           <>

@@ -21,8 +21,10 @@ export const SiderTop = ({ collapsed }) => (
   </div>
 );
 
+
+/* *********侧边栏 应用概况  待办事项 包括公司管理********** */
 const renderItem = (r) => (
-  <Menu.Item className={classes.item} key={r.key}>
+  <Menu.Item id="jianjian" className={classes.item} key={r.key}>
     <Link to={r.path}>
       {r.icon ? (
         <i className="anticon">
@@ -70,6 +72,7 @@ const HomeSider = (props) => {
       auth: e.auth,
     });
   return (
+    /* 侧边菜单栏 */
     <Sider
       trigger={null}
       className={classes.sider}
@@ -78,7 +81,7 @@ const HomeSider = (props) => {
       collapsible
       collapsed={collapsed}
     >
-      {/* <SiderTop collapsed={collapsed} /> */}
+      {/* ******这是个侧边栏的公司管理******* */}
       <Menu
         className={classes.menu}
         theme="light"
@@ -97,11 +100,13 @@ const HomeSider = (props) => {
               );
             };
             return (
+              /* ******这是个侧边栏的公司管理下的二级菜单******* */
               <SubMenu
+              id="jianjian"
                 key={r.key}
                 onTitleClick={onTitleClick}
                 title={
-                  <span>
+                  <span id="坚坚的侧边栏">
                     {r.icon ? (
                       <i className="anticon">
                         <r.icon />

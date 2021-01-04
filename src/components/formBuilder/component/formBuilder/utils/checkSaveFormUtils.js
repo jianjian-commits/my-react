@@ -10,6 +10,7 @@ import { message } from "antd";
 import { getDataFromUrl } from "../../../utils/locationUtils";
 // 检查是否可以保存表单
 export default function checkAndSaveForm(props) {
+  console.log(props);
   const { formData, formArray } = props;
   console.log("fck", formData)
   const [...result] = [

@@ -18,7 +18,7 @@ class Preview extends React.Component {
     this.deleteFormComponent = this.deleteFormComponent.bind(this);
     this.saveData = this.saveData.bind(this);
   }
-
+  
   componentDidMount() {
     document.addEventListener("mousedown", this.editModeOff);
     if (this.props.defaultForm && this.props.defaultForm.components) {
@@ -238,6 +238,8 @@ class Preview extends React.Component {
     );
   }
 
+  /* **********************表示新建一个表单还没有 创建表单************************ */
+
   buildEmptyComponent() {
     const FormComponent = FormComponentContainer["EmptyFormComponent"];
     let item = { id: "EmptyFormComponent", key: "EmptyFormComponent" };
@@ -261,6 +263,7 @@ class Preview extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     let { isEditMode, isDragging, activeIndex } = this.props;
     let classes = this.props.className;
     if (isEditMode) {

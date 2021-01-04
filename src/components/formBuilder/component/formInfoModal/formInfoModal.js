@@ -1,3 +1,5 @@
+/* *****************这个组件是点击新建表单时的组件***************************** */
+
 import React from "react";
 import { connect } from "react-redux";
 import { Form, Icon, Input, Button, Checkbox } from "antd";

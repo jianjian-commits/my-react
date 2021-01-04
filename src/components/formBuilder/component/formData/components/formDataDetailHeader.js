@@ -266,13 +266,16 @@ const FormDataDetailHeader = (props) => {
     currentTaskId,
     canSetApprover
   } = taskData;
+  /* **************问题出在这里 props中没有 appName这个*************** */
+  // console.log(props.appName);
+  // console.log(props);
   return (
     <div className="FormDataDetailHeader">
     <HeaderBar
       name={"记录详情"}
       navs={[
         { key: 0, label: "我的应用", onClick: () => history.push("/app/list") },
-        { key: 1, label: props.appName || "未知应用名", disabled: true },
+        { key: 1, label: props.appName || "qqqqq", disabled: true },
         { key: 1, label: "记录列表", onClick: onClickBack }
       ]}
       isShowExtraTitle={false}

@@ -30,6 +30,7 @@ const checkCompanyName = async (rule, value, callback) => {
   callback();
 };
 
+/* ***************这里是所有的应用列表项目 (*^▽^*) ******************** */
 const getApps = (list) => {
   return list.map((e) => {
     return (
@@ -38,7 +39,8 @@ const getApps = (list) => {
           className={classes.appCard}
           loading={false}
           onClick={() => history.push(`/app/${e.id}/detail`)}
-        >
+        > 
+        {/* 创建应用的图片logo */}
           <Meta
             className={classes.appCardMeta}
             avatar={<img src={`/image/appCreateIcons/${e.icon}.svg`} alt="" />}
@@ -202,6 +204,7 @@ class Apps extends React.Component {
             {getApps(appList)}
             <Authenticate auth={TEAM_CREATE_APP}>
               <Card className={clx(classes.appCard, classes.createAppButton)}>
+                {/* **********创建一个应用**************** */}
                 <Button
                   type="dashed"
                   icon="plus"

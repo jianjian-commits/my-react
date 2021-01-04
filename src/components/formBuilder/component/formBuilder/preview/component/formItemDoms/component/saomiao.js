@@ -1,8 +1,9 @@
 import React from 'react';
 import ComponentBox from '../componentBox';
 import { ComponentHeader } from '../utils/commonDom';
+import '../../../../../../scss/components/form_builder/iconClass.scss';
 
-export default class SingleText extends React.Component {
+export default class Saomiao extends React.Component {
     constructor(props) {
         super(props);
         this.inputField = React.createRef();
@@ -39,10 +40,9 @@ export default class SingleText extends React.Component {
                     <>
                         <ComponentHeader {...this.props} active={this.props.active} />
                         <div className="form-group">
+                            {/* <ComponentLabel {...this.props} /> */}
                             <input {...props}/>
-                            {
-                                iconClass && <img className="iconClass" src="/image/icons/address.png" alt=""/>
-                            }
+                            {/* <img className="iconClass" src="/image/icons/address.png" alt=""/> */}
                         </div>
                     </>
                 }

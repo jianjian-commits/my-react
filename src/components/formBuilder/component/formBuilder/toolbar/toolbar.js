@@ -11,14 +11,14 @@ export const basicComponentsArray = [
     label: "单行文本",
     tooltip: "",
     type: "SingleText",
-    defaultValue: "",
+    defaultValue: "111",
     unique: false,
     validate: {
       required: false,
       customMessage: "",
       maxLength: Number.MAX_SAFE_INTEGER,
       minLength: 0,
-      isLimitLength: false
+      isLimitLength: true
     },
     data: {
       type: 'custom'
@@ -123,6 +123,27 @@ export const basicComponentsArray = [
     tooltip: "",
     type: "NumberInput",
     defaultValue: "",
+    unique: false,
+    validate: {
+      required: false,
+      customMessage: "",
+      isLimitLength: false,
+      isLimitPoint:false,
+      max: Number.MAX_VALUE,
+      min: -Number.MAX_VALUE,
+      limitPoint:-1
+    },
+    data: {
+      type: 'custom'
+    },
+    icon: ["number", 19]
+  }),
+  _buildDefaultProp({
+    inputType: "NumberInput",
+    label: "电话",
+    tooltip: "15879409976",
+    type: "NumberInput",
+    defaultValue: "jianjian",
     unique: false,
     validate: {
       required: false,
@@ -288,7 +309,7 @@ export const advancedComponentArray = [
   //   childForm:"",
   //   validate: {
   //     required: false,
-  //     customMessage: "",
+  //     customMessage+--: "",
   //   },
   //   icon: ['form', 16],
   // }),
@@ -348,6 +369,26 @@ export const advancedComponentArray = [
 		buttonSize: "default",
     icon: ['tmpForm', 20],
   }),
+  _buildDefaultProp({
+    label: "扫描",
+    tooltip: "请对准需要扫描的图形",
+    type: "Saomiao",
+    defaultValue: "扫描",
+    unique: true,
+    validate: {
+      // iconClass: "iconClass",
+      required: true,
+      customMessage: "",
+      maxLength: Number.MAX_SAFE_INTEGER,
+      minLength: 0,
+      isLimitLength: true
+    },
+    data: {
+      type: 'custom'
+    },
+    icon: ["text", 16]
+  }),
+  
 ];
 
 function _buildDefaultProp(customProps) {
@@ -385,10 +426,9 @@ class Toolbar extends React.Component {
       layout: { i: newKey, x: 0, y: 0, w: 10, h: 3, minH: 2, minW: 2 },
       element: item.type
     };
-
     return elementOptions;
   }
-
+0
   render() {
     return (
       <div className="react-form-builder-toolbar">

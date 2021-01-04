@@ -116,14 +116,19 @@ class ForBuilderHeader extends React.Component {
     let editForm = this.props.editForm;
     const saveHandle = e => {
       const checkRes = checkAndSaveForm(this.props);
+      console.log(this.props);
       if (!checkRes.res) {
         return;
       }
       this.setState({ btnCanClick: false }, () => {
+        console.log("我被执行了....");
         editForm || this.props.localForm !== null
           ? (() => {
+            console.log("执行第一步");
               const checkRes = checkAndSaveForm(this.props);
               if (checkRes.res) {
+                
+                console.log(updateForm);
                 this.props.updateForm(
                   this.props.formData,
                   this.props.submissionAccess,

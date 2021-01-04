@@ -6,6 +6,8 @@ import RadioButtons from "./formItemDoms/component/radioButtons";
 import EmailInput from './formItemDoms/component/emailInput';
 import PhoneInput from './formItemDoms/component/phoneInput';
 
+import Saomiao from './formItemDoms/component/saomiao';
+
 import FileUpload from "./formItemDoms/component/fileUpload";
 import CheckboxInput from "./formItemDoms/component/checkboxInput";
 import IdCardInput from "./formItemDoms/component/idCardInput";
@@ -29,6 +31,7 @@ import PureDate from "./formItemDoms/component/pureDate";
 
 const FormElements = {};
 
+FormElements.Saomiao = FormComponent(Saomiao);
 FormElements.Button = FormComponent(SubmitButton);
 FormElements.SingleText = FormComponent(SingleText);
 FormElements.NumberInput = FormComponent(NumberInput);

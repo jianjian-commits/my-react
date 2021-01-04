@@ -26,6 +26,7 @@ class ToolbarItem extends React.Component {
 
     if (!connectDragSource) return null;
     return connectDragSource(
+      /* 这里表示编辑表单时候左侧的可选组件的结构 */
       <li>
         <FormIcon icon={data.icon} />
         {data.label}

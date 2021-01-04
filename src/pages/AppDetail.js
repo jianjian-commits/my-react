@@ -42,6 +42,8 @@ const VISITOR_HEADER_HEIGHT = 50;
 //   { key: 1, label: `${appName}`, disabled: true }
 // ];
 
+
+/* ***********点击应用管理去跳转*********** */
 const getOreations = (appId, history) => [
   {
     key: "setting",
@@ -56,6 +58,7 @@ const getOreations = (appId, history) => [
   }
 ];
 
+/* 点击表单的操作中的编辑进入的组件 */
 const FormBuilderEditFormData = mobileAdoptor.submission(EditFormData);
 const AppDetail = props => {
   const { appId } = useParams();
@@ -107,10 +110,16 @@ const AppDetail = props => {
 
 
   const [approvalKey, setApprovalKey] = React.useState("myPending");
+
+  // console.log(props);
+
+  /* 通过 useParams 拿到地址栏中的 id  同和applist所有应用循环对比他们的id 如果有一样的取则得到当前是哪个应用 */
   const currentApp =
     Object.assign([], props.appList).find(v => v.id === appId) || {};
-  const appName = currentApp.name || "";
 
+    /* **********这个就是面包屑的展示内容************* */
+  const appName = currentApp.name || "";
+  /* ***********查询表单查询函数************ */
   const searchForms = (keyword, groupsParams) => {
     let _groups = groupsParams;
 
@@ -149,7 +158,9 @@ const AppDetail = props => {
   };
 
   //根据点击菜单栏
+  /* ***********点击我的待办  我发起的  我处理的************* */
   const onClickMenu = (key, e) => {
+    console.log(1111);
     setApprovalKey(key);
     setSelectedID(null);
     setEnterApprovalDetail(false);
@@ -206,13 +217,13 @@ const AppDetail = props => {
     }
   };
 
-  /**
+/**
  * On select dashboard or form.
  */
+ /* ***********选择表单或者仪表盘时触发的函数**************** */
   const handleClickList = (id, type) => {
     setSelectedID(id);
     setSelectedType(type);
-
     switch (type) {
       case DASHBOARD:
         openDBVistor(id);
@@ -225,6 +236,7 @@ const AppDetail = props => {
     }
   }
 
+  /* **************点击仪表盘时右边的仪表盘展示界面************* */
   const getDashboard = () => {
     return (
       <div style={{ height: document.body.scrollHeight - HEADER_HEIGHT }}>
@@ -233,8 +245,10 @@ const AppDetail = props => {
       </div>)
   }
 
+  /* **************点击仪表盘时右边的表单展示界面************* */
   const getForm = () => {
-    return (<Fragment>
+    return (
+        <Fragment>
       {submit ? (
         submissionId ? (
           <FormBuilderEditFormData
@@ -275,24 +289,27 @@ const AppDetail = props => {
             searchStatus={searchStatus}
           ></FormBuilderSubmitData>
         )}
-    </Fragment>)
+    </Fragment>
+    )
   }
   return (
     <Authenticate type="redirect" auth={APP_VISIABLED(appId)}>
       <Layout>
+        {/* 头部 */}
         <CommonHeader
           // title={appName}
           // navigationList={navigationList(appName, history)}
           operations={getOreations(appId, history)}
         />
-
         <Layout>
-          <Sider
+          {/* http://localhost:3000/app/5eb380f1c7a5fb179c877d0b/detail 下面的侧边栏 */}
+          <Sider 
             className={classes.appSider}
             style={{ background: "#fff" }}
             width="240"
           >
             {/* <SiderTop /> */}
+            {/* 表示 http://localhost:3000/app/5eb380f1c7a5fb179c877d0b/detail 我的待办 我发起的 我处理的侧边栏*/}
             <ApprovalSection approvalKey={approvalKey} fn={onClickMenu} approveListCount={props.approveListCount} getApproveCount={props.getApproveCount} clearApproveCount={props.clearApproveCount} />
             <div className={appDeatilClasses.searchBox}>
               <Input
@@ -315,6 +332,8 @@ const AppDetail = props => {
                 }
               />
             </div>
+
+            {/* 点击该应用跳转进去显示该应用下的表单 和 仪表盘 */}
             <div className={appDeatilClasses.formArea}>
               <DraggableList
                 selected={selectedID}
@@ -325,6 +344,8 @@ const AppDetail = props => {
               />
             </div>
           </Sider>
+              
+          {/* 主要的内容是  http://localhost:3000/app/5ea9375571c3c77b22a1ed45/detail 除去侧边菜单栏 */}
           <Content className={classes.container}>
             {// eslint-disable-next-line
               selectedID != void 0 ? (selectedType === DASHBOARD ? getDashboard() : getForm()) :

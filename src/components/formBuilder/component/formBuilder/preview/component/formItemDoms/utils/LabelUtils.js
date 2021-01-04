@@ -11,6 +11,7 @@ export default class LabelUtils extends Component {
       case "FileUpload": isNeed = true; break;
       case "ImageUpload": isNeed = true; break;
       case "CheckboxInput": isNeed = true; break;
+      case "Saomiao": isNeed = true; break;
       default: isNeed = false;
     }
     return isNeed;

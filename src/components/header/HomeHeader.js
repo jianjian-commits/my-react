@@ -8,6 +8,8 @@ import { toggleSiderCollapsed } from "../../store/layoutReducer";
 import { getTransactList } from "../../store/loginReducer";
 import { Link } from "react-router-dom";
 
+/* ***********头部信息 最顶部************* */
+
 const { Header } = Layout;
 const homeHeaderStyle = {
   background: "#2A7FFF",

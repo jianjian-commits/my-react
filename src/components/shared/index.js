@@ -49,6 +49,7 @@ export const Navigation = ({
   style = {},
   fontStyle = {}
 }) => {
+  // console.log(navs); //这个nav出问题了~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   return (
     <>
       <Breadcrumb style={{ height: 34, ...style }} separator={separator}>
