@@ -326,7 +326,6 @@ export const updateForm = (
     }
   })
     .then(response => {
-      console.log(response);
       if (type === "back") {
         message.success("保存成功", 1, () => {
           dispatch({

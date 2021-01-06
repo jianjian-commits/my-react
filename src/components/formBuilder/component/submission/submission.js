@@ -34,6 +34,8 @@ import ImageUploadMobile from "./component/imageUpload/imageUploadMobile";
 import FormChildTest from "./component/formChildTest/formChildTest";
 import PositionComponentMobile from "./component/getLocalPosition/positionComponentMobile";
 import PositionComponentPC from "./component/getLocalPosition/component/positionComponentPC";
+//jianjian
+import Saomiao from "./component/saomiao/Saomiao";
 
 // import FileUpload from "./component/fileUpload";
 import FileUpload from "./component/fileUpload/fileUpload";
@@ -570,10 +572,11 @@ class Submission extends Component {
     // }
   };
 
+  // 点击提交
   handleSubmit = (e, isStartApprove = false) => {
     e.preventDefault();
     const isMobile = this.props.mobile.is;
-
+    console.log(isMobile);
     if (!this.state.isSubmitted) {
       this.props.form.validateFields((err, values) => {
         let formComponentArray = this.props.formComponent.components;
@@ -738,12 +741,18 @@ class Submission extends Component {
   renderFormComponent = (getFieldDecorator, components, errorResponseMsg) => {
     const { forms } = this.props;
     const { mobile } = this.props;
-
+    console.log(forms);
+    console.log(mobile);
+    console.log(getFieldDecorator);
+    console.log(components);
+    console.log(errorResponseMsg);
     return components
       .filter(item => {
         return item.isShow;
       })
       .map((item, i) => {
+        console.log(item.key);
+        console.log(item);
         switch (item.type) {
           case "EmailInput":
             return (
@@ -1354,6 +1363,38 @@ class Submission extends Component {
               </div>
             );
           }
+          case "Saomiao": {
+            console.log(111111);
+            return (
+              <div 
+                key={item.key}
+                style={{ zIndex: 300 - i }}
+                id={"Id" + item.key + "Dom"} 
+              >
+                <Saomiao
+                  forms={forms}
+                  handleSetComponentEvent={this.handleSetComponentEvent}
+                  key={item.key}
+                  form={this.props.form}
+                  getFieldDecorator={getFieldDecorator}
+                  item={item}
+                  isChangeLayout={this.state.isChangeLayout}
+                  handleSetFormula={this.handleSetFormula}
+                  formulaArray={this.state.formulaArray}
+                  formChildDataObj={this.state.formChildDataObj}
+                  formComponent={this.props.formComponent}
+                  saveFormChildSubmitData={(formChildDataObj) => {
+                    this.setState(state => ({
+                      ...state,
+                      formChildDataObj: formChildDataObj
+                    }));
+                  }}
+                  errorResponseMsg={errorResponseMsg[item.key]}
+                  resetErrorMsg={this._changeErrorResponseData}
+                ></Saomiao>
+              </div>
+            )
+          }
           default:
             return <></>;
             break;
@@ -1538,7 +1579,7 @@ class Submission extends Component {
                           </>
                         ) : (
                             <GridLayout
-                              className="layout"
+                              className="layout2222222222"
                               layout={layout}
                               cols={12}
                               rowHeight={22}

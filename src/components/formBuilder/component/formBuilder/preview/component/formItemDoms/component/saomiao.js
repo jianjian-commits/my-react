@@ -1,8 +1,6 @@
 import React from 'react';
 import ComponentBox from '../componentBox';
 import { ComponentHeader } from '../utils/commonDom';
-import '../../../../../../scss/components/form_builder/iconClass.scss';
-
 export default class Saomiao extends React.Component {
     constructor(props) {
         super(props);
@@ -10,8 +8,7 @@ export default class Saomiao extends React.Component {
     }
 
     render() {
-        console.log(this.props);
-        const iconClass = this.props.data.iconClass || ""; //图标样式
+        // console.log(this.props);
         const props = {};
         props.type = 'text';
         props.className = 'form-control singleText';
@@ -39,10 +36,15 @@ export default class Saomiao extends React.Component {
                 content={
                     <>
                         <ComponentHeader {...this.props} active={this.props.active} />
-                        <div className="form-group">
-                            {/* <ComponentLabel {...this.props} /> */}
+                        <div className="form-group" style={{
+                            position: 'relative'
+                        }}>
                             <input {...props}/>
-                            {/* <img className="iconClass" src="/image/icons/address.png" alt=""/> */}
+                            <img style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '58%'
+                            }} src="/image/icons/address.png" alt=""/>
                         </div>
                     </>
                 }

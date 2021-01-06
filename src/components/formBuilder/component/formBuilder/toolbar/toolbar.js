@@ -371,24 +371,19 @@ export const advancedComponentArray = [
   }),
   _buildDefaultProp({
     label: "扫描",
-    tooltip: "请对准需要扫描的图形",
+    tooltip: "",
     type: "Saomiao",
     defaultValue: "扫描",
-    unique: true,
+    unique: false,
     validate: {
-      // iconClass: "iconClass",
-      required: true,
-      customMessage: "",
-      maxLength: Number.MAX_SAFE_INTEGER,
-      minLength: 0,
-      isLimitLength: true
+      required: false,
+      customMessage: "222222222", //这个表示错误的提示信息
     },
     data: {
       type: 'custom'
     },
     icon: ["text", 16]
   }),
-  
 ];
 
 function _buildDefaultProp(customProps) {

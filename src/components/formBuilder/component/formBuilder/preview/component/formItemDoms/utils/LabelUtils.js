@@ -36,12 +36,15 @@ export default class LabelUtils extends Component {
       case "HandWrittenSignature": isRadio = true; break;
       case "FormChildTest": isRadio = true; break;
       case "GetLocalPosition": isRadio = true; break;
+      case "Saomiao": isRadio = true; break;
       default: isRadio = false;
     }
     return isRadio;
   }
   render() {
     const { data } = this.props;
+    
+    console.log(data);
     return (
       <React.Fragment>
         <div id={data.key + "Title"}>

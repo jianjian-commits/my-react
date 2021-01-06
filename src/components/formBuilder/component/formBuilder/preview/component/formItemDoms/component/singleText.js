@@ -9,8 +9,6 @@ export default class SingleText extends React.Component {
     }
 
     render() {
-        console.log(this.props);
-        const iconClass = this.props.data.iconClass || ""; //图标样式
         const props = {};
         props.type = 'text';
         props.className = 'form-control singleText';
@@ -40,9 +38,6 @@ export default class SingleText extends React.Component {
                         <ComponentHeader {...this.props} active={this.props.active} />
                         <div className="form-group">
                             <input {...props}/>
-                            {
-                                iconClass && <img className="iconClass" src="/image/icons/address.png" alt=""/>
-                            }
                         </div>
                     </>
                 }

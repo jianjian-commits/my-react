@@ -31,7 +31,9 @@ import PureDate from "./formItemDoms/component/pureDate";
 
 const FormElements = {};
 
+//jianjian加的
 FormElements.Saomiao = FormComponent(Saomiao);
+
 FormElements.Button = FormComponent(SubmitButton);
 FormElements.SingleText = FormComponent(SingleText);
 FormElements.NumberInput = FormComponent(NumberInput);

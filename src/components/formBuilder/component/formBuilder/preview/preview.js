@@ -215,7 +215,7 @@ class Preview extends React.Component {
     const FormComponent = FormComponentContainer["DragParent"];
     let item = { id: "dragParent", key: "dragParent" };
     let active = activeIndex === -2 ? true : false;
-
+    
     return (
       <FormComponent
         key={Math.random()}
@@ -263,7 +263,7 @@ class Preview extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    /* console.log(this.props); */
     let { isEditMode, isDragging, activeIndex } = this.props;
     let classes = this.props.className;
     if (isEditMode) {

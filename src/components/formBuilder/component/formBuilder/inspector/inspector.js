@@ -22,6 +22,9 @@ import FormChildTestInspector from "./component/formChildTestInspector";
 import GetLocalPositionInspector from "./component/getLocalPosition/getLocalPositionInspector";
 import AddressInspector from "./component/addressInspector";
 
+//jianjian的
+import SaomiaoInspector from "./component/saomiaospector"
+
 const { TabPane } = Tabs;
 
 export default class Inspector extends React.Component {
@@ -189,6 +192,14 @@ export default class Inspector extends React.Component {
       case "Button":
         return (
           <SubmitBtnInspector key={editElement.id} element={editElement} />
+        );
+       case "Saomiao":
+        return (
+          <SaomiaoInspector
+            key={editElement.id}
+            elementParent={editElementParent}
+            element={editElement}
+          />
         );
       default:
         return <div></div>;
