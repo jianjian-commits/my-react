@@ -1,0 +1,19 @@
+.scroll-view{
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+}
+.scroll-wrap{
+    /* width: 800px; */
+    position: relative;
+}
+#root{
+    height: 100%;
+}
+.beforePullDown{
+    width: 100%;
+    height: 46px;
+    position: absolute;
+    top: -46px;
+    background-color: red;
+}
